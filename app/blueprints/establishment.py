@@ -1294,9 +1294,13 @@ def employee_first_appointment_details():
                 LEFT JOIN Department_Mst DP ON TRY_CONVERT(int, P.NewDepartment) = DP.pk_deptid
                 LEFT JOIN SAL_Designation_Mst DS ON TRY_CONVERT(int, P.NewDesignation) = DS.pk_desgid
                 WHERE P.fk_empid = ?
-                ORDER BY P.pk_proincid DESC
+                ORDER BY
+                      CASE WHEN ? IS NOT NULL AND P.DateofJoinning = ? THEN 0 ELSE 1 END,
+                      CASE WHEN ? IS NOT NULL AND P.DateofAppointment = ? THEN 0 ELSE 1 END,
+                      CASE WHEN P.DateofJoinning IS NOT NULL OR P.DateofAppointment IS NOT NULL THEN 0 ELSE 1 END,
+                      P.pk_proincid DESC
                 """
-                [emp_id],
+                [emp_id, target_join_date, target_join_date, target_appointment_date, target_appointment_date],
             )
         except Exception:
             hist = None
@@ -1339,6 +1343,51 @@ def employee_first_appointment_details():
 
             if hist_ord and not _blank(hist_ord.get('OrderNo')):
                 edit_data['OrderNo'] = hist_ord.get('OrderNo')
+
+        if edit_data and _blank(edit_data.get('probation_date_fmt')):
+            hist_prob = None
+            try:
+                hist_prob = DB.fetch_one(
+                    """
+                    SELECT TOP 1 CONVERT(varchar, P.ProbationCompleted, 103) as probation_date_fmt
+                    FROM [HAU_Client_Backup].[dbo].[sal_emp_promotion_increment_payrevision_detail] P
+                    WHERE P.fk_empid = ?
+                      AND P.ProbationCompleted IS NOT NULL
+                      AND (P.DateofJoinning IS NOT NULL OR P.DateofAppointment IS NOT NULL)
+                    ORDER BY
+                      CASE WHEN ? IS NOT NULL AND P.DateofJoinning = ? THEN 0 ELSE 1 END,
+                      CASE WHEN ? IS NOT NULL AND P.DateofAppointment = ? THEN 0 ELSE 1 END,
+                      P.pk_proincid DESC
+                    """,
+                    [emp_id, target_join_date, target_join_date, target_appointment_date, target_appointment_date],
+                )
+            except Exception:
+                hist_prob = None
+            if hist_prob and not _blank(hist_prob.get('probation_date_fmt')):
+                edit_data['probation_date_fmt'] = hist_prob.get('probation_date_fmt')
+
+        if edit_data and _blank(edit_data.get('due_date_pp_fmt')):
+            hist_due = None
+            try:
+                hist_due = DB.fetch_one(
+                    """
+                    SELECT TOP 1 CONVERT(varchar, P.DueDatePP, 103) as due_date_pp_fmt
+                    FROM [HAU_Client_Backup].[dbo].[sal_emp_promotion_increment_payrevision_detail] P
+                    WHERE P.fk_empid = ?
+                      AND P.DueDatePP IS NOT NULL
+                      AND (P.DateofJoinning IS NOT NULL OR P.DateofAppointment IS NOT NULL)
+                    ORDER BY
+                      CASE WHEN ? IS NOT NULL AND P.DateofJoinning = ? THEN 0 ELSE 1 END,
+                      CASE WHEN ? IS NOT NULL AND P.DateofAppointment = ? THEN 0 ELSE 1 END,
+                      P.pk_proincid DESC
+                    """,
+                    [emp_id, target_join_date, target_join_date, target_appointment_date, target_appointment_date],
+                )
+            except Exception:
+                hist_due = None
+            if hist_due and not _blank(hist_due.get('due_date_pp_fmt')):
+                edit_data['due_date_pp_fmt'] = hist_due.get('due_date_pp_fmt')
+
 
         if hist:
             if not edit_data:
