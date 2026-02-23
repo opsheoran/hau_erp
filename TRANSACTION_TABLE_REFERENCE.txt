@@ -106,3 +106,16 @@ Notes:
 
 16) Non Teaching VC Promotion Approval (establishment.non_teaching_vc_promotion_approval)
 - Transaction Table: sal_emp_NonteachersPromotion_Approval
+
+17) Employee First Appointment Details (establishment.employee_first_appointment_details)
+- Primary Transaction Table: SAL_FirstAppointment_Details
+  - PK: pk_appointmentid
+  - FK: fk_empid -> SAL_Employee_Mst.pk_empid
+- Child Table (Probation terms): SAL_FirstAppointment_Description_Details
+  - FK: fk_appointmentid -> SAL_FirstAppointment_Details.pk_appointmentid
+- Backfill sources when SAL_FirstAppointment_Details has blanks:
+  - SAL_EmployeeOther_Details (dateofjoining, dateofappointment, OrderNo, AppointmentTime)
+  - SAL_Employee_Mst (curbasic) + lookups for names (DDO_Mst, Department_Mst, SAL_Designation_Mst)
+  - SAL_Grade_Mst (gradedetails from fk_cgradeid / fk_gradeid for PayScale)
+  - [HAU_Client_Backup].[dbo].[sal_emp_promotion_increment_payrevision_detail] (latest by pk_proincid)
+
