@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tablesubheading">Employee Leave Assignment</div>
+    <div style="padding: 15px;">
+        <form method="GET" action="{{ url_for('leave.leave_assignment') }}" id="filter-form">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">DDO</td><td class="colon">:</td>
+                    <td>
+                        <select name="ddo" id="ddo_filter" class="dropdown" style="width: 250px;" onchange="updateLocations()">
+                            <option value="">-- All DDO --</option>
+                            {% for d in ddos %}
+                            <option value="{{ d.id }}" {% if d.id|string == selected_ddo|string %}selected{% endif %}>{{ d.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext" width="15%">Location</td><td class="colon">:</td>
+                    <td>
+                        <select name="location" id="loc_filter" class="dropdown" style="width: 250px;" onchange="onLocationChange()">
+                            <option value="">-- All Location --</option>
+                            {% for l in locations %}
+                            <option value="{{ l.id }}" {% if l.id|string == selected_loc|string %}selected{% endif %}>{{ l.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Department</td><td class="colon">:</td>
+                    <td>
+                        <select name="dept" id="dept_filter" class="dropdown" style="width: 250px;" onchange="onDeptChange()">
+                            <option value="">-- All Department --</option>
+                            {% for d in depts %}
+                            <option value="{{ d.id }}" {% if d.id|string == selected_dept|string %}selected{% endif %}>{{ d.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext">Employee</td><td class="colon">:</td>
+                    <td>
+                        <input type="hidden" name="emp_id" id="emp_id" value="{{ selected_emp or '' }}">
+                        <input type="text" id="emp_name" class="textbox" style="width: 220px;" value="{{ selected_emp_name }}" readonly>
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="openEmpSearch('emp_id', 'emp_name')" style="cursor:pointer; vertical-align:middle;">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Financial Year</td><td class="colon">:</td>
+                    <td>
+                        <select name="fin_year" class="dropdown" style="width: 200px;" onchange="this.form.submit()">
+                            <option value="">-- Select Year --</option>
+                            {% for f in fin_years %}
+                            <option value="{{ f.id }}" {% if f.id|string == selected_fin|string %}selected{% endif %}>{{ f.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext">Leave Type</td><td class="colon">:</td>
+                    <td>
+                        <select name="leave_type" class="dropdown" style="width: 200px;" onchange="this.form.submit()">
+                            <option value="">-- Select Leave --</option>
+                            {% for t in leave_types %}
+                            <option value="{{ t.id }}" {% if t.id|string == selected_leave|string %}selected{% endif %}>{{ t.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" align="center" style="padding-top:10px;">
+                        <a href="{{ url_for('leave.leave_assignment') }}" class="button-common" style="text-decoration:none; display:inline-block; line-height:22px;">RESET ALL FILTERS</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top:20px; color: #d00; font-size:11px; font-weight:bold; border:1px solid #ccc; padding:10px; background:#fffbfb;">
+            NOTICE: Earned Leave is automatically calculated based on duty days (1/11 logic) and is excluded from manual assignment here.
+        </div>
+
+        {% if selected_leave and selected_fin and (selected_ddo or selected_loc or selected_dept or selected_emp) %}
+        <!-- UNASSIGNED GRID -->
+        <div style="margin-top:30px;">
+            <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">List of Unassigned Employees</div>
+            <form method="POST">
+                <input type="hidden" name="action" value="ASSIGN">
+                <input type="hidden" name="leave_type" value="{{ selected_leave }}">
+                <input type="hidden" name="fin_year" value="{{ selected_fin }}">
+                
+                <table class="table-grid-view">
+                    <thead>
+                        <tr class="header-style">
+                            <td width="40"><input type="checkbox" onclick="toggleAll(this, '.unassigned-chk')"></td>
+                            <td>Emp Code (M)</td>
+                            <td>Employee Name</td>
+                            <td>Controlling Officer</td>
+                            <td>Designation</td>
+                            <td>Nature Type</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in unassigned %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center"><input type="checkbox" name="emp_ids[]" value="{{ e.pk_empid }}" class="unassigned-chk"></td>
+                            <td>{{ e.manualempcode }}</td>
+                            <td>{{ e.empname }}</td>
+                            <td>{{ e.Description }}</td>
+                            <td>{{ e.designation }}</td>
+                            <td>{{ e.nature }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="6" align="center" style="padding:20px;">No unassigned employees found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if unassigned %}
+                <div style="margin-top:15px; background:#f4f4f4; padding:10px; border:1px solid #ccc;">
+                    <span class="vtext">Assign Leave Days :</span>
+                    <input type="number" name="leave_days" value="0" class="textbox" style="width:80px;" required>
+                    <input type="submit" value="ASSIGN LEAVE" class="button-common" style="margin-left:10px; background:#3c8dbc; color:white;">
+                </div>
+                {% endif %}
+            </form>
+        </div>
+
+        <!-- ASSIGNED GRID -->
+        <div style="margin-top:40px;">
+            <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">List of Assigned Employees (Process / UnProcess)</div>
+            <form method="POST" id="assigned-form">
+                <input type="hidden" name="action" id="assigned-action" value="UPDATE">
+                <input type="hidden" name="leave_type" value="{{ selected_leave }}">
+                <input type="hidden" name="fin_year" value="{{ selected_fin }}">
+
+                <table class="table-grid-view">
+                    <thead>
+                        <tr class="header-style">
+                            <td width="40"><input type="checkbox" onclick="toggleAll(this, '.assigned-chk')"></td>
+                            <td>Emp Code (M)</td>
+                            <td>Employee Name</td>
+                            <td>Controlling Officer</td>
+                            <td>Designation</td>
+                            <td>Cur. Balance</td>
+                            <td width="100">Status</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in assigned %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" style="background-color: {{ '#eaffea' if e.is_processed else '' }};">
+                            <td align="center"><input type="checkbox" name="emp_ids[]" value="{{ e.pk_empid }}" class="assigned-chk"></td>
+                            <td>{{ e.manualempcode }}</td>
+                            <td>{{ e.empname }}</td>
+                            <td>{{ e.Description }}</td>
+                            <td>{{ e.designation }}</td>
+                            <td align="center"><b>{{ "{:,.2f}".format(e.leaveassigned|float) }}</b></td>
+                            <td align="center">
+                                {% if e.is_processed %}
+                                <span style="color:green; font-weight:bold;">Processed</span>
+                                {% else %}
+                                <span style="color:orange; font-weight:bold;">Unprocessed</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="7" align="center" style="padding:20px;">No assigned employees found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if assigned %}
+                <div style="margin-top:15px; background:#f4f4f4; padding:10px; border:1px solid #ccc;">
+                    <span class="vtext">Update Balance To :</span>
+                    <input type="number" name="leave_days" value="0" class="textbox" style="width:80px;">
+                    <input type="submit" value="UPDATE BALANCE" onclick="setAction('UPDATE')" class="button-common" style="margin-left:5px;">
+                    <input type="submit" value="PROCESS (LOCK)" onclick="setAction('PROCESS')" class="button-common" style="margin-left:15px; background:#28a745; color:white;">
+                    <input type="submit" value="UNPROCESS (UNLOCK)" onclick="setAction('UNPROCESS')" class="button-common" style="margin-left:5px; background:#dc3545; color:white;">
+                </div>
+                {% endif %}
+            </form>
+        </div>
+        {% else %}
+        <div style="margin-top:20px; padding:15px; border:1px solid #3c8dbc; background:#f0f7ff; font-family:Verdana; font-size:11px;">
+            Please select <b>Financial Year</b>, <b>Leave Type</b> and a <b>DDO or Location</b> to view employee lists.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function setAction(val) { document.getElementById('assigned-action').value = val; }
+function toggleAll(source, targetClass) {
+    document.querySelectorAll(targetClass).forEach(el => { el.checked = source.checked; });
+}
+
+async function updateLocations() {
+    const ddo = document.getElementById('ddo_filter').value;
+    const res = await fetch(`/api/ddo/locations?ddo=${ddo}`);
+    const data = await res.json();
+    const select = document.getElementById('loc_filter');
+    select.innerHTML = '<option value="">-- All Location --</option>';
+    data.forEach(l => { select.innerHTML += `<option value="${l.id}">${l.name}</option>`; });
+}
+
+async function onLocationChange() {
+    const loc = document.getElementById('loc_filter').value;
+    const ddoRes = await fetch(`/api/location/ddos?loc=${loc}`);
+    const ddos = await ddoRes.json();
+    const ddoSelect = document.getElementById('ddo_filter');
+    ddoSelect.innerHTML = '<option value="">-- All DDO --</option>';
+    ddos.forEach(d => { ddoSelect.innerHTML += `<option value="${d.id}">${d.name}</option>`; });
+}
+
+function onDeptChange() { document.getElementById('filter-form').submit(); }
+
+function selectItem(id, name) {
+    document.getElementById('emp_id').value = id;
+    document.getElementById('emp_name').value = name;
+    document.getElementById('filter-form').submit();
+}
+</script>
+{% endblock %}

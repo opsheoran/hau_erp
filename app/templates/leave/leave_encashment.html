@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tablesubheading">Leave Encashment Processing</div>
+    <div style="padding: 15px;">
+        <!-- Search Area -->
+        <form method="GET">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Search Employee</td><td class="colon">:</td>
+                    <td>
+                        <input type="hidden" name="emp_id" id="emp_id" value="{{ selected_emp or '' }}">
+                        <input type="text" id="emp_name" class="textbox" style="width: 250px;" readonly placeholder="Select employee...">
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="ShowSearch('emp')" style="cursor:pointer; vertical-align:middle;">
+                        <input type="submit" value="FETCH BALANCES" class="button-common" style="margin-left:10px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        {% if selected_emp %}
+        <div style="display: flex; gap: 30px; margin-top: 25px;">
+            <!-- Balances and Entry -->
+            <div style="flex: 1;">
+                <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">Current Balances</div>
+                <table class="table-grid-view">
+                    <thead><tr class="header-style"><td>Leave Type</td><td>Balance</td></tr></thead>
+                    <tbody>
+                        {% for b in balances %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td>{{ b.leavetype }}</td>
+                            <td align="center"><b>{{ "{:,.2f}".format(b.balance|float) }}</b></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="tablesubheading" style="background:#eee; color:#333; margin-top:25px; margin-bottom:10px;">Encashment Form</div>
+                <form method="POST">
+                    <input type="hidden" name="emp_id" value="{{ selected_emp }}">
+                    <table class="form-table" style="background:#f9f9f9; border:1px solid #ddd !important;">
+                        <tr>
+                            <td class="vtext">Leave Type</td><td class="colon">:</td>
+                            <td>
+                                <select name="leave_id" class="dropdown" style="width: 100%;" required>
+                                    {% for b in balances %}<option value="{{ b.pk_leaveid }}">{{ b.leavetype }}</option>{% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vtext">Encashed Days</td><td class="colon">:</td>
+                            <td><input type="number" name="days" class="textbox" style="width: 100%;" required></td>
+                        </tr>
+                        <tr>
+                            <td class="vtext">Basic Pay</td><td class="colon">:</td>
+                            <td><input type="number" name="basic" class="textbox" style="width: 100%;" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td class="vtext">Net Payment</td><td class="colon">:</td>
+                            <td><input type="number" name="amount" class="textbox" style="width: 100%;" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td class="vtext">Remarks</td><td class="colon">:</td>
+                            <td><textarea name="remarks" class="textbox" style="width: 100%; height: 40px;"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td style="padding-top:10px;">
+                                <input type="submit" value="PROCESS ENCASHMENT" class="button-common" style="background:#3c8dbc; color:white; width:100%;">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+
+            <!-- History -->
+            <div style="flex: 2;">
+                <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">Encashment History</div>
+                <table class="table-grid-view">
+                    <thead>
+                        <tr class="header-style">
+                            <td>Date</td><td>Leave Type</td><td>Days</td><td>Amount</td><td>Remarks</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for h in history %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center">{{ h.encashdate.strftime('%d/%m/%Y') if h.encashdate else '' }}</td>
+                            <td>{{ h.leavetype }}</td>
+                            <td align="center">{{ "{:,.2f}".format(h.encashedleaves|float) }}</td>
+                            <td align="right">{{ "{:,.2f}".format(h.NetPayment|float) }}</td>
+                            <td>{{ h.remarks or '' }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="5" align="center" style="padding:20px;">No history found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Search Modal -->
+<div id="SearchDiv" class="white_content-new">
+    <div style="text-align:right;"><span onclick="HideSearch()" style="cursor:pointer; color:red; font-weight:bold;">X</span></div>
+    <div class="tableheading" style="margin-top:-15px;">Employee Search</div>
+    <div style="padding:15px;">
+        <table class="form-table">
+            <tr>
+                <td class="vtext">Search Employee</td><td class="colon">:</td>
+                <td><input type="text" id="simple_search_term" class="textbox" style="width:250px;"></td>
+                <td><input type="button" value="SEARCH" class="button-common" onclick="doSimpleSearch()"></td>
+            </tr>
+        </table>
+        <div id="search_results" style="margin-top:20px; max-height:250px; overflow-y:auto;"></div>
+    </div>
+</div>
+
+<script>
+function ShowSearch() { document.getElementById('SearchDiv').style.display = 'block'; }
+function HideSearch() { document.getElementById('SearchDiv').style.display = 'none'; }
+
+async function doSimpleSearch() {
+    const term = document.getElementById('simple_search_term').value;
+    if(term.length < 2) return;
+    const res = await fetch(`/leave/api/employee/search?term=${term}`);
+    const data = await res.json();
+    let html = '<table class="table-grid-view"><tr class="header-style"><td>Code</td><td>Name</td><td>Action</td></tr>';
+    data.forEach(e => {
+        html += `<tr class="item-style"><td>${e.id}</td><td>${e.name}</td><td><a href="javascript:void(0)" onclick="selectEmployee('${e.id}', '${e.name}')">Select</a></td></tr>`;
+    });
+    html += '</table>';
+    document.getElementById('search_results').innerHTML = html;
+}
+
+function selectEmployee(id, name) {
+    document.getElementById('emp_id').value = id;
+    document.getElementById('emp_name').value = name;
+    HideSearch();
+}
+</script>
+{% endblock %}

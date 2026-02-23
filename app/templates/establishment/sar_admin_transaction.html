@@ -1,0 +1,224 @@
+{% extends "establishment/manage.html" %}
+
+{% block content_area %}
+<div class="vtext" style="padding: 10px;">
+    <div class="tableheading" style="margin-bottom: 10px;">SAR / ACR Admin Transaction Details</div>
+
+    <form method="GET" class="filter-box" style="background: #f4f4f4; padding: 10px; border: 1px solid #ddd; margin-bottom: 15px;">
+        <table width="100%">
+            <tr>
+                <td width="10%">Category:</td>
+                <td width="20%">
+                    <select name="category" class="vtext" style="width: 150px;" onchange="this.form.submit()">
+                        {% for cat in lookups.categories %}
+                        <option value="{{ cat.id }}" {% if category == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td width="10%">Session:</td>
+                <td width="20%">
+                    <select name="session_id" class="vtext" style="width: 150px;">
+                        <option value="">--Select Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if request.args.get('session_id') == s.id %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td width="10%">Department:</td>
+                <td>
+                    <select name="dept_id" class="vtext" style="width: 250px;">
+                        <option value="">--Select Department--</option>
+                        {% for d in lookups.departments %}
+                        <option value="{{ d.pk_deptid }}" {% if request.args.get('dept_id')|int == d.pk_deptid %}selected{% endif %}>{{ d.dept_name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td align="right">
+                    <input type="submit" value="Search" class="vtext" style="padding: 2px 10px;">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div class="tabs-container">
+        <div style="border-bottom: 2px solid #3c8dbc; margin-bottom: 10px;">
+            <button class="tab-btn active" onclick="showTab('to_report')">To Report ({{ sar_data.to_report|length }})</button>
+            <button class="tab-btn" onclick="showTab('to_forward')">To Forward ({{ sar_data.to_forward|length }})</button>
+            <button class="tab-btn" onclick="showTab('to_accept')">To Accept ({{ sar_data.to_accept|length }})</button>
+            <button class="tab-btn" onclick="showTab('submitted')">Submitted ({{ sar_data.submitted|length }})</button>
+        </div>
+
+        <!-- Tab: To Report -->
+        <div id="to_report" class="tab-content">
+            <table class="table-grid-view" width="100%">
+                <tr class="header-style">
+                    <th width="5%">S.No</th>
+                    <th>Employee Name</th>
+                    <th>Department</th>
+                    <th width="15%">DOJ</th>
+                    <th width="10%">Basic</th>
+                    <th width="10%">Grade Pay</th>
+                    <th width="8%">View</th>
+                </tr>
+                {% for item in sar_data.to_report %}
+                <tr class="{% if loop.index is odd %}item-style{% else %}item-style-alt{% endif %}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ item.empname }}</td>
+                    <td>{{ item.dept_name }}</td>
+                    <td align="center">{{ item.doj_fmt }}</td>
+                    <td align="right">{{ item.basic }}</td>
+                    <td align="right">{{ item.gp }}</td>
+                    <td align="center">
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" 
+                             style="cursor: pointer;" onclick="viewSarDetails('{{ item.pk_sarid }}')">
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" align="center" style="padding:10px;">No pending SAR to report.</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- Tab: To Forward -->
+        <div id="to_forward" class="tab-content" style="display: none;">
+            <table class="table-grid-view" width="100%">
+                <tr class="header-style">
+                    <th width="5%">S.No</th>
+                    <th>Employee Name</th>
+                    <th>Department</th>
+                    <th width="15%">DOJ</th>
+                    <th width="8%">View</th>
+                </tr>
+                {% for item in sar_data.to_forward %}
+                <tr class="{% if loop.index is odd %}item-style{% else %}item-style-alt{% endif %}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ item.empname }}</td>
+                    <td>{{ item.dept_name }}</td>
+                    <td align="center">{{ item.doj_fmt }}</td>
+                    <td align="center">
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" 
+                             style="cursor: pointer;" onclick="viewSarDetails('{{ item.pk_sarid }}')">
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" align="center" style="padding:10px;">No pending SAR to forward.</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- Tab: To Accept -->
+        <div id="to_accept" class="tab-content" style="display: none;">
+            <table class="table-grid-view" width="100%">
+                <tr class="header-style">
+                    <th width="5%">S.No</th>
+                    <th>Employee Name</th>
+                    <th>Department</th>
+                    <th width="15%">DOJ</th>
+                    <th width="8%">View</th>
+                </tr>
+                {% for item in sar_data.to_accept %}
+                <tr class="{% if loop.index is odd %}item-style{% else %}item-style-alt{% endif %}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ item.empname }}</td>
+                    <td>{{ item.dept_name }}</td>
+                    <td align="center">{{ item.doj_fmt }}</td>
+                    <td align="center">
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" 
+                             style="cursor: pointer;" onclick="viewSarDetails('{{ item.pk_sarid }}')">
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" align="center" style="padding:10px;">No pending SAR to accept.</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- Tab: Submitted -->
+        <div id="submitted" class="tab-content" style="display: none;">
+            <table class="table-grid-view" width="100%">
+                <tr class="header-style">
+                    <th width="5%">S.No</th>
+                    <th>Employee Name</th>
+                    <th>Department</th>
+                    <th width="15%">DOJ</th>
+                    <th width="8%">View</th>
+                    <th width="8%">Print</th>
+                </tr>
+                {% for item in sar_data.submitted %}
+                <tr class="{% if loop.index is odd %}item-style{% else %}item-style-alt{% endif %}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ item.empname }}</td>
+                    <td>{{ item.dept_name }}</td>
+                    <td align="center">{{ item.doj_fmt }}</td>
+                    <td align="center">
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" 
+                             style="cursor: pointer;" onclick="viewSarDetails('{{ item.pk_sarid }}')">
+                    </td>
+                    <td align="center">
+                        <a href="#" style="color: blue;">Print</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" align="center" style="padding:10px;">No submitted SAR found.</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- SAR Detail Modal -->
+<div id="sarModal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+    <div class="modal-content" style="background-color: #fefefe; margin: 5% auto; padding: 0; border: 1px solid #888; width: 80%; border-radius: 4px; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
+        <div style="background: #3c8dbc; color: white; padding: 10px; font-weight: bold;">
+            SAR Details
+            <span style="float: right; cursor: pointer;" onclick="closeSarModal()">&times;</span>
+        </div>
+        <div id="sarModalBody" style="padding: 20px;">
+            Loading...
+        </div>
+        <div style="padding: 10px; border-top: 1px solid #ddd; text-align: right;">
+            <button class="vtext" onclick="closeSarModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .tab-btn { background: #eee; border: 1px solid #ddd; border-bottom: none; padding: 8px 15px; cursor: pointer; font-family: Verdana; font-size: 11px; margin-right: 2px; border-radius: 4px 4px 0 0; }
+    .tab-btn.active { background: #3c8dbc; color: white; border-color: #3c8dbc; font-weight: bold; }
+    .filter-box table td { font-family: Verdana; font-size: 11px; }
+</style>
+
+<script>
+function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(tabId).style.display = 'block';
+    event.currentTarget.classList.add('active');
+}
+
+function viewSarDetails(sarId) {
+    document.getElementById('sarModal').style.display = 'block';
+    document.getElementById('sarModalBody').innerHTML = 'Loading SAR details...';
+    
+    fetch(`/establishment/api/sar/details/${sarId}`)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('sarModalBody').innerHTML = html;
+        })
+        .catch(err => {
+            document.getElementById('sarModalBody').innerHTML = 'Error loading details.';
+            console.error(err);
+        });
+}
+
+function closeSarModal() {
+    document.getElementById('sarModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target == document.getElementById('sarModal')) {
+        closeSarModal();
+    }
+}
+</script>
+{% endblock %}

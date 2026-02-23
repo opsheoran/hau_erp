@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Alert</title>
+    <link href="{{ url_for('static', filename='css/stylesheet.css') }}" rel="stylesheet" type="text/css">
+    <style>
+        body { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; padding: 15px; background-color: #fff; }
+        .alert-title { font-size: 14px; font-weight: bold; color: Red; border-bottom: 2px solid Red; margin-bottom: 15px; padding-bottom: 5px; text-align: center; }
+        .table-grid { border-collapse: collapse; width: 100%; border: 1px solid #D4D4D4; margin-top: 10px; }
+        .table-grid th { background-color: #E6E6E6; color: #333; font-weight: bold; padding: 5px; border: 1px solid #D4D4D4; font-size: 11px; }
+        .table-grid td { padding: 5px; border: 1px solid #D4D4D4; font-size: 11px; color: #333; }
+        .item-style { background-color: #FFFFFF; }
+        .item-style-alt { background-color: #F7F7F7; }
+        .header-red { color: Red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="alert-title">STUDENT ALERT</div>
+    
+    <div style="margin-bottom: 15px;">
+        <b>Student Name:</b> <span class="header-red">{{ info.fullname if info else 'N/A' }}</span><br>
+        <b>Admission No:</b> <span class="header-red">{{ info.enrollmentno if info else 'N/A' }}</span>
+    </div>
+
+    <div class="tablesubheading"><span class="subheadingborderbottom">Achievements</span></div>
+    <table class="table-grid">
+        <thead>
+            <tr>
+                <th width="10%">S.No.</th>
+                <th>Achievement Type</th>
+                <th>Details</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in achievements %}
+            <tr class="{{ 'item-style-alt' if loop.index is even else 'item-style' }}">
+                <td align="center">{{ loop.index }}</td>
+                <td>{{ a.AchievementType }}</td>
+                <td>{{ a.AchievementDetail }}</td>
+                <td>{{ a.AchievementDate }}</td>
+            </tr>
+            {% else %}
+            <tr class="item-style"><td colspan="4" align="center" style="padding:10px; color:#999;">No achievements found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <div class="tablesubheading"><span class="subheadingborderbottom">Disciplinary Actions</span></div>
+    <table class="table-grid">
+        <thead>
+            <tr>
+                <th width="10%">S.No.</th>
+                <th>Action Type</th>
+                <th>Reason</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in disciplinary %}
+            <tr class="{{ 'item-style-alt' if loop.index is even else 'item-style' }}">
+                <td align="center">{{ loop.index }}</td>
+                <td>{{ d.ActionType }}</td>
+                <td>{{ d.Reason }}</td>
+                <td>{{ d.ActionDate }}</td>
+            </tr>
+            {% else %}
+            <tr class="item-style"><td colspan="4" align="center" style="padding:10px; color:#999;">No disciplinary actions found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div style="margin-top: 20px; text-align: center;">
+        <input type="button" value="CLOSE" class="button-common" style="width:80px;" onclick="window.close();">
+    </div>
+</body>
+</html>

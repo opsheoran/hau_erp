@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=1057 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Designation Master_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Designation Master_files/default.css" type="text/css" rel="stylesheet"><link href="./Designation Master_files/font.css" type="text/css" rel="stylesheet"><link href="./Designation Master_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Designation Master_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style><script type="text/javascript" src="./Designation Master_files/WebResource.axd"></script><script type="text/javascript" src="./Designation Master_files/WebResource(1).axd"></script><script type="text/javascript" src="./Designation Master_files/WebResource(2).axd"></script><script type="text/javascript" src="./Designation Master_files/WebResource(3).axd"></script><script type="text/javascript" src="./Designation Master_files/CommonJS.js.download"></script><script type="text/javascript" src="./Designation Master_files/jquery-2.2.0.min.js.download"></script><script type="text/javascript">
+//<![CDATA[
+var Page_Validators = new Array();
+function WebForm_OnSubmit() {
+    return true;
+}
+//]]></script><script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script><script type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script><script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script><script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script><script type="text/javascript">
+        function restrict() {
+            var level = document.getElementById("ctl00_ContentPlaceHolder1_R_txtSenLevel");
+            if (level.value != "") {
+                if (parseInt(level.value) == 0) {
+                    alert("Seniority Level can't be zero!");
+                    level.value = "";
+                    level.focus();
+                    return false;
+                }
+            }
+        }
+        function restrictage() {
+            var age = document.getElementById("ctl00_ContentPlaceHolder1_R_txtAge");
+            if (age.value != "") {
+                if (parseInt(age.value) == 0) {
+                    alert("Retirement Age can't be zero!");
+                    age.value = "";
+                    age.focus();
+                    return false;
+                }
+            }
+        }
+    </script><script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script><script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_R_txtDesignation');//]]>
+</script><script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=1057" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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MCkVSQAGQUstMTUxBkFLLTE2NQZBWC0xNTIGQVgtMTUzBkFYLTE1NAZBWC0xNTUGQVgtMTU2BkNPLTE1NwZDTy0xNTgGQ08tMTU5BkNPLTE2MAZDTy0xNjEGQ08tMTYyBkNPLTE2MwZDTy0xNjQGRVMtMTAwBkVTLTEwMQZFUy0xMDIGRVMtMTAzBkVTLTEwNAZFUy0xMDUGRVMtMTA2BkVTLTEwNwZFUy0xMDgGRVMtMTA5BkVTLTExMAZFUy0xMTEGRVMtMTEyBkVTLTExMwZFUy0xMTQGRVMtMTE1BkVTLTExNgZFUy0xMTcGRVMtMTE4BkVTLTExOQZFUy0xMjAGRVMtMTIxBkVTLTEyMgZFUy0xMjMGRVMtMTI0BkVTLTEyNgZFUy0xMjcGRVMtMTI4BkVTLTEyOQZFUy0xMzAGRVMtMTMxBkVTLTEzMgZFUy0xMzMGRVMtMTM0BkVTLTEzNQZFUy0xMzYGRVMtMTM3BkVTLTEzOAZFUy0xMzkGRVMtMTQwBkVTLTE0MQZFUy0xNDIGRVMtMTQzBkVTLTE0NAZFUy0xNDUFRVMtOTcFRVMtOTgFRVMtOTkGS1YtMTI1BktWLTE0NgZLWi0xNDcGS1otMTQ4BktaLTE0OQZLWi0xNTAFVkMtNzMFVkMtODgFVkMtOTYUKwNJZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZxYBAgdkAgcPEA8WBh8HBQpwa19kZXNnY2F0HwYFC2Rlc2NyaXB0aW9uHwhnZBAVBCEtLS1TZWxlY3QgRGVzaWduYXRpb24gQ2F0ZWdvcnktLS0eQWRtaW5pc3RyYXRpdmUgYW5kIE1pbmlzdGVyaWFsJ090aGVyIHRoYW4gQWRtaW5pc3RyYXRpdmUgJiBNaW5pc3RlcmlhbCBUZWFjaGluZywgUmVzZWFyY2ggYW5kIEV4dGVuc2lvbhUEAAE4AjEwATkUKwMEZ2dnZxYBAgNkAgkPDxYCHwUFBTEwMDAwZGQCCw8QDxYGHwYFCWNsYXNzbmFtZR8HBQpwa19jbGFzc2lkHwhnZBAVBxItLSBTZWxlY3QgQ2xhc3MgLS0BQQFCDkIgbm9uIHRlYWNoaW5nAUMMQyAoVGVhY2hpbmcpAUQVBwAES0ctMgRLVi01BENPLTcES0ctMQRBUy02BEtHLTMUKwMHZ2dnZ2dnZxYBAgFkAg0PDxYCHwUFAjYwZGQCDw8PFgIfBQUBMmRkAhEPDxYCHwVlZGQCEw8PFgIfBWVkZAIVDxAPFgIeB0NoZWNrZWRoFgIeB29uY2xpY2sFiQFqYXZhc2NyaXB0OkFudGhlbV9GaXJlQ2FsbEJhY2tFdmVudCh0aGlzLGV2ZW50LCdjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJENoa0F1dGhvcml0eScsJycsZmFsc2UsJycsJycsJycsdHJ1ZSxudWxsLG51bGwsbnVsbCx0cnVlLHRydWUpO2RkZAIXDxAPFgYfBgULZGVzaWduYXRpb24fBwUJcGtfZGVzZ2lkHwhnZBAV8wMYLS0gU2VsZWN0IERlc2lnbmF0aW9uIC0tBEFBSE0aQWRkbC4gRGlyZWN0b3Igb2YgUmVzZWFyY2gaQWRtaW4tY3VtLUFjY291bnRzIE9mZmljZXIEQURSSRZBZ3JpY3VsdHVyYWwgSW5zcGVjdG9yD0FncmlsLiBFbmdpbmVlchBBZ3JvbWV0IE9ic2VydmVyD0Fncm9tZXRlb3JvbG9neRBBZ3JvbWV0ZXJvbG9naXN0CkFncm9ub21pc3QQQW5pbWFsIEF0dGVuZGFudBZBcHBsaWVkIE1pY3JvYmlvbG9naXN0GkFwcHJlbnRpY2UgaW4gQm9vay1iaW5kaW5nHEFwcHJlbnRpY2UgaW4gSGFuZCBDb21wb3NpbmccQXBwcmVudGljZSBpbiBNYWNoaW5lLU1pbmRlcglBcmNoaXRlY3QWQXJjaHRlY3R1cmFsIEFzc2lzdGFudBdBcnRpc3QtY3VtLVBob3RvZ3JhcGhlchZBc2lzdGFudCBFZGl0b3IoSGluZGkpCUFzc2lzdGFudBlBc3Npc3RhbnQgQWdyaWwuIEVuZ2luZWVyFEFzc2lzdGFudCBBZ3Jvbm9taXN0E0Fzc2lzdGFudCBBcmNoaXRlY3QYQXNzaXN0YW50IEJhY3RlcmlvbG9naXN0FEFzc2lzdGFudCBCaW9jaGVtaXN0I0Fzc2lzdGFudCBCb3RhbmlzdCAoQmFybGV5IEJyZWVkZXIpHUFzc2lzdGFudCBCb3RhbmlzdC1jdW0tU3VwZHQuEUFzc2lzdGFudCBCcmVlZGVyEUFzc2lzdGFudCBDaGVtaXN0GUFzc2lzdGFudCBDb3R0b24gQm90YW5pc3QSQXNzaXN0YW50IERpcmVjdG9yGkFzc2lzdGFudCBEaXJlY3RvciAoQWdyaS4pHEFzc2lzdGFudCBEaXJlY3RvciAoRERVQ0VPRikZQXNzaXN0YW50IERpcmVjdG9yIChSZWwuKRxBc3Npc3RhbnQgRGlyZWN0b3IoQWdyb25vbXkpIUFzc2lzdGFudCBEaXJlY3RvcihDYW1wdXMgU2Nob29sKRxBc3Npc3RhbnQgRGlyZWN0b3IoRERVQ0UtT0YpHkFzc2lzdGFudCBEaXJlY3RvcihFdmFsdWF0aW9uKRxBc3Npc3RhbnQgRGlyZWN0b3IoRk1QRS9QRkUpIEFzc2lzdGFudCBEaXJlY3RvcihIb3J0aWN1bHR1cmUpJEFzc2lzdGFudCBEaXJlY3RvcihQbGFudCBQcm90ZWN0aW9uKSBBc3Npc3RhbnQgRGlyZWN0b3IoU29pbCBTY2llbmNlKRlBc3Npc3RhbnQgRGlyZWN0b3IoU3RhdC4pE0Fzc2lzdGFudCBEcmFmdHNtYW4NQXNzaXN0YW50IERTVxtBc3Npc3RhbnQgRWNvbm9taWMgQm90YW5pc3QiQXNzaXN0YW50IEVjb25vbWljIEJvdGFuaXN0IChSaWNlKRJBc3Npc3RhbnQgRW5naW5lZXIWQXNzaXN0YW50IEVudG9tb2xvZ2lzdCNBc3Npc3RhbnQgRXh0bi4gVHJhaW5pbmcgU3BlY2lhbGlzdBZBc3Npc3RhbnQgRmFybSBNYW5hZ2VyEUFzc2lzdGFudCBGb3JlbWFuF0Fzc2lzdGFudCBGcnVpdCBCcmVlZGVyFEFzc2lzdGFudCBHZW5ldGljaXN0GEFzc2lzdGFudCBIb3J0aWN1bHR1cmlzdBZBc3Npc3RhbnQgSWNodGh5bG9naXN0HUFzc2lzdGFudCBJbmZvcm1hdGlvbiBPZmZpY2VyE0Fzc2lzdGFudCBMaWJyYXJpYW4XQXNzaXN0YW50IE1haXplIEJyZWVkZXIaQXNzaXN0YW50IE1haXplIEVudG9tb2xvZ3kYQXNzaXN0YW50IE1hbmFnZXIoSE9TUC4pF0Fzc2lzdGFudCBNZXRlb3JvbG9naXN0GEFzc2lzdGFudCBNaWNyb2Jpb2xvZ2lzdBZBc3Npc3RhbnQgTmVtYXRvbG9naXN0GkFzc2lzdGFudCBPaWxzZWVkIEJvdGFuaXN0FUFzc2lzdGFudCBQYXRob2xvZ2lzdBZBc3Npc3RhbnQgUGh5c2lvbG9naXN0I0Fzc2lzdGFudCBQaHlzaW9sb2dpc3QgKEJpb2NoZW1pc3QpG0Fzc2lzdGFudCBQbGFudCBQYXRob2xvZ2lzdBtBc3Npc3RhbnQgUG90YXRvIFNwZWNpYWxpc3QTQXNzaXN0YW50IFByb2Zlc3NvcidBc3Npc3RhbnQgUHJvZmVzc29yICggQW5pbWFsIE51dHJpdGlvbikiQXNzaXN0YW50IFByb2Zlc3NvciBCaW9pbmZvcm1hdGljcyFBc3Npc3RhbnQgUHJvZmVzc29yIEJpb3RlY2hub2xvZ3kXQXNzaXN0YW50IFByb2Zlc3NvciBNQkIrQXNzaXN0YW50IFByb2Zlc3NvcihGaXNoaW5nIFRlY2hub2xvZ3kgL0ZFKRlBc3Npc3RhbnQgUHJvZmVzc29yKEhPUlQpIUFzc2lzdGFudCBQcm9mZXNzb3IoSG9ydGljdWx0dXJlKRNBc3Npc3RhbnQgUmVnaXN0cmFyGkFzc2lzdGFudCBSZXNlYXJjaCBPZmZpY2VyGUFzc2lzdGFudCBSZXNpZHVlIENoZW1pc3QWQXNzaXN0YW50IFJpY2UgQnJlZWRlchtBc3Npc3RhbnQgUnVyYWwgU29jaW9sb2dpc3QTQXNzaXN0YW50IFNjaWVudGlzdCFBc3Npc3RhbnQgU2NpZW50aXN0IChBZ3JpLiBFY29uLikjQXNzaXN0YW50IFNjaWVudGlzdCAoQWdybyBGb3Jlc3RyeSkeQXNzaXN0YW50IFNjaWVudGlzdCAoQWdyb25vbXkpIUFzc2lzdGFudCBTY2llbnRpc3QgKEFuaW1hbCBTY2kuKSBBc3Npc3RhbnQgU2NpZW50aXN0IChFbnRvbW9sb2d5KSNBc3Npc3RhbnQgU2NpZW50aXN0IChGcnVpdCBCcmVlZGVyKRhBc3Npc3RhbnQgU2NpZW50aXN0IChQQiklQXNzaXN0YW50IFNjaWVudGlzdCAoUGxhbnQgUGF0aG9sb2d5KShBc3Npc3RhbnQgU2NpZW50aXN0IChQbGFudCBQaHlzaW9sb2dpc3QpIkFzc2lzdGFudCBTY2llbnRpc3QgKFNpbHZhY3VsdHVyZSkaQXNzaXN0YW50IFNjaWVudGlzdCAoU29pbCkhQXNzaXN0YW50IFNjaWVudGlzdCAoVmVnLlNjaWVuY2UpIUFzc2lzdGFudCBTY2llbnRpc3QgQmlvdGVjaG5vbG9neR5Bc3Npc3RhbnQgU2NpZW50aXN0IEdlbmV0aWNpc3QrQXNzaXN0YW50IFNjaWVudGlzdCBNaWNyb2JpYWwgQmlvdGVjaG5vbG9neSVBc3Npc3RhbnQgU2NpZW50aXN0IE5hbm9iaW90ZWNobm9sb2d5IEFzc2lzdGFudCBTY2llbnRpc3QgU29pbCBDaGVtaXN0HEFzc2lzdGFudCBTY2llbnRpc3QoQWdyaW1ldCkdQXNzaXN0YW50IFNjaWVudGlzdChBZ3Jvbm9teSkgQXNzaXN0YW50IFNjaWVudGlzdChDYXJ0b2dyYXBoeSkfQXNzaXN0YW50IFNjaWVudGlzdChFbnRvbW9sb2d5KRpBc3Npc3RhbnQgU2VjdXJpdHkgT2ZmaWNlciFBc3Npc3RhbnQgU2VlZCBQcm9kdWN0aW9uIE9mZmljZXIWQXNzaXN0YW50IFNvaWwgQ2hlbWlzdBhBc3Npc3RhbnQgU3BvcnRzIE9mZmljZXIWQXNzaXN0YW50IFN0YXRpc3RpY2lhbh1Bc3Npc3RhbnQgU3RhdGlzdGljaWFuKEV4dG4uKSBBc3Npc3RhbnQgU3RvcmUgUHVyY2hhc2UgT2ZmaWNlchtBc3Npc3RhbnQgU3VnYXJjYW5lIEJyZWVkZXIaQXNzaXN0YW50IFZlZyBQaHlzaW9sb2dpc3QZQXNzaXN0YW50IFZlZy4gQWdyb25vbWlzdBxBc3Npc3RhbnQgVmVnZXRhYmxlIEJvdGFuaXN0G0Fzc2lzdGFudCBWZWdldGFibGUgQnJlZWRlchtBc3Npc3RhbnQgV2VlZCBSZXMuIE9mZmljZXIlQXNzaXN0YW50LlNjaWVudGlzdCAoUGxhbnQgUGF0aG9sb2d5KRFBc3NpdGFudCBEaXJlY3RvchRBc3NvYy4gRGlyZWN0b3IoRkFTKQ5Bc3NvY2lhdGUgRGVhbhxBc3NvY2lhdGUgRGlyZWN0b3IgKCBDT0JTJkgpJEFzc29jaWF0ZSBEaXJlY3RvciAoUGxhbnQgUGF0aG9sb2d5KRNBc3NvY2lhdGUgUHJvZmVzc29yEUFzc3R0LiBCb2ljaGVtaXN0HEFzdHQuIEV4dG4uIE9mZmljZXIgKENvdHRvbikJQXR0ZW5kYW50E0F0dGVuZGFudCBJbXBvc2l0b3IPQXV0byBFbGVjcmljaWFuD0F1eGlsbGFyeSBOdXJzZQ1CYWpyYSBCcmVlZGVyDkJhcmxleSBCcmVlZGVyBkJlbGRhchZCZWxkYXIgKFN1cGVybnVtZXJhcnkpEEJpbmRyeSBBdHRlbmRhbnQOQmluZHJ5IEZvcmVtYW4LQmlvLWNoZW1pc3QKQmxhY2tzbWl0aBVCb2NoZW1pY2FsIEdlbmV0aWNpc3QLQm9vay1CaW5kZXIHQnJlZWRlcgpCdXMgRHJpdmVyDENhbGlvZ3JhcGhlcg9DYW1lcmEgT3BlcmF0b3ILQ2FuZSBXZWF2ZXIPQ2FyL0plZXAgRHJpdmVyCkNhcmUtVGFrZXIJQ2FycGVudGVyB0Nhc2hpZXIJQ2hhcmdlbWFuEENoaWVmIEFncm9ub21pc3QKQ2hpZWYgQ29vaw5DaGllZiBNZWNoYW5pYw9DaGllZiBTY2llbnRpc3QWQ2hpZWYgU2VjdXJpdHkgT2ZmaWNlchRDaXJjbGUgSGVhZCBEcmFmdG1lbgVDbGVyaxZDbGVyay1jdW0tc3RvcmUga2VlcGVyEENsZXJrLUN1bS1UeXBpc3QPQ29hY2ggQXRobGV0aWNzA0NPRQpDb21wb3NpdG9yC0NvbXB0cm9sbGVyCENvbXB1dGVyCENvbXB1dGVyEUNvbXB1dGVyIE9wZXJhdG9yE0NvbXB1dGVyIFByb2dyYW1tZXIoQ29uc29sZSBPcGVyYXRvciBjdW0gRGF0YSBFbnRyeSBPcGVyYXRvchJDb25zdWx0YW50IEZhY3VsdHkEQ29vawtDb29rIEhlbHBlchJDb29rLWN1bS1DaG93a2lkYXILQ29vcmRpbmF0b3IOQ290dG9uIEJyZWVkZXIHQ3VyYXRvcgVEIFMgVw5ELlAuUC5PcGVyYXRvcg9ELlQuUC4gT3BlcmF0b3ITRGFyayBSb29tIEF0dGVuZGFudAREZWFuCERlYW4gUEdTDkRlbnRhbCBTdXJnZW9uEkRlcHV0eSBDb21wdHJvbGxlcg9EZXB1dHkgRGlyZWN0b3IVRGVwdXR5IEVzdGF0ZSBPZmZpY2VyEERlcHV0eSBMaWJyYXJpYW4QREVQVVRZIFJFR0lTVFJBUg1EZXB1dHkgU3VwZHQuA0RFUxBEaG9sYWsgUGVyZm9ybWVyFkRpcmVjdG9yIENhbXB1cyBTY2hvb2wRRGlyZWN0b3IgRERVQ0UtT0YMRGlyZWN0b3IgRlNUDERpcmVjdG9yIEhSTRFEaXJlY3RvciBJbmNoYXJnZRpEaXJlY3RvciBPZiBFeHRuLkVkdWNhdGlvbhREaXJlY3RvciBvZiBSZXNlYXJjaBlEaXJlY3RvciBTdHVkZW50cyBXZWxmYXJlEkRpcmVjdG9yIFRlY2huaWNhbBZEaXN0cmlidXRpb24gQXNzaXN0YW50C0Rpc3RyaWJ1dG9yFURpdmlzaW9uYWwgQWNjb3VudGFudAREb21lA0RQTAlEcmFmdHNtYW4GRHJpdmVyE0RyaXZlci1DdW0tTWVjaGFuaWMZRHJpdmVyLWN1bS1NZWNoYW5pYyhKZWVwKRxEcml2ZXItY3VtLU1lY2hhbmljKFRyYWN0b3IpEkR5LiBFc3RhdGUgT2ZmaWNlcgdEeS4gUFJPEUVjb25vbWljIEJvdGFuaXN0D0VkaXRvcihFbmdsaXNoKRBFZGl0b3IoUmVzZWFyY2gpE0VkaXRvcmlhbCBBc3Npc3RhbnQSRWxlY3RyaWMgQ2hhcmdlbWFuC0VsZWN0cmljaWFuC2VsZWN0cmljaWFuEUVsZWN0cmljaWFuIEdyIElJEkVtZXJpdHVzIFByb2Zlc3NvciFFc3RhdGUgT2ZmaWNlci1jdW0gQ2hpZWYgRW5naW5lZXISRXhlY3V0aXZlIEVuZ2luZWVyEkV4aGliaXRpb24gT2ZmaWNlciVFeHRuLiBBZ3Jvbm9taXN0L0pvaW50IERpcmVjdG9yIChSRUwpEUV4dG4uIFNwZWNpYWxpc3RzBkZhcmFzaAxGYXJtIE1hbmFnZXIDRkNBDUZlcnJvIEtoYWxhc2kNRmVycm8gUHJpbnRlchBGaWVsZCBTdXBlcnZpc29yCEZpZWxkbWFuE0ZpdHRlci1jdW0tT3BlcmF0b3IaRml0dGVyLWN1bS1PcGVyYXRvciBHci4gSUkORm9sayBEcmFtYXRpc3QNRm9sayBNdXNpY2lhbg5Gb3JhZ2UgQnJlZWRlcgdGb3JlbWFuEUZvcmVtYW4oUmVmICYgQUMpDkdhbWUgT3JnYW5pemVyEkdlbmVyYXRvciBPcGVyYXRvcgpHZW5ldGljaXN0HUdlc3RldG5lciBPcGVyYXRvci1jdW0tRGFmdHJpB0dsYXppZXINR08gY3VtIERhZnRyaRBHcmFwaGljIERlc2lnbmVyE0hhcm1vbml1bSBQZXJmb3JtZXIOSGVhZCBEcmFmdHNtYW4JSGVhZCBNYWxpFEhlYXZ5IFZlaGljbGUgRHJpdmVyBkhlbHBlcgZIZWxwZXIUSGVscGVyIChTdXBlcm51bWVyeSkWSG9ydGljdWx0dXJlIEluc3BlY3Rvcg5Ib3J0aWN1bHR1cmlzdAxIb3N0ZWwgQ2xlcmsNSG9zdGVsIFdhcmRlbhVIb3N0ZWwgV2FyZGVuKEZlbWFsZSkTSG9zdGVsIFdhcmRlbihNYWxlKRdJbmZvcm1hdGlvbiBDYXRlZ29yaXNlchRJbnBzZWN0b3IgKFNlY3VyaXR5KRBJbnNlY3QgRWNvbG9naXN0C0luc2VtaW5hdG9yCkluc3RydWN0b3IYSW5zdHJ1bWVudGF0aW9uIEVuZ2luZWVyE0luc3RydW1lbnRzIEZvcmVtYW4MSW52ZXN0aWdhdG9yC0plZXAgRHJpdmVyDkpvaW50IGRpcmVjdG9yFkpvaW50IERpcmVjdG9yIChDcm9wcykWSm9pbnQgRGlyZWN0b3IgKEV4dG4uKRZKb2ludCBEaXJlY3RvciAoU3RhdC4pGkpvaW50IERpcmVjdG9yKEV2YWx1YXRpb24pGEpvaW50IERpcmVjdG9yKFBsYW5uaW5nKRNKb2ludCBkaXJlY3RvcihTV0UpDkpyLiBBZ3Jvbm9taXN0D0pyLiBCaW8tQ2hlbWlzdAtKci4gQnJlZWRlch9Kci4gQnJlZWRlcihBc3Npc3RhbnRTY2llbnRpc3QpDUpyLiBEcmFmdHNtZW4QSnIuIEVudG9tb2xvZ2lzdCtKci4gTWljcm9iaW9sb2dpc3QvQXNzaXN0YW50IE1pY3JvYmlvbG9naXN0EEpyLiBOZW1hdG9sb2dpc3QPSnIuIFBhdGhvbG9naXN0DkpyLiBQZWRvbG9naXN0EEpyLiBQaG90b2dyYXBoZXIQSnIuIFBoeXNpb2xvZ2lzdBVKci4gUGxhbnQgUGF0aG9sb2dpc3QOSnIuIFByb2dyYW1tZXINSnIuIFNjaWVudGlzdBBKci4gU29pbCBDaGVtaXN0F0pyLiBTb2lsIFdhdGVyIEVuZ2luZWVyEUpyLiBXaGVhdCBCcmVlZGVyA0pSRgNKU1M7SnQuIERpcmVjdG9yIChCYXNpYyBTY2llbmNlcyAmIEh1bWFuaXRpZXMgYW5kIEhvbWUgU2NpZW5jZSkPSnVuaW9yIEVuZ2luZWVyF0p1bmlvciBFbmdpbmVlciAoQ2l2aWwpE0p1bmlvciBQaHl0b2NoZW1pc3QbSnVuaW9yIFRlY2huaWNhbCBTdXBlcnZpc29yDkxhYi4gQXNzaXN0YW50DkxhYi4gQXR0ZW5kYW50D0xhYi4gVGVjaG5pY2lhbhJMYWR5IEhvc3RlbCBXYXJkZW4UTGFkeSBNZWRpY2FsIE9mZmljZXIITGVjdHVyZXISTGVnYWwgUmVtZW1icmFuY2VyCUxpYnJhcmlhbhFMaWJyYXJ5IEFzc2lzdGFudBFMaWJyYXJ5IEF0dGVuZGFudA1MaWZ0IE9wZXJhdG9yCk1hY2hpbmVtYW4NTWFoaWxhIFNldmlrYQ1NYWl6ZSBCcmVlZGVyBE1hbGkITWFzYWxjaGkFTWFzb24LTWFzb24gR3IuSUkcTWFzb24tY3VtLUdsYXppYXIgQ2FycGVudGVycwRNYXRlCE1lY2hhbmljD01lY2hhbmljIChBaWRzKQ9NZWNoYW5pYyAoRmFybSkWTWVjaGFuaWMgKEluc3RydW1lbnRzKRRNZWNoYW5pYyAoUmVmLiAmIEFDKRJNZWNoYW5pYyAoVHJhY3RvcikRTWVjaGFuaWMgT3BlcmF0b3IWTWVjaGFuaWMgT3BlcmF0b3IgKEFDKSxNZWNoYW5pYy1jdW0tRWxlY3RyaWNpYW4vVGVjaG5pY2FsIEFzc2lzdGFudBNNZWNoYW5pYy1jdW0tZml0dGVyD01lZGljYWwgT2ZmaWNlchRNZWRpY2FsIFJlY29yZGtlZXBlcg9NZXNzIFN1cGVydmlzb3IJTWVzc2VuZ2VyF01ldGVvcm9sb2dpY2FsIE9ic2VydmVyDk1pY3JvYmlvbG9naXN0CE1vZGVsbGVyC01vcnRhciBNYXRlDE5lbWF0b2xvZ2lzdA9OdXJzZXJ5IFRlYWNoZXIOTnVyc2luZyBTaXN0ZXILT1NEIEZpbmFuY2UIUEEgdG8gVkMHUGFpbnRlcg5QYWludGVyIEdyLiBJSQ9QYXJ0IFRpbWUgQ2xlcmsQUGFydCBUaW1lIERvY3RvchlQYXJ0IHRpbWUgTWVkaWNhbCBvZmZpY2VyEVBhcnQgVGltZSBTd2VlcGVyClBlZG9sb2dpc3QSUGVyc29uYWwgQXNzaXN0YW50ClBldHJvbCBNZW4KUGhhcm1hY2lzdAxQaG90b2dyYXBoZXIWUGhvdG9ncmFwaGljIEFzc2lzdGFudA1QbGFudCBCcmVlZGVyGlBsYW50IEVuZ2luZWVyLWN1bS1NYW5hZ2VyD1BsYW50IE9iZXNlcnZlch1QbGFudCBPYmVzZXJ2ZXItY3VtLUhlYWQgTWFsaRFQbGFudCBQYXRob2xvZ2lzdBBQbGFudCBWaXJvbG9naXN0DVBsYXRlLUdyYWluZXILUGxhdGUtTWFrZXIHUGx1bWJlchdQbHVtYmVyLWN1bS1FbGVjdHJpY2lhbg9QcmltYXJ5IFRlYWNoZXIJUHJpbmNpcGFsHlByaW5jaXBhbCBFeHRlbnNpb24gU3BlY2lhbGlzdBNQcmluY2lwYWwgU2NpZW50aXN0EVByaXZhdGUgU2VjcmV0YXJ5A1BSTxRQcm9kdWN0aW9uIFNjaWVudGlzdAlQcm9mZXNzb3IZUHJvZmVzc29yIGFuZCBDb21wdHJvbGxlciFQcm9mZXNzb3IoRmlzaGluZyBUZWNobm9sb2d5IC9GRSkKUHJvZ3JhbW1lchBQcm9qZWN0IERpcmVjdG9yDVByb2plY3Rpb25pc3QSUHJvamVjdG9yIE9wZXJhdG9yDFByb29mIFJlYWRlcgxSZWNlcHRpb25pc3QWUmVjZXB0aW9uaXN0IGN1bSBDbGVyaxZSZWZyaWdlcmF0aW9uIE1lY2hhbmljEVJlZ2lvbmFsIERpcmVjdG9yCVJlZ2lzdHJhchJSZXNlYXJjaCBBc3NvY2lhdGURUmVzZWFyY2ggRW5naW5lZXIQUmV0b3VjaGVyL0FydGlzdCdSaWNlIEJyZWVkZXIgL1NyLiBTY2llbnRpZXN0L0VxdWl2YWxlbnQOUm9hZCBJbnNwZWN0b3ISUm9hZCBSb2xsZXIgRHJpdmVyElJvdXRlci1DdW0tTW91bnRlchVTYWxlcyBBc3Npc3RhbnQoUHViLikZU2FsZXMgUHJvbW90aW9uIEFzc2lzdGFudBJTYW5pdGFyeSBJbnNwZWN0b3IMU2F3IE9wZXJhdG9yD1NjaG9vbCBMZWN0dXJlcg5TY2hvb2wgVGVhY2hlcglTY2llbnRpc3QhU2NpZW50aXN0ICggTmVtYXRvZGVzIFRheG9ub21pc3QpDlNjaWVudGlzdCAoUFApA1NERRxTZWNyZXRhcnkgdG8gVmljZS1DaGFuY2VsbG9yD1NlY3Rpb24gT2ZmaWNlcg5TZWN1cml0eSBHdWFyZBBTZWN1cml0eSBPZmZpY2VyEFNlY3VyaXR5IE9mZmljZXIZU2VlZCBQcm9kdWN0aW9uIEFzc2lzdGFudBdTZWVkIFByb2R1Y3Rpb24gT2ZmaWNlchVTZWVkIFJlc2VhcmNoIE9mZmljZXIbU2VuaW9yIFNjaWVudGlmaWMgT2ZmaWNlci1JHFNlbmlvciBTY2llbnRpZmljIE9mZmljZXItSUkQU2VuaW9yIFNjaWVudGlzdANTTU8MU29pbCBDaGVtaXN0DlNvaWwgUGh5c2ljaXN0DlNvaWwgU2NpZW50aXN0A1NQTwNTUFMPU3IuIEFjYXJvbG9naXN0DlNyLiBBZ3Jvbm9taXN0FlNyLiBBbmFseXRpY2FsIENoZW1pc3QOU3IuIEJpb2NoZW1pc3QLU3IuIEJyZWVkZXISU3IuIENvdHRvbiBCcmVlZGVyDVNyLiBEcmFmdHNtYW4YU3IuIEV4dGVuc2lvbiBTcGVjaWFsaXN0E1NyLiBMYWIgVGVjaGluaWNpYW4SU3IuIExhYi4gQXNzaXN0YW50DFNyLiBNZWNoYW5pYxJTci4gTW90b3IgUmV3aW5kZXIQU3IuIFBob3RvZ3JhcGhlchVTci4gUHJpdmF0ZSBzZWNyZXRhcnkUU3IuIFByb2Zlc3NvciBSZWFkZXIQU3IuIFByb29mIFJlYWRlcg1Tci4gU2NpZW50aXN0HFNyLiBTY2llbnRpc3QgKEVudG9tb2xvZ2lzdCkfU3IuIFNjaWVudGlzdCAoUGxhbnQgUGF0aG9sb2d5KRdTci4gVGVjaG5pY2FsIEFzc2lzdGFudA5Tci4gVGVjaG5pY2lhbhxTci4gVGVjaG5pY2lhbihWaWRlbyBQcm9kbi4pFFNyLiBUcmFjdG9yIE1lY2hhbmljHFNyLlNjaWVudGlzdCAoQmlvdGVjaG5vbG9neSkbU3IuU2NpZW50aXN0IChIb3J0aWN1bHR1cmUpG1NyLlNjaWVudGlzdCAoUGFudGhvbG9naXN0KRFTci5TY2llbnRpc3QgKFBCKRRTci5TY2llbnRpc3QgKFNvaWwgKQNTUkYDU1NTClNTUyhIaW5kaSkLU3RhZmYgTnVyc2UMU3Rlbm8tVHlwaXN0GlN0b3JlIFZlcmlmaWNhdGlvbiBPZmZpY2VyDFN0b3JlLUtlZXBlcg1TdG9yZS1LaGFsYXNpGFN1Yi1JbnNwZWN0b3IgKFNlY3VyaXR5KRlTdWJqZWN0IE1hdHRlciBTcGVjaWFsaXN0FFN1Z2FyY2FuZSBBZ3Jvbm9taXN0EVN1Z2FyY2FuZSBCcmVlZGVyEVN1Z2FyY2FuZSBDaGVtaXN0BlN1cGR0LhdTdXBlcmludGVuZGluZyBFbmdpbmVlcghTdXJ2ZXllcgdTd2VlcGVyD1RhYmxhIFBlcmZvcm1lcgdUZWFjaGVyE1RlY2huaWNhbCBBc3Npc3RhbnQTVGVsZXBob25lIEF0dGVuZGFudBJUZWxlcGhvbmUgT3BlcmF0b3IOVGVsZXggT3BlcmF0b3IGVHJhY2VyDlRyYWN0b3IgRHJpdmVyElRyYWluaW5nIEFzc2lzdGFudB1UcmFpbmluZyBBc3Npc3RhbnQgKEtWSyBGYXJtKQpUcmFuc2xhdG9yEVRyYW5zcG9ydCBPZmZpY2VyFFR1YmV3ZWxsIEVsZWN0cmljaWFuBlR1cm5lcgZUeXBpc3QSVmVnZXRhYmxlIEJvdGFuaXN0EVZlZ2V0YWJsZSBCcmVlZGVyEVZlaGljbGUgQXR0ZW5kYW50D1ZpY2UgQ2hhbmNlbGxvcgRWTERBDldhcmQgQXR0ZW5kYW50LldhcmQgQXR0ZW5kYW50IGN1bSBPcGVyYXRpb24gVGhlYXRyZSBBdHRlbmRhbnQGV2VsZGVyDVdlbGwgT2JzZXJ2ZXINV2hlYXQgQnJlZWRlcgxXaGl0ZSB3YXNoZXIOV29yayBJbnNwZWN0b3IRV29ya3Nob3AgRW5naW5lZXINV29ya3Nob3AgTWF0ZQNXUE8KV1BPIEdyLiBJSRxXUE8gR3JhZGUtSUkgKFN1cGVybnVtZXJhcnkpFVlvdW5nIFByb2Zlc3Npb25hbC1JSRXzAwAGRlMtNDk5BFZDLTMEVkMtMgRWQy00BFZDLTUEVkMtNgZESC00ODgGQVgtNDUxBFZDLTcEVkMtOARWQy05BVZDLTEwBVZDLTExBVZDLTEyBVZDLTEzBVZDLTE0BVZDLTE1BVZDLTE2BVZDLTE3BVZDLTE5BVZDLTIwBVZDLTIxBkVTLTQzMwVWQy0yMwVWQy0yNAVWQy0yNQVWQy0yNgVWQy0yNwVWQy0yOAVWQy0yOQZBRS00NzAFVkMtMzAGQUUtNDY2BkFKLTQ1NwZBRS01MTQGQ1MtNDk1BkFFLTUxMgVWQy0zMQZBRS01MTAGQUUtNTA5BkFFLTQ2NwZBRS01MTEFVkMtMzIFVkMtMzMFVkMtMzQFVkMtMzUFVkMtMzYFVkMtMzcFVkMtMzgGQ0ItNDQ5BVZDLTM5BVZDLTQwBVZDLTQxBVZDLTQyBVZDLTQzBVZDLTQ1BVZDLTQ2BVZDLTQ3BVZDLTQ4BVZDLTQ5BVZDLTUwBVZDLTUxBVZDLTUyBVZDLTUzBVZDLTU0BVZDLTU1BVZDLTU2BVZDLTU3BVZDLTU4BVZDLTYwBVZDLTYxBlJSLTUyOAZESC01MDYGREgtNTA0BkRILTUwMQZGUy01MzYGQVAtNTE1BkFaLTUxOAVWQy03NAVWQy03NQVWQy03NgVWQy03NwVWQy03OAVWQy03OQZLWi00NDAGUlItNTI3BlJSLTUyNAZSUi01MjUGQ08tNTMzBkNPLTUzMgZSUi01MjEGQ08tNTM0BVZDLTU5BlJSLTUyMgZSUi01MjMGUlItNTI2BkRILTUwNwZESC01MDIGREgtNTA1BkRILTUwMwZBWC00OTgGQVgtNTM4BlJPLTUxNgZBWC01MzkGUk8tNTE3BVZDLTk3BVZDLTk4BVZDLTk5BlZDLTEwMAZWQy0xMDEGVkMtMTAyBktaLTQ0NQZWQy0xMDMGVkMtMTA0BlZDLTEwNQZWQy0xMDYGVkMtMTA3BlZDLTEwOAZDTy01MzEGQUUtNDY5BlZDLTEwOQZWQy0xMTAGQ08tNDk0BkVFLTQ3NgZWQy0xMTEGQ0ItNDc5BlZDLTExNgZWQy0xMTcGVkMtMTE4BlZDLTExOQZWQy0xMjAGVkMtMTIxBlZDLTEyMgZWQy0xMjMGVkMtMTI0BlZDLTEyNQZWQy0xMjYGQ0ItNDc4BlZDLTEyNwZWQy0xMjgGVkMtMTI5BlZDLTEzMAZWQy0xMzEGVkMtMTMyBlZDLTEzMwZWQy0xMzQGVkMtMTM1BlZDLTEzNgZWQy0xMzcGVkMtMTM4BlZDLTEzOQZWQy0xNDAGVkMtMTQxBlZDLTE0MgZWQy0xNDMGUkgtNDkyBlZDLTE0NQZWQy0xNDYGS1otNDM1BlZDLTE0NwZWQy0xNDgGVkMtMTQ5BlZDLTE1MAZWQy0xNTEGQ0ItNDYxBlZDLTE1MgZWQy0xNTMGVkMtMTU0BlZDLTE1NQZDTy00OTMGVkMtMTU2BlZDLTE1NwZWQy0xNTgGVkMtMTU5BlZDLTE2MAZWQy0xNjEGVkMtMTYyBlZDLTE2MwZBWC00NTQGVkMtMTY0BlZDLTE2NQZDTy00OTcGVkMtMTY2BlZDLTE2NwZWQy0xNjgGS1otNDQxBkVTLTQzMAZWQy0xNjkGVkMtMTcwBlZDLTE3MQZWQy0xNzMGQ1MtNTI5BkNPLTQ3NQZDQi00NjQGVkMtMTc0BkFYLTQ3MgZWQy0xNzUGVkMtMTc2BkNCLTQ2MwZDTy00ODAGVkMtMTc3BlZDLTE3OAZWQy0xNzkEVkMtMQZWQy0xODAGQUotNTQzBlZDLTE4MQZBWC00NTAGVkMtMTgyBlZDLTE4MwZWQy0xODQGVkMtMTg1BlZDLTE4NgZWQy0xODcGVkMtMTg4BlZDLTE4OQZWQy0xOTAGVkMtMTkxBlZDLTE5MwZWQy0xOTIGQ0ItNDQzBkVTLTQzMgZWQy0xOTUGVkMtMTk2BlZDLTE5NwZWQy0xOTgGVkMtMTk5BlZDLTIwMAZWQy0yMDEGVkMtMjAyBlZDLTIwMwZWQy0yMDQGVkMtMjA1BlZDLTIwNgZWQy0yMDcGVkMtMjA4BlZDLTIwOQZWQy0yMTAGVkMtMjExBkNPLTQ2MgZWQy0yMTIGVkMtMjEzBlZDLTIxNAZBUy00NDQGVkMtMjE1BlZDLTIxNgZDTy00NTgGVkMtMjE3BlZDLTIxOAZWQy0yMTkGREgtNDcxBlZDLTIyMAZWQy00MDgGQUotNDYwBlZDLTIyMgZWQy0yMjMGVkMtMjI0BkZTLTU0NAVWQy00NAZWQy0yMjUGVkMtMjI2BlZDLTIyNwZWQy0yMjgGQ0ItNTQxBlZDLTIyOQZWQy0yMzAGVkMtMjMxBlZDLTIzMgZWQy0yMzMGQUotNDQ4BlZDLTIzNAZWQy0yMzUGVkMtMjM2BlZDLTIzNwZWQy0yMzgGQUUtNTEzBlZDLTIzOQZWQy0yNDAGVkMtMjQxBlZDLTI0MgZWQy0yNDMGVkMtMjQ1BlZDLTI0NgZWQy0yNDcGVkMtMjQ4BlZDLTI0OQZWQy0yNTAGVkMtMjUxBlZDLTI1MgZWQy0yNTMGVkMtMjU0BlZDLTI1NwZWQy0yNTgGVkMtMjU5BkNCLTQ1MwZWQy0yNjAGVkMtMjYxBlZDLTI2MgZBSi01NDIGQ08tNDU1BkNPLTQ4NQZWQy0yNjMGVkMtMjY0BlZDLTI2NQZWQy0yNjYGVkMtMjY3BlZDLTI2OAZWQy0yNjkGVkMtMjcwBlZDLTI3MQZWQy0yNzIGVkMtMjczBlZDLTI3NAZWQy0yNzUGVkMtMjc2BlZDLTI3NwZWQy0yNzgGVkMtMjc5BkNCLTQ0NwZWQy0yODAGVkMtMjgxBlZDLTI4MgZWQy0yODMGS1otNDM4BlZDLTI4NAZWQy0yODUGS1otNDM5BlZDLTI4NgZWQy0yODcGVkMtMjg4BlZDLTI4OQZWQy0yOTAGVkMtMjkxBlZDLTI5MgZWQy0yOTMGVkMtMjk0BlZDLTI5NQZWQy0yOTYGVkMtMjk3BlZDLTI5OAZWQy0yOTkGVkMtMzAwBkNPLTQ3NwZWQy0zMDEGVkMtMzAyBlZDLTMwMwZBSi00NTkGVkMtMzA0BlZDLTMwNQZWQy0zMDYGVkMtMzA3BlZDLTMwOAZWQy0zMDkGVkMtMzEwBkFYLTQ4NgZWQy0zMTEGVkMtMzEyBlZDLTMxMwZWQy0zMTQGVkMtMzE1BlZDLTMxNgZWQy0zMTcGVkMtMzE4BlZDLTMxOQZWQy0zMjAGQVgtNDQ2BlZDLTMyMQZWQy0zMjIGRVMtNDMxBlZDLTMyMwZWQy0zMjQGVkMtMzI1BkNPLTQ4MQZWQy0zMjYGQ08tNDc0BkZTLTUzNwZWQy0zMjcGVkMtMzI4BkFYLTQ1NgZWQy0zMzAGVkMtMzMxBlZDLTMzMgZWQy0zMzMGVkMtMzM0BlZDLTMzNQZWQy0zMzYGVkMtMzM3BktaLTQzNwZWQy0zMzkGVkMtMzQwBlZDLTM0MQZWQy0zNDIGVkMtMzQzBlZDLTM0NAZWQy0zNDUGVkMtMzQ2BlZDLTM0NwZSSC00NzMGVkMtMzQ4BlZDLTM0OQZBWC01MzUGVkMtMzUyBlZDLTM1MwZWQy0zOTYGVkMtMzU0BlZDLTM1NQZWQy0xNDQGVkMtMzU2BlZDLTM1NwZWQy0zNTgGVkMtMzU5BkNPLTQ4MwZDTy00ODQGQ08tNDgyBlZDLTM2MAZWQy0zNjEGVkMtMzYyBlZDLTM2MwZWQy0zNjQGVkMtMzY1BkFYLTU0MAZWQy0zNjYGQ08tNDg5BlZDLTM2NwZWQy0zNjgGVkMtMzY5BlZDLTM3MAZDTy00OTEGVkMtMzcxBlZDLTM3MgZWQy0zNzMGVkMtMzc0BlZDLTM3NQZLWi00MzQGVkMtMzc2BktaLTQzNgZWQy0zNzcGVkMtMTk0BlVILTUwOAZWQy0zNzgGVkMtMzc5BlZDLTM4MAZWQy0zODEGREgtNTAwBkNPLTUzMAZBWC01MjAGVkMtMzUxBkxILTUxOQZDQi00NDIGVkMtMzgyBlZDLTM4MwZWQy0zODQGVkMtMzg1BlZDLTM4NwZWQy0zODgGVkMtMzg5BlZDLTM5MAZDQi00OTAGVkMtMzkxBlZDLTM5MgZWQy0zOTMGVkMtMzk0BlJILTQ4NwZWQy0zOTUGVkMtMzk3BlZDLTM5OAZWQy0zOTkGVkMtNDAwBlZDLTQwMQZWQy00MDIGVkMtNDAzBlZDLTQwNAZWQy00MDUGVkMtNDA2BlZDLTQwNwZWQy00MDkGVkMtNDEwBlZDLTQxMQZWQy00MTIGVkMtNDEzBlZDLTQxNAZWQy00MTUGVkMtNDE2BlZDLTQxNwZWQy00MTgGVkMtNDE5BlZDLTQyMAZWQy00MjEGVkMtNDIyBlZDLTQyMwZWQy00MjQGVkMtNDI1BlZDLTQyNgZWQy00MjcGVkMtNDI4BlZDLTQyOQZBWC00NTIGREgtNDk2FCsD8wNnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnFgFmZAIZDxAPFgYfBgULZGVzaWduYXRpb24fBwUJcGtfZGVzZ2lkHwhnZBAVAxgtLSBTZWxlY3QgRGVzaWduYXRpb24gLS0JUmVnaXN0cmFyD1ZpY2UgQ2hhbmNlbGxvchUDAAZWQy0zMzYGVkMtNDE3FCsDA2dnZxYBZmQCGw8PFggfBQUGVVBEQVRFHgtDb21tYW5kTmFtZQUGVVBEQVRFHhdBdXRvVXBkYXRlQWZ0ZXJDYWxsQmFja2ceElRleHREdXJpbmdDYWxsQmFjawULVVBEQVRJTkcuLi5kZAIdDw8WAh8MZ2RkAiEPDxYCHwVlZGQCIw88KwALAQAPFg4eC18hSXRlbUNvdW50AgoeCERhdGFLZXlzFgAeEFZpcnR1YWxJdGVtQ291bnQC8gMeCVBhZ2VDb3VudAIyHhVfIURhdGFTb3VyY2VJdGVtQ291bnQC8gMeDVNlbGVjdGVkSW5kZXgCAR4QQ3VycmVudFBhZ2VJbmRleGZkFgJmD2QWFAICD2QWEmYPDxYCHwUFATFkZAIBD2QWAgIBDxYCHwUFBEFBSE1kAgIPZBYCAgEPFgIfBQUnT3RoZXIgdGhhbiBBZG1pbmlzdHJhdGl2ZSAmIE1pbmlzdGVyaWFsZAIDD2QWAgIBDxYCHwUFAUJkAgQPZBYCAgEPFgIfBQURNTc3MDAt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">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./Designation Master_files/WebResource(4).axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Designation Master_files/WebResource(5).axd" type="text/javascript"></script>
+<script src="./Designation Master_files/WebResource(6).axd" type="text/javascript"></script>
+<script src="./Designation Master_files/WebResource(7).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="3CED0BA5">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="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">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Designation Master_files/user-management.png">
+                            User Management
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=1057#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> University Admin</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> University Admin</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">Comptroller, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=1057#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Designation Master_files/WebResource(8).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Create Masters" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=1032#" tabindex="-1">Create Masters</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create District Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_District_Mst.aspx?Mwpid=1054" tabindex="-1">District Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create DDO Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Mst.aspx?Mwpid=1034" tabindex="-1">DDO Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Office Type Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_OfficeType_Mst.aspx?Mwpid=1052" tabindex="-1">Office Type Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Location Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_Location_Mst.aspx?Mwpid=1053" tabindex="-1">Location Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Section Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Section_Mst.aspx?Mwpid=1937" tabindex="-1">Section Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Department Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Department_Mst.aspx?Mwpid=1056" tabindex="-1">Department Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Class Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Class_Mst.aspx?Mwpid=1059" tabindex="-1">Class Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Grade Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Grade_Mst.aspx?Mwpid=1060" tabindex="-1">Grade Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Designation Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=1057" tabindex="-1">Designation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Religion Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Religion_Mst.aspx?Mwpid=1058" tabindex="-1">Religion Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Comm_DDO_Location_Mapping" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870" tabindex="-1">DDO Location Mapping</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Country State District City Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_Country_State_City_Mst.aspx?Mwpid=2061" tabindex="-1">Country State District City Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Specialization Master" class="level2 dynamic" href="https://hauiums.in/UMM/UMM_Designation_Specialization.aspx?Mwpid=5068" tabindex="-1">Designation Specialization Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Controlling Office Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_ControllingOfficer_Mst.aspx?Mwpid=5076" tabindex="-1">Controlling Office Master</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:18" role="menuitem" style="position: relative; float: left;"><a title="Manage Users" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=1033#" tabindex="-1">Manage Users</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:18" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create User Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035" tabindex="-1">User Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="ResetPassword" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_ResetPassword.aspx?Mwpid=4839" tabindex="-1">Reset Password</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Manage Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_UserAuthorization.aspx?Mwpid=1044" tabindex="-1">Manage Page Rights</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Page Type Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_PageTypeMaster.aspx?Mwpid=1364" tabindex="-1">Page Type Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Role Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793" tabindex="-1">Role Page Rights</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Role Level Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_RoleLevelsMaster.aspx?Mwpid=1365" tabindex="-1">Role Level Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Role Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_RolesMaster.aspx?Mwpid=1366" tabindex="-1">Role Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="PageType-Role Link" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_AssignRolePageType.aspx?Mwpid=1046" tabindex="-1">PageType-Role Link</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Module Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_ModuleMaster.aspx?Mwpid=1363" tabindex="-1">Module Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Page Master" class="level2 dynamic" href="https://hauiums.in/UMM/WebpageMst.aspx?Mwpid=1040" tabindex="-1">Web Page Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="User Login Management" class="level2 dynamic" href="https://hauiums.in/sms/masters/LoginPage_ImageChange.aspx?Mwpid=4853" tabindex="-1">User Login Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Module Rights Detail" class="level2 dynamic" href="https://hauiums.in/UMM/User_ModulDetails.aspx?Mwpid=4951" tabindex="-1">Module Rights Detail</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Fetch Password" class="level2 dynamic" href="https://hauiums.in/UMM/FetchPass.aspx?Mwpid=5165" tabindex="-1">Fetch Password</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Multiple Users Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/MultipleUsers_PageRights.aspx?Mwpid=5245" tabindex="-1">Multiple Users Page Rights</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:34" role="menuitem" style="position: relative; float: left;"><a title="View User Logs" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=1883#" tabindex="-1">View User Logs</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:34" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="User Wise Log" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_UserLoginDetail_Rpt.aspx?Mwpid=1884" tabindex="-1">User Wise Log</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Send Message" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_CommonMessages.aspx?Mwpid=1885" tabindex="-1">Send Message</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:38" role="menuitem" style="position: relative; float: left;"><a title="Database Backup" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=1968#" tabindex="-1">Backup</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:38" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Database Backup" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DbOperations.aspx?Mwpid=1969" tabindex="-1">Database Backup</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:41" role="menuitem" style="position: relative; float: left;"><a title="Other Configurations" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3286#" tabindex="-1">Other Configurations</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:41" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:42" role="menuitem" style="position: relative;"><a title="Hostel Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=3287#" tabindex="-1">Hostel Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:42" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Hostel Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_Hosteltype.aspx?Mwpid=3252" tabindex="-1">Create &amp; Manage Hostel Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Room Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_Rromtypemst.aspx?Mwpid=3253" tabindex="-1">Create &amp; Manage Room Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Building" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_Building_Mst.aspx?Mwpid=3254" tabindex="-1">Create &amp; Manage Building</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Floor" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_Floor_Mst.aspx?Mwpid=3274" tabindex="-1">Create &amp; Manage Floor</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Map Floor With Building" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_FloorMap.aspx?Mwpid=3275" tabindex="-1">Map Floor With Building</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Facility Name" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_RoomFacility_Mst.aspx?Mwpid=3255" tabindex="-1">Create &amp; Manage Facility Name</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_HostelMaster.aspx?Mwpid=3256" tabindex="-1">Create &amp; Manage Hostel</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Assign Asst. Warden To Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Trns/HST_hostelwardendtl.aspx?Mwpid=3261" tabindex="-1">Assign Asst. Warden To Hostel</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Assign User For Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/Hst_AssignedUser_Mst.aspx?Mwpid=4150" tabindex="-1">Assign User For Hostel</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:53" role="menuitem" style="position: relative;"><a title="Fee Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=3700#" tabindex="-1">Fee Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:53" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeTypeMaster.aspx?Mwpid=3538" tabindex="-1">Create &amp; Manage Fee Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Head" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeHeads.aspx?Mwpid=3539" tabindex="-1">Create &amp; Manage Fee Head</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Structure" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeStructure.aspx?Mwpid=3540" tabindex="-1">Create &amp; Manage Fee Structure</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Exemption" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_Exemption.aspx?Mwpid=3550" tabindex="-1">Create &amp; Manage Fee Exemption</a></li>
+			</ul></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="NULL" class="level2 dynamic" href="https://hauiums.in/UMM/UMM_PasswordPolicyManager.aspx?Mwpid=3811" tabindex="-1">Password Policies</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:61" role="menuitem" style="position: relative; float: left;"><a title="Farms/Plants" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3982#" tabindex="-1">Farms/Plants</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:61" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Scheme Master" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_Scheme_Mst.aspx?Mwpid=2447" tabindex="-1">Scheme Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="User Location Scheme Map" class="level2 dynamic" href="https://hauiums.in/LRS/Location_SchemeMapping_Mst.aspx?Mwpid=2448" tabindex="-1">User Location Scheme Map</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Financial Year Master" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_FinYear_Mst.aspx?Mwpid=2443" tabindex="-1">Financial Year Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Change Financial Year" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_Change_FinancialYear.aspx?Mwpid=2484" tabindex="-1">Change Financial Year</a></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Create Masters</span>&nbsp;&gt;&nbsp;<strong>Designation Master</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Designation Master_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <script type="text/javascript" language="javascript">
+        function restrict() {
+            var level = document.getElementById("ctl00_ContentPlaceHolder1_R_txtSenLevel");
+            if (level.value != "") {
+                if (parseInt(level.value) == 0) {
+                    alert("Seniority Level can't be zero!");
+                    level.value = "";
+                    level.focus();
+                    return false;
+                }
+            }
+        }
+        function restrictage() {
+            var age = document.getElementById("ctl00_ContentPlaceHolder1_R_txtAge");
+            if (age.value != "") {
+                if (parseInt(age.value) == 0) {
+                    alert("Retirement Age can't be zero!");
+                    age.value = "";
+                    age.focus();
+                    return false;
+                }
+            }
+        }
+    </script>
+    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%" align="left">
+        <tbody><tr>
+            <td colspan="7" class="tableheading">
+                <span class="mainheadingborderbottom">Designation Master</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td style="width: 15%" id="lblDesignation" class="vtext">Designation
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtDesignation__"><input name="ctl00$ContentPlaceHolder1$R_txtDesignation" type="text" value="Addl. Director of Research" maxlength="100" id="ctl00_ContentPlaceHolder1_R_txtDesignation" class="textboxlong"></span>
+                *
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lnkSearch__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$lnkSearch&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_lnkSearch" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$lnkSearch&#39;,&#39;&#39;)"><img src="./Designation Master_files/srec.jpg" border="0"></a></span>
+            </td>
+            <td></td>
+            <td class="vtext">Grade
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlGrade__"><select name="ctl00$ContentPlaceHolder1$ddlGrade" id="ctl00_ContentPlaceHolder1_ddlGrade" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlGrade&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value="">-- Select Grade --</option>
+	<option value="AK-151">0-0-0SP-NPA-CA-SA(0)</option>
+	<option value="AK-165">44900-142400-500---(0)</option>
+	<option value="AX-152">57700-182400-0---(6000)</option>
+	<option value="AX-153">68900-205500-0---(7000)</option>
+	<option value="AX-154">79800-211500-0---(8000)</option>
+	<option value="AX-155">131400-217100-0---(9000)</option>
+	<option selected="selected" value="AX-156">144200-218200-0---(10000)</option>
+	<option value="CO-157">35400-112400-0--500-(0)</option>
+	<option value="CO-158">44900-142400-200---(0)</option>
+	<option value="CO-159">19900-63200-70---(0)</option>
+	<option value="CO-160">16900-53500-30---525(0)</option>
+	<option value="CO-161">118500-207000-0SP-NPA-CA-SA(0)</option>
+	<option value="CO-162">47600-151110-0--500-(0)</option>
+	<option value="CO-163">128900-219600-0---(10000)</option>
+	<option value="CO-164">67700-191000-0SP-NPA-500CA-0SA(0)</option>
+	<option value="ES-100">18000-56900-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-101">19900-63200-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-102">21700-69100-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-103">21700-69100-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-104">29200-92300-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-105">29200-92300-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-106">35400-112400-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-107">35400-112400-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-108">44900-142400-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-109">47600-151100-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-110">53100-167800-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-111">53100-167800-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-112">56100-177500-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-113">67700-191000-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-114">15600-39100-0SP-NPA-CA-SA(6600)</option>
+	<option value="ES-115">78800-197200-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-116">88400-202600-0SP-NPA-CA-SA(8000)</option>
+	<option value="ES-117">37400-67000-0---(8700)</option>
+	<option value="ES-118">37400-67000-0---(8800)</option>
+	<option value="ES-119">37400-67000-0---(8900)</option>
+	<option value="ES-120">37400-67000-0---(9500)</option>
+	<option value="ES-121">37400-67000-0---(9800)</option>
+	<option value="ES-122">37400-67000-0---(10000)</option>
+	<option value="ES-123">25500-81100-200SP-0NPA-0CA-0SA(0)</option>
+	<option value="ES-124">35400-112400-40SP-NPA-CA-SA(0)</option>
+	<option value="ES-126">78800-197200-0SP-NPA-150CA-300SA(0)</option>
+	<option value="ES-127">67700-191000-0SP-NPA-150CA-SA(6000)</option>
+	<option value="ES-128">47600-151100-0SP-NPA-150CA-SA(0)</option>
+	<option value="ES-129">53100-167800-0SP-NPA-150CA-SA(0)</option>
+	<option value="ES-130">35400-112400-200SP-NPA-CA-SA(0)</option>
+	<option value="ES-131">35400-112400-0SP-NPA-150CA-SA(0)</option>
+	<option value="ES-132">35400-112400-150SP-NPA-CA-SA(0)</option>
+	<option value="ES-133">35400-112400-200SP-NPA-CA-SA(0)</option>
+	<option value="ES-134">25500-81100-40SP-NPA-CA-SA(0)</option>
+	<option value="ES-135">19900-63200-100SP-NPA-CA-SA(0)</option>
+	<option value="ES-136">25500-81100-100SP-NPA-CA-SA(0)</option>
+	<option value="ES-137">19900-63200-40SP-NPA-CA-SA(0)</option>
+	<option value="ES-138">19900-63200-30SP-NPA-CA-SA(0)</option>
+	<option value="ES-139">16900-53500-30SP-NPA-CA-SA(0)</option>
+	<option value="ES-140">25500-81100-300SP-NPA-CA-SA(0)</option>
+	<option value="ES-141">21700-69100-40SP-NPA-CA-SA(0)</option>
+	<option value="ES-142">18000-56900-60SP-NPA-CA-SA(0)</option>
+	<option value="ES-143">16900-53500-30SP-NPA-CA-SA(0)</option>
+	<option value="ES-144">16900-53500-30SP-NPA-CA-SA(0)</option>
+	<option value="ES-145">18000-56900-40SP-NPA-CA-SA(0)</option>
+	<option value="ES-97">16900-53500-60SP-NPA-CA-SA(0)</option>
+	<option value="ES-98">16900-53500-0SP-NPA-CA-SA(0)</option>
+	<option value="ES-99">16900-53500-0SP-NPA-CA-SA(0)</option>
+	<option value="KV-125">25500-81100-0SP-NPA-CA-SA(0)</option>
+	<option value="KV-146">16900-53500-30SP-NPA-CA-625SA(0)</option>
+	<option value="KZ-147">0-0-0SP-NPA-CA-5400SA(0)</option>
+	<option value="KZ-148">18000-56900-30SP-NPA-CA-SA(0)</option>
+	<option value="KZ-149">35400-112400-0SP-NPA-CA-SA(0)</option>
+	<option value="KZ-150">67000-79000-0---(0)</option>
+	<option value="VC-73">37400-67000-0(9000)</option>
+	<option value="VC-88">15600-39100-0SP-NPA-CA-SA(7000)</option>
+	<option value="VC-96">67700-191000-0SP-NPA-CA-SA(0)</option>
+
+</select></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lbldesgcat">Designation Category
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddldesgcat__"><select name="ctl00$ContentPlaceHolder1$D_ddldesgcat" id="ctl00_ContentPlaceHolder1_D_ddldesgcat" class="dropdown">
+	<option value="">---Select Designation Category---</option>
+	<option value="8">Administrative and Ministerial</option>
+	<option value="10">Other than Administrative &amp; Ministerial</option>
+	<option selected="selected" value="9">Teaching, Research and Extension</option>
+
+</select></span>
+                *
+            </td>
+            <td></td>
+
+            <td class="vtext">Grade-Pay
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtGradePay__"><input name="ctl00$ContentPlaceHolder1$txtGradePay" type="text" value="10000" maxlength="12" id="ctl00_ContentPlaceHolder1_txtGradePay" disabled="disabled" class="textboxlong" onkeydown="return NumberOnly(this);" ondrag="return false" ondrop="return false" onpaste="return false;"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblClass">Class
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlClass__"><select name="ctl00$ContentPlaceHolder1$D_ddlClass" id="ctl00_ContentPlaceHolder1_D_ddlClass" class="dropdown">
+	<option value="">-- Select Class --</option>
+	<option selected="selected" value="KG-2">A</option>
+	<option value="KV-5">B</option>
+	<option value="CO-7">B non teaching</option>
+	<option value="KG-1">C</option>
+	<option value="AS-6">C (Teaching)</option>
+	<option value="KG-3">D</option>
+
+</select></span>
+                *
+            </td>
+            <td></td>
+
+
+            <td class="vtext" id="lblAge">Retirement Age
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtAge__"><input name="ctl00$ContentPlaceHolder1$R_txtAge" type="text" value="60" maxlength="2" id="ctl00_ContentPlaceHolder1_R_txtAge" class="textboxlong" ondrag="return false" onkeyup="return restrictage()" ondrop="return false" onpaste="return false;" onkeydown="return NumCheck();"></span>
+                *
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblSenLevel">Seniority Level
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtSenLevel__"><input name="ctl00$ContentPlaceHolder1$R_txtSenLevel" type="text" value="2" maxlength="3" id="ctl00_ContentPlaceHolder1_R_txtSenLevel" class="textboxlong" ondrag="return false" ondrop="return false" onpaste="return false;" onkeyup="return restrict()" onkeydown="return NumCheck();"></span>
+                *
+            </td>
+            <td></td>
+            <td class="vtext">Qualification
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtQualification__"><input name="ctl00$ContentPlaceHolder1$txtQualification" type="text" maxlength="255" id="ctl00_ContentPlaceHolder1_txtQualification" class="textboxlong" ondrag="return false" ondrop="return false" onpaste="return false;"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Remarks
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtRemarks__"><input name="ctl00$ContentPlaceHolder1$txtRemarks" type="text" maxlength="255" id="ctl00_ContentPlaceHolder1_txtRemarks" class="textboxlong" ondrag="return false" ondrop="return false" onpaste="return false;"></span>
+            </td>
+            <td></td>
+            <td class="vtext">Is Appointing Authority?</td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ChkAuthority__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_ChkAuthority" type="checkbox" name="ctl00$ContentPlaceHolder1$ChkAuthority" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ChkAuthority&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);"></span></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Next Designation</td>
+            <td class="colon">:</td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlnextdesg__"><select name="ctl00$ContentPlaceHolder1$ddlnextdesg" id="ctl00_ContentPlaceHolder1_ddlnextdesg" class="dropdownlong">
+	<option selected="selected" value="">-- Select Designation --</option>
+	<option value="FS-499">AAHM</option>
+	<option value="VC-3">Addl. Director of Research</option>
+	<option value="VC-2">Admin-cum-Accounts Officer</option>
+	<option value="VC-4">ADRI</option>
+	<option value="VC-5">Agricultural Inspector</option>
+	<option value="VC-6">Agril. Engineer</option>
+	<option value="DH-488">Agromet Observer</option>
+	<option value="AX-451">Agrometeorology</option>
+	<option value="VC-7">Agrometerologist</option>
+	<option value="VC-8">Agronomist</option>
+	<option value="VC-9">Animal Attendant</option>
+	<option value="VC-10">Applied Microbiologist</option>
+	<option value="VC-11">Apprentice in Book-binding</option>
+	<option value="VC-12">Apprentice in Hand Composing</option>
+	<option value="VC-13">Apprentice in Machine-Minder</option>
+	<option value="VC-14">Architect</option>
+	<option value="VC-15">Archtectural Assistant</option>
+	<option value="VC-16">Artist-cum-Photographer</option>
+	<option value="VC-17">Asistant Editor(Hindi)</option>
+	<option value="VC-19">Assistant</option>
+	<option value="VC-20">Assistant Agril. Engineer</option>
+	<option value="VC-21">Assistant Agronomist</option>
+	<option value="ES-433">Assistant Architect</option>
+	<option value="VC-23">Assistant Bacteriologist</option>
+	<option value="VC-24">Assistant Biochemist</option>
+	<option value="VC-25">Assistant Botanist (Barley Breeder)</option>
+	<option value="VC-26">Assistant Botanist-cum-Supdt.</option>
+	<option value="VC-27">Assistant Breeder</option>
+	<option value="VC-28">Assistant Chemist</option>
+	<option value="VC-29">Assistant Cotton Botanist</option>
+	<option value="AE-470">Assistant Director</option>
+	<option value="VC-30">Assistant Director (Agri.)</option>
+	<option value="AE-466">Assistant Director (DDUCEOF)</option>
+	<option value="AJ-457">Assistant Director (Rel.)</option>
+	<option value="AE-514">Assistant Director(Agronomy)</option>
+	<option value="CS-495">Assistant Director(Campus School)</option>
+	<option value="AE-512">Assistant Director(DDUCE-OF)</option>
+	<option value="VC-31">Assistant Director(Evaluation)</option>
+	<option value="AE-510">Assistant Director(FMPE/PFE)</option>
+	<option value="AE-509">Assistant Director(Horticulture)</option>
+	<option value="AE-467">Assistant Director(Plant Protection)</option>
+	<option value="AE-511">Assistant Director(Soil Science)</option>
+	<option value="VC-32">Assistant Director(Stat.)</option>
+	<option value="VC-33">Assistant Draftsman</option>
+	<option value="VC-34">Assistant DSW</option>
+	<option value="VC-35">Assistant Economic Botanist</option>
+	<option value="VC-36">Assistant Economic Botanist (Rice)</option>
+	<option value="VC-37">Assistant Engineer</option>
+	<option value="VC-38">Assistant Entomologist</option>
+	<option value="CB-449">Assistant Extn. Training Specialist</option>
+	<option value="VC-39">Assistant Farm Manager</option>
+	<option value="VC-40">Assistant Foreman</option>
+	<option value="VC-41">Assistant Fruit Breeder</option>
+	<option value="VC-42">Assistant Geneticist</option>
+	<option value="VC-43">Assistant Horticulturist</option>
+	<option value="VC-45">Assistant Ichthylogist</option>
+	<option value="VC-46">Assistant Information Officer</option>
+	<option value="VC-47">Assistant Librarian</option>
+	<option value="VC-48">Assistant Maize Breeder</option>
+	<option value="VC-49">Assistant Maize Entomology</option>
+	<option value="VC-50">Assistant Manager(HOSP.)</option>
+	<option value="VC-51">Assistant Meteorologist</option>
+	<option value="VC-52">Assistant Microbiologist</option>
+	<option value="VC-53">Assistant Nematologist</option>
+	<option value="VC-54">Assistant Oilseed Botanist</option>
+	<option value="VC-55">Assistant Pathologist</option>
+	<option value="VC-56">Assistant Physiologist</option>
+	<option value="VC-57">Assistant Physiologist (Biochemist)</option>
+	<option value="VC-58">Assistant Plant Pathologist</option>
+	<option value="VC-60">Assistant Potato Specialist</option>
+	<option value="VC-61">Assistant Professor</option>
+	<option value="RR-528">Assistant Professor ( Animal Nutrition)</option>
+	<option value="DH-506">Assistant Professor Bioinformatics</option>
+	<option value="DH-504">Assistant Professor Biotechnology</option>
+	<option value="DH-501">Assistant Professor MBB</option>
+	<option value="FS-536">Assistant Professor(Fishing Technology /FE)</option>
+	<option value="AP-515">Assistant Professor(HORT)</option>
+	<option value="AZ-518">Assistant Professor(Horticulture)</option>
+	<option value="VC-74">Assistant Registrar</option>
+	<option value="VC-75">Assistant Research Officer</option>
+	<option value="VC-76">Assistant Residue Chemist</option>
+	<option value="VC-77">Assistant Rice Breeder</option>
+	<option value="VC-78">Assistant Rural Sociologist</option>
+	<option value="VC-79">Assistant Scientist</option>
+	<option value="KZ-440">Assistant Scientist (Agri. Econ.)</option>
+	<option value="RR-527">Assistant Scientist (Agro Forestry)</option>
+	<option value="RR-524">Assistant Scientist (Agronomy)</option>
+	<option value="RR-525">Assistant Scientist (Animal Sci.)</option>
+	<option value="CO-533">Assistant Scientist (Entomology)</option>
+	<option value="CO-532">Assistant Scientist (Fruit Breeder)</option>
+	<option value="RR-521">Assistant Scientist (PB)</option>
+	<option value="CO-534">Assistant Scientist (Plant Pathology)</option>
+	<option value="VC-59">Assistant Scientist (Plant Physiologist)</option>
+	<option value="RR-522">Assistant Scientist (Silvaculture)</option>
+	<option value="RR-523">Assistant Scientist (Soil)</option>
+	<option value="RR-526">Assistant Scientist (Veg.Science)</option>
+	<option value="DH-507">Assistant Scientist Biotechnology</option>
+	<option value="DH-502">Assistant Scientist Geneticist</option>
+	<option value="DH-505">Assistant Scientist Microbial Biotechnology</option>
+	<option value="DH-503">Assistant Scientist Nanobiotechnology</option>
+	<option value="AX-498">Assistant Scientist Soil Chemist</option>
+	<option value="AX-538">Assistant Scientist(Agrimet)</option>
+	<option value="RO-516">Assistant Scientist(Agronomy)</option>
+	<option value="AX-539">Assistant Scientist(Cartography)</option>
+	<option value="RO-517">Assistant Scientist(Entomology)</option>
+	<option value="VC-97">Assistant Security Officer</option>
+	<option value="VC-98">Assistant Seed Production Officer</option>
+	<option value="VC-99">Assistant Soil Chemist</option>
+	<option value="VC-100">Assistant Sports Officer</option>
+	<option value="VC-101">Assistant Statistician</option>
+	<option value="VC-102">Assistant Statistician(Extn.)</option>
+	<option value="KZ-445">Assistant Store Purchase Officer</option>
+	<option value="VC-103">Assistant Sugarcane Breeder</option>
+	<option value="VC-104">Assistant Veg Physiologist</option>
+	<option value="VC-105">Assistant Veg. Agronomist</option>
+	<option value="VC-106">Assistant Vegetable Botanist</option>
+	<option value="VC-107">Assistant Vegetable Breeder</option>
+	<option value="VC-108">Assistant Weed Res. Officer</option>
+	<option value="CO-531">Assistant.Scientist (Plant Pathology)</option>
+	<option value="AE-469">Assitant Director</option>
+	<option value="VC-109">Assoc. Director(FAS)</option>
+	<option value="VC-110">Associate Dean</option>
+	<option value="CO-494">Associate Director ( COBS&amp;H)</option>
+	<option value="EE-476">Associate Director (Plant Pathology)</option>
+	<option value="VC-111">Associate Professor</option>
+	<option value="CB-479">Asstt. Boichemist</option>
+	<option value="VC-116">Astt. Extn. Officer (Cotton)</option>
+	<option value="VC-117">Attendant</option>
+	<option value="VC-118">Attendant Impositor</option>
+	<option value="VC-119">Auto Elecrician</option>
+	<option value="VC-120">Auxillary Nurse</option>
+	<option value="VC-121">Bajra Breeder</option>
+	<option value="VC-122">Barley Breeder</option>
+	<option value="VC-123">Beldar</option>
+	<option value="VC-124">Beldar (Supernumerary)</option>
+	<option value="VC-125">Bindry Attendant</option>
+	<option value="VC-126">Bindry Foreman</option>
+	<option value="CB-478">Bio-chemist</option>
+	<option value="VC-127">Blacksmith</option>
+	<option value="VC-128">Bochemical Geneticist</option>
+	<option value="VC-129">Book-Binder</option>
+	<option value="VC-130">Breeder</option>
+	<option value="VC-131">Bus Driver</option>
+	<option value="VC-132">Caliographer</option>
+	<option value="VC-133">Camera Operator</option>
+	<option value="VC-134">Cane Weaver</option>
+	<option value="VC-135">Car/Jeep Driver</option>
+	<option value="VC-136">Care-Taker</option>
+	<option value="VC-137">Carpenter</option>
+	<option value="VC-138">Cashier</option>
+	<option value="VC-139">Chargeman</option>
+	<option value="VC-140">Chief Agronomist</option>
+	<option value="VC-141">Chief Cook</option>
+	<option value="VC-142">Chief Mechanic</option>
+	<option value="VC-143">Chief Scientist</option>
+	<option value="RH-492">Chief Security Officer</option>
+	<option value="VC-145">Circle Head Draftmen</option>
+	<option value="VC-146">Clerk</option>
+	<option value="KZ-435">Clerk-cum-store keeper</option>
+	<option value="VC-147">Clerk-Cum-Typist</option>
+	<option value="VC-148">Coach Athletics</option>
+	<option value="VC-149">COE</option>
+	<option value="VC-150">Compositor</option>
+	<option value="VC-151">Comptroller</option>
+	<option value="CB-461">Computer</option>
+	<option value="VC-152">Computer</option>
+	<option value="VC-153">Computer Operator</option>
+	<option value="VC-154">Computer Programmer</option>
+	<option value="VC-155">Console Operator cum Data Entry Operator</option>
+	<option value="CO-493">Consultant Faculty</option>
+	<option value="VC-156">Cook</option>
+	<option value="VC-157">Cook Helper</option>
+	<option value="VC-158">Cook-cum-Chowkidar</option>
+	<option value="VC-159">Coordinator</option>
+	<option value="VC-160">Cotton Breeder</option>
+	<option value="VC-161">Curator</option>
+	<option value="VC-162">D S W</option>
+	<option value="VC-163">D.P.P.Operator</option>
+	<option value="AX-454">D.T.P. Operator</option>
+	<option value="VC-164">Dark Room Attendant</option>
+	<option value="VC-165">Dean</option>
+	<option value="CO-497">Dean PGS</option>
+	<option value="VC-166">Dental Surgeon</option>
+	<option value="VC-167">Deputy Comptroller</option>
+	<option value="VC-168">Deputy Director</option>
+	<option value="KZ-441">Deputy Estate Officer</option>
+	<option value="ES-430">Deputy Librarian</option>
+	<option value="VC-169">DEPUTY REGISTRAR</option>
+	<option value="VC-170">Deputy Supdt.</option>
+	<option value="VC-171">DES</option>
+	<option value="VC-173">Dholak Performer</option>
+	<option value="CS-529">Director Campus School</option>
+	<option value="CO-475">Director DDUCE-OF</option>
+	<option value="CB-464">Director FST</option>
+	<option value="VC-174">Director HRM</option>
+	<option value="AX-472">Director Incharge</option>
+	<option value="VC-175">Director Of Extn.Education</option>
+	<option value="VC-176">Director of Research</option>
+	<option value="CB-463">Director Students Welfare</option>
+	<option value="CO-480">Director Technical</option>
+	<option value="VC-177">Distribution Assistant</option>
+	<option value="VC-178">Distributor</option>
+	<option value="VC-179">Divisional Accountant</option>
+	<option value="VC-1">Dome</option>
+	<option value="VC-180">DPL</option>
+	<option value="AJ-543">Draftsman</option>
+	<option value="VC-181">Driver</option>
+	<option value="AX-450">Driver-Cum-Mechanic</option>
+	<option value="VC-182">Driver-cum-Mechanic(Jeep)</option>
+	<option value="VC-183">Driver-cum-Mechanic(Tractor)</option>
+	<option value="VC-184">Dy. Estate Officer</option>
+	<option value="VC-185">Dy. PRO</option>
+	<option value="VC-186">Economic Botanist</option>
+	<option value="VC-187">Editor(English)</option>
+	<option value="VC-188">Editor(Research)</option>
+	<option value="VC-189">Editorial Assistant</option>
+	<option value="VC-190">Electric Chargeman</option>
+	<option value="VC-191">Electrician</option>
+	<option value="VC-193">electrician</option>
+	<option value="VC-192">Electrician Gr II</option>
+	<option value="CB-443">Emeritus Professor</option>
+	<option value="ES-432">Estate Officer-cum Chief Engineer</option>
+	<option value="VC-195">Executive Engineer</option>
+	<option value="VC-196">Exhibition Officer</option>
+	<option value="VC-197">Extn. Agronomist/Joint Director (REL)</option>
+	<option value="VC-198">Extn. Specialists</option>
+	<option value="VC-199">Farash</option>
+	<option value="VC-200">Farm Manager</option>
+	<option value="VC-201">FCA</option>
+	<option value="VC-202">Ferro Khalasi</option>
+	<option value="VC-203">Ferro Printer</option>
+	<option value="VC-204">Field Supervisor</option>
+	<option value="VC-205">Fieldman</option>
+	<option value="VC-206">Fitter-cum-Operator</option>
+	<option value="VC-207">Fitter-cum-Operator Gr. II</option>
+	<option value="VC-208">Folk Dramatist</option>
+	<option value="VC-209">Folk Musician</option>
+	<option value="VC-210">Forage Breeder</option>
+	<option value="VC-211">Foreman</option>
+	<option value="CO-462">Foreman(Ref &amp; AC)</option>
+	<option value="VC-212">Game Organizer</option>
+	<option value="VC-213">Generator Operator</option>
+	<option value="VC-214">Geneticist</option>
+	<option value="AS-444">Gestetner Operator-cum-Daftri</option>
+	<option value="VC-215">Glazier</option>
+	<option value="VC-216">GO cum Daftri</option>
+	<option value="CO-458">Graphic Designer</option>
+	<option value="VC-217">Harmonium Performer</option>
+	<option value="VC-218">Head Draftsman</option>
+	<option value="VC-219">Head Mali</option>
+	<option value="DH-471">Heavy Vehicle Driver</option>
+	<option value="VC-220">Helper</option>
+	<option value="VC-408">Helper</option>
+	<option value="AJ-460">Helper (Supernumery)</option>
+	<option value="VC-222">Horticulture Inspector</option>
+	<option value="VC-223">Horticulturist</option>
+	<option value="VC-224">Hostel Clerk</option>
+	<option value="FS-544">Hostel Warden</option>
+	<option value="VC-44">Hostel Warden(Female)</option>
+	<option value="VC-225">Hostel Warden(Male)</option>
+	<option value="VC-226">Information Categoriser</option>
+	<option value="VC-227">Inpsector (Security)</option>
+	<option value="VC-228">Insect Ecologist</option>
+	<option value="CB-541">Inseminator</option>
+	<option value="VC-229">Instructor</option>
+	<option value="VC-230">Instrumentation Engineer</option>
+	<option value="VC-231">Instruments Foreman</option>
+	<option value="VC-232">Investigator</option>
+	<option value="VC-233">Jeep Driver</option>
+	<option value="AJ-448">Joint director</option>
+	<option value="VC-234">Joint Director (Crops)</option>
+	<option value="VC-235">Joint Director (Extn.)</option>
+	<option value="VC-236">Joint Director (Stat.)</option>
+	<option value="VC-237">Joint Director(Evaluation)</option>
+	<option value="VC-238">Joint Director(Planning)</option>
+	<option value="AE-513">Joint director(SWE)</option>
+	<option value="VC-239">Jr. Agronomist</option>
+	<option value="VC-240">Jr. Bio-Chemist</option>
+	<option value="VC-241">Jr. Breeder</option>
+	<option value="VC-242">Jr. Breeder(AssistantScientist)</option>
+	<option value="VC-243">Jr. Draftsmen</option>
+	<option value="VC-245">Jr. Entomologist</option>
+	<option value="VC-246">Jr. Microbiologist/Assistant Microbiologist</option>
+	<option value="VC-247">Jr. Nematologist</option>
+	<option value="VC-248">Jr. Pathologist</option>
+	<option value="VC-249">Jr. Pedologist</option>
+	<option value="VC-250">Jr. Photographer</option>
+	<option value="VC-251">Jr. Physiologist</option>
+	<option value="VC-252">Jr. Plant Pathologist</option>
+	<option value="VC-253">Jr. Programmer</option>
+	<option value="VC-254">Jr. Scientist</option>
+	<option value="VC-257">Jr. Soil Chemist</option>
+	<option value="VC-258">Jr. Soil Water Engineer</option>
+	<option value="VC-259">Jr. Wheat Breeder</option>
+	<option value="CB-453">JRF</option>
+	<option value="VC-260">JSS</option>
+	<option value="VC-261">Jt. Director (Basic Sciences &amp; Humanities and Home Science)</option>
+	<option value="VC-262">Junior Engineer</option>
+	<option value="AJ-542">Junior Engineer (Civil)</option>
+	<option value="CO-455">Junior Phytochemist</option>
+	<option value="CO-485">Junior Technical Supervisor</option>
+	<option value="VC-263">Lab. Assistant</option>
+	<option value="VC-264">Lab. Attendant</option>
+	<option value="VC-265">Lab. Technician</option>
+	<option value="VC-266">Lady Hostel Warden</option>
+	<option value="VC-267">Lady Medical Officer</option>
+	<option value="VC-268">Lecturer</option>
+	<option value="VC-269">Legal Remembrancer</option>
+	<option value="VC-270">Librarian</option>
+	<option value="VC-271">Library Assistant</option>
+	<option value="VC-272">Library Attendant</option>
+	<option value="VC-273">Lift Operator</option>
+	<option value="VC-274">Machineman</option>
+	<option value="VC-275">Mahila Sevika</option>
+	<option value="VC-276">Maize Breeder</option>
+	<option value="VC-277">Mali</option>
+	<option value="VC-278">Masalchi</option>
+	<option value="VC-279">Mason</option>
+	<option value="CB-447">Mason Gr.II</option>
+	<option value="VC-280">Mason-cum-Glaziar Carpenters</option>
+	<option value="VC-281">Mate</option>
+	<option value="VC-282">Mechanic</option>
+	<option value="VC-283">Mechanic (Aids)</option>
+	<option value="KZ-438">Mechanic (Farm)</option>
+	<option value="VC-284">Mechanic (Instruments)</option>
+	<option value="VC-285">Mechanic (Ref. &amp; AC)</option>
+	<option value="KZ-439">Mechanic (Tractor)</option>
+	<option value="VC-286">Mechanic Operator</option>
+	<option value="VC-287">Mechanic Operator (AC)</option>
+	<option value="VC-288">Mechanic-cum-Electrician/Technical Assistant</option>
+	<option value="VC-289">Mechanic-cum-fitter</option>
+	<option value="VC-290">Medical Officer</option>
+	<option value="VC-291">Medical Recordkeeper</option>
+	<option value="VC-292">Mess Supervisor</option>
+	<option value="VC-293">Messenger</option>
+	<option value="VC-294">Meteorological Observer</option>
+	<option value="VC-295">Microbiologist</option>
+	<option value="VC-296">Modeller</option>
+	<option value="VC-297">Mortar Mate</option>
+	<option value="VC-298">Nematologist</option>
+	<option value="VC-299">Nursery Teacher</option>
+	<option value="VC-300">Nursing Sister</option>
+	<option value="CO-477">OSD Finance</option>
+	<option value="VC-301">PA to VC</option>
+	<option value="VC-302">Painter</option>
+	<option value="VC-303">Painter Gr. II</option>
+	<option value="AJ-459">Part Time Clerk</option>
+	<option value="VC-304">Part Time Doctor</option>
+	<option value="VC-305">Part time Medical officer</option>
+	<option value="VC-306">Part Time Sweeper</option>
+	<option value="VC-307">Pedologist</option>
+	<option value="VC-308">Personal Assistant</option>
+	<option value="VC-309">Petrol Men</option>
+	<option value="VC-310">Pharmacist</option>
+	<option value="AX-486">Photographer</option>
+	<option value="VC-311">Photographic Assistant</option>
+	<option value="VC-312">Plant Breeder</option>
+	<option value="VC-313">Plant Engineer-cum-Manager</option>
+	<option value="VC-314">Plant Obeserver</option>
+	<option value="VC-315">Plant Obeserver-cum-Head Mali</option>
+	<option value="VC-316">Plant Pathologist</option>
+	<option value="VC-317">Plant Virologist</option>
+	<option value="VC-318">Plate-Grainer</option>
+	<option value="VC-319">Plate-Maker</option>
+	<option value="VC-320">Plumber</option>
+	<option value="AX-446">Plumber-cum-Electrician</option>
+	<option value="VC-321">Primary Teacher</option>
+	<option value="VC-322">Principal</option>
+	<option value="ES-431">Principal Extension Specialist</option>
+	<option value="VC-323">Principal Scientist</option>
+	<option value="VC-324">Private Secretary</option>
+	<option value="VC-325">PRO</option>
+	<option value="CO-481">Production Scientist</option>
+	<option value="VC-326">Professor</option>
+	<option value="CO-474">Professor and Comptroller</option>
+	<option value="FS-537">Professor(Fishing Technology /FE)</option>
+	<option value="VC-327">Programmer</option>
+	<option value="VC-328">Project Director</option>
+	<option value="AX-456">Projectionist</option>
+	<option value="VC-330">Projector Operator</option>
+	<option value="VC-331">Proof Reader</option>
+	<option value="VC-332">Receptionist</option>
+	<option value="VC-333">Receptionist cum Clerk</option>
+	<option value="VC-334">Refrigeration Mechanic</option>
+	<option value="VC-335">Regional Director</option>
+	<option value="VC-336">Registrar</option>
+	<option value="VC-337">Research Associate</option>
+	<option value="KZ-437">Research Engineer</option>
+	<option value="VC-339">Retoucher/Artist</option>
+	<option value="VC-340">Rice Breeder /Sr. Scientiest/Equivalent</option>
+	<option value="VC-341">Road Inspector</option>
+	<option value="VC-342">Road Roller Driver</option>
+	<option value="VC-343">Router-Cum-Mounter</option>
+	<option value="VC-344">Sales Assistant(Pub.)</option>
+	<option value="VC-345">Sales Promotion Assistant</option>
+	<option value="VC-346">Sanitary Inspector</option>
+	<option value="VC-347">Saw Operator</option>
+	<option value="RH-473">School Lecturer</option>
+	<option value="VC-348">School Teacher</option>
+	<option value="VC-349">Scientist</option>
+	<option value="AX-535">Scientist ( Nematodes Taxonomist)</option>
+	<option value="VC-352">Scientist (PP)</option>
+	<option value="VC-353">SDE</option>
+	<option value="VC-396">Secretary to Vice-Chancellor</option>
+	<option value="VC-354">Section Officer</option>
+	<option value="VC-355">Security Guard</option>
+	<option value="VC-144">Security Officer</option>
+	<option value="VC-356">Security Officer</option>
+	<option value="VC-357">Seed Production Assistant</option>
+	<option value="VC-358">Seed Production Officer</option>
+	<option value="VC-359">Seed Research Officer</option>
+	<option value="CO-483">Senior Scientific Officer-I</option>
+	<option value="CO-484">Senior Scientific Officer-II</option>
+	<option value="CO-482">Senior Scientist</option>
+	<option value="VC-360">SMO</option>
+	<option value="VC-361">Soil Chemist</option>
+	<option value="VC-362">Soil Physicist</option>
+	<option value="VC-363">Soil Scientist</option>
+	<option value="VC-364">SPO</option>
+	<option value="VC-365">SPS</option>
+	<option value="AX-540">Sr. Acarologist</option>
+	<option value="VC-366">Sr. Agronomist</option>
+	<option value="CO-489">Sr. Analytical Chemist</option>
+	<option value="VC-367">Sr. Biochemist</option>
+	<option value="VC-368">Sr. Breeder</option>
+	<option value="VC-369">Sr. Cotton Breeder</option>
+	<option value="VC-370">Sr. Draftsman</option>
+	<option value="CO-491">Sr. Extension Specialist</option>
+	<option value="VC-371">Sr. Lab Techinician</option>
+	<option value="VC-372">Sr. Lab. Assistant</option>
+	<option value="VC-373">Sr. Mechanic</option>
+	<option value="VC-374">Sr. Motor Rewinder</option>
+	<option value="VC-375">Sr. Photographer</option>
+	<option value="KZ-434">Sr. Private secretary</option>
+	<option value="VC-376">Sr. Professor Reader</option>
+	<option value="KZ-436">Sr. Proof Reader</option>
+	<option value="VC-377">Sr. Scientist</option>
+	<option value="VC-194">Sr. Scientist (Entomologist)</option>
+	<option value="UH-508">Sr. Scientist (Plant Pathology)</option>
+	<option value="VC-378">Sr. Technical Assistant</option>
+	<option value="VC-379">Sr. Technician</option>
+	<option value="VC-380">Sr. Technician(Video Prodn.)</option>
+	<option value="VC-381">Sr. Tractor Mechanic</option>
+	<option value="DH-500">Sr.Scientist (Biotechnology)</option>
+	<option value="CO-530">Sr.Scientist (Horticulture)</option>
+	<option value="AX-520">Sr.Scientist (Panthologist)</option>
+	<option value="VC-351">Sr.Scientist (PB)</option>
+	<option value="LH-519">Sr.Scientist (Soil )</option>
+	<option value="CB-442">SRF</option>
+	<option value="VC-382">SSS</option>
+	<option value="VC-383">SSS(Hindi)</option>
+	<option value="VC-384">Staff Nurse</option>
+	<option value="VC-385">Steno-Typist</option>
+	<option value="VC-387">Store Verification Officer</option>
+	<option value="VC-388">Store-Keeper</option>
+	<option value="VC-389">Store-Khalasi</option>
+	<option value="VC-390">Sub-Inspector (Security)</option>
+	<option value="CB-490">Subject Matter Specialist</option>
+	<option value="VC-391">Sugarcane Agronomist</option>
+	<option value="VC-392">Sugarcane Breeder</option>
+	<option value="VC-393">Sugarcane Chemist</option>
+	<option value="VC-394">Supdt.</option>
+	<option value="RH-487">Superintending Engineer</option>
+	<option value="VC-395">Surveyer</option>
+	<option value="VC-397">Sweeper</option>
+	<option value="VC-398">Tabla Performer</option>
+	<option value="VC-399">Teacher</option>
+	<option value="VC-400">Technical Assistant</option>
+	<option value="VC-401">Telephone Attendant</option>
+	<option value="VC-402">Telephone Operator</option>
+	<option value="VC-403">Telex Operator</option>
+	<option value="VC-404">Tracer</option>
+	<option value="VC-405">Tractor Driver</option>
+	<option value="VC-406">Training Assistant</option>
+	<option value="VC-407">Training Assistant (KVK Farm)</option>
+	<option value="VC-409">Translator</option>
+	<option value="VC-410">Transport Officer</option>
+	<option value="VC-411">Tubewell Electrician</option>
+	<option value="VC-412">Turner</option>
+	<option value="VC-413">Typist</option>
+	<option value="VC-414">Vegetable Botanist</option>
+	<option value="VC-415">Vegetable Breeder</option>
+	<option value="VC-416">Vehicle Attendant</option>
+	<option value="VC-417">Vice Chancellor</option>
+	<option value="VC-418">VLDA</option>
+	<option value="VC-419">Ward Attendant</option>
+	<option value="VC-420">Ward Attendant cum Operation Theatre Attendant</option>
+	<option value="VC-421">Welder</option>
+	<option value="VC-422">Well Observer</option>
+	<option value="VC-423">Wheat Breeder</option>
+	<option value="VC-424">White washer</option>
+	<option value="VC-425">Work Inspector</option>
+	<option value="VC-426">Workshop Engineer</option>
+	<option value="VC-427">Workshop Mate</option>
+	<option value="VC-428">WPO</option>
+	<option value="VC-429">WPO Gr. II</option>
+	<option value="AX-452">WPO Grade-II (Supernumerary)</option>
+	<option value="DH-496">Young Professional-II</option>
+
+</select></span>
+            </td>
+            <td></td>
+            <td class="vtext">Appointing Authority</td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlAuthority__"><select name="ctl00$ContentPlaceHolder1$ddlAuthority" id="ctl00_ContentPlaceHolder1_ddlAuthority" class="dropdownlong">
+	<option selected="selected" value="">-- Select Designation --</option>
+	<option value="VC-336">Registrar</option>
+	<option value="VC-417">Vice Chancellor</option>
+
+</select></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5"></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="5">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tbody><tr>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnSave__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="UPDATE" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSave&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;UPDATING...&#39;,true,btnSave_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSave" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnPrint__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnPrint" value="Print" id="ctl00_ContentPlaceHolder1_btnPrint" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tablesubheading">
+                <span class="subheadingborderbottom">List of Designations</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_dgDetails__"><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td>S. No.</td><td>Designation Name</td><td>Designation Category</td><td>Class</td><td>Grade</td><td>Seniority Level</td><td>Retirement Age</td><td>EDIT</td><td>DELETE</td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">1</td><td style="width:20%;">
+                                AAHM
+                            </td><td align="center" style="width:10%;">
+                                Other than Administrative &amp; Ministerial
+                            </td><td align="center" style="width:10%;">
+                                B
+                            </td><td style="width:18%;">
+                                57700-182400-0---
+                            </td><td align="center">
+                                2
+                            </td><td align="center">
+                                60
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;)"><img src="./Designation Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;)">
+                    <img src="./Designation Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete--></span>
+                            </td>
+	</tr><tr class="item-style" style="color:Black;background-color:#E4EAFF;font-weight:normal;">
+		<td align="center" style="width:5%;">2</td><td style="width:20%;">
+                                Addl. Director of Research
+                            </td><td align="center" style="width:10%;">
+                                Teaching, Research and Extension
+                            </td><td align="center" style="width:10%;">
+                                A
+                            </td><td style="width:18%;">
+                                144200-218200-0---
+                            </td><td align="center">
+                                2
+                            </td><td align="center">
+                                60
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;)"><img src="./Designation Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete&#39;,&#39;&#39;)">
+                    <img src="./Designation Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete--></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">3</td><td style="width:20%;">
+                                Admin-cum-Accounts Officer
+                            </td><td align="center" style="width:10%;">
+                                Administrative and Ministerial
+                            </td><td align="center" style="width:10%;">
+                                B
+                            </td><td style="width:18%;">
+                                53100-167800-0SP-NPA-CA-SA
+                            </td><td align="center">
+                                2
+                            </td><td align="center">
+                                60
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;)"><img src="./Designation Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete&#39;,&#39;&#39;)">
+                    <img src="./Designation Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete--></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">4</td><td style="width:20%;">
+                                ADRI
+                            </td><td align="center" style="width:10%;">
+                                Teaching, Research and Extension
+                            </td><td align="center" style="width:10%;">
+                                B
+                            </td><td style="width:18%;">
+                                67700-191000-0SP-NPA-CA-SA
+                            </td><td align="center">
+                                1
+                            </td><td align="center">
+                                60
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;)"><img src="./Designation Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete&#39;,&#39;&#39;)">
+                    <img src="./Designation Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete--></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">5</td><td style="width:20%;">
+                                Agricultural Inspector
+                            </td><td align="center" style="width:10%;">
+                                Other than Administrative &amp; Ministerial
+                            </td><td align="center" style="width:10%;">
+                                C
+                            </td><td style="width:18%;">
+                                19900-63200-0SP-NPA-CA-SA
+                            </td><td align="center">
+                                4
+                            </td><td align="center">
+                                60
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;)"><img src="./Designation Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete&#39;,&#39;&#39;)">
+                    <img src="./Designation Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete--></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">6</td><td style="width:20%;">
+                                Agril. Engineer
+                            </td><td align="center" style="width:10%;">
+                                Other than Administrative &amp; Ministerial
+                            </td><td align="center" style="width:10%;">
+                                B
+                            </td><td style="width:18%;">
+                                67700-191000-0SP-NPA-CA-SA
+                            </td><td align="center">
+                                3
+                            </td><td align="center">
+                                60
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;)"><img src="./Designation Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete&#39;,&#39;&#39;)">
+                    <img src="./Designation Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete--></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">7</td><td style="width:20%;">
+                                Agromet Observer
+                            </td><td align="center" style="width:10%;">
+                                Teaching, Research and Extension
+                            </td><td align="center" style="width:10%;">
+                                C
+                            </td><td style="width:18%;">
+                                0-0-0SP-NPA-CA-SA
+                            </td><td align="center">
+                                1
+                            </td><td align="center">
+                                60
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;)"><img src="./Designation Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete&#39;,&#39;&#39;)">
+                    <img src="./Designation Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete--></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">8</td><td style="width:20%;">
+                                Agrometeorology
+                            </td><td align="center" style="width:10%;">
+                                Teaching, Research and Extension
+                            </td><td align="center" style="width:10%;">
+                                B
+                            </td><td style="width:18%;">
+                                88400-202600-0SP-NPA-CA-SA
+                            </td><td align="center">
+                                2
+                            </td><td align="center">
+                                60
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;)"><img src="./Designation Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete&#39;,&#39;&#39;)">
+                    <img src="./Designation Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete--></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">9</td><td style="width:20%;">
+                                Agrometerologist
+                            </td><td align="center" style="width:10%;">
+                                Teaching, Research and Extension
+                            </td><td align="center" style="width:10%;">
+                                B
+                            </td><td style="width:18%;">
+                                88400-202600-0SP-NPA-CA-SA
+                            </td><td align="center">
+                                2
+                            </td><td align="center">
+                                60
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;)"><img src="./Designation Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete&#39;,&#39;&#39;)">
+                    <img src="./Designation Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete--></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">10</td><td style="width:20%;">
+                                Agronomist
+                            </td><td align="center" style="width:10%;">
+                                Teaching, Research and Extension
+                            </td><td align="center" style="width:10%;">
+                                B
+                            </td><td style="width:18%;">
+                                88400-202600-0SP-NPA-CA-SA
+                            </td><td align="center">
+                                3
+                            </td><td align="center">
+                                60
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;)"><img src="./Designation Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete&#39;,&#39;&#39;)">
+                    <img src="./Designation Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete--></span>
+                            </td>
+	</tr><tr class="pager-style" align="center" style="color:#000000;">
+		<td colspan="9"><span>1</span>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;Page$2&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;&#39;)" style="color:#000000;">2</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;Page$3&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;&#39;)" style="color:#000000;">3</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl03&#39;,&#39;Page$4&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl03&#39;,&#39;&#39;)" style="color:#000000;">4</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl04&#39;,&#39;Page$5&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl04&#39;,&#39;&#39;)" style="color:#000000;">5</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl05&#39;,&#39;Page$6&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl05&#39;,&#39;&#39;)" style="color:#000000;">6</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl06&#39;,&#39;Page$7&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl06&#39;,&#39;&#39;)" style="color:#000000;">7</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl07&#39;,&#39;Page$8&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl07&#39;,&#39;&#39;)" style="color:#000000;">8</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl08&#39;,&#39;Page$9&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl08&#39;,&#39;&#39;)" style="color:#000000;">9</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl09&#39;,&#39;Page$10&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl09&#39;,&#39;&#39;)" style="color:#000000;">10</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl10&#39;,&#39;Page$11&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl10&#39;,&#39;&#39;)" style="color:#000000;">...</a></td>
+	</tr>
+</tbody></table></div>
+            </td>
+        </tr>
+    </tbody></table>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_R_txtDesignation');//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./Designation Master_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Designation Master_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

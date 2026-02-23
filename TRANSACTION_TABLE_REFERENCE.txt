@@ -1,0 +1,76 @@
+TRANSACTION TABLE REFERENCE (VERIFIED FEB 2026)
+
+This file records verified master/transaction tables for Establishment -> Transactions pages.
+Only add entries here once the table has been confirmed against the live database schema.
+
+1) SAR/ACR Admin Transaction (establishment.sar_admin_transaction)
+- Primary Transaction Table: SAR_Employee_Mst
+  - PK: pk_sarid
+  - Links:
+    - fk_empid -> SAL_Employee_Mst.pk_empid (employee name/code, department/designation)
+    - fk_finid -> SAL_Financial_Year.pk_finid (Financial Year / "Session" filter values like CO-11, ES-10)
+    - fk_categoryid -> category mapping used by UI (T/N/F -> 1/2/3)
+  - Status fields used for tabs:
+    - IsSubmit (char) : submitted flag
+    - FinalApproval (bit) : final approval flag
+
+- Session/Year Master Table used by dropdown:
+  - SAL_Financial_Year (pk_finid)
+  - Display can be derived from date1/date2 year range (e.g., 2020-2021)
+
+- Department Master Table used by dropdown:
+  - Department_Mst (pk_deptid, description)
+
+Notes:
+- The previously referenced table SMS_Session_Mst does NOT exist in the current database (confirmed by SELECT failure).
+- SAR_Employee_Mst.fk_finid values match SAL_Financial_Year.pk_finid.
+
+2) Employee Previous Job Details (establishment.employee_previous_job_details)
+- Transaction Table: SAL_EmployeePreviousJob_Details
+  - PK: pk_pjobid
+  - FK: fk_empid -> SAL_Employee_Mst.pk_empid
+
+3) Employee Foreign Visit Details (establishment.employee_foreign_visit_details)
+- Transaction Table: SAL_EmployeeForeignVisit_Details
+  - PK: pk_visitid
+  - FK: fk_empid -> SAL_Employee_Mst.pk_empid
+  - FK: FK_FSponsor_Id -> SAL_FundSponsor_Mst.PK_FSponsor_Id
+- Sponsor Master Table: SAL_FundSponsor_Mst (PK_FSponsor_Id, FName, DisplayOrder)
+
+4) Employee Training Details (establishment.employee_training_details)
+- Transaction Table: SAL_EmployeeTraining_Details
+  - PK: pk_trainingid
+  - FK: fk_empid -> SAL_Employee_Mst.pk_empid
+  - FK: FK_FSponsor_Id -> SAL_FundSponsor_Mst.PK_FSponsor_Id
+- Sponsor Master Table: SAL_FundSponsor_Mst (PK_FSponsor_Id, FName, DisplayOrder)
+
+5) Employee Departmental Exam Details (establishment.employee_departmental_exam_details)
+- Transaction Table: SAL_EmployeeDepartmentalExam_Details
+  - PK: pk_deptexamid
+  - FK: fk_empid -> SAL_Employee_Mst.pk_empid
+  - FK: FK_EType_Id -> SAL_ExamType_Mst.PK_EType_Id
+- Exam Type Master Table: SAL_ExamType_Mst (PK_EType_Id, ExamType, DisplayOrder)
+
+6) Employee Service Verification Details (establishment.employee_service_verification_details)
+- Transaction Table: SAL_EmployeeServiceVerification_Details
+  - PK: pk_verificationid
+  - FK: fk_empid -> SAL_Employee_Mst.pk_empid
+  - FK: fk_natureid -> SAL_Nature_Mst.pk_natureid
+- Nature Master Table: SAL_Nature_Mst (pk_natureid, nature)
+
+7) Disciplinary Action/Reward Details (establishment.employee_disciplinary_details)
+- Transaction Table: EST_Disciplinary_Action_Details
+  - PK: pk_discid
+  - FK: fk_empid -> SAL_Employee_Mst.pk_empid
+  - Soft delete flag: IsDeleted
+
+8) Employee Loan Details (establishment.employee_loan_details)
+- Transaction Table: SAL_EmployeeLoan_Details
+  - PK: pk_loanId
+  - FK: fk_empid -> SAL_Employee_Mst.pk_empid
+
+9) Employee Book Grant Amount Details (establishment.employee_book_grant_details)
+- Transaction Table: SAL_BookGrantDetails_Details
+  - PK: pk_grantId
+  - FK: fk_empid -> SAL_Employee_Mst.pk_empid
+

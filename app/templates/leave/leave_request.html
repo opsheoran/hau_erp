@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    /* AGGRESSIVE BORDER REMOVAL FOR FORM TABLES */
+    .form-table, .form-table td, .form-table tr, .form-table th { 
+        border: none !important; 
+        border-collapse: collapse !important;
+        padding: 4px 8px !important;
+    }
+    
+    /* MAINTAIN BORDERS ONLY FOR DATA GRIDS */
+    .table-grid-view { border-collapse: collapse !important; width: 100%; border: 1px solid #D4D4D4 !important; margin-bottom: 20px; }
+    .table-grid-view td, .table-grid-view th { border: 1px solid #D4D4D4 !important; padding: 5px; }
+    
+    .vtext { font-family: Verdana; font-size: 11px; font-weight: bold; color: #333333; }
+    .colon { font-family: Verdana; font-size: 11px; font-weight: bold; color: #333333; text-align: center; width: 10px; }
+    .required { font-family: Verdana; font-size: 11px; color: Red; font-weight: bold; }
+    .textbox { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; height: 18px; }
+    .textboxdate { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; height: 18px; width: 80px; }
+    .dropdown { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; height: 22px; }
+    .dropdownverysmall { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; height: 22px; }
+    .textboxmultiline { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; width: 100%; }
+    .button-common { font-family: Verdana; font-size: 11px; font-weight: bold; height: 24px; cursor: pointer; background: #f4f4f4; border: 1px solid #bbb; padding: 0 10px; text-transform: uppercase; }
+    
+    /* SEARCH MODAL STYLES */
+    .white_content-new { 
+        display: none; position: fixed; top: 10%; left: 20%; width: 60%; height: auto; 
+        max-height: 80%; padding: 20px; border: 2px solid #3c8dbc; background-color: white; 
+        z-index: 9999; overflow-y: auto; box-shadow: 0px 0px 30px #000; 
+    }
+</style>
+
+<div style="padding: 10px;">
+    <!-- TITLE AREA (Borderless) -->
+    <table class="form-table">
+        <tr><td class="tablesubheading">Leave Request</td></tr>
+        <tr><td style="height:5px;"></td></tr>
+        <tr><td class="vtext" style="color: blue; text-decoration: underline; cursor: pointer;">Download Leave Information</td></tr>
+        <tr><td style="height:5px;"></td></tr>
+        <tr><td><b style="color: Blue;">{{ emp.empcode }} | {{ emp.empname }} | {{ emp.designation }}</b></td></tr>
+    </table>
+
+    <!-- BALANCE GRID (Bordered) -->
+    <table class="table-grid-view">
+        <tr class="header-style">
+            <td>S.No.</td><td>Leave Type</td><td>Total Leave (Days)</td><td>Availed Leave (Days)</td><td>Adjusted Leave (Days)</td><td>Balance Leave (Days)</td><td>Applied Leave (Days)</td><td>Applied Balance Leave(Days)</td>
+        </tr>
+        {% for row in summary %}
+        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+            <td align="center">{{ loop.index }}</td>
+            <td>{{ row.leavetype }}</td>
+            <td align="right">{{ "{:,.2f}".format(row.total|float) }}</td>
+            <td align="right">{{ "{:,.2f}".format(row.availed|float) }}</td>
+            <td align="right">{{ "{:,.2f}".format(row.adjusted|float) }}</td>
+            <td align="right"><b>{{ "{:,.2f}".format(row.balance|float) }}</b></td>
+            <td align="right" style="color:red;">{{ "{:,.2f}".format(row.applied|float) }}</td>
+            <td align="right"><b>{{ "{:,.2f}".format(row.applied_balance|float) }}</b></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- PIXEL PERFECT FORM (EXACT SEQUENCE) -->
+    <form method="POST" id="leaveForm">
+        <input type="hidden" name="emp_id" value="{{ emp.pk_empid }}">
+        <input type="hidden" name="loc_id" value="{{ emp.fk_locid }}">
+        
+        <table class="form-table">
+            <!-- Row 1: Reporting To | Leave Type -->
+            <tr>
+                <td class="vtext" width="15%">Reporting To</td>
+                <td class="colon">:</td>
+                <td class="required" width="33%">
+                    <input type="text" id="ro_name" class="textbox" style="width:180px;" readonly value="{{ ro.name if ro else '' }}">
+                    <input type="hidden" name="reporting_to" id="ro_id" value="{{ ro.id if ro else '' }}">
+                    <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="ShowSearch('ro')" style="cursor:pointer; vertical-align:middle;">
+                    *
+                </td>
+                <td class="vtext" width="15%">Leave Type</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="leave_id" id="ddlLeaveType" class="dropdown" style="width:185px;" required>
+                        <option value="">-- Select Leave Type --</option>
+                        {% for t in leave_types %}
+                        <option value="{{ t.id }}">{{ t.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+
+            <!-- Row 2: From Date | To Date -->
+            <tr>
+                <td class="vtext">From Date</td><td class="colon">:</td>
+                <td class="required">
+                    <input type="date" name="from_date" id="txtFDate" class="textboxdate" required> *
+                </td>
+                <td class="vtext">To Date</td><td class="colon">:</td>
+                <td class="required">
+                    <input type="date" name="to_date" id="txtTDate" class="textboxdate" required> *
+                </td>
+            </tr>
+
+            <!-- Row 3: STATION FROM | STATION TO -->
+            <tr>
+                <td class="vtext">Station From</td><td class="colon">:</td>
+                <td class="required">
+                    <input type="date" name="station_from" class="textboxdate">
+                </td>
+                <td class="vtext">Station To</td><td class="colon">:</td>
+                <td class="required">
+                    <input type="date" name="station_to" class="textboxdate">
+                </td>
+            </tr>
+
+            <!-- Row 4: Start Time | End Time -->
+            <tr>
+                <td class="vtext">Start Time</td><td class="colon">:</td>
+                <td>
+                    <select name="station_start_hour" class="dropdownverysmall">
+                        <option value="0">-Hour-</option>
+                        {% for i in range(1,13) %}<option value="{{'%02d'|format(i)}}">{{'%02d'|format(i)}}</option>{% endfor %}
+                    </select>
+                    <select name="station_start_min" class="dropdownverysmall">
+                        <option value="">-Minutes-</option>
+                        {% for i in range(0,60) %}<option value="{{'%02d'|format(i)}}">{{'%02d'|format(i)}}</option>{% endfor %}
+                    </select>
+                    <select name="station_start_ampm" class="dropdownverysmall"><option value="AM">AM</option><option value="PM">PM</option></select>
+                </td>
+                <td class="vtext">End Time</td><td class="colon">:</td>
+                <td>
+                    <select name="station_end_hour" class="dropdownverysmall">
+                        <option value="0">-Hour-</option>
+                        {% for i in range(1,13) %}<option value="{{'%02d'|format(i)}}">{{'%02d'|format(i)}}</option>{% endfor %}
+                    </select>
+                    <select name="station_end_min" class="dropdownverysmall">
+                        <option value="">-Minutes-</option>
+                        {% for i in range(0,60) %}<option value="{{'%02d'|format(i)}}">{{'%02d'|format(i)}}</option>{% endfor %}
+                    </select>
+                    <select name="station_end_ampm" class="dropdownverysmall"><option value="AM">AM</option><option value="PM">PM</option></select>
+                </td>
+            </tr>
+
+            <!-- Row 5: Contact Number | Commuted Leave -->
+            <tr>
+                <td class="vtext">Contact Number</td><td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="contact" class="textbox" style="width:180px;" value="{{ emp.contactno or '' }}" required> *
+                </td>
+                <td class="vtext">Commuted leave</td><td class="colon">:</td>
+                <td><input type="checkbox" name="is_commuted"></td>
+            </tr>
+
+            <!-- Row 6: Recommend Employee | With Medical -->
+            <tr>
+                <td class="vtext">Recommend Employee</td><td class="colon">:</td>
+                <td>
+                    <input type="text" id="rec1_name" class="textbox" style="width:180px;" readonly>
+                    <input type="hidden" name="rec1" id="rec1_id">
+                    <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="ShowSearch('rec1')" style="cursor:pointer; vertical-align:middle;">
+                </td>
+                <td class="vtext">With Medical</td><td class="colon">:</td>
+                <td><input type="checkbox" name="is_medical"></td>
+            </tr>
+
+            <!-- Row 7: Recommend Employee 2 | Leave of Kind Due -->
+            <tr>
+                <td class="vtext">Recommend Employee 2</td><td class="colon">:</td>
+                <td>
+                    <input type="text" id="rec2_name" class="textbox" style="width:180px;" readonly>
+                    <input type="hidden" name="rec2" id="rec2_id">
+                    <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="ShowSearch('rec2')" style="cursor:pointer; vertical-align:middle;">
+                </td>
+                <td class="vtext">Leave of Kind Due</td><td class="colon">:</td>
+                <td><input type="checkbox" name="is_study"></td>
+            </tr>
+
+            <!-- Row 8: Recommend Employee 3 | Reason For Leave -->
+            <tr>
+                <td class="vtext">Recommend Employee 3</td><td class="colon">:</td>
+                <td>
+                    <input type="text" id="rec3_name" class="textbox" style="width:180px;" readonly>
+                    <input type="hidden" name="rec3" id="rec3_id">
+                    <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="ShowSearch('rec3')" style="cursor:pointer; vertical-align:middle;">
+                </td>
+                <td class="vtext">Reason For Leave</td><td class="colon">:</td>
+                <td class="required">
+                    <textarea name="reason" class="textboxmultiline" rows="2" required></textarea> *
+                </td>
+            </tr>
+
+            <!-- Row 9: Is Short Leave | Address During Leave -->
+            <tr>
+                <td class="vtext">Is Short Leave</td><td class="colon">:</td>
+                <td><input type="checkbox" name="is_short" id="chkShort" onchange="onShortChange()"></td>
+                <td class="vtext">Address During Leave</td><td class="colon">:</td>
+                <td class="required">
+                    <textarea name="add_inst" class="textboxmultiline" rows="2" required></textarea> *
+                </td>
+            </tr>
+
+            <!-- Row 10: Start Time (For Short Leave) -->
+            <tr id="trShortTime" style="display:none;">
+                <td class="vtext">Start Time</td><td class="colon">:</td>
+                <td colspan="4">
+                    <select name="s_hour" class="dropdownverysmall">
+                        <option value="00">-Hour-</option>
+                        {% for i in range(1,13) %}<option value="{{'%02d'|format(i)}}">{{'%02d'|format(i)}}</option>{% endfor %}
+                    </select>
+                    <select name="s_min" class="dropdownverysmall">
+                        <option value="00">-Minutes-</option>
+                        {% for i in range(0,60) %}<option value="{{'%02d'|format(i)}}">{{'%02d'|format(i)}}</option>{% endfor %}
+                    </select>
+                    <select name="s_ampm" class="dropdownverysmall"><option value="AM">AM</option><option value="PM">PM</option></select>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4" style="padding-top:15px;">
+                    <input type="button" value="CALCULATE" class="button-common" onclick="performCalculation()">
+                    <input type="reset" value="RESET" class="button-common" style="margin-left:10px;">
+                </td>
+            </tr>
+        </table>
+
+        <!-- CALCULATION BREAKDOWN GRID (Bordered) -->
+        <div id="pnlCalc" style="display:none; margin-top:20px;">
+            <div style="margin-bottom:10px;"><span class="vtext">Leave Taken : </span><input type="text" id="txtDays" class="textbox" readonly style="width:60px; background:#eee;"></div>
+            <table class="table-grid-view">
+                <tr class="header-style"><td>S.No.</td><td>Leave Date</td><td>Day</td><td>Leave Type</td></tr>
+                <tbody id="transBody"></tbody>
+            </table>
+            <div style="text-align:center; margin-top:20px;">
+                <input type="submit" value="SUBMIT" class="button-common" style="background:#3c8dbc; color:white; width:100px;">
+            </div>
+        </div>
+    </form>
+
+    <!-- LIST OF LEAVE REQUEST GRID (Bordered) -->
+    <div style="margin-top:40px;">
+        <table class="form-table"><tr><td class="tablesubheading">List of Leave Request</td></tr></table>
+        <table class="table-grid-view">
+            <tr class="header-style">
+                <td>S.No.</td><td>Reporting To</td><td>Leave Type</td><td>Requested Date</td><td>Requested Time</td><td>From Date</td><td>To Date</td><td>Station From Date</td><td>Station To Date</td><td>Total Leave Days</td><td>Status</td><td>EDIT</td><td>DELETE</td>
+            </tr>
+            {% for r in requests %}
+            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                <td align="center">{{ loop.index }}</td>
+                <td>{{ r.ReportingTo }}</td><td>{{ r.LeaveType }}</td><td align="center">{{ r.RequestDate }}</td><td align="center">{{ r.RequestTime }}</td><td align="center">{{ r.FromDate }}</td><td align="center">{{ r.ToDate }}</td><td align="center">{{ r.SFrom or '' }}</td><td align="center">{{ r.STo or '' }}</td><td align="right">{{ "{:,.2f}".format(r.Days|float) }}</td><td align="center"><b>{{ r.Status }}</b></td>
+                <td align="center"><img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer"></td>
+                <td align="center"><img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer"></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<!-- RESTORED SIMPLE SEARCH MODAL -->
+<div id="SearchDiv" class="white_content-new">
+    <div style="text-align:right;"><span onclick="HideSearch()" style="cursor:pointer; color:red; font-weight:bold;">X</span></div>
+    <div class="tableheading" style="margin-top:-15px;">Employee Search</div>
+    <div style="padding:15px;">
+        <table class="form-table">
+            <tr>
+                <td class="vtext">Search Employee</td><td class="colon">:</td>
+                <td><input type="text" id="simple_search_term" class="textbox" style="width:250px;"></td>
+                <td><input type="button" value="SEARCH" class="button-common" onclick="doSimpleSearch()"></td>
+            </tr>
+        </table>
+        <div id="search_results" style="margin-top:20px; max-height:250px; overflow-y:auto;"></div>
+    </div>
+</div>
+
+<script>
+let activeSearchTarget = '';
+function ShowSearch(target) { 
+    activeSearchTarget = target; 
+    document.getElementById('SearchDiv').style.display = 'block'; 
+}
+function HideSearch() { document.getElementById('SearchDiv').style.display = 'none'; }
+
+async function doSimpleSearch() {
+    const term = document.getElementById('simple_search_term').value;
+    if(term.length < 2) return;
+    const res = await fetch(`/leave/api/employee/search?term=${term}`);
+    const data = await res.json();
+    let html = '<table class="table-grid-view"><tr class="header-style"><td>Code</td><td>Name</td><td>Action</td></tr>';
+    data.forEach(e => {
+        html += `<tr class="item-style"><td>${e.id}</td><td>${e.name}</td><td><a href="javascript:void(0)" onclick="selectEmployee('${e.id}', '${e.name}')">Select</a></td></tr>`;
+    });
+    html += '</table>';
+    document.getElementById('search_results').innerHTML = html;
+}
+
+function selectEmployee(id, name) {
+    document.getElementById(activeSearchTarget + '_id').value = id;
+    document.getElementById(activeSearchTarget + '_name').value = name;
+    HideSearch();
+}
+
+function onShortChange() {
+    document.getElementById('trShortTime').style.display = document.getElementById('chkShort').checked ? 'table-row' : 'none';
+}
+
+function performCalculation() {
+    const f = document.getElementById('txtFDate').value;
+    const t = document.getElementById('txtTDate').value;
+    const ltext = document.getElementById('ddlLeaveType').options[document.getElementById('ddlLeaveType').selectedIndex].text;
+    if(!f || !t) return;
+    
+    fetch(`/leave/api/calculate_days?from=${f}&to=${t}&short=${document.getElementById('chkShort').checked}`)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('txtDays').value = data.days;
+            const body = document.getElementById('transBody');
+            body.innerHTML = '';
+            let start = new Date(f);
+            let end = new Date(t);
+            let i = 1;
+            while(start <= end) {
+                const row = body.insertRow();
+                row.className = (i % 2 == 0) ? 'item-style-alt' : 'item-style';
+                row.innerHTML = `<td>${i++}</td><td>${start.toLocaleDateString('en-GB')}</td><td>${start.toLocaleDateString('en-GB', {weekday:'long'})}</td><td>${ltext}</td>`;
+                start.setDate(start.getDate() + 1);
+            }
+            document.getElementById('pnlCalc').style.display = 'block';
+        });
+}
+</script>
+{% endblock %}

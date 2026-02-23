@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Achievement/Disciplinary</span>
+    </div>
+
+    <div style="padding: 15px;">
+        <form method="GET">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="20%">Search Student</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <input type="text" name="enrollment_no" class="textbox w-200" placeholder="Admission/Enrollment No." value="{{ request.args.get('enrollment_no', '') }}" required>
+                        <input type="submit" value="Show" class="button-common" style="margin-left:5px;">
+                        <input type="button" value="Reset" class="button-common" onclick="location.href='{{ url_for('academics.achievement_disciplinary') }}'" style="margin-left:5px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td></td><td></td>
+                    <td style="font-size:11px;">
+                        <label><input type="radio" name="ach_dis" value="A" checked> Achievement</label>
+                        <label style="margin-left:15px;"><input type="radio" name="ach_dis" value="D"> Disciplinary</label>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        {% if student %}
+        <div style="margin-top:20px; border:1px solid #ddd; padding:10px; background:#f9f9f9;">
+            <table width="100%">
+                <tr>
+                    <td width="15%" class="vtext">Name</td><td>: {{ student.fullname }}</td>
+                    <td width="15%" class="vtext">Adm No.</td><td>: {{ student.AdmissionNo }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="margin-top:20px;">
+            <table class="table-grid-view" width="100%" id="achTable">
+                <thead>
+                    <tr class="header-style">
+                        <th width="5%">S.No.</th>
+                        <th width="20%">Category</th>
+                        <th>Details/Achievement</th>
+                        <th width="15%">Date</th>
+                        <th width="10%">DEL</th>
+                    </tr>
+                </thead>
+                <tbody id="achBody">
+                    <tr class="item-style">
+                        <td align="center">1</td>
+                        <td>
+                            <select name="cat[]" class="dropdown w-150">
+                                <option value="Sports">Sports</option>
+                                <option value="Cultural">Cultural</option>
+                                <option value="Academic">Academic</option>
+                            </select>
+                        </td>
+                        <td><textarea name="dtl[]" class="textbox" style="width:95%; height:30px;"></textarea></td>
+                        <td align="center"><input type="date" name="date[]" class="textbox w-120"></td>
+                        <td align="center"><img src="{{ url_for('static', filename='images/delete.gif') }}" style="cursor:pointer"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="text-align:right; margin-top:5px;">
+                <input type="button" value="ADD MORE" class="button-common" style="width:100px;">
+            </div>
+            
+            <div style="text-align:center; margin-top:20px;">
+                <input type="button" value="SAVE RECORD" class="button-common" style="width:150px; background:#3c8dbc; color:white;">
+            </div>
+        </div>
+        {% elif request.args.get('enrollment_no') %}
+        <div style="text-align:center; padding:30px; color:red;">Student not found.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
