@@ -399,7 +399,10 @@ class NavModel:
             'Employee Departmental Exam Details', 'Employee Service Verification Details',
             'Disciplinary Action/Reward Details', 'Employee Loan Details', 'Employee Book Grant Amount Details',
             'Employee Bonus Amount Details', 'SAR/ACR Admin Transaction', 'Employee First Appointment Details',
-            'Emp Increment Payrevision', 'Employee Promotion/Financial Up-gradation', 'Employee No-Dues Detail'
+            'Emp Increment Payrevision', 'Employee Promotion/Financial Up-gradation', 'Employee No-Dues Detail',
+            'Appointing Authority', 'Controlling DDO Department Reliving', 'Controlling DDO Department Joining',
+            'Non Teaching Employee Promotion Verification', 'Non Teaching Employee Promotion Approval',
+            'Non Teaching VC Promotion Approval'
         ]
         
         for p_name in transaction_pages:

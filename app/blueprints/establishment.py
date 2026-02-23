@@ -5,7 +5,7 @@ from app.models import (
     EmployeeFamilyModel, EmployeeNomineeModel, EmployeeBookModel, LTCModel, 
     PreviousJobModel, ForeignVisitModel, TrainingModel, DeptExamModel, 
     ServiceVerificationModel, SARModel, FirstAppointmentModel, IncrementModel, 
-    NoDuesModel, EarnedLeaveModel, DisciplinaryModel, LoanModel, BookGrantModel, BonusModel
+    NoDuesModel, EarnedLeaveModel, DisciplinaryModel, LoanModel, BookGrantModel, BonusModel, AppointingAuthorityModel, NonTeachingPromotionModel
 )
 from app.db import DB
 from app.utils import get_pagination, to_int
@@ -46,7 +46,10 @@ ESTABLISHMENT_MENU_CONFIG = {
             'Increment/Promotion': [
                 'SAR/ACR Admin Transaction', 'Employee First Appointment Details', 'Emp Increment Payrevision',
                 'Employee Promotion/Financial Up-gradation', 'Employee No-Dues Detail',
-                'Appointing Authority', 'Controlling DDO Department Reliving', 'Controlling DDO Department Joining'
+                'Appointing Authority', 'Controlling DDO Department Reliving', 'Controlling DDO Department Joining',
+                'Employee Bonus Amount Details',
+                'Non Teaching Employee Promotion Verification', 'Non Teaching Employee Promotion Approval',
+                'Non Teaching VC Promotion Approval'
             ]
         }
     },
@@ -3321,4 +3324,247 @@ def disciplinary_action_details():
     return render_template('establishment/disciplinary_action_details.html', 
                           employee_info=employee_info, records=records, 
                           perm=perm, emp_id=emp_id)
+
+
+# --- INCREMENT / PROMOTION (LIVE TEMPLATE MIMIC) ---
+
+@establishment_bp.route('/appointing_authority', methods=['GET', 'POST'])
+@permission_required('Appointing Authority')
+def appointing_authority():
+    user_id = session.get('user_id'); perm = request.page_perms
+    emp_id = request.args.get('emp_id')
+    edit_id = request.args.get('edit_id')
+    delete_id = request.args.get('delete_id')
+    status_filter = (request.args.get('status_filter') or '').strip()
+
+    if delete_id and perm.get('AllowDelete'):
+        try:
+            AppointingAuthorityModel.delete(delete_id)
+            flash('Record deleted successfully.', 'success')
+        except Exception as e:
+            flash(f'Error: {str(e)}', 'danger')
+        return redirect(url_for('establishment.appointing_authority'))
+
+    edit_data = AppointingAuthorityModel.get_by_id(edit_id) if edit_id else None
+    if edit_data and not emp_id:
+        emp_id = edit_data.get('fk_EmpId')
+
+    if request.method == 'POST':
+        action = request.form.get('action')
+        if action == 'RESET':
+            return redirect(url_for('establishment.appointing_authority'))
+
+        target_emp_id = request.form.get('target_emp_id') or emp_id
+        if not target_emp_id:
+            flash('Please select an employee first.', 'warning')
+            return redirect(url_for('establishment.appointing_authority'))
+
+        try:
+            data = request.form.to_dict()
+            data['emp_id'] = target_emp_id
+            AppointingAuthorityModel.save(data, user_id)
+            flash('Data saved successfully.', 'success')
+            return redirect(url_for('establishment.appointing_authority', emp_id=target_emp_id))
+        except Exception as e:
+            flash(f'Error: {str(e)}', 'danger')
+            return redirect(url_for('establishment.appointing_authority', emp_id=target_emp_id))
+
+    employee_info = EmployeeModel.get_employee_full_details(emp_id) if emp_id else None
+    lookups = EmployeeModel.get_full_lookups()
+    records = AppointingAuthorityModel.list_records(status_filter or None)
+
+    def to_date_str(v):
+        if not v:
+            return ''
+        if hasattr(v, 'strftime'):
+            return v.strftime('%Y-%m-%d')
+        s = str(v)
+        return s[:10] if len(s) >= 10 else s
+
+    if edit_data:
+        edit_data['order_date_value'] = to_date_str(edit_data.get('OrderDate'))
+
+    return render_template(
+        'establishment/appointing_authority.html',
+        employee_info=employee_info,
+        lookups=lookups,
+        records=records,
+        edit_data=edit_data,
+        perm=perm,
+        emp_id=emp_id,
+        status_filter=status_filter,
+    )
+
+
+@establishment_bp.route('/controlling_ddo_department_reliving', methods=['GET', 'POST'])
+@permission_required('Controlling DDO Department Reliving')
+def controlling_ddo_department_reliving():
+    user_id = session.get('user_id'); perm = request.page_perms
+    emp_id = request.args.get('emp_id')
+
+    if request.method == 'POST':
+        action = request.form.get('action')
+        if action == 'RESET':
+            return redirect(url_for('establishment.controlling_ddo_department_reliving'))
+
+        target_emp_id = request.form.get('target_emp_id') or emp_id
+        if not target_emp_id:
+            flash('Please select an employee first.', 'warning')
+            return redirect(url_for('establishment.controlling_ddo_department_reliving'))
+
+        try:
+            data = request.form.to_dict()
+            data['emp_id'] = target_emp_id
+            AppointingAuthorityModel.save_reliving(data, user_id)
+            flash('Relieving details submitted successfully.', 'success')
+            return redirect(url_for('establishment.controlling_ddo_department_reliving', emp_id=target_emp_id))
+        except Exception as e:
+            flash(f'Error: {str(e)}', 'danger')
+            return redirect(url_for('establishment.controlling_ddo_department_reliving', emp_id=target_emp_id))
+
+    employee_info = EmployeeModel.get_employee_full_details(emp_id) if emp_id else None
+    lookups = EmployeeModel.get_full_lookups()
+    return render_template(
+        'establishment/controlling_ddo_department_reliving.html',
+        employee_info=employee_info,
+        lookups=lookups,
+        perm=perm,
+        emp_id=emp_id,
+    )
+
+
+@establishment_bp.route('/controlling_ddo_department_joining', methods=['GET', 'POST'])
+@permission_required('Controlling DDO Department Joining')
+def controlling_ddo_department_joining():
+    user_id = session.get('user_id'); perm = request.page_perms
+    emp_id = request.args.get('emp_id')
+
+    if request.method == 'POST':
+        action = request.form.get('action')
+        if action == 'RESET':
+            return redirect(url_for('establishment.controlling_ddo_department_joining'))
+
+        target_emp_id = request.form.get('target_emp_id') or emp_id
+        if not target_emp_id:
+            flash('Please select an employee first.', 'warning')
+            return redirect(url_for('establishment.controlling_ddo_department_joining'))
+
+        try:
+            approve_date = request.form.get('approve_date')
+            affected = AppointingAuthorityModel.set_approve_date(target_emp_id, approve_date, user_id)
+            if affected:
+                flash('Joining (approve) date submitted successfully.', 'success')
+            else:
+                flash('No pending record found for this employee.', 'warning')
+            return redirect(url_for('establishment.controlling_ddo_department_joining', emp_id=target_emp_id))
+        except Exception as e:
+            flash(f'Error: {str(e)}', 'danger')
+            return redirect(url_for('establishment.controlling_ddo_department_joining', emp_id=target_emp_id))
+
+    employee_info = EmployeeModel.get_employee_full_details(emp_id) if emp_id else None
+    lookups = EmployeeModel.get_full_lookups()
+    return render_template(
+        'establishment/controlling_ddo_department_joining.html',
+        employee_info=employee_info,
+        lookups=lookups,
+        perm=perm,
+        emp_id=emp_id,
+    )
+
+
+@establishment_bp.route('/non_teaching_promotion_verification', methods=['GET', 'POST'])
+@permission_required('Non Teaching Employee Promotion Verification')
+def non_teaching_promotion_verification():
+    perm = request.page_perms
+    status_filter = (request.args.get('status_filter') or '').strip()
+
+    if request.method == 'POST' and perm.get('AllowUpdate'):
+        row_id = request.form.get('row_id')
+        new_status = request.form.get('new_status')
+        try:
+            NonTeachingPromotionModel.set_verify_status(row_id, new_status)
+            flash('Status updated successfully.', 'success')
+        except Exception as e:
+            flash(f'Error: {str(e)}', 'danger')
+        return redirect(url_for('establishment.non_teaching_promotion_verification', status_filter=status_filter))
+
+    rows = NonTeachingPromotionModel.list_verify(status_filter or None)
+    try:
+        pk = NonTeachingPromotionModel._pk_col(NonTeachingPromotionModel.TABLE_VERIFY)
+        if pk:
+            for r in rows:
+                r['row_id'] = r.get(pk)
+    except Exception:
+        pass
+
+    return render_template(
+        'establishment/non_teaching_promotion_verification.html',
+        perm=perm,
+        rows=rows,
+        status_filter=status_filter,
+    )
+
+@establishment_bp.route('/non_teaching_promotion_approval', methods=['GET', 'POST'])
+@permission_required('Non Teaching Employee Promotion Approval')
+def non_teaching_promotion_approval():
+    perm = request.page_perms
+    status_filter = (request.args.get('status_filter') or '').strip()
+
+    if request.method == 'POST' and perm.get('AllowUpdate'):
+        row_id = request.form.get('row_id')
+        new_status = request.form.get('new_status')
+        try:
+            NonTeachingPromotionModel.set_approval_status(row_id, new_status)
+            flash('Status updated successfully.', 'success')
+        except Exception as e:
+            flash(f'Error: {str(e)}', 'danger')
+        return redirect(url_for('establishment.non_teaching_promotion_approval', status_filter=status_filter))
+
+    rows = NonTeachingPromotionModel.list_approval(status_filter or None)
+    try:
+        pk = NonTeachingPromotionModel._pk_col(NonTeachingPromotionModel.TABLE_APPROVAL)
+        if pk:
+            for r in rows:
+                r['row_id'] = r.get(pk)
+    except Exception:
+        pass
+
+    return render_template(
+        'establishment/non_teaching_promotion_approval.html',
+        perm=perm,
+        rows=rows,
+        status_filter=status_filter,
+    )
+
+@establishment_bp.route('/non_teaching_vc_promotion_approval', methods=['GET', 'POST'])
+@permission_required('Non Teaching VC Promotion Approval')
+def non_teaching_vc_promotion_approval():
+    perm = request.page_perms
+    status_filter = (request.args.get('status_filter') or '').strip()
+
+    if request.method == 'POST' and perm.get('AllowUpdate'):
+        row_id = request.form.get('row_id')
+        new_status = request.form.get('new_status')
+        try:
+            NonTeachingPromotionModel.set_approval_status(row_id, new_status)
+            flash('Status updated successfully.', 'success')
+        except Exception as e:
+            flash(f'Error: {str(e)}', 'danger')
+        return redirect(url_for('establishment.non_teaching_vc_promotion_approval', status_filter=status_filter))
+
+    rows = NonTeachingPromotionModel.list_approval(status_filter or None)
+    try:
+        pk = NonTeachingPromotionModel._pk_col(NonTeachingPromotionModel.TABLE_APPROVAL)
+        if pk:
+            for r in rows:
+                r['row_id'] = r.get(pk)
+    except Exception:
+        pass
+
+    return render_template(
+        'establishment/non_teaching_vc_promotion_approval.html',
+        perm=perm,
+        rows=rows,
+        status_filter=status_filter,
+    )
 

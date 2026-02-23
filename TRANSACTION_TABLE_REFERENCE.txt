@@ -74,3 +74,35 @@ Notes:
   - PK: pk_grantId
   - FK: fk_empid -> SAL_Employee_Mst.pk_empid
 
+
+10) Employee Bonus Amount Details (establishment.employee_bonus_details)
+- Transaction Table: SAL_EmployeeBonusAmount_dtl
+  - PK: Pk_BonusId
+  - FK: Fk_Empid -> SAL_Employee_Mst.pk_empid
+
+11) Appointing Authority (establishment.appointing_authority)
+- Transaction Table: SAL_Appointing_Authority
+  - PK (live): Pk_AuthId
+  - FK: fk_EmpId -> SAL_Employee_Mst.pk_empid
+  - Key fields used in module: OrderNo, OrderDate, Status, Remarks
+  - Mapping fields (live): Old*/New* (ControllingOffice, DDO, Department, Section, Desig, FundType, SchemeGroup, SchemeCode)
+
+12) Controlling DDO Department Reliving (establishment.controlling_ddo_department_reliving)
+- Transaction Table: SAL_Appointing_Authority
+  - Key field used in module: RelievingDate
+  - Other mapping fields: Old*/New* (ControllingOffice, DDO, Department, Section, Desig)
+
+13) Controlling DDO Department Joining (establishment.controlling_ddo_department_joining)
+- Transaction Table: SAL_Appointing_Authority
+  - Key field used in module: ApproveDate
+
+14) Non Teaching Employee Promotion Verification (establishment.non_teaching_promotion_verification)
+- Transaction Table: SAL_NonTeachingPromotionVerification_Mst
+  - PK/FK columns can vary across DBs; module resolves primary key dynamically from INFORMATION_SCHEMA.
+
+15) Non Teaching Employee Promotion Approval (establishment.non_teaching_promotion_approval)
+- Transaction Table: sal_emp_NonteachersPromotion_Approval
+  - PK/FK columns can vary across DBs; module resolves primary key dynamically from INFORMATION_SCHEMA.
+
+16) Non Teaching VC Promotion Approval (establishment.non_teaching_vc_promotion_approval)
+- Transaction Table: sal_emp_NonteachersPromotion_Approval

@@ -22,6 +22,7 @@ from .hrms import (
     ServiceVerificationModel, SARModel, FirstAppointmentModel, IncrementModel,
     NoDuesModel, EarnedLeaveModel, DisciplinaryModel, BookGrantModel, BonusModel
 )
+from .establishment_promotion import AppointingAuthorityModel, NonTeachingPromotionModel
 from .payroll import PayrollModel
 from .establishment import EstablishmentModel
 from .examination import ExaminationModel
