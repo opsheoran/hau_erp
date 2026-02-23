@@ -1182,21 +1182,55 @@ def employee_first_appointment_details():
                 [emp_id],
             )
 
+        target_join_date = None
+        target_appointment_date = None
+        try:
+            target_join_date = DB.fetch_scalar(
+                "SELECT TOP 1 dateofjoining FROM SAL_EmployeeOther_Details WHERE fk_empid = ? AND dateofjoining IS NOT NULL ORDER BY ISNULL(fk_updDateID, fk_insDateID) DESC",
+                [emp_id],
+            )
+            target_appointment_date = DB.fetch_scalar(
+                "SELECT TOP 1 dateofappointment FROM SAL_EmployeeOther_Details WHERE fk_empid = ? AND dateofappointment IS NOT NULL ORDER BY ISNULL(fk_updDateID, fk_insDateID) DESC",
+                [emp_id],
+            )
+        except Exception:
+            target_join_date = DB.fetch_scalar(
+                "SELECT TOP 1 dateofjoining FROM SAL_EmployeeOther_Details WHERE fk_empid = ? AND dateofjoining IS NOT NULL",
+                [emp_id],
+            )
+            target_appointment_date = DB.fetch_scalar(
+                "SELECT TOP 1 dateofappointment FROM SAL_EmployeeOther_Details WHERE fk_empid = ? AND dateofappointment IS NOT NULL",
+                [emp_id],
+            )
+
+
         other_ord = None
         try:
             other_ord = DB.fetch_one(
                 """
                 SELECT TOP 1 OrderNo
                 FROM SAL_EmployeeOther_Details
-                WHERE fk_empid = ? AND NULLIF(LTRIM(RTRIM(OrderNo)), '') IS NOT NULL
-                ORDER BY ISNULL(fk_updDateID, fk_insDateID) DESC
+                WHERE fk_empid = ?
+                  AND NULLIF(LTRIM(RTRIM(OrderNo)), '') IS NOT NULL
+                ORDER BY
+                  CASE WHEN ? IS NOT NULL AND dateofjoining = ? THEN 0 ELSE 1 END,
+                  CASE WHEN ? IS NOT NULL AND dateofappointment = ? THEN 0 ELSE 1 END,
+                  ISNULL(fk_updDateID, fk_insDateID) DESC
                 """,
-                [emp_id],
+                [emp_id, target_join_date, target_join_date, target_appointment_date, target_appointment_date],
             )
         except Exception:
             other_ord = DB.fetch_one(
-                "SELECT TOP 1 OrderNo FROM SAL_EmployeeOther_Details WHERE fk_empid = ? AND NULLIF(LTRIM(RTRIM(OrderNo)), '') IS NOT NULL",
-                [emp_id],
+                """
+                SELECT TOP 1 OrderNo
+                FROM SAL_EmployeeOther_Details
+                WHERE fk_empid = ?
+                  AND NULLIF(LTRIM(RTRIM(OrderNo)), '') IS NOT NULL
+                ORDER BY
+                  CASE WHEN ? IS NOT NULL AND dateofjoining = ? THEN 0 ELSE 1 END,
+                  CASE WHEN ? IS NOT NULL AND dateofappointment = ? THEN 0 ELSE 1 END
+                """,
+                [emp_id, target_join_date, target_join_date, target_appointment_date, target_appointment_date],
             )
 
         if other_ord:
@@ -1272,15 +1306,37 @@ def employee_first_appointment_details():
             try:
                 hist_ord = DB.fetch_one(
                     """
-                    SELECT TOP 1 P.OrdeNo as OrderNo
+                    SELECT TOP 1
+                        P.OrdeNo as OrderNo
                     FROM [HAU_Client_Backup].[dbo].[sal_emp_promotion_increment_payrevision_detail] P
-                    WHERE P.fk_empid = ? AND NULLIF(LTRIM(RTRIM(P.OrdeNo)), '') IS NOT NULL
-                    ORDER BY P.pk_proincid DESC
+                    WHERE P.fk_empid = ?
+                      AND NULLIF(LTRIM(RTRIM(P.OrdeNo)), '') IS NOT NULL
+                      AND (P.DateofJoinning IS NOT NULL OR P.DateofAppointment IS NOT NULL)
+                    ORDER BY
+                      CASE WHEN ? IS NOT NULL AND P.DateofJoinning = ? THEN 0 ELSE 1 END,
+                      CASE WHEN ? IS NOT NULL AND P.DateofAppointment = ? THEN 0 ELSE 1 END,
+                      P.pk_proincid DESC
                     """,
-                    [emp_id],
+                    [emp_id, target_join_date, target_join_date, target_appointment_date, target_appointment_date],
                 )
             except Exception:
                 hist_ord = None
+
+            # If no dated record exists, fallback to any non-blank OrdeNo
+            if not hist_ord:
+                try:
+                    hist_ord = DB.fetch_one(
+                        """
+                        SELECT TOP 1 P.OrdeNo as OrderNo
+                        FROM [HAU_Client_Backup].[dbo].[sal_emp_promotion_increment_payrevision_detail] P
+                        WHERE P.fk_empid = ? AND NULLIF(LTRIM(RTRIM(P.OrdeNo)), '') IS NOT NULL
+                        ORDER BY P.pk_proincid DESC
+                        """,
+                        [emp_id],
+                    )
+                except Exception:
+                    hist_ord = None
+
             if hist_ord and not _blank(hist_ord.get('OrderNo')):
                 edit_data['OrderNo'] = hist_ord.get('OrderNo')
 
