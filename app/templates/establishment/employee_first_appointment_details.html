@@ -90,7 +90,7 @@
                 <td class="vtext">Date of Joining</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input name="joining_date" type="text" class="textboxdate w-150" value="{{ record.joining_date_fmt if record else '' }}" required placeholder="DD/MM/YYYY">
+                    <input name="joining_date" type="text" class="textboxdate w-150" value="{{ (record.joining_date_fmt or '') if record else '' }}" required placeholder="DD/MM/YYYY">
                     <select name="joining_time" class="dropdown w-100">
                         <option value="Fore Noon" {% if record and record.JoiningTime == 'Fore Noon' %}selected{% endif %}>Fore Noon</option>
                         <option value="After Noon" {% if record and record.JoiningTime == 'After Noon' %}selected{% endif %}>After Noon</option>
@@ -101,7 +101,7 @@
                 <td class="vtext">Order No.</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input name="order_no" type="text" class="textbox w-200" value="{{ record.OrderNo if record else '' }}" required>
+                    <input name="order_no" type="text" class="textbox w-200" value="{{ (record.OrderNo or '') if record else '' }}" required>
                     <span class="required">*</span>
                 </td>
             </tr>
@@ -109,14 +109,14 @@
                 <td class="vtext">Appointment Date</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input name="appointment_date" type="text" class="textboxdate w-150" value="{{ record.appointment_date_fmt if record else '' }}" required placeholder="DD/MM/YYYY">
+                    <input name="appointment_date" type="text" class="textboxdate w-150" value="{{ (record.appointment_date_fmt or '') if record else '' }}" required placeholder="DD/MM/YYYY">
                     <span class="required">*</span>
                 </td>
                 <td></td>
                 <td class="vtext">DDO</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input name="appointment_ddo" type="text" class="textbox w-250" value="{{ record.DDO if record else '' }}" required>
+                    <input name="appointment_ddo" type="text" class="textbox w-250" value="{{ (record.DDO or '') if record else '' }}" required>
                     <span class="required">*</span>
                 </td>
             </tr>
@@ -124,14 +124,14 @@
                 <td class="vtext">Designation</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input name="appointment_designation" type="text" class="textbox w-250" value="{{ record.Designation if record else '' }}" required>
+                    <input name="appointment_designation" type="text" class="textbox w-250" value="{{ (record.Designation or '') if record else '' }}" required>
                     <span class="required">*</span>
                 </td>
                 <td></td>
                 <td class="vtext">Department</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input name="appointment_department" type="text" class="textbox w-250" value="{{ record.Department if record else '' }}" required>
+                    <input name="appointment_department" type="text" class="textbox w-250" value="{{ (record.Department or '') if record else '' }}" required>
                     <span class="required">*</span>
                 </td>
             </tr>
@@ -139,14 +139,14 @@
                 <td class="vtext">Basic</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input name="basic" type="text" class="textbox w-150" value="{{ record.BasicPay if record else '' }}" required onkeypress="return isNumberKey(event)">
+                    <input name="basic" type="text" class="textbox w-150" value="{{ (record.BasicPay or '') if record else '' }}" required onkeypress="return isNumberKey(event)">
                     <span class="required">*</span>
                 </td>
                 <td></td>
                 <td class="vtext">Pay Scale</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input name="pay_scale" type="text" class="textbox w-250" value="{{ record.PayScale if record else '' }}" required>
+                    <input name="pay_scale" type="text" class="textbox w-250" value="{{ (record.PayScale or '') if record else '' }}" required>
                     <span class="required">*</span>
                 </td>
             </tr>
@@ -154,20 +154,20 @@
                 <td class="vtext">Probation Period Completed Date</td>
                 <td class="colon">:</td>
                 <td>
-                    <input name="probation_date" type="text" class="textboxdate w-150" value="{{ record.probation_date_fmt if record else '' }}" placeholder="DD/MM/YYYY">
+                    <input name="probation_date" type="text" class="textboxdate w-150" value="{{ (record.probation_date_fmt or '') if record else '' }}" placeholder="DD/MM/YYYY">
                 </td>
                 <td></td>
                 <td class="vtext">Sr. No</td>
                 <td class="colon">:</td>
                 <td>
-                    <input name="sr_no" type="text" class="textbox w-150" value="{{ record.SrNo if record else '' }}">
+                    <input name="sr_no" type="text" class="textbox w-150" value="{{ (record.SrNo or '') if record else '' }}">
                 </td>
             </tr>
             <tr>
                 <td class="vtext">Due Date of Completion of PP</td>
                 <td class="colon">:</td>
                 <td>
-                    <input name="due_date_pp" type="text" class="textboxdate w-150" value="{{ record.due_date_pp_fmt if record else '' }}" placeholder="DD/MM/YYYY">
+                    <input name="due_date_pp" type="text" class="textboxdate w-150" value="{{ (record.due_date_pp_fmt or '') if record else '' }}" placeholder="DD/MM/YYYY">
                 </td>
                 <td colspan="4"></td>
             </tr>

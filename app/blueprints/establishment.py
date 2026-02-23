@@ -1129,7 +1129,49 @@ def employee_first_appointment_details():
         if not edit_data:
             existing = DB.fetch_one("SELECT pk_appointmentid FROM SAL_FirstAppointment_Details WHERE fk_empid = ?", [emp_id])
             if existing: edit_data = FirstAppointmentModel.get_appointment_by_id(existing['pk_appointmentid'])
-        # Fallback / backfill: use promotion-increment-payrevision detail table from HAU_Client_Backup
+
+        def _blank(v):
+            if v is None:
+                return True
+            if isinstance(v, (int, float)) and v == 0:
+                return True
+            return str(v).strip() == ''
+
+        # Backfill from SAL_EmployeeOther_Details (dates are reliable for old employees)
+        other = DB.fetch_one(
+            "SELECT TOP 1 OrderNo, CONVERT(varchar, dateofjoining, 103) as joining_date_fmt, CONVERT(varchar, dateofappointment, 103) as appointment_date_fmt, AppointmentTime FROM SAL_EmployeeOther_Details WHERE fk_empid = ?",
+            [emp_id],
+        )
+        if other:
+            if not edit_data:
+                edit_data = {}
+            if _blank(edit_data.get('OrderNo')) and not _blank(other.get('OrderNo')):
+                edit_data['OrderNo'] = other.get('OrderNo')
+            if _blank(edit_data.get('joining_date_fmt')) and not _blank(other.get('joining_date_fmt')):
+                edit_data['joining_date_fmt'] = other.get('joining_date_fmt')
+            if _blank(edit_data.get('appointment_date_fmt')) and not _blank(other.get('appointment_date_fmt')):
+                edit_data['appointment_date_fmt'] = other.get('appointment_date_fmt')
+            if _blank(edit_data.get('JoiningTime')):
+                at = (other.get('AppointmentTime') or '').strip().upper()
+                if at == 'F':
+                    edit_data['JoiningTime'] = 'Fore Noon'
+                elif at == 'A':
+                    edit_data['JoiningTime'] = 'After Noon'
+
+        # Backfill from current employee master (matches live display)
+        if employee_info:
+            if not edit_data:
+                edit_data = {}
+            if _blank(edit_data.get('DDO')) and not _blank(employee_info.get('ddo_name')):
+                edit_data['DDO'] = employee_info.get('ddo_name')
+            if _blank(edit_data.get('Department')) and not _blank(employee_info.get('dept_name')):
+                edit_data['Department'] = employee_info.get('dept_name')
+            if _blank(edit_data.get('Designation')) and not _blank(employee_info.get('designation')):
+                edit_data['Designation'] = employee_info.get('designation')
+            if _blank(edit_data.get('BasicPay')) and not _blank(employee_info.get('curbasic')):
+                edit_data['BasicPay'] = employee_info.get('curbasic')
+
+        # Backfill from promotion/increment/payrevision history (latest)
         hist = None
         try:
             hist = DB.fetch_one(
@@ -1155,8 +1197,8 @@ def employee_first_appointment_details():
                 LEFT JOIN Department_Mst DP ON TRY_CONVERT(int, P.NewDepartment) = DP.pk_deptid
                 LEFT JOIN SAL_Designation_Mst DS ON TRY_CONVERT(int, P.NewDesignation) = DS.pk_desgid
                 WHERE P.fk_empid = ?
-                ORDER BY P.DateofJoinning ASC
-                """,
+                ORDER BY ISNULL(P.DateofJoinning, '1900-01-01') DESC, P.pk_proincid DESC
+                """
                 [emp_id],
             )
         except Exception:
@@ -1166,13 +1208,6 @@ def employee_first_appointment_details():
             if not edit_data:
                 edit_data = hist
             else:
-                def _blank(v):
-                    if v is None:
-                        return True
-                    if isinstance(v, (int, float)) and v == 0:
-                        return True
-                    return str(v).strip() == ''
-
                 for k in [
                     'OrderNo', 'joining_date_fmt', 'appointment_date_fmt',
                     'probation_date_fmt', 'due_date_pp_fmt',
@@ -1183,23 +1218,8 @@ def employee_first_appointment_details():
                     if _blank(edit_data.get(k)) and not _blank(hist.get(k)):
                         edit_data[k] = hist.get(k)
 
-        if not edit_data:
-            other = DB.fetch_one(
-                "SELECT OrderNo, CONVERT(varchar, dateofjoining, 103) as joining_date_fmt, CONVERT(varchar, dateofappointment, 103) as appointment_date_fmt, AppointmentTime FROM SAL_EmployeeOther_Details WHERE fk_empid = ?",
-                [emp_id],
-            )
-            if other or employee_info:
-                edit_data = {
-                    'joining_date_fmt': other['joining_date_fmt'] if other else None,
-                    'OrderNo': other['OrderNo'] if other else None,
-                    'appointment_date_fmt': other['appointment_date_fmt'] if other else None,
-                    'DDO': employee_info['ddo_name'] if employee_info else None,
-                    'Designation': employee_info['designation'] if employee_info else None,
-                    'Department': employee_info['dept_name'] if employee_info else None,
-                    'BasicPay': employee_info['curbasic'] if employee_info else None,
-                    'JoiningTime': 'Fore Noon' if other and other.get('AppointmentTime') == 'F' else 'After Noon',
-                }
-        if edit_data and edit_data.get('pk_appointmentid'): terms = FirstAppointmentModel.get_probation_terms(edit_data['pk_appointmentid'])
+        if edit_data and edit_data.get('pk_appointmentid'):
+            terms = FirstAppointmentModel.get_probation_terms(edit_data['pk_appointmentid'])
         appointments = FirstAppointmentModel.get_employee_appointments(emp_id)
     return render_template('establishment/employee_first_appointment_details.html', emp=employee_info, appointments=appointments, record=edit_data, terms=terms, ddos=ddos, perm=perm)
 
