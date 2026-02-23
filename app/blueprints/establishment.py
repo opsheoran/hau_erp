@@ -1155,21 +1155,65 @@ def employee_first_appointment_details():
             return str(v).strip() == ''
 
         # Backfill from SAL_EmployeeOther_Details (dates are reliable for old employees)
-        other = DB.fetch_one(
-            "SELECT TOP 1 OrderNo, CONVERT(varchar, dateofjoining, 103) as joining_date_fmt, CONVERT(varchar, dateofappointment, 103) as appointment_date_fmt, AppointmentTime FROM SAL_EmployeeOther_Details WHERE fk_empid = ?",
-            [emp_id],
-        )
-        if other:
+        other_dates = None
+        try:
+            other_dates = DB.fetch_one(
+                """
+                SELECT TOP 1
+                    CONVERT(varchar, dateofjoining, 103) as joining_date_fmt,
+                    CONVERT(varchar, dateofappointment, 103) as appointment_date_fmt,
+                    AppointmentTime
+                FROM SAL_EmployeeOther_Details
+                WHERE fk_empid = ?
+                ORDER BY ISNULL(fk_updDateID, fk_insDateID) DESC
+                """,
+                [emp_id],
+            )
+        except Exception:
+            other_dates = DB.fetch_one(
+                """
+                SELECT TOP 1
+                    CONVERT(varchar, dateofjoining, 103) as joining_date_fmt,
+                    CONVERT(varchar, dateofappointment, 103) as appointment_date_fmt,
+                    AppointmentTime
+                FROM SAL_EmployeeOther_Details
+                WHERE fk_empid = ?
+                """,
+                [emp_id],
+            )
+
+        other_ord = None
+        try:
+            other_ord = DB.fetch_one(
+                """
+                SELECT TOP 1 OrderNo
+                FROM SAL_EmployeeOther_Details
+                WHERE fk_empid = ? AND NULLIF(LTRIM(RTRIM(OrderNo)), '') IS NOT NULL
+                ORDER BY ISNULL(fk_updDateID, fk_insDateID) DESC
+                """,
+                [emp_id],
+            )
+        except Exception:
+            other_ord = DB.fetch_one(
+                "SELECT TOP 1 OrderNo FROM SAL_EmployeeOther_Details WHERE fk_empid = ? AND NULLIF(LTRIM(RTRIM(OrderNo)), '') IS NOT NULL",
+                [emp_id],
+            )
+
+        if other_ord:
             if not edit_data:
                 edit_data = {}
-            if _blank(edit_data.get('OrderNo')) and not _blank(other.get('OrderNo')):
-                edit_data['OrderNo'] = other.get('OrderNo')
-            if _blank(edit_data.get('joining_date_fmt')) and not _blank(other.get('joining_date_fmt')):
-                edit_data['joining_date_fmt'] = other.get('joining_date_fmt')
-            if _blank(edit_data.get('appointment_date_fmt')) and not _blank(other.get('appointment_date_fmt')):
-                edit_data['appointment_date_fmt'] = other.get('appointment_date_fmt')
+            if _blank(edit_data.get('OrderNo')) and not _blank(other_ord.get('OrderNo')):
+                edit_data['OrderNo'] = other_ord.get('OrderNo')
+
+        if other_dates:
+            if not edit_data:
+                edit_data = {}
+            if _blank(edit_data.get('joining_date_fmt')) and not _blank(other_dates.get('joining_date_fmt')):
+                edit_data['joining_date_fmt'] = other_dates.get('joining_date_fmt')
+            if _blank(edit_data.get('appointment_date_fmt')) and not _blank(other_dates.get('appointment_date_fmt')):
+                edit_data['appointment_date_fmt'] = other_dates.get('appointment_date_fmt')
             if _blank(edit_data.get('JoiningTime')):
-                at = (other.get('AppointmentTime') or '').strip().upper()
+                at = (other_dates.get('AppointmentTime') or '').strip().upper()
                 if at == 'F':
                     edit_data['JoiningTime'] = 'Fore Noon'
                 elif at == 'A':
@@ -1222,6 +1266,23 @@ def employee_first_appointment_details():
             )
         except Exception:
             hist = None
+
+        if edit_data and _blank(edit_data.get('OrderNo')):
+            hist_ord = None
+            try:
+                hist_ord = DB.fetch_one(
+                    """
+                    SELECT TOP 1 P.OrdeNo as OrderNo
+                    FROM [HAU_Client_Backup].[dbo].[sal_emp_promotion_increment_payrevision_detail] P
+                    WHERE P.fk_empid = ? AND NULLIF(LTRIM(RTRIM(P.OrdeNo)), '') IS NOT NULL
+                    ORDER BY P.pk_proincid DESC
+                    """,
+                    [emp_id],
+                )
+            except Exception:
+                hist_ord = None
+            if hist_ord and not _blank(hist_ord.get('OrderNo')):
+                edit_data['OrderNo'] = hist_ord.get('OrderNo')
 
         if hist:
             if not edit_data:
