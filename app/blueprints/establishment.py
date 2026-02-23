@@ -1102,7 +1102,7 @@ def sar_admin_transaction():
 def employee_first_appointment_details():
     user_id = session.get('user_id'); perm = request.page_perms
     emp_id = request.args.get('emp_id'); edit_id = request.args.get('edit')
-    ddos = EstablishmentModel.get_ddos()
+    ddos = EmployeeModel.get_all_ddos()
     if request.method == 'POST':
         action = request.form.get('action', 'SAVE'); target_emp_id = request.form.get('emp_id')
         if action == 'DELETE':
