@@ -1129,12 +1129,76 @@ def employee_first_appointment_details():
         if not edit_data:
             existing = DB.fetch_one("SELECT pk_appointmentid FROM SAL_FirstAppointment_Details WHERE fk_empid = ?", [emp_id])
             if existing: edit_data = FirstAppointmentModel.get_appointment_by_id(existing['pk_appointmentid'])
-        if not edit_data:
-            hist = DB.fetch_one("SELECT TOP 1 OrdeNo as OrderNo, CONVERT(varchar, DateofJoinning, 103) as joining_date_fmt, CONVERT(varchar, DateofAppointment, 103) as appointment_date_fmt, NewBasic as BasicPay, NewPayScale as PayScale, NewDDO as DDO, NewDesignation as Designation, NewDepartment as Department, JoiningTime, SrNo, CONVERT(varchar, DueDatePP, 103) as due_date_pp_fmt FROM sal_emp_promotion_increment_payrevision_detail WHERE fk_empid = ? ORDER BY DateofJoinning ASC", [emp_id])
-            if hist: edit_data = hist
+        # Fallback / backfill: use promotion-increment-payrevision detail table from HAU_Client_Backup
+        hist = None
+        try:
+            hist = DB.fetch_one(
+                """
+                SELECT TOP 1
+                    P.pk_proincid,
+                    P.OrdeNo as OrderNo,
+                    CONVERT(varchar, P.DateofJoinning, 103) as joining_date_fmt,
+                    CONVERT(varchar, P.DateofAppointment, 103) as appointment_date_fmt,
+                    CONVERT(varchar, P.ProbationCompleted, 103) as probation_date_fmt,
+                    CONVERT(varchar, P.DueDatePP, 103) as due_date_pp_fmt,
+                    P.JoiningTime,
+                    P.SrNo,
+                    COALESCE(DDO.Description, CAST(P.NewDDO AS varchar(200))) as DDO,
+                    COALESCE(DP.description, CAST(P.NewDepartment AS varchar(200))) as Department,
+                    COALESCE(DS.designation, CAST(P.NewDesignation AS varchar(200))) as Designation,
+                    P.NewBasic as BasicPay,
+                    P.NewPayScale as PayScale,
+                    P.PromotionTittle as title,
+                    P.Remarks as remarks
+                FROM [HAU_Client_Backup].[dbo].[sal_emp_promotion_increment_payrevision_detail] P
+                LEFT JOIN DDO_Mst DDO ON TRY_CONVERT(int, P.NewDDO) = DDO.pk_ddoid
+                LEFT JOIN Department_Mst DP ON TRY_CONVERT(int, P.NewDepartment) = DP.pk_deptid
+                LEFT JOIN SAL_Designation_Mst DS ON TRY_CONVERT(int, P.NewDesignation) = DS.pk_desgid
+                WHERE P.fk_empid = ?
+                ORDER BY P.DateofJoinning ASC
+                """,
+                [emp_id],
+            )
+        except Exception:
+            hist = None
+
+        if hist:
+            if not edit_data:
+                edit_data = hist
             else:
-                other = DB.fetch_one("SELECT OrderNo, CONVERT(varchar, dateofjoining, 103) as joining_date_fmt, CONVERT(varchar, dateofappointment, 103) as appointment_date_fmt, AppointmentTime FROM SAL_EmployeeOther_Details WHERE fk_empid = ?", [emp_id])
-                if other or employee_info: edit_data = { 'joining_date_fmt': other['joining_date_fmt'] if other else None, 'OrderNo': other['OrderNo'] if other else None, 'appointment_date_fmt': other['appointment_date_fmt'] if other else None, 'DDO': employee_info['ddo_name'] if employee_info else None, 'Designation': employee_info['designation'] if employee_info else None, 'Department': employee_info['dept_name'] if employee_info else None, 'BasicPay': employee_info['curbasic'] if employee_info else None, 'JoiningTime': 'Fore Noon' if other and other['AppointmentTime'] == 'F' else 'After Noon' }
+                def _blank(v):
+                    if v is None:
+                        return True
+                    if isinstance(v, (int, float)) and v == 0:
+                        return True
+                    return str(v).strip() == ''
+
+                for k in [
+                    'OrderNo', 'joining_date_fmt', 'appointment_date_fmt',
+                    'probation_date_fmt', 'due_date_pp_fmt',
+                    'DDO', 'Department', 'Designation',
+                    'BasicPay', 'PayScale', 'JoiningTime', 'SrNo',
+                    'title', 'remarks'
+                ]:
+                    if _blank(edit_data.get(k)) and not _blank(hist.get(k)):
+                        edit_data[k] = hist.get(k)
+
+        if not edit_data:
+            other = DB.fetch_one(
+                "SELECT OrderNo, CONVERT(varchar, dateofjoining, 103) as joining_date_fmt, CONVERT(varchar, dateofappointment, 103) as appointment_date_fmt, AppointmentTime FROM SAL_EmployeeOther_Details WHERE fk_empid = ?",
+                [emp_id],
+            )
+            if other or employee_info:
+                edit_data = {
+                    'joining_date_fmt': other['joining_date_fmt'] if other else None,
+                    'OrderNo': other['OrderNo'] if other else None,
+                    'appointment_date_fmt': other['appointment_date_fmt'] if other else None,
+                    'DDO': employee_info['ddo_name'] if employee_info else None,
+                    'Designation': employee_info['designation'] if employee_info else None,
+                    'Department': employee_info['dept_name'] if employee_info else None,
+                    'BasicPay': employee_info['curbasic'] if employee_info else None,
+                    'JoiningTime': 'Fore Noon' if other and other.get('AppointmentTime') == 'F' else 'After Noon',
+                }
         if edit_data and edit_data.get('pk_appointmentid'): terms = FirstAppointmentModel.get_probation_terms(edit_data['pk_appointmentid'])
         appointments = FirstAppointmentModel.get_employee_appointments(emp_id)
     return render_template('establishment/employee_first_appointment_details.html', emp=employee_info, appointments=appointments, record=edit_data, terms=terms, ddos=ddos, perm=perm)

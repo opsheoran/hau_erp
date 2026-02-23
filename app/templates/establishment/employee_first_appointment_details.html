@@ -224,10 +224,11 @@
             <tr>
                 <td colspan="2"></td>
                 <td colspan="5">
-                    {% if (record and perm.AllowUpdate) or (not record and perm.AllowAdd) %}
-                    <input type="submit" name="action" value="{{ 'UPDATE' if record else 'SAVE' }}" class="button-common">
+                    {% set has_db_record = record and record.pk_appointmentid %}
+                    {% if (has_db_record and perm.AllowUpdate) or (not has_db_record and perm.AllowAdd) %}
+                    <input type="submit" name="action" value="{{ 'UPDATE' if has_db_record else 'SAVE' }}" class="button-common">
                     {% endif %}
-                    {% if record and perm.AllowDelete %}
+                    {% if has_db_record and perm.AllowDelete %}
                     <input type="submit" name="action" value="DELETE" class="button-common" onclick="return confirm('Are you sure?')">
                     {% endif %}
                     <input type="submit" name="action" value="RESET" class="button-common" formnovalidate>
