@@ -1124,7 +1124,24 @@ def employee_first_appointment_details():
         except Exception as e: flash(f'Error: {str(e)}', 'danger')
     employee_info = None; appointments = []; edit_data = None; terms = []
     if emp_id:
-        employee_info = DB.fetch_one("SELECT E.*, D.description as dept_name, DS.designation, DD.Description as ddo_name FROM SAL_Employee_Mst E LEFT JOIN Department_Mst D ON E.fk_deptid = D.pk_deptid LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid LEFT JOIN DDO_Mst DD ON E.fk_ddoid = DD.pk_ddoid WHERE E.pk_empid = ?", [emp_id])
+        employee_info = DB.fetch_one(
+            """
+            SELECT
+                E.*,
+                D.description as dept_name,
+                DS.designation,
+                DD.Description as ddo_name,
+                COALESCE(CG.gradedetails, G.gradedetails) as grade_details
+            FROM SAL_Employee_Mst E
+            LEFT JOIN Department_Mst D ON E.fk_deptid = D.pk_deptid
+            LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid
+            LEFT JOIN DDO_Mst DD ON E.fk_ddoid = DD.pk_ddoid
+            LEFT JOIN SAL_Grade_Mst G ON E.fk_gradeid = G.pk_gradeid
+            LEFT JOIN SAL_Grade_Mst CG ON E.fk_cgradeid = CG.pk_gradeid
+            WHERE E.pk_empid = ?
+            """,
+            [emp_id],
+        )
         edit_data = FirstAppointmentModel.get_appointment_by_id(edit_id) if edit_id else None
         if not edit_data:
             existing = DB.fetch_one("SELECT pk_appointmentid FROM SAL_FirstAppointment_Details WHERE fk_empid = ?", [emp_id])
@@ -1170,6 +1187,8 @@ def employee_first_appointment_details():
                 edit_data['Designation'] = employee_info.get('designation')
             if _blank(edit_data.get('BasicPay')) and not _blank(employee_info.get('curbasic')):
                 edit_data['BasicPay'] = employee_info.get('curbasic')
+            if _blank(edit_data.get('PayScale')) and not _blank(employee_info.get('grade_details')):
+                edit_data['PayScale'] = employee_info.get('grade_details')
 
         # Backfill from promotion/increment/payrevision history (latest)
         hist = None
@@ -1197,7 +1216,7 @@ def employee_first_appointment_details():
                 LEFT JOIN Department_Mst DP ON TRY_CONVERT(int, P.NewDepartment) = DP.pk_deptid
                 LEFT JOIN SAL_Designation_Mst DS ON TRY_CONVERT(int, P.NewDesignation) = DS.pk_desgid
                 WHERE P.fk_empid = ?
-                ORDER BY ISNULL(P.DateofJoinning, '1900-01-01') DESC, P.pk_proincid DESC
+                ORDER BY P.pk_proincid DESC
                 """
                 [emp_id],
             )
