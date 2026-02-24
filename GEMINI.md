@@ -1,5 +1,8 @@
 # Mandatory Git Workflow (Safety First)
 
+**Local Environment Configuration:**
+- **Git Path:** `C:\Program Files\Git\bin\git.exe`
+
 To ensure code integrity and follow the user's preferred version control strategy, the following rules are MANDATORY:
 
 1. **User-Directed Commits:** Perform stage, commit, and push operations ONLY when explicitly requested by the user.
