@@ -278,10 +278,35 @@ class NonTeachingPromotionModel:
 
     @staticmethod
     def _cols(table: str) -> List[str]:
+        table_name = str(table or "").strip()
+        if not table_name:
+            return []
+        # Strip any schema/db prefix and brackets.
+        if "." in table_name:
+            table_name = table_name.split(".")[-1]
+        table_name = table_name.strip("[]")
         try:
             rows = DB.fetch_all(
-                "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? ORDER BY ORDINAL_POSITION",
-                [table],
+                "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE UPPER(TABLE_NAME) = UPPER(?) ORDER BY ORDINAL_POSITION",
+                [table_name],
+            )
+            cols = [str(r["COLUMN_NAME"]) for r in rows]
+            if cols:
+                return cols
+        except Exception:
+            pass
+
+        # Fallback for DBs that restrict INFORMATION_SCHEMA.
+        try:
+            rows = DB.fetch_all(
+                """
+                SELECT c.name as COLUMN_NAME
+                FROM sys.columns c
+                INNER JOIN sys.objects o ON c.object_id = o.object_id
+                WHERE o.name = ?
+                ORDER BY c.column_id
+                """,
+                [table_name],
             )
             return [str(r["COLUMN_NAME"]) for r in rows]
         except Exception:
