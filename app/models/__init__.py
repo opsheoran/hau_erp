@@ -13,7 +13,7 @@ from .academics import (
 
 # Explicit exports (defensive): prevents missing-name ImportError if the grouped import list above is edited/merged incorrectly.
 from .academics import FeeApprovalModel as FeeApprovalModel, DeanApprovalModel as DeanApprovalModel, DeanPgsApprovalModel as DeanPgsApprovalModel
-from .leave import LeaveModel, HolidayModel, LeaveEncashmentModel, LeaveReportModel, LeaveConfigModel, LeaveAssignmentModel
+from .leave import LeaveModel, HolidayModel, LeaveEncashmentModel, LeaveReportModel, LeaveConfigModel, LeaveAssignmentModel, WeeklyOffModel
 from .hrms import (
     LoanModel, IncomeTaxModel, EmployeePortalModel, EmployeeModel, DesignationCategoryModel,
     EmployeeDocumentModel, EmployeeQualificationModel, EmployeePermissionModel, 

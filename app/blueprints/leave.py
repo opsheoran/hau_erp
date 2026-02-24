@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, flash, make_response
 from app.db import DB
-from app.models import LeaveModel, NavModel, EmployeeModel, LeaveAssignmentModel, LeaveEncashmentModel, LeaveReportModel, LeaveConfigModel, HolidayModel
+from app.models import LeaveModel, NavModel, EmployeeModel, LeaveAssignmentModel, LeaveEncashmentModel, LeaveReportModel, LeaveConfigModel, HolidayModel, WeeklyOffModel
 from functools import wraps
 from datetime import datetime, timedelta
 import math
@@ -1423,10 +1423,74 @@ def loc_wise_holiday_master():
                            years=years,
                            pagination=pagination)
 
+@leave_bp.route('/api/weekly_off/<woff_id>')
+def api_weekly_off_details(woff_id):
+    master = WeeklyOffModel.get_by_id(woff_id)
+    employees = WeeklyOffModel.get_employees(woff_id)
+    return jsonify({
+        'master': master,
+        'employees': employees
+    })
+
 @leave_bp.route('/weekly_off_master', methods=['GET', 'POST'])
 @permission_required('Weekly Off Master')
 def weekly_off_master():
-    return render_template('leave/master_weekly_off.html')
+    user_id = session['user_id']
+    if request.method == 'POST':
+        action = (request.form.get('action') or 'SAVE').upper().strip()
+        
+        if action == 'DELETE':
+            try:
+                woff_id = request.form.get('id')
+                WeeklyOffModel.delete(woff_id)
+                flash("Weekly off mapping deleted successfully.", "success")
+            except Exception as e:
+                flash(f"Error: {str(e)}", "danger")
+            return redirect(url_for('leave.weekly_off_master'))
+            
+        try:
+            # Process week-wise configuration for each day
+            # Format: "w1,w2,w3,w4,w5" where wX is 0, 1, or 2
+            days_data = {}
+            for day in ['sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat']:
+                weeks = []
+                for w in range(1, 6):
+                    weeks.append(request.form.get(f'{day}_w{w}', '0'))
+                days_data[day] = ",".join(weeks)
+            
+            data = {
+                'pk_id': request.form.get('pk_id'),
+                'hloc_id': request.form.get('hloc_id'),
+                'description': request.form.get('description'),
+                'remarks': request.form.get('remarks'),
+                'emp_ids': request.form.getlist('emp_ids[]'),
+                **days_data
+            }
+            
+            WeeklyOffModel.save(data, user_id)
+            flash("Weekly off details saved successfully.", "success")
+        except Exception as e:
+            flash(f"Error: {str(e)}", "danger")
+        return redirect(url_for('leave.weekly_off_master'))
+
+    # GET request
+    locations = DB.fetch_all("SELECT pk_locid as id, locname as name FROM Location_Mst ORDER BY locname")
+    holiday_locations = HolidayModel.get_holiday_locations()
+    weekly_offs = WeeklyOffModel.get_all()
+    
+    # Employee search lookups
+    lookups = {
+        'ddos': EmployeeModel.get_all_ddos(),
+        'depts': EmployeeModel.get_all_departments(),
+        'desgs': EmployeeModel.get_all_designations(),
+        'classes': DB.fetch_all("SELECT pk_classid as id, classname as name FROM SAL_Class_Mst ORDER BY classname")
+    }
+
+    return render_template('leave/master_weekly_off.html', 
+                           locations=locations, 
+                           holiday_locations=holiday_locations,
+                           weekly_offs=weekly_offs,
+                           lookups=lookups)
 
 @leave_bp.route('/extend_request', methods=['GET', 'POST'])
 

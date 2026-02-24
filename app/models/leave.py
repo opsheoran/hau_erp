@@ -84,6 +84,85 @@ class HolidayModel:
     def delete_loc_holiday_detail(did):
         return DB.execute("DELETE FROM SAL_LocationWiseHolidays_Dtl WHERE pk_locholidaydtlid = ?", [did])
 
+class WeeklyOffModel:
+    @staticmethod
+    def get_all():
+        return DB.fetch_all("SELECT pk_woffid as id, Description, Remarks FROM SAL_WeeklyOff_Mst ORDER BY Description")
+
+    @staticmethod
+    def get_by_id(woff_id):
+        return DB.fetch_one("SELECT * FROM SAL_WeeklyOff_Mst WHERE pk_woffid = ?", [woff_id])
+
+    @staticmethod
+    def get_employees(woff_id):
+        query = """
+            SELECT E.pk_empid, E.empname, E.empcode, D.designation 
+            FROM SAL_WeeklyOff_Employee WE
+            INNER JOIN SAL_Employee_Mst E ON WE.fk_empid = E.pk_empid
+            LEFT JOIN SAL_Designation_Mst D ON E.fk_desgid = D.pk_desgid
+            WHERE WE.fk_woffid = ?
+        """
+        return DB.fetch_all(query, [woff_id])
+
+    @staticmethod
+    def save(data, user_id):
+        # Determine unique ID for new record
+        pk_id = data.get('pk_id')
+        is_new = not pk_id
+        
+        # Automate University Location mapping based on Holiday Location
+        hloc_id = data.get('hloc_id')
+        loc_id = 'VC-52' if str(hloc_id) == '1' else 'VC-1'
+        
+        if is_new:
+            # Generate ID (mimic live system prefix/logic if possible, or use count)
+            count = DB.fetch_scalar("SELECT COUNT(*) FROM SAL_WeeklyOff_Mst")
+            pk_id = f"WOFF-{count + 1}"
+            
+            sql = """
+                INSERT INTO SAL_WeeklyOff_Mst 
+                (pk_woffid, fk_locid, sun, mon, tue, wed, thur, fri, sat, fk_holidaylocid, 
+                 Description, Remarks, fk_insUserID, fk_insDateID) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())
+            """
+            params = [
+                pk_id, loc_id, data.get('sun'), data.get('mon'), 
+                data.get('tue'), data.get('wed'), data.get('thur'), data.get('fri'), 
+                data.get('sat'), hloc_id, data.get('description'), 
+                data.get('remarks'), user_id
+            ]
+            DB.execute(sql, params)
+        else:
+            sql = """
+                UPDATE SAL_WeeklyOff_Mst 
+                SET fk_locid=?, sun=?, mon=?, tue=?, wed=?, thur=?, fri=?, sat=?, 
+                    fk_holidaylocid=?, Description=?, Remarks=?, 
+                    fk_updUserID=?, fk_updDateID=GETDATE() 
+                WHERE pk_woffid=?
+            """
+            params = [
+                loc_id, data.get('sun'), data.get('mon'), 
+                data.get('tue'), data.get('wed'), data.get('thur'), data.get('fri'), 
+                data.get('sat'), hloc_id, data.get('description'), 
+                data.get('remarks'), user_id, pk_id
+            ]
+            DB.execute(sql, params)
+            
+        # Handle employee mapping
+        emp_ids = data.get('emp_ids', [])
+        if not is_new:
+            DB.execute("DELETE FROM SAL_WeeklyOff_Employee WHERE fk_woffid = ?", [pk_id])
+            
+        for eid in emp_ids:
+            DB.execute("INSERT INTO SAL_WeeklyOff_Employee (fk_woffid, fk_empid) VALUES (?, ?)", [pk_id, eid])
+            
+        return pk_id
+
+    @staticmethod
+    def delete(woff_id):
+        DB.execute("DELETE FROM SAL_WeeklyOff_Employee WHERE fk_woffid = ?", [woff_id])
+        return DB.execute("DELETE FROM SAL_WeeklyOff_Mst WHERE pk_woffid = ?", [woff_id])
+
 class LeaveEncashmentModel:
     @staticmethod
     def get_encashments(emp_id=None):
