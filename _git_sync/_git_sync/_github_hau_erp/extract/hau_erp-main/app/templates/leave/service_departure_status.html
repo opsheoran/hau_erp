@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tablesubheading">Service Departure Status (RO View)</div>
+    <div style="padding: 15px;">
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <td>S.No.</td>
+                    <td>Employee Name</td>
+                    <td>Emp Code</td>
+                    <td>Leave Type</td>
+                    <td>Departure Date</td>
+                    <td>Period</td>
+                    <td>Status</td>
+                    <td>Remarks</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for h in history %}
+                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                    <td align="center">{{ loop.index + (pagination.page - 1) * 10 }}</td>
+                    <td>{{ h.EmployeeName }}</td>
+                    <td align="center">{{ h.empcode }}</td>
+                    <td>{{ h.LeaveType }}</td>
+                    <td align="center">{{ h.FromDate }}</td>
+                    <td align="center">{{ h.ANFN }}</td>
+                    <td align="center"><b>{{ h.leavestatus }}</b></td>
+                    <td>{{ h.DepartureRemarks or '' }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="8" align="center" style="padding:20px;">No departure records found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Optimized Pagination -->
+        {% if pagination.total_pages > 1 %}
+        <div style="margin-top:15px; text-align:right; font-family:Verdana; font-size:11px;">
+            <span>Page {{ pagination.page }} of {{ pagination.total_pages }} </span>
+            {% if pagination.has_prev %}
+            <a href="?page={{ pagination.page - 1 }}" class="btn-hau">Previous</a>
+            {% endif %}
+            {% if pagination.has_next %}
+            <a href="?page={{ pagination.page + 1 }}" class="btn-hau" style="margin-left:5px;">Next</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

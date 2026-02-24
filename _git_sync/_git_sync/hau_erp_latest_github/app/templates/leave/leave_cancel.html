@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    /* Exact styles from live system */
+    .table { width: 100%; border-collapse: collapse; font-family: Verdana, sans-serif; font-size: 11px; }
+    .tableheading { background-color: #3c8dbc; color: #fff; font-weight: bold; padding: 5px 10px; font-size: 12px; border: 1px solid #2c729e; }
+    .tablesubheading { background-color: #eee; color: #333; font-weight: bold; padding: 5px 10px; font-size: 11px; border: 1px solid #ccc; }
+    .vtext { font-weight: bold; color: #333; font-size: 11px; width: 150px; }
+    .colon { width: 15px; text-align: center; font-weight: bold; }
+    .textboxlong { border: 1px solid #ccc; padding: 3px; font-size: 11px; width: 300px; height: 22px; outline: none; }
+    .textboxmultiline { border: 1px solid #ccc; padding: 3px; font-size: 11px; width: 400px; height: 40px; }
+    .dropdown { border: 1px solid #ccc; padding: 3px; font-size: 11px; height: 22px; }
+    
+    .button-common1 { background: #f4f4f4; border: 1px solid #bbb; color: #333; padding: 3px 12px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+    .header-style th { background: #eee; border: 1px solid #ccc; padding: 5px; font-weight: bold; text-align: center; }
+    .item-style td { border: 1px solid #ccc; padding: 4px 8px; }
+</style>
+
+<div style="padding: 10px 20px;">
+    <form method="POST">
+        <table width="100%" class="table">
+            <tr><td class="tableheading">Leave Adjustment Request</td></tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr><td><b><span style="color: Blue;">{{ session.login_name }} | {{ session.user_name }}</span></b></td></tr>
+            <tr><td style="height:10px;"></td></tr>
+            
+            <!-- Leave Balance Grid -->
+            <tr>
+                <td>
+                    <table width="100%" border="1" style="border:1px solid #D4D4D4; border-collapse:collapse;">
+                        <tr class="header-style">
+                            <th>S.No.</th><th>Leave Type</th><th>Total Leave (Days)</th><th>Availed Leave (Days)</th><th>Adjusted Leave (Days)</th><th>Balance Leave (Days)</th><th>Applied Leave (Days)</th><th>Applied Balance Leave(Days)</th>
+                        </tr>
+                        {% for b in balances %}
+                        <tr class="item-style" style="background-color: {{ 'White' if loop.index % 2 != 0 else '#F0F0F0' }};">
+                            <td align="center">{{ loop.index }}</td>
+                            <td>{{ b.leavetype }}</td>
+                            <td align="right">{{ "{:,.3f}".format(b.total|float) }}</td>
+                            <td align="right">{{ "{:,.2f}".format(b.availed|float) }}</td>
+                            <td align="right">{{ "{:,.2f}".format(b.adjusted|float) }}</td>
+                            <td align="right">{{ "{:,.3f}".format(b.balance|float) }}</td>
+                            <td align="right" style="color:red;">{{ "{:,.2f}".format(b.applied|float) }}</td>
+                            <td align="right"><b>{{ "{:,.3f}".format(b.balance|float - b.applied|float) }}</b></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Cancellation Request Form -->
+        <table border="0" cellpadding="3" cellspacing="0" width="100%" style="margin-top:20px;">
+            <tr>
+                <td class="vtext">Leave Request</td><td class="colon">:</td>
+                <td class="required">
+                    <select name="leave_id" class="dropdown" style="width:350px;" onchange="window.location='?leave_id='+this.value">
+                        <option value="">-- Leave Type | From Date | To Date --</option>
+                        {% for l in leaves %}
+                        <option value="{{ l.pk_leavetakenid }}" {% if selected_leave_id == l.pk_leavetakenid|string %}selected{% endif %}>{{ l.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Reporting To</td><td class="colon">:</td>
+                <td><input type="text" class="textboxlong" value="{{ reporting_to.name if reporting_to else '' }}" readonly></td>
+            </tr>
+            <tr>
+                <td class="vtext">Remarks</td><td class="colon">:</td>
+                <td><textarea name="remarks" class="textboxmultiline"></textarea></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td style="padding-top:10px;">
+                    <input type="submit" value="DONE" class="button-common1">
+                    <input type="reset" value="RESET" class="button-common1" style="margin-left:10px;">
+                </td>
+            </tr>
+        </table>
+
+        <!-- Leave Detail Grid (if leave selected) -->
+        {% if daywise_details %}
+        <table width="100%" class="table" style="margin-top:20px;">
+            <tr><td class="tablesubheading">Leave Detail</td></tr>
+            <tr>
+                <td>
+                    <table width="100%" border="1" style="border:1px solid #D4D4D4; border-collapse:collapse;">
+                        <tr class="header-style">
+                            <th>S.No.</th><th>Date</th><th>Day</th><th>Leave Type</th><th>Half Day</th>
+                        </tr>
+                        {% for d in daywise_details %}
+                        <tr class="item-style" style="background-color: {{ 'White' if loop.index % 2 != 0 else '#F0F0F0' }};">
+                            <td align="center">{{ loop.index }}</td>
+                            <td>{{ d.leavedate }}</td>
+                            <td>{{ d.day_name }}</td>
+                            <td>{{ d.LeaveType }}</td>
+                            <td>No</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+            </tr>
+        </table>
+        {% endif %}
+
+        <!-- Cancellation History -->
+        <table width="100%" class="table" style="margin-top:30px;">
+            <tr><td class="tableheading">List of Leave Adjustment Request</td></tr>
+            <tr>
+                <td>
+                    <table width="100%" border="1" style="border:1px solid #D4D4D4; border-collapse:collapse;">
+                        <tr class="header-style">
+                            <th>S.No.</th><th>Request Date</th><th>Leave Type</th><th>Original Dates</th><th>Days</th><th>Status</th>
+                        </tr>
+                        {% for h in history %}
+                        <tr class="item-style" style="background-color: {{ 'White' if loop.index % 2 != 0 else '#F0F0F0' }};">
+                            <td align="center">{{ loop.index + (pagination.page - 1) * 10 }}</td>
+                            <td align="center">{{ h.RequestDate }}</td>
+                            <td>{{ h.LeaveType }}</td>
+                            <td align="center">{{ h.FromDate }} - {{ h.ToDate }}</td>
+                            <td align="right">{{ h.Days }}</td>
+                            <td align="center"><b>{{ h.Status }}</b></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+
+                    <!-- Pagination -->
+                    {% if pagination.total_pages > 1 %}
+                    <div style="margin-top:10px; text-align:right; font-family:Verdana; font-size:11px;">
+                        <span>Page {{ pagination.page }} of {{ pagination.total_pages }} </span>
+                        {% if pagination.has_prev %}
+                        <a href="?page={{ pagination.page - 1 }}" class="button-common1" style="text-decoration:none;">Previous</a>
+                        {% endif %}
+                        {% if pagination.has_next %}
+                        <a href="?page={{ pagination.page + 1 }}" class="button-common1" style="text-decoration:none; margin-left:5px;">Next</a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}

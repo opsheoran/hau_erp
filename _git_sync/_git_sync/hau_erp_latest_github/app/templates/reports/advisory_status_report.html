@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table { border-collapse: collapse; width: 100%; font-family: Verdana, sans-serif; font-size: 8px; }
+        th, td { border: 1px solid black; padding: 3px; text-align: center; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        .header { text-align: center; font-weight: bold; font-size: 12px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY<br>
+        ADVISORY CREATION AND APPROVAL STATUS REPORT<br>
+        <span style="font-size: 8px; font-weight: normal;">
+            College: {{ filters_info.college }} | Session: {{ filters_info.session }} | Degree: {{ filters_info.degree }}<br>
+            Report Generated on: {{ now.strftime('%d/%m/%Y %H:%M') }}
+        </span>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Admission No</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Major Advisor Made</th>
+                <th>Specialization Made</th>
+                <th>Member of Minor & supporting</th>
+                <th>Hod Approval</th>
+                <th>Hod Approval Date</th>
+                <th>College Dean Approval</th>
+                <th>College Dean Approval Date</th>
+                <th>Dean Pgs Approval(Advisory Committe)</th>
+                <th>Dean Pgs Approval Date</th>
+                <th>Course Plan Made</th>
+                <th>Dean Pgs Approval(Course Plan)</th>
+                <th>Dean Pgs Approval(CP) Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in status_list %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ s.AdmissionNo }}</td>
+                <td>{{ s.fullname }}</td>
+                <td>{{ s.Branchname }}</td>
+                <td>{{ s.MajorAdvisorMade }}</td>
+                <td>{{ s.SpecializationMade }}</td>
+                <td>{{ s.MemberMinorMade }}</td>
+                <td>{{ s.HodApproval }}</td>
+                <td>{{ s.HodApprovalDate or '' }}</td>
+                <td>{{ s.CollegeDeanApproval }}</td>
+                <td>{{ s.CollegeDeanApprovalDate or '' }}</td>
+                <td>{{ s.DeanPgsApproval }}</td>
+                <td>{{ s.DeanPgsApprovalDate or '' }}</td>
+                <td>{{ s.CoursePlanMade }}</td>
+                <td>{{ s.CoursePlanApproval }}</td>
+                <td>{{ s.CoursePlanApprovalDate or '' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hau-card">
+<div class="tableheading"><span class="mainheadingborderbottom">Advisor Allocation(For UG)</span></div>
+<div style="padding:10px;">
+<style>
+    .chkbox {
+        font-family: Verdana;
+        font-size: 11px;
+        font-weight: bold;
+    }
+</style>
+
+<form method="POST" action="{{ url_for('academics_mgmt.advisor_allocation_ug') }}" id="aspnetForm" autocomplete="off">
+    <input type="hidden" name="action" id="actionField" value="">
+    <input type="hidden" name="fetch" id="fetchField" value="{{ filters.fetch or '' }}">
+    <input type="hidden" name="branch_id" id="branchHidden" value="{{ filters.branch_id or '0' }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+
+    <table id="TABLE1" border="0" cellpadding="0" class="secContent" width="100%">
+        <tbody>
+            <tr>
+                <td id="lblColleges" class="vtext">College</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="ctl00_ContentPlaceHolder1_D_ddlColleges" class="dropdownvvlong" onchange="this.form.submit()">
+                        <option value="">--Select College--</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Admitted Session</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="session_id" id="ctl00_ContentPlaceHolder1_D_ddlAcdSession" class="dropdownlong" onchange="this.form.submit()">
+                        <option value="0">--Select Academic Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                <td id="lbldegree" class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td valign="top" class="required">
+                    <select name="degree_id" id="ctl00_ContentPlaceHolder1_D_ddldegree" class="dropdown" onchange="this.form.submit()">
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td id="lblEmployees" style="width:15%" class="vtext">Teacher</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="teacher_id" id="ctl00_ContentPlaceHolder1_D_ddlEmployees" class="dropdownvvlong">
+                        <option value="">--Select Employees--</option>
+                        {% for t in lookups.teachers %}
+                        <option value="{{ t.id }}" {% if filters.teacher_id|string == t.id|string %}selected{% endif %}>{{ t.display_name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                <td class="vtext"></td>
+                <td class="colon"></td>
+                <td class="required">
+                    <span id="ctl00_ContentPlaceHolder1_D_ddlSemester" style="display:none;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Teacher Search</td>
+                <td class="colon">:</td>
+                <td colspan="4">
+                    <input type="text" id="teacherSearch" class="textbox w-250" placeholder="Name / Code" autocomplete="off">
+                    <input type="button" value="SEARCH" class="button-common" onclick="searchTeachers()">
+                    <input type="button" value="RESET" class="button-common" onclick="resetTeacherSearch()" title="Restore list">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="button" value="GET Student" id="ctl00_ContentPlaceHolder1_btnGetStudent" class="button-common" onclick="getStudents()" cellpadding="0" cellspacing="0">
+                </td>
+            </tr>
+
+            <tr>
+                <td class="tablesubheading" colspan="6"><span class="subheadingborderbottom">List of Students</span></td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_gvStudent" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+                        <tbody>
+                            <tr class="header-style">
+                                <th scope="col">S.No.</th>
+                                <th align="center" scope="col" style="width:5%;">
+                                    <span class="chkbox"><input id="ctl00_ContentPlaceHolder1_gvStudent_ctl01_chkAll" type="checkbox" onclick="CheckAllDataGridCheckBoxes(this);"><label for="ctl00_ContentPlaceHolder1_gvStudent_ctl01_chkAll">ALL</label></span>
+                                </th>
+                                <th scope="col">Student Name</th>
+                                <th scope="col">Admission Number</th>
+                                <th scope="col">Advisor Name</th>
+                            </tr>
+                            {% if students %}
+                                {% for s in students %}
+                                <tr class="item-style" style="background-color:{{ 'White' if loop.index % 2 != 0 else '#FAFAFA' }};">
+                                    <td align="center" style="width:5%;">{{ loop.index }}</td>
+                                    <td align="center" style="width:5%;">
+                                        <span class="chkbox"><input id="ctl00_ContentPlaceHolder1_gvStudent_ctl{{ '%02d'|format(loop.index + 1) }}_chk" type="checkbox" name="student_ids" value="{{ s.id }}"></span>
+                                    </td>
+                                    <td align="center">
+                                        <a id="ctl00_ContentPlaceHolder1_gvStudent_ctl{{ '%02d'|format(loop.index + 1) }}_alertlink" onclick="window.open(this.href,'popupwindow','width=400,height=400,scrollbars,resizable'); return false;" href="{{ url_for('academics.student_alert', sid=s.id) }}" style="color:Black;text-decoration:underline;">{{ s.name }}</a>
+                                    </td>
+                                    <td align="center">
+                                        <span id="ctl00_ContentPlaceHolder1_gvStudent_ctl{{ '%02d'|format(loop.index + 1) }}_enroll" style="color:Black;">{{ s.admission_no }}</span>
+                                    </td>
+                                    <td align="center">
+                                        <span id="ctl00_ContentPlaceHolder1_gvStudent_ctl{{ '%02d'|format(loop.index + 1) }}_empname" style="color:Black;">{{ s.advisor_name }}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr class="item-style" style="background-color:White;">
+                                    <td colspan="5" align="center" style="padding:20px; color:#999;">No students found for the selected criteria.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="required" colspan="4"></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="button" name="btnSave" value="UPDATE" id="ctl00_ContentPlaceHolder1_btnSave" accesskey="s" class="button-common" onclick="saveAllocation()" cellpadding="0" cellspacing="0">
+                    <input type="button" name="btnReset" value="RESET" id="ctl00_ContentPlaceHolder1_btnReset" accesskey="r" class="button-common" onclick="window.location.href='{{ url_for('academics_mgmt.advisor_allocation_ug') }}'" cellpadding="0" cellspacing="0">
+                    <span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+    </div>
+</div>
+
+<script>
+    var originalTeachersHtml = '';
+    var initialTeacherId = '{{ filters.teacher_id or "" }}';
+
+    function getStudents() {
+        if (!document.getElementById('ctl00_ContentPlaceHolder1_D_ddlColleges').value ||
+            !document.getElementById('ctl00_ContentPlaceHolder1_D_ddlAcdSession').value ||
+            document.getElementById('ctl00_ContentPlaceHolder1_D_ddlAcdSession').value === '0' ||
+            !document.getElementById('ctl00_ContentPlaceHolder1_D_ddldegree').value) {
+            alert('Please select College, Admitted Session and Degree first.');
+            return;
+        }
+        document.getElementById('fetchField').value = '1';
+        document.getElementById('aspnetForm').submit();
+    }
+
+    function saveAllocation() {
+        const teacherSelect = document.getElementById('ctl00_ContentPlaceHolder1_D_ddlEmployees');
+        const studentCheckboxes = document.querySelectorAll('input[name=\"student_ids\"]:checked');
+
+        if (!teacherSelect.value) {
+            alert('Please select a Teacher.');
+            return;
+        }
+
+        if (studentCheckboxes.length === 0) {
+            alert('Please select at least one student.');
+            return;
+        }
+
+        if (confirm('Are you sure you want to assign the selected teacher as advisor to ' + studentCheckboxes.length + ' students?')) {
+            document.getElementById('actionField').value = 'UPDATE';
+            document.getElementById('aspnetForm').submit();
+        }
+    }
+
+    function CheckAllDataGridCheckBoxes(master) {
+        const checkboxes = document.querySelectorAll('input[name=\"student_ids\"]');
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = master.checked;
+        }
+    }
+
+    function resetTeacherSearch() {
+        var teacherSearch = document.getElementById('teacherSearch');
+        if (teacherSearch) teacherSearch.value = '';
+
+        var select = document.getElementById('ctl00_ContentPlaceHolder1_D_ddlEmployees');
+        if (originalTeachersHtml) {
+            select.innerHTML = originalTeachersHtml;
+            if (initialTeacherId) {
+                select.value = initialTeacherId;
+            }
+        }
+    }
+
+    function searchTeachers() {
+        var term = (document.getElementById('teacherSearch').value || '').trim();
+        if (!term) { alert('Please enter teacher name or code to search'); return; }
+
+        var url = '/academics/api/search_teachers?q=' + encodeURIComponent(term) + '&all=1';
+        fetch(url)
+            .then(function(r){ return r.json(); })
+            .then(function(data){
+                var select = document.getElementById('ctl00_ContentPlaceHolder1_D_ddlEmployees');
+                if (data && data.length > 0) {
+                    select.innerHTML = '<option value=\"\">--Select Employees--</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        var o = document.createElement('option');
+                        o.value = data[i].id;
+                        o.textContent = data[i].name;
+                        select.appendChild(o);
+                    }
+                    select.value = data[0].id;
+                } else {
+                    alert('No teachers found for the given search term.');
+                }
+            });
+    }
+
+    window.addEventListener('load', function() {
+        var select = document.getElementById('ctl00_ContentPlaceHolder1_D_ddlEmployees');
+        if (select && !originalTeachersHtml) {
+            originalTeachersHtml = select.innerHTML;
+        }
+    });
+</script>
+{% endblock %}

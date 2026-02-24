@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)https://hauiums.in/HRMS/SAL_Grade_Mst.aspx?Mwpid=1060 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Grade Master_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Grade Master_files/default.css" type="text/css" rel="stylesheet"><link href="./Grade Master_files/font.css" type="text/css" rel="stylesheet"><link href="./Grade Master_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Grade Master_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style><script type="text/javascript" src="./Grade Master_files/WebResource.axd"></script><script type="text/javascript" src="./Grade Master_files/WebResource(1).axd"></script><script type="text/javascript" src="./Grade Master_files/WebResource(2).axd"></script><script type="text/javascript" src="./Grade Master_files/WebResource(3).axd"></script><script type="text/javascript" src="./Grade Master_files/WebResource(4).axd"></script><script type="text/javascript" src="./Grade Master_files/WebResource(5).axd"></script><script type="text/javascript" src="./Grade Master_files/WebResource(6).axd"></script><script type="text/javascript" src="./Grade Master_files/CommonJS.js.download"></script><script type="text/javascript" src="./Grade Master_files/jquery-2.2.0.min.js.download"></script><script type="text/javascript">
+//<![CDATA[
+var Page_Validators = new Array();
+function WebForm_OnSubmit() {
+    return true;
+}
+//]]></script><script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script><script type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script><script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script><script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script><script type="text/javascript">
+//<![CDATA[
+function WebForm_OnSubmit() {
+if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+//]]>
+</script><script type="text/javascript">
+//<![CDATA[
+var form = Anthem_GetForm();
+if (typeof(form) != "undefined" && form != null) {
+  Anthem_AddEvent(form, "onsubmit", "return WebForm_OnSubmit();");
+}
+//]]></script><script type="text/javascript">
+        function restrict() {
+
+            var level = document.getElementById("ctl00_ContentPlaceHolder1_txtorder");
+            if (level.value != "") {
+                if (parseInt(level.value) == 0) {
+                    alert("Order can't be zero!");
+                    level.value = "";
+                    level.focus();
+                    return false;
+                }
+            }
+        }
+    </script><script type="text/javascript">
+//<![CDATA[
+var Page_ValidationSummaries =  new Array(document.getElementById("ctl00_ContentPlaceHolder1_ValidationSummary1"));
+var Page_Validators =  new Array(document.getElementById("ctl00_ContentPlaceHolder1_cvGradePay"), document.getElementById("ctl00_ContentPlaceHolder1_cvG1"), document.getElementById("ctl00_ContentPlaceHolder1_cvG2"));
+//]]>
+</script><script type="text/javascript">
+//<![CDATA[
+var ctl00_ContentPlaceHolder1_cvGradePay = document.all ? document.all["ctl00_ContentPlaceHolder1_cvGradePay"] : document.getElementById("ctl00_ContentPlaceHolder1_cvGradePay");
+ctl00_ContentPlaceHolder1_cvGradePay.controltovalidate = "ctl00_ContentPlaceHolder1_R_txtGradePay";
+ctl00_ContentPlaceHolder1_cvGradePay.focusOnError = "t";
+ctl00_ContentPlaceHolder1_cvGradePay.errormessage = "Grade pay is invalid!";
+ctl00_ContentPlaceHolder1_cvGradePay.display = "None";
+ctl00_ContentPlaceHolder1_cvGradePay.type = "Double";
+ctl00_ContentPlaceHolder1_cvGradePay.decimalchar = ".";
+ctl00_ContentPlaceHolder1_cvGradePay.evaluationfunction = "CompareValidatorEvaluateIsValid";
+var ctl00_ContentPlaceHolder1_cvG1 = document.all ? document.all["ctl00_ContentPlaceHolder1_cvG1"] : document.getElementById("ctl00_ContentPlaceHolder1_cvG1");
+ctl00_ContentPlaceHolder1_cvG1.controltovalidate = "ctl00_ContentPlaceHolder1_txtG1";
+ctl00_ContentPlaceHolder1_cvG1.focusOnError = "t";
+ctl00_ContentPlaceHolder1_cvG1.errormessage = "G1 is invalid!";
+ctl00_ContentPlaceHolder1_cvG1.display = "None";
+ctl00_ContentPlaceHolder1_cvG1.type = "Double";
+ctl00_ContentPlaceHolder1_cvG1.decimalchar = ".";
+ctl00_ContentPlaceHolder1_cvG1.evaluationfunction = "CompareValidatorEvaluateIsValid";
+var ctl00_ContentPlaceHolder1_cvG2 = document.all ? document.all["ctl00_ContentPlaceHolder1_cvG2"] : document.getElementById("ctl00_ContentPlaceHolder1_cvG2");
+ctl00_ContentPlaceHolder1_cvG2.controltovalidate = "ctl00_ContentPlaceHolder1_txtG2";
+ctl00_ContentPlaceHolder1_cvG2.focusOnError = "t";
+ctl00_ContentPlaceHolder1_cvG2.errormessage = "G2 is invalid!";
+ctl00_ContentPlaceHolder1_cvG2.display = "None";
+ctl00_ContentPlaceHolder1_cvG2.type = "Double";
+ctl00_ContentPlaceHolder1_cvG2.decimalchar = ".";
+ctl00_ContentPlaceHolder1_cvG2.evaluationfunction = "CompareValidatorEvaluateIsValid";
+var ctl00_ContentPlaceHolder1_ValidationSummary1 = document.all ? document.all["ctl00_ContentPlaceHolder1_ValidationSummary1"] : document.getElementById("ctl00_ContentPlaceHolder1_ValidationSummary1");
+ctl00_ContentPlaceHolder1_ValidationSummary1.showmessagebox = "True";
+ctl00_ContentPlaceHolder1_ValidationSummary1.showsummary = "False";
+//]]>
+</script><script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script><script type="text/javascript">
+//<![CDATA[
+
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+        WebForm_AutoFocus('ctl00_ContentPlaceHolder1_txtG1');//]]>
+</script><script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/HRMS/SAL_Grade_Mst.aspx?Mwpid=1060" onsubmit="javascript:return WebForm_OnSubmit();" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUJNTY4NjIxNjI0DxYGHgZwb3N0aWQFJDk1OWY3M2RkLTQ5YjQtNDFmMi05MmQwLTJmOGIwNmUzODFlNh4CaWQFBkVTLTExNB4JVGltZXN0YW1wFClYU3lzdGVtLkJ5dGUsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQgDAAMAAwADAAMBA64DOwNPFgJmDw8WAh4HUGVuZGluZwUBMGQWAgIBD2QWEAICDw8WAh4EVGV4dAURIFVuaXZlcnNpdHkgQWRtaW5kZAIEDw8WAh8EBRtMTFQuIC0gMi8yMC8yMDI2IDg6NTA6MTggUE1kZAIFDw8WAh8EBRtDTFQuIC0gMi8yMS8yMDI2IDY6NTc6MDggQU1kZAIGDw8WAh8EBREgVW5pdmVyc2l0eSBBZG1pbmRkAgcPDxYCHwQFEkNvbXB0cm9sbGVyLCBIaXNhcmRkAgkPZBYCZg8WAh8EBUU8c3Bhbj5DcmVhdGUgTWFzdGVyczwvc3Bhbj4mbmJzcDs+Jm5ic3A7PHN0cm9uZz5HcmFkZSBNYXN0ZXI8L1N0cm9uZz5kAgoPZBYgAgEPDxYCHwQFAS1kZAIDDw8WAh8EBQQ2NjAwZGQCBw8QZA8WAmYCARYCEAUHUGVyY2VudAUBUGcQBQpGaXggQW1vdW50BQFBZxYBZmQCCw8PFgIfBGUWBB4Hb25wYXN0ZQUwamF2YXNjcmlwdDpyZXR1cm4gTWF4VGV4dFBhc3RlKCd0eHRSZW1hcmtzJywyNTUpHgpvbmtleXByZXNzBTBqYXZhc2NyaXB0OnJldHVybiBNYXhUZXh0SW5wdXQoJ3R4dFJlbWFya3MnLDI1NSlkAg0PD2QWAh4Jb25rZXlkb3duBRJyZXR1cm4gTnVtQ2hlY2soKTtkAhEPD2QWAh8HBRJyZXR1cm4gTnVtQ2hlY2soKTtkAhUPD2QWAh8HBRJyZXR1cm4gTnVtQ2hlY2soKTtkAhcPD2QWAh8HBRJyZXR1cm4gTnVtQ2hlY2soKTtkAhkPD2QWAh8HBRJyZXR1cm4gTnVtQ2hlY2soKTtkAhsPD2QWAh8HBRJyZXR1cm4gTnVtQ2hlY2soKTtkAh0PD2QWAh8HBRJyZXR1cm4gTnVtQ2hlY2soKTtkAiMPPCsAEQMADxYEHgtfIURhdGFCb3VuZGceC18hSXRlbUNvdW50AgFkARAWABYAFgAMFCsAABYCZg9kFgQCAQ9kFhRmD2QWAmYPFQEBMWQCAQ8PFgIfBAUFMTU2MDBkZAICDw8WAh8EBQUzOTEwMGRkAgMPDxYCHwQFATBkZAIEDw8WAh8EBQYmbmJzcDtkZAIFDw8WAh8EBQYmbmJzcDtkZAIGDw8WAh8EBQYmbmJzcDtkZAIHDw8WAh8EBQExZGQCCA9kFgICAQ8PFgIeD0NvbW1hbmRBcmd1bWVudAUBMWRkAgkPZBYCAgEPDxYCHwoFATFkZAICDw8WAh4HVmlzaWJsZWhkZAIlDw8WCB8EBQZVUERBVEUeC0NvbW1hbmROYW1lBQZVUERBVEUeF0F1dG9VcGRhdGVBZnRlckNhbGxCYWNrZx4SVGV4dER1cmluZ0NhbGxCYWNrBQtVUERBVElORy4uLmRkAicPDxYCHw1nZGQCKw8PFgIfBGVkZAItDzwrAAsBAA8WDh8JAgoeCERhdGFLZXlzFgAeCVBhZ2VDb3VudAIIHhVfIURhdGFTb3VyY2VJdGVtQ291bnQCSB4NU2VsZWN0ZWRJbmRleAIGHhBWaXJ0dWFsSXRlbUNvdW50AkgeEEN1cnJlbnRQYWdlSW5kZXhmZBYCZg9kFhQCAg9kFgxmDw8WAh8EBQExZGQCAQ8PFgIfBAUVMC0wLTBTUC1OUEEtQ0EtNTQwMFNBZGQCAg8PFgIfBAUBMGRkAgMPDxYCHwQFB1BlcmNlbnRkZAIED2QWAgIBDw8WAh8KBQZLWi0xNDdkZAIFD2QWAgIBDw8WAh8KBQZLWi0xNDdkZAIDD2QWDGYPDxYCHwQFATJkZAIBDw8WAh8EBREwLTAtMFNQLU5QQS1DQS1TQWRkAgIPDxYCHwQFATBkZAIDDw8WAh8EBQdQZXJjZW50ZGQCBA9kFgICAQ8PFgIfCgUGQUstMTUxZGQCBQ9kFgICAQ8PFgIfCgUGQUstMTUxZGQCBA9kFgxmDw8WAh8EBQEzZGQCAQ8PFgIfBAUbMTE4NTAwLTIwNzAwMC0wU1AtTlBBLUNBLVNBZGQCAg8PFgIfBAUBMGRkAgMPDxYCHwQFB1BlcmNlbnRkZAIED2QWAgIBDw8WAh8KBQZDTy0xNjFkZAIFD2QWAgIBDw8WAh8KBQZDTy0xNjFkZAIFD2QWDGYPDxYCHwQFATRkZAIBDw8WAh8EBRIxMjg5MDAtMjE5NjAwLTAtLS1kZAICDw8WAh8EBQUxMDAwMGRkAgMPDxYCHwQFB1BlcmNlbnRkZAIED2QWAgIBDw8WAh8KBQZDTy0xNjNkZAIFD2QWAgIBDw8WAh8KBQZDTy0xNjNkZAIGD2QWDGYPDxYCHwQFATVkZAIBDw8WAh8EBRIxMzE0MDAtMjE3MTAwLTAtLS1kZAICDw8WAh8EBQQ5MDAwZGQCAw8PFgIfBAUHUGVyY2VudGRkAgQPZBYCAgEPDxYCHwoFBkFYLTE1NWRkAgUPZBYCAgEPDxYCHwoFBkFYLTE1NWRkAgcPZBYMZg8PFgIfBAUBNmRkAgEPDxYCHwQFEjE0NDIwMC0yMTgyMDAtMC0tLWRkAgIPDxYCHwQFBTEwMDAwZGQCAw8PFgIfBAUHUGVyY2VudGRkAgQPZBYCAgEPDxYCHwoFBkFYLTE1NmRkAgUPZBYCAgEPDxYCHwoFBkFYLTE1NmRkAggPZBYMZg8PFgIfBAUBN2RkAgEPDxYCHwQFGTE1NjAwLTM5MTAwLTBTUC1OUEEtQ0EtU0FkZAICDw8WAh8EBQQ2NjAwZGQCAw8PFgIfBAUHUGVyY2VudGRkAgQPZBYCAgEPDxYCHwoFBkVTLTExNGRkAgUPZBYCAgEPDxYCHwoFBkVTLTExNGRkAgkPZBYMZg8PFgIfBAUBOGRkAgEPDxYCHwQFGTE1NjAwLTM5MTAwLTBTUC1OUEEtQ0EtU0FkZAICDw8WAh8EBQQ3MDAwZGQCAw8PFgIfBAUHUGVyY2VudGRkAgQPZBYCAgEPDxYCHwoFBVZDLTg4ZGQCBQ9kFgICAQ8PFgIfCgUFVkMtODhkZAIKD2QWDGYPDxYCHwQFATlkZAIBDw8WAh8EBRkxNjkwMC01MzUwMC0wU1AtTlBBLUNBLVNBZGQCAg8PFgIfBAUBMGRkAgMPDxYCHwQFB1BlcmNlbnRkZAIED2QWAgIBDw8WAh8KBQVFUy05OGRkAgUPZBYCAgEPDxYCHwoFBUVTLTk4ZGQCCw9kFgxmDw8WAh8EBQIxMGRkAgEPDxYCHwQFGTE2OTAwLTUzNTAwLTBTUC1OUEEtQ0EtU0FkZAICDw8WAh8EBQEwZGQCAw8PFgIfBAUHUGVyY2VudGRkAgQPZBYCAgEPDxYCHwoFBUVTLTk5ZGQCBQ9kFgICAQ8PFgIfCgUFRVMtOTlkZAILDw8WAh8EZWRkGAIFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYBBQxjdGwwMCRocGxCdG4FH2N0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkZ3ZkdGwPPCsADAEIAgFkVRNfvqPf6eO1M9ayfOvhtzzeTPxZg2FdiazubCWZuHo=">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./Grade Master_files/WebResource.axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Grade Master_files/WebResource(7).axd" type="text/javascript"></script>
+<script src="./Grade Master_files/WebResource(8).axd" type="text/javascript"></script>
+<script src="./Grade Master_files/WebResource(1).axd" type="text/javascript"></script>
+<script src="./Grade Master_files/WebResource(9).axd" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+function WebForm_OnSubmit() {
+if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+//]]>
+</script>
+
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="AF4D2607">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAD8ztZncNOSCO3PK4Cj+RaAURyk5P+91hMCfDVCSoqBkp44eRKtsxJob1RfElJgktgN3agFLWPnpABxhK1xObsLq02ZKEjAkEIwoN1qpO3yn7uIHyHVMgfW375qUiagpWDQBLSBPjFeZvVbtgG3bwiCqeFGyKHGYi1mIVUbJGuqsBZ2PSEG3HA7gAKfU4287hOYkXlSQNMhxxezeE2/hssep0WG7anlQczlFyN11StjEUD64UhWWDL3wzv4LadoYTMjkNqUnGUnNBMJc+zXUvhFYvT93apl0lOv/DAU7UmI7EIxRelSYcOC+EWD2cFDR0U9cO+B4PXD7/k75QUrC94TvpW0OLovm4gq4vsnetANzugOlmpGlEDWuAx8ZC5zxqBpFUrDxiWfF7jvXc3czL8gsy6jVEW7zHCyzg6I8c2Nu2RjyRBlqndtqTdICG7mbrKbSEwfOn6alsRzJy8wv1jf1/Gr8Mr/XPWCTtjuuj4kK7Jwt6G2hIKAAB9cDAQGsShZzqCT7+mPzeyxEGFQoWpDP2G/3vOrHsfMAzjVr48ru555i1d8kMja2IS8AKub7t71kJytZhN2VdRxSpENm35JCenn5eeRaZO7W8ku7yYzEUypDAwXOGKeWgK4MxrN5qRerdYHZWyDOY5Iz95cnISM5fbB9nqpFnDG7Aqo5tEk5cqB+fqcMy1XXW0rho3QwVFRv+LjbV5HXhVG4Ow9SOvwGZcbDg9lmzd3ga2bQWW6f9bAY/Qj2Pxmb5Ia7va8V4vVRYo7fBihlYUsyQaLH149U+miGNvgDA2AxiDlFvNl/DIYeXBE/3KKwxdbTu4ToAmGiCPTk7BpdUsvXHf36YW0tuIKQ+kwKs21sz6PgzTB4l4kGtMtyqGo4T0VYTdkfjhmIyAyc2itglC9AivVN1X7uEWyTQzAaoC253pWxCu2/broyXSE/vWL1mERhXHtN79ENyvcVo6kb7J07b3szK8rv27LiPaOsvrrqwmTKDVkj8K9dLIeGfKN+QRdpTkbJnG1v6TDDPfRKP2ls4/Bd68kGH2UXrspTSzTMzkYlfMoKZMmWECdrOIaq2ds444taAa9fokIA/GdmaSijO2OAH0sjVD9TOiUiKQEVJlWf0Gq5hK2uS/L0HrWtzU7z/LOzSE26LYt9r4aOhxMAsp+814blWpyznFz3ak3rJ+B/Z0hlwkgdPv09rjLVOBEeeyx9LyVa9JP6dzcyV3Doase5DTuN4JRLhhkfERqDKKUYRZa6EDkNhj1aVZGyoQtyQFbUVNTmcM543p1qviM8Hv4OYaZrLCHac+csk6eAcuS2J5s4MLA3dGsxTGfc8nwycoF1tjz82BzVRHNo6vp4twcaQ0Nix1GXmuVQlbGuL8/dxUVOOA==">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Grade Master_files/user-management.png">
+                            User Management
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/HRMS/SAL_Grade_Mst.aspx?Mwpid=1060#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> University Admin</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> University Admin</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">Comptroller, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/HRMS/SAL_Grade_Mst.aspx?Mwpid=1060#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Grade Master_files/WebResource(10).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Create Masters" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=1032#" tabindex="-1">Create Masters</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create District Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_District_Mst.aspx?Mwpid=1054" tabindex="-1">District Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create DDO Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Mst.aspx?Mwpid=1034" tabindex="-1">DDO Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Office Type Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_OfficeType_Mst.aspx?Mwpid=1052" tabindex="-1">Office Type Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Location Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_Location_Mst.aspx?Mwpid=1053" tabindex="-1">Location Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Section Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Section_Mst.aspx?Mwpid=1937" tabindex="-1">Section Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Department Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Department_Mst.aspx?Mwpid=1056" tabindex="-1">Department Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Class Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Class_Mst.aspx?Mwpid=1059" tabindex="-1">Class Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Grade Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Grade_Mst.aspx?Mwpid=1060" tabindex="-1">Grade Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Designation Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=1057" tabindex="-1">Designation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Religion Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Religion_Mst.aspx?Mwpid=1058" tabindex="-1">Religion Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Comm_DDO_Location_Mapping" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870" tabindex="-1">DDO Location Mapping</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Country State District City Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_Country_State_City_Mst.aspx?Mwpid=2061" tabindex="-1">Country State District City Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Specialization Master" class="level2 dynamic" href="https://hauiums.in/UMM/UMM_Designation_Specialization.aspx?Mwpid=5068" tabindex="-1">Designation Specialization Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Controlling Office Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_ControllingOfficer_Mst.aspx?Mwpid=5076" tabindex="-1">Controlling Office Master</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:18" role="menuitem" style="position: relative; float: left;"><a title="Manage Users" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=1033#" tabindex="-1">Manage Users</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:18" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create User Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035" tabindex="-1">User Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="ResetPassword" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_ResetPassword.aspx?Mwpid=4839" tabindex="-1">Reset Password</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Manage Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_UserAuthorization.aspx?Mwpid=1044" tabindex="-1">Manage Page Rights</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Page Type Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_PageTypeMaster.aspx?Mwpid=1364" tabindex="-1">Page Type Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Role Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793" tabindex="-1">Role Page Rights</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Role Level Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_RoleLevelsMaster.aspx?Mwpid=1365" tabindex="-1">Role Level Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Role Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_RolesMaster.aspx?Mwpid=1366" tabindex="-1">Role Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="PageType-Role Link" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_AssignRolePageType.aspx?Mwpid=1046" tabindex="-1">PageType-Role Link</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Module Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_ModuleMaster.aspx?Mwpid=1363" tabindex="-1">Module Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Page Master" class="level2 dynamic" href="https://hauiums.in/UMM/WebpageMst.aspx?Mwpid=1040" tabindex="-1">Web Page Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="User Login Management" class="level2 dynamic" href="https://hauiums.in/sms/masters/LoginPage_ImageChange.aspx?Mwpid=4853" tabindex="-1">User Login Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Module Rights Detail" class="level2 dynamic" href="https://hauiums.in/UMM/User_ModulDetails.aspx?Mwpid=4951" tabindex="-1">Module Rights Detail</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Fetch Password" class="level2 dynamic" href="https://hauiums.in/UMM/FetchPass.aspx?Mwpid=5165" tabindex="-1">Fetch Password</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Multiple Users Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/MultipleUsers_PageRights.aspx?Mwpid=5245" tabindex="-1">Multiple Users Page Rights</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:34" role="menuitem" style="position: relative; float: left;"><a title="View User Logs" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=1883#" tabindex="-1">View User Logs</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:34" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="User Wise Log" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_UserLoginDetail_Rpt.aspx?Mwpid=1884" tabindex="-1">User Wise Log</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Send Message" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_CommonMessages.aspx?Mwpid=1885" tabindex="-1">Send Message</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:38" role="menuitem" style="position: relative; float: left;"><a title="Database Backup" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=1968#" tabindex="-1">Backup</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:38" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Database Backup" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DbOperations.aspx?Mwpid=1969" tabindex="-1">Database Backup</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:41" role="menuitem" style="position: relative; float: left;"><a title="Other Configurations" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3286#" tabindex="-1">Other Configurations</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:41" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:42" role="menuitem" style="position: relative;"><a title="Hostel Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=3287#" tabindex="-1">Hostel Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:42" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Hostel Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_Hosteltype.aspx?Mwpid=3252" tabindex="-1">Create &amp; Manage Hostel Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Room Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_Rromtypemst.aspx?Mwpid=3253" tabindex="-1">Create &amp; Manage Room Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Building" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_Building_Mst.aspx?Mwpid=3254" tabindex="-1">Create &amp; Manage Building</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Floor" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_Floor_Mst.aspx?Mwpid=3274" tabindex="-1">Create &amp; Manage Floor</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Map Floor With Building" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_FloorMap.aspx?Mwpid=3275" tabindex="-1">Map Floor With Building</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Facility Name" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_RoomFacility_Mst.aspx?Mwpid=3255" tabindex="-1">Create &amp; Manage Facility Name</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_HostelMaster.aspx?Mwpid=3256" tabindex="-1">Create &amp; Manage Hostel</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Assign Asst. Warden To Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Trns/HST_hostelwardendtl.aspx?Mwpid=3261" tabindex="-1">Assign Asst. Warden To Hostel</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Assign User For Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/Hst_AssignedUser_Mst.aspx?Mwpid=4150" tabindex="-1">Assign User For Hostel</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:53" role="menuitem" style="position: relative;"><a title="Fee Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=3700#" tabindex="-1">Fee Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:53" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeTypeMaster.aspx?Mwpid=3538" tabindex="-1">Create &amp; Manage Fee Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Head" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeHeads.aspx?Mwpid=3539" tabindex="-1">Create &amp; Manage Fee Head</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Structure" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeStructure.aspx?Mwpid=3540" tabindex="-1">Create &amp; Manage Fee Structure</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Exemption" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_Exemption.aspx?Mwpid=3550" tabindex="-1">Create &amp; Manage Fee Exemption</a></li>
+			</ul></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="NULL" class="level2 dynamic" href="https://hauiums.in/UMM/UMM_PasswordPolicyManager.aspx?Mwpid=3811" tabindex="-1">Password Policies</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:61" role="menuitem" style="position: relative; float: left;"><a title="Farms/Plants" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3982#" tabindex="-1">Farms/Plants</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:61" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Scheme Master" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_Scheme_Mst.aspx?Mwpid=2447" tabindex="-1">Scheme Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="User Location Scheme Map" class="level2 dynamic" href="https://hauiums.in/LRS/Location_SchemeMapping_Mst.aspx?Mwpid=2448" tabindex="-1">User Location Scheme Map</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Financial Year Master" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_FinYear_Mst.aspx?Mwpid=2443" tabindex="-1">Financial Year Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Change Financial Year" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_Change_FinancialYear.aspx?Mwpid=2484" tabindex="-1">Change Financial Year</a></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><div style="clear: left;"></div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Create Masters</span>&nbsp;&gt;&nbsp;<strong>Grade Master</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Grade Master_files/help.png" alt="Click For Help" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$hplBtn&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <!--Main Table-->
+    <script type="text/javascript">
+        function restrict() {
+
+            var level = document.getElementById("ctl00_ContentPlaceHolder1_txtorder");
+            if (level.value != "") {
+                if (parseInt(level.value) == 0) {
+                    alert("Order can't be zero!");
+                    level.value = "";
+                    level.focus();
+                    return false;
+                }
+            }
+        }
+    </script>
+
+    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%" align="left">
+
+        <tbody><tr>
+            <td align="left">
+                <!--Sub Main Table-->
+                <table border="0" cellpadding="0" cellspacing="0" style="width: 100%" class="table">
+                    <tbody><tr>
+                        <td colspan="3" class="tableheading">
+                            <span class="mainheadingborderbottom">Grade Master</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="tdgap"></td>
+                    </tr>
+                    <tr>
+                        <td id="lblgname" class="vtext">Grade Name
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtgname__"><input name="ctl00$ContentPlaceHolder1$R_txtgname" type="text" value="-" maxlength="6" id="ctl00_ContentPlaceHolder1_R_txtgname" class="textbox"></span>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="lblGradePay" class="vtext">Grade Pay
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtGradePay__"><input name="ctl00$ContentPlaceHolder1$R_txtGradePay" type="text" value="6600" maxlength="6" id="ctl00_ContentPlaceHolder1_R_txtGradePay" class="textbox" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeypress="return IntegerOnly(event);"></span>
+                            *
+                            <span id="ctl00_ContentPlaceHolder1_cvGradePay" style="color:Red;display:none;"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Increment Type
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_ddlIncType__"><select name="ctl00$ContentPlaceHolder1$ddlIncType" id="ctl00_ContentPlaceHolder1_ddlIncType" class="dropdown">
+	<option selected="selected" value="P">Percent</option>
+	<option value="A">Fix Amount</option>
+
+</select></span>
+                            *
+                        </td>
+                    </tr>
+                     <tr>
+                        <td class="vtext">Grade Code/Level
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td>
+                          <span id="Anthem_ctl00_ContentPlaceHolder1_txtGradeCode__"><input name="ctl00$ContentPlaceHolder1$txtGradeCode" type="text" maxlength="10" id="ctl00_ContentPlaceHolder1_txtGradeCode" class="textbox" onpaste="event.returnValue=false" ondrop="event.returnValue=false"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="lblRemarks" class="vtext">Remarks
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtRemarks__"><textarea name="ctl00$ContentPlaceHolder1$txtRemarks" rows="2" cols="20" id="ctl00_ContentPlaceHolder1_txtRemarks" class="textboxmultiline" ondrag="return false" ondrop="return false" onpaste="javascript:return MaxTextPaste(&#39;txtRemarks&#39;,255)" onkeypress="javascript:return MaxTextInput(&#39;txtRemarks&#39;,255)"></textarea></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="tablesubheading">
+                            <span class="subheadingborderbottom">Grade Amount Detail</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext" id="lblG1" style="width: 15%">G1
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtG1__"><input name="ctl00$ContentPlaceHolder1$txtG1" type="text" maxlength="6" id="ctl00_ContentPlaceHolder1_txtG1" class="textbox" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeypress="return IntegerOnly(event);" onkeydown="return NumCheck();"></span>
+                            *
+                            <span id="ctl00_ContentPlaceHolder1_cvG1" style="color:Red;display:none;"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="lblG2" class="vtext">G2
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtG2__"><input name="ctl00$ContentPlaceHolder1$txtG2" type="text" maxlength="6" id="ctl00_ContentPlaceHolder1_txtG2" class="textbox" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeypress="return IntegerOnly(event);" onkeydown="return NumCheck();"></span>
+                            *<span id="ctl00_ContentPlaceHolder1_cvG2" style="color:Red;display:none;"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="lblG3" class="vtext">
+                             Special Pay 
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtG3__"><input name="ctl00$ContentPlaceHolder1$txtG3" type="text" maxlength="10" id="ctl00_ContentPlaceHolder1_txtG3" class="textbox" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeydown="return NumCheck();"></span>
+
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">
+                            NPA
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtG4__"><input name="ctl00$ContentPlaceHolder1$txtG4" type="text" maxlength="10" id="ctl00_ContentPlaceHolder1_txtG4" class="textbox" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeydown="return NumCheck();"></span>
+
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">
+                             Cyclo-Allowance
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtG5__"><input name="ctl00$ContentPlaceHolder1$txtG5" type="text" maxlength="10" id="ctl00_ContentPlaceHolder1_txtG5" class="textbox" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeydown="return NumCheck();"></span>
+
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="lblG6" class="vtext">
+                             Special Allowance 
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtG6__"><input name="ctl00$ContentPlaceHolder1$txtG6" type="text" maxlength="10" id="ctl00_ContentPlaceHolder1_txtG6" class="textbox" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeydown="return NumCheck();"></span>
+
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="lblorder" class="vtext">Order
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtorder__"><input name="ctl00$ContentPlaceHolder1$txtorder" type="text" maxlength="6" id="ctl00_ContentPlaceHolder1_txtorder" class="textbox" onblur="return restrict();" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeypress="return IntegerOnly(event);" onkeydown="return NumCheck();"></span>
+                            *
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnAdd__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnAdd" value="ADD" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnAdd&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$btnAdd&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="ctl00_ContentPlaceHolder1_btnAdd" class="button-common" cellpadding="0" cellspacing="0"></span>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset0__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset0" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset0&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset0" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <div id="Anthem_ctl00_ContentPlaceHolder1_gvdtl__"><div>
+	<table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_gvdtl" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+		<tbody><tr class="header-style">
+			<th align="center" scope="col" style="width:10%;">S.No.</th><th scope="col" style="width:10%;">G1</th><th scope="col" style="width:10%;">G2</th><th scope="col" style="width:10%;">Special Pay</th><th scope="col" style="width:10%;">NPA</th><th scope="col" style="width:10%;">Cyclo-Allowance</th><th scope="col" style="width:10%;">Special Allowance</th><th scope="col" style="width:10%;">Order</th><th align="center" scope="col" style="width:5%;">EDIT</th><th align="center" scope="col" style="width:5%;">DELETE</th>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:10px;">
+                                            1
+                                        </td><td align="center">15600</td><td align="center">39100</td><td align="center">0</td><td align="center">&nbsp;</td><td align="center">&nbsp;</td><td align="center">&nbsp;</td><td align="center">1</td><td align="center" style="width:5%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_gvdtl_ctl02_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvdtl$ctl02$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvdtl$ctl02$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvdtl_ctl02_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvdtl$ctl02$lnkEdit&#39;,&#39;&#39;)"> <img src="./Grade Master_files/Edit.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$gvdtl$ctl02$lnkEdit--></span>
+                                        </td><td align="center" style="width:5%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_gvdtl_ctl02_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvdtl$ctl02$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvdtl$ctl02$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Wait..&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvdtl_ctl02_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvdtl$ctl02$lnkDelete&#39;,&#39;&#39;)">
+                                                                    <img src="./Grade Master_files/Delete.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$gvdtl$ctl02$lnkDelete--></span>
+                                        </td>
+		</tr>
+	</tbody></table>
+</div></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="tdgap"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <table cellpadding="0" cellspacing="0" border="0">
+                                <tbody><tr>
+                                    <td>
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_btnSave__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="UPDATE" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSave&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;UPDATING...&#39;,true,btnSave_PreCallBack,null,null,true,true);return false;WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$btnSave&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="ctl00_ContentPlaceHolder1_btnSave" class="button-common" cellpadding="0" cellspacing="0"></span>
+                                    </td>
+                                    <td class="btngap"></td>
+                                    <td>
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+                                    </td>
+                                    <td class="btngap"></td>
+                                    <td>
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_btnPrint__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnPrint" value="Print" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$btnPrint&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="ctl00_ContentPlaceHolder1_btnPrint" class="button-common" cellpadding="0" cellspacing="0"></span>
+                                    </td>
+                                    <td>
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+                                    </td>
+                                </tr>
+                            </tbody></table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="tdgap"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="tablesubheading" id="lblSubheading">
+                            <span class="subheadingborderbottom">List of Grades</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="tdgap"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div id="Anthem_ctl00_ContentPlaceHolder1_dgDetails__"><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td>S. No.</td><td>Grade Details</td><td>Grade Pay</td><td>Increment Type</td><td>EDIT</td><td>DELETE</td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">1</td><td align="left">0-0-0SP-NPA-CA-5400SA</td><td align="center" style="width:15%;">0</td><td align="center" style="width:15%;">Percent</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Edit.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit--></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Delete.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete--></span>
+                                        </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">2</td><td align="left">0-0-0SP-NPA-CA-SA</td><td align="center" style="width:15%;">0</td><td align="center" style="width:15%;">Percent</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Edit.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit--></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Delete.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete--></span>
+                                        </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">3</td><td align="left">118500-207000-0SP-NPA-CA-SA</td><td align="center" style="width:15%;">0</td><td align="center" style="width:15%;">Percent</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Edit.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit--></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Delete.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete--></span>
+                                        </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">4</td><td align="left">128900-219600-0---</td><td align="center" style="width:15%;">10000</td><td align="center" style="width:15%;">Percent</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Edit.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit--></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Delete.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete--></span>
+                                        </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">5</td><td align="left">131400-217100-0---</td><td align="center" style="width:15%;">9000</td><td align="center" style="width:15%;">Percent</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Edit.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit--></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Delete.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete--></span>
+                                        </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">6</td><td align="left">144200-218200-0---</td><td align="center" style="width:15%;">10000</td><td align="center" style="width:15%;">Percent</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Edit.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit--></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Delete.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete--></span>
+                                        </td>
+	</tr><tr class="item-style" style="color:Black;background-color:#E4EAFF;font-weight:normal;">
+		<td align="center" style="width:5%;">7</td><td align="left">15600-39100-0SP-NPA-CA-SA</td><td align="center" style="width:15%;">6600</td><td align="center" style="width:15%;">Percent</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Edit.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit--></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Delete.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete--></span>
+                                        </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">8</td><td align="left">15600-39100-0SP-NPA-CA-SA</td><td align="center" style="width:15%;">7000</td><td align="center" style="width:15%;">Percent</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Edit.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit--></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Delete.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete--></span>
+                                        </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">9</td><td align="left">16900-53500-0SP-NPA-CA-SA</td><td align="center" style="width:15%;">0</td><td align="center" style="width:15%;">Percent</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Edit.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit--></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Delete.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete--></span>
+                                        </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">10</td><td align="left">16900-53500-0SP-NPA-CA-SA</td><td align="center" style="width:15%;">0</td><td align="center" style="width:15%;">Percent</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Edit.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit--></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Grade Master_files/Delete.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete--></span>
+                                        </td>
+	</tr><tr class="pager-style" align="center" style="color:#000000;">
+		<td colspan="6"><span>1</span>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;Page$2&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;&#39;)" style="color:#000000;">2</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;Page$3&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;&#39;)" style="color:#000000;">3</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl03&#39;,&#39;Page$4&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl03&#39;,&#39;&#39;)" style="color:#000000;">4</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl04&#39;,&#39;Page$5&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl04&#39;,&#39;&#39;)" style="color:#000000;">5</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl05&#39;,&#39;Page$6&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl05&#39;,&#39;&#39;)" style="color:#000000;">6</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl06&#39;,&#39;Page$7&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl06&#39;,&#39;&#39;)" style="color:#000000;">7</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl07&#39;,&#39;Page$8&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl07&#39;,&#39;&#39;)" style="color:#000000;">8</a></td>
+	</tr>
+</tbody></table></div>
+                        </td>
+                    </tr>
+                </tbody></table>
+                <!--Sub Main Table End-->
+            </td>
+        </tr>
+    </tbody></table>
+    <!--Main Table End-->
+    <div id="ctl00_ContentPlaceHolder1_ValidationSummary1" style="color:Red;display:none;">
+
+</div>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">
+//<![CDATA[
+var Page_ValidationSummaries =  new Array(document.getElementById("ctl00_ContentPlaceHolder1_ValidationSummary1"));
+var Page_Validators =  new Array(document.getElementById("ctl00_ContentPlaceHolder1_cvGradePay"), document.getElementById("ctl00_ContentPlaceHolder1_cvG1"), document.getElementById("ctl00_ContentPlaceHolder1_cvG2"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+var ctl00_ContentPlaceHolder1_cvGradePay = document.all ? document.all["ctl00_ContentPlaceHolder1_cvGradePay"] : document.getElementById("ctl00_ContentPlaceHolder1_cvGradePay");
+ctl00_ContentPlaceHolder1_cvGradePay.controltovalidate = "ctl00_ContentPlaceHolder1_R_txtGradePay";
+ctl00_ContentPlaceHolder1_cvGradePay.focusOnError = "t";
+ctl00_ContentPlaceHolder1_cvGradePay.errormessage = "Grade pay is invalid!";
+ctl00_ContentPlaceHolder1_cvGradePay.display = "None";
+ctl00_ContentPlaceHolder1_cvGradePay.type = "Double";
+ctl00_ContentPlaceHolder1_cvGradePay.decimalchar = ".";
+ctl00_ContentPlaceHolder1_cvGradePay.evaluationfunction = "CompareValidatorEvaluateIsValid";
+var ctl00_ContentPlaceHolder1_cvG1 = document.all ? document.all["ctl00_ContentPlaceHolder1_cvG1"] : document.getElementById("ctl00_ContentPlaceHolder1_cvG1");
+ctl00_ContentPlaceHolder1_cvG1.controltovalidate = "ctl00_ContentPlaceHolder1_txtG1";
+ctl00_ContentPlaceHolder1_cvG1.focusOnError = "t";
+ctl00_ContentPlaceHolder1_cvG1.errormessage = "G1 is invalid!";
+ctl00_ContentPlaceHolder1_cvG1.display = "None";
+ctl00_ContentPlaceHolder1_cvG1.type = "Double";
+ctl00_ContentPlaceHolder1_cvG1.decimalchar = ".";
+ctl00_ContentPlaceHolder1_cvG1.evaluationfunction = "CompareValidatorEvaluateIsValid";
+var ctl00_ContentPlaceHolder1_cvG2 = document.all ? document.all["ctl00_ContentPlaceHolder1_cvG2"] : document.getElementById("ctl00_ContentPlaceHolder1_cvG2");
+ctl00_ContentPlaceHolder1_cvG2.controltovalidate = "ctl00_ContentPlaceHolder1_txtG2";
+ctl00_ContentPlaceHolder1_cvG2.focusOnError = "t";
+ctl00_ContentPlaceHolder1_cvG2.errormessage = "G2 is invalid!";
+ctl00_ContentPlaceHolder1_cvG2.display = "None";
+ctl00_ContentPlaceHolder1_cvG2.type = "Double";
+ctl00_ContentPlaceHolder1_cvG2.decimalchar = ".";
+ctl00_ContentPlaceHolder1_cvG2.evaluationfunction = "CompareValidatorEvaluateIsValid";
+var ctl00_ContentPlaceHolder1_ValidationSummary1 = document.all ? document.all["ctl00_ContentPlaceHolder1_ValidationSummary1"] : document.getElementById("ctl00_ContentPlaceHolder1_ValidationSummary1");
+ctl00_ContentPlaceHolder1_ValidationSummary1.showmessagebox = "True";
+ctl00_ContentPlaceHolder1_ValidationSummary1.showsummary = "False";
+//]]>
+</script>
+
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+<script type="text/javascript">
+//<![CDATA[
+
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+        WebForm_AutoFocus('ctl00_ContentPlaceHolder1_txtG1');//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./Grade Master_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Grade Master_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

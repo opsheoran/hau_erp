@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Student Extension</span>
+    </div>
+
+    <form id="filterForm" method="GET">
+        <table width="100%" class="filter-table">
+            <tr>
+                <td class="vtext">College</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="college_id" id="ddlCollege" class="dropdown w-300" onchange="loadDegrees()">
+                        <option value="">--Select College--</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext">Session</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="session_id" id="ddlSession" class="dropdown w-200">
+                        <option value="">--Select Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="degree_id" id="ddlDegree" class="dropdown w-300" onchange="onDegreeChange()">
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext">Semester</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="semester_id" id="ddlSemester" class="dropdown w-150" onchange="loadYear()">
+                        <option value="">--Select Semester--</option>
+                        {% for s in lookups.semesters %}
+                        <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.semester_roman }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="branch_id" id="ddlBranch" class="dropdown w-250">
+                        <option value="0">--Select Department--</option>
+                        {% for b in lookups.branches %}
+                        <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td class="vtext">Year</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" id="txtYear" class="textbox w-150" value="" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Enrollment No.</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="enrollment_no" id="txtEnrollment" class="textbox w-200" value="{{ filters.enrollment_no or '' }}">
+                </td>
+                <td></td>
+                <td colspan="2" style="padding-top: 6px;">
+                    <input type="submit" value="VIEW" class="button-common" style="width: 90px;">
+                    <input type="button" value="RESET" class="button-common" style="width: 90px; margin-left: 10px;" onclick="window.location.href='{{ url_for('academics_mgmt.student_extension') }}'">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div style="margin-top: 20px; padding: 15px; border: 1px solid #ddd; background: #fdfdfd;">
+        <form method="POST" onsubmit="return validateSave()">
+            <input type="hidden" name="college_id" value="{{ filters.college_id }}">
+            <input type="hidden" name="session_id" value="{{ filters.session_id }}">
+            <input type="hidden" name="degree_id" value="{{ filters.degree_id }}">
+            <input type="hidden" name="semester_id" value="{{ filters.semester_id }}">
+            <input type="hidden" name="branch_id" value="{{ filters.branch_id }}">
+            <input type="hidden" name="enrollment_no" value="{{ filters.enrollment_no or '' }}">
+
+            <div class="tablesubheading">
+                <span class="subheadingborderbottom">List of Students</span>
+            </div>
+
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <th style="width: 8%;">S No.</th>
+                        <th style="width: 35%;">Student</th>
+                        <th style="width: 16%;">Session</th>
+                        <th style="width: 18%;">Semester</th>
+                        <th style="width: 18%;">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in students %}
+                    <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td>
+                            <label style="cursor:pointer;">
+                                <input type="checkbox" name="student_ids" value="{{ s.pk_sid }}" class="stu-chk">
+                                {{ s.fullname }}{% if s.enrollmentno %} [{{ s.enrollmentno }}]{% endif %}
+                            </label>
+                        </td>
+                        <td align="center">
+                            <select name="to_session_{{ s.pk_sid }}" class="dropdown" style="width: 120px;">
+                                {% for ses in lookups.sessions %}
+                                <option value="{{ ses.id }}" {% if filters.session_id|string == ses.id|string %}selected{% endif %}>{{ ses.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td align="center">
+                            <select name="to_semester_{{ s.pk_sid }}" class="dropdown" style="width: 140px;">
+                                <option value="0"> -- Select Semester -- </option>
+                                {% for sem in lookups.ext_semesters %}
+                                <option value="{{ sem.id }}">{{ sem.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td align="center">
+                            <input type="text" name="remarks_{{ s.pk_sid }}" maxlength="50" class="textbox w-150">
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" align="center" style="color: red; padding: 20px;">No students found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div style="margin-top: 15px;">
+                <input type="submit" value="Save" class="button-common" style="width: 80px; font-weight: normal;">
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function loadDegrees() {
+    var cid = document.getElementById('ddlCollege').value;
+    if (!cid) return;
+    fetch('/academics/api/college/' + cid + '/degrees')
+        .then(r => r.json())
+        .then(data => {
+            setOptions(document.getElementById('ddlDegree'), data, '--Select Degree--');
+        });
+}
+
+function onDegreeChange() {
+    var did = document.getElementById('ddlDegree').value;
+    var cid = document.getElementById('ddlCollege').value;
+    if (!did || !cid) return;
+    fetch('/academics/api/degree/' + did + '/branches')
+        .then(r => r.json())
+        .then(data => {
+            setOptions(document.getElementById('ddlBranch'), data, '--Select Department--', true);
+        });
+}
+
+function setOptions(dropdown, data, defaultText, allowZero) {
+    var firstVal = allowZero ? '0' : '';
+    dropdown.innerHTML = '<option value=\"' + firstVal + '\">' + defaultText + '</option>';
+    data.forEach(function(item) {
+        var opt = document.createElement('option');
+        opt.value = item.id || item.pk_branchid;
+        opt.textContent = item.name || item.Branchname;
+        dropdown.appendChild(opt);
+    });
+}
+
+function loadYear() {
+    var sid = document.getElementById('ddlSemester').value;
+    if (!sid) {
+        document.getElementById('txtYear').value = '';
+        return;
+    }
+    fetch('/academics/api/get_semester_year/' + sid)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('txtYear').value = (data && data.degreeyear_char) ? data.degreeyear_char : '';
+        });
+}
+
+function validateSave() {
+    var checked = document.querySelectorAll('.stu-chk:checked');
+    if (checked.length === 0) {
+        alert('Please select student(s).');
+        return false;
+    }
+    // Require at least one selected student to have a semester chosen.
+    for (var i = 0; i < checked.length; i++) {
+        var sid = checked[i].value;
+        var sel = document.querySelector('select[name=\"to_semester_' + sid + '\"]');
+        if (sel && sel.value && sel.value !== '0') return true;
+    }
+    alert('Please select semester for selected student(s).');
+    return false;
+}
+
+loadYear();
+</script>
+{% endblock %}
+

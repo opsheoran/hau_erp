@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .hau-table-bordered { width: 100%; border-collapse: collapse; font-family: Verdana, sans-serif; font-size: 11px; border: 1px solid #D4D4D4; }
+    .hau-table-bordered th { background-color: #eee; color: #333; padding: 4px 6px; text-align: center; border: 1px solid #D4D4D4; }
+    .hau-table-bordered td { padding: 3px 6px; border: 1px solid #D4D4D4; }
+    .item-style { background-color: #fff; }
+    .item-style-alt { background-color: #F0F0F0; }
+    .tablesubheading { background-color: #3c8dbc; color: #fff; padding: 5px 10px; font-weight: bold; font-size: 12px; }
+    .button-common { background-color: #3c8dbc; border: 1px solid #2c729e; color: #fff; padding: 4px 15px; cursor: pointer; font-size: 11px; font-weight: bold; }
+    .button-common:hover { background-color: #2c729e; }
+    .vtext { font-weight: bold; font-size: 11px; }
+    .required { color: red; font-weight: bold; }
+</style>
+
+<div class="card card-hau mb-4" id="editCard" style="display:none;">
+    <div class="tablesubheading" id="editCardTitle">Edit Holiday Mapping</div>
+    <div class="card-body">
+        <form method="POST" id="editForm">
+            <input type="hidden" name="action" value="SAVE">
+            <input type="hidden" name="pk_id" id="form_pk_id">
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="vtext">University Location</label>
+                    <select name="loc_id" id="form_loc_id" class="dropdown w-100" required>
+                        <option value="">-- Select --</option>
+                        {% for l in locations %}
+                        <option value="{{ l.id }}">{{ l.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <label class="vtext">Holiday Location (Source)</label>
+                    <select name="holiday_loc_id" id="form_hloc_id" class="dropdown w-100" required>
+                        <option value="">-- Select --</option>
+                        {% for hl in holiday_locations %}
+                        <option value="{{ hl.pk_holidaylocid }}">{{ hl.holidayloc }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="vtext">Year</label>
+                    <select name="year_id" id="form_year_id" class="dropdown w-100" required>
+                        {% for y in years %}
+                        <option value="{{ y.id }}">{{ y.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label class="vtext">Remarks</label>
+                    <textarea name="remarks" id="form_remarks" class="textbox w-100" rows="1"></textarea>
+                </div>
+            </div>
+
+            <div id="divHolidayDetails" style="display:none; margin-top:15px;">
+                <div class="tablesubheading py-1 px-2 mb-2" style="font-size:11px;">List of Holidays</div>
+                <table class="hau-table-bordered" style="width:100%;">
+                    <thead>
+                        <tr style="background:#eee;">
+                            <th>S.No.</th>
+                            <th>Holiday</th>
+                            <th>Holiday Type</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody id="holidayDetailBody"></tbody>
+                </table>
+            </div>
+
+            <div class="mt-3 text-center">
+                <button type="submit" class="button-common">UPDATE DETAILS</button>
+                <button type="button" class="button-common ms-2" style="background:#f0ad4e;" onclick="resetEditForm()">RESET</button>
+                <button type="button" class="button-common ms-2" style="background:#777;" onclick="hideEditForm()">CANCEL</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card card-hau">
+    <div class="tableheading d-flex justify-content-between align-items-center">
+        <span>Location Wise Holiday Master</span>
+        <button type="button" class="btn btn-sm btn-light" onclick="showAddForm()">+ Add New Mapping</button>
+    </div>
+    <div class="card-body">
+        <form method="GET" class="mb-4 bg-light p-3 border no-print">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="vtext">Location</label>
+                    <select name="loc_id" id="filter_loc" class="dropdown w-100">
+                        <option value="">-- Select --</option>
+                        {% for l in locations %}
+                        <option value="{{ l.id }}" {% if l.id == request.args.get('loc_id') %}selected{% endif %}>{{ l.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="vtext">Year</label>
+                    <select name="lyear" id="filter_year" class="dropdown w-100">
+                        {% for y in years %}
+                        <option value="{{ y.id }}" {% if y.id|string == request.args.get('lyear') %}selected{% endif %}>{{ y.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="button-common">VIEW HOLIDAYS</button>
+                    <button type="button" class="btn btn-secondary btn-sm ms-2" onclick="window.print()">PRINT</button>
+                </div>
+            </div>
+        </form>
+
+        <table class="hau-table-bordered">
+            <thead>
+                <tr>
+                    <th>Sr. No.</th>
+                    <th>Holiday Location</th>
+                    <th>University Location</th>
+                    <th>Year</th>
+                    <th>Remarks</th>
+                    <th class="no-print" width="80">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for h in holidays %}
+                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ h.holidayloc }}</td>
+                    <td>{{ h.locname }}</td>
+                    <td align="center">{{ h.fk_yearid }}</td>
+                    <td>{{ h.remarks or '' }}</td>
+                    <td align="center" class="no-print">
+                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editHoliday({{ h|tojson }})' alt="Edit">
+                        <form method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
+                            <input type="hidden" name="action" value="DELETE">
+                            <input type="hidden" name="id" value="{{ h.pk_locholidayid }}">
+                            <input type="hidden" name="loc_id" value="{{ request.args.get('loc_id') }}">
+                            <input type="hidden" name="year_id" value="{{ request.args.get('lyear') }}">
+                            <button type="submit" style="border:none; background:none; padding:0; margin-left:5px;">
+                                <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" align="center">No mappings found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+let currentMapping = null;
+
+function showAddForm() {
+    currentMapping = null;
+    document.getElementById('editCardTitle').innerText = 'Add Holiday Mapping';
+    document.getElementById('form_pk_id').value = '';
+    document.getElementById('editForm').reset();
+    document.getElementById('divHolidayDetails').style.display = 'none';
+    document.getElementById('editCard').style.display = 'block';
+    window.scrollTo(0, 0);
+}
+
+function hideEditForm() {
+    document.getElementById('editCard').style.display = 'none';
+}
+
+function resetEditForm() {
+    if (currentMapping) {
+        editHoliday(currentMapping);
+    } else {
+        showAddForm();
+    }
+}
+
+function editHoliday(h) {
+    currentMapping = h;
+    document.getElementById('editCardTitle').innerText = 'Edit Holiday Mapping';
+    document.getElementById('form_pk_id').value = h.pk_locholidayid;
+    document.getElementById('form_loc_id').value = h.fk_locid;
+    document.getElementById('form_hloc_id').value = h.fk_holidaylocid;
+    document.getElementById('form_year_id').value = h.fk_yearid;
+    document.getElementById('form_remarks').value = h.remarks || '';
+    
+    // Fetch details
+    fetch(`/leave/api/holiday_details/${h.pk_locholidayid}`)
+        .then(res => res.json())
+        .then(data => {
+            const body = document.getElementById('holidayDetailBody');
+            body.innerHTML = '';
+            if (data.length > 0) {
+                data.forEach((d, i) => {
+                    const row = body.insertRow();
+                    row.className = 'item-style';
+                    row.innerHTML = `
+                        <td align="center">${i + 1}</td>
+                        <td>${d.Holiday} <input type="hidden" name="h_ids[]" value="${d.pk_commonholidayid}"></td>
+                        <td align="center">${d.HolidayType || ''}</td>
+                        <td><input type="date" name="f_dates[]" value="${d.FromDate || ''}" class="textbox w-100" style="font-size:10px;"></td>
+                        <td><input type="date" name="t_dates[]" value="${d.ToDate || ''}" class="textbox w-100" style="font-size:10px;"></td>
+                        <td><input type="text" name="h_remarks[]" value="${d.Remarks || ''}" class="textbox w-100" style="font-size:10px;"></td>
+                    `;
+                });
+                document.getElementById('divHolidayDetails').style.display = 'block';
+            } else {
+                document.getElementById('divHolidayDetails').style.display = 'none';
+            }
+            document.getElementById('editCard').style.display = 'block';
+            window.scrollTo(0, 0);
+        });
+}
+</script>
+<style>
+    @media print {
+        .no-print { display: none !important; }
+        .card { border: none !important; box-shadow: none !important; }
+        .tableheading { background: #eee !important; color: #000 !important; border: 1px solid #ccc !important; }
+    }
+</style>
+{% endblock %}

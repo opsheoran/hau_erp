@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Helvetica, sans-serif; font-size: 9pt; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h2 { margin: 0; padding: 0; color: #3c8dbc; }
+        .header h3 { margin: 5px 0; padding: 0; }
+        .footer { text-align: right; font-size: 8pt; color: #666; margin-top: 20px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background-color: #f2f2f2; border: 1px solid #ccc; padding: 5px; font-weight: bold; }
+        td { border: 1px solid #ccc; padding: 5px; }
+        .center { text-align: center; }
+        .bold { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY, HISAR</h2>
+        <h3>Course Detail Report</h3>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th width="3%">S.No.</th>
+                <th width="10%">Code</th>
+                <th width="30%">Course Name</th>
+                <th width="15%">Degree</th>
+                <th width="8%">Sem</th>
+                <th width="5%">Th</th>
+                <th width="5%">Pr</th>
+                <th width="5%">Tot</th>
+                <th width="10%">Compulsory</th>
+                <th width="9%">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td class="center">{{ loop.index }}</td>
+                <td class="bold">{{ item.coursecode }}</td>
+                <td>{{ item.coursename }}</td>
+                <td>{{ item.degreename }}</td>
+                <td class="center">{{ item.semester_roman }}</td>
+                <td class="center">{{ item.crhr_theory }}</td>
+                <td class="center">{{ item.crhr_practical }}</td>
+                <td class="center bold">{{ item.total_crhr }}</td>
+                <td class="center">{{ item.compulsory }}</td>
+                <td class="center">{{ item.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Generated on: {{ now }}
+    </div>
+</body>
+</html>

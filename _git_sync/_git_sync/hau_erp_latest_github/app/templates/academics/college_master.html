@@ -1,0 +1,413 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- SAVE FORM -->
+<form method="POST" id="collegeForm">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="pk_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="6">
+                    <span class="mainheadingborderbottom">College Master</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">College Name</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="text" name="name" id="c_name" class="textbox w-250" maxlength="99" required>
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext" width="15%">Location</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <select name="loc_id" id="c_loc" class="dropdown w-200" required>
+                        <option value="">--Select Location --</option>
+                        {% for l in lookups.locations %}
+                        <option value="{{ l.id }}">{{ l.locname }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">College Code</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="code" id="c_code" class="textbox w-150" maxlength="50" required>
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext">DDO Name</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" id="c_ddo" class="textbox w-200" readonly style="background:#f4f4f4">
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Contact Person</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="contactperson" id="c_person" class="textbox w-200" maxlength="50">
+                </td>
+                <td class="vtext">Contact No.</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="contactno" id="c_no" class="textbox w-150" maxlength="10">
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Email Id</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="email" name="email" id="c_email" class="textbox w-200" maxlength="50" required>
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext">Website Address</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="website" id="c_web" class="textbox w-200" maxlength="50">
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">College Type</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="type_id" id="c_type" class="dropdown w-200" required>
+                        <option value="">-- Select College Type --</option>
+                        {% for t in lookups.types %}
+                        <option value="{{ t.pk_collegetypeid }}">{{ t.collegypedesc }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext">City</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="city_id" id="c_city" class="dropdown w-150" required>
+                        <option value="">--Select City --</option>
+                        {% for ci in lookups.cities %}
+                        <option value="{{ ci.id }}">{{ ci.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Address</td>
+                <td class="colon">:</td>
+                <td colspan="4">
+                    <textarea name="address" id="c_address" class="textbox w-300" style="height:40px;"></textarea>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td colspan="4">
+                    <textarea name="remarks" id="c_remarks" class="textbox w-300" style="height:40px;"></textarea>
+                </td>
+            </tr>
+            
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <!-- COLLEGE DETAIL (DEAN/PRINCIPAL) -->
+            <tr>
+                <td colspan="6" class="tablesubheading">
+                    <span class="subheadingborderbottom">College Detail</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="5"></td></tr>
+            <tr>
+                <td colspan="6">
+                    <table class="table-grid-view" id="dtlTable" width="100%">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="5%">S.No.</th>
+                                <th width="25%">Dean/Principal Search</th>
+                                <th width="25%">Dean</th>
+                                <th width="20%">About Dean/Principal</th>
+                                <th width="10%">From Date</th>
+                                <th width="10%">To Date</th>
+                                <th width="5%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dtlBody">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                    <div style="text-align:right; margin-top:5px;">
+                        <input type="button" value="Add More College Detail" class="button-common" onclick="addRow()" style="width:180px;">
+                    </div>
+                </td>
+            </tr>
+            
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="submit" value="SAVE" id="btnSave" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left:10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<!-- LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="6">
+                <span class="subheadingborderbottom">List of Colleges</span>
+            </td>
+        </tr>
+        <tr><td colspan="6" height="10"></td></tr>
+        <tr>
+            <td colspan="6">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th width="60%">College Name</th>
+                            <th width="20%">College Code</th>
+                            <th width="7.5%">EDIT</th>
+                            <th width="7.5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                            <td align="center">{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td>{{ item.collegename }} ( {{ item.collegecode }} )</td>
+                            <td align="center">{{ item.collegecode }}</td>
+                            <td align="center">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editCollege({{ item.pk_collegeid }})'>
+                            </td>
+                            <td align="center">
+                                <form method="POST" onsubmit="return confirm('Are you sure you want to delete this college?');" style="display:inline;">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ item.pk_collegeid }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('academics.college_master', page=pagination.page-1) }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('academics.college_master', page=p) }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('academics.college_master', page=pagination.page+1) }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+let employees = [];
+let employeesLoaded = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    employeesLoaded = fetch('/academics/api/get_all_employees')
+        .then(r => r.json())
+        .then(data => { employees = data; });
+
+    document.getElementById('c_loc').addEventListener('change', function() {
+        setDDOFromLocation();
+    });
+
+    addRow(); // Start with one empty row
+});
+
+function addRow(data = null) {
+    const tbody = document.getElementById('dtlBody');
+    const rowCount = tbody.rows.length;
+    const row = tbody.insertRow();
+    row.className = rowCount % 2 === 0 ? 'item-style' : 'item-style-alt';
+    
+    const sNo = rowCount + 1;
+    
+    row.innerHTML = `
+        <td align="center">${sNo}</td>
+        <td>
+            <input type="text" class="textbox dean-search" list="empList" onchange="syncDean(this)" value="${data ? (data.Deanname || '') : ''}">
+            <datalist id="empList">
+                ${employees.map(e => `<option value="${e.name}" data-id="${e.id}">`).join('')}
+            </datalist>
+        </td>
+        <td>
+            <select name="dean_id[]" class="dropdown dean-id-select" style="width:100%">
+                <option value=""> -- Select dean-- </option>
+                ${employees.map(e => `<option value="${e.id}" ${data && data.fk_deanid == e.id ? 'selected' : ''}>${e.name}</option>`).join('')}
+            </select>
+            <input type="hidden" name="dean_name[]" class="dean-name-hidden" value="${data ? (data.Deanname || '') : ''}">
+        </td>
+        <td>
+            <textarea name="dean_about[]" class="textbox" rows="1" style="width:100%">${data ? (data.deanhistory || '') : ''}</textarea>
+        </td>
+        <td>
+            <input type="date" name="from_date[]" class="textbox" value="${data ? (data.fromdate_iso || '') : ''}">
+        </td>
+        <td>
+            <input type="date" name="to_date[]" class="textbox" value="${data ? (data.todate_iso || '') : ''}">
+        </td>
+        <td align="center">
+            <img src="{{ url_for('static', filename='images/delete.gif') }}" style="cursor:pointer" onclick="this.closest('tr').remove(); renumberRows();">
+        </td>
+    `;
+}
+
+function syncDean(input) {
+    const row = input.closest('tr');
+    const select = row.querySelector('.dean-id-select');
+    const hiddenName = row.querySelector('.dean-name-hidden');
+    const val = input.value;
+    
+    // Find matching employee
+    const option = Array.from(document.getElementById('empList').options).find(opt => opt.value === val);
+    if (option) {
+        const id = option.getAttribute('data-id');
+        select.value = id;
+        hiddenName.value = val;
+    } else {
+        hiddenName.value = val;
+    }
+}
+
+function renumberRows() {
+    const tbody = document.getElementById('dtlBody');
+    Array.from(tbody.rows).forEach((row, i) => {
+        row.cells[0].textContent = i + 1;
+        row.className = i % 2 === 0 ? 'item-style' : 'item-style-alt';
+    });
+}
+
+function setDDOFromLocation() {
+    const loc = document.getElementById('c_loc');
+    if (!loc || loc.selectedIndex < 0) {
+        document.getElementById('c_ddo').value = '';
+        return;
+    }
+    const locId = loc.value;
+    const txt = (loc.options[loc.selectedIndex].textContent || '').trim();
+    if (!locId || !txt || txt.startsWith('--Select')) {
+        document.getElementById('c_ddo').value = '';
+        return;
+    }
+    fetch(`/establishment/api/location/ddos?loc=${encodeURIComponent(locId)}`)
+        .then(r => r.json())
+        .then(ddos => {
+            if (ddos && ddos.length > 0 && ddos[0].name) {
+                document.getElementById('c_ddo').value = ddos[0].name;
+            } else {
+                const namePart = txt.split(',')[0].trim();
+                document.getElementById('c_ddo').value = namePart ? `A&AO, ${namePart}` : '';
+            }
+        })
+        .catch(() => {
+            const namePart = txt.split(',')[0].trim();
+            document.getElementById('c_ddo').value = namePart ? `A&AO, ${namePart}` : '';
+        });
+}
+
+function editCollege(id) {
+    fetch(`/academics/api/get_college_details/${id}`)
+        .then(r => r.json())
+        .then(data => {
+            const toStr = (v) => (v === null || v === undefined) ? '' : String(v).trim();
+            document.getElementById('pk_id').value = data.pk_collegeid;
+            document.getElementById('c_name').value = toStr(data.collegename);
+            document.getElementById('c_loc').value = toStr(data.fk_locid);
+            document.getElementById('c_code').value = toStr(data.collegecode);
+            setDDOFromLocation();
+            document.getElementById('c_person').value = toStr(data.contactperson);
+            document.getElementById('c_no').value = toStr(data.contactno);
+            document.getElementById('c_email').value = toStr(data.emailid);
+            document.getElementById('c_web').value = toStr(data.websiteaddress);
+            document.getElementById('c_type').value = toStr(data.fk_collegetypeid);
+            const citySelect = document.getElementById('c_city');
+            const cityIdStr = toStr(data.fk_cityid);
+            citySelect.value = cityIdStr;
+            if (!citySelect.value && cityIdStr) {
+                const cityIdNum = parseInt(cityIdStr, 10);
+                const optByNum = Array.from(citySelect.options).find(o => {
+                    const m = String(o.value || '').match(/(\d+)$/);
+                    return m && parseInt(m[1], 10) === cityIdNum;
+                });
+                if (optByNum) citySelect.value = optByNum.value;
+            }
+            if (!citySelect.value && data.cityname) {
+                const opt = Array.from(citySelect.options)
+                    .find(o => (o.textContent || '').trim().toLowerCase() === String(data.cityname).trim().toLowerCase());
+                if (opt) citySelect.value = opt.value;
+            }
+            if (!citySelect.value && data.locname && String(data.locname).includes(',')) {
+                const locCity = String(data.locname).split(',')[1].trim();
+                const opt = Array.from(citySelect.options)
+                    .find(o => (o.textContent || '').trim().toLowerCase() === locCity.toLowerCase());
+                if (opt) citySelect.value = opt.value;
+            }
+            document.getElementById('c_address').value = toStr(data.address);
+            document.getElementById('c_remarks').value = toStr(data.remarks);
+            
+            document.getElementById('btnSave').value = 'UPDATE';
+            
+            // Clear and populate details after employee list is ready
+            const done = employeesLoaded || Promise.resolve();
+            done.then(() => {
+                const tbody = document.getElementById('dtlBody');
+                tbody.innerHTML = '';
+                if (data.details && data.details.length > 0) {
+                    data.details.forEach(dtl => addRow(dtl));
+                } else {
+                    addRow();
+                }
+            });
+            
+            window.scrollTo(0,0);
+        });
+}
+
+function resetForm() {
+    document.getElementById('pk_id').value = '';
+    document.getElementById('collegeForm').reset();
+    document.getElementById('dtlBody').innerHTML = '';
+    document.getElementById('btnSave').value = 'SAVE';
+    addRow();
+}
+</script>
+{% endblock %}

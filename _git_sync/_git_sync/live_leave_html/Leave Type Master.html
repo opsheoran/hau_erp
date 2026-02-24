@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)https://hauiums.in/Leave/SAL_Leavetype_Mst.aspx?Mwpid=3216 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Leave Type Master_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Leave Type Master_files/default.css" type="text/css" rel="stylesheet"><link href="./Leave Type Master_files/font.css" type="text/css" rel="stylesheet"><link href="./Leave Type Master_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Leave Type Master_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/Leave/SAL_Leavetype_Mst.aspx?Mwpid=3216" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUJNjkwMzUzMTc5DxYCHgZwb3N0aWQFJDI0MjU0MGE0LTk5OGItNGE2Mi1hYzE4LWQ4ZDU5NzJjYjMxYxYCZg8PFgIeB1BlbmRpbmcFATBkFgICAQ9kFhACAg8PFgIeBFRleHQFESBVbml2ZXJzaXR5IEFkbWluZGQCBA8PFgIfAgUaTExULiAtIDIvNy8yMDI2IDg6NDQ6MDQgUE1kZAIFDw8WAh8CBRpDTFQuIC0gMi84LzIwMjYgNzowMzoyNyBBTWRkAgYPDxYCHwIFESBVbml2ZXJzaXR5IEFkbWluZGQCBw8PFgIfAgUSQ29tcHRyb2xsZXIsIEhpc2FyZGQCCQ9kFgJmDxYCHwIFQzxzcGFuPk1hc3RlcnM8L3NwYW4+Jm5ic3A7PiZuYnNwOzxzdHJvbmc+TGVhdmUgVHlwZSBNYXN0ZXI8L1N0cm9uZz5kAgoPZBYuAgUPEGQPFgdmAgECAgIDAgQCBQIGFgcQBR4tLSBTZWxlY3QgTGVhdmUgTmF0dXJlIFR5cGUgLS1lZxAFBk5vcm1hbAUBTmcQBRdMZWF2ZSBXaXRob3V0IEFsbG93YW5jZQUBTGcQBQpXZWVrbHkgT2ZmBQFPZxAFB0hvbGlkYXkFAUhnEAUMSGFsZiBIb2xpZGF5BQFGZxAFElJlc3RyaWN0ZWQgSG9saWRheQUBUmcWAQIBZAIHDxBkEBUDCi0tIEJvdGggLS0ETWFsZQZGZW1hbGUVAwABTQFGFCsDA2dnZxYBZmQCCQ8QDxYGHg1EYXRhVGV4dEZpZWxkBQlzaG9ydGRlc2MeDkRhdGFWYWx1ZUZpZWxkBQ9wa19sZWF2ZWZpeGVkaWQeC18hRGF0YUJvdW5kZ2QQFQIdLS0gU2VsZWN0IEZpeGVkIExlYXZlIFR5cGUgLS0DTVRMFQIAAjIxFCsDAmdnFgFmZAINDxAPFgYfAwUGbmF0dXJlHwQFC3BrX25hdHVyZWlkHwVnZBAVDBgtLSBTZWxlY3QgTmF0dXJlIFR5cGUgLS0LQ29udHJhY3R1YWwTREVQVVRBVElPTiAoSU5XQVJEKRRERVBVVEFUSU9OIChPVVRXQVJEKQNEUEwDRkNBFlBhcnR0aW1lIEd1ZXN0IHRlYWNoZXIJUGVybWFuZW50CVJBL1RBL1NUQQtSZS1lbXBsb3llZAdTUkYvSlJGCVRlbXBvcmFyeRUMAARLWi04BEtHLTEEVkMtNQRBUC03BFBCLTQFQVgtMTEES0ctMgVLVi0xMARLWi02BEtWLTkES0ctMxQrAwxnZ2dnZ2dnZ2dnZ2cWAWZkAg8PEGRkFgFmZAIRDw9kFgIeCW9ua2V5ZG93bgUacmV0dXJuIEludGVnZXJPbmx5KGV2ZW50KTtkAhMPD2QWAh8GBRpyZXR1cm4gSW50ZWdlck9ubHkoZXZlbnQpO2QCFQ8PZBYCHwYFGnJldHVybiBJbnRlZ2VyT25seShldmVudCk7ZAIXDw9kFgIfBgUacmV0dXJuIEludGVnZXJPbmx5KGV2ZW50KTtkAhsPEA9kFgIeB29uY2xpY2sFHGphdmFzY3JpcHQ6cmV0dXJuIGNmY2xpY2soKTtkZGQCHQ8QD2QWAh8HBSJqYXZhc2NyaXB0OnJldHVybiBjYXNoYWJsZWNoZWNrKCk7ZGRkAh8PD2QWAh8GBRpyZXR1cm4gSW50ZWdlck9ubHkoZXZlbnQpO2QCIw8PZBYCHwYFGnJldHVybiBJbnRlZ2VyT25seShldmVudCk7ZAIoDxAPFgYfAwUMZm9ybXVsYV9kZXNjHwQFDHBrX2Zvcm11bGFpZB8FZ2QQFQwULS0gU2VsZWN0IEZvcm11bGEgLS0IQURBX05vblQMQURBX1RlYWNoZXJzB0NvdmlkMTkHR1BGL0NQRghHcmF0dWl0eQNIUkEQTGVhdmUgRW5jYXNobWVudANOUFMRTlBTXyBDb250cmlidXRpb24ZUGh5X0hhbmRpY2FwcGVkX0FsbG93YW5jZQx6ZXJvIGZvcm11bGEVDAAES0ctMQVUVi0xMAVBWC0xNgRLRy0zBFZNLTYES0ctMgRWQy03BFZNLTUFQ0ItMTgFVkMtMTUFQ08tMTcUKwMMZ2dnZ2dnZ2dnZ2dnFgFmZAIyDw9kFgIfBgUecmV0dXJuIE51bWJlck9ubHkoZXZlbnQsdGhpcyk7ZAI/D2QWAgIBDxAPZBYCHwcFI2phdmFzY3JpcHQ6cmV0dXJuIGZpeGVkdGltZWlzc3VlKCk7ZGRkAkEPZBYCAgIPZBYCAgEPD2QWAh8GBRpyZXR1cm4gSW50ZWdlck9ubHkoZXZlbnQpO2QCQw8PZBYCHwcFFHJldHVybiBibGFua2NoZWNrKCk7ZAJFDw9kFgIfBwURcmV0dXJuIGNhbGxBbGwoKTtkAkkPPCsACwEADxYIHghEYXRhS2V5cxYAHgtfIUl0ZW1Db3VudGYeCVBhZ2VDb3VudAIBHhVfIURhdGFTb3VyY2VJdGVtQ291bnRmZGQCSw8PZBYCHwcFSWphdmFzY3JpcHQ6cmV0dXJuIFN1Ym1pdE1hc3RlclZhbGlkYXRlKGFzcG5ldEZvcm0sJ0Nhbm5vdCBMZWZ0IEJsYW5rICEnKTtkAlEPPCsACwEADxYQHwkCCh8IFgAfCgIDHhFBbGxvd0N1c3RvbVBhZ2luZ2cfCwIcHg1TZWxlY3RlZEluZGV4Av////8PHhBWaXJ0dWFsSXRlbUNvdW50AhweEEN1cnJlbnRQYWdlSW5kZXhmZBYCZg9kFhQCAg9kFgpmDw8WAh8CBQExZGQCAQ8PFgIfAgUMQ2FzdWFsIExlYXZlZGQCAg8PFgIfAgUCQ0xkZAIDD2QWAgIBDw8WAh4PQ29tbWFuZEFyZ3VtZW50BQE5ZGQCBA9kFgICAQ8PFgQeDUFudGhlbVZpc2libGVnHxAFATkWAh8HBUdqYXZhc2NyaXB0OnJldHVybiBDb25maXJtRGVsZXRlKCdEbyB5b3Ugd2FudCB0byBkZWxldGUgdGhpcyByZWNvcmQgPycpO2QCAw9kFgpmDw8WAh8CBQEyZGQCAQ8PFgIfAgUQQ2hpbGQgQ2FyZSBMZWF2ZWRkAgIPDxYCHwIFA0NBTGRkAgMPZBYCAgEPDxYCHxAFAThkZAIED2QWAgIBDw8WBB8RZx8QBQE4FgIfBwVHamF2YXNjcmlwdDpyZXR1cm4gQ29uZmlybURlbGV0ZSgnRG8geW91IHdhbnQgdG8gZGVsZXRlIHRoaXMgcmVjb3JkID8nKTtkAgQPZBYKZg8PFgIfAgUBM2RkAgEPDxYCHwIFDUNvbXV0ZWQgTGVhdmVkZAICDw8WAh8CBQNDTUxkZAIDD2QWAgIBDw8WAh8QBQIxMWRkAgQPZBYCAgEPDxYEHxFnHxAFAjExFgIfBwVHamF2YXNjcmlwdDpyZXR1cm4gQ29uZmlybURlbGV0ZSgnRG8geW91IHdhbnQgdG8gZGVsZXRlIHRoaXMgcmVjb3JkID8nKTtkAgUPZBYKZg8PFgIfAgUBNGRkAgEPDxYCHwIFA0NQTGRkAgIPDxYCHwIFA0NQTGRkAgMPZBYCAgEPDxYCHxAFAjQ3ZGQCBA9kFgICAQ8PFgQfEWcfEAUCNDcWAh8HBUdqYXZhc2NyaXB0OnJldHVybiBDb25maXJtRGVsZXRlKCdEbyB5b3Ugd2FudCB0byBkZWxldGUgdGhpcyByZWNvcmQgPycpO2QCBg9kFgpmDw8WAh8CBQE1ZGQCAQ8PFgIfAgUQRGVwdXRhdGlvbiBMZWF2ZWRkAgIPDxYCHwIFAkRMZGQCAw9kFgICAQ8PFgIfEAUCMjBkZAIED2QWAgIBDw8WBB8RZx8QBQIyMBYCHwcFR2phdmFzY3JpcHQ6cmV0dXJuIENvbmZpcm1EZWxldGUoJ0RvIHlvdSB3YW50IHRvIGRlbGV0ZSB0aGlzIHJlY29yZCA/Jyk7ZAIHD2QWCmYPDxYCHwIFATZkZAIBDw8WAh8CBQpEdXR5IExlYXZlZGQCAg8PFgIfAgUCRExkZAIDD2QWAgIBDw8WAh8QBQI0MWRkAgQPZBYCAgEPDxYEHxFnHxAFAjQxFgIfBwVHamF2YXNjcmlwdDpyZXR1cm4gQ29uZmlybURlbGV0ZSgnRG8geW91IHdhbnQgdG8gZGVsZXRlIHRoaXMgcmVjb3JkID8nKTtkAggPZBYKZg8PFgIfAgUBN2RkAgEPDxYCHwIFDEVhcm5lZCBMZWF2ZWRkAgIPDxYCHwIFAkVMZGQCAw9kFgICAQ8PFgIfEAUBMmRkAgQPZBYCAgEPDxYEHxFnHxAFATIWAh8HBUdqYXZhc2NyaXB0OnJldHVybiBDb25maXJtRGVsZXRlKCdEbyB5b3Ugd2FudCB0byBkZWxldGUgdGhpcyByZWNvcmQgPycpO2QCCQ9kFgpmDw8WAh8CBQE4ZGQCAQ8PFgIfAgUMSGFsZiBIb2xpZGF5ZGQCAg8PFgIfAgUCSEhkZAIDD2QWAgIBDw8WAh8QBQEzZGQCBA9kFgICAQ8PFgQfEWgfEAUBMxYCHwcFR2phdmFzY3JpcHQ6cmV0dXJuIENvbmZpcm1EZWxldGUoJ0RvIHlvdSB3YW50IHRvIGRlbGV0ZSB0aGlzIHJlY29yZCA/Jyk7ZAIKD2QWCmYPDxYCHwIFATlkZAIBDw8WAh8CBQ5IYWxmIFBheSBMZWF2ZWRkAgIPDxYCHwIFA0hQTGRkAgMPZBYCAgEPDxYCHxAFAjEyZGQCBA9kFgICAQ8PFgQfEWcfEAUCMTIWAh8HBUdqYXZhc2NyaXB0OnJldHVybiBDb25maXJtRGVsZXRlKCdEbyB5b3Ugd2FudCB0byBkZWxldGUgdGhpcyByZWNvcmQgPycpO2QCCw9kFgpmDw8WAh8CBQIxMGRkAgEPDxYCHwIFB0hvbGlkYXlkZAICDw8WAh8CBQJITGRkAgMPZBYCAgEPDxYCHxAFATRkZAIED2QWAgIBDw8WBB8RaB8QBQE0FgIfBwVHamF2YXNjcmlwdDpyZXR1cm4gQ29uZmlybURlbGV0ZSgnRG8geW91IHdhbnQgdG8gZGVsZXRlIHRoaXMgcmVjb3JkID8nKTtkAlMPFgIfAgUvPHNjcmlwdCBsYW5ndWFnZT1qYXZhc2NyaXB0PmNhbGxBbGwoKTs8L3NjcmlwdD5kAgsPDxYCHwJlZGQYAQUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgUFDGN0bDAwJGhwbEJ0bgUgY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRjaGtIUEwFH2N0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkY2hrQ0YFJWN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkY2hrQ2FzaGFibGUFJ2N0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkY2hrT2ZmQ292ZXJlZAll68NTgzMIhnLphojspvVOjunrD0M1gE5YanBdGfm/">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./Leave Type Master_files/WebResource.axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Leave Type Master_files/WebResource(1).axd" type="text/javascript"></script>
+<script src="./Leave Type Master_files/WebResource(2).axd" type="text/javascript"></script>
+<script src="./Leave Type Master_files/WebResource(3).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="FC08EECA">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAFX2hbDPF372/pImsVx5cjFARyk5P+91hMCfDVCSoqBkp4CQsBLWRGuzcGrfymn0yff/pUKtfnsp9+XN1lutjAcNFlp4Fn5vZiQikYy4y0RIxQ795cTHzU3im2plu/YNmYH2jZA5KaUhuNl7YksmODbmuUVZrIp/VDt5Wt5IdB/65DvJkwXiVAgjBMPTHxr2VvuOVpR3V64YTWfk0I0IRjTy47vS5Kn9z4BfSGuZaP3Jg7kCZv36GOz9u3Fb3GDuxiuo8sj9KWn2/G4uVRBnri0OynQJa6157kM2/vXrhFMlGUD2+ar+mqq7JedfS6LEKM4hp3Ha6JW1lSvWjQG46tH7eFGyKHGYi1mIVUbJGuqsBZ09cm1mT9Y4uiAUMMSpe/AX0WWDp3mQ5vgD6nVvHnnOB1PlJ9jCk40V5n3iDEOcUBqaT4M/PM6KH5bRW/r9+c9mvHLLZnU8OBlKYVumRKNX7shv/eOCxoH5e810fue93QOe1s17Or7ln0RyXKNDwBRHMeuel+2SJk809YFPqcYyI5Iuv8fNcueUwv7ZasbPFftlP8mTGQ+kzE385CEAFg9QBSjAUdZr4RGiPlOSOyJy+AnKOvTuV+0XFYjmQU0L1IJq43gUBgeqX741j2kTpLC3tS1BW1zZsKbHKnxCtTT2JsNW6IpZimhWbti2dUzp7UuiD4ta/dk2eYSd97Z7PnN33C9d0XvUWtvGhBta1AFM3MCBMYVz2+wxSCL7CPhIqUnhlSBQXpQGpkMgWr0+yz1kIHd8wN+Elt47UNfrw5jZLRsrzXUUynhb4R6nAjWrxCf72r8w/OKPuuihwrupFuR86obz+WANdOncL161vcQ5HX+CSXDE0Fvfi7I2BnpwVLjBzmH6mP+u96SYsYW/44vrsaksqTJnOAhQrgyep/OwawGJg8GSMH7+xVix0nZ/FFph6e+1vzivapCuFxSY6ueMMdBwHZeI0FGpp5NDF0oblkrz0NXf5HSksO6DFcemKO/t250I1Ouqu1ZSFG6YS93EhYNy9zwk2EcpD47axjRfo/sCDVJ9N/HYz8A5zFZzKX7lzCGFz/bPJ4w+umsuItkwmrlbQVnrg8sR+qROBOOQNwu6Gt6ghEg26WvPos/LvOgnxNZC3YQZit8LVk4P730Nyj5Vea3mN2g9I4OGW8qXK/9l5sxALBGjznv8QFKYgJwAARzHJF/9NNv/2fFOcdJcO+B4PXD7/k75QUrC94Tvol9ZIOAalaEgZQCVHKdISMuo1RFu8xwss4OiPHNjbtkY8kQZap3bak3SAhu5m6ym/Gr8Mr/XPWCTtjuuj4kK7Jwt6G2hIKAAB9cDAQGsShYqQwMFzhinloCuDMazeakXq3WB2VsgzmOSM/eXJyEjOVFijt8GKGVhSzJBosfXj1T6aIY2+AMDYDGIOUW82X8Mhh5cET/corDF1tO7hOgCYaII9OTsGl1Sy9cd/fphbS24gpD6TAqzbWzPo+DNMHiXiQa0y3KoajhPRVhN2R+OGYjIDJzaK2CUL0CK9U3Vfu4RbJNDMBqgLbnelbEK7b9uujJdIT+9YvWYRGFce03v0Q3K9xWjqRvsnTtvezMryu/bsuI9o6y+uurCZMoNWSPwr10sh4Z8o35BF2lORsmcbW/pMMM99Eo/aWzj8F3ryQYfZReuylNLNMzORiV8ygpkyZYQJ2s4hqrZ2zjji1oBr1Q/UzolIikBFSZVn9BquYStrkvy9B61rc1O8/yzs0hNui2Lfa+GjocTALKfvNeG5UgdPv09rjLVOBEeeyx9LyVa9JP6dzcyV3Doase5DTuN9rcoOJiFeB61oO0W9UzVPLS0ehuKHLeGTfuCfSERzxE=">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Leave Type Master_files/Leave.png">
+                            Leave Management
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/Leave/SAL_Leavetype_Mst.aspx?Mwpid=3216#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> University Admin</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> University Admin</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">Comptroller, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/Leave/SAL_Leavetype_Mst.aspx?Mwpid=3216#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Leave Type Master_files/WebResource(4).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Masters" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3209#" tabindex="-1">Masters</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Common Holidays Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_CommonHolidays_Mst.aspx?Mwpid=3211" tabindex="-1">Common Holidays Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Holiday Location Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_HolidayLocation_Mst.aspx?Mwpid=3212" tabindex="-1">Holiday Location Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Location Wise Holidays Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_LocationWiseHolidays_Mst.aspx?Mwpid=3214" tabindex="-1">Location Wise Holidays Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Weekly Off Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_WeeklyOff_Mst.aspx?Mwpid=3215" tabindex="-1">Weekly Off Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Type Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Leavetype_Mst.aspx?Mwpid=3216" tabindex="-1">Leave Type Master</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:9" role="menuitem" style="position: relative; float: left;"><a title="Transactions" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3210#" tabindex="-1">Transactions</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:9" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Previous Leave Assign" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_LeaveAssign.aspx?Mwpid=3491" tabindex="-1">Employee Previous Leave Assign</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Request" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_Employee_LeaveRequest.aspx?Mwpid=3309" tabindex="-1">Leave Request</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Departure Details" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceDepartureDtl.aspx?Mwpid=5069" tabindex="-1">Service Departure Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Leave Assignment" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Employee_LeaveAssignment.aspx?Mwpid=3055" tabindex="-1">Employee Leave Assignment</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Departure Status" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceDepartureDtl_Status.aspx?Mwpid=5187" tabindex="-1">Service Departure Status</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Departure from Admin" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceDeparturefromAdmin.aspx?Mwpid=5195" tabindex="-1">Service Departure from Admin</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee CPL Assignment" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Employee_CPLAssignment.aspx?Mwpid=5300" tabindex="-1">Employee CPL Assignment</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Joining Date" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceJoiningDate.aspx?Mwpid=4804" tabindex="-1">Service Joining Date</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Approval" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_Pending_LeaveRequest.aspx?Mwpid=3312" tabindex="-1">Leave Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Joining Status" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_LeaveJoiningStatus.aspx?Mwpid=4805" tabindex="-1">Service Joining Status</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Adjustment Request" class="level2 dynamic" href="https://hauiums.in/Leave/Emp_LeaveAdjustmentRequest.aspx?Mwpid=3310" tabindex="-1">Leave Adjustment Request</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Adjustment Approval" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_Pending_LeaveAdjustmentRequest.aspx?Mwpid=3314" tabindex="-1">Leave Adjustment Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Extend Request" class="level2 dynamic" href="https://hauiums.in/Leave/Emp_LeaveAdjustmentRequest_New.aspx?Mwpid=4874" tabindex="-1">Leave Extend Request</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Cancel Approved Leaves" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_CancelApprovedLeaves.aspx?Mwpid=4803" tabindex="-1">Cancel Approved Leaves</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Encashment" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Leaves_Encashment.aspx?Mwpid=3220" tabindex="-1">Leave Encashment</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Joining from Admin" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceJoiningDateFromAdmin.aspx?Mwpid=5073" tabindex="-1">Service Joining from Admin</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Transaction" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Employee_LeavesTaken_Details.aspx?Mwpid=3218" tabindex="-1">Leave Transaction</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Update Earned Leave Balance" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Update_EL_Balance.aspx?Mwpid=8440" tabindex="-1">Update Earned Leave Balance</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:29" role="menuitem" style="position: relative; float: left;"><a title="Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3418#" tabindex="-1">Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:29" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Transaction Reports" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_LeavesTaken_SelCriteria.aspx?Mwpid=3419" tabindex="-1">Leave Transaction Reports</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Reconcilliation Report" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_EarnedLeaves_Reconcil_rpt.aspx?Mwpid=4887" tabindex="-1">Leave Reconcilliation Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Leave Details" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_EmpLeaveDetails.aspx?Mwpid=5093" tabindex="-1">Employee Leave Details</a></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Masters</span>&nbsp;&gt;&nbsp;<strong>Leave Type Master</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Leave Type Master_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <script language="Javascript">
+        function blankcheck() {
+            if (document.getElementById('ctl00_ContentPlaceHolder1_ddlNaturetype').value == '') {
+                alert("Nature Type is required");
+                document.getElementById('ctl00_ContentPlaceHolder1_ddlNaturetype').focus();
+                return false;
+            }
+            if (document.getElementById('ctl00_ContentPlaceHolder1_ddlCategory').value == '') {
+                alert("Employee Category is required");
+                document.getElementById('ctl00_ContentPlaceHolder1_ddlCategory').focus();
+                return false;
+            }
+            if (document.getElementById('ctl00_ContentPlaceHolder1_txtEligibility').value == '') {
+                alert("Eligibility (In Months) is required");
+                document.getElementById('ctl00_ContentPlaceHolder1_txtEligibility').focus();
+                return false;
+            }
+            if (document.getElementById('ctl00_ContentPlaceHolder1_txtMaxperyear').value == '') {
+                alert("Max Leave Per Year is required");
+                document.getElementById('ctl00_ContentPlaceHolder1_txtMaxperyear').focus();
+                return false;
+            }
+
+            if (document.getElementById('ctl00_ContentPlaceHolder1_txtMaxLeaveBalance').value == '') {
+                alert("Max Leave Balance is required");
+                document.getElementById('ctl00_ContentPlaceHolder1_txtMaxLeaveBalance').focus();
+                return false;
+            }
+
+            if (document.getElementById('ctl00_ContentPlaceHolder1_chkCF').checked == true) {
+                if (document.getElementById('ctl00_ContentPlaceHolder1_txtTotalleavelimit').value == '') {
+                    alert("Carry Forward Limit is required");
+                    document.getElementById('ctl00_ContentPlaceHolder1_txtTotalleavelimit').focus();
+                    return false;
+                }
+            }
+            //if (document.getElementById('ctl00_ContentPlaceHolder1_txtLeavelimitperinstance').value == '') {
+            //    alert("Leave Limit Per Instance is required");
+            //    document.getElementById('ctl00_ContentPlaceHolder1_txtLeavelimitperinstance').focus();
+            //    return false;
+            //}
+            if (document.getElementById('ctl00_ContentPlaceHolder1_chkFixedtimesissue').checked == true) {
+                if (document.getElementById('ctl00_ContentPlaceHolder1_txtTotaltimesissue').value == '') {
+                    alert("Total Times Issue is required");
+                    document.getElementById('ctl00_ContentPlaceHolder1_txtTotaltimesissue').focus();
+                    return false;
+                }
+            }
+            if (document.getElementById('ctl00_ContentPlaceHolder1_chkCashable').checked == true) {
+
+                //if (document.getElementById('ctl00_ContentPlaceHolder1_txtMaxcashable').value == '')
+                //{
+                //    alert("Leaves Encashment Before Retirement is required");
+                //    document.getElementById('ctl00_ContentPlaceHolder1_txtMaxcashable').focus();
+                //    return false;
+                //}
+                if (document.getElementById('ctl00_ContentPlaceHolder1_ddlFormula').value == '') {
+                    if (document.getElementById('ctl00_ContentPlaceHolder1_txtAmount').value == '') {
+                        alert("Formula or Amount is required");
+                        document.getElementById('ctl00_ContentPlaceHolder1_ddlFormula').focus();
+                        return false;
+                    }
+                    if (document.getElementById('ctl00_ContentPlaceHolder1_txtAmount').value != '') {
+                        var Amt = parseInt(document.getElementById('ctl00_ContentPlaceHolder1_txtAmount').value);
+                        if (Amt <= 0) {
+                            alert("Amount can't be zero!");
+                            document.getElementById('ctl00_ContentPlaceHolder1_txtAmount').focus();
+                            return false;
+                        }
+                    }
+                }
+                if (document.getElementById('ctl00_ContentPlaceHolder1_txtEncashmentDays').value == '') {
+                    alert("Leaves Encashment After Retirement is required");
+                    document.getElementById('ctl00_ContentPlaceHolder1_txtEncashmentDays').focus();
+                    return false;
+                }
+
+            }
+        }
+
+        function callAll() {
+            cfclick();
+            fixedtimeissue();
+            cashablecheck();
+        }
+
+        function cfclick() {
+            if (document.getElementById('ctl00_ContentPlaceHolder1_chkCF').checked == true) {
+                document.getElementById('ctl00_ContentPlaceHolder1_txtTotalleavelimit').disabled = false;
+                document.getElementById('ctl00_ContentPlaceHolder1_Star1').style.display = '';
+            }
+            else {
+                document.getElementById('ctl00_ContentPlaceHolder1_txtTotalleavelimit').value = '';
+                document.getElementById('ctl00_ContentPlaceHolder1_txtTotalleavelimit').disabled = true;
+                document.getElementById('ctl00_ContentPlaceHolder1_Star1').style.display = 'none';
+            }
+        }
+
+        function fixedtimeissue() {
+            if (document.getElementById('ctl00_ContentPlaceHolder1_chkFixedtimesissue').checked == true) {
+                document.getElementById('ctl00_ContentPlaceHolder1_txtTotaltimesissue').disabled = false;
+                document.getElementById('ctl00_ContentPlaceHolder1_Star2').style.display = '';
+            }
+            else {
+                document.getElementById('ctl00_ContentPlaceHolder1_txtTotaltimesissue').value = '';
+                document.getElementById('ctl00_ContentPlaceHolder1_txtTotaltimesissue').disabled = true;
+                document.getElementById('ctl00_ContentPlaceHolder1_Star2').style.display = 'none';
+            }
+        }
+
+        function cashablecheck() {
+            if (document.getElementById('ctl00_ContentPlaceHolder1_chkCashable').checked == true) {
+
+                //document.getElementById('ctl00_ContentPlaceHolder1_txtMaxcashable').disabled = false;
+                //document.getElementById('ctl00_ContentPlaceHolder1_Star3').style.display = '';
+
+                document.getElementById('ctl00_ContentPlaceHolder1_ddlFormula').disabled = false;
+
+                if (document.getElementById('ctl00_ContentPlaceHolder1_ddlFormula').value == '') {
+                    document.getElementById('ctl00_ContentPlaceHolder1_txtAmount').disabled = false;
+                    document.getElementById('ctl00_ContentPlaceHolder1_Star4').style.display = '';
+                    document.getElementById('ctl00_ContentPlaceHolder1_Star5').style.display = '';
+                }
+                else {
+                    document.getElementById('ctl00_ContentPlaceHolder1_txtAmount').value = '';
+                    document.getElementById('ctl00_ContentPlaceHolder1_txtAmount').disabled = true;
+                    document.getElementById('ctl00_ContentPlaceHolder1_Star5').style.display = 'none';
+                }
+                document.getElementById('ctl00_ContentPlaceHolder1_txtEncashmentDays').disabled = false;
+                document.getElementById('ctl00_ContentPlaceHolder1_Star6').style.display = '';
+            }
+            else {
+                //document.getElementById('ctl00_ContentPlaceHolder1_txtMaxcashable').disabled = true;
+                //document.getElementById('ctl00_ContentPlaceHolder1_txtMaxcashable').value = '';
+                //document.getElementById('ctl00_ContentPlaceHolder1_Star3').style.display = 'none';
+
+                document.getElementById('ctl00_ContentPlaceHolder1_ddlFormula').disabled = true;
+                document.getElementById('ctl00_ContentPlaceHolder1_ddlFormula').value = '';
+                document.getElementById('ctl00_ContentPlaceHolder1_Star4').style.display = 'none';
+
+                document.getElementById('ctl00_ContentPlaceHolder1_txtAmount').disabled = true;
+                document.getElementById('ctl00_ContentPlaceHolder1_txtAmount').value = '';
+                document.getElementById('ctl00_ContentPlaceHolder1_Star5').style.display = 'none';
+
+                document.getElementById('ctl00_ContentPlaceHolder1_txtEncashmentDays').disabled = true;
+                document.getElementById('ctl00_ContentPlaceHolder1_txtEncashmentDays').value = '';
+                document.getElementById('ctl00_ContentPlaceHolder1_Star6').style.display = 'none';
+            }
+        }
+
+        function IsDigit(e) {
+            var keyCode = e.which ? e.which : e.keyCode
+            var result = (keyCode >= 48 && keyCode <= 57);
+            return result;
+        }
+    </script>
+    <!--Main Table-->
+    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%" align="left" class="table">
+        <tbody><tr>
+            <td align="left">
+                <!--Sub Main Table-->
+                <table border="0" cellpadding="0" cellspacing="0" style="width: 100%">
+                    <tbody><tr>
+                        <td colspan="7" class="tableheading">
+                            Leave Type Master
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="tdgap">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="lblLeaveType" class="vtext" style="width: 20%">
+                            Leave Type
+                        </td>
+                        <td class="colon">
+                            :
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtLeaveType__"><input name="ctl00$ContentPlaceHolder1$R_txtLeaveType" type="text" maxlength="50" id="ctl00_ContentPlaceHolder1_R_txtLeaveType" class="textbox"></span>
+                            *
+                        </td>
+                        <td>
+                        </td>
+                        <td id="lblShortDesc" class="vtext">
+                            Short Description
+                        </td>
+                        <td class="colon">
+                            :
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtShortDesc__"><input name="ctl00$ContentPlaceHolder1$R_txtShortDesc" type="text" maxlength="5" id="ctl00_ContentPlaceHolder1_R_txtShortDesc" class="textbox"></span>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext" id="lblLeaveNature">
+                            Leave Nature
+                        </td>
+                        <td class="colon">
+                            :
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlLeaveNature__"><select name="ctl00$ContentPlaceHolder1$D_ddlLeaveNature" id="ctl00_ContentPlaceHolder1_D_ddlLeaveNature" disabled="disabled" class="dropdown">
+	<option value="">-- Select Leave Nature Type --</option>
+	<option selected="selected" value="N">Normal</option>
+	<option value="L">Leave Without Allowance</option>
+	<option value="O">Weekly Off</option>
+	<option value="H">Holiday</option>
+	<option value="F">Half Holiday</option>
+	<option value="R">Restricted Holiday</option>
+
+</select></span>
+                            *
+                        </td>
+                        <td>
+                        </td>
+                        <td class="vtext">
+                            Gender
+                        </td>
+                        <td class="colon">
+                            :
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_ddlGender__"><select name="ctl00$ContentPlaceHolder1$ddlGender" id="ctl00_ContentPlaceHolder1_ddlGender" class="dropdown">
+	<option selected="selected" value="">-- Both --</option>
+	<option value="M">Male</option>
+	<option value="F">Female</option>
+
+</select></span>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">
+                            Fixed Leave Type
+                        </td>
+                        <td class="colon">
+                            :
+                        </td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_ddlFixedLeaveType__"><select name="ctl00$ContentPlaceHolder1$ddlFixedLeaveType" id="ctl00_ContentPlaceHolder1_ddlFixedLeaveType" class="dropdown">
+	<option selected="selected" value="">-- Select Fixed Leave Type --</option>
+	<option value="21">MTL</option>
+
+</select></span>
+                        </td>
+                        <td>
+                        </td>
+                        <td class="vtext">
+                            Remarks
+                        </td>
+                        <td class="colon">
+                            :
+                        </td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtRemarks__"><textarea name="ctl00$ContentPlaceHolder1$txtRemarks" rows="2" cols="20" id="ctl00_ContentPlaceHolder1_txtRemarks" class="textbox" ondrop="event.returnValue=false" onkeypress="return CheckMaxLength(this,500);"></textarea></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="tdgap">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="tablesubheading">
+                            Leave Type Details
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdgap" colspan="7">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                <tbody><tr>
+                                    <td class="vtext">
+                                        Nature Type
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td class="required">
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_ddlNaturetype__"><select name="ctl00$ContentPlaceHolder1$ddlNaturetype" id="ctl00_ContentPlaceHolder1_ddlNaturetype" class="dropdown">
+	<option selected="selected" value="">-- Select Nature Type --</option>
+	<option value="KZ-8">Contractual</option>
+	<option value="KG-1">DEPUTATION (INWARD)</option>
+	<option value="VC-5">DEPUTATION (OUTWARD)</option>
+	<option value="AP-7">DPL</option>
+	<option value="PB-4">FCA</option>
+	<option value="AX-11">Parttime Guest teacher</option>
+	<option value="KG-2">Permanent</option>
+	<option value="KV-10">RA/TA/STA</option>
+	<option value="KZ-6">Re-employed</option>
+	<option value="KV-9">SRF/JRF</option>
+	<option value="KG-3">Temporary</option>
+
+</select></span>
+                                        *
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="vtext" style="width: 20%">
+                                        Employee Category
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td class="required">
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_ddlCategory__"><select name="ctl00$ContentPlaceHolder1$ddlCategory" id="ctl00_ContentPlaceHolder1_ddlCategory" class="dropdownlong">
+	<option selected="selected" value=""> --Select Employee Category-- </option>
+	<option value="T">TEACHING</option>
+	<option value="N">NON-TEACHING</option>
+
+</select></span>
+                                        *
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td class="vtext">
+                                        Eligibility (In Months)
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td class="required">
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_txtEligibility__"><input name="ctl00$ContentPlaceHolder1$txtEligibility" type="text" maxlength="4" id="ctl00_ContentPlaceHolder1_txtEligibility" class="textbox" onmousedown="DisableRightClick(event)" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeypress="return IsDigit(event);" onkeydown="return IntegerOnly(event);"></span>
+                                        *
+                                    </td>
+                                </tr>
+                                <tr>
+                                     <td class="vtext">Leave Limit Per Instance
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td class="required">
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_txtLeavelimitperinstance__"><input name="ctl00$ContentPlaceHolder1$txtLeavelimitperinstance" type="text" maxlength="4" id="ctl00_ContentPlaceHolder1_txtLeavelimitperinstance" class="textbox" onmousedown="DisableRightClick(event)" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeypress="return IsDigit(event);" onkeydown="return IntegerOnly(event);"></span> *                                       
+                                    </td>                                    
+                                    <td>
+                                    </td>
+                                    <td class="vtext">
+                                        Max Leave Balance
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td class="required">
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_txtMaxLeaveBalance__"><input name="ctl00$ContentPlaceHolder1$txtMaxLeaveBalance" type="text" maxlength="4" id="ctl00_ContentPlaceHolder1_txtMaxLeaveBalance" class="textbox" onmousedown="DisableRightClick(event)" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeypress="return IsDigit(event);" onkeydown="return IntegerOnly(event);"></span>
+                                        *
+                                    </td>
+                                </tr>
+                                <tr>
+                                   <td class="vtext">
+                                        Max Leave Per Year
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td class="required">
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_txtMaxperyear__"><input name="ctl00$ContentPlaceHolder1$txtMaxperyear" type="text" maxlength="4" id="ctl00_ContentPlaceHolder1_txtMaxperyear" class="textbox" onmousedown="DisableRightClick(event)" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeypress="return IsDigit(event);" onkeydown="return IntegerOnly(event);"></span>
+                                        *
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td class="vtext">
+                                        HPL
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td>
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_chkHPL__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_chkHPL" type="checkbox" name="ctl00$ContentPlaceHolder1$chkHPL"></span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    
+
+                                    <td class="vtext">
+                                        Carry Forward
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td>
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_chkCF__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_chkCF" type="checkbox" name="ctl00$ContentPlaceHolder1$chkCF" onclick="javascript:return cfclick();"></span></span>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    
+                                    <td class="vtext">
+                                        Cashable
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td>
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_chkCashable__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_chkCashable" type="checkbox" name="ctl00$ContentPlaceHolder1$chkCashable" onclick="javascript:return cashablecheck();"></span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="vtext">
+                                        Carry Forward Limit
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td class="required">
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_txtTotalleavelimit__"><input name="ctl00$ContentPlaceHolder1$txtTotalleavelimit" type="text" maxlength="3" id="ctl00_ContentPlaceHolder1_txtTotalleavelimit" class="textbox" onkeypress="return IsDigit(event);" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onmousedown="DisableRightClick(event)" onkeydown="return IntegerOnly(event);" disabled=""></span>
+                                        <span id="ctl00_ContentPlaceHolder1_Star1" style="display: none;"> *</span>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td class="vtext">
+                                        Leaves Encashment After Retirement
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td class="required">
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_txtEncashmentDays__"><input name="ctl00$ContentPlaceHolder1$txtEncashmentDays" type="text" maxlength="3" id="ctl00_ContentPlaceHolder1_txtEncashmentDays" class="textbox" onmousedown="DisableRightClick(event)" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeypress="return IsDigit(event);" onkeydown="return IntegerOnly(event);"></span><span id="ctl00_ContentPlaceHolder1_Star6">  *</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="vtext">
+                                        Off Covered
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td>
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_chkOffCovered__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_chkOffCovered" type="checkbox" name="ctl00$ContentPlaceHolder1$chkOffCovered"></span></span>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td class="vtext">
+                                        Formula
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td class="required">
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_ddlFormula__"><select name="ctl00$ContentPlaceHolder1$ddlFormula" id="ctl00_ContentPlaceHolder1_ddlFormula" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlFormula&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option selected="selected" value="">-- Select Formula --</option>
+	<option value="KG-1">ADA_NonT</option>
+	<option value="TV-10">ADA_Teachers</option>
+	<option value="AX-16">Covid19</option>
+	<option value="KG-3">GPF/CPF</option>
+	<option value="VM-6">Gratuity</option>
+	<option value="KG-2">HRA</option>
+	<option value="VC-7">Leave Encashment</option>
+	<option value="VM-5">NPS</option>
+	<option value="CB-18">NPS_ Contribution</option>
+	<option value="VC-15">Phy_Handicapped_Allowance</option>
+	<option value="CO-17">zero formula</option>
+
+</select></span>
+                                        <span id="ctl00_ContentPlaceHolder1_Star4">  *</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="vtext">Minimum Leave limit </td>
+
+                                    <td class="colon">:</td>
+
+                                    <td><span id="Anthem_ctl00_ContentPlaceHolder1_txtMinimumLeavelimit__"><input name="ctl00$ContentPlaceHolder1$txtMinimumLeavelimit" type="text" maxlength="8" id="ctl00_ContentPlaceHolder1_txtMinimumLeavelimit" class="textbox" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onmousedown="DisableRightClick(event)" onkeypress="return IsDigit(event);"></span></td>
+                                    <td></td>
+                                     <td class="vtext">
+                                        Amount
+                                    </td>
+                                    <td class="colon">
+                                        :
+                                    </td>
+                                    <td class="required">
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_txtAmount__"><input name="ctl00$ContentPlaceHolder1$txtAmount" type="text" maxlength="8" id="ctl00_ContentPlaceHolder1_txtAmount" class="textbox" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onmousedown="DisableRightClick(event)" onkeypress="return IsDigit(event);" onkeydown="return NumberOnly(event,this);"></span><span id="ctl00_ContentPlaceHolder1_Star5">  *</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="vtext">No. of Days before apply leave</td>
+
+                                    <td class="colon">:</td>
+
+                                    <td><span id="Anthem_ctl00_ContentPlaceHolder1_txtDaysbeforeapplyleave__"><input name="ctl00$ContentPlaceHolder1$txtDaysbeforeapplyleave" type="text" maxlength="8" id="ctl00_ContentPlaceHolder1_txtDaysbeforeapplyleave" class="textbox" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onmousedown="DisableRightClick(event)" onkeypress="return IsDigit(event);"></span></td>
+                                </tr>
+                                <tr>
+                                    
+                                    
+                                                                                                         
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="7" class="tdgap">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                    </td>
+                                    <td colspan="5">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tbody><tr>
+                                                <td>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_btnAdd__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnAdd" value="SAVE" onclick="return blankcheck();javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnAdd&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;ADDING...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnAdd" class="button-common" cellpadding="0" cellspacing="0"></span>
+                                                </td>
+                                                <td class="btngap">
+                                                </td>
+                                                <td>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_btnClear__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnClear" value="RESET" onclick="return callAll();javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnClear&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnClear" class="button-common" cellpadding="0" cellspacing="0"></span>
+                                                </td>
+                                                <td class="btngap">
+                                                </td>
+                                                <td>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg1__"><span id="ctl00_ContentPlaceHolder1_lblMsg1" class="lblmessage"></span></span>
+                                                </td>
+                                            </tr>
+                                        </tbody></table>
+                                    </td>
+                                </tr>
+                            </tbody></table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="tdgap">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            <div id="Anthem_ctl00_ContentPlaceHolder1_dgLeaveDetails__"><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgLeaveDetails" style="border-color:Black;width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td align="center" style="font-weight:bold;">S. No.</td><td align="center" style="font-weight:bold;">Nature Type</td><td align="center" style="font-weight:bold;">Employee Category</td><td align="center" style="font-weight:bold;">Leave Limit Per Instance</td><td align="center" style="font-weight:bold;">Max Leave Per Year</td><td align="center" style="font-weight:bold;">Max Leave Balance</td><td align="center" style="font-weight:bold;">Carry Forward</td><td align="center" style="font-weight:bold;">Off Covered</td><td align="center" style="font-weight:bold;">Cashable</td><td align="center" style="font-weight:bold;">EDIT</td><td align="center" style="font-weight:bold;">DELETE</td>
+	</tr>
+</tbody></table></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdgap" colspan="7">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="5">
+                            <table cellpadding="0" cellspacing="0" border="0">
+                                <tbody><tr>
+                                    <td>
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_btnSave__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="SAVE" onclick="javascript:return SubmitMasterValidate(aspnetForm,&#39;Cannot Left Blank !&#39;);javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSave&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;SAVING...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSave" class="button-common" cellpadding="0" cellspacing="0"></span>
+                                    </td>
+                                    <td class="btngap">
+                                    </td>
+                                    <td>
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+                                    </td>
+                                    <td class="btngap">
+                                    </td>
+                                    <td>
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+                                    </td>
+                                </tr>
+                            </tbody></table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="tdgap">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="tablesubheading">
+                            List of Leave Type
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="tdgap">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            <div id="Anthem_ctl00_ContentPlaceHolder1_dgDetails__"><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td align="center" style="font-weight:bold;">S. No.</td><td align="center" style="font-weight:bold;width:30%;">Leave Type</td><td align="center" style="font-weight:bold;width:30%;">Short Description</td><td align="center" style="font-weight:bold;">EDIT</td><td align="center" style="font-weight:bold;">DELETE</td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:10%;">1</td><td>Casual Leave</td><td>CL</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Edit.gif" alt="" border="0">
+                                            </a></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete__"><a onclick="javascript:return ConfirmDelete(&#39;Do you want to delete this record ?&#39;);javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Delete.gif" alt="" border="0">
+                                            </a></span>
+                                        </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:10%;">2</td><td>Child Care Leave</td><td>CAL</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Edit.gif" alt="" border="0">
+                                            </a></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkDelete__"><a onclick="javascript:return ConfirmDelete(&#39;Do you want to delete this record ?&#39;);javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Delete.gif" alt="" border="0">
+                                            </a></span>
+                                        </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:10%;">3</td><td>Comuted Leave</td><td>CML</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Edit.gif" alt="" border="0">
+                                            </a></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkDelete__"><a onclick="javascript:return ConfirmDelete(&#39;Do you want to delete this record ?&#39;);javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Delete.gif" alt="" border="0">
+                                            </a></span>
+                                        </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:10%;">4</td><td>CPL</td><td>CPL</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Edit.gif" alt="" border="0">
+                                            </a></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkDelete__"><a onclick="javascript:return ConfirmDelete(&#39;Do you want to delete this record ?&#39;);javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Delete.gif" alt="" border="0">
+                                            </a></span>
+                                        </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:10%;">5</td><td>Deputation Leave</td><td>DL</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Edit.gif" alt="" border="0">
+                                            </a></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkDelete__"><a onclick="javascript:return ConfirmDelete(&#39;Do you want to delete this record ?&#39;);javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Delete.gif" alt="" border="0">
+                                            </a></span>
+                                        </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:10%;">6</td><td>Duty Leave</td><td>DL</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Edit.gif" alt="" border="0">
+                                            </a></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkDelete__"><a onclick="javascript:return ConfirmDelete(&#39;Do you want to delete this record ?&#39;);javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Delete.gif" alt="" border="0">
+                                            </a></span>
+                                        </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:10%;">7</td><td>Earned Leave</td><td>EL</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Edit.gif" alt="" border="0">
+                                            </a></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkDelete__"><a onclick="javascript:return ConfirmDelete(&#39;Do you want to delete this record ?&#39;);javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Delete.gif" alt="" border="0">
+                                            </a></span>
+                                        </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:10%;">8</td><td>Half Holiday</td><td>HH</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Edit.gif" alt="" border="0">
+                                            </a></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkDelete__"></span>
+                                        </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:10%;">9</td><td>Half Pay Leave</td><td>HPL</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Edit.gif" alt="" border="0">
+                                            </a></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkDelete__"><a onclick="javascript:return ConfirmDelete(&#39;Do you want to delete this record ?&#39;);javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Delete.gif" alt="" border="0">
+                                            </a></span>
+                                        </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:10%;">10</td><td>Holiday</td><td>HL</td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;)">
+                                            <img src="./Leave Type Master_files/Edit.gif" alt="" border="0">
+                                            </a></span>
+                                        </td><td align="center" style="width:10%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkDelete__"></span>
+                                        </td>
+	</tr><tr class="pager-style" align="center" style="color:#000000;">
+		<td colspan="5"><span>1</span>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;Page$2&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;&#39;)" style="color:#000000;">2</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;Page$3&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;&#39;)" style="color:#000000;">3</a></td>
+	</tr>
+</tbody></table></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            <script language="javascript">callAll();</script>
+                        </td>
+                    </tr>
+                </tbody></table>
+                <!--Sub Main Table End-->
+            </td>
+        </tr>
+    </tbody></table>
+    <!--Main Table End-->
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_R_txtLeaveType');//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./Leave Type Master_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Leave Type Master_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,419 @@
+﻿{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" id="aspnetForm">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="emp_id" value="{{ (edit_data.pk_empid if edit_data else (request.args.get('edit_id') or '')) }}">
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="text-align:left;">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">Employee Demographic Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" class="tdgap" height="10"></td></tr>
+
+            <tr>
+                <td class="vtext" style="width:20%">Employee Code (M)</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" class="textboxlong" value="{{ edit_data.manualempcode if edit_data else '' }}" readonly>
+                    <span class="required">*</span>
+                </td>
+                <td width="2%"></td>
+                <td class="vtext" style="width:20%">Employee Name</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" class="textboxlong" value="{{ edit_data.empname if edit_data else '' }}" readonly>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Location</td>
+                <td class="colon">:</td>
+                <td><input type="text" class="textboxlong" value="{{ edit_data.location_name if edit_data else '' }}" readonly></td>
+                <td></td>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td><input type="text" class="textboxlong" value="{{ edit_data.dept_name if edit_data else '' }}" readonly></td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Designation</td>
+                <td class="colon">:</td>
+                <td><input type="text" class="textboxlong" value="{{ edit_data.desg_name if edit_data else '' }}" readonly></td>
+                <td></td>
+                <td class="vtext">DDO</td>
+                <td class="colon">:</td>
+                <td><input type="text" class="textboxlong" value="{{ edit_data.ddo_name if edit_data else '' }}" readonly></td>
+            </tr>
+
+            <tr><td colspan="7" class="tdgap" height="10"></td></tr>
+
+            <tr>
+                <td class="vtext">Quarter No.</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="quarter_id" class="dropdownlong">
+                        <option value="">-- Select Quarter No --</option>
+                        {% for q in lookups.quarters %}
+                        <option value="{{ q.id }}" {% if edit_data and edit_data.fk_quarterid|string == q.id|string %}selected{% endif %}>{{ q.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td></td>
+                <td class="vtext">Joining Location</td>
+                <td class="colon">:</td>
+                <td><input name="joining_location" type="text" class="textboxlong" value="{{ edit_data.joininglocation if edit_data else '' }}"></td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Joining Designation</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="joining_desg_id" class="dropdownlong">
+                        <option value="">-- Select Designation --</option>
+                        {% for d in lookups.designations %}
+                        <option value="{{ d.id }}" {% if edit_data and edit_data.fk_desgid_j|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Religion</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="religion_id" class="dropdownlong">
+                        <option value="">-- Select Religion --</option>
+                        {% for r in lookups.religions %}
+                        <option value="{{ r.id }}" {% if edit_data and edit_data.fk_religionid|string == r.id|string %}selected{% endif %}>{{ r.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Gender</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="gender" class="dropdownlong">
+                        <option value="">-- Select Gender --</option>
+                        {% for g in lookups.genders %}
+                        <option value="{{ g.id }}" {% if edit_data and (edit_data.gender or '')|string == g.id|string %}selected{% endif %}>{{ g.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Category</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="category_id" class="dropdownlong">
+                        <option value="">-- Select Category --</option>
+                        {% for c in lookups.categories %}
+                        <option value="{{ c.id }}" {% if edit_data and edit_data.fk_catid|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Father Name</td>
+                <td class="colon">:</td>
+                <td><input type="text" class="textboxlong" value="{{ edit_data.fathername if edit_data else '' }}" readonly></td>
+                <td></td>
+                <td class="vtext">Mother Name</td>
+                <td class="colon">:</td>
+                <td><input name="mother_name" type="text" class="textboxlong" value="{{ edit_data.mothername if edit_data else '' }}"></td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Date of Appointment</td>
+                <td class="colon">:</td>
+                <td><input name="doa" type="text" class="textboxdate" value="{{ edit_data.doa_fmt if edit_data else '' }}"></td>
+                <td></td>
+                <td class="vtext">Date of Joining</td>
+                <td class="colon">:</td>
+                <td><input name="doj" type="text" class="textboxdate" value="{{ edit_data.doj_fmt if edit_data else '' }}"></td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Date of Confirmation</td>
+                <td class="colon">:</td>
+                <td><input name="doc" type="text" class="textboxdate" value="{{ edit_data.doc_fmt if edit_data else '' }}"></td>
+                <td></td>
+                <td class="vtext">Date of Retirement</td>
+                <td class="colon">:</td>
+                <td><input name="dor" type="text" class="textboxdate" value="{{ edit_data.dor_fmt if edit_data else '' }}"></td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Contact No. 1</td>
+                <td class="colon">:</td>
+                <td><input name="contact1" type="text" class="textboxlong" value="{{ edit_data.corresContactNo if edit_data else '' }}"></td>
+                <td></td>
+                <td class="vtext">Contact No. 2</td>
+                <td class="colon">:</td>
+                <td><input name="contact2" type="text" class="textboxlong" value="{{ edit_data.permanentContactNo if edit_data else '' }}"></td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Mobile No.</td>
+                <td class="colon">:</td>
+                <td><input name="mobile" type="text" class="textboxlong" value="{{ edit_data.econtactnum if edit_data else '' }}"></td>
+                <td></td>
+                <td class="vtext">Personal Email</td>
+                <td class="colon">:</td>
+                <td><input name="personal_email" type="text" class="textboxlong" value="{{ edit_data.PersonalEmail if edit_data else '' }}"></td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Official Email</td>
+                <td class="colon">:</td>
+                <td><input name="official_email" type="text" class="textboxlong" value="{{ edit_data.email if edit_data else '' }}"></td>
+                <td></td>
+                <td class="vtext">Voter ID No.</td>
+                <td class="colon">:</td>
+                <td><input name="voter_id" type="text" class="textboxlong" value="{{ edit_data.voteridnumber if edit_data else '' }}"></td>
+            </tr>
+
+            <tr>
+                <td class="vtext">UID No.</td>
+                <td class="colon">:</td>
+                <td><input name="uid_no" type="text" class="textboxlong" value="{{ edit_data.uidnumber if edit_data else '' }}"></td>
+                <td></td>
+                <td class="vtext">Tech. Qualification</td>
+                <td class="colon">:</td>
+                <td><input name="tech_qualification" type="text" class="textboxlong" value="{{ edit_data.technicalQualifications if edit_data else '' }}"></td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Height (In cms)</td>
+                <td class="colon">:</td>
+                <td><input name="height" type="text" class="textboxlong" value="{{ edit_data.height if edit_data else '' }}"></td>
+                <td></td>
+                <td class="vtext">Scholarship</td>
+                <td class="colon">:</td>
+                <td><input name="scholarship" type="text" class="textboxlong" value="{{ edit_data.scholarships if edit_data else '' }}"></td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Identification Mark</td>
+                <td class="colon">:</td>
+                <td colspan="5"><textarea name="identification_mark" rows="2" class="textboxmultiline" style="width:98%">{{ edit_data.IdentificationMarks if edit_data else '' }}</textarea></td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td colspan="2"><textarea name="remarks" rows="2" class="textboxmultiline" style="width:98%">{{ edit_data.remarks if edit_data else '' }}</textarea></td>
+                <td class="vtext">Reference</td>
+                <td class="colon">:</td>
+                <td><textarea name="reference" rows="2" class="textboxmultiline" style="width:98%">{{ edit_data.reference if edit_data else '' }}</textarea></td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Wife/Husband Name</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="5"><input name="spouse_name" type="text" class="textboxlong" value="{{ edit_data.txtHusbWifeName if edit_data else '' }}"></td>
+            </tr>
+
+            <tr><td colspan="7" height="20"></td></tr>
+            <tr>
+                <td colspan="7" align="center">
+                    {% if perm.AllowAdd or perm.AllowUpdate %}
+                    <input type="submit" name="action" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" class="button-common">
+                    {% endif %}
+                    <input type="submit" name="action" value="RESET" class="button-common">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="text-align:left; margin-top:10px;" id="results_table">
+    <tbody>
+        <tr>
+            <td colspan="9" class="tablesubheading">
+                <span class="subheadingborderbottom">List of Employee Demographic Details</span>
+            </td>
+        </tr>
+        <tr><td colspan="9" class="tdgap" height="10"></td></tr>
+        <tr>
+            <td colspan="9">
+                <table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+                    <tbody>
+                        <tr class="header-style">
+                            <td>S. No.</td>
+                            <td>Employee Code(M)</td>
+                            <td>Employee Name</td>
+                            <td>Location</td>
+                            <td>Department</td>
+                            <td>Designation</td>
+                            <td>Salary Type</td>
+                            <td>EDIT</td>
+                            <td>DELETE</td>
+                        </tr>
+                        {% if employees %}
+                            {% for e in employees %}
+                            <tr class="item-style" {% if edit_data and e.id|string == edit_data.pk_empid|string %}style="background-color:#E4EAFF;color:Black;"{% endif %}>
+                                <td align="center" style="width:5%;">{{ loop.index + ((page-1) * 10) }}</td>
+                                <td align="center" style="width:10%;">{{ e.manualempcode or '' }}</td>
+                                <td>{{ e.empname or '' }}</td>
+                                <td>{{ e.location_name or '' }}</td>
+                                <td>{{ e.dept_name or '' }}</td>
+                                <td>{{ e.desg_name or '' }}</td>
+                                <td>{{ e.salary_type or '' }}</td>
+                                <td align="center" style="width:8%;">
+                                    <a href="{{ e.edit_url }}"><img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit" border="0"></a>
+                                </td>
+                                <td align="center" style="width:8%;">
+                                    <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete" border="0" style="opacity:0.35; cursor:not-allowed;">
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr class="item-style">
+                                <td colspan="9" align="center" class="text-muted">No records found.</td>
+                            </tr>
+                        {% endif %}
+
+                        {% if total_pages > 1 %}
+                        <tr class="pager-style" align="center">
+                            <td colspan="9" style="padding: 10px 0;">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    {% if prev_url %}
+                                    <a href="{{ prev_url }}" class="btn btn-outline-secondary btn-xs py-0 px-2 me-2" style="font-size: 10px;">&laquo; Previous</a>
+                                    {% endif %}
+
+                                    {% for p in page_links %}
+                                        {% if p.active %}
+                                        <span class="btn btn-primary btn-xs py-0 px-2 me-1" style="font-size: 10px; cursor: default;">{{ p.page }}</span>
+                                        {% else %}
+                                        <a href="{{ p.url }}" class="btn btn-outline-primary btn-xs py-0 px-2 me-1" style="font-size: 10px;">{{ p.page }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if next_url %}
+                                    <a href="{{ next_url }}" class="btn btn-outline-secondary btn-xs py-0 px-2 ms-1" style="font-size: 10px;">Next &raquo;</a>
+                                    {% endif %}
+
+                                    <span class="ms-3 text-muted" style="font-size: 10px;">Page {{ page }} of {{ total_pages }} (Total: {{ total_count }})</span>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="text-align:left; margin-top:10px;">
+    <tbody>
+        <tr>
+            <td colspan="6" class="tablesubheading">
+                <span class="subheadingborderbottom">Employee Search</span>
+            </td>
+            <td class="tablesubheading" align="right">
+                <a data-bs-toggle="collapse" href="#empSearchPanel" style="font-size:11px;">Show / Hide</a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <div class="collapse show" id="empSearchPanel">
+                    <form method="GET" action="#results_table">
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td class="vtext" style="width:20%">Employee Code</td>
+                                    <td class="colon">:</td>
+                                    <td><input name="s_emp_code" type="text" class="textboxlong" value="{{ filters.s_emp_code }}"></td>
+                                    <td></td>
+                                    <td class="vtext" style="width:20%">Employee Code (M)</td>
+                                    <td class="colon">:</td>
+                                    <td><input name="s_manual_code" type="text" class="textboxlong" value="{{ filters.s_manual_code }}"></td>
+                                </tr>
+                                <tr>
+                                    <td class="vtext">Employee Name</td>
+                                    <td class="colon">:</td>
+                                    <td><input name="s_emp_name" type="text" class="textboxlong" value="{{ filters.s_emp_name }}"></td>
+                                    <td></td>
+                                    <td class="vtext">Sort By</td>
+                                    <td class="colon">:</td>
+                                    <td>
+                                        <select name="s_sort_by" class="dropdownlong">
+                                            <option value="name" {% if filters.s_sort_by == 'name' %}selected{% endif %}>Employee Name</option>
+                                            <option value="manual" {% if filters.s_sort_by == 'manual' %}selected{% endif %}>Employee Code (M)</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="vtext">DDO</td>
+                                    <td class="colon">:</td>
+                                    <td>
+                                        <select name="s_ddo_id" class="dropdownlong">
+                                            <option value="">-- Select DDO --</option>
+                                            {% for d in lookups.ddos %}
+                                            <option value="{{ d.id }}" {% if filters.s_ddo_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td></td>
+                                    <td class="vtext">Location</td>
+                                    <td class="colon">:</td>
+                                    <td>
+                                        <select name="s_loc_id" class="dropdownlong">
+                                            <option value="">-- Select Location --</option>
+                                            {% for l in lookups.locations %}
+                                            <option value="{{ l.id }}" {% if filters.s_loc_id|string == l.id|string %}selected{% endif %}>{{ l.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="vtext">Department</td>
+                                    <td class="colon">:</td>
+                                    <td>
+                                        <select name="s_dept_id" class="dropdownlong">
+                                            <option value="">-- Select Department --</option>
+                                            {% for d in lookups.departments %}
+                                            <option value="{{ d.id }}" {% if filters.s_dept_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td></td>
+                                    <td class="vtext">Designation</td>
+                                    <td class="colon">:</td>
+                                    <td>
+                                        <select name="s_desg_id" class="dropdownlong">
+                                            <option value="">-- Select Designation --</option>
+                                            {% for d in lookups.designations %}
+                                            <option value="{{ d.id }}" {% if filters.s_desg_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr><td colspan="7" height="12"></td></tr>
+                                <tr>
+                                    <td colspan="7" align="center">
+                                        <input type="submit" value="SEARCH" class="button-common">
+                                        <a href="{{ url_for('establishment.employee_demographic_details') }}" class="button-common" style="text-decoration:none; padding:4px 12px; display:inline-block;">RESET</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock %}
+

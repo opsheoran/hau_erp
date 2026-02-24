@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Student Semester Change Details</span>
+    </div>
+
+    <div style="margin-top: 25px;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">List of Semester Changes</span>
+        </div>
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <th style="width: 5%;">S.No.</th>
+                    <th style="width: 30%;">Student Name</th>
+                    <th style="width: 20%;">Admission No.</th>
+                    <th style="width: 20%;">New Semester</th>
+                    <th style="width: 25%;">Allocation Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                    <td align="center">{{ loop.index + (pagination.page - 1) * pagination.per_page }}</td>
+                    <td>{{ item.studentname }}</td>
+                    <td align="center">{{ item.AdmissionNo }}</td>
+                    <td align="center">{{ item.semester_roman }}</td>
+                    <td align="center">{{ item.Datecurrent or '' }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" align="center" style="color: red; padding: 20px;">No records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% include "includes/pagination.html" %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .textbox-small { width: 150px !important; }
+    .textbox-medium { width: 250px !important; }
+    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .required-star { color: red; font-weight: bold; }
+</style>
+
+<div class="hau-card" style="max-width: 700px;">
+    <div class="tablesubheading">Board Master</div>
+    <div style="padding: 15px;">
+        <form method="POST">
+            <input type="hidden" name="action" value="SAVE">
+            <input type="hidden" name="pk_id" id="b_id">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="25%">Board Name</td><td class="colon">:</td>
+                    <td>
+                        <input type="text" name="name" id="b_name" class="textbox textbox-medium" required>
+                        <span class="required-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Is Approved?</td><td class="colon">:</td>
+                    <td><input type="checkbox" name="is_approved" id="b_approved"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Order By</td><td class="colon">:</td>
+                    <td><input type="number" name="order" id="b_order" class="textbox textbox-small" value="1" required> <span class="required-star">*</span></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td style="padding-top: 15px;">
+                        <input type="submit" id="btn_save" value="SAVE" class="button-common" style="background:#3c8dbc; color:white; padding: 5px 20px;">
+                        <input type="button" value="RESET" class="button-common" style="margin-left:10px;" onclick="resetForm()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 40px;">
+            <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">List of Boards</div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <th width="50">S.No.</th>
+                        <th>Board Name</th>
+                        <th width="80">Approved</th>
+                        <th width="80">Order</th>
+                        <th width="60">EDIT</th>
+                        <th width="60">DELETE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in items %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index + (pagination.page - 1) * pagination.per_page }}</td>
+                        <td style="font-weight: bold;">{{ b.name }}</td>
+                        <td align="center">{{ 'Yes' if b.isapproved else 'No' }}</td>
+                        <td align="center">{{ b.orderby }}</td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editB({{ b|tojson }})'>
+                        </td>
+                        <td align="center">
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this board?')">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="id" value="{{ b.id }}">
+                                <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}" style="border-width:0px; cursor:pointer;">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if pagination.total_pages > 1 %}
+            <div class="pager-style">
+                {% if pagination.has_prev %}
+                    <a href="{{ url_for('academics.board_master', page=pagination.page-1) }}">&lt;</a>
+                {% else %}
+                    <span class="disabled">&lt;</span>
+                {% endif %}
+
+                {% for p in page_range %}
+                    {% if p == '...' %}
+                        <span>{{ p }}</span>
+                    {% elif p == pagination.page %}
+                        <span class="active">{{ p }}</span>
+                    {% else %}
+                        <a href="{{ url_for('academics.board_master', page=p) }}">{{ p }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if pagination.has_next %}
+                    <a href="{{ url_for('academics.board_master', page=pagination.page+1) }}">&gt;</a>
+                {% else %}
+                    <span class="disabled">&gt;</span>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function editB(b) {
+    document.getElementById('b_id').value = b.id;
+    document.getElementById('b_name').value = b.name;
+    document.getElementById('b_approved').checked = b.isapproved;
+    document.getElementById('b_order').value = b.orderby;
+    document.getElementById('btn_save').value = 'UPDATE';
+    window.scrollTo(0,0);
+}
+function resetForm() {
+    document.getElementById('b_id').value = '';
+    document.querySelector('form').reset();
+    document.getElementById('btn_save').value = 'SAVE';
+}
+</script>
+{% endblock %}

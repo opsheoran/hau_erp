@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h5 class="mainheadingborderbottom">Student Activity Course Allocation</h5>
+            
+            <form method="GET" class="mb-4 bg-light p-3 border">
+                <div class="row g-3">
+                    <div class="col-md-5">
+                        <label class="form-label small">College *</label>
+                        <select name="college_id" class="form-select form-select-sm" required onchange="this.form.submit()">
+                            <option value="">-- Select College --</option>
+                            {% for c in lookups.colleges %}
+                            <option value="{{ c.pk_collegeid }}" {% if filters.college_id|string == c.pk_collegeid|string %}selected{% endif %}>{{ c.collegename }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small">Session *</label>
+                        <select name="session_id" class="form-select form-select-sm" required onchange="this.form.submit()">
+                            <option value="">-- Select --</option>
+                            {% for s in lookups.sessions %}
+                            <option value="{{ s.pk_sessionid }}" {% if filters.session_id|string == s.pk_sessionid|string %}selected{% endif %}>{{ s.sessionname }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small">Degree *</label>
+                        <select name="degree_id" class="form-select form-select-sm" required onchange="this.form.submit()">
+                            <option value="">-- Select Degree --</option>
+                            {% for d in lookups.degrees %}
+                            <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small">Department / Specialization</label>
+                        <select name="branch_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                            <option value="">-- ALL --</option>
+                            {% for b in lookups.branches %}
+                            <option value="{{ b.Pk_BranchId }}" {% if filters.branch_id|string == b.Pk_BranchId|string %}selected{% endif %}>{{ b.Branchname }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary btn-sm w-100">VIEW STUDENTS</button>
+                    </div>
+                </div>
+            </form>
+
+            {% if items %}
+            <form method="POST">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                
+                <div class="bg-light p-3 border mb-3">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Select Activity to Allocate *</label>
+                            <select name="activity_dtl_id" class="form-select form-select-sm" required>
+                                <option value="">-- Select Activity --</option>
+                                {% for a in lookups.activities %}
+                                <option value="{{ a.id }}">{{ a.group_name }} - {{ a.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 pt-4 text-end">
+                            <button type="submit" name="action" value="ALLOCATE" class="btn btn-success btn-sm">ALLOCATE TO SELECTED</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive border" style="max-height: 500px;">
+                    <table class="table table-bordered table-sm table-striped mb-0 small">
+                        <thead class="table-dark sticky-top">
+                            <tr>
+                                <th class="text-center" width="50"><input type="checkbox" id="selectAll"></th>
+                                <th class="text-center" width="50">S.No</th>
+                                <th>Admission No</th>
+                                <th>Student Name</th>
+                                <th>Allocated Activities</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in items %}
+                            <tr>
+                                <td class="text-center"><input type="checkbox" name="student_ids[]" value="{{ s.pk_sid }}" class="itemCheckbox"></td>
+                                <td class="text-center">{{ loop.index }}</td>
+                                <td>{{ s.AdmissionNo }}</td>
+                                <td>{{ s.fullname }}</td>
+                                <td>{{ s.allocated_activities or '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+            {% elif filters.college_id %}
+            <div class="alert alert-info small text-center">No students found for the selected criteria.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('selectAll').addEventListener('change', function() {
+    document.querySelectorAll('.itemCheckbox').forEach(cb => cb.checked = this.checked);
+});
+</script>
+{% endblock %}

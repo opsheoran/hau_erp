@@ -1,0 +1,603 @@
+﻿from __future__ import annotations
+
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
+
+from app.db import DB
+
+
+def _parse_date(value: Optional[str]) -> Optional[str]:
+    if not value:
+        return None
+    s = str(value).strip()
+    if not s:
+        return None
+
+    for fmt in ("%Y-%m-%d", "%d/%m/%Y"):
+        try:
+            return datetime.strptime(s, fmt).strftime("%Y-%m-%d")
+        except Exception:
+            pass
+    return None
+
+
+class AppointingAuthorityModel:
+    TABLE = "SAL_Appointing_Authority"
+    _cols_cache: Optional[set] = None
+
+    @staticmethod
+    def _cols() -> set:
+        if AppointingAuthorityModel._cols_cache is not None:
+            return AppointingAuthorityModel._cols_cache
+        try:
+            rows = DB.fetch_all(
+                "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ?",
+                [AppointingAuthorityModel.TABLE],
+            )
+            AppointingAuthorityModel._cols_cache = {str(r["COLUMN_NAME"]).lower() for r in rows}
+        except Exception:
+            AppointingAuthorityModel._cols_cache = set()
+        return AppointingAuthorityModel._cols_cache
+
+    @staticmethod
+    def _pk_col() -> str:
+        cols = AppointingAuthorityModel._cols()
+        # Common live column name
+        if "pk_authid" in cols:
+            return "Pk_AuthId"
+        # Fallback
+        return "Pk_AuthId"
+
+    @staticmethod
+    def _audit_fields(user_id: Any, mode: str) -> Dict[str, Any]:
+        cols = AppointingAuthorityModel._cols()
+        fields: Dict[str, Any] = {}
+
+        if mode == "insert":
+            if "fk_insuserid" in cols:
+                fields["fk_insUserID"] = user_id
+            if "fk_insdateid" in cols:
+                fields["fk_insDateID"] = "GETDATE()"
+            if "insertuserid" in cols:
+                fields["InsertUserId"] = user_id
+            if "insertdate" in cols:
+                fields["InsertDate"] = "GETDATE()"
+
+        if "fk_upduserid" in cols:
+            fields["fk_updUserID"] = user_id
+        if "fk_upddateid" in cols:
+            fields["fk_updDateID"] = "GETDATE()"
+        if "updateuserid" in cols:
+            fields["UpdateUserId"] = user_id
+        if "updatedate" in cols:
+            fields["UpdateDate"] = "GETDATE()"
+
+        return fields
+
+    @staticmethod
+    def _build_insert_sql(fields: Dict[str, Any]) -> Tuple[str, List[Any]]:
+        col_names: List[str] = []
+        placeholders: List[str] = []
+        params: List[Any] = []
+
+        for col, value in fields.items():
+            if value is None:
+                continue
+            col_names.append(f"[{col}]")
+            if isinstance(value, str) and value.upper() == "GETDATE()":
+                placeholders.append("GETDATE()")
+            else:
+                placeholders.append("?")
+                params.append(value)
+
+        sql = f"INSERT INTO {AppointingAuthorityModel.TABLE} ({', '.join(col_names)}) VALUES ({', '.join(placeholders)})"
+        return sql, params
+
+    @staticmethod
+    def _build_update_sql(pk_col: str, pk_val: Any, fields: Dict[str, Any]) -> Tuple[str, List[Any]]:
+        sets: List[str] = []
+        params: List[Any] = []
+
+        for col, value in fields.items():
+            if value is None:
+                continue
+            if isinstance(value, str) and value.upper() == "GETDATE()":
+                sets.append(f"[{col}] = GETDATE()")
+            else:
+                sets.append(f"[{col}] = ?")
+                params.append(value)
+
+        sql = f"UPDATE {AppointingAuthorityModel.TABLE} SET {', '.join(sets)} WHERE [{pk_col}] = ?"
+        params.append(pk_val)
+        return sql, params
+
+    @staticmethod
+    def get_by_id(auth_id: Any) -> Optional[Dict[str, Any]]:
+        pk = AppointingAuthorityModel._pk_col()
+        try:
+            return DB.fetch_one(f"SELECT * FROM {AppointingAuthorityModel.TABLE} WHERE [{pk}] = ?", [auth_id])
+        except Exception:
+            return None
+
+    @staticmethod
+    def delete(auth_id: Any) -> None:
+        pk = AppointingAuthorityModel._pk_col()
+        DB.execute(f"DELETE FROM {AppointingAuthorityModel.TABLE} WHERE [{pk}] = ?", [auth_id])
+
+    @staticmethod
+    def list_records(status: Optional[str] = None, limit: int = 200) -> List[Dict[str, Any]]:
+        where = ""
+        params: List[Any] = []
+        if status:
+            where = " WHERE A.Status = ?"
+            params.append(status)
+
+        top = max(1, min(int(limit or 200), 500))
+        pk = AppointingAuthorityModel._pk_col()
+        query = f"""
+            SELECT TOP {top}
+                A.[{pk}] as auth_id,
+                A.OrderNo,
+                CONVERT(varchar, A.OrderDate, 23) as order_date_fmt,
+                A.EmpCode,
+                E.empname,
+                DS.designation,
+                DP.description as dept_name,
+                NDP.description as new_dept_name,
+                A.Status,
+                A.Remarks
+            FROM {AppointingAuthorityModel.TABLE} A
+            LEFT JOIN SAL_Employee_Mst E ON A.fk_EmpId = E.pk_empid
+            LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid
+            LEFT JOIN Department_Mst DP ON E.fk_deptid = DP.pk_deptid
+            LEFT JOIN Department_Mst NDP ON A.NewDepartment = NDP.pk_deptid
+            {where}
+            ORDER BY A.[{pk}] DESC
+        """
+        try:
+            return DB.fetch_all(query, params)
+        except Exception:
+            return []
+
+    @staticmethod
+    def save(form: Dict[str, Any], user_id: Any) -> None:
+        cols = AppointingAuthorityModel._cols()
+        pk = AppointingAuthorityModel._pk_col()
+        auth_id = str(form.get("auth_id") or "").strip()
+
+        fields: Dict[str, Any] = {}
+
+        if "fk_empid" in cols:
+            fields["fk_EmpId"] = form.get("emp_id")
+        if "empcode" in cols:
+            fields["EmpCode"] = form.get("emp_code")
+        if "orderno" in cols:
+            fields["OrderNo"] = form.get("order_no")
+        if "orderdate" in cols:
+            fields["OrderDate"] = _parse_date(form.get("order_date"))
+        if "status" in cols:
+            fields["Status"] = form.get("status")
+        if "remarks" in cols:
+            fields["Remarks"] = form.get("remarks")
+
+        mapping_pairs = [
+            ("OldControllingOffice", "old_controlling"),
+            ("NewControllingOffice", "new_controlling"),
+            ("OldDDO", "old_ddo"),
+            ("NewDDO", "new_ddo"),
+            ("OldDepartment", "old_dept"),
+            ("NewDepartment", "new_dept"),
+            ("OldSection", "old_section"),
+            ("NewSection", "new_section"),
+            ("OldDesig", "old_desg"),
+            ("NewDesig", "new_desg"),
+            ("OldFundType", "old_fund"),
+            ("NewFundType", "new_fund"),
+            ("OldSchemeGroup", "old_scheme_group"),
+            ("NewSchemeGroup", "new_scheme_group"),
+            ("OldSchemeCode", "old_scheme_code"),
+            ("NewSchemeCode", "new_scheme_code"),
+        ]
+        for col, key in mapping_pairs:
+            if col.lower() in cols:
+                fields[col] = form.get(key)
+
+        if auth_id:
+            fields.update(AppointingAuthorityModel._audit_fields(user_id, mode="update"))
+            sql, params = AppointingAuthorityModel._build_update_sql(pk, auth_id, fields)
+            DB.execute(sql, params)
+        else:
+            fields.update(AppointingAuthorityModel._audit_fields(user_id, mode="insert"))
+            sql, params = AppointingAuthorityModel._build_insert_sql(fields)
+            DB.execute(sql, params)
+
+    @staticmethod
+    def save_reliving(form: Dict[str, Any], user_id: Any) -> None:
+        cols = AppointingAuthorityModel._cols()
+        fields: Dict[str, Any] = {}
+
+        if "fk_empid" in cols:
+            fields["fk_EmpId"] = form.get("emp_id")
+        if "empcode" in cols:
+            fields["EmpCode"] = form.get("emp_code")
+        if "status" in cols:
+            fields["Status"] = form.get("status")
+        if "relievingdate" in cols:
+            fields["RelievingDate"] = _parse_date(form.get("relieving_date"))
+        if "remarks" in cols:
+            fields["Remarks"] = form.get("remarks")
+
+        mapping_pairs = [
+            ("OldControllingOffice", "old_controlling"),
+            ("NewControllingOffice", "new_controlling"),
+            ("OldDDO", "old_ddo"),
+            ("NewDDO", "new_ddo"),
+            ("OldDepartment", "old_dept"),
+            ("NewDepartment", "new_dept"),
+            ("OldSection", "old_section"),
+            ("NewSection", "new_section"),
+            ("OldDesig", "old_desg"),
+            ("NewDesig", "new_desg"),
+        ]
+        for col, key in mapping_pairs:
+            if col.lower() in cols:
+                fields[col] = form.get(key)
+
+        fields.update(AppointingAuthorityModel._audit_fields(user_id, mode="insert"))
+        sql, params = AppointingAuthorityModel._build_insert_sql(fields)
+        DB.execute(sql, params)
+
+    @staticmethod
+    def set_approve_date(emp_id: Any, approve_date: Optional[str], user_id: Any) -> int:
+        cols = AppointingAuthorityModel._cols()
+        if "approvedate" not in cols:
+            return 0
+
+        pk = AppointingAuthorityModel._pk_col()
+        row = DB.fetch_one(
+            f"""
+            SELECT TOP 1 [{pk}] as auth_id
+            FROM {AppointingAuthorityModel.TABLE}
+            WHERE fk_EmpId = ? AND ApproveDate IS NULL
+            ORDER BY [{pk}] DESC
+            """,
+            [emp_id],
+        )
+        if not row:
+            return 0
+
+        fields: Dict[str, Any] = {"ApproveDate": _parse_date(approve_date)}
+        fields.update(AppointingAuthorityModel._audit_fields(user_id, mode="update"))
+        sql, params = AppointingAuthorityModel._build_update_sql(pk, row["auth_id"], fields)
+        return DB.execute(sql, params)
+
+
+class NonTeachingPromotionModel:
+    TABLE_VERIFY = "SAL_NonTeachingPromotionVerification_Mst"
+    TABLE_APPROVAL = "sal_emp_NonteachersPromotion_Approval"
+    TABLE_VC_APPROVAL = "sal_emp_NonteachersPromotion_Approval"
+
+    TABLE_VERIFY_CANDIDATES = [
+        "SAL_NonTeachingPromotionVerification_Mst",
+        "SAL_NonTeachingEmpPromotion_Verification",
+        "SAL_NonTeachingEmpPromotionVerification_Mst",
+        "SAL_NonTeachingPromotionVerification",
+    ]
+    TABLE_APPROVAL_CANDIDATES = [
+        "sal_emp_NonteachersPromotion_Approval",
+        "SAL_NonTeachingVerificationList",
+        "SAL_NonTeachingPromotionApproval_Mst",
+        "SAL_NonTeachingEmpPromotion_Approval",
+        "SAL_NonTeachingPromotion_Approval",
+    ]
+    TABLE_VC_APPROVAL_CANDIDATES = [
+        "SAL_NonTeachingEmpPromotion_VCApproval",
+        "SAL_NonTeachingEmpPromotionVCApproval_Mst",
+        "SAL_NonTeachingPromotionVCApproval_Mst",
+        "SAL_NonTeachingPromotion_VCApproval",
+        "sal_emp_NonteachersPromotion_Approval",
+    ]
+
+    @staticmethod
+    def _cols(table: str) -> List[str]:
+        table_name = str(table or "").strip()
+        if not table_name:
+            return []
+        # Strip any schema/db prefix and brackets.
+        if "." in table_name:
+            table_name = table_name.split(".")[-1]
+        table_name = table_name.strip("[]")
+        try:
+            rows = DB.fetch_all(
+                "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE UPPER(TABLE_NAME) = UPPER(?) ORDER BY ORDINAL_POSITION",
+                [table_name],
+            )
+            cols = [str(r["COLUMN_NAME"]) for r in rows]
+            if cols:
+                return cols
+        except Exception:
+            pass
+
+        # Fallback for DBs that restrict INFORMATION_SCHEMA.
+        try:
+            rows = DB.fetch_all(
+                """
+                SELECT c.name as COLUMN_NAME
+                FROM sys.columns c
+                INNER JOIN sys.objects o ON c.object_id = o.object_id
+                WHERE o.name = ?
+                ORDER BY c.column_id
+                """,
+                [table_name],
+            )
+            return [str(r["COLUMN_NAME"]) for r in rows]
+        except Exception:
+            return []
+
+    @staticmethod
+    def _pick_table(candidates: List[str], fallback: str) -> str:
+        for t in candidates or []:
+            try:
+                if NonTeachingPromotionModel._cols(t):
+                    return t
+            except Exception:
+                continue
+        return fallback
+
+    @staticmethod
+    def _emp_join(table: str) -> Optional[Dict[str, str]]:
+        cols = NonTeachingPromotionModel._cols(table)
+        if not cols:
+            return None
+
+        cols_lc = {c.lower(): c for c in cols}
+
+        # Prefer joining via employee id if present.
+        for key in (
+            "fk_empid",
+            "fk_emp_id",
+            "fk_emp",
+            "empid",
+            "emp_id",
+            "fk_employeeid",
+            "fk_employee_id",
+            "employeeid",
+            "employee_id",
+        ):
+            col = cols_lc.get(key)
+            if col:
+                return {"col": col, "mode": "empid"}
+
+        # Fallback: some tables store employee code instead of pk_empid.
+        for key in ("empcode", "emp_code", "employee_code", "employeecode"):
+            col = cols_lc.get(key)
+            if col:
+                return {"col": col, "mode": "empcode"}
+
+        return None
+
+    @staticmethod
+    def _emp_join_cols(table: str) -> List[str]:
+        cols = NonTeachingPromotionModel._cols(table)
+        if not cols:
+            return []
+
+        cols_lc = {c.lower(): c for c in cols}
+
+        join_cols: List[str] = []
+
+        for key in (
+            "fk_empid",
+            "fk_emp_id",
+            "fk_emp",
+            "empid",
+            "emp_id",
+            "fk_employeeid",
+            "fk_employee_id",
+            "employeeid",
+            "employee_id",
+        ):
+            col = cols_lc.get(key)
+            if col and col not in join_cols:
+                join_cols.append(col)
+
+        for key in (
+            "empcode",
+            "emp_code",
+            "employee_code",
+            "employeecode",
+            "employeecode1",
+            "employeecode2",
+            "employeecod",
+            "employee_code1",
+            "employee_code2",
+        ):
+            col = cols_lc.get(key)
+            if col and col not in join_cols:
+                join_cols.append(col)
+
+        return join_cols
+
+    @staticmethod
+    def _pk_col(table: str) -> Optional[str]:
+        cols = NonTeachingPromotionModel._cols(table)
+        for c in cols:
+            lc = c.lower()
+            if lc.startswith("pk_") or lc.startswith("pk"):
+                return c
+        return cols[0] if cols else None
+
+    @staticmethod
+    def _emp_fk_col(table: str) -> Optional[str]:
+        cols = NonTeachingPromotionModel._cols(table)
+        for cand in ("fk_empid", "fk_emp_id", "empid", "emp_id"):
+            for c in cols:
+                if c.lower() == cand:
+                    return c
+        return None
+
+    @staticmethod
+    def _status_col(table: str) -> Optional[str]:
+        cols = NonTeachingPromotionModel._cols(table)
+        for cand in ("status", "verifystatus", "approvalstatus", "recommendstatus"):
+            for c in cols:
+                if c.lower() == cand:
+                    return c
+        return None
+
+    @staticmethod
+    def list_verify(status: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
+        table = NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_VERIFY_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_VERIFY,
+        )
+        pk = NonTeachingPromotionModel._pk_col(table)
+        emp_join_cols = NonTeachingPromotionModel._emp_join_cols(table)
+        status_col = NonTeachingPromotionModel._status_col(table)
+
+        where = ""
+        params: List[Any] = []
+        if status and status_col:
+            where = f" WHERE V.[{status_col}] = ?"
+            params.append(status)
+
+        top = max(1, min(int(limit or 100), 500))
+        order = f" ORDER BY V.[{pk}] DESC" if pk else ""
+
+        join = ""
+        select_emp = ""
+        if emp_join_cols:
+            conds = []
+            for c in emp_join_cols:
+                val = f"LTRIM(RTRIM(TRY_CONVERT(varchar(50), V.[{c}])))"
+                conds.append(
+                    f"({val} = LTRIM(RTRIM(TRY_CONVERT(varchar(50), E.pk_empid))) OR {val} = LTRIM(RTRIM(E.empcode)))"
+                )
+            join = f" LEFT JOIN SAL_Employee_Mst E ON ({' OR '.join(conds)}) LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid"
+            select_emp = ", E.empcode as empcode, E.empname as empname, DS.designation as designation"
+
+        q = f"SELECT TOP {top} V.*{select_emp} FROM {table} V{join}{where}{order}"
+        try:
+            return DB.fetch_all(q, params)
+        except Exception:
+            return []
+
+    @staticmethod
+    def set_verify_status(row_id: Any, status: str) -> int:
+        table = NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_VERIFY_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_VERIFY,
+        )
+        pk = NonTeachingPromotionModel._pk_col(table)
+        status_col = NonTeachingPromotionModel._status_col(table)
+        if not pk or not status_col:
+            return 0
+        return DB.execute(f"UPDATE {table} SET [{status_col}] = ? WHERE [{pk}] = ?", [status, row_id])
+
+    @staticmethod
+    def list_approval(
+        status: Optional[str] = None,
+        limit: int = 100,
+        table_override: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
+        table = table_override or NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_APPROVAL_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_APPROVAL,
+        )
+        pk = NonTeachingPromotionModel._pk_col(table)
+        status_col = NonTeachingPromotionModel._status_col(table)
+
+        where = ""
+        params: List[Any] = []
+        if status and status_col:
+            where = f" WHERE A.[{status_col}] = ?"
+            params.append(status)
+
+        top = max(1, min(int(limit or 100), 500))
+        order = f" ORDER BY A.[{pk}] DESC" if pk else ""
+
+        # Approval table typically points to verification rows via fk_VerId. Emp details live in verification.
+        a_cols = {c.lower(): c for c in NonTeachingPromotionModel._cols(table)}
+        fk_ver_col = None
+        for cand in ("fk_verid", "fk_ver_id", "fk_verificationid", "fk_verification_id"):
+            fk_ver_col = a_cols.get(cand)
+            if fk_ver_col:
+                break
+
+        v_table = NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_VERIFY_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_VERIFY,
+        )
+        v_pk = NonTeachingPromotionModel._pk_col(v_table) or "Pk_VerId"
+        v_cols = {c.lower(): c for c in NonTeachingPromotionModel._cols(v_table)}
+        v_empid_col = None
+        for cand in ("fk_empid", "fk_emp_id", "empid", "emp_id", "fk_employeeid", "employeeid"):
+            v_empid_col = v_cols.get(cand)
+            if v_empid_col:
+                break
+
+        v_desg_col = v_cols.get("fk_desgid") or v_cols.get("fk_desg_id") or v_cols.get("desgid") or v_cols.get("desg_id")
+        v_empcode_col = v_cols.get("empcode") or v_cols.get("emp_code") or v_cols.get("employeecode")
+
+        join = ""
+        select_emp = ", E.empcode as empcode, E.empname as empname, DS.designation as designation"
+        if fk_ver_col:
+            join = f" LEFT JOIN {v_table} V ON A.[{fk_ver_col}] = V.[{v_pk}]"
+            if v_empid_col:
+                join += f" LEFT JOIN SAL_Employee_Mst E ON V.[{v_empid_col}] = E.pk_empid"
+            elif v_empcode_col:
+                join += f" LEFT JOIN SAL_Employee_Mst E ON V.[{v_empcode_col}] = E.empcode"
+            else:
+                join += " LEFT JOIN SAL_Employee_Mst E ON 1=0"
+
+            if v_desg_col:
+                join += f" LEFT JOIN SAL_Designation_Mst DS ON V.[{v_desg_col}] = DS.pk_desgid"
+            else:
+                join += " LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid"
+        else:
+            # Fallback: if there's no fk_VerId, try joining directly by any emp columns on approval table.
+            emp_join_cols = NonTeachingPromotionModel._emp_join_cols(table)
+            if emp_join_cols:
+                conds = []
+                for c in emp_join_cols:
+                    val = f"LTRIM(RTRIM(TRY_CONVERT(varchar(50), A.[{c}])))"
+                    conds.append(
+                        f"({val} = LTRIM(RTRIM(TRY_CONVERT(varchar(50), E.pk_empid))) OR {val} = LTRIM(RTRIM(E.empcode)))"
+                    )
+                join = f" LEFT JOIN SAL_Employee_Mst E ON ({' OR '.join(conds)}) LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid"
+            else:
+                select_emp = ""
+
+        q = f"SELECT TOP {top} A.*{select_emp} FROM {table} A{join}{where}{order}"
+        try:
+            return DB.fetch_all(q, params)
+        except Exception:
+            return []
+
+    @staticmethod
+    def set_approval_status(row_id: Any, status: str, table_override: Optional[str] = None) -> int:
+        table = table_override or NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_APPROVAL_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_APPROVAL,
+        )
+        pk = NonTeachingPromotionModel._pk_col(table)
+        status_col = NonTeachingPromotionModel._status_col(table)
+        if not pk or not status_col:
+            return 0
+        return DB.execute(f"UPDATE {table} SET [{status_col}] = ? WHERE [{pk}] = ?", [status, row_id])
+
+    @staticmethod
+    def list_vc_approval(status: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
+        table = NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_VC_APPROVAL_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_VC_APPROVAL,
+        )
+        return NonTeachingPromotionModel.list_approval(status, limit, table_override=table)
+
+    @staticmethod
+    def set_vc_approval_status(row_id: Any, status: str) -> int:
+        table = NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_VC_APPROVAL_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_VC_APPROVAL,
+        )
+        return NonTeachingPromotionModel.set_approval_status(row_id, status, table_override=table)

@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<span>Transactions</span>&nbsp;&gt;&nbsp;<span>Job Details</span>&nbsp;&gt;&nbsp;<strong>Employee Loan Details</strong>
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="target_emp_id" value="{{ employee_info.pk_empid if employee_info else '' }}">
+    <input type="hidden" name="loan_id" value="{{ edit_data.id if edit_data else '' }}">
+
+    <!-- SHARED SEARCH MODAL -->
+    {% include 'establishment/_search_modal.html' %}
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">Employee Loan Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Employee Code</td>
+                <td class="colon">:</td>
+                <td class="required" width="30%">
+                    <input name="empcode" type="text" class="textbox w-150" value="{{ employee_info.empcode if employee_info else '' }}" readonly>
+                    <a href="javascript:void(0);" onclick="openEmpSearch('emp_id', '')">
+                        <img src="{{ url_for('static', filename='srec.jpg') }}" border="0" style="vertical-align:middle; cursor:pointer;">
+                    </a>
+                    <span class="required">*</span>
+                </td>
+                <td width="2%"></td>
+                <td class="vtext" width="15%">Employee Name</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="text" class="textbox w-250" value="{{ employee_info.empname if employee_info else '' }}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ employee_info.dept_name if employee_info else '' }}" readonly>
+                </td>
+                <td></td>
+                <td class="vtext">Designation</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ employee_info.designation if employee_info else '' }}" readonly>
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td class="vtext">Date</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="loan_date" type="text" class="textboxdate w-150" value="{{ edit_data.date_fmt if edit_data else '' }}" required placeholder="DD/MM/YYYY">
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Amount</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="amount" type="text" class="textbox w-150" value="{{ edit_data.Amount if edit_data else '' }}" required onkeypress="return isNumberKey(event)">
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Purpose</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <textarea name="purpose" class="textbox w-300" rows="2" required>{{ edit_data.Purpose if edit_data else '' }}</textarea>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Type</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="type" type="text" class="textbox w-200" value="{{ edit_data.Type if edit_data else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Status</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="status" type="text" class="textbox w-200" value="{{ edit_data.Status if edit_data else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+                <td colspan="4"></td>
+            </tr>
+            
+            <tr><td colspan="7" height="20"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    {% if (edit_data and perm.AllowUpdate) or (not edit_data and perm.AllowAdd) %}
+                    <input type="submit" name="action" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" class="button-common">
+                    {% endif %}
+                    <input type="submit" name="action" value="RESET" class="button-common" formnovalidate>
+                </td>
+            </tr>
+            
+            {% if employee_info %}
+            <tr><td colspan="7" height="30"></td></tr>
+            <tr>
+                <td colspan="7" class="tablesubheading">
+                    <span class="subheadingborderbottom">List of Employee Loan Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td colspan="7">
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="5%">S. No.</th>
+                                <th width="15%">Date</th>
+                                <th width="15%">Amount</th>
+                                <th width="25%">Purpose</th>
+                                <th width="15%">Type</th>
+                                <th width="15%">Status</th>
+                                <th width="10%">EDIT / DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for l in loans %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                <td align="center">{{ loop.index }}</td>
+                                <td align="center">{{ l.date_fmt }}</td>
+                                <td align="right" style="padding-right:10px;">{{ l.Amount }}</td>
+                                <td>{{ l.Purpose }}</td>
+                                <td>{{ l.Type }}</td>
+                                <td>{{ l.Status }}</td>
+                                <td align="center">
+                                    <a href="{{ url_for('establishment.employee_loan_details', emp_id=emp_id, edit_id=l.id) }}">
+                                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                                    </a>
+                                    {% if perm.AllowDelete %}
+                                    &nbsp;
+                                    <a href="{{ url_for('establishment.employee_loan_details', emp_id=emp_id, delete_id=l.id) }}" onclick="return confirm('Are you sure?')">
+                                        <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="7" align="center" style="padding:10px;">No loan details found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function selectItem(id, name) {
+        window.location.href = "{{ url_for('establishment.employee_loan_details') }}?emp_id=" + id;
+    }
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
+            return false;
+        return true;
+    }
+</script>
+{% endblock %}

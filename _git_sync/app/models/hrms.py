@@ -124,9 +124,52 @@ class EmployeeLoanModel:
 
 class IncomeTaxModel:
     @staticmethod
-    def get_it_declarations(emp_id, fin_id):
-        query = "SELECT * FROM SAL_ITaxDeclaration_Trn WHERE fk_empid = ? AND fk_finid = ?"
+    def get_sections():
+        return DB.fetch_all("SELECT * FROM SAL_Sections_Mst WHERE active = 1 ORDER BY orderby")
+
+    @staticmethod
+    def get_subsections(sec_id):
+        return DB.fetch_all("SELECT * FROM SAL_SubSections_Mst WHERE fk_secid = ? AND active = 1", [sec_id])
+
+    @staticmethod
+    def get_employee_declarations(emp_id, fin_id):
+        query = """
+            SELECT D.*, S.description as section_name 
+            FROM SAL_Employee_SectionDocStatus D 
+            INNER JOIN SAL_Sections_Mst S ON D.fk_secid = S.pk_secid 
+            WHERE D.fk_empid = ? AND D.fk_finid = ?
+        """
         return DB.fetch_all(query, [emp_id, fin_id])
+
+    @staticmethod
+    def save_declaration(decl_data, emp_id, fin_id, user_id):
+        conn = DB.get_connection()
+        cursor = conn.cursor()
+        date_id = datetime.now().strftime("%b %d %Y %H:")[:15]
+        try:
+            # Delete existing for this year to overwrite
+            cursor.execute("DELETE FROM SAL_Employee_SectionDocStatus WHERE fk_empid = ? AND fk_finid = ?", [emp_id, fin_id])
+            
+            for d in decl_data:
+                sql = """
+                    INSERT INTO SAL_Employee_SectionDocStatus (
+                        fk_empid, fk_secid, fk_subsecid, docsub_Amt, fk_finid, 
+                        fk_insUserID, fk_insDateID, fk_updUserID, fk_updDateID, submitdate
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())
+                """
+                cursor.execute(sql, [emp_id, d['sec_id'], d['subsec_id'], d['amount'], fin_id, user_id, date_id, user_id, date_id])
+            
+            conn.commit()
+            return True
+        except Exception as e:
+            conn.rollback()
+            raise e
+        finally:
+            conn.close()
+
+    @staticmethod
+    def get_it_declarations(emp_id, fin_id):
+        return IncomeTaxModel.get_employee_declarations(emp_id, fin_id)
 
 class EmployeePortalModel:
     @staticmethod
@@ -138,7 +181,7 @@ class EmployeePortalModel:
         
         header_sql = f"""
             SELECT E.empname, E.empcode, DS.designation, DP.description as department, 
-            G.gpfno, G.PFType, FY.Lyear, FY.pk_finid, BM.OpningBalEmp as OpeningBalance
+            G.gpfno, G.PFType, FY.Lyear, FY.pk_finid, ISNULL(BM.OpningBalEmp, 0) as OpeningBalance
             FROM SAL_Employee_Mst E
             INNER JOIN gpf_employee_details G ON E.pk_empid = G.fk_empid
             LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid

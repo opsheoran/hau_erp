@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tablesubheading">Loan Apply</div>
+    <div style="padding: 15px;">
+        <form method="POST">
+            <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:15px;">Application Detail</div>
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Employee Code</td><td class="colon">:</td>
+                    <td width="34%">{{ e.empcode }}</td>
+                    <td class="vtext" width="15%">DDO</td><td class="colon">:</td>
+                    <td>{{ e.ddo_name }}</td>
+                </tr>
+                <tr>
+                    <td class="vtext">Employee Name</td><td class="colon">:</td>
+                    <td>{{ e.empname }}</td>
+                    <td class="vtext">Department</td><td class="colon">:</td>
+                    <td>{{ e.dept_name }}</td>
+                </tr>
+                <tr>
+                    <td class="vtext">Designation</td><td class="colon">:</td>
+                    <td>{{ e.designation }}</td>
+                    <td class="vtext">PF Type</td><td class="colon">:</td>
+                    <td>GPF</td>
+                </tr>
+                <tr><td colspan="6"><hr style="border:none; border-top:1px dashed #ccc; margin:10px 0;"></td></tr>
+                <tr>
+                    <td class="vtext">Loan/Adv. Type</td><td class="colon">:</td>
+                    <td>
+                        <select name="loan_type" class="dropdown" required style="width: 200px;">
+                            <option value="">-- Select Loan/Adv. Type --</option>
+                            {% for t in types %}<option value="{{ t.id }}">{{ t.description }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                    <td class="vtext">Dated</td><td class="colon">:</td>
+                    <td><input type="text" value="{{ today }}" readonly class="textbox" style="width: 100px; background: #eee;"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Loan/Adv. Nature</td><td class="colon">:</td>
+                    <td>
+                        <select name="nature" class="dropdown" required style="width: 200px;">
+                            <option value="">-- Select Loan/Adv. Nature --</option>
+                            {% for n in natures %}<option value="{{ n.id }}">{{ n.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                    <td class="vtext">Amount</td><td class="colon">:</td>
+                    <td><input type="number" name="amount" class="textbox" step="0.01" required style="width: 120px;"> <span class="required">*</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Loan Purpose</td><td class="colon">:</td>
+                    <td>
+                        <select name="purpose" class="dropdown" required style="width: 200px;">
+                            <option value="">--Select Loan Purpose--</option>
+                            {% for p in purposes %}<option value="{{ p.name }}">{{ p.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                    <td class="vtext">Remarks</td><td class="colon">:</td>
+                    <td><textarea name="remarks" class="textbox" style="width:300px; height:40px;"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Send To</td><td class="colon">:</td>
+                    <td colspan="4">
+                        <select name="send_to" class="dropdown" required style="width: 350px;">
+                            <option value="">-- Select Employee --</option>
+                            {% for emp in employees %}<option value="{{ emp.id }}">{{ emp.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top: 20px;">
+                        <input type="submit" value="SUBMIT" class="button-common" style="background:#3c8dbc; color:white; padding: 5px 30px;">
+                        <input type="reset" value="RESET" class="button-common" style="margin-left:10px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 40px;">
+            <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">List of Employee (Applied For Loan)</div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td>S. No.</td><td>Loan/Adv.Type</td><td>Loan/Adv.Nature</td><td>Dated</td><td>Amount</td><td>Print</td><td>EDIT</td><td>DELETE</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in history %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td>{{ h.LoanType }}</td>
+                        <td align="center">{{ h.loanNature }}</td>
+                        <td align="center">{{ h.ApplyDate }}</td>
+                        <td align="right">{{ "{:,.2f}".format(h.amount) }}</td>
+                        <td align="center">
+                            <a href="{{ url_for('hrms.download_loan_report', apply_id=h.pk_applyid) }}" target="_blank" style="color:blue;">Print</a>
+                        </td>
+                        <td align="center">
+                            <a href="#"><img src="{{ url_for('static', filename='images/Edit.gif') }}"></a>
+                        </td>
+                        <td align="center">
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="apply_id" value="{{ h.pk_applyid }}">
+                                <button type="submit" style="background:none; border:none; padding:0; cursor:pointer;">
+                                    <img src="{{ url_for('static', filename='images/Delete.gif') }}">
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="8" align="center" style="padding:20px;">No Record Found!</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

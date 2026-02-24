@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Dean PGS Course Plan Approval</span></div>
+    
+    <div style="padding: 10px;">
+        <!-- FILTER FORM -->
+        <form method="GET" id="filterForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="college_id" class="dropdown w-300" required onchange="handleFilterChange()">
+                                <option value="0">--Select College--</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext" width="15%">Admitted Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" class="dropdown w-200" required>
+                                <option value="0">--Select Academic Session--</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" class="dropdown w-300" required onchange="handleFilterChange()">
+                                <option value="0">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext">Specialization</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="branch_id" class="dropdown w-200">
+                                <option value="0">--Select Specialization--</option>
+                                {% for b in lookups.branches %}
+                                <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="10"></td></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="4">
+                            <input type="submit" value="GET STUDENTS" class="button-common" style="width:120px;">
+                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="window.location.href='{{ url_for('academics.dean_pgs_course_plan_approval') }}'">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+
+        <!-- STUDENT SELECTION -->
+        <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="vtext" width="15%">Student Name</td>
+                    <td class="colon">:</td>
+                    <td class="required">
+                        <select id="ddlStudent" name="sid" class="dropdown w-300" onchange="loadStudent(this.value)">
+                            <option value="">--Select Student Name--</option>
+                            {% for s in students %}
+                            <option value="{{ s.pk_sid }}" {% if sid|string == s.pk_sid|string %}selected{% endif %}>{{ s.fullname }} [ {{ s.enrollmentno }} ]</option>
+                            {% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="viewAdvisorsList()">View Advisors List</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        {% if course_plan %}
+        <br>
+        <!-- CREDIT SUMMARY -->
+        {% set stats = {'total': 0, 'major': 0, 'minor': 0, 'supporting': 0, 'research': 0, 'seminar': 0, 'nc': 0, 'de': 0} %}
+        {% for c in course_plan %}
+            {% set cr = (c.crhr_theory|float) + (c.crhr_practical|float) %}
+            {% if stats.update({'total': stats.total + cr}) %}{% endif %}
+            {% if c.coursetype == 'MA' %}{% if stats.update({'major': stats.major + cr}) %}{% endif %}
+            {% elif c.coursetype == 'MI' %}{% if stats.update({'minor': stats.minor + cr}) %}{% endif %}
+            {% elif c.coursetype == 'SU' %}{% if stats.update({'supporting': stats.supporting + cr}) %}{% endif %}
+            {% elif c.coursetype == 'NC' %}{% if stats.update({'nc': stats.nc + cr}) %}{% endif %}
+            {% elif c.coursetype == 'DE' %}{% if stats.update({'de': stats.de + cr}) %}{% endif %}
+            {% endif %}
+            
+            {% set name_up = c.coursename|upper %}
+            {% if 'RESEARCH' in name_up or '599' in c.coursecode or '699' in c.coursecode %}
+                {% if stats.update({'research': stats.research + cr}) %}{% endif %}
+            {% endif %}
+            {% if 'SEMINAR' in name_up or '591' in c.coursecode or '691' in c.coursecode %}
+                {% if stats.update({'seminar': stats.seminar + cr}) %}{% endif %}
+            {% endif %}
+        {% endfor %}
+
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="form-table">
+            <tbody>
+                <tr>
+                    <td style="width: 250px"><b>Overall Total Credits</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">{{ stats.total }}</span></td>
+                    <td style="width: 250px"><b>Total Credit (Major Field)</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">{{ stats.major }}</span></td>
+                    <td style="width: 250px"><b>Total Credit (Minor Field)</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">{{ stats.minor }}</span></td>
+                    <td style="width: 250px"><b>Total Credit (Supporting Field)</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">{{ stats.supporting }}</span></td>
+                </tr>
+                <tr>
+                    <td style="width: 250px"><b>Total Credit (Research Field)</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">{{ stats.research }}</span></td>
+                    <td style="width: 250px"><b>Total Credit (Seminar Field)</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">{{ stats.seminar }}</span></td>
+                    <td style="width: 250px"><b>Total Credit (NON Credit Field)</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">{{ stats.nc }}</span></td>
+                    <td style="width: 250px"><b>Total Credit (Deficiency Field)</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">{{ stats.de }}</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="color:seagreen; font-size:10px; margin:10px 0; font-weight:bold;">
+            Note:-1)LightGray for major specialization courses 2)LightBlue for minor specialization courses 3)LightGreen for supporting specialization courses 4)LightSkyBlue for others courses from other degrees 5)LightCyan for Non Credit Compulsory courses
+        </div>
+
+        <div class="tablesubheading"><span class="subheadingborderbottom">Course Plan Details</span></div>
+        <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4; margin-top:10px;">
+            <table class="table-grid-view" width="100%" id="gvCoursePlan">
+                <thead>
+                    <tr class="header-style">
+                        <th width="5%">S.No.</th>
+                        <th>Course Code</th>
+                        <th>Course Name</th>
+                        <th>Credit Hours (T+P)</th>
+                        <th>Course Plan Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in course_plan %}
+                    <tr class="{% if loop.index is even %}item-style-alt{% else %}item-style{% endif %}" align="center" 
+                        style="background-color: {{ 'LightGray' if c.coursetype == 'MA' else 'LightBlue' if c.coursetype == 'MI' else 'LightGreen' if c.coursetype == 'SU' else 'LightGrey' if c.coursetype == 'CP' else 'LightCyan' if c.coursetype == 'NC' else 'white' }};">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ c.coursecode }}</td>
+                        <td align="left">{{ c.coursename }}</td>
+                        <td>{{ c.crhr_theory }} + {{ c.crhr_practical }}</td>
+                        <td>{{ c.type_name }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+        <form method="POST">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="sid" value="{{ sid }}">
+            <div style="text-align:center; margin-top:20px;">
+                <input type="submit" name="action" value="APPROVE" class="button-common" style="width:100px;">
+                <input type="submit" name="action" value="REJECT" class="button-common" style="width:100px; margin-left:10px;">
+            </div>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+window.addEventListener('beforeunload', () => {
+    localStorage.setItem('dean_pgs_cp_scroll', window.scrollY);
+});
+window.addEventListener('load', () => {
+    const scrollPos = localStorage.getItem('dean_pgs_cp_scroll');
+    if (scrollPos) {
+        window.scrollTo(0, parseInt(scrollPos));
+        localStorage.removeItem('dean_pgs_cp_scroll');
+    }
+});
+
+function handleFilterChange() {
+    localStorage.setItem('dean_pgs_cp_scroll', window.scrollY);
+    document.getElementById('filterForm').submit();
+}
+
+function loadStudent(sid) {
+    if(!sid) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set('sid', sid);
+    localStorage.setItem('dean_pgs_cp_scroll', window.scrollY);
+    window.location.href = url.toString();
+}
+
+function viewAdvisorsList() {
+    const sid = document.getElementById('ddlStudent').value;
+    if(!sid) {
+        alert('Please select a student first.');
+        return;
+    }
+    window.open('/academics/student/' + sid + '/advisors_popup', '_blank', 'width=800,height=500,scrollbars=yes,resizable=yes');
+}
+</script>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tablesubheading">Download Salary Slip</div>
+    <div style="padding: 20px;">
+        <form method="POST">
+            <table class="form-table" style="max-width: 600px;">
+                <tr>
+                    <td class="vtext" width="30%">Report Type</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="report_type" class="dropdown" style="width: 100%;">
+                            <option value="R">Regular Salary</option>
+                            <option value="S">Stop Salary</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Month</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="month" class="dropdown" style="width: 100%;" required>
+                            <option value="">-- Select Month --</option>
+                            {% for m in months %}
+                            <option value="{{ m.id }}">{{ m.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Year</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="year" class="dropdown" style="width: 100%;" required>
+                            <option value="">-- Select Year --</option>
+                            {% for y in years %}
+                            <option value="{{ y }}">{{ y }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td><td></td>
+                    <td style="padding-top: 20px;">
+                        <button type="submit" class="btn-hau btn-hau-primary">VIEW SALARY SLIP</button>
+                        <button type="reset" class="btn-hau" style="margin-left: 10px;">RESET</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)https://hauiums.in/Leave/SAL_EarnedLeave_Details.aspx?Mwpid=5190 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Earned Leave Details_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Earned Leave Details_files/default.css" type="text/css" rel="stylesheet"><link href="./Earned Leave Details_files/font.css" type="text/css" rel="stylesheet"><link href="./Earned Leave Details_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Earned Leave Details_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/Leave/SAL_EarnedLeave_Details.aspx?Mwpid=5190" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTExMDQ0MjExNTYPFgIeBnBvc3RpZAUkYjdhMWJjNmItYzNhMS00MjYxLWJkMjQtOWJiNTc3Mzc3MzY5FgJmDw8WAh4HUGVuZGluZwUBMGQWAgIBD2QWEAICDw8WAh4EVGV4dAUITXMuIFJlbnVkZAIEDw8WAh8CBRtMTFQuIC0gMi8yMS8yMDI2IDM6MTg6MDUgUE1kZAIFDw8WAh8CBRtDTFQuIC0gMi8yMS8yMDI2IDM6MTg6MTkgUE1kZAIGDw8WAh8CBQhNcy4gUmVudWRkAgcPDxYCHwIFDUNPQlMmSCwgSGlzYXJkZAIJD2QWAmYPFgIfAgV1PHNwYW4+VHJhbnNhY3Rpb25zPC9zcGFuPiZuYnNwOz4mbmJzcDs8c3Bhbj5QZXJzb25hbCBEZXRhaWxzPC9zcGFuPiZuYnNwOz4mbmJzcDs8c3Ryb25nPkVhcm5lZCBMZWF2ZSBEZXRhaWxzPC9TdHJvbmc+ZAIKD2QWGGYPEGRkFgBkAgEPDxYCHwIFCGhhdTAwMjEyZGQCAg8PFgIfAgUST20gUGFya2FzaCBTaGVvcmFuZGQCAw8QDxYGHg1EYXRhVGV4dEZpZWxkBQdlbXBjb2RlHg5EYXRhVmFsdWVGaWVsZAUIcGtfZW1waWQeC18hRGF0YUJvdW5kZ2QQFQIVLS0gU2VsZWN0IEVtcGxveWVlIC0tHU9tIFBhcmthc2ggU2hlb3JhbiB8IEhBVTAwMjEyFQIABkVTLTI3MRQrAwJnZxYBAgFkAgQPDxYCHwIFCVByb2Zlc3NvcmRkAgUPDxYCHwIFGk1hdGhlbWF0aWNzIGFuZCBTdGF0aXN0aWNzZGQCBg8PFgIfAgUKMjAvMTIvMjAwMGRkAgcPD2QWAh4IcmVhZG9ubHkFCHJlYWRvbmx5ZAIIDxAPFgYfAwUJbGVhdmV0eXBlHwQFCmZrX2xlYXZlaWQfBWdkEBUKFy0tIFNlbGVjdCBMZWF2ZSBUeXBlIC0tDEVhcm5lZCBMZWF2ZRBDaGlsZCBDYXJlIExlYXZlDkhhbGYgUGF5IExlYXZlD01hdGVybml0eSBMZWF2ZQ9QYXRlcm5pdHkgTGVhdmULU3R1ZHkgTGVhdmUcTGVhdmUgV2l0aG91dCBBbGxvd2FuY2UoRU9MKSVNYXRlcm5pdHkgTGVhdmUoQWJvcnRpb24vTWlzY2FycmlhZ2UpDU1lZGljYWwgTGVhdmUVCgEwATIBOAIxMgIxNAIxNQIxNgIxNwI0MwI0NhQrAwpnZ2dnZ2dnZ2dnFgECBmQCCQ8PZBYCHwYFCHJlYWRvbmx5ZAIKDxAPFgQeDUFudGhlbVZpc2libGVoHgdFbmFibGVkaGRkFgFmZAIPDzwrAAsBAA8WEB4LXyFJdGVtQ291bnRmHghEYXRhS2V5cxYAHglQYWdlQ291bnQCAR4RQWxsb3dDdXN0b21QYWdpbmdnHhVfIURhdGFTb3VyY2VJdGVtQ291bnRmHg1TZWxlY3RlZEluZGV4Av////8PHhBWaXJ0dWFsSXRlbUNvdW50Zh4QQ3VycmVudFBhZ2VJbmRleGZkZAILDw8WAh8CZWRkGAEFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYBBQxjdGwwMCRocGxCdG5bFAyNN3k4VOohuBMXR+ZCPUxDQ2UUl8ySzPLDeFI3aQ==">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Earned Leave Details_files/WebResource.axd" type="text/javascript"></script>
+<script src="./Earned Leave Details_files/WebResource(1).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="A1EF3DB5">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdABgyi9GZOjeG7zd+Dr/rrtmbRyk5P+91hMCfDVCSoqBkp19EMnyAvK0hdPzAYodcKSQZuT3VXycYim14UkInEOtUxW7nqdHyY0YYGv2JCJYIc1q4GhVgAbWl3CIM1vS+QkqJOg7QOwjIGwmfpCCTuSrlYsOufRMlscnhOPdmuIoJgwoQqHk3jWesoahVsilcGRurOAQiAjZa/UwitK9nYi7YC3RCbAU7C1Kx5oMXoWyT9itIoCUxX3XPugOf/TfzU/kSMVBd0OsV6ayko64d6FkgJPhbcR8tLo738EPhlYy04obsJfCpas+/hscYNKhpxfbWjGgN4AXYUxWENeSlJxXTn0CNZV/Q/tqsb0lK8bhqrK9HQMKEjdTWpj7UX7eYSdHMY/RLNAjxVcZ6WX9RoiZuAp0zOlgpovntKAxGXQ/Uic0vA2elftJoaCNOq7dV7GLLqNURbvMcLLODojxzY27ZGPJEGWqd22pN0gIbuZuspn7pjIbBfzjhEpaWLcEu0T1KOzPElp1Hf+N1fITC8zb4aL5+IhCzKBbwlpmIt6z6ng==">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Earned Leave Details_files/Establishment.png">
+                            Establishment
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/Leave/SAL_EarnedLeave_Details.aspx?Mwpid=5190#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment">Ms. Renu</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName">Ms. Renu</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COBS&amp;H, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/Leave/SAL_EarnedLeave_Details.aspx?Mwpid=5190#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Earned Leave Details_files/WebResource(2).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Masters" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3191#" tabindex="-1">Masters</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:3" role="menuitem" style="position: relative;"><a title="Establishment Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5041#" tabindex="-1">Establishment Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:3" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="City Category Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_CityCategory_Mst.aspx?Mwpid=76" tabindex="-1">City-Category Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="City Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_City_Mst.aspx?Mwpid=75" tabindex="-1">City Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Salutation  Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Salutation_Mst.aspx?Mwpid=3717" tabindex="-1">Salutation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Religion Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Religion_Mst.aspx?Mwpid=855" tabindex="-1">Religion Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Relation Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Relation_MST.aspx?Mwpid=3709" tabindex="-1">Relation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Category Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Category_Mst.aspx?Mwpid=74" tabindex="-1">Category Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Gad-Nongad Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_GadNongad_Mst.aspx?Mwpid=89" tabindex="-1">Gad-Nongad Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Class Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Class_Mst.aspx?Mwpid=77" tabindex="-1">Class Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Discipline Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Discipline_Mst.aspx?Mwpid=1892" tabindex="-1">Discipline Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marital Status Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Marital_Status_Mst.aspx?Mwpid=3710" tabindex="-1">Marital Status Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Funds Sponsor Master" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_Fund_Sponsor_Mst.aspx?Mwpid=5080" tabindex="-1">Funds Sponsor Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="ExamType Master" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_ExamType_Master.aspx?Mwpid=5081" tabindex="-1">ExamType Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Category" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_DesignationCategory_Mst.aspx?Mwpid=5085" tabindex="-1">Designation Category</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:18" role="menuitem" style="position: relative;"><a title="Employee Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5042#" tabindex="-1">Employee Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:18" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Department Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Department_Mst.aspx?Mwpid=1948" tabindex="-1">Department Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Section Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Section_Mst.aspx?Mwpid=1947" tabindex="-1">Section Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=80" tabindex="-1">Designation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Employee_Mst.aspx?Mwpid=3194" tabindex="-1">Employee Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Master Scheme Wise" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Employee_Mst_Scheme.aspx?Mwpid=5279" tabindex="-1">Employee Master Scheme Wise</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:25" role="menuitem" style="position: relative;"><a title="SAR Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5044#" tabindex="-1">SAR Maters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:25" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Category Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Category_mst.aspx?Mwpid=5045" tabindex="-1">SAR Category Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Activity Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Activity_mst.aspx?Mwpid=5046" tabindex="-1">SAR Activity Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Grade Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Grade_mst.aspx?Mwpid=5047" tabindex="-1">SAR Grade Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Employee_mst.aspx?Mwpid=5048" tabindex="-1">SAR Employee Master</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:32" role="menuitem" style="position: relative; float: left;"><a title="Transactions" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3192#" tabindex="-1">Transactions</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:32" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:33" role="menuitem" style="position: relative;"><a title="Personal Details" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5049#" tabindex="-1">Personal Details</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:33" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Demographic Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Employee_Demographic_Details.aspx?Mwpid=1665" tabindex="-1">Employee Demographic Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="SAL_EmployeeDocument_Details.aspx" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeDocument_Details.aspx?Mwpid=4481" tabindex="-1">Employee Document Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Qualification Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeQualification_Details.aspx?Mwpid=1955" tabindex="-1">Education Qualification Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Permission of Qualification Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeEducation_Details.aspx?Mwpid=5253" tabindex="-1">Employee Permission of Qualification Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Family Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeFamily_Details.aspx?Mwpid=1954" tabindex="-1">Employee Family Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Nominee Details" class="level3 dynamic" href="https://hauiums.in/HRMS/GPF_Employee_Details_Mst.aspx?Mwpid=4497" tabindex="-1">Employee Nominee Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Books Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeMemo_Details.aspx?Mwpid=1979" tabindex="-1">Employee Books Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="LTC Detail" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_LTC_Detail.aspx?Mwpid=4832" tabindex="-1">LTC Detail</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Earned Leave Details" class="level3 dynamic" href="https://hauiums.in/Leave/SAL_EarnedLeave_Details.aspx?Mwpid=5190" tabindex="-1">Earned Leave Details</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:44" role="menuitem" style="position: relative;"><a title="Job Details" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5050#" tabindex="-1">Job Details</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:44" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Previous Job Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeePreviousJob_Details.aspx?Mwpid=1667" tabindex="-1">Employee Previous Job Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Foreign Visit Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeForeignVisit_Details.aspx?Mwpid=1961" tabindex="-1">Employee Foreign Visit Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Training Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeTraining_Details.aspx?Mwpid=1957" tabindex="-1">Employee Training Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Departmental Exam Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeDepartmentalExam_Details.aspx?Mwpid=4797" tabindex="-1">Employee Departmental Exam Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Service Verification Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeServiceVerification_Details.aspx?Mwpid=4798" tabindex="-1">Employee Service Verification Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Disciplinary Action/Reward Details" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_Disciplinary_Action_Details.aspx?Mwpid=368" tabindex="-1">Disciplinary Action/Reward Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Loan Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_LoanDetails.aspx?Mwpid=5232" tabindex="-1">Employee Loan Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Book Grant Amount Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_BookGrantAmount.aspx?Mwpid=5233" tabindex="-1">Employee Book Grant Amount Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Bonus Amount Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeBonusAmont_dtl.aspx?Mwpid=5247" tabindex="-1">Employee Bonus Amount Details</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:55" role="menuitem" style="position: relative;"><a title="Increment/Promotion" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5051#" tabindex="-1">Increment/Promotion</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:55" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="SAR/ACR Admin Transaction" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Admin_Transaction.aspx?Mwpid=5054" tabindex="-1">SAR/ACR Admin Transaction</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee First Appointment Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_FirstAppointment_Details.aspx?Mwpid=4823" tabindex="-1">Employee First Appointment Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Emp Increment Payrevision" class="level3 dynamic" href="https://hauiums.in/HRMS/sal_emp_increment_payrevision_detailt.aspx?Mwpid=4802" tabindex="-1">Emp Increment Payrevision</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Promotion/Financial Up-gradation Details" class="level3 dynamic" href="https://hauiums.in/HRMS/sal_emp_promotion_detail.aspx?Mwpid=4820" tabindex="-1">Employee Promotion/Financial Up-gradation</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee No-Dues Detail" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Emp_NoDues_Detail.aspx?Mwpid=5151" tabindex="-1">Employee No-Dues Detail</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:63" role="menuitem" style="position: relative; float: left;"><a title="Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3193#" tabindex="-1">Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:63" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:64" role="menuitem" style="position: relative;"><a title="Reports" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5052#" tabindex="-1">Reports</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:64" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Service Book Report" class="level3 dynamic" href="https://hauiums.in/HRMS/Reports/EST_EmpServiceBookDigitizedView_Rpt.aspx?Mwpid=1653" tabindex="-1">Employee Service Book Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Establishment OfficeWise Report" class="level3 dynamic" href="https://hauiums.in/HRMS/Reports/EST_Establishment_OfficeWise_Rpt.aspx?Mwpid=1875" tabindex="-1">Establishment OfficeWise Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Organisation Data" class="level3 dynamic" href="https://hauiums.in/HRMS/OrganisationStruct.aspx?Mwpid=5114" tabindex="-1">Organisation Data</a></li>
+			</ul></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Transactions</span>&nbsp;&gt;&nbsp;<span>Personal Details</span>&nbsp;&gt;&nbsp;<strong>Earned Leave Details</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Earned Leave Details_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+     <script type="text/javascript" src="./Earned Leave Details_files/jquery-1.9.1.js.download"></script>
+
+    <script language="javascript" type="text/javascript">
+        function ShowSearch(obj) {
+            document.getElementById('SearchDiv').style.display = 'block';
+        }
+    </script>
+
+    
+    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%" align="left">
+        <tbody><tr>
+            <td align="left">
+                <table border="0" cellpadding="0" cellspacing="0" style="width: 100%">
+                    <tbody><tr>
+                        <td colspan="7" class="tableheading">Earned Leave Details
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="tdgap"></td>
+                    </tr>
+                    <tr>
+
+                        <td style="width: 18%" class="vtext" id="lblDDO">Employee Code/Name
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_ddlDDO__"></span>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtEmpCodeName_Search__"><input name="ctl00$ContentPlaceHolder1$txtEmpCodeName_Search" type="text" value="hau00212" id="ctl00_ContentPlaceHolder1_txtEmpCodeName_Search" class="gtextboxmedium" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$txtEmpCodeName_Search&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);"></span>
+                        </td>
+                        <td class="vtext">Employee Name
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtEmpName__"><input name="ctl00$ContentPlaceHolder1$txtEmpName" type="text" value="Om Parkash Sheoran" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtEmpName" class="textboxlong"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="vtext" id="lblEmpcode">Employee 
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlEmpcode__"><select name="ctl00$ContentPlaceHolder1$D_ddlEmpcode" id="ctl00_ContentPlaceHolder1_D_ddlEmpcode" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlEmpcode&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value="">-- Select Employee --</option>
+	<option selected="selected" value="ES-271">Om Parkash Sheoran | HAU00212</option>
+
+</select></span>
+                            *
+                        </td>
+
+                        <td class="vtext">Designation
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtDesignation__"><input name="ctl00$ContentPlaceHolder1$txtDesignation" type="text" value="Professor" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtDesignation" class="textboxlong"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Department
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtDepartment__"><input name="ctl00$ContentPlaceHolder1$txtDepartment" type="text" value="Mathematics and Statistics" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtDepartment" class="textboxlong"></span>
+                        </td>
+                         <td class="vtext" id="lblJoing">Date of Joining
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtJoining__"><input name="ctl00$ContentPlaceHolder1$txtJoining" type="text" value="20/12/2000" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtJoining" class="textboxdate" style="width:80px;"></span>                                           
+                        </td>    
+                       
+                    </tr>
+                    <tr>
+                        <td class="vtext" id="lblFDate">From Date
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_V_txtFDate__"><input name="ctl00$ContentPlaceHolder1$V_txtFDate" type="text" maxlength="10" id="ctl00_ContentPlaceHolder1_V_txtFDate" class="textboxdate" onpaste="event.returnValue=false" onkeydown="return NumberOnly(event,this);" ondrag="return false;" ondrop="return false;" onmousedown="DisableRightClick(event)" onkeypress="return IsDigit(event);" readonly="readonly" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$V_txtFDate&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);" style="width:80px;"></span>
+
+                            <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.aspnetForm.ctl00_ContentPlaceHolder1_V_txtFDate);return false;">
+                                <img align="absMiddle" alt="" border="0" class="PopcalTrigger" height="20" src="./Earned Leave Details_files/calbtn.gif" width="34"></a> *
+                        </td>
+                         <td id="lblLeaveType" class="vtext" style="width: 20%">Leave Type
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_ddlLeaveType__"><select name="ctl00$ContentPlaceHolder1$ddlLeaveType" id="ctl00_ContentPlaceHolder1_ddlLeaveType" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlLeaveType&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value="0">-- Select Leave Type --</option>
+	<option value="2">Earned Leave</option>
+	<option value="8">Child Care Leave</option>
+	<option value="12">Half Pay Leave</option>
+	<option value="14">Maternity Leave</option>
+	<option value="15">Paternity Leave</option>
+	<option selected="selected" value="16">Study Leave</option>
+	<option value="17">Leave Without Allowance(EOL)</option>
+	<option value="43">Maternity Leave(Abortion/Miscarriage)</option>
+	<option value="46">Medical Leave</option>
+
+</select></span>
+                            *
+                        </td>
+                                           
+                    </tr>
+
+                    <tr>                      
+                         <td class="vtext" id="lblTDate">To Date
+                        </td>
+                        <td class="colon">:
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtTDate__"><input name="ctl00$ContentPlaceHolder1$txtTDate" type="text" maxlength="10" id="ctl00_ContentPlaceHolder1_txtTDate" class="textboxdate" onpaste="event.returnValue=false" onkeydown="return NumberOnly(event,this);" ondrag="return false;" ondrop="return false;" onmousedown="DisableRightClick(event)" onkeypress="return IsDigit(event);" readonly="readonly" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$txtTDate&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);" style="width:80px;"></span>
+
+                            <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.aspnetForm.ctl00_ContentPlaceHolder1_txtTDate);return false;">
+                                <img align="absMiddle" alt="" border="0" class="PopcalTrigger" height="20" src="./Earned Leave Details_files/calbtn.gif" width="34"></a> *                        
+                        </td>
+
+                         <td id="lblLeave" class="vtext" style="width: 20%">
+                        </td>
+                        <td class="colon">
+                        </td>
+                        <td class="required">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_ddlLeave__"></span>
+                            
+                        </td>
+
+
+
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnSave__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="SAVE" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSave&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;SAVING...&#39;,true,btnSave_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSave" class="button-common" cellpadding="0" cellspacing="0"></span>
+
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+
+                             <span id="Anthem_ctl00_ContentPlaceHolder1_btnExcel__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnExcel" value="PREVIEW" id="ctl00_ContentPlaceHolder1_btnExcel" class="button-common" cellpadding="0" cellspacing="0"></span>
+
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+                        </td>
+                       
+                    </tr>
+                </tbody></table>
+
+                <table cellpadding="0" cellspacing="0" border="0" style="width: 100%" class="table">
+                    <tbody><tr>
+                        <td class="tablesubheading">List of Leave Request
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="Anthem_ctl00_ContentPlaceHolder1_gv_ELDetails__"><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_gv_ELDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td align="center" style="font-weight:bold;">S.NO.</td><td align="center" style="font-weight:bold;">Employee Name</td><td align="center" style="font-weight:bold;">Duty From</td><td align="center" style="font-weight:bold;">Duty To</td><td align="center" style="font-weight:bold;">No. of Days</td><td align="center" style="font-weight:bold;">Leave Earned</td><td align="center" style="font-weight:bold;">Leave at Credit</td><td align="center" style="font-weight:bold;">Leave Taken Form</td><td align="center" style="font-weight:bold;">Leave Taken To</td><td align="center" style="font-weight:bold;">No. of Days</td><td align="center" style="font-weight:bold;">Balance on Return from Leave</td><td align="center" style="font-weight:bold;">ML</td><td align="center" style="font-weight:bold;">EOL</td><td align="center" style="font-weight:bold;">HPL</td><td align="center" style="font-weight:bold;">MT.L/PL</td><td align="center" style="font-weight:bold;">CCL</td><td align="center" style="font-weight:bold;">SL</td><td>DELETE</td>
+	</tr><tr class="pager-style" align="center" style="color:#000000;">
+		<td colspan="18"><span>1</span></td>
+	</tr>
+</tbody></table></div>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+    </tbody></table>
+    <iframe width="174" height="189" name="gToday:normal:agenda.js" id="gToday:normal:agenda.js" src="./Earned Leave Details_files/ipopeng.html" scrolling="no" frameborder="0" style="visibility: visible; z-index: 119; position: absolute; top: -500px; left: -500px;"></iframe>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+
+<script type="text/javascript">
+//<![CDATA[
+alert('No Record Found!');//]]>
+</script>
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script></form>
+
+
+<script language="javascript" src="./Earned Leave Details_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Earned Leave Details_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

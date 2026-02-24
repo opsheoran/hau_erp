@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block content %}
+{% block extra_head %}
+<style>
+    .tablesubheading { 
+        background-color: #2d5a27 !important; 
+        color: #ffffff !important; 
+        font-weight: bold; 
+        padding: 5px 10px; 
+        font-size: 12px; 
+        border: 1px solid #1e3d1a; 
+        display: block; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+<div class="hau-card">
+    <div class="tablesubheading">Service Departure Details</div>
+    <div style="padding: 15px;">
+        <!-- PENDING LIST -->
+        <div class="tablesubheading" style="margin-bottom:10px;">List of Pending Departure</div>
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <td>S.No.</td><td>Leave Type</td><td>From Date</td><td>To Date</td><td>Days</td><td>Reason</td><td>Action</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in pending %}
+                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ p.LeaveType }}</td>
+                    <td align="center">{{ p.FromDate }}</td>
+                    <td align="center">{{ p.ToDate }}</td>
+                    <td align="right">{{ "{:,.2f}".format(p.Days|float) }}</td>
+                    <td>{{ p.Reason }}</td>
+                    <td align="center">
+                        <a href="?req_id={{ p.RequestID }}">
+                            <img src="{{ url_for('static', filename='images/srec.jpg') }}" border="0" title="Select Request">
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" align="center" style="padding:20px; font-weight:bold; color:red;">No Record Found!</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- ENTRY FORM -->
+        {% if selected_req %}
+        <div style="margin-top:30px; border:1px solid #2d5a27; padding:15px; background:#f9f9f9;">
+            <div class="tablesubheading" style="margin-bottom:15px;">Departure Details for {{ selected_req.LeaveTypeName }}</div>
+            <form method="POST">
+                <input type="hidden" name="req_id" value="{{ selected_req.pk_leavereqid }}">
+                <table class="form-table">
+                    <tr>
+                        <td class="vtext" width="150">Departure Date</td><td class="colon">:</td>
+                        <td>
+                            <input type="date" name="departure_date" class="textbox" value="{{ selected_req.fromdate.strftime('%Y-%m-%d') if selected_req.fromdate else '' }}" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Departure Remark</td><td class="colon">:</td>
+                        <td>
+                            <textarea name="departure_remark" style="width:400px; height:50px;" class="textboxmultiline"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td style="padding-top:15px;">
+                            <input type="submit" value="SUBMIT DEPARTURE" class="button-common" style="background:#2d5a27; color:white; border:1px solid #1e3d1a; height:26px; padding:0 15px;">
+                            <a href="{{ url_for('leave.service_departure_details') }}" class="button-common" style="text-decoration:none; margin-left:10px; display:inline-block; line-height:24px; background:#eee; color:#333; border:1px solid #ccc; padding:0 15px;">CANCEL</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        {% endif %}
+
+        <!-- SUBMITTED HISTORY -->
+        <div style="margin-top:40px;">
+            <div class="tablesubheading" style="margin-bottom:10px;">List of submitted Departure</div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td>S.No.</td><td>Employee Name</td><td>Leave Type</td><td>Requested Date</td><td>From Date</td><td>To Date</td><td>Total Leave Days</td><td>Status</td><td>Contact No.</td><td>VIEW</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in history %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td>{{ h.EmployeeName }}</td>
+                        <td>{{ h.LeaveType }}</td>
+                        <td align="center">{{ h.RequestedDate }}</td>
+                        <td align="center">{{ h.FromDate }}</td>
+                        <td align="center">{{ h.ToDate }}</td>
+                        <td align="right">{{ "{:,.2f}".format(h.totalleavedays|float) }}</td>
+                        <td align="center">Approved</td>
+                        <td align="center">{{ h.contactno or '' }}</td>
+                        <td align="center">
+                            <a href="{{ url_for('leave.download_departure_report', req_id=h.RequestID) }}" target="_blank">
+                                <img src="{{ url_for('static', filename='images/srec.jpg') }}" border="0" title="View Detail">
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="10" align="center" style="padding:20px; font-weight:bold; color:red;">No Record Found!</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

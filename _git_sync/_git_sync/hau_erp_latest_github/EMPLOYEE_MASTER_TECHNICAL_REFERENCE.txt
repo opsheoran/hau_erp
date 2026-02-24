@@ -1,0 +1,59 @@
+EMPLOYEE MASTER TECHNICAL REFERENCE (VERIFIED FEB 2026)
+=====================================================
+
+This document serves as the authoritative mapping for the Employee Master module,
+verified against the actual HAU database schema and active records as of Feb 2026.
+
+1. CORE EMPLOYEE DATA
+----------------------------------------------------------------------------------------------------
+Table                           | Description                               | Key Purpose
+----------------------------------------------------------------------------------------------------
+SAL_Employee_Mst                | Main Employee Table                       | PK (pk_empid), Codes, Name, Salary Base, Dept/DDO links
+SAL_EmployeeOther_Details       | Extended Demographics                     | Gender, DOB, Address, Mother Name, Technical Quals
+SAL_FirstAppointment_Details    | Appointment Records                       | First Order No, Appointment Date, Joining Date
+gpf_employee_details            | GPF/CPF/NPS Master                        | GPF/PF Number, PF Type (G=GPF, C=CPF, P=NPS)
+GPF_Balance_Mst                 | Financial Year Balances                   | Opening/Closing Balances (Year-wise)
+BMS_BM10_Details                | Budgetary/Detailed Summary                | Fallback for Retirement Date, Grade Details string
+
+2. SALARY & FINANCIALS
+----------------------------------------------------------------------------------------------------
+Table                           | Description                               | Key Purpose
+----------------------------------------------------------------------------------------------------
+SAL_Salary_Master               | Monthly Salary Processed Data             | Latest Income Tax (IT), Net Pay, Monthly Basic
+SAL_EmployeeHead_Details        | Employee-specific Salary Heads            | Mapping of amount to fk_headid (Earnings/Deductions)
+SAL_Head_Mst                    | Global Salary Head Definitions            | Head Description, Type (E/D), Mapping (Y/N)
+SAL_LoanTransaction_Mst         | Loan/Advance Headers                      | fk_headid=27 (GPF Advance), ldated
+SAL_LoanTransaction_Details     | Loan/Advance Installments                 | Monthly InstalmentAmount, balAmount (Current Advance)
+SAL_FMAeffective_Trn            | Medical Allowance History                 | EffectiveDate for Medical Allowance
+
+3. MAPPING LOGIC & FIELD SOURCES
+----------------------------------------------------------------------------------------------------
+Field                           | Source Table.Column                       | Processing Logic
+----------------------------------------------------------------------------------------------------
+Employee Name                   | SAL_Employee_Mst.empname                  | Join SAL_Salutation_Mst for prefix
+Order No (First)                | SAL_FirstAppointment_Details.OrderNo      | Join on fk_empid
+Date of Birth                   | SAL_EmployeeOther_Details.dateofbirth     | Format as YYYY-MM-DD for HTML5
+Date of Retirement              | SAL_EmployeeOther_Details.dateofretirement| Fallback: BMS_BM10_Details.Retirement
+PF Number                       | gpf_employee_details.gpfno                | Primary source for PF identification
+PF Type                         | gpf_employee_details.PFType               | Map G->GPF, C->CPF, P->NPS
+PF Balance                      | GPF_Balance_Mst.ClosingBal                | Filter by latest fk_finid (e.g. CO-18)
+Income Tax                      | SAL_Salary_Master.IT                      | Retrieve from latest processed month/year
+GPF Advance (Monthly)           | SAL_LoanTransaction_Details.InstalmentAmount| Where head=27 and balAmount > 0
+Grade String                    | SAL_Grade_Mst.gradedetails                | Append SAL_Grade_Mst.gradepay in paren
+Level/Cell                      | SAL_Employee_Mst.level_type / level_name  | Direct from Master table
+
+4. LOOKUP TABLES (DROPDOWNS)
+----------------------------------------------------------------------------------------------------
+- SAL_Salutation_Mst            | - Religion_Mst                            | - SAL_Quarter_Mst
+- SAL_Category_Mst              | - GIS_Marital_Status_Mst                  | - SAL_SalaryType_Mst
+- SAL_Bank_Mst                  | - Sal_ControllingOffice_Mst               | - Department_Mst
+- DDO_Mst                       | - Location_Mst                            | - SAL_Section_Mst
+- SAL_Designation_Mst           | - SMS_BranchMst (Specialization)          | - SAL_Discipline_Mst
+- SAL_Grade_Mst                 | - SAL_City_Mst                            | - SAL_EmployeeDocumentCategory_Mst
+
+5. RECENT UPDATES (FEB 2026)
+----------------------------------------------------------------------------------------------------
+- Synchronized HTML5 date inputs (type="date") with CONVERT(varchar, DateCol, 23) from SQL Server.
+- Implemented Reporting To lookup using active employee list from SAL_Employee_Mst.
+- Corrected GPF Advance deduction display to use real-time installment from Loan Transaction tables.
+- Added Grade Pay suffix to Grade lookup names for template parity.

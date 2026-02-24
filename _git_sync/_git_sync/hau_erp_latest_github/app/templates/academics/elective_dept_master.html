@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .textbox-small { width: 150px !important; }
+    .textbox-medium { width: 250px !important; }
+    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .required-star { color: red; font-weight: bold; }
+</style>
+
+<div class="hau-card" style="max-width: 800px;">
+    <div class="tablesubheading">Elective Department Master</div>
+    <div style="padding: 15px;">
+        <table class="table-grid-view mt-3">
+            <thead>
+                <tr class="header-style">
+                    <th width="60">S.No.</th>
+                    <th>Department Name</th>
+                    <th width="100">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in depts %}
+                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ d.name }}</td>
+                    <td align="center">
+                        <span style="color:green; font-weight:bold;">Eligible</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

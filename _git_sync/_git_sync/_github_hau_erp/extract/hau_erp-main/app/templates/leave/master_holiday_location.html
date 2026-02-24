@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tablesubheading">Holiday Location Master</div>
+    <div style="padding: 15px;">
+        <form method="POST">
+            <input type="hidden" name="id" id="l_id">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Location Name</td><td class="colon">:</td>
+                    <td><input type="text" name="name" id="l_name" class="textbox" style="width: 250px;" required></td>
+                    <td class="vtext" width="15%">Display Order</td><td class="colon">:</td>
+                    <td><input type="number" name="order" id="l_order" class="textbox" value="1" style="width: 100px;"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Remarks</td><td class="colon">:</td>
+                    <td colspan="4"><input type="text" name="remarks" id="l_remarks" class="textbox" style="width: 400px;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top: 15px;">
+                        <input type="submit" value="SAVE LOCATION" class="button-common">
+                        <input type="reset" value="RESET" class="button-common" style="margin-left: 10px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 25px;">
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td width="60">Order</td><td>Location Name</td><td>Remarks</td><td width="60">Edit</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in locations %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ l.displayorder }}</td>
+                        <td>{{ l.holidayloc }}</td>
+                        <td>{{ l.remarks or '' }}</td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick="editL('{{ l.pk_holidaylocid }}', '{{ l.holidayloc }}', '{{ l.displayorder }}', '{{ l.remarks or '' }}')">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function editL(id, name, order, remarks) {
+    document.getElementById('l_id').value = id;
+    document.getElementById('l_name').value = name;
+    document.getElementById('l_order').value = order;
+    document.getElementById('l_remarks').value = remarks;
+}
+</script>
+{% endblock %}

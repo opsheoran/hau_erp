@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+{% block extra_head %}
+<style>
+    .tablesubheading { 
+        background-color: #2d5a27 !important; 
+        color: #ffffff !important; 
+        font-weight: bold; 
+        padding: 5px 10px; 
+        font-size: 12px; 
+        border: 1px solid #1e3d1a; 
+        display: block; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+<div class="hau-card">
+    <div class="tablesubheading">Earned Leave Reconciliation Report (1/11 Logic)</div>
+    <div style="padding: 15px;">
+        <form method="GET">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Search Employee</td><td class="colon">:</td>
+                    <td>
+                        <input type="hidden" name="emp_id" id="emp_id" value="{{ selected_emp or '' }}">
+                        <input type="text" id="emp_name" class="textbox" style="width: 250px;" readonly placeholder="Select employee...">
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="ShowSearch()" style="cursor:pointer; vertical-align:middle;">
+                        <input type="submit" value="FETCH DATA" class="button-common" style="margin-left:10px; background:#3c8dbc; color:white;">
+                        <input type="button" value="PRINT" class="button-common" style="margin-left:5px;" onclick="window.print()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 25px;">
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td rowspan="2">SNo</td>
+                        <td rowspan="2">Emp Code</td>
+                        <td rowspan="2">Name</td>
+                        <td colspan="2" style="text-align: center;">Duty Period</td>
+                        <td rowspan="2">Duty Days</td>
+                        <td rowspan="2">EL Earned (1/11)</td>
+                        <td colspan="2" style="text-align: center;">Availed Period</td>
+                        <td rowspan="2">Availed Days</td>
+                        <td rowspan="2">EL Balance</td>
+                    </tr>
+                    <tr class="header-style">
+                        <td>From</td><td>To</td>
+                        <td>From</td><td>To</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in results %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td>{{ r.empcode }}</td>
+                        <td>{{ r.empname }}</td>
+                        <td align="center">{{ r.dutyfrom_date.strftime('%d/%m/%Y') if r.dutyfrom_date else '' }}</td>
+                        <td align="center">{{ r.dytyto_date.strftime('%d/%m/%Y') if r.dytyto_date else '' }}</td>
+                        <td align="right">{{ "{:,.2f}".format(r.dutydays|float) }}</td>
+                        <td align="right" style="font-weight: bold; color: green;">{{ "{:,.2f}".format(r.el_earned|float) }}</td>
+                        <td align="center">{{ r.leavefrom_date.strftime('%d/%m/%Y') if r.leavefrom_date else '' }}</td>
+                        <td align="center">{{ r.leaveto_date.strftime('%d/%m/%Y') if r.leaveto_date else '' }}</td>
+                        <td align="right">{{ "{:,.2f}".format(r.leave_days|float) }}</td>
+                        <td align="right" style="font-weight: bold; color: #3c8dbc;">{{ "{:,.2f}".format(r.el_balance|float) }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="11" align="center" style="padding:20px;">Please select an employee to view reconciliation details.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Search Modal -->
+<div id="SearchDiv" class="white_content-new">
+    <div style="text-align:right;"><span onclick="HideSearch()" style="cursor:pointer; color:red; font-weight:bold;">X</span></div>
+    <div class="tableheading" style="margin-top:-15px;">Employee Search</div>
+    <div style="padding:15px;">
+        <table class="form-table">
+            <tr>
+                <td class="vtext">Search Employee</td><td class="colon">:</td>
+                <td><input type="text" id="simple_search_term" class="textbox" style="width:250px;"></td>
+                <td><input type="button" value="SEARCH" class="button-common" onclick="doSimpleSearch()"></td>
+            </tr>
+        </table>
+        <div id="search_results" style="margin-top:20px; max-height:250px; overflow-y:auto;"></div>
+    </div>
+</div>
+
+<script>
+function ShowSearch() { document.getElementById('SearchDiv').style.display = 'block'; }
+function HideSearch() { document.getElementById('SearchDiv').style.display = 'none'; }
+
+async function doSimpleSearch() {
+    const term = document.getElementById('simple_search_term').value;
+    if(term.length < 2) return;
+    const res = await fetch(`/leave/api/employee/search?term=${term}`);
+    const data = await res.json();
+    let html = '<table class="table-grid-view"><tr class="header-style"><td>Code</td><td>Name</td><td>Action</td></tr>';
+    data.forEach(e => {
+        html += `<tr class="item-style"><td>${e.id}</td><td>${e.name}</td><td><a href="javascript:void(0)" onclick="selectEmployee('${e.id}', '${e.name}')">Select</a></td></tr>`;
+    });
+    html += '</table>';
+    document.getElementById('search_results').innerHTML = html;
+}
+
+function selectEmployee(id, name) {
+    document.getElementById('emp_id').value = id;
+    document.getElementById('emp_name').value = name;
+    HideSearch();
+}
+</script>
+{% endblock %}

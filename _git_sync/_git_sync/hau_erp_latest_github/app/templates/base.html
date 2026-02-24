@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>CCS HAU ERP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {% block extra_head %}{% endblock %}
+
+    <style>
+        /* CORE ERP THEME - MAXIMUM VISIBILITY & PATTERN MATCHING */
+        :root { --hau-blue: #3c8dbc; --hau-border: #d4d4d4; }
+        body { font-family: Verdana, sans-serif; font-size: 11px; margin: 0; padding: 0; background: #fff; color: #333; }
+        
+        .header-top { background: #fff; border-bottom: 2px solid var(--hau-blue); padding: 8px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo-text { font-size: 18px; font-weight: bold; color: var(--hau-blue); }
+        
+        .user-info-bar { background: var(--hau-blue); color: #fff; padding: 5px 20px; display: flex; justify-content: space-between; font-size: 11px; }
+        .user-info-bar span { color: #FFFF00 !important; font-weight: bold; }
+
+        /* MULTI-TIER FLYOUT NAV - "HANG DOWN" STYLE */
+        .nav-container { background: #fff; border-bottom: 1px solid var(--hau-border); display: flex; padding: 0 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow: visible !important; }
+        .nav-list { list-style: none; display: flex; margin: 0; padding: 0; overflow: visible !important; }
+        .nav-item { position: relative; overflow: visible !important; }
+        .nav-link { display: block; padding: 12px 15px; color: #333 !important; font-weight: bold; text-decoration: none; text-transform: uppercase; font-size: 11px; border-right: 1px solid #eee; white-space: nowrap; }
+        .nav-link:hover { background: #f4f4f4; color: var(--hau-blue) !important; }
+        
+        .dropdown-menu { display: none; position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid var(--hau-border); min-width: 240px; padding: 5px 0; z-index: 1001; box-shadow: 0 8px 24px rgba(0,0,0,0.2); border-radius: 0 0 4px 4px; overflow: visible !important; height: auto !important; max-height: none !important; }
+        .nav-item:hover > .dropdown-menu { display: block; }
+        
+        .dropdown-submenu { position: relative; }
+        /* The "Hang Down" offset for sub-levels */
+        .dropdown-submenu .dropdown-menu { top: -5px; left: 100%; border: 1px solid var(--hau-border); margin-left: 1px; border-radius: 4px; }
+        .dropdown-submenu:hover > .dropdown-menu { display: block; }
+
+        .dropdown-item { display: block; padding: 8px 20px; color: #333 !important; text-decoration: none; font-size: 11px; font-weight: normal; background: #fff; white-space: nowrap; position: relative; }
+        .dropdown-item:hover { background: var(--hau-blue) !important; color: #fff !important; }
+        .dropdown-item.has-children::after { content: "►"; position: absolute; right: 10px; top: 10px; font-size: 8px; color: #999; }
+        .dropdown-item:hover.has-children::after { color: #fff; }
+        
+        .dropdown-item b { font-weight: bold; color: var(--hau-blue); }
+        .dropdown-item:hover b { color: #fff; }
+
+        /* BREADCRUMBS */
+        .brdcums { background: #f9f9f9; border-bottom: 1px solid #ddd; padding: 8px 20px; }
+        .brdcrmsinnerdiv { display: flex; align-items: center; color: #666; font-size: 11px; }
+        .brdcrmsinnerdiv strong { color: #000; }
+
+        /* TABBED MENU */
+        .tabbing-table { width: 100%; background: #fff; border-bottom: 1px solid #ddd; margin-bottom: 20px; }
+        .tabbing-td { padding: 8px 20px; }
+        
+        .tabgs { background: #3c8dbc; color: #fff !important; padding: 8px 18px; text-decoration: none; display: inline-block; font-weight: bold; border: 1px solid #3c8dbc; border-radius: 4px 4px 0 0; margin-right: 4px; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); font-size: 11px; }
+        .tabg { background: #f0f0f0; color: #3c8dbc !important; padding: 8px 18px; text-decoration: none; display: inline-block; font-weight: bold; border: 1px solid #ddd; border-bottom: none; border-radius: 4px 4px 0 0; margin-right: 4px; font-size: 11px; transition: 0.2s; }
+        .tabg:hover { background: #e0e0e0; margin-top: -2px; padding-bottom: 10px; }
+
+        /* FORM & GRID STANDARDS - MIMICKING LIVE ERP */
+        /* Support legacy classnames used by live templates (dropdownvvlong/dropdownlong/etc.). */
+        input.textbox,
+        select.dropdown,
+        select.dropdownvvlong,
+        select.dropdownlong,
+        select.dropdownshowhide,
+        textarea.textbox { 
+            border: 1px solid #ccc; 
+            padding: 3px 5px; 
+            font-family: Verdana, Arial, sans-serif; 
+            font-size: 11px; 
+            box-sizing: border-box; 
+            height: 22px; /* Standard ERP height */
+        }
+        textarea.textbox { height: auto; }
+
+        /* FIXED WIDTH CLASSES FOR UNIFORMITY */
+        .w-50 { width: 50px !important; }
+        .w-75 { width: 75px !important; }
+        .w-100 { width: 100px !important; }
+        .w-120 { width: 120px !important; }
+        .w-150 { width: 150px !important; }
+        .w-180 { width: 180px !important; }
+        .w-200 { width: 200px !important; }
+        .w-250 { width: 250px !important; }
+        .w-300 { width: 300px !important; }
+
+        /* Legacy width aliases (close enough to live) */
+        .dropdownvvlong { width: 300px !important; }
+        .dropdownlong { width: 250px !important; }
+
+        /* Link styles used in grid tables (live-like) */
+        a.link, a.gridlink { color: #3c8dbc; text-decoration: underline; }
+        a.link:hover, a.gridlink:hover { color: #2c729e; }
+        
+        .button-common { 
+            background: #3c8dbc; 
+            color: white; 
+            border: 1px solid #2c729e; 
+            padding: 3px 15px; 
+            font-family: Verdana; 
+            font-size: 11px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border-radius: 2px;
+            height: 24px;
+        }
+        .button-common:hover { background: #2c729e; }
+        .required { color: red; font-weight: bold; }
+
+        .content-wrapper { flex-grow: 1; padding: 20px; width: 100%; }
+
+        .tableheading { background: #f4f4f4; padding: 10px; font-weight: bold; color: #3c8dbc; font-size: 11px; margin-bottom: 15px; border-bottom: 1px solid #ddd; }
+        .tablesubheading { background: #f9f9f9; padding: 6px 10px; font-weight: bold; color: #333; font-size: 11px; margin-bottom: 10px; border-bottom: 1px solid #eee; }
+        .mainheadingborderbottom { border-bottom: 2px solid #3c8dbc; padding-bottom: 2px; }
+        .subheadingborderbottom { border-bottom: 1px solid #666; padding-bottom: 1px; }
+        
+        .table-grid-view { width: 100%; border-collapse: collapse; border: 1px solid #D4D4D4 !important; }
+        .header-style th, .header-style td { background: #f8f9fa; border: 1px solid #D4D4D4 !important; padding: 6px 10px; text-align: center; font-weight: bold; color: #333; }
+        .item-style td, .item-style-alt td { border: 1px solid #D4D4D4 !important; padding: 5px 8px; }
+        .item-style-alt { background: #FAFAFA; }
+
+        .form-table { width: 100%; border-collapse: collapse; }
+        .form-table td { padding: 4px 6px; vertical-align: middle; }
+
+        .filter-table { width: 100%; border-collapse: collapse; }
+        .filter-table td { padding: 8px 5px; vertical-align: middle; }
+        .vtext { font-weight: bold; color: #444; font-size: 11px; }
+        .colon { width: 15px; text-align: center; font-weight: bold; }
+
+        .pager-style { margin-top: 15px; text-align: center; font-family: Verdana; font-size: 11px; width: 100%; }
+        .pager-style a, .pager-style span { padding: 2px 8px; border: 1px solid #ddd; margin: 0 2px; text-decoration: none; color: #333; display: inline-block; min-width: 20px; text-align: center; }
+        .pager-style a:hover { background: #f4f4f4; border-color: #3c8dbc; }
+        .pager-style .active, .pager-style span.active { background: #eee; color: red !important; border-color: #ddd; font-weight: bold; }
+        .pager-style .disabled { color: #ccc; cursor: not-allowed; }
+
+        @media print { .no-print { display: none !important; } }
+    </style>
+</head>
+<body>
+    {% if session.user_id %}
+    <div class="header-top no-print">
+        <div class="logo-text">CCS HAU ERP</div>
+        <div style="display: flex; gap: 20px; align-items: center;">
+            <span>Welcome: <b>{{ session.user_name }}</b></span>
+            <a href="{{ url_for('main.reset_module') }}" class="button-common" style="background:#eee; color:#333; border-color:#ccc">My Modules</a>
+            <a href="{{ url_for('auth.logout') }}" class="button-common" style="background:#d9534f; border-color:#d43f3a">Logout</a>
+        </div>
+    </div>
+
+    <div class="user-info-bar no-print">
+        <div>Module: <b>{{ current_mod.modulename if current_mod else 'ADMISSION & ACADEMICS' }}</b></div>
+        <div>Login: <span>{{ session.login_name }}</span> | Campus: <span>{{ session.campus or 'COBS&H, Hisar' }}</span></div>
+    </div>
+
+    <div class="nav-container no-print">
+        <ul class="nav-list">
+            <li class="nav-item"><a href="{{ url_for('main.index') }}" class="nav-link">HOME</a></li>
+            
+            {% if current_mod_id|string == '55' %}
+                {% set active_menu = processed_academic_menu %}
+            {% elif current_mod_id|string == '30' %}
+                {% set active_menu = processed_umm_menu %}
+            {% elif current_mod_id|string == '72' %}
+                {% set active_menu = processed_establishment_menu %}
+            {% else %}
+                {% set active_menu = menu %}
+            {% endif %}
+
+            {% macro render_sub_items(items) %}
+                {% for item in items %}
+                    {% set has_children = item.subs or item.pages %}
+                    <div class="dropdown-submenu">
+                        <a href="{{ item.url if item.url else 'javascript:void(0)' }}" class="dropdown-item {{ 'has-children' if has_children else '' }}">
+                            <b>{{ item.name }}</b>
+                        </a>
+                        {% if has_children %}
+                        <div class="dropdown-menu">
+                            {% if item.pages %}
+                                {% for p in item.pages %}
+                                    <a href="{{ p.url }}" class="dropdown-item">{{ p.name }}</a>
+                                {% endfor %}
+                            {% endif %}
+                            {% if item.subs %}
+                                {{ render_sub_items(item.subs) }}
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endmacro %}
+
+            {% if active_menu is mapping %}
+                {# Other modules using recursive builder mapping #}
+                {% for main_name, main_data in active_menu.items() %}
+                <li class="nav-item">
+                    <a href="javascript:void(0)" class="nav-link">{{ main_name }}</a>
+                    <div class="dropdown-menu">
+                        {% if main_data.pages %}
+                            {% for p in main_data.pages %}
+                                <a href="{{ p.url }}" class="dropdown-item">{{ p.name }}</a>
+                            {% endfor %}
+                        {% endif %}
+                        {% if main_data.subs %}
+                            {{ render_sub_items(main_data.subs) }}
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            {% else %}
+                {# UMM / Academics using processed list #}
+                {% for main_item in active_menu %}
+                <li class="nav-item">
+                    <a href="javascript:void(0)" class="nav-link">{{ main_item.name }}</a>
+                    <div class="dropdown-menu">
+                        {% if main_item.pages %}
+                            {% for p in main_item.pages %}
+                                <a href="{{ p.url }}" class="dropdown-item">{{ p.name }}</a>
+                            {% endfor %}
+                        {% endif %}
+                        {% if main_item.subs %}
+                            {{ render_sub_items(main_item.subs) }}
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- BREADCRUMBS -->
+    {% if academic_breadcrumb or umm_breadcrumb or establishment_breadcrumb %}
+    <div class="brdcums no-print">
+        <div class="brdcrmsinnerdiv" style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center;">
+                <img style="margin-right: 10px;" src="{{ url_for('static', filename='images/home-icon.png') }}">
+                {% set breadcrumb = academic_breadcrumb if academic_breadcrumb else (umm_breadcrumb if umm_breadcrumb else establishment_breadcrumb) %}
+                {% for item in breadcrumb %}
+                    {% if not loop.last %}
+                        <span>{{ item }}</span>&nbsp;&gt;&nbsp;
+                    {% else %}
+                        <strong>{{ item }}</strong>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="helpbtn" id="hlpbtn" style="margin-right: 10px;">
+                <img src="{{ url_for('static', filename='help.png') }}" alt="Help" style="height:26px; width:16px; cursor:pointer;" onclick="alert('Context sensitive help will be activated after final User Acceptance.')">
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- TABBED MENU -->
+    {% if academic_tabs or umm_tabs or establishment_tabs %}
+    <table class="tabbing-table no-print" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td class="tabbing-td">
+                {% set active_tabs = academic_tabs if academic_tabs else (umm_tabs if umm_tabs else establishment_tabs) %}
+                {% for tab in active_tabs %}
+                <a href="{{ tab.url }}" class="{{ 'tabgs' if tab.active else 'tabg' }}">{{ tab.name }}</a>
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+    {% endif %}
+
+    {% endif %}
+
+    <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none;"></div>
+
+    <div class="content-wrapper">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        function toggleDropdownMenus() {
+            const nav = document.querySelector('.nav-container');
+            if (!nav) return;
+
+            nav.addEventListener('click', function(e) {
+                const link = e.target.closest('.nav-link');
+                if (!link) return;
+
+                const item = link.closest('.nav-item');
+                if (!item) return;
+
+                const dropdown = item.querySelector(':scope > .dropdown-menu');
+                if (!dropdown) return; // normal link
+
+                e.preventDefault();
+
+                // close others
+                nav.querySelectorAll('.nav-item.open').forEach(el => {
+                    if (el !== item) el.classList.remove('open');
+                });
+                item.classList.toggle('open');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.nav-container')) {
+                    document.querySelectorAll('.nav-item.open').forEach(el => el.classList.remove('open'));
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', toggleDropdownMenus);
+    </script>
+
+    <script>
+        window.showToast = function(message, category = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast-message ${category}`;
+            const colors = { 'success': '#28a745', 'danger': '#dc3545', 'error': '#dc3545', 'warning': '#ffc107', 'info': '#17a2b8' };
+            toast.style.cssText = 'padding: 15px 25px; background: ' + (colors[category] || '#3c8dbc') + '; color: #fff; font-weight: bold; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 250px; cursor: pointer; opacity: 0; transform: translateY(-20px); transition: all 0.5s ease; pointer-events: auto; position: relative; font-family: Verdana, sans-serif; font-size: 11px;';
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; }, 10);
+            toast.onclick = function() { this.style.opacity = '0'; setTimeout(() => this.remove(), 500); };
+            setTimeout(() => { if (toast && toast.parentNode) { toast.style.opacity = '0'; toast.style.transform = 'translateX(20px)'; setTimeout(() => { if (toast.parentNode) toast.remove(); }, 500); } }, 4000);
+        };
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    window.showToast({{ message|tojson }}, {{ category|tojson }});
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        (function() {
+            const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+            if (!tokenMeta) return;
+            const csrfToken = tokenMeta.getAttribute('content') || '';
+
+            function ensureFormToken(form) {
+                if (!form || !csrfToken) return;
+                let tokenInput = form.querySelector('input[name="_csrf_token"]');
+                if (!tokenInput) {
+                    tokenInput = document.createElement('input');
+                    tokenInput.type = 'hidden';
+                    tokenInput.name = '_csrf_token';
+                    form.appendChild(tokenInput);
+                }
+                tokenInput.value = csrfToken;
+            }
+
+            // Apply to existing forms
+            document.querySelectorAll('form').forEach(ensureFormToken);
+            
+            // Catch dynamic forms or submissions
+            document.addEventListener('submit', function(e) {
+                if (e.target.tagName === 'FORM') {
+                    ensureFormToken(e.target);
+                }
+            }, true);
+
+            const originalFetch = window.fetch;
+            if (originalFetch) {
+                window.fetch = function(resource, init) {
+                    init = init || {};
+                    init.headers = new Headers(init.headers || {});
+                    if (!init.headers.has('X-CSRF-Token')) {
+                        init.headers.set('X-CSRF-Token', csrfToken);
+                    }
+                    return originalFetch(resource, init);
+                };
+            }
+
+            if (window.jQuery && window.jQuery.ajaxSetup) {
+                window.jQuery.ajaxSetup({
+                    headers: {'X-CSRF-Token': csrfToken}
+                });
+            }
+        })();
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

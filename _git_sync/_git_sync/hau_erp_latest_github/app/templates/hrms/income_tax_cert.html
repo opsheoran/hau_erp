@@ -1,0 +1,407 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .tax-table { width: 100%; border-collapse: collapse; font-family: Verdana, sans-serif; font-size: 11px; margin-top: 15px; }
+    .tax-table th { background-color: #eee; border: 1px solid #ccc; padding: 5px; font-weight: bold; text-align: center; }
+    .tax-table td { border: 1px solid #ccc; padding: 2px 4px; }
+    .tax-table input { width: 100%; border: none; text-align: right; font-size: 11px; background: transparent; }
+    
+    .performa-container { border: 2px solid #000; padding: 30px; background: #fff; margin-top: 30px; font-family: "Times New Roman", Times, serif; color: #000; }
+    .performa-header { text-align: center; font-weight: bold; margin-bottom: 20px; }
+    .performa-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .performa-table td { padding: 4px; vertical-align: top; border: 1px solid #000; font-size: 12px; }
+    .item-label { font-weight: bold; width: 60%; }
+    .val-col { width: 20%; text-align: right; font-weight: bold; }
+    .nested-item { padding-left: 20px !important; font-style: italic; }
+    
+    .editable-val { width: 100%; border: none; text-align: right; background: #fffde7; font-weight: bold; }
+    .no-border td { border: none !important; }
+    .bold-row { font-weight: bold; background: #f0f0f0; }
+</style>
+
+<div style="padding: 10px 20px;">
+    <div class="card card-hau">
+        <div class="tableheading">Income Tax Calculation Performa</div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('hrms.export_it_excel') }}" id="taxForm">
+                <div class="mb-3 d-flex align-items-center no-print">
+                    <span class="vtext me-2">Select Financial Year :</span>
+                    <select name="fin_year" id="fin_year_select" class="dropdown" style="width: 200px;">
+                        {% for fy in fin_years %}
+                        <option value="{{ fy.id }}" {% if fy.id == selected_fin_id %}selected{% endif %}>{{ fy.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="button" class="btn btn-sm btn-primary ms-2" onclick="loadYearData()">Load Base Data</button>
+                </div>
+
+            {% if data %}
+            <div class="no-print mt-3 mb-3 text-center">
+                <button type="button" id="btn-new" class="btn btn-primary" onclick="showRegime('NEW')">NEW REGIME (2025-26)</button>
+                <button type="button" id="btn-old" class="btn btn-outline-primary ms-2" onclick="showRegime('OLD')">OLD REGIME (2025-26)</button>
+                <input type="hidden" name="selected_regime" id="selected_regime" value="NEW">
+            </div>
+
+            <div style="text-align: center; font-weight: bold; font-size: 13px; color: #333; margin-bottom: 20px;">
+                Income Tax Statement of {{ p.basic.empname }}, {{ p.basic.designation }}, {{ p.basic.actual_ddo_name }} <br>
+                for the period from April - {{ selected_fin_id.split('-')[0] if '-' in selected_fin_id else '2025' }} to March - 2026
+            </div>
+
+                <!-- SALARY STATEMENT SECTION -->
+                <div class="tablesubheading">Monthly Salary Statement</div>
+                <table class="tax-table" id="salaryTable">
+                    <thead>
+                        <tr>
+                            <th>Period</th><th>Basic Pay</th><th>DA</th><th>HRA</th><th>FMA</th><th width="10%">Gross Pay</th><th>GPF(SUB)</th><th>GSLIS</th><th>PT</th><th>IT</th><th class="no-print">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in data.statement %}
+                        <tr class="data-row">
+                            <td><input type="text" name="period[]" value="{{ s.period }}" style="text-align:center;"></td>
+                            <td><input type="number" name="basic[]" value="{{ s.basic_pay|int }}" class="calc-trigger"></td>
+                            <td><input type="number" name="da[]" value="{{ s.da|int }}" class="calc-trigger"></td>
+                            <td><input type="number" name="hra[]" value="{{ s.hra|int }}" class="calc-trigger"></td>
+                            <td><input type="number" name="fma[]" value="{{ s.fma|int }}" class="calc-trigger"></td>
+                            <td align="right" class="row-total" style="font-weight:bold; background:#f9f9f9;">0</td>
+                            <td><input type="number" name="gpf[]" value="{{ s.gpf_sub|int }}" class="calc-trigger"></td>
+                            <td><input type="number" name="gslis[]" value="{{ s.gslis|int }}" class="calc-trigger"></td>
+                            <td><input type="number" name="pt[]" value="{{ s.pt|int }}" class="calc-trigger"></td>
+                            <td><input type="number" name="it[]" value="{{ s.it_paid|int }}" class="calc-trigger-it"></td>
+                            <td align="center" class="no-print"><button type="button" class="btn btn-xs btn-danger" onclick="removeRow(this)">×</button></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr class="bold-row">
+                            <td align="center">TOTAL</td>
+                                                                                    <td id="total-basic">0</td><td id="total-da">0</td><td id="total-hra">0</td><td id="total-fma">0</td>
+                                                                                    <td id="total-gross">0</td>
+                                                        
+                            <td id="total-gpf">0</td><td id="total-gslis">0</td><td id="total-pt">0</td><td id="total-it">0</td>
+                            <td class="no-print"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <button type="button" class="btn btn-xs btn-success mt-2 no-print" onclick="addRow()">+ Add Row</button>
+
+                <!-- PERFORMA SECTION -->
+                <div class="performa-container" id="performa">
+                    <div class="performa-header">
+                        <h4 style="margin:0;">CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY, HISAR</h4>
+                        PERFORMA FOR CALCULATION OF INCOME TAX FOR THE YEAR {{ selected_fin_id.replace(' - ', '-') if selected_fin_id else '2025-26' }}<br>
+                        <small>(To be submitted in Triplicate along with Attested Photostat copies of savings Mentioned in Item No. G)</small>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 13px;">
+                        <div>
+                            <strong>Name:</strong> {{ p.basic.empname }}<br>
+                            <strong>Account No:</strong> {{ p.basic.bankaccountno or '________________' }}
+                        </div>
+                        <div>
+                            <strong>Designation:</strong> {{ p.basic.designation }}<br>
+                            <strong>PAN:</strong> {{ p.basic.panno or '________________' }}
+                        </div>
+                    </div>
+
+                    <table class="performa-table">
+                        <tr class="bold-row">
+                            <td colspan="2"><span id="perf-regime-title">New Regime (115BAC)</span></td>
+                            <td class="val-col">Rs.</td><td class="val-col">Rs.</td>
+                        </tr>
+                        
+                        <!-- SECTION A -->
+                        <tr>
+                            <td class="item-label">A. Salary and Other Benefits:</td>
+                            <td>Gross Income</td>
+                            <td class="val-col"><span id="perf-gross">0</span></td>
+                            <td class="val-col"></td>
+                        </tr>
+                        <tr>
+                            <td class="item-label sub-item">Standard Deduction</td>
+                            <td>Less</td>
+                            <td class="val-col"><span id="perf-std-ded">75,000</span></td>
+                            <td class="val-col"></td>
+                        </tr>
+                        <tr class="bold-row">
+                            <td colspan="2">Balance</td>
+                            <td class="val-col"></td>
+                            <td class="val-col"><span id="perf-balance-a">0</span></td>
+                        </tr>
+
+                        <!-- SECTION B -->
+                        <tr class="old-only"><td class="item-label" colspan="2">B. Less : Income exempt u/s 10 (Old Regime Only)</td><td class="val-col"></td><td class="val-col"></td></tr>
+                        <tr class="old-only"><td class="sub-item" colspan="2">1. House Rent Allowance</td><td class="val-col"><input type="number" name="ex_hra" value="0" class="editable-val perf-trigger"></td><td></td></tr>
+                        <tr class="old-only"><td class="sub-item" colspan="2">2. Children Education Allowance</td><td class="val-col"><input type="number" name="ex_cea" value="0" class="editable-val perf-trigger"></td><td></td></tr>
+                        <tr class="old-only"><td class="sub-item" colspan="2">3. Fixed / Conveyance Allowance</td><td class="val-col"><input type="number" name="ex_conv" value="0" class="editable-val perf-trigger"></td><td></td></tr>
+                        <tr class="bold-row">
+                            <td colspan="2">Income from Salary</td>
+                            <td></td><td class="val-col"><span id="perf-income-salary">0</span></td>
+                        </tr>
+
+                        <!-- SECTION C, D, E -->
+                        <tr class="old-only">
+                            <td class="item-label" colspan="2">C. Add : Income from House Property</td>
+                            <td class="val-col"><input type="number" name="inc_house" value="0" class="editable-val perf-trigger"></td><td></td>
+                        </tr>
+                        <tr class="old-only">
+                            <td class="item-label" colspan="2">D. Less : Interest Paid for self occupied house (Max 2L)</td>
+                            <td class="val-col"><input type="number" name="ex_house_int" value="0" class="editable-val perf-trigger"></td><td></td>
+                        </tr>
+                        <tr>
+                            <td class="item-label" colspan="2">E. Add : Income from other sources (Bank Interest etc)</td>
+                            <td class="val-col"><input type="number" name="inc_other" value="0" class="editable-val perf-trigger"></td><td></td>
+                        </tr>
+                        
+                        <tr class="bold-row" style="background: #e3f2fd;">
+                            <td class="item-label" colspan="2">F. Gross Total Income</td>
+                            <td></td><td class="val-col"><span id="perf-gti">0</span></td>
+                        </tr>
+
+                        <!-- SECTION G - DEDUCTIONS -->
+                        <tr id="sec-g-header" class="old-only"><td class="item-label" colspan="4">G. Less : Deduction u/s 80C to 80CCF (Savings & Investments)</td></tr>
+                        <tr class="old-only"><td class="sub-item" colspan="2">i) GPF/PRAN - Contribution towards Provident Fund</td><td class="val-col"><span id="perf-gpf-val">0</span></td><td></td></tr>
+                        <tr class="old-only"><td class="sub-item" colspan="2">ii) GIS - Recovery towards Group Insurance Scheme</td><td class="val-col"><span id="perf-gis-val">0</span></td><td></td></tr>
+                        <tr class="old-only"><td class="sub-item" colspan="2">iii) LIC - Life Insurance Premium Payment</td><td class="val-col"><input type="number" name="s_lic" value="0" class="editable-val perf-trigger"></td><td></td></tr>
+                        <tr class="old-only"><td class="sub-item" colspan="2">iv) ULIP - Unit-Linked Insurance Plan</td><td class="val-col"><input type="number" name="s_ulip" value="0" class="editable-val perf-trigger"></td><td></td></tr>
+                        <tr class="old-only"><td class="sub-item" colspan="2">v) Repayment of House Loan (Principal) (Max 1.5L)</td><td class="val-col"><input type="number" name="s_hloan" value="0" class="editable-val perf-trigger"></td><td></td></tr>
+                        <tr class="old-only"><td class="sub-item" colspan="2">vi) Tuition Fee (Max for 2 children)</td><td class="val-col"><input type="number" name="s_tuition" value="0" class="editable-val perf-trigger"></td><td></td></tr>
+                        <tr class="old-only"><td class="sub-item" colspan="2">vii) Investment in NSC / Accrued Interest</td><td class="val-col"><input type="number" name="s_nsc" value="0" class="editable-val perf-trigger"></td><td></td></tr>
+                        <tr class="old-only"><td class="sub-item" colspan="2">ix) PPF</td><td class="val-col"><input type="number" name="s_ppf" value="0" class="editable-val perf-trigger"></td><td></td></tr>
+                        <tr class="bold-row old-only">
+                            <td class="sub-item" colspan="2">Total 80C (Limited to Rs. 1,50,000)</td>
+                            <td></td><td class="val-col"><span id="perf-total-80c">0</span></td>
+                        </tr>
+
+                        <!-- SECTION H -->
+                        <tr class="old-only">
+                            <td class="item-label" colspan="2">H. Less : Deductions u/s 80D to 80U (Health, 80G etc)</td>
+                            <td class="val-col"><input type="number" name="s_other_ded" value="0" class="editable-val perf-trigger"></td><td></td>
+                        </tr>
+                        
+                        <tr class="bold-row" style="font-size: 14px; background: #fff9c4;">
+                            <td class="item-label" colspan="3">I. Taxable Income (Rounded off to nearest ten rupees)</td>
+                            <td class="val-col"><span id="perf-taxable-total">0</span></td>
+                        </tr>
+
+                        <!-- SECTION J: COMPUTATION -->
+                        <tr><td class="item-label" colspan="4">J. Computation of Tax</td></tr>
+                        <tr style="text-align: center; font-weight: bold;"><td>Rate</td><td>Amount</td><td>Tax</td><td></td></tr>
+                        <tbody id="perf-slab-body">
+                            <!-- JS Generated -->
+                        </tbody>
+                        
+                        <tr class="bold-row">
+                            <td colspan="2">Tax Rebate Under Section 87a</td>
+                            <td class="val-col" style="color:green;"><span id="perf-rebate">0</span></td>
+                            <td></td>
+                        </tr>
+                        <tr class="bold-row" style="background: #ffebee;">
+                            <td colspan="2">TAX PAYABLE (Total)</td>
+                            <td class="val-col"><span id="perf-tax-only">0</span></td>
+                            <td class="val-col"><span id="perf-tax-final-col">0</span></td>
+                        </tr>
+
+                        <tr><td class="item-label" colspan="2">K. Education Cess @ 4% of Above</td><td class="val-col"><span id="perf-cess">0</span></td><td></td></tr>
+                        <tr class="bold-row">
+                            <td class="item-label" colspan="3">L. Total Tax Payable (Item No. J + K)</td>
+                            <td class="val-col"><span id="perf-total-payable">0</span></td>
+                        </tr>
+                        <tr><td class="item-label" colspan="3">M. Tax deducted at source (IT paid total)</td><td class="val-col" style="color:red;"><span id="perf-it-paid">0</span></td></tr>
+                        <tr class="bold-row" style="font-size: 14px; border-top: 2px solid #000;">
+                            <td class="item-label" colspan="3">N. Balance Tax Payable (Item No. L - M)</td>
+                            <td class="val-col" id="perf-balance-tax">0</td>
+                        </tr>
+                    </table>
+
+                    <div style="margin-top: 40px; font-size: 13px;">
+                        <strong>Verification</strong><br>
+                        I, <strong>{{ p.basic.empname }}</strong>, do hereby declare that what is stated above is true to the best of my knowledge and belief. 
+                        Verified today, the <strong>{{ today.day }}</strong> day of <strong>{{ today.month }}</strong> 202<strong>{{ today.year|string|last }}</strong>.
+                        
+                        <div style="display: flex; justify-content: space-between; margin-top: 50px;">
+                            <div style="border-top: 1px solid #000; width: 150px; text-align: center;">Checked by</div>
+                            <div style="border-top: 1px solid #000; width: 200px; text-align: center;">Signature of Employee</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 no-print text-center">
+                    <button type="submit" class="btn btn-lg btn-success">📊 EXPORT TO EXCEL WITH FORMULAS</button>
+                    <button type="button" class="btn btn-lg btn-primary ms-3" onclick="window.print()">🖨️ PRINT PERFORMA</button>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function loadYearData() {
+    const fy = document.getElementById('fin_year_select').value;
+    if (fy) window.location.href = '?fin_year=' + fy;
+}
+
+function addRow() {
+    const tbody = document.querySelector('#salaryTable tbody');
+    const newRow = document.createElement('tr');
+    newRow.className = 'data-row';
+    newRow.innerHTML = `
+        <td><input type="text" name="period[]" value="Extra" style="text-align:center;"></td>
+        <td><input type="number" name="basic[]" value="0" class="calc-trigger"></td>
+        <td><input type="number" name="da[]" value="0" class="calc-trigger"></td>
+        <td><input type="number" name="hra[]" value="0" class="calc-trigger"></td>
+        <td><input type="number" name="fma[]" value="0" class="calc-trigger"></td>
+        <td align="right" class="row-total" style="font-weight:bold; background:#f9f9f9;">0</td>
+        <td><input type="number" name="gpf[]" value="0" class="calc-trigger"></td>
+        <td><input type="number" name="gslis[]" value="0" class="calc-trigger"></td>
+        <td><input type="number" name="pt[]" value="0" class="calc-trigger"></td>
+        <td><input type="number" name="it[]" value="0" class="calc-trigger-it"></td>
+        <td align="center" class="no-print"><button type="button" class="btn btn-xs btn-danger" onclick="removeRow(this)">×</button></td>
+    `;
+    tbody.appendChild(newRow);
+    attachEvents();
+    calculateAll();
+}
+
+function removeRow(btn) { btn.closest('tr').remove(); calculateAll(); }
+
+function showRegime(mode) {
+    document.getElementById('selected_regime').value = mode;
+    const btnNew = document.getElementById('btn-new');
+    const btnOld = document.getElementById('btn-old');
+    
+    if (mode === 'NEW') {
+        btnNew.className = 'btn btn-primary';
+        btnOld.className = 'btn btn-outline-primary ms-2';
+        document.getElementById('perf-regime-title').innerText = 'New Regime (115BAC)';
+        document.querySelectorAll('.old-only').forEach(el => el.style.display = 'none');
+    } else {
+        btnNew.className = 'btn btn-outline-primary';
+        btnOld.className = 'btn btn-primary ms-2';
+        document.getElementById('perf-regime-title').innerText = 'Old Regime';
+        document.querySelectorAll('.old-only').forEach(el => el.style.display = 'table-row');
+    }
+    calculateAll();
+}
+
+function calculateAll() {
+    const regime = document.getElementById('selected_regime').value;
+    let t_basic = 0, t_da = 0, t_hra = 0, t_fma = 0, t_gross = 0, t_gpf = 0, t_gslis = 0, t_pt = 0, t_it = 0;
+
+    document.querySelectorAll('.data-row').forEach(row => {
+        const basic = parseFloat(row.querySelector('[name="basic[]"]').value) || 0;
+        const da = parseFloat(row.querySelector('[name="da[]"]').value) || 0;
+        const hra = parseFloat(row.querySelector('[name="hra[]"]').value) || 0;
+        const fma = parseFloat(row.querySelector('[name="fma[]"]').value) || 0;
+        const rowTotal = basic + da + hra + fma;
+        row.querySelector('.row-total').innerText = Math.round(rowTotal).toLocaleString();
+        t_basic += basic; t_da += da; t_hra += hra; t_fma += fma; t_gross += rowTotal;
+        t_gpf += parseFloat(row.querySelector('[name="gpf[]"]').value) || 0;
+        t_gslis += parseFloat(row.querySelector('[name="gslis[]"]').value) || 0;
+        t_pt += parseFloat(row.querySelector('[name="pt[]"]').value) || 0;
+        t_it += parseFloat(row.querySelector('[name="it[]"]').value) || 0;
+    });
+
+    // Totals
+    document.getElementById('total-basic').innerText = Math.round(t_basic).toLocaleString();
+    document.getElementById('total-da').innerText = Math.round(t_da).toLocaleString();
+    document.getElementById('total-hra').innerText = Math.round(t_hra).toLocaleString();
+    document.getElementById('total-fma').innerText = Math.round(t_fma).toLocaleString();
+    document.getElementById('total-gross').innerText = Math.round(t_gross).toLocaleString();
+    document.getElementById('total-gpf').innerText = Math.round(t_gpf).toLocaleString();
+    document.getElementById('total-gslis').innerText = Math.round(t_gslis).toLocaleString();
+    document.getElementById('total-pt').innerText = Math.round(t_pt).toLocaleString();
+    document.getElementById('total-it').innerText = Math.round(t_it).toLocaleString();
+
+    // Performa Logic
+    const gross = Math.round(t_gross);
+    document.getElementById('perf-gross').innerText = gross.toLocaleString();
+    
+    const stdDed = (regime === 'NEW') ? 75000 : 50000;
+    document.getElementById('perf-std-ded').innerText = stdDed.toLocaleString();
+    const balA = gross - stdDed;
+    document.getElementById('perf-balance-a').innerText = balA.toLocaleString();
+
+    let taxableTotal = balA;
+
+    if (regime === 'OLD') {
+        const exHra = parseFloat(document.querySelector('[name="ex_hra"]').value) || 0;
+        const exCea = parseFloat(document.querySelector('[name="ex_cea"]').value) || 0;
+        const exConv = parseFloat(document.querySelector('[name="ex_conv"]').value) || 0;
+        const incSal = balA - exHra - exCea - exConv;
+        document.getElementById('perf-income-salary').innerText = incSal.toLocaleString();
+
+        const incHouse = parseFloat(document.querySelector('[name="inc_house"]').value) || 0;
+        const exHouseInt = parseFloat(document.querySelector('[name="ex_house_int"]').value) || 0;
+        const incOther = parseFloat(document.querySelector('[name="inc_other"]').value) || 0;
+        const GTI = incSal + incHouse - exHouseInt + incOther;
+        document.getElementById('perf-gti').innerText = GTI.toLocaleString();
+
+        document.getElementById('perf-gpf-val').innerText = t_gpf.toLocaleString();
+        document.getElementById('perf-gis-val').innerText = t_gslis.toLocaleString();
+        const sLic = parseFloat(document.querySelector('[name="s_lic"]').value) || 0;
+        const sUlip = parseFloat(document.querySelector('[name="s_ulip"]').value) || 0;
+        const sHloan = parseFloat(document.querySelector('[name="s_hloan"]').value) || 0;
+        const sTui = parseFloat(document.querySelector('[name="s_tuition"]').value) || 0;
+        const sNsc = parseFloat(document.querySelector('[name="s_nsc"]').value) || 0;
+        const sPpf = parseFloat(document.querySelector('[name="s_ppf"]').value) || 0;
+        
+        let total80C = t_gpf + t_gslis + sLic + sUlip + sHloan + sTui + sNsc + sPpf;
+        total80C = Math.min(total80C, 150000);
+        document.getElementById('perf-total-80c').innerText = total80C.toLocaleString();
+
+        const otherDed = parseFloat(document.querySelector('[name="s_other_ded"]').value) || 0;
+        taxableTotal = Math.round((GTI - total80C - otherDed) / 10) * 10;
+    } else {
+        // NEW REGIME simplified
+        const incOther = parseFloat(document.querySelector('[name="inc_other"]').value) || 0;
+        taxableTotal = Math.round((balA + incOther) / 10) * 10;
+        document.getElementById('perf-gti').innerText = taxableTotal.toLocaleString();
+    }
+
+    document.getElementById('perf-taxable-total').innerText = taxableTotal.toLocaleString();
+
+    // Slabs
+    const slabs = (regime === 'NEW') ? [
+        { l: 0, u: 400000, r: 'NIL' }, { l: 400000, u: 800000, r: '5%' }, { l: 800000, u: 1200000, r: '10%' },
+        { l: 1200000, u: 1600000, r: '15%' }, { l: 1600000, u: 2000000, r: '20%' }, { l: 2000000, u: 2400000, r: '25%' }, { l: 2400000, u: 99999999, r: '30%' }
+    ] : [
+        { l: 0, u: 250000, r: 'NIL' }, { l: 250000, u: 500000, r: '5%' }, { l: 500000, u: 1000000, r: '20%' }, { l: 1000000, u: 99999999, r: '30%' }
+    ];
+
+    let itOnly = 0;
+    let slabHtml = '';
+    slabs.forEach(s => {
+        if (taxableTotal > s.l) {
+            const amtInSlab = Math.min(taxableTotal, s.u) - s.l;
+            const rate = parseFloat(s.r) || 0;
+            const tax = (amtInSlab * rate) / 100;
+            itOnly += tax;
+            slabHtml += `<tr><td>${s.r}</td><td align="right">${amtInSlab.toLocaleString()}</td><td align="right">${Math.round(tax).toLocaleString()}</td><td></td></tr>`;
+        }
+    });
+    document.getElementById('perf-slab-body').innerHTML = slabHtml;
+
+    let rebate = 0;
+    const rebateLimit = (regime === 'NEW') ? 1200000 : 500000;
+    if (taxableTotal <= rebateLimit) { rebate = itOnly; itOnly = 0; }
+    
+    document.getElementById('perf-rebate').innerText = Math.round(rebate).toLocaleString();
+    document.getElementById('perf-tax-only').innerText = Math.round(itOnly).toLocaleString();
+    document.getElementById('perf-tax-final-col').innerText = Math.round(itOnly).toLocaleString();
+
+    const cess = Math.round(itOnly * 0.04);
+    document.getElementById('perf-cess').innerText = cess.toLocaleString();
+    const totalPayable = itOnly + cess;
+    document.getElementById('perf-total-payable').innerText = totalPayable.toLocaleString();
+    document.getElementById('perf-it-paid').innerText = t_it.toLocaleString();
+    
+    const balance = totalPayable - t_it;
+    const balEl = document.getElementById('perf-balance-tax');
+    balEl.innerText = balance.toLocaleString();
+    balEl.style.color = balance > 0 ? 'red' : 'green';
+}
+
+window.onload = () => { showRegime('NEW'); };
+</script>
+{% endblock %}

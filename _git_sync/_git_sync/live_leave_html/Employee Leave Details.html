@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)https://hauiums.in/Leave/SAL_EmpLeaveDetails.aspx?Mwpid=5093 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Employee Leave Details_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Employee Leave Details_files/default.css" type="text/css" rel="stylesheet"><link href="./Employee Leave Details_files/font.css" type="text/css" rel="stylesheet"><link href="./Employee Leave Details_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Employee Leave Details_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/Leave/SAL_EmpLeaveDetails.aspx?Mwpid=5093" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTQyMzc4ODM1Ng8WBB4GcG9zdGlkBSQyNTFhN2RkZS02ZjgwLTQ3NGYtYjg1OS1iMzkxNmVlZTljNTYeDExlYXZlRGV0YWlsczLnOAABAAAA/////wEAAAAAAAAADAIAAABOU3lzdGVtLkRhdGEsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5BQEAAAATU3lzdGVtLkRhdGEuRGF0YVNldAMAAAAXRGF0YVNldC5SZW1vdGluZ1ZlcnNpb24JWG1sU2NoZW1hC1htbERpZmZHcmFtAwEBDlN5c3RlbS5WZXJzaW9uAgAAAAkDAAAABgQAAAD7FDw/eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9InV0Zi0xNiI/Pg0KPHhzOnNjaGVtYSBpZD0iTmV3RGF0YVNldCIgeG1sbnM9IiIgeG1sbnM6eHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIiB4bWxuczptc2RhdGE9InVybjpzY2hlbWFzLW1pY3Jvc29mdC1jb206eG1sLW1zZGF0YSI+DQogIDx4czplbGVtZW50IG5hbWU9Ik5ld0RhdGFTZXQiIG1zZGF0YTpJc0RhdGFTZXQ9InRydWUiIG1zZGF0YTpVc2VDdXJyZW50TG9jYWxlPSJ0cnVlIj4NCiAgICA8eHM6Y29tcGxleFR5cGU+DQogICAgICA8eHM6Y2hvaWNlIG1pbk9jY3Vycz0iMCIgbWF4T2NjdXJzPSJ1bmJvdW5kZWQiPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJUYWJsZSI+DQogICAgICAgICAgPHhzOmNvbXBsZXhUeXBlPg0KICAgICAgICAgICAgPHhzOnNlcXVlbmNlPg0KICAgICAgICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJwa19sZWF2ZXJlcWlkIiB0eXBlPSJ4czppbnQiIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9IiIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJlbXBuYW1lIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9IiIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJsZWF2ZXR5cGUiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgICAgICAgIDx4czplbGVtZW50IG5hbWU9IlJlcXVlc3RUaW1lIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9IiIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJhcHBmcm9tZGF0ZSIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSIiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iYXBwdG9kYXRlIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9IiIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJ0b3RhbGRheXMiIHR5cGU9InhzOmRlY2ltYWwiIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9IiIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJsZWF2ZXN0YXR1cyIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSIiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iYXBwY29tbWVudHMiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgICAgICAgIDx4czplbGVtZW50IG5hbWU9ImNvbnRhY3RubyIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSIiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0icmVxZGF0ZSIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSIiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iYXBwcm92ZWRhdGUiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgICAgICAgIDx4czplbGVtZW50IG5hbWU9InJlY29tbWVuZEVtcENvZGUiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgICAgICAgIDx4czplbGVtZW50IG5hbWU9InJlYXNvbmZvcmxlYXZlIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9IiIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJTZnJvbWRhdGUiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgICAgICAgIDx4czplbGVtZW50IG5hbWU9IlN0b2RhdGUiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgICAgICAgIDx4czplbGVtZW50IG5hbWU9IkRlcGFydG1lbnQiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgICAgICAgIDx4czplbGVtZW50IG5hbWU9IkRETyIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSIiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iU2VjdGlvbiIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSIiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iQ29udHJvbGxpbmdPZmZpY2VyIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9IiIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICAgICAgPC94czpzZXF1ZW5jZT4NCiAgICAgICAgICA8L3hzOmNvbXBsZXhUeXBlPg0KICAgICAgICA8L3hzOmVsZW1lbnQ+DQogICAgICA8L3hzOmNob2ljZT4NCiAgICA8L3hzOmNvbXBsZXhUeXBlPg0KICA8L3hzOmVsZW1lbnQ+DQo8L3hzOnNjaGVtYT4GBQAAAMMhPGRpZmZncjpkaWZmZ3JhbSB4bWxuczptc2RhdGE9InVybjpzY2hlbWFzLW1pY3Jvc29mdC1jb206eG1sLW1zZGF0YSIgeG1sbnM6ZGlmZmdyPSJ1cm46c2NoZW1hcy1taWNyb3NvZnQtY29tOnhtbC1kaWZmZ3JhbS12MSI+PE5ld0RhdGFTZXQ+PFRhYmxlIGRpZmZncjppZD0iVGFibGUxIiBtc2RhdGE6cm93T3JkZXI9IjAiPjxwa19sZWF2ZXJlcWlkPjg3Mzg4NjwvcGtfbGVhdmVyZXFpZD48ZW1wbmFtZT5NYW5qdSBUb25rPC9lbXBuYW1lPjxsZWF2ZXR5cGU+RWFybmVkIExlYXZlPC9sZWF2ZXR5cGU+PFJlcXVlc3RUaW1lPjI3LzAxLzIwMjYgMTE6MTU8L1JlcXVlc3RUaW1lPjxhcHBmcm9tZGF0ZT4yOC8wMS8yMDI2PC9hcHBmcm9tZGF0ZT48YXBwdG9kYXRlPjA3LzAyLzIwMjY8L2FwcHRvZGF0ZT48dG90YWxkYXlzPjExLjAwPC90b3RhbGRheXM+PGxlYXZlc3RhdHVzPkFwcHJvdmVkPC9sZWF2ZXN0YXR1cz48YXBwY29tbWVudHMgLz48Y29udGFjdG5vPjk5OTYyMTAyNzc8L2NvbnRhY3Rubz48cmVxZGF0ZT4yNy8wMS8yMDI2PC9yZXFkYXRlPjxhcHByb3ZlZGF0ZT4yNy8wMS8yMDI2PC9hcHByb3ZlZGF0ZT48cmVjb21tZW5kRW1wQ29kZSAvPjxyZWFzb25mb3JsZWF2ZT5wcmVwYXJhdGlvbiBmb3IgcmV0aXJlbWVudDwvcmVhc29uZm9ybGVhdmU+PERlcGFydG1lbnQ+TWF0aGVtYXRpY3MgYW5kIFN0YXRpc3RpY3M8L0RlcGFydG1lbnQ+PERETz5BJmFtcDtBTywgQ09CUyZhbXA7SDwvRERPPjxDb250cm9sbGluZ09mZmljZXI+Q29sbGVnZSBvZiBCYXNpYyBTY2llbmNlIGFuZCBIdW1hbml0aWVzPC9Db250cm9sbGluZ09mZmljZXI+PC9UYWJsZT48VGFibGUgZGlmZmdyOmlkPSJUYWJsZTIiIG1zZGF0YTpyb3dPcmRlcj0iMSI+PHBrX2xlYXZlcmVxaWQ+ODc0MzE5PC9wa19sZWF2ZXJlcWlkPjxlbXBuYW1lPk1hbm9qIEt1bWFyPC9lbXBuYW1lPjxsZWF2ZXR5cGU+Q2FzdWFsIExlYXZlPC9sZWF2ZXR5cGU+PFJlcXVlc3RUaW1lPjAyLzAyLzIwMjYgMTE6NTg8L1JlcXVlc3RUaW1lPjxhcHBmcm9tZGF0ZT4wNi8wMi8yMDI2PC9hcHBmcm9tZGF0ZT48YXBwdG9kYXRlPjA5LzAyLzIwMjY8L2FwcHRvZGF0ZT48dG90YWxkYXlzPjMuMDA8L3RvdGFsZGF5cz48bGVhdmVzdGF0dXM+QXBwcm92ZWQ8L2xlYXZlc3RhdHVzPjxhcHBjb21tZW50cyAvPjxjb250YWN0bm8+OTQxNjA3ODcwMTwvY29udGFjdG5vPjxyZXFkYXRlPjAyLzAyLzIwMjY8L3JlcWRhdGU+PGFwcHJvdmVkYXRlPjAyLzAyLzIwMjY8L2FwcHJvdmVkYXRlPjxyZWNvbW1lbmRFbXBDb2RlIC8+PHJlYXNvbmZvcmxlYXZlPlRvIGF0dGVuZCB0aGUgbWFycmlhZ2UgZnVuY3Rpb29uPC9yZWFzb25mb3JsZWF2ZT48U2Zyb21kYXRlPjA2LzAyLzIwMjY8L1Nmcm9tZGF0ZT48U3RvZGF0ZT4wOS8wMi8yMDI2PC9TdG9kYXRlPjxEZXBhcnRtZW50Pk1hdGhlbWF0aWNzIGFuZCBTdGF0aXN0aWNzPC9EZXBhcnRtZW50PjxERE8+QSZhbXA7QU8sIENPQlMmYW1wO0g8L0RETz48Q29udHJvbGxpbmdPZmZpY2VyPkNvbGxlZ2Ugb2YgQmFzaWMgU2NpZW5jZSBhbmQgSHVtYW5pdGllczwvQ29udHJvbGxpbmdPZmZpY2VyPjwvVGFibGU+PFRhYmxlIGRpZmZncjppZD0iVGFibGUzIiBtc2RhdGE6cm93T3JkZXI9IjIiPjxwa19sZWF2ZXJlcWlkPjg3NDI5NTwvcGtfbGVhdmVyZXFpZD48ZW1wbmFtZT5IZW1hbnQgUG9vbmlhPC9lbXBuYW1lPjxsZWF2ZXR5cGU+Q2FzdWFsIExlYXZlPC9sZWF2ZXR5cGU+PFJlcXVlc3RUaW1lPjAyLzAyLzIwMjYgMDk6MDk8L1JlcXVlc3RUaW1lPjxhcHBmcm9tZGF0ZT4wMi8wMi8yMDI2PC9hcHBmcm9tZGF0ZT48YXBwdG9kYXRlPjAyLzAyLzIwMjY8L2FwcHRvZGF0ZT48dG90YWxkYXlzPjAuNTA8L3RvdGFsZGF5cz48bGVhdmVzdGF0dXM+QXBwcm92ZWQ8L2xlYXZlc3RhdHVzPjxhcHBjb21tZW50cyAvPjxjb250YWN0bm8+OTY0ODE5MjA3MTwvY29udGFjdG5vPjxyZXFkYXRlPjAyLzAyLzIwMjY8L3JlcWRhdGU+PGFwcHJvdmVkYXRlPjAyLzAyLzIwMjY8L2FwcHJvdmVkYXRlPjxyZWNvbW1lbmRFbXBDb2RlIC8+PHJlYXNvbmZvcmxlYXZlPlBlcnNvbmFsPC9yZWFzb25mb3JsZWF2ZT48RGVwYXJ0bWVudD5NYXRoZW1hdGljcyBhbmQgU3RhdGlzdGljczwvRGVwYXJ0bWVudD48RERPPkEmYW1wO0FPLCBDT0JTJmFtcDtIPC9ERE8+PENvbnRyb2xsaW5nT2ZmaWNlcj5Db2xsZWdlIG9mIEJhc2ljIFNjaWVuY2UgYW5kIEh1bWFuaXRpZXM8L0NvbnRyb2xsaW5nT2ZmaWNlcj48L1RhYmxlPjxUYWJsZSBkaWZmZ3I6aWQ9IlRhYmxlNCIgbXNkYXRhOnJvd09yZGVyPSIzIj48cGtfbGVhdmVyZXFpZD44NzI3NzM8L3BrX2xlYXZlcmVxaWQ+PGVtcG5hbWU+T20gUGFya2FzaCBTaGVvcmFuPC9lbXBuYW1lPjxsZWF2ZXR5cGU+RHV0eSBMZWF2ZTwvbGVhdmV0eXBlPjxSZXF1ZXN0VGltZT4wOC8wMS8yMDI2IDE0OjM5PC9SZXF1ZXN0VGltZT48YXBwZnJvbWRhdGU+MDgvMDEvMjAyNjwvYXBwZnJvbWRhdGU+PGFwcHRvZGF0ZT4wOC8wMS8yMDI2PC9hcHB0b2RhdGU+PHRvdGFsZGF5cz4xLjAwPC90b3RhbGRheXM+PGxlYXZlc3RhdHVzPkFwcHJvdmVkPC9sZWF2ZXN0YXR1cz48YXBwY29tbWVudHM+Tm9uZTwvYXBwY29tbWVudHM+PGNvbnRhY3Rubz45NDE2MjQxMzI2PC9jb250YWN0bm8+PHJlcWRhdGU+MDgvMDEvMjAyNjwvcmVxZGF0ZT48YXBwcm92ZWRhdGU+MDgvMDEvMjAyNjwvYXBwcm92ZWRhdGU+PHJlYXNvbmZvcmxlYXZlPkR1dHkgTGVhdmU8L3JlYXNvbmZvcmxlYXZlPjxEZXBhcnRtZW50Pk1hdGhlbWF0aWNzIGFuZCBTdGF0aXN0aWNzPC9EZXBhcnRtZW50PjxERE8+QSZhbXA7QU8sIENPQlMmYW1wO0g8L0RETz48Q29udHJvbGxpbmdPZmZpY2VyPkNvbGxlZ2Ugb2YgQmFzaWMgU2NpZW5jZSBhbmQgSHVtYW5pdGllczwvQ29udHJvbGxpbmdPZmZpY2VyPjwvVGFibGU+PFRhYmxlIGRpZmZncjppZD0iVGFibGU1IiBtc2RhdGE6cm93T3JkZXI9IjQiPjxwa19sZWF2ZXJlcWlkPjg3Mzc0ODwvcGtfbGVhdmVyZXFpZD48ZW1wbmFtZT5IZW1hbnQgUG9vbmlhPC9lbXBuYW1lPjxsZWF2ZXR5cGU+U3RhdGlvbiBMZWF2ZTwvbGVhdmV0eXBlPjxSZXF1ZXN0VGltZT4yMi8wMS8yMDI2IDE1OjMzPC9SZXF1ZXN0VGltZT48YXBwZnJvbWRhdGU+MjIvMDEvMjAyNjwvYXBwZnJvbWRhdGU+PGFwcHRvZGF0ZT4yNi8wMS8yMDI2PC9hcHB0b2RhdGU+PHRvdGFsZGF5cz4xLjAwPC90b3RhbGRheXM+PGxlYXZlc3RhdHVzPkFwcHJvdmVkPC9sZWF2ZXN0YXR1cz48YXBwY29tbWVudHMgLz48Y29udGFjdG5vPjk2NDgxOTIwNzE8L2NvbnRhY3Rubz48cmVxZGF0ZT4yMi8wMS8yMDI2PC9yZXFkYXRlPjxhcHByb3ZlZGF0ZT4yNy8wMS8yMDI2PC9hcHByb3ZlZGF0ZT48cmVjb21tZW5kRW1wQ29kZSAvPjxyZWFzb25mb3JsZWF2ZT5QZXJzb25hbDwvcmVhc29uZm9ybGVhdmU+PERlcGFydG1lbnQ+TWF0aGVtYXRpY3MgYW5kIFN0YXRpc3RpY3M8L0RlcGFydG1lbnQ+PERETz5BJmFtcDtBTywgQ09CUyZhbXA7SDwvRERPPjxDb250cm9sbGluZ09mZmljZXI+Q29sbGVnZSBvZiBCYXNpYyBTY2llbmNlIGFuZCBIdW1hbml0aWVzPC9Db250cm9sbGluZ09mZmljZXI+PC9UYWJsZT48VGFibGUgZGlmZmdyOmlkPSJUYWJsZTYiIG1zZGF0YTpyb3dPcmRlcj0iNSI+PHBrX2xlYXZlcmVxaWQ+ODczNjI3PC9wa19sZWF2ZXJlcWlkPjxlbXBuYW1lPk1hbmp1IFRvbms8L2VtcG5hbWU+PGxlYXZldHlwZT5DYXN1YWwgTGVhdmU8L2xlYXZldHlwZT48UmVxdWVzdFRpbWU+MjEvMDEvMjAyNiAxMTowNzwvUmVxdWVzdFRpbWU+PGFwcGZyb21kYXRlPjIyLzAxLzIwMjY8L2FwcGZyb21kYXRlPjxhcHB0b2RhdGU+MjIvMDEvMjAyNjwvYXBwdG9kYXRlPjx0b3RhbGRheXM+MS4wMDwvdG90YWxkYXlzPjxsZWF2ZXN0YXR1cz5BcHByb3ZlZDwvbGVhdmVzdGF0dXM+PGFwcGNvbW1lbnRzIC8+PGNvbnRhY3Rubz45OTk2MjEwMjc3PC9jb250YWN0bm8+PHJlcWRhdGU+MjEvMDEvMjAyNjwvcmVxZGF0ZT48YXBwcm92ZWRhdGU+MjcvMDEvMjAyNjwvYXBwcm92ZWRhdGU+PHJlY29tbWVuZEVtcENvZGUgLz48cmVhc29uZm9ybGVhdmU+VXJnZW50IHdvcms8L3JlYXNvbmZvcmxlYXZlPjxEZXBhcnRtZW50Pk1hdGhlbWF0aWNzIGFuZCBTdGF0aXN0aWNzPC9EZXBhcnRtZW50PjxERE8+QSZhbXA7QU8sIENPQlMmYW1wO0g8L0RETz48Q29udHJvbGxpbmdPZmZpY2VyPkNvbGxlZ2Ugb2YgQmFzaWMgU2NpZW5jZSBhbmQgSHVtYW5pdGllczwvQ29udHJvbGxpbmdPZmZpY2VyPjwvVGFibGU+PC9OZXdEYXRhU2V0PjwvZGlmZmdyOmRpZmZncmFtPgQDAAAADlN5c3RlbS5WZXJzaW9uBAAAAAZfTWFqb3IGX01pbm9yBl9CdWlsZAlfUmV2aXNpb24AAAAACAgICAIAAAAAAAAA//////////8LFgJmDw8WAh4HUGVuZGluZwUBMGQWAgIBD2QWEAICDw8WAh4EVGV4dAURIFVuaXZlcnNpdHkgQWRtaW5kZAIEDw8WAh8DBRpMTFQuIC0gMi83LzIwMjYgODo0NDowNCBQTWRkAgUPDxYCHwMFGkNMVC4gLSAyLzgvMjAyNiA3OjAzOjI3IEFNZGQCBg8PFgIfAwURIFVuaXZlcnNpdHkgQWRtaW5kZAIHDw8WAh8DBRJDb21wdHJvbGxlciwgSGlzYXJkZAIJD2QWAmYPFgIfAwVIPHNwYW4+UmVwb3J0czwvc3Bhbj4mbmJzcDs+Jm5ic3A7PHN0cm9uZz5FbXBsb3llZSBMZWF2ZSBEZXRhaWxzPC9TdHJvbmc+ZAIKD2QWFGYPEA8WBh4NRGF0YVRleHRGaWVsZAULRGVzY3JpcHRpb24eDkRhdGFWYWx1ZUZpZWxkBQ1wa19Db250cm9sbGlkHgtfIURhdGFCb3VuZGdkEBUbIC0tIFNlbGVjdCBDb250cm9sbGluZyBPZmZpY2VyIC0tBEFCSUMNQ2FtcHVzIFNjaG9vbARDRlNUMkNvbGxlZ2Ugb2YgQWdyaWN1bHR1cmFsIEVuZ2luZWVyaW5nIGFuZCBUZWNobm9sb2d5FkNvbGxlZ2Ugb2YgQWdyaWN1bHR1cmUnQ29sbGVnZSBvZiBCYXNpYyBTY2llbmNlIGFuZCBIdW1hbml0aWVzGENvbGxlZ2Ugb2YgQmlvdGVjaG5vbG9neRpDb2xsZWdlIG9mIEZpc2hlcnkgU2NpZW5jZRdDb2xsZWdlIG9mIEhvbWUgU2NpZW5jZQtDb21wdHJvbGxlcglEZWFuLCBQR1MlRGlyZWN0b3JhdGUgSHVtYW4gUmVzb3VyY2UgTWFuYWdlbWVudCJEaXJlY3RvcmF0ZSBvZiBFeHRlbnNpb24gRWR1Y2F0aW9uE0RpcmVjdG9yYXRlIG9mIEZhcm0cRGlyZWN0b3JhdGUgb2YgUkRTIHNlZWQgZmFybRdEaXJlY3RvcmF0ZSBvZiBSZXNlYXJjaB9EaXJlY3RvcmF0ZSBvZiBTdHVkZW50cyBXZWxmYXJlIEVzdGF0ZSBvZmZpY2UgY3VtIENoaWVmIEVuZ2luZWVyA0hBVRVJbmNoYXJnZSBBZ3JpIFRvdXJpc20OTGFuZHNjYXBlIFVuaXQWT1NEIHRvIFZpY2UtQ2hhbmNlbGxvcglSZWdpc3RyYXIDU1ZDElVuaXZlcnNpdHkgTGlicmFyeRhWaWNlLUNoYW5jZWxsb3IncyBPZmZpY2UVGwAFQVgtMjIFQ08tMjgFS1YtMTIFS1YtMTQERVMtMQRFUy0yBUFYLTI0BUNPLTE5BEtWLTUES1YtNwVLVi0xMQRLVi02BEtWLTQFRVMtMTgFQ08tMjYFS1YtMTAFS1YtMTMFS1YtMTUES1YtOQVDTy0yMAVBWC0yMwVDTy0yNQRLVi0zBUNPLTIxBUtWLTE2BEtWLTgUKwMbZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnFgECBmQCAQ8QDxYGHwQFA0RETx8FBQhwa19kZG9pZB8GZ2QQFQ0QLS0gU2VsZWN0IERETyAtLShbIDE3NSBdIEhPRCwgTWF0aGVtYXRpY3MgYW5kwqBTdGF0aXN0aWNzJlsgMTc2IF0gSE9ELCBCb3RhbnkgJiBQbGFudCBQaHlzaW9sb2d5FFsgMTc3IF0gSE9ELCBab29sb2d5FlsgMTc4IF0gSE9ELCBDaGVtaXN0cnkUWyAxNzkgXSBIT0QsIFBoeXNpY3MrWyAxODAgXSBIT0QsIExhbmd1YWdlcyBhbmQgSGFyeWFudmkgQ3VsdHVyZRlbIDE4MSBdIEhPRCwgQmlvY2hlbWlzdHJ5FlsgMTgyIF0gSE9ELCBTb2Npb2xvZ3kRWyAxODMgXSBIT0QsIE1CQkIiWyAxODQgXSBJbmNoYXJnZSwgQ29tcHV0ZXIgU2VjdGlvbhRbIDE4NSBdIEEmQU8sIENPQlMmSBlbIDE4NiBdIEhPRCwgTWljcm9iaW9sb2d5FQ0ABVZDLTc1BVZDLTc2BVZDLTc3BUtaLTkwBUtaLTkxBVZDLTQ2BVZDLTgxBVZDLTcyBVZDLTQ5BVZDLTUwBVZDLTMyBUtWLTg1FCsDDWdnZ2dnZ2dnZ2dnZ2cWAQILZAICDxAPFgYfBAULZGVzY3JpcHRpb24fBQUJcGtfZGVwdGlkHwZnZBAVDxggLS0gU2VsZWN0IERlcGFydG1lbnQgLS0MQmlvY2hlbWlzdHJ5GUJvdGFueSAmIFBsYW50IFBoeXNpb2xvZ3kEQ0JOVCVDZW50cmUgb2YgRm9vZCBTY2llbmNlIGFuZCBUZWNobm9sb2d5CUNoZW1pc3RyeRBDb21wdXRlciBTZWN0aW9uE0RlYW4gb2ZmaWNlLCBDT0JTJkgeTGFuZ3VhZ2VzIGFuZCBIYXJ5YW52aSBDdWx0dXJlGk1hdGhlbWF0aWNzIGFuZCBTdGF0aXN0aWNzDE1pY3JvYmlvbG9neTFNb2xlY3VsYXIgQmlvbG9neSwgQmlvdGVjaG5vbG9neSAmIEJpb2luZm9ybWF0aWNzB1BoeXNpY3MJU29jaW9sb2d5FVpvb2xvZ3kgJiBBcXVhY3VsdHVyZRUPAAVWQy04NwVWQy04MgZBUC0xMzcFVkMtNjUGS1otMTE5BVZDLTE3BVZDLTMxBVZDLTExBVZDLTgxBFZDLTIFVkMtMTYGS1otMTE4BVZDLTc0BVZDLTgzFCsDD2dnZ2dnZ2dnZ2dnZ2dnZxYBAglkAgMPEA8WBh8EBQtEZXNjcmlwdGlvbh8FBQxwa19zZWN0aW9uaWQfBmdkEBUBFC0tIFNlbGVjdCBTZWN0aW9uIC0tFQEAFCsDAWcWAWZkAgQPDxYCHwMFCjAxLzAxLzIwMjYWAh4IcmVhZG9ubHkFCHJlYWRvbmx5ZAIFDw8WAh8DBQowOC8wMi8yMDI2FgIfBwUIcmVhZG9ubHlkAgYPEGRkFgFmZAIJDw8WAh4NQW50aGVtVmlzaWJsZWdkZAIKDw8WAh8IZ2QWAgIBDzwrABEDAA8WBB8GZx4LXyFJdGVtQ291bnQCBmQBEBYAFgAWAAwUKwAAFgJmD2QWDgIBD2QWGmYPZBYCZg8VAQExZAIBDw8WAh8DBQpNYW5qdSBUb25rZGQCAg8PFgIfAwUaTWF0aGVtYXRpY3MgYW5kIFN0YXRpc3RpY3NkZAIDDw8WAh8DBQxFYXJuZWQgTGVhdmVkZAIEDw8WAh8DBRAyNy8wMS8yMDI2IDExOjE1ZGQCBQ8PFgIfAwUKMjgvMDEvMjAyNmRkAgYPDxYCHwMFCjA3LzAyLzIwMjZkZAIHDw8W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">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Employee Leave Details_files/WebResource.axd" type="text/javascript"></script>
+<script src="./Employee Leave Details_files/WebResource(1).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="9A9270D4">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAEG33IJXvvOlIyRLBTxF85EdRyk5P+91hMCfDVCSoqBkp9UuCVul84E98+wHMMGBPIvejDgMOHFTtBKeQ6A417Zo5jaJXMQ/HOT7+IK1MJrANCeK5r2pofhYjiFjdOBOTHJ1yxoLhAFdJYaFlgJUFS6Zkag0xIZhxnP1Zx6dgEKtBZhlk/IisAW8SGjyiAnugrvjx3DvtdijBwY/la6LpC3S1RC96h4rFau0E0+h2QdDjDj/vIjs9FRwmp23NZrXe3lMs5NlnyH3Lwv9ewq4DhSMrmldP/ncRjFRzTI0byfDSGPiP9fFOAexpMZ7E6scM1sgHfzoWMUDyV539k2cUovy/2bPCIPk1hCxjm+ez2sgDUfUSSjaOyePT1CdvX79moxr0srHD95uZlMfRHnxzDwR8v0nqNyne6dU/zfIfcbos+L/wihb3V0A833LpOw3Z7wG3mKK4G4htohNszo9kxX2LoZTx2WuXDOxYAhbdwcwcgxLtsC27nMRt4tiX8mvWXcN1KrXTNqxQ+QVu5yrhnntoYxD3ueu81L3IlhkDPsjjArKnIF+l/htc80de2Kq/yQz4Z6AcpKlJXOQeI9de1BniJxbFYb7jm7N5lKQNHAnInKzcDxiuKJE457LOVQRWNPPH3mfY8X520BAX/hscmELBXIiFGNcLAS0/D2d+2QNRLJc/HqRjnNfXXbroRw6H/pGB8mQHZThkILSf5ECcdJi3BPsWEYKRrBNhQPYmkm3fffSfqsu5AEiUoGNRqFwnYC8xVfhkENhKUsf3+P2GVym2ro9NrkRlillWuwm9fg8w1EqSVh6oMI3gLzJnI9dVTr8UFXtbQjEClox7W4Qnh5VLEl9aZhDlKQ7Meca2Q8vAmnQdkZmrtLNtYdNITTa1GdkNXm/8PxgMfZWlmc7vTZRInMwv/phnedPATFWDCONwTtEigCJJhZ2WqkIEyoshCzO4GEgO1Zl0Dd5clpI9FL1JZha3O5KAhTQ40WEZJQVAljfnPBtD9eFT01j/41N5ggmWbjNRM3c+bGrbAB/qqQcW2QEHdkdGdGjhjFnJb6LcmB2z3+atVQG1HchGCI55Cvnx4f+0vQ+hHXeqNIzL8TPw9G6UbWeTsqEp5Wlf2h25oHnnBm3NOBCKH5UIZuu6QZzgnE/wzjxkYR4dfkhcdqa379EGPzMToomQcB1vblH9McPW3OaZPlPo6j69IRlvFWOXTxe8ip3oh+lfGpkM7fuqzgEIgI2Wv1MIrSvZ2Iu2H/8EhdruHlW4aqJX4kNiYOJPI1EA6Ro2bUwABW99xzoFOqC1KScwC7tcaitwtp6XFK6AFJllXYDPSpPdkc3MbMY8kQZap3bak3SAhu5m6ym0hMHzp+mpbEcycvML9Y39bD7mreagr6cAs1GMCzQ4FbEH1VwZMPbS6khEk0jRzFK">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Employee Leave Details_files/Leave.png">
+                            Leave Management
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/Leave/SAL_EmpLeaveDetails.aspx?Mwpid=5093#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> University Admin</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> University Admin</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">Comptroller, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/Leave/SAL_EmpLeaveDetails.aspx?Mwpid=5093#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Employee Leave Details_files/WebResource(2).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Masters" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3209#" tabindex="-1">Masters</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Common Holidays Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_CommonHolidays_Mst.aspx?Mwpid=3211" tabindex="-1">Common Holidays Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Holiday Location Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_HolidayLocation_Mst.aspx?Mwpid=3212" tabindex="-1">Holiday Location Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Location Wise Holidays Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_LocationWiseHolidays_Mst.aspx?Mwpid=3214" tabindex="-1">Location Wise Holidays Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Weekly Off Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_WeeklyOff_Mst.aspx?Mwpid=3215" tabindex="-1">Weekly Off Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Type Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Leavetype_Mst.aspx?Mwpid=3216" tabindex="-1">Leave Type Master</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:9" role="menuitem" style="position: relative; float: left;"><a title="Transactions" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3210#" tabindex="-1">Transactions</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:9" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Previous Leave Assign" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_LeaveAssign.aspx?Mwpid=3491" tabindex="-1">Employee Previous Leave Assign</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Request" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_Employee_LeaveRequest.aspx?Mwpid=3309" tabindex="-1">Leave Request</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Departure Details" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceDepartureDtl.aspx?Mwpid=5069" tabindex="-1">Service Departure Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Leave Assignment" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Employee_LeaveAssignment.aspx?Mwpid=3055" tabindex="-1">Employee Leave Assignment</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Departure Status" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceDepartureDtl_Status.aspx?Mwpid=5187" tabindex="-1">Service Departure Status</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Departure from Admin" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceDeparturefromAdmin.aspx?Mwpid=5195" tabindex="-1">Service Departure from Admin</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee CPL Assignment" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Employee_CPLAssignment.aspx?Mwpid=5300" tabindex="-1">Employee CPL Assignment</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Joining Date" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceJoiningDate.aspx?Mwpid=4804" tabindex="-1">Service Joining Date</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Approval" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_Pending_LeaveRequest.aspx?Mwpid=3312" tabindex="-1">Leave Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Joining Status" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_LeaveJoiningStatus.aspx?Mwpid=4805" tabindex="-1">Service Joining Status</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Adjustment Request" class="level2 dynamic" href="https://hauiums.in/Leave/Emp_LeaveAdjustmentRequest.aspx?Mwpid=3310" tabindex="-1">Leave Adjustment Request</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Adjustment Approval" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_Pending_LeaveAdjustmentRequest.aspx?Mwpid=3314" tabindex="-1">Leave Adjustment Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Extend Request" class="level2 dynamic" href="https://hauiums.in/Leave/Emp_LeaveAdjustmentRequest_New.aspx?Mwpid=4874" tabindex="-1">Leave Extend Request</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Cancel Approved Leaves" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_CancelApprovedLeaves.aspx?Mwpid=4803" tabindex="-1">Cancel Approved Leaves</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Encashment" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Leaves_Encashment.aspx?Mwpid=3220" tabindex="-1">Leave Encashment</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Joining from Admin" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceJoiningDateFromAdmin.aspx?Mwpid=5073" tabindex="-1">Service Joining from Admin</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Transaction" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Employee_LeavesTaken_Details.aspx?Mwpid=3218" tabindex="-1">Leave Transaction</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Update Earned Leave Balance" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Update_EL_Balance.aspx?Mwpid=8440" tabindex="-1">Update Earned Leave Balance</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:29" role="menuitem" style="position: relative; float: left;"><a title="Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3418#" tabindex="-1">Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:29" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Transaction Reports" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_LeavesTaken_SelCriteria.aspx?Mwpid=3419" tabindex="-1">Leave Transaction Reports</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Reconcilliation Report" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_EarnedLeaves_Reconcil_rpt.aspx?Mwpid=4887" tabindex="-1">Leave Reconcilliation Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Leave Details" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_EmpLeaveDetails.aspx?Mwpid=5093" tabindex="-1">Employee Leave Details</a></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Reports</span>&nbsp;&gt;&nbsp;<strong>Employee Leave Details</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Employee Leave Details_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <script language="javascript" type="text/javascript">
+
+        function IsDigit(e) {
+            var keyCode = e.which ? e.which : e.keyCode
+            var result = (keyCode >= 48 && keyCode <= 57);
+            return result;
+        }
+    </script>
+    <div id="Anthem_ctl00_ContentPlaceHolder1_PnlLeave__"><div id="ctl00_ContentPlaceHolder1_PnlLeave">
+	
+        </div></div><div id="Anthem_ctl00_ContentPlaceHolder1_PnlBal__"></div><table cellpadding="0" cellspacing="0" border="0" style="width: 100%; text-align: left;" class="secContent">
+        <tbody><tr>
+            <td colspan="7" class="tableheading">Employee Leave Details
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+
+        <tr>
+            <td class="vtext">Controlling Officer</td>
+            <td class="colon">:
+            </td>
+            <td>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlControllingOfficer__"><select name="ctl00$ContentPlaceHolder1$ddlControllingOfficer" id="ctl00_ContentPlaceHolder1_ddlControllingOfficer" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlControllingOfficer&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value="">-- Select Controlling Officer --</option>
+	<option value="AX-22">ABIC</option>
+	<option value="CO-28">Campus School</option>
+	<option value="KV-12">CFST</option>
+	<option value="KV-14">College of Agricultural Engineering and Technology</option>
+	<option value="ES-1">College of Agriculture</option>
+	<option selected="selected" value="ES-2">College of Basic Science and Humanities</option>
+	<option value="AX-24">College of Biotechnology</option>
+	<option value="CO-19">College of Fishery Science</option>
+	<option value="KV-5">College of Home Science</option>
+	<option value="KV-7">Comptroller</option>
+	<option value="KV-11">Dean, PGS</option>
+	<option value="KV-6">Directorate Human Resource Management</option>
+	<option value="KV-4">Directorate of Extension Education</option>
+	<option value="ES-18">Directorate of Farm</option>
+	<option value="CO-26">Directorate of RDS seed farm</option>
+	<option value="KV-10">Directorate of Research</option>
+	<option value="KV-13">Directorate of Students Welfare</option>
+	<option value="KV-15">Estate office cum Chief Engineer</option>
+	<option value="KV-9">HAU</option>
+	<option value="CO-20">Incharge Agri Tourism</option>
+	<option value="AX-23">Landscape Unit</option>
+	<option value="CO-25">OSD to Vice-Chancellor</option>
+	<option value="KV-3">Registrar</option>
+	<option value="CO-21">SVC</option>
+	<option value="KV-16">University Library</option>
+	<option value="KV-8">Vice-Chancellor's Office</option>
+
+</select></span>
+            </td>
+            <td></td>
+            <td class="vtext">DDO</td>
+            <td class="colon">:
+            </td>
+            <td>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlDDO__"><select name="ctl00$ContentPlaceHolder1$ddlDDO" id="ctl00_ContentPlaceHolder1_ddlDDO" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlDDO&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value="">-- Select DDO --</option>
+	<option value="VC-75">[ 175 ] HOD, Mathematics and&nbsp;Statistics</option>
+	<option value="VC-76">[ 176 ] HOD, Botany &amp; Plant Physiology</option>
+	<option value="VC-77">[ 177 ] HOD, Zoology</option>
+	<option value="KZ-90">[ 178 ] HOD, Chemistry</option>
+	<option value="KZ-91">[ 179 ] HOD, Physics</option>
+	<option value="VC-46">[ 180 ] HOD, Languages and Haryanvi Culture</option>
+	<option value="VC-81">[ 181 ] HOD, Biochemistry</option>
+	<option value="VC-72">[ 182 ] HOD, Sociology</option>
+	<option value="VC-49">[ 183 ] HOD, MBBB</option>
+	<option value="VC-50">[ 184 ] Incharge, Computer Section</option>
+	<option selected="selected" value="VC-32">[ 185 ] A&amp;AO, COBS&amp;H</option>
+	<option value="KV-85">[ 186 ] HOD, Microbiology</option>
+
+</select></span>
+                *
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Department
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlDepartment__"><select name="ctl00$ContentPlaceHolder1$ddlDepartment" id="ctl00_ContentPlaceHolder1_ddlDepartment" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlDepartment&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value=""> -- Select Department --</option>
+	<option value="VC-87">Biochemistry</option>
+	<option value="VC-82">Botany &amp; Plant Physiology</option>
+	<option value="AP-137">CBNT</option>
+	<option value="VC-65">Centre of Food Science and Technology</option>
+	<option value="KZ-119">Chemistry</option>
+	<option value="VC-17">Computer Section</option>
+	<option value="VC-31">Dean office, COBS&amp;H</option>
+	<option value="VC-11">Languages and Haryanvi Culture</option>
+	<option selected="selected" value="VC-81">Mathematics and Statistics</option>
+	<option value="VC-2">Microbiology</option>
+	<option value="VC-16">Molecular Biology, Biotechnology &amp; Bioinformatics</option>
+	<option value="KZ-118">Physics</option>
+	<option value="VC-74">Sociology</option>
+	<option value="VC-83">Zoology &amp; Aquaculture</option>
+
+</select></span>
+            </td>
+            <td></td>
+            <td class="vtext">Section
+            </td>
+            <td class="colon">:
+            </td>
+            <td>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlSection__"><select name="ctl00$ContentPlaceHolder1$ddlSection" id="ctl00_ContentPlaceHolder1_ddlSection" class="dropdownlong">
+	<option selected="selected" value="">-- Select Section --</option>
+
+</select></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblFDate">From Date
+            </td>
+            <td class="colon" style="width: 2%">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_V_txtFDate__"><input name="ctl00$ContentPlaceHolder1$V_txtFDate" type="text" value="01/01/2026" maxlength="10" id="ctl00_ContentPlaceHolder1_V_txtFDate" class="textboxdate" onpaste="event.returnValue=false" onkeydown="return NumberOnly(event,this);" ondrag="return false;" ondrop="return false;" onmousedown="DisableRightClick(event)" onkeypress="return IsDigit(event);" readonly="readonly" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$V_txtFDate&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);" style="width:80px;"></span>
+
+                <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.aspnetForm.ctl00_ContentPlaceHolder1_V_txtFDate);return false;">
+                    <img align="absMiddle" alt="" border="0" class="PopcalTrigger" height="20" src="./Employee Leave Details_files/calbtn.gif" width="34"></a> *
+            </td>
+            <td></td>
+            <td class="vtext" id="lblTDate">To Date
+            </td>
+            <td class="colon" style="width: 2%">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_V_txtTDate__"><input name="ctl00$ContentPlaceHolder1$V_txtTDate" type="text" value="08/02/2026" maxlength="10" id="ctl00_ContentPlaceHolder1_V_txtTDate" class="textboxdate" onpaste="event.returnValue=false" onkeydown="return NumberOnly(event,this);" ondrag="return false;" ondrop="return false;" onmousedown="DisableRightClick(event)" onkeypress="return IsDigit(event);" readonly="readonly" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$V_txtTDate&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);" style="width:80px;"></span>
+
+                <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.aspnetForm.ctl00_ContentPlaceHolder1_V_txtTDate);return false;">
+                    <img align="absMiddle" alt="" border="0" class="PopcalTrigger" height="20" src="./Employee Leave Details_files/calbtn.gif" width="34"></a> *
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lbltype">Type
+            </td>
+            <td class="colon" style="width: 2%">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlType__"><select name="ctl00$ContentPlaceHolder1$ddlType" id="ctl00_ContentPlaceHolder1_ddlType" class="dropdownlong">
+	<option selected="selected" value="L">Leave</option>
+	<option value="B">Balance</option>
+
+</select></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="6">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnView__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnView" value="VIEW" id="ctl00_ContentPlaceHolder1_btnView" class="button-common" cellpadding="0" cellspacing="0"></span>
+
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnPrint__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnPrint" value="PRINT" id="ctl00_ContentPlaceHolder1_btnPrint" class="button-common" cellpadding="0" cellspacing="0"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="tablesubheading">Approved Leave Requests
+                </td>
+        </tr>
+        <tr>
+                <td colspan="7">
+                    <div id="Anthem_ctl00_ContentPlaceHolder1_gvApproved__"><div>
+		<table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" datakeyfield="pk_leavereqid" border="1" id="ctl00_ContentPlaceHolder1_gvApproved" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+			<tbody><tr class="header-style">
+				<th scope="col">S.No.</th><th scope="col">Employee Name</th><th scope="col">Department</th><th scope="col">Leave Type</th><th scope="col">Request DateTime</th><th scope="col">From Date</th><th scope="col">To Date</th><th scope="col">Station From Date</th><th scope="col">Station To Date</th><th scope="col">Total Leave Days</th><th scope="col">Contact No.</th><th scope="col">Reason for Leave</th><th scope="col">Comments</th>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    1
+                                </td><td align="left" style="width:11%;">Manju Tonk</td><td align="left" style="width:7%;">Mathematics and Statistics</td><td align="left" style="width:10%;">Earned Leave</td><td align="left" style="width:6%;">27/01/2026 11:15</td><td align="left" style="width:6%;">28/01/2026</td><td align="left" style="width:6%;">07/02/2026</td><td align="left" style="width:6%;">&nbsp;</td><td align="left" style="width:6%;">&nbsp;</td><td align="center" style="width:6%;">11.00</td><td align="left" style="width:6%;">9996210277</td><td align="center" style="width:12%;">preparation for retirement</td><td align="left" style="width:12%;">&nbsp;</td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    2
+                                </td><td align="left" style="width:11%;">Manoj Kumar</td><td align="left" style="width:7%;">Mathematics and Statistics</td><td align="left" style="width:10%;">Casual Leave</td><td align="left" style="width:6%;">02/02/2026 11:58</td><td align="left" style="width:6%;">06/02/2026</td><td align="left" style="width:6%;">09/02/2026</td><td align="left" style="width:6%;">06/02/2026</td><td align="left" style="width:6%;">09/02/2026</td><td align="center" style="width:6%;">3.00</td><td align="left" style="width:6%;">9416078701</td><td align="center" style="width:12%;">To attend the marriage functioon</td><td align="left" style="width:12%;">&nbsp;</td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    3
+                                </td><td align="left" style="width:11%;">Hemant Poonia</td><td align="left" style="width:7%;">Mathematics and Statistics</td><td align="left" style="width:10%;">Casual Leave</td><td align="left" style="width:6%;">02/02/2026 09:09</td><td align="left" style="width:6%;">02/02/2026</td><td align="left" style="width:6%;">02/02/2026</td><td align="left" style="width:6%;">&nbsp;</td><td align="left" style="width:6%;">&nbsp;</td><td align="center" style="width:6%;">0.50</td><td align="left" style="width:6%;">9648192071</td><td align="center" style="width:12%;">Personal</td><td align="left" style="width:12%;">&nbsp;</td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    4
+                                </td><td align="left" style="width:11%;">Om Parkash Sheoran</td><td align="left" style="width:7%;">Mathematics and Statistics</td><td align="left" style="width:10%;">Duty Leave</td><td align="left" style="width:6%;">08/01/2026 14:39</td><td align="left" style="width:6%;">08/01/2026</td><td align="left" style="width:6%;">08/01/2026</td><td align="left" style="width:6%;">&nbsp;</td><td align="left" style="width:6%;">&nbsp;</td><td align="center" style="width:6%;">1.00</td><td align="left" style="width:6%;">9416241326</td><td align="center" style="width:12%;">Duty Leave</td><td align="left" style="width:12%;">None</td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    5
+                                </td><td align="left" style="width:11%;">Hemant Poonia</td><td align="left" style="width:7%;">Mathematics and Statistics</td><td align="left" style="width:10%;">Station Leave</td><td align="left" style="width:6%;">22/01/2026 15:33</td><td align="left" style="width:6%;">22/01/2026</td><td align="left" style="width:6%;">26/01/2026</td><td align="left" style="width:6%;">&nbsp;</td><td align="left" style="width:6%;">&nbsp;</td><td align="center" style="width:6%;">1.00</td><td align="left" style="width:6%;">9648192071</td><td align="center" style="width:12%;">Personal</td><td align="left" style="width:12%;">&nbsp;</td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    6
+                                </td><td align="left" style="width:11%;">Manju Tonk</td><td align="left" style="width:7%;">Mathematics and Statistics</td><td align="left" style="width:10%;">Casual Leave</td><td align="left" style="width:6%;">21/01/2026 11:07</td><td align="left" style="width:6%;">22/01/2026</td><td align="left" style="width:6%;">22/01/2026</td><td align="left" style="width:6%;">&nbsp;</td><td align="left" style="width:6%;">&nbsp;</td><td align="center" style="width:6%;">1.00</td><td align="left" style="width:6%;">9996210277</td><td align="center" style="width:12%;">Urgent work</td><td align="left" style="width:12%;">&nbsp;</td>
+			</tr>
+		</tbody></table>
+	</div></div>
+                </td>
+            </tr>
+        
+
+
+        
+    </tbody></table>
+   
+
+    <iframe width="174" height="189" name="gToday:normal:agenda.js" id="gToday:normal:agenda.js" src="./Employee Leave Details_files/ipopeng.html" scrolling="no" frameborder="0" style="visibility: visible; z-index: 119; position: absolute; top: -500px; left: -500px;"></iframe>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script></form>
+
+
+<script language="javascript" src="./Employee Leave Details_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Employee Leave Details_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

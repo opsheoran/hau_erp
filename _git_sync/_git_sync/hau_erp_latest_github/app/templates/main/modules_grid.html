@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .module-grid-container { padding: 20px; }
+    .module-row { display: flex; flex-wrap: wrap; margin: -10px; justify-content: flex-start; }
+    .module-item { width: 20%; padding: 15px; text-align: center; } /* 5 per row */
+    
+    @media (max-width: 1200px) { .module-item { width: 25%; } } /* 4 per row */
+    @media (max-width: 992px) { .module-item { width: 33.33%; } }
+    @media (max-width: 768px) { .module-item { width: 50%; } }
+
+    .module-box { 
+        background: #fff; border: 1px solid #ddd; padding: 20px; transition: all 0.3s; cursor: pointer;
+        display: block; text-decoration: none; border-radius: 4px; height: 100%;
+    }
+    .module-box:hover { border-color: #3c8dbc; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: translateY(-5px); }
+    
+    .module-icon-img { width: 64px; height: 64px; margin-bottom: 15px; }
+    .module-name { color: #3c8dbc; font-weight: bold; font-size: 12px; text-transform: uppercase; display: block; }
+    
+    .grid-header { border-bottom: 2px solid #3c8dbc; padding-bottom: 10px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+    .grid-header h2 { font-size: 18px; font-weight: bold; color: #444; margin: 0; }
+</style>
+
+<div class="module-grid-container">
+    <div class="grid-header">
+        <h2>MODULES ASSIGNED</h2>
+        <div class="no-print">
+            <form method="GET">
+                <select name="loc_id" class="dropdown" style="width: 300px;" onchange="this.form.submit()">
+                    <option value="">-- Change Location --</option>
+                    {% for loc in locations %}
+                    <option value="{{ loc.id }}" {% if selected_loc|string == loc.id|string %}selected{% endif %}>{{ loc.name }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <div class="module-row">
+        {% for mod in modules %}
+        <div class="module-item">
+            <a href="{{ url_for('main.index', module_id=mod.pk_moduleId) }}" class="module-box">
+                {% set mod_name = mod.modulename.strip() %}
+                {% if 'Admission' in mod_name %}<img src="{{ url_for('static', filename='images/admission.png') }}" class="module-icon-img">
+                {% elif 'Establishment' in mod_name %}<img src="{{ url_for('static', filename='images/Establishment.png') }}" class="module-icon-img">
+                {% elif 'HRMS' in mod_name or 'Payroll' in mod_name %}<img src="{{ url_for('static', filename='images/hrms.png') }}" class="module-icon-img">
+                {% elif 'Leave' in mod_name %}<img src="{{ url_for('static', filename='images/Leave.png') }}" class="module-icon-img">
+                {% elif 'User Management' in mod_name %}<img src="{{ url_for('static', filename='images/user-management.png') }}" class="module-icon-img">
+                {% elif 'Research' in mod_name %}<img src="{{ url_for('static', filename='images/research.png') }}" class="module-icon-img">
+                {% elif 'RTI' in mod_name %}<img src="{{ url_for('static', filename='images/rti.png') }}" class="module-icon-img">
+                {% elif 'Tax' in mod_name %}<img src="{{ url_for('static', filename='images/Tax.png') }}" class="module-icon-img">
+                {% elif 'Budget' in mod_name %}<img src="{{ url_for('static', filename='images/Budget.png') }}" class="module-icon-img">
+                {% elif 'Finance' in mod_name %}<img src="{{ url_for('static', filename='images/Finance.png') }}" class="module-icon-img">
+                {% elif 'Agriculture' in mod_name %}<img src="{{ url_for('static', filename='images/agriculture-farm-mgmt.png') }}" class="module-icon-img">
+                {% elif 'Examination' in mod_name %}<img src="{{ url_for('static', filename='images/Examination.png') }}" class="module-icon-img">
+                {% elif 'Attendance' in mod_name %}<img src="{{ url_for('static', filename='images/attendance.png') }}" class="module-icon-img">
+                {% elif 'Bill Tracking' in mod_name %}<img src="{{ url_for('static', filename='images/bill-tracking-system.png') }}" class="module-icon-img">
+                {% elif 'Employee Portal' in mod_name %}<img src="{{ url_for('static', filename='images/employee-portal.png') }}" class="module-icon-img">
+                {% elif 'GPF' in mod_name or 'Pension' in mod_name %}<img src="{{ url_for('static', filename='images/GPF.png') }}" class="module-icon-img">
+                {% elif 'Recruitment' in mod_name %}<img src="{{ url_for('static', filename='images/Recruitment.png') }}" class="module-icon-img">
+                {% else %}<img src="{{ url_for('static', filename='images/logo.png') }}" class="module-icon-img">{% endif %}
+                
+                <span class="module-name">{{ mod_name }}</span>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

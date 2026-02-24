@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Member of Minor And Supporting</span></div>
+    
+    <div style="padding: 10px;">
+        <!-- SEARCH/FILTER SECTION -->
+        <form method="GET">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="tablesubheading" colspan="7">
+                            <a href="javascript:void(0)" onclick="toggleSection('pnlSearch')" style="float:left; font-size:11px; font-weight:bold; color:#3c8dbc;">Show / Hide</a>
+                            <span style="font-size:10px; margin-left:10px;">(Search criteria for employee)</span>
+                        </td>
+                    </tr>
+                    <tr id="pnlSearch" style="display:none;">
+                        <td colspan="7">
+                            <!-- Hidden search panel logic here if needed -->
+                        </td>
+                    </tr>
+                    
+                    <tr><td colspan="7" height="10"></td></tr>
+                    
+                    <tr>
+                        <td class="tableheading" colspan="7"><span class="mainheadingborderbottom">Member of Minor And Supporting </span></td>
+                    </tr>
+                    <tr><td colspan="7" height="10"></td></tr>
+
+                    <tr>
+                        <td width="21%" class="vtext">College</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="college_id" class="dropdown w-300" required onchange="this.form.submit()">
+                                <option value="0">--Select College--</option>
+                                {% for c in lookups.colleges %}<option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext" width="15%">Admitted Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" class="dropdown w-200" required>
+                                <option value="0">--Select Academic Session--</option>
+                                {% for s in lookups.sessions %}<option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" class="dropdown w-300" required onchange="this.form.submit()">
+                                <option value="0">--Select Degree--</option>
+                                {% for d in lookups.degrees %}<option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>{% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext">Specialization</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="branch_id" class="dropdown w-200" required>
+                                <option value="0">--Select Specialization--</option>
+                                {% for b in lookups.branches %}<option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>{% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr><td colspan="7" height="10"></td></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="5">
+                            <input type="submit" value="GET STUDENTS" class="button-common" style="width:120px;">
+                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="window.location.href='{{ url_for('academics.minor_advisor') }}'">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+
+        <!-- ASSIGNMENT SECTION -->
+            <form method="POST">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr>
+                            <td class="vtext" width="21%">Student Name</td>
+                            <td class="colon">:</td>
+                            <td colspan="5">
+                                <select name="sid" class="dropdown w-300" required onchange="loadCommittee(this.value)">
+                                    <option value="">--Select Student Name--</option>
+                                    {% for s in students %}
+                                    <option value="{{ s.pk_sid }}" {% if sid|string == s.pk_sid|string %}selected{% endif %}>{{ s.fullname }} [ {{ s.enrollmentno }} ]</option>
+                                    {% endfor %}
+                                </select>
+                                <span class="required">*</span>
+                            </td>
+                        </tr>
+                        
+                        <tr><td colspan="7" height="15"></td></tr>
+                        
+                        <tr>
+                            <td class="tablesubheading" colspan="7"><span class="subheadingborderbottom">Committee Details</span></td>
+                        </tr>
+                        <tr><td colspan="7" height="10"></td></tr>
+                        
+                        <tr>
+                            <td class="vtext">Status/Advisory Type</td>
+                            <td class="colon">:</td>
+                            <td class="required">
+                                <select name="role_id" id="ddlRole" class="dropdown w-250" required onchange="fillAdvisorByRole(this.value)">
+                                    <option value="">--Select--</option>
+                                    <option value="3">Member From Minor Subject</option>
+                                    <option value="4">Member From Supporting Subject</option>
+                                    <option value="6">Member From Major Subject</option>
+                                </select>
+                                <span class="required">*</span>
+                            </td>
+                            <td colspan="4"></td>
+                        </tr>
+                            <tr>
+                        <td class="vtext">Advisor Name</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="advisor_id" id="ddlAdvisor" class="dropdown w-300" required>
+                                <option value="">--Select Advisor Name--</option>
+                                {% for e in lookups.employees %}<option value="{{ e.id }}">{{ e.name }}</option>{% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td colspan="4"></td>
+                    </tr>
+                    
+                    <tr><td colspan="7" height="15"></td></tr>
+                    
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="5">
+                            <input type="submit" value="ADD" class="button-common" style="width:100px;">
+                            <input type="reset" value="RESET" class="button-common" style="width:100px; margin-left:5px;">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+
+        <!-- LIST OF ADVISORS (TOGGLEABLE) -->
+        <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="tablesubheading" colspan="7">
+                        <span class="subheadingborderbottom">List of Advisors</span>
+                        <a href="javascript:void(0)" onclick="toggleSection('gvdtl')" style="float:right; font-size:10px; color:#3c8dbc; font-weight:bold;">Show Filter</a>
+                    </td>
+                </tr>
+                <tr id="gvdtl" style="display:none;">
+                    <td colspan="7">
+                        <table class="table-grid-view" width="100%" id="committee_table">
+                            <thead>
+                                <tr class="header-style">
+                                    <th width="5%">S.No.</th>
+                                    <th>Student</th>
+                                    <th>Status/Advisory Type</th>
+                                    <th>Advisor Name</th>
+                                    <th>Designation</th>
+                                    <th>Department</th>
+                                    <th>Specialization</th>
+                                    <th width="5%">EDIT</th>
+                                    <th width="5%">DELETE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Loaded via AJAX -->
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="agreementRow" style="display:none;">
+                    <td colspan="7">
+                        <div style="padding:10px; background:#fffbe6; border:1px solid #ffe58f; margin-top:10px;">
+                            <label style="font-weight:normal;">
+                                <input type="checkbox" name="hod_agree" checked> 
+                                Check here to indicate that, the advisory committee of student has been formed in consultation with Head of the Department.
+                            </label>
+                            <div style="color:red; margin-top:5px; font-weight:bold;">Submit Date has expired or already submitted.</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br>
+
+        <!-- BOTTOM GRID (FULL LIST) -->
+        <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="tableheading" colspan="7">
+                        <a href="javascript:void(0)" style="float:right; font-size:10px; color:#3c8dbc; font-weight:bold;">Show Filter</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tablesubheading" colspan="7"><span class="subheadingborderbottom">List of Dean PGS Advisory Committee</span></td>
+                </tr>
+                <tr><td colspan="7" height="10"></td></tr>
+                <tr>
+                    <td colspan="7">
+                        <table class="table-grid-view" width="100%">
+                            <thead>
+                                <tr class="header-style">
+                                    <th width="3%">S.No.</th>
+                                    <th>Student Name</th>
+                                    <th>College Name</th>
+                                    <th>Degree</th>
+                                    <th>Session</th>
+                                    <th>Submit Date</th>
+                                    <th>Approval Status</th>
+                                    <th>Response Date</th>
+                                    <th>Remarks</th>
+                                    <th width="4%">Print</th>
+                                    <th width="4%">EDIT</th>
+                                    <th width="4%">DELETE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for s in students %}
+                                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
+                                    <td>{{ loop.index }}</td>
+                                    <td align="left"><b>{{ s.fullname }}</b><br><small>[ {{ s.enrollmentno }} ]</small></td>
+                                    <td align="left" style="font-size:9px;">{{ s.collegename }}</td>
+                                    <td align="left">{{ s.degreename }}</td>
+                                    <td>{{ s.sessionname }}</td>
+                                    <td>{{ s.submitdate or '-' }}</td>
+                                    <td>
+                                        <span style="font-weight:bold; color:{% if s.approvalstatus == 'A' %}green{% elif s.approvalstatus == 'R' %}red{% else %}orange{% endif %};">
+                                            {{ 'Approved' if s.approvalstatus == 'A' else ('Rejected' if s.approvalstatus == 'R' else 'Pending') }}
+                                        </span>
+                                    </td>
+                                    <td>{{ s.responsedate or '-' }}</td>
+                                    <td align="left">{{ s.responseremarks or '-' }}</td>
+                                    <td><img src="{{ url_for('static', filename='images/print.gif') }}" style="cursor:pointer"></td>
+                                    <td>
+                                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editMinorAdvisor({{ s.pk_sid }})'>
+                                    </td>
+                                    <td>
+                                        <img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer">
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr class="item-style"><td colspan="12" align="center" style="padding:20px; color:#999;">No records found.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function toggleSection(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === 'none' ? 'table-row' : 'none';
+}
+
+let currentCommittee = [];
+
+function editMinorAdvisor(sid) {
+    document.querySelector('select[name="sid"]').value = sid;
+    loadCommittee(sid);
+    window.scrollTo(0,0);
+}
+
+function loadCommittee(sid) {
+    if(!sid || sid === '0') {
+        currentCommittee = [];
+        return;
+    }
+    
+    fetch('/academics/api/student/' + sid + '/committee')
+        .then(res => res.json())
+        .then(data => {
+            currentCommittee = data;
+            const tbody = document.querySelector('#committee_table tbody');
+            tbody.innerHTML = '';
+            data.forEach((member, index) => {
+                const row = tbody.insertRow();
+                row.className = index % 2 === 0 ? 'item-style' : 'item-style-alt';
+                row.align = 'center';
+                let html = '<td>' + (index + 1) + '</td>';
+                html += '<td align="left">' + member.student_name + '</td>';
+                html += '<td>' + member.role_name + '</td>';
+                html += '<td align="left">' + member.advisor_name + '</td>';
+                html += '<td align="left">' + (member.designation || '-') + '</td>';
+                html += '<td align="left">' + (member.department || '-') + '</td>';
+                html += '<td align="left">' + (member.specialization || '-') + '</td>';
+                html += '<td><img src="/static/images/Edit.gif" style="cursor:pointer" onclick="fillForm(\'' + member.fk_statusid + '\', \'' + member.fk_empid + '\')"></td>';
+                html += '<td><img src="/static/images/Delete.gif" style="cursor:pointer"></td>';
+                row.innerHTML = html;
+            });
+            document.getElementById('gvdtl').style.display = 'table-row';
+            document.getElementById('agreementRow').style.display = 'table-row';
+        });
+}
+
+function fillAdvisorByRole(roleId) {
+    if(!roleId) return;
+    const member = currentCommittee.find(m => m.fk_statusid == roleId);
+    if(member) {
+        document.getElementById('ddlAdvisor').value = member.fk_empid;
+    } else {
+        document.getElementById('ddlAdvisor').value = "";
+    }
+}
+
+function fillForm(roleId, empId) {
+    document.getElementById('ddlRole').value = roleId;
+    document.getElementById('ddlAdvisor').value = empId;
+    // Scroll to the Committee Details section
+    const target = document.getElementById('ddlRole').closest('tr').previousElementSibling;
+    if(target) target.scrollIntoView({behavior: 'smooth'});
+}
+</script>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+{% block extra_head %}
+<style>
+    .tablesubheading { 
+        background-color: #2d5a27 !important; 
+        color: #ffffff !important; 
+        font-weight: bold; 
+        padding: 5px 10px; 
+        font-size: 12px; 
+        border: 1px solid #1e3d1a; 
+        display: block; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+<div class="hau-card">
+    <div class="tablesubheading">Leave Extend Request</div>
+    <div style="padding: 15px;">
+        <form method="POST">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="20%">Select Approved Leave to Extend</td><td class="colon">:</td>
+                    <td>
+                        <select name="req_id" class="dropdown" style="width: 400px;" required>
+                            <option value="">-- Select Approved Leave --</option>
+                            {% for l in leaves %}
+                            <option value="{{ l.id }}">{{ l.name }}</option>
+                            {% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Extend Up To</td><td class="colon">:</td>
+                    <td>
+                        <input type="date" name="extend_date" class="textbox" style="width: 150px;" required> <span class="required">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Extension Reason</td><td class="colon">:</td>
+                    <td>
+                        <textarea name="reason" class="textbox" style="width: 400px; height: 60px;"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td style="padding-top: 15px;">
+                        <input type="submit" value="SUBMIT REQUEST" class="button-common" style="background:#3c8dbc; color:white;">
+                        <input type="reset" value="RESET" class="button-common" style="margin-left:10px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% if total_pages > 1 %}
+<tr class="pager-style" align="center">
+    <td colspan="10" style="padding: 10px 0;">
+        <div class="d-flex justify-content-center align-items-center">
+            {% if page > 1 %}
+            <a href="?page={{ page - 1 }}{% if request.args.get('edit_id') %}&edit_id={{ request.args.get('edit_id') }}{% endif %}" class="btn btn-outline-secondary btn-xs py-0 px-2 me-2" style="font-size: 10px;">&laquo; Previous</a>
+            {% endif %}
+            
+            {% set start_page = [1, page - 2]|max %}
+            {% set end_page = [total_pages, start_page + 4]|min %}
+            {% if end_page == total_pages %}
+                {% set start_page = [1, end_page - 4]|max %}
+            {% endif %}
+
+            {% for p in range(start_page, end_page + 1) %}
+                {% if p == page %}
+                <span class="btn btn-primary btn-xs py-0 px-2 me-1" style="font-size: 10px; cursor: default;">{{ p }}</span>
+                {% else %}
+                <a href="?page={{ p }}{% if request.args.get('edit_id') %}&edit_id={{ request.args.get('edit_id') }}{% endif %}" class="btn btn-outline-primary btn-xs py-0 px-2 me-1" style="font-size: 10px;">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page < total_pages %}
+            <a href="?page={{ page + 1 }}{% if request.args.get('edit_id') %}&edit_id={{ request.args.get('edit_id') }}{% endif %}" class="btn btn-outline-secondary btn-xs py-0 px-2 ms-1" style="font-size: 10px;">Next &raquo;</a>
+            {% endif %}
+            
+            <span class="ms-3 text-muted" style="font-size: 10px;">Page {{ page }} of {{ total_pages }} (Total: {{ total_count }})</span>
+        </div>
+    </td>
+</tr>
+{% endif %}

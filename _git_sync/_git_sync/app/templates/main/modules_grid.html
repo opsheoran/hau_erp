@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .module-grid-container { padding: 20px; }
+    .module-row { display: flex; flex-wrap: wrap; margin: -10px; justify-content: flex-start; }
+    .module-item { width: 20%; padding: 15px; text-align: center; } /* 5 per row */
+    
+    @media (max-width: 1200px) { .module-item { width: 25%; } } /* 4 per row */
+    @media (max-width: 992px) { .module-item { width: 33.33%; } }
+    @media (max-width: 768px) { .module-item { width: 50%; } }
+
+    .module-box { 
+        background: #fff; border: 1px solid #eee; padding: 25px 20px; transition: all 0.4s ease; cursor: pointer;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-decoration: none !important; border-radius: 8px; height: 100%;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .module-box:hover, .module-box:focus { 
+        border-color: #3c8dbc; 
+        box-shadow: 0 8px 25px rgba(60, 141, 188, 0.15); 
+        transform: translateY(-8px); 
+        outline: none;
+    }
+    
+    .module-icon-img { 
+        width: 72px; height: 72px; margin-bottom: 15px; 
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .module-box:hover .module-icon-img, .module-box:focus .module-icon-img { 
+        transform: rotate(360deg); 
+    }
+
+    .module-name { 
+        color: #444; font-weight: bold; font-size: 11px; 
+        text-transform: uppercase; display: block; 
+        transition: color 0.3s;
+        letter-spacing: 0.5px;
+    }
+    .module-box:hover .module-name { color: #3c8dbc; }
+    
+    .grid-header { border-bottom: 2px solid #3c8dbc; padding-bottom: 12px; margin-bottom: 35px; display: flex; justify-content: space-between; align-items: center; }
+    .grid-header h2 { font-size: 18px; font-weight: bold; color: #333; margin: 0; }
+</style>
+
+<div class="module-grid-container">
+    <div class="grid-header">
+        <h2><i class="fas fa-th-large me-2"></i> MODULES ASSIGNED</h2>
+        <div class="no-print">
+            <form method="GET" class="d-flex align-items-center">
+                <span class="vtext me-2">Location:</span>
+                <select name="loc_id" class="dropdown" style="width: 320px;" onchange="this.form.submit()">
+                    <option value="">-- Select Your Campus --</option>
+                    {% for loc in locations %}
+                    <option value="{{ loc.id }}" {% if selected_loc|string == loc.id|string %}selected{% endif %}>{{ loc.name }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <div class="module-row">
+        {# Define the exact 21 modules and their corresponding local modern icons #}
+        {% set module_map = {
+            'Admission & Academics': url_for('static', filename='images/Admission_Academics.png'),
+            'Employee Portal': url_for('static', filename='images/Employee_Portal.png'),
+            'Financial Accounts': url_for('static', filename='images/Financial_Accounts.png'),
+            'PF': url_for('static', filename='images/PF.png'),
+            'Research': url_for('static', filename='images/Research.png'),
+            'Student Attendance': url_for('static', filename='images/Student_Attendance.png'),
+            'Agriculture Farm Management': url_for('static', filename='images/Agriculture_Farm_Management.png'),
+            'Establishment': url_for('static', filename='images/Establishment.png'),
+            'HRMS': url_for('static', filename='images/HRMS.png'),
+            'PreAdmission': url_for('static', filename='images/PreAdmission.png'),
+            'RTI': url_for('static', filename='images/RTI.png'),
+            'Tax Management': url_for('static', filename='images/Tax_Management.png'),
+            'Bill Tracking': url_for('static', filename='images/Bill_Tracking.png'),
+            'Examination & Results': url_for('static', filename='images/Examination_Results.png'),
+            'Leave Management': url_for('static', filename='images/Leave_Management.png'),
+            'Pre-Examination': url_for('static', filename='images/Pre_Examination.png'),
+            'SAR Module': url_for('static', filename='images/SAR_Module.png'),
+            'User Management': url_for('static', filename='images/User_Management.png'),
+            'Budget Management': url_for('static', filename='images/Budget_Management.png'),
+            'Fee Management': url_for('static', filename='images/Fee_Management.png'),
+            'Pension Management': url_for('static', filename='images/Pension_Management.png')
+        } %}
+
+        {% for mod in modules %}
+            {% set mod_name = mod.modulename.strip() %}
+            {% set ns = namespace(icon='') %}
+            
+            {# Perform robust name matching #}
+            {% for key, icon in module_map.items() %}
+                {% if key|lower in mod_name|lower or mod_name|lower in key|lower %}
+                    {% set ns.icon = icon %}
+                {% endif %}
+            {% endfor %}
+
+            {# Only display if it's one of the 21 requested modules #}
+            {% if ns.icon %}
+            <div class="module-item">
+                <a href="{{ url_for('main.index', module_id=mod.pk_moduleId) }}" class="module-box" tabindex="0">
+                    <img src="{{ ns.icon }}" class="module-icon-img">
+                    <span class="module-name">{{ mod_name }}</span>
+                </a>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -283,8 +283,8 @@ class NavModel:
 
     @staticmethod
     def get_all_fin_years():
-        """Fetches all financial years formatted as '2026'"""
-        return DB.fetch_all("SELECT pk_finid as id, Lyear as name FROM SAL_Financial_Year ORDER BY Lyear DESC")
+        """Fetches all financial years formatted as '2025-2026'"""
+        return DB.fetch_all("SELECT pk_finid as id, CAST(Lyear-1 as varchar) + '-' + CAST(Lyear as varchar) as name FROM SAL_Financial_Year WHERE Lyear IS NOT NULL ORDER BY Lyear DESC")
 
     @staticmethod
     def get_years():

@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% from "includes/pager_macro.html" import render_pager %}
+{% block content %}
+<style>
+    /* EXACT STYLES FROM leave_cancel_approval.html */
+    .table { width: 100%; border-collapse: collapse; font-family: Verdana, sans-serif; font-size: 11px; }
+    .tableheading { background-color: #2d5a27 !important; color: #fff !important; font-weight: bold; padding: 5px 10px; font-size: 12px; border: 1px solid #1e3d1a; }
+    .tablesubheading { background-color: #2d5a27 !important; color: #fff !important; font-weight: bold; padding: 5px 10px; font-size: 11px; border: 1px solid #1e3d1a; }
+    .vtext { font-weight: bold; color: #333; font-size: 11px; width: 150px; }
+    .colon { width: 15px; text-align: center; font-weight: bold; }
+    .textboxmultiline { border: 1px solid #ccc; padding: 3px; font-size: 11px; width: 400px; height: 40px; }
+    
+    .button-common1 { background: #f4f4f4; border: 1px solid #bbb; color: #333; padding: 3px 12px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+    .header-style th { background: #eee; border: 1px solid #ccc; padding: 5px; font-weight: bold; text-align: center; }
+    .item-style td { border: 1px solid #ccc; padding: 4px 8px; }
+</style>
+
+<div style="padding: 10px 20px;">
+    <!-- Main Heading -->
+    <table width="100%" class="table">
+        <tr><td class="tableheading">Leave Adjustment Approval</td></tr>
+        <tr><td style="height:10px;"></td></tr>
+        
+        <!-- Pending Section -->
+        <tr><td class="tablesubheading">Pending Leave Adjustment Requests</td></tr>
+        <tr><td style="height:10px;"></td></tr>
+        <tr>
+            <td>
+                <table width="100%" border="1" style="border:1px solid #D4D4D4; border-collapse:collapse;">
+                    <tr class="header-style">
+                        <th>S.No.</th><th>Requested By</th><th>Leave Type</th><th>Request Date</th><th>From Date</th><th>To Date</th><th>Total Days</th><th>Status</th><th>Reason</th><th>Contact No.</th><th>Action</th><th>View</th>
+                    </tr>
+                    {% if pending %}
+                        {% for p in pending %}
+                        <tr class="item-style" style="background-color: {{ 'White' if loop.index % 2 != 0 else '#F0F0F0' }};">
+                            <td align="center">{{ loop.index }}</td>
+                            <td>{{ p.empname }} ({{ p.empcode }})</td>
+                            <td>{{ p.leavetype }}</td>
+                            <td align="center">{{ p.RequestDate }}</td>
+                            <td align="center">{{ p.FromDate }}</td>
+                            <td align="center">{{ p.ToDate }}</td>
+                            <td align="right">{{ "{:,.2f}".format(p.totaldays|float) }}</td>
+                            <td align="center">{{ p.leaveadjstatus }}</td>
+                            <td>{{ p.remarks or '' }}</td>
+                            <td align="center">{{ p.contactno or '' }}</td>
+                            <td align="center">
+                                <a href="?adj_id={{ p.adj_id }}#response_panel">
+                                    <img src="{{ url_for('static', filename='images/srec.jpg') }}" border="0" title="Take Action">
+                                </a>
+                            </td>
+                            <td align="center">
+                                <a href="javascript:void(0)" onclick="openBalancePopup('{{ p.adj_id }}')">
+                                    <img src="{{ url_for('static', filename='images/srec.jpg') }}" border="0" title="View Balance">
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="12" align="center" style="padding:10px;">No Record Found!</td></tr>
+                    {% endif %}
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Response Detail Panel -->
+    {% if selected_adj %}
+    <div style="margin-top:20px; border:1px solid #2d5a27; padding:15px; background:#f9f9f9;" id="response_panel">
+        <table width="100%" class="table">
+            <tr><td class="tablesubheading" colspan="3">Response Detail</td></tr>
+            <tr><td style="padding:10px; font-weight:bold; color:#2d5a27;" colspan="3">
+                Action for: {{ selected_adj.empname }} ({{ selected_adj.empcode }}) | Leave: {{ selected_adj.leavetype }}
+            </td></tr>
+            <tr>
+                <td class="vtext">Leave Status</td><td class="colon">:</td>
+                <td>
+                    <form method="POST" id="approvalForm">
+                        <input type="hidden" name="adj_id" value="{{ selected_adj.adj_id }}">
+                        <select name="action" class="dropdown" required style="width:150px;">
+                            <option value="">-- Select Status --</option>
+                            <option value="APPROVE">APPROVED</option>
+                            <option value="REJECT">REJECTED</option>
+                        </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Comments</td><td class="colon">:</td>
+                <td>
+                        <textarea name="comments" class="textboxmultiline" style="width:80%; height:50px;" required></textarea> *
+                        <div style="margin-top:10px;">
+                            <input type="submit" value="DONE" class="button-common1" style="background:#2d5a27; color:white; border:1px solid #1e3d1a;">
+                            <a href="{{ url_for('leave.cancel_approvals') }}" class="button-common1" style="margin-left:10px; text-decoration:none; display:inline-block; padding:4px 12px; background:#eee; color:#333; border:1px solid #ccc; font-size:11px;">CANCEL</a>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Approved History Section -->
+    <table width="100%" class="table" style="margin-top:30px;">
+        <tr><td class="tablesubheading">Approved Leave Adjustment Requests</td></tr>
+        <tr><td style="height:10px;"></td></tr>
+        <tr>
+            <td>
+                <table width="100%" border="1" style="border:1px solid #D4D4D4; border-collapse:collapse;">
+                    <tr class="header-style">
+                        <th>S.No.</th><th>Requested By</th><th>Leave Type</th><th>Requested Date</th><th>Days</th><th>Approved Date</th><th>Comments</th>
+                    </tr>
+                    {% for h in history %}
+                    <tr class="item-style" style="background-color: {{ 'White' if loop.index % 2 != 0 else '#F0F0F0' }};">
+                        <td align="center">{{ loop.index + (pagination.page - 1) * 10 }}</td>
+                        <td>{{ h.empname }}</td>
+                        <td>{{ h.leavetype }}</td>
+                        <td align="center">{{ h.adjreqdate_fmt }}</td>
+                        <td align="right">{{ "{:,.2f}".format(h.totaladjleave|float) }}</td>
+                        <td align="center">{{ h.responsedate_fmt }}</td>
+                        <td>{{ h.remarks or '' }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {{ render_pager(pagination) }}
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- Balance Popup (Mimic ASPX LeaveDiv) -->
+{% if selected_adj and balances %}
+<div id="LeaveDiv" style="display:block; position:fixed; top:10%; left:15%; width:70%; height:80%; background:white; border:2px solid #3c8dbc; z-index:9999; box-shadow:0 0 20px rgba(0,0,0,0.5); overflow-y:auto; padding:20px;">
+    <div style="text-align:right;"><button onclick="this.parentElement.parentElement.style.display='none'" class="button-common1">X</button></div>
+    <table width="100%" class="table">
+        <tr><td class="tablesubheading">Employee Leave Balance Details</td></tr>
+        <tr><td style="padding:10px; font-weight:bold; color:blue;">{{ selected_adj.empname }} ({{ selected_adj.empcode }})</td></tr>
+        <tr>
+            <td>
+                <table width="100%" border="1" style="border:1px solid #D4D4D4; border-collapse:collapse;">
+                    <tr class="header-style">
+                        <th>S.No.</th><th>Leave Type</th><th>Total</th><th>Availed</th><th>Adjusted</th><th>Balance</th>
+                    </tr>
+                    {% for b in balances %}
+                    <tr class="item-style">
+                        <td align="center">{{ loop.index }}</td>
+                        <td>{{ b.leavetype }}</td>
+                        <td align="right">{{ b.total }}</td>
+                        <td align="right">{{ b.availed }}</td>
+                        <td align="right">{{ b.adjusted_val }}</td>
+                        <td align="right">{{ b.balance }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+        <tr><td class="tablesubheading" style="margin-top:20px;">Leave Details</td></tr>
+        <tr>
+            <td>
+                <table width="100%" border="1" style="border:1px solid #D4D4D4; border-collapse:collapse;">
+                    <tr class="header-style">
+                        <th>S.No.</th><th>Date</th><th>Day</th><th>Leave Type</th>
+                    </tr>
+                    {% for d in daywise %}
+                    <tr class="item-style">
+                        <td align="center">{{ loop.index }}</td>
+                        <td align="center">{{ d.leavedate }}</td>
+                        <td>{{ d.day_name }}</td>
+                        <td>{{ d.LeaveType }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+{% endif %}
+
+<script>
+function openBalancePopup(id) {
+    window.location.href = '?adj_id=' + id;
+}
+</script>
+{% endblock %}

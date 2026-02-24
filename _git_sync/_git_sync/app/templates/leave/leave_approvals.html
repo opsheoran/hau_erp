@@ -1,0 +1,296 @@
+{% extends "base.html" %}
+{% from "includes/pager_macro.html" import render_pager %}
+{% block content %}
+<style>
+    .table { width: 100%; border-collapse: collapse; font-family: Verdana, sans-serif; font-size: 11px; }
+    .tablesubheading { 
+        background-color: #2d5a27 !important; 
+        color: #ffffff !important; 
+        font-weight: bold; 
+        padding: 5px 10px; 
+        font-size: 12px; 
+        border: 1px solid #1e3d1a; 
+        display: block; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .vtext { font-weight: bold; color: #333; font-size: 11px; width: 150px; }
+    .colon { width: 15px; text-align: center; font-weight: bold; }
+    .textbox, .dropdown, .gdropdown { border: 1px solid #ccc; padding: 3px; font-size: 11px; height: 22px; outline: none; }
+    .textboxmultiline { border: 1px solid #ccc; padding: 3px; font-size: 11px; width: 100%; height: 40px; }
+    
+    .button-common1 { background: #f4f4f4; border: 1px solid #bbb; color: #333; padding: 3px 12px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 2px; }
+    .button-common1:hover { background: #e6e6e6; }
+    
+    .header-style th, .header-style td { background: #eee; border: 1px solid #ccc; padding: 5px; font-weight: bold; text-align: center; }
+    .item-style td { border: 1px solid #ccc; padding: 4px 8px; }
+    .item-style-alt { background-color: #F0F0F0; }
+    
+    .box { border: 1px solid #d4d4d4; background: #fff; margin-top: 20px; padding: 10px; }
+    .white_content-new { display: none; position: fixed; top: 10%; left: 15%; width: 70%; height: 80%; padding: 16px; border: 2px solid #3c8dbc; background-color: white; z-index: 1002; overflow: auto; box-shadow: 0px 0px 15px #000; }
+</style>
+
+<div style="padding: 10px 20px;">
+    <!-- 1. PENDING REQUESTS SECTION -->
+    <table width="100%" class="table">
+        <tr><td class="tablesubheading">Pending Leave Requests</td></tr>
+        <tr>
+            <td>
+                <div style="overflow-x:auto; width:100%; max-height:400px; border: 1px solid #D4D4D4;">
+                    <table width="100%" border="1" style="border-collapse:collapse;">
+                        <tr class="header-style">
+                            <th>S.No.</th><th>Requested By</th><th>Leave Type</th><th>Requested Date</th><th>Requested Time</th><th>From Date</th><th>To Date</th><th>Station From</th><th>Station To</th><th>Total Days</th><th>Status</th><th>Contact No.</th><th>Reason</th><th>Response</th>
+                        </tr>
+                        {% for r in pending %}
+                        <tr class="item-style {% if loop.index % 2 == 0 %}item-style-alt{% endif %}" style="{% if loop.first %}background-color: #BEE5FB;{% endif %}">
+                            <td align="center">{{ loop.index + (pagination_p.page - 1) * 10 }}</td>
+                            <td>{{ r.EmployeeName }} ({{ r.empcode }})</td>
+                            <td>{{ r.LeaveType }}</td>
+                            <td align="center">{{ r.RequestDate }}</td>
+                            <td align="center">{{ r.RequestTime or '' }}</td>
+                            <td align="center">{{ r.FromDate }}</td>
+                            <td align="center">{{ r.ToDate }}</td>
+                            <td align="center">{{ r.SFrom or '' }}</td>
+                            <td align="center">{{ r.STo or '' }}</td>
+                            <td align="center">{{ "{:,.2f}".format(r.Days|float) }}</td>
+                            <td align="center">{{ r.leavestatus }}</td>
+                            <td align="center">{{ r.contactno }}</td>
+                            <td>{{ r.Reason }}</td>
+                            <td align="center">
+                                <a href="?req_id={{ r.RequestID }}&page_p={{ pagination_p.page }}&page_h={{ pagination_h.page }}&page_r={{ pagination_r.page }}#response_panel" title="View Response Detail">
+                                    <img src="{{ url_for('static', filename='images/srec.jpg') }}" border="0">
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="14" align="center" style="padding:20px;">No pending requests found.</td></tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {{ render_pager(pagination_p, 'page_p') }}
+            </td>
+        </tr>
+    </table>
+
+    <!-- RESPONSE DETAIL PANEL -->
+    {% if selected_req %}
+    <div class="box" id="response_panel">
+        <form method="POST">
+            <input type="hidden" name="req_id" value="{{ selected_req.master.pk_leavereqid }}">
+            <table width="100%" class="table">
+                <tr><td colspan="6" class="tablesubheading">Response Detail</td></tr>
+                <tr><td colspan="6" style="padding:10px; font-weight:bold; color:#3c8dbc; border-bottom: 1px solid #eee;">
+                    {{ selected_req.master.RequesterName }} | {{ selected_req.master.RequesterCode }}
+                </td></tr>
+                <tr>
+                    <td class="vtext">Leave Status</td><td class="colon">:</td>
+                    <td>
+                        <select name="action" class="gdropdown" required style="width:150px;">
+                            <option value="">-- Select Status --</option>
+                            <option value="A">APPROVED</option>
+                            <option value="R">REJECTED</option>
+                            <option value="M">RECOMMENDED</option>
+                        </select> *
+                    </td>
+                    <td class="vtext" style="padding-left: 20px;">Recommend EmpCode</td><td class="colon">:</td>
+                    <td>
+                        <input type="hidden" name="recommend_id" id="recommend_id">
+                        <input type="text" id="recommend_name" class="textbox" readonly style="width:180px;">
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" style="cursor:pointer; vertical-align:middle;" onclick="openSearch('recommend')">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Comment</td><td class="colon">:</td>
+                    <td colspan="4">
+                        <textarea name="comments" class="textboxmultiline" style="width:95%;"></textarea>
+                    </td>
+                </tr>
+                <tr><td colspan="6" style="height:10px;"></td></tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4">
+                        <input type="submit" value="DONE" class="button-common1" style="background:#3c8dbc; color:white; border:1px solid #2c729e;">
+                        <a href="{{ url_for('leave.approvals') }}" class="button-common1" style="margin-left:10px; text-decoration:none; display:inline-block; line-height:1.5;">CANCEL</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- 2. APPROVED HISTORY SECTION -->
+    <table width="100%" class="table" style="margin-top:30px;">
+        <tr><td class="tablesubheading">Approved Leave Requests</td></tr>
+        <tr>
+            <td style="padding: 10px 0;">
+                <div style="font-family:Verdana; font-size:11px; margin-bottom:10px;">
+                    Search By Employee Name: <input type="text" id="hist_search_name" class="textbox" style="width:150px;">
+                    &nbsp; Date: <input type="text" id="hist_search_date" class="textboxdate flatpickr" style="width:80px;">
+                    <button class="button-common1" style="margin-left:5px;">SEARCH</button>
+                </div>
+                <div style="overflow-x:auto; width:100%; border: 1px solid #D4D4D4;">
+                    <table width="100%" border="1" style="border-collapse:collapse;">
+                        <tr class="header-style">
+                            <th>S.No.</th><th>Requested By</th><th>Leave Type</th><th>Requested Date</th><th>Requested Time</th><th>From Date</th><th>To Date</th><th>Total Days</th><th>Status</th><th>Download</th>
+                        </tr>
+                        {% for r in history %}
+                        <tr class="item-style {% if loop.index % 2 == 0 %}item-style-alt{% endif %}">
+                            <td align="center">{{ loop.index + (pagination_h.page - 1) * 10 }}</td>
+                            <td>{{ r.EmployeeName }} ({{ r.empcode }})</td>
+                            <td>{{ r.LeaveType }}</td>
+                            <td align="center">{{ r.RequestDate }}</td>
+                            <td align="center">{{ r.RequestTime or '' }}</td>
+                            <td align="center">{{ r.FromDate }}</td>
+                            <td align="center">{{ r.ToDate }}</td>
+                            <td align="center">{{ "{:,.2f}".format(r.Days|float) }}</td>
+                            <td align="center"><b>{{ r.Status }}</b></td>
+                            <td align="center">
+                                <a href="{{ url_for('leave.download_joining_report', req_id=r.RequestID) }}">
+                                    <img src="{{ url_for('static', filename='images/print.gif') }}" border="0">
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {{ render_pager(pagination_h, 'page_h') }}
+            </td>
+        </tr>
+    </table>
+
+    <!-- 3. REJECTED REQUESTS SECTION -->
+    <table width="100%" class="table" style="margin-top:30px;">
+        <tr><td class="tablesubheading">Reject Leave Requests</td></tr>
+        <tr>
+            <td>
+                <div style="overflow-x:auto; width:100%; border: 1px solid #D4D4D4;">
+                    <table width="100%" border="1" style="border-collapse:collapse;">
+                        <tr class="header-style">
+                            <th>S.No.</th><th>Requested By</th><th>Leave Type</th><th>Requested Date</th><th>Requested Time</th><th>From Date</th><th>To Date</th><th>Total Days</th><th>Action Date</th><th>Reason</th><th>Comments</th>
+                        </tr>
+                        {% for r in rejected %}
+                        <tr class="item-style {% if loop.index % 2 == 0 %}item-style-alt{% endif %}">
+                            <td align="center">{{ loop.index + (pagination_r.page - 1) * 10 }}</td>
+                            <td>{{ r.EmployeeName }} ({{ r.empcode }})</td>
+                            <td>{{ r.LeaveType }}</td>
+                            <td align="center">{{ r.RequestDate }}</td>
+                            <td align="center">{{ r.RequestTime or '' }}</td>
+                            <td align="center">{{ r.FromDate }}</td>
+                            <td align="center">{{ r.ToDate }}</td>
+                            <td align="center">{{ "{:,.2f}".format(r.Days|float) }}</td>
+                            <td align="center">{{ r.ActionDate }}</td>
+                            <td>{{ r.Reason }}</td>
+                            <td>{{ r.Comments or '' }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="11" align="center" style="padding:15px;">No rejected requests found.</td></tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {{ render_pager(pagination_r, 'page_r') }}
+            </td>
+        </tr>
+    </table>
+
+    <!-- 4. LOWER LEVEL SECTION -->
+    <table width="100%" class="table" style="margin-top:30px;">
+        <tr><td class="tablesubheading">Leave Requests Approved/Rejected At Lower Level</td></tr>
+        <tr>
+            <td>
+                <div style="overflow-x:auto; width:100%; border: 1px solid #D4D4D4;">
+                    <table width="100%" border="1" style="border-collapse:collapse;">
+                        <tr class="header-style">
+                            <th>S.No.</th><th>Requested By</th><th>Leave Type</th><th>Requested Date</th><th>From Date</th><th>To Date</th><th>Total Days</th><th>Status</th>
+                        </tr>
+                        {% for r in lower_level %}
+                        <tr class="item-style {% if loop.index % 2 == 0 %}item-style-alt{% endif %}">
+                            <td align="center">{{ loop.index + (pagination_l.page - 1) * 10 }}</td>
+                            <td>{{ r.EmployeeName }}</td>
+                            <td>{{ r.LeaveType }}</td>
+                            <td align="center">{{ r.RequestDate }}</td>
+                            <td align="center">{{ r.FromDate }}</td>
+                            <td align="center">{{ r.ToDate }}</td>
+                            <td align="center">{{ r.Days }}</td>
+                            <td align="center"><b>{{ r.Status }}</b></td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="8" align="center" style="padding:15px;">No Record Found!</td></tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {{ render_pager(pagination_l, 'page_l') }}
+            </td>
+        </tr>
+    </table>
+
+    <!-- 5. UPPER LEVEL SECTION -->
+    <table width="100%" class="table" style="margin-top:30px;">
+        <tr><td class="tablesubheading">Leave Requests Approved/Rejected At Upper Level</td></tr>
+        <tr>
+            <td>
+                <div style="overflow-x:auto; width:100%; border: 1px solid #D4D4D4;">
+                    <table width="100%" border="1" style="border-collapse:collapse;">
+                        <tr class="header-style">
+                            <th>S.No.</th><th>Requested By</th><th>Leave Type</th><th>Requested Date</th><th>From Date</th><th>To Date</th><th>Total Days</th><th>Comments</th><th>Contact No.</th>
+                        </tr>
+                        {% for r in upper_level %}
+                        <tr class="item-style {% if loop.index % 2 == 0 %}item-style-alt{% endif %}">
+                            <td align="center">{{ loop.index + (pagination_u.page - 1) * 10 }}</td>
+                            <td>{{ r.EmployeeName }}</td>
+                            <td>{{ r.LeaveType }}</td>
+                            <td align="center">{{ r.RequestDate }}</td>
+                            <td align="center">{{ r.FromDate }}</td>
+                            <td align="center">{{ r.ToDate }}</td>
+                            <td align="center">{{ r.Days }}</td>
+                            <td>{{ r.Comments or '' }}</td>
+                            <td align="center">{{ r.contactno }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="9" align="center" style="padding:15px;">No Record Found!</td></tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {{ render_pager(pagination_u, 'page_u') }}
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- Search Popup Overlay -->
+<div id="SearchDiv" class="white_content-new">
+    <div onclick="hideSearch()" style="float:right; cursor:pointer; color:red; font-weight:bold; font-family:Verdana;">X</div>
+    <div class="tablesubheading" style="margin-top:-5px;">Employee Search</div>
+    <div style="padding:15px;">
+        <input type="text" id="search_term" class="textbox" style="width:70%;" placeholder="Enter name or code...">
+        <button class="button-common1" onclick="performSearch()">SEARCH</button>
+        <div id="search_results" style="margin-top:15px; max-height:200px; overflow-y:auto;"></div>
+    </div>
+</div>
+
+<script>
+let activeTarget = '';
+function openSearch(target) { activeTarget = target; document.getElementById('SearchDiv').style.display = 'block'; }
+function hideSearch() { document.getElementById('SearchDiv').style.display = 'none'; }
+
+async function performSearch() {
+    const term = document.getElementById('search_term').value;
+    if(term.length < 2) return;
+    const res = await fetch(`/leave/api/employee/search?term=${term}`);
+    const data = await res.json();
+    let html = '<table width="100%" border="1" class="table"><thead><tr class="header-style"><td>Code</td><td>Name</td></tr></thead><tbody>';
+    data.forEach(e => {
+        html += `<tr class="item-style" style="cursor:pointer" onclick="selectEmp('${e.id}', '${e.empname} | ${e.empcode}')">
+            <td>${e.empcode}</td><td>${e.empname}</td>
+        </tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('search_results').innerHTML = html;
+}
+
+function selectEmp(id, name) {
+    document.getElementById(activeTarget + '_id').value = id;
+    document.getElementById(activeTarget + '_name').value = name;
+    hideSearch();
+}
+</script>
+{% endblock %}

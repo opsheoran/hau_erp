@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<!-- saved from url=(0033)https://hauiums.in/UserLogin.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><noscript>
+    <meta http-equiv="reflresh" content="1;URL=BrowserSettings.htm" />
+</noscript>
+
+    <title>USER LOGIN</title>
+
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="./USER LOGIN_files/stylesheet.css" media="screen">
+    <link href="./USER LOGIN_files/nex.min.css" rel="stylesheet">
+    <link href="./USER LOGIN_files/bootstrap.css" rel="stylesheet">
+
+
+    <!--<script src="include/jquery-1.4.1.min.js"></script>-->
+    <!--<script language="JavaScript">
+            if(navigator.appName == "WebTV")
+
+            {
+
+             alert("You're using the WebTV browser.")
+
+            }
+
+            if(navigator.appName == "Netscape")
+
+            { alert("This software is best compatible with Internet Explorer.")
+
+
+
+            }
+
+            if(navigator.appName == "Netscape")
+
+            { window.location = "BrowserMsg.htm"
+
+
+
+            }
+
+            if(navigator.appName == "Firefox")
+
+            { window.location = "BrowserMsg.htm"
+
+
+
+            }
+    </script>-->
+    <script language="javascript" src="./USER LOGIN_files/jquery-2.2.0.min.js_)%_" type="text/javascript"></script>
+
+    <script language="javascript">
+        function Check() {
+            f.username.focus();
+            var index = document.URL.lastIndexOf('?');
+            if (parseInt(index) > -1) {
+                alert('Either you are not Authorized or Your Username/Password is invalid !!!');
+                window.location.href = "UserLogin.html";
+            }
+        }
+    </script>
+
+    <script language="javascript">
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = 'AppError.aspx';
+            }
+        }
+
+        function checkscript() {
+            if (event.keyCode == 188) {
+                return false;
+            }
+            if (event.keyCode == 222) {
+                document.form1.outstring.value = "";
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+
+        function onsubmitclick() {
+            var f = document.getElementById("f");
+            if (f.username.value == "" || f.upassword.value == "") {
+                alert("User Name and Password can not be blank !!!")
+                if (f.username.value == "")
+                    f.username.focus();
+                else if (f.upassword.value == "")
+                    f.upassword.focus();
+                else
+                    f.username.focus();
+                return false;
+            }
+
+            var hashpass = Sha1.hash(f.upassword.value);
+            //var salt = "" + Math.floor(Math.random() * 1111111111118 + 10000); //by Anand
+
+
+            var salt = "123456789102";
+            var salt1, salt2;
+            salt1 = salt.substring(0, 6);
+            salt2 = salt.substring(6, 12);
+            var Saltedhash = Sha1.hash(salt + hashpass);
+            var Saltedhash = salt1 + Saltedhash + salt2;
+
+            f.salt.value = ''; //  Math.random().toString(36).substr(2, 16);
+            f.hash.value = Saltedhash; //  Sha1.hash(f.salt.value + hashpass); //Saltedhash
+            f.upassword.value = "";
+            f.uname.value = f.username.value;
+        }
+
+        function DisableBackButton() {
+            window.history.forward()
+        }
+        DisableBackButton();
+        window.onload = DisableBackButton;
+        window.onpageshow = function (evt) { if (evt.persisted) DisableBackButton() }
+        window.onunload = function () { void (0) }
+
+    </script>
+
+
+    <script type="text/javascript">
+        //
+        //Amit Dalakoti
+        //10/26/2016
+        //Start
+        var images = []; // Global Variable.
+        $(document).ready(function () {
+
+            fun();
+            // fun() Using it for calling Web Method ("GetImageNames")
+            // from  "UserLoginPageManagementDtl.aspx" page.
+            function fun() {
+                $.ajax({
+                    type: "POST",
+                    url: "SMS/Masters/UserLoginPageManagementDtl.aspx/GetImageNames",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+
+                        images = getXMLToArray(response.d); //Passing XML to function
+                        changeBackground(); // Calling ChangeBackground function.
+                    },
+                    error: function (f) {
+                        console.log('F');
+                    }
+                });
+            }
+            // Function For converting the XMl into Array.
+            function getXMLToArray(xml) {
+
+                var array = $(xml).find("ImageName").map(function () {
+                    return $(this).text();
+                }).get();
+                return array;
+            }
+            //Function to Change Background
+            function changeBackground() {
+                console.log("A");
+                console.log(images);
+                var randomNumber = Math.floor(Math.random() * images.length);
+                var bgImg = images[randomNumber]; // Setting Random Number.
+                $('body').css('background', 'url(../FTPsite/Luvas/Loginimage/' + bgImg + ') no-repeat');
+                $('body').css('background-size', '100%');
+                setTimeout(changeBackground, 5000); // Setting Time for recall.
+            }
+        });
+
+        //10/26/2016
+        //End
+    </script>
+
+    <!-- Added By Arunesh Dated 2nd May,2019 -->
+    <script type="text/javascript">
+        function IsIntegerOnly(key) {
+            var keycode = (key.which) ? key.which : key.keyCode;
+            if (keycode > 31 && (keycode < 48 || keycode > 57) && (keycode > 105 || keycode < 95)) {
+                return false;
+            }
+            else if (keycode == 16)
+                alert("Shift Key is not Allowed..!!");
+            else
+                return true;
+        }
+
+        function ShowForgetPasswordDiv(obj) {
+            document.getElementById('ShowPassDiv').style.display = 'block';
+            fp.fpusername.value = "";
+            fp.fpmobileid.value = "";
+        }
+
+        function onSubmitForgetPass() {
+            var fp = document.getElementById("fp");
+            if (fp.fpusername.value == "" || fp.fpmobileid.value == "") {
+                alert("Username and Mobile No. is Required...!!!")
+                if (fp.fpusername.value == "")
+                    fp.fpusername.focus();
+                else if (fp.fpmobileid.value == "")
+                    fp.fpmobileid.focus();
+                return false;
+            }
+            fp.fpuname.value = fp.fpusername.value;
+            fp.fpmobile.value = fp.fpmobileid.value;
+        }
+    </script>
+    <!-- END -->
+
+    <style>
+        .popupboxouter {
+            width:35%;
+        }
+        .popupbox {
+            width:100%;
+        }
+        @media (max-width:768px) and (min-width:240px) {
+
+	    .popupboxouter {
+            width:90%;
+        }
+	
+        }
+    </style>
+
+</head>
+
+<body class="" onload="Check();burstCache();" onkeydown="return checkscript();" style="">
+    <form name="f" id="f" action="https://hauiums.in/Loginutil.aspx" method="post" autocomplete="off">
+        <div class="loginbase">
+            <div class="form-login">
+                <div class="login-wrap">
+                    <div class="text-center">
+                        <img class="login-pg-logo-new" src="./USER LOGIN_files/CCSHAU.png">
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <h2 class="loginheading"> Login</h2>
+                    <div class="form-horizontal">
+
+                        <!--<div class="form-group">
+                            <div class="col-sm-12">
+                                Welcome to CCSHAU, please Provide your user name and password.
+                            </div>
+                        </div>-->
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" style="text-align:left">Username</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="username" class="form-control" maxlength="40" autocomplete="off" style="max-width:100%;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" style="text-align:left">Password</label>
+                            <div class="col-sm-9">
+                                <input type="password" maxlength="20" class="form-control" id="upassword" autocomplete="off" style="max-width:100%;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">&nbsp;</label>
+                            <div class="col-sm-9">
+                                <button type="submit" class="logbutt" onclick="return onsubmitclick();">
+                                    Sign In
+                                </button>
+                                <!--<span class="a-btn-slide-text">For IUMS </span>
+                                <span class="a-btn-icon-right"><span></span></span>-->
+                                <input type="hidden" name="hash" id="hash" readonly="readonly" autocomplete="off">
+                                <input type="hidden" name="uname" id="uname" readonly="readonly" autocomplete="off">
+                                <input type="hidden" name="salt" id="salt" autocomplete="off">
+                            </div>
+                        </div>
+                        <!-- Added By Arunesh Singh Dated 1st May,2019 -->
+                        <!-- Start -->
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">&nbsp;</label>
+                            <div class="col-sm-9">
+                                <button type="button" class="btn-link" onclick="return ShowForgetPasswordDiv();">
+                                    Forget Your Password?
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <p style="color:#1b3807;font-size: 13px;">
+                                    <strong>To protect your privacy, remember to sign out </strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div id="ShowPassDiv" class="white_content-new" style="display: none; z-index:999999">
+        <div class="popupboxouter">
+            <div class="popupbox">
+                <div onclick="document.getElementById(&#39;ShowPassDiv&#39;).style.display = &#39;none&#39;;" class="close">
+                </div>
+                <div style="padding:2%">
+                    <form name="fp" id="fp" action="https://hauiums.in/ForgetPassword.aspx" method="post" autocomplete="off">
+                        <h2 class="loginheading"> Forget Your Password?</h2>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" style="text-align:left">Username</label>
+                                <div class="col-sm-9">
+                                    <input type="text" id="fpusername" placeholder="Enter Username" class="form-control" maxlength="40" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" style="text-align:left">Mobile No.</label>
+                                <div class="col-sm-9">
+                                    <input type="text" maxlength="10" class="form-control" id="fpmobileid" placeholder="Enter Mobile No." autocomplete="off" onkeydown="return IsIntegerOnly(event);">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">&nbsp;</label>
+                                <div class="col-sm-9">
+                                    <button type="submit" class="logbutt" onclick="return onSubmitForgetPass();">
+                                        Submit
+                                    </button>
+                                    <input type="hidden" name="fpuname" id="fpuname" readonly="readonly" autocomplete="off">
+                                    <input type="hidden" name="fpmobile" id="fpmobile" readonly="readonly" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End -->
+
+
+<script src="./USER LOGIN_files/sha1.js.download" type="text/javascript"></script>
+<script src="./USER LOGIN_files/utf8.js.download" type="text/javascript"></script>
+
+<script type="text/javascript" src="./USER LOGIN_files/jquery-1.10.0.min.js.download"></script>
+<script type="text/javascript" src="./USER LOGIN_files/Animo.min.js.download"></script>
+<script type="text/javascript" src="./USER LOGIN_files/nex.min.js.download"></script>
+<script type="text/javascript" src="./USER LOGIN_files/functions.js.download"></script>
+
+
+
+<div id="nex-preloader"><div id="nex-preloader-1"></div><div id="nex-preloader-2"></div><div id="nex-preloader-3"></div><div id="nex-preloader-4"></div></div><div id="nex" class="nex-circle" style="opacity:1;"><div id="nex-bar"><ul id="nex-thumbnails"><li data-nex-display="image" data-nex-title="" data-nex-description="" class="" style="opacity:1;-webkit-transform:scale(1) ;"><a href="https://hauiums.in/UserLogin.html#"><img class="nex-none" src="https://hauiums.in/UserLogin.html" alt="" width="125" height="125"></a></li><li data-nex-display="image" data-nex-title="" data-nex-description="" style="opacity:1;-webkit-transform:scale(1) ;" class=""><a href="https://hauiums.in/UserLogin.html#"><img class="nex-none" src="https://hauiums.in/UserLogin.html" alt="" width="125" height="125"></a></li><li data-nex-display="image" data-nex-title="" data-nex-description="" style="opacity:1;-webkit-transform:scale(1) ;" class=""><a href="https://hauiums.in/UserLogin.html#"><img class="nex-none" src="https://hauiums.in/UserLogin.html" alt="" width="125" height="125"></a></li><li data-nex-display="image" data-nex-title="" data-nex-description="" style="opacity:1;-webkit-transform:scale(1) ;" class="is-active"><a href="https://hauiums.in/UserLogin.html#"><img class="nex-none" src="https://hauiums.in/UserLogin.html" alt="" width="125" height="125"></a></li><li data-nex-display="image" data-nex-title="" data-nex-description="" style="opacity:1;-webkit-transform:scale(1) ;" class=""><a href="https://hauiums.in/UserLogin.html#"><img class="nex-none" src="https://hauiums.in/UserLogin.html" alt="" width="125" height="125"></a></li></ul><div class="clear"></div><div id="nex-details"><span id="nex-details-title"> </span><span id="nex-details-description"></span></div><div id="nex-bullets"><a href="https://hauiums.in/UserLogin.html#" class="nex-bullet" data-nex-title="" data-nex-description="" data-nex-display="image" data-nex-link="http://13.71.117.195/hau/App_Themes/skyblue/Images/slider5.jpg"></a><a href="https://hauiums.in/UserLogin.html#" class="nex-bullet" data-nex-title="" data-nex-description="" data-nex-display="image" data-nex-link="http://13.71.117.195/hau/App_Themes/skyblue/Images/slider1.jpg"></a><a href="https://hauiums.in/UserLogin.html#" class="nex-bullet" data-nex-title="" data-nex-description="" data-nex-display="image" data-nex-link="http://13.71.117.195/hau/App_Themes/skyblue/Images/slider3.jpg"></a><a href="https://hauiums.in/UserLogin.html#" class="nex-bullet is-active" data-nex-title="" data-nex-description="" data-nex-display="image" data-nex-link="http://13.71.117.195/hau/App_Themes/skyblue/Images/slider2.jpg"></a><a href="https://hauiums.in/UserLogin.html#" class="nex-bullet" data-nex-title="" data-nex-description="" data-nex-display="image" data-nex-link="http://13.71.117.195/hau/App_Themes/skyblue/Images/slider4.jpg"></a></div></div><div class="nex-animo-main" style="opacity:0;"><div class="nex-main nex-none is-image" style="background-image:url(http://13.71.117.195/hau/App_Themes/skyblue/Images/slider5.jpg)"></div></div><div class="nex-animo-main" style="opacity:0;"><div class="nex-main nex-none is-image" style="background-image:url(http://13.71.117.195/hau/App_Themes/skyblue/Images/slider1.jpg)"></div></div><div class="nex-animo-main" style="opacity:0;"><div class="nex-main nex-none is-image" style="background-image:url(http://13.71.117.195/hau/App_Themes/skyblue/Images/slider3.jpg)"></div></div><div class="nex-animo-main is-active" style="opacity:1;-webkit-transform:rotateY(0deg) ;"><div class="nex-main nex-none is-image" style="background-image:url(http://13.71.117.195/hau/App_Themes/skyblue/Images/slider2.jpg)"></div></div><div class="nex-animo-main" style="opacity:0;"><div class="nex-main nex-none is-image" style="background-image:url(http://13.71.117.195/hau/App_Themes/skyblue/Images/slider4.jpg)"></div></div><div id="nex-loadbar"></div><div id="nex-loadbar-progress" style="width:80.35714285714286%;"></div></div><style type="text/css">#nex-bar,#nex-loadbar,#nex-loadbar-progress {background-color:#ede8d2}#nex-thumbnails li {border:4px solid #ede8d2;border:4px solid rgba(237,232,210,0.75) }a:hover.nex-bullet, a.nex-bullet.is-active {background-color:#aac83f}#nex-details {color:#000}</style></body></html>

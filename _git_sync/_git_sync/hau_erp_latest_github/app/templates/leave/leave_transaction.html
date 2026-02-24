@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tablesubheading">Employee Leave Transaction</div>
+    <div style="padding: 15px;">
+        <!-- Employee Header (Standardized Info Bar) -->
+        <table class="form-table" style="background:#f0f7ff; margin-bottom:20px; border:1px solid #3c8dbc !important;">
+            <tr>
+                <td class="vtext" width="15%">Employee Name</td><td class="colon">:</td>
+                <td width="33%"><span style="color:Blue; font-weight:bold;">{{ emp.empname }} ({{ emp.empcode }})</span></td>
+                <td class="vtext" width="15%">Designation</td><td class="colon">:</td>
+                <td width="33%"><span style="color:Blue; font-weight:bold;">{{ emp.designation }}</span></td>
+            </tr>
+            <tr>
+                <td class="vtext">DDO</td><td class="colon">:</td>
+                <td><span style="color:Blue; font-weight:bold;">{{ emp.actual_ddo_name or '' }}</span></td>
+                <td class="vtext">Department</td><td class="colon">:</td>
+                <td><span style="color:Blue; font-weight:bold;">{{ emp.department }}</span></td>
+            </tr>
+        </table>
+
+        <!-- Transaction Entry Form -->
+        <form method="POST" id="transForm">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Leave Type</td><td class="colon">:</td>
+                    <td width="33%">
+                        <select name="leave_id" id="ddlLeaveType" class="dropdown" style="width:200px;" required onchange="onLeaveTypeChange()">
+                            <option value="">-- Select Leave Type --</option>
+                            {% for t in leave_types %}
+                            <option value="{{ t.id }}">{{ t.name }}</option>
+                            {% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                    <td class="vtext" width="15%">Commuted leave</td><td class="colon">:</td>
+                    <td><input type="checkbox" name="is_commuted"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Total Balance</td><td class="colon">:</td>
+                    <td><input type="text" id="txtBalance" class="textbox" readonly style="width:100px; background:#eee;"></td>
+                    <td class="vtext">With Medical</td><td class="colon">:</td>
+                    <td><input type="checkbox" name="is_medical"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Contact Number</td><td class="colon">:</td>
+                    <td><input type="text" name="contact" class="textbox" style="width:200px;" value="{{ emp.contactno or '' }}"></td>
+                    <td class="vtext">Leave of Kind Due</td><td class="colon">:</td>
+                    <td><input type="checkbox" name="is_study"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">From Date</td><td class="colon">:</td>
+                    <td><input type="date" name="from_date" id="txtFDate" class="textbox" style="width:150px;" required onchange="calculateDays()"></td>
+                    <td class="vtext">To Date</td><td class="colon">:</td>
+                    <td><input type="date" name="to_date" id="txtTDate" class="textbox" style="width:150px;" required onchange="calculateDays()"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Recommend Emp</td><td class="colon">:</td>
+                    <td>
+                        <input type="text" id="rec_name" class="textbox" style="width:180px;" readonly>
+                        <input type="hidden" name="rec_id" id="rec_id">
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="openEmpSearch('rec_id', 'rec_name')" style="cursor:pointer; vertical-align:middle;">
+                    </td>
+                    <td class="vtext">Reason</td><td class="colon">:</td>
+                    <td><textarea name="reason" class="textbox" style="width:250px; height:40px;" required></textarea></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Total Leave Days</td><td class="colon">:</td>
+                    <td colspan="4"><input type="text" id="txtTotalDays" name="total_days" class="textbox" readonly style="width:100px; background:#eee;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top:15px;">
+                        <input type="submit" value="SAVE TRANSACTION" class="button-common" style="background:#3c8dbc; color:white;">
+                        <input type="reset" value="RESET" class="button-common" style="margin-left:10px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <!-- Transaction History -->
+        <div style="margin-top:40px;">
+            <div class="tablesubheading">List of Leaves Taken</div>
+            <table class="table-grid-view" style="margin-top:10px;">
+                <thead>
+                    <tr class="header-style">
+                        <td>S.No.</td><td>Request Date</td><td>Leave Type</td><td>From Date</td><td>To Date</td><td>Total Leave Days</td><td>EDIT</td><td>DELETE</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in history %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index + (pagination.page - 1) * 10 }}</td>
+                        <td align="center">{{ h.RequestDate }}</td>
+                        <td>{{ h.leavetype }}</td>
+                        <td align="center">{{ h.FromDate }}</td>
+                        <td align="center">{{ h.ToDate }}</td>
+                        <td align="right">{{ "{:,.2f}".format(h.Days|float) }}</td>
+                        <td align="center"><img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer;"></td>
+                        <td align="center"><img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer;"></td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="8" align="center" style="padding:20px;">No record found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% include 'establishment/_search_modal.html' %}
+
+<script>
+function onLeaveTypeChange() {
+    const lid = document.getElementById('ddlLeaveType').value;
+    if(!lid) { document.getElementById('txtBalance').value = ''; return; }
+    fetch(`/leave/api/balance/${lid}`)
+        .then(res => res.json())
+        .then(data => { document.getElementById('txtBalance').value = parseFloat(data.balance).toFixed(2); });
+}
+function calculateDays() {
+    const f = document.getElementById('txtFDate').value;
+    const t = document.getElementById('txtTDate').value;
+    if(f && t) {
+        fetch(`/leave/api/calculate_days?from=${f}&to=${t}`)
+            .then(res => res.json())
+            .then(data => { document.getElementById('txtTotalDays').value = data.days; });
+    }
+}
+</script>
+{% endblock %}

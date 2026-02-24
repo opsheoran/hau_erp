@@ -104,30 +104,90 @@ class PayrollModel:
         DB.execute("DELETE FROM SAL_ITaxComputation_Mst WHERE fk_empid=? AND fk_finid=?", [emp_id, fin_id])
         sql = """
             INSERT INTO SAL_ITaxComputation_Mst 
-            (fk_empid, fk_finid, drawnsalary, arrearsalary, duesalary, hraallownce, conallownce, 
-             interest, otherincome, employmenttax, deductionunder6A, deductionunderother, 
-             netgrossincome, tax, surchargeamt, cessamt, totaltax, paidtax, totaltaxpayret,
-             fk_insUserID, fk_insDateID, fk_updUserID, fk_updDateID, dated) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?, GETDATE(), GETDATE())
+            (fk_empid, fk_finid, GrossSal, Perquisites, Profitlieu, GrossPerkLieu, 
+             HRA, Conveyance, TotHraConvey, Balance, StandardDed, EntAllowance, 
+             Aggregate, Incomechargeble, Houseproperty, IntrestHBA, Othersource, 
+             AgriIncome, Grosstotincome, AggrChapVIDedAmt, TotIncomechapVI, 
+             TotalTaxIncome, TaxOnIncome, TotalTax, Surcharge, AddEdu, 
+             TaxIncludindSur, Relief89, TaxPayable, Taxdeducted, paid, PayRefund, 
+             Regime, fk_insUserID, fk_insDateID, fk_updUserID, fk_updDateID, dated) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?, GETDATE(), GETDATE())
         """
+        date_id = datetime.now().strftime("%b %d %Y %H:")[:15]
         params = [
-            emp_id, fin_id, data.get('GrossSal', 0), 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            data.get('TotalTaxableIncome', 0), data.get('TotalTax', 0), 0, 0, data.get('TotalTax', 0), 0, 0,
-            user_id, user_id
+            emp_id, fin_id, 
+            data.get('GrossSal', 0), data.get('Perquisites', 0), data.get('Profitlieu', 0), data.get('GrossPerkLieu', 0),
+            data.get('HRA', 0), data.get('Conveyance', 0), data.get('TotHraConvey', 0), data.get('Balance', 0),
+            data.get('StandardDed', 0), data.get('EntAllowance', 0), data.get('Aggregate', 0), data.get('Incomechargeble', 0),
+            data.get('Houseproperty', 0), data.get('IntrestHBA', 0), data.get('Othersource', 0), data.get('AgriIncome', 0),
+            data.get('Grosstotincome', 0), data.get('AggrChapVIDedAmt', 0), data.get('TotIncomechapVI', 0),
+            data.get('TotalTaxIncome', 0), data.get('TaxOnIncome', 0), data.get('TotalTax', 0), data.get('Surcharge', 0),
+            data.get('AddEdu', 0), data.get('TaxIncludindSur', 0), data.get('Relief89', 0), data.get('TaxPayable', 0),
+            data.get('Taxdeducted', 0), data.get('paid', 0), data.get('PayRefund', 0),
+            data.get('Regime', 'NEW'), user_id, date_id, user_id, date_id
         ]
         return DB.execute(sql, params)
 
     @staticmethod
     def get_it_computation_data(emp_id, fin_id):
-        return DB.fetch_one("SELECT * FROM SAL_ITaxComputation_Mst WHERE fk_empid = ? AND fk_finid = ?", [emp_id, fin_id])
+        res = DB.fetch_one("SELECT * FROM SAL_ITaxComputation_Mst WHERE fk_empid = ? AND fk_finid = ?", [emp_id, fin_id])
+        if res: return res
+        
+        # Calculate Defaults if no draft saved
+        it_data = PayrollModel.get_it_certificate_data(emp_id, fin_id)
+        gross = sum(float(s['gross_total']) for s in it_data['statement']) if it_data else 0
+        tds_paid = sum(float(s['it_paid']) for s in it_data['statement']) if it_data else 0
+        
+        from app.models.hrms import IncomeTaxModel
+        decls = IncomeTaxModel.get_employee_declarations(emp_id, fin_id)
+        savings = sum(float(d['docsub_Amt']) for d in decls)
+        
+        return {
+            'GrossSal': gross,
+            'StandardDed': 75000,
+            'AggrChapVIDedAmt': savings,
+            'paid': tds_paid,
+            'Regime': 'NEW'
+        }
 
     @staticmethod
     def get_form16_quarterly_summary(emp_id, fin_id):
-        return []
+        query = """
+            SELECT 
+                CASE 
+                    WHEN fk_monthId IN (4,5,6) THEN 'Q1'
+                    WHEN fk_monthId IN (7,8,9) THEN 'Q2'
+                    WHEN fk_monthId IN (10,11,12) THEN 'Q3'
+                    WHEN fk_monthId IN (1,2,3) THEN 'Q4'
+                END as quarter,
+                SUM(ISNULL(IT, 0)) as total_tax
+            FROM SAL_Salary_Master
+            WHERE fk_empid = ? AND fk_finid = ?
+            GROUP BY 
+                CASE 
+                    WHEN fk_monthId IN (4,5,6) THEN 'Q1'
+                    WHEN fk_monthId IN (7,8,9) THEN 'Q2'
+                    WHEN fk_monthId IN (10,11,12) THEN 'Q3'
+                    WHEN fk_monthId IN (1,2,3) THEN 'Q4'
+                END
+        """
+        return DB.fetch_all(query, [emp_id, fin_id])
 
     @staticmethod
     def get_form16_tds_details(emp_id, fin_id):
-        return []
+        query = """
+            SELECT 
+                ISNULL(IT, 0) as tax,
+                0 as surcharge,
+                0 as cess,
+                CONVERT(varchar, GETDATE(), 103) as pay_date,
+                'N/A' as challan_no,
+                'N/A' as bsr_code
+            FROM SAL_Salary_Master
+            WHERE fk_empid = ? AND fk_finid = ?
+            ORDER BY fk_yearId, fk_monthId
+        """
+        return DB.fetch_all(query, [emp_id, fin_id])
 
     @staticmethod
     def amount_to_words(amt):

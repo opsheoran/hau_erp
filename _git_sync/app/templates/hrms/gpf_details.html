@@ -5,43 +5,51 @@
         <div class="tablesubheading">Employee GPF/CPF/NPS Detail</div>
         <div style="padding: 15px;">
             <!-- Header Info - Redesigned with Textboxes like Live Template -->
-            <table class="form-table" style="width: 100%; border-bottom: 2px solid #2d5a27; padding-bottom: 15px; margin-bottom: 20px;">
-                <tr>
-                    <td class="vtext" width="20%">Employee Name</td><td class="colon">:</td>
-                    <td width="30%">
-                        <input type="text" value="{{ gpf.header.empname if gpf else '' }}" readonly class="textboxlong" style="width: 250px;">
-                    </td>
-                    <td class="vtext" width="20%">Designation</td><td class="colon">:</td>
-                    <td width="25%">
-                        <input type="text" value="{{ gpf.header.designation if gpf else '' }}" readonly class="textboxlong" style="width: 250px;">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="vtext">Employee Opening Balance</td><td class="colon">:</td>
-                    <td>
-                        <input type="text" value="{{ "{:,.2f}".format(gpf.header.OpeningBalance|float) if gpf and gpf.header.OpeningBalance else '0.00' }}" readonly class="textboxlong" style="width: 250px; font-weight: bold; color: #2d5a27;">
-                    </td>
-                    <td class="vtext">Department</td><td class="colon">:</td>
-                    <td>
-                        <input type="text" value="{{ gpf.header.department if gpf else '' }}" readonly class="textboxlong" style="width: 250px;">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="vtext">Account Number</td><td class="colon">:</td>
-                    <td>
-                        <input type="text" value="{{ gpf.header.gpfno if gpf else '' }}" readonly class="textboxlong" style="width: 250px; font-weight: bold;">
-                    </td>
-                    <td class="vtext">Finance Year</td><td class="colon">:</td>
-                    <td>
-                        <select id="ddlFinYear" class="dropdown" style="width: 260px;" onchange="changeYear(this.value)">
-                            <option value="">-- Select Financial Year --</option>
-                            {% for f in fin_years %}
-                            <option value="{{ f.id }}" {% if (selected_fin_id == f.id) or (not selected_fin_id and gpf and gpf.header.pk_finid == f.id) %}selected{% endif %}>{{ f.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
-            </table>
+                    <table class="form-table" style="width: 100%; border-bottom: 2px solid #2d5a27; padding-bottom: 15px; margin-bottom: 20px;">
+                        <tr>
+                            <td class="vtext" width="20%">Employee Name</td><td class="colon">:</td>
+                            <td width="30%">
+                                <input type="text" value="{{ gpf.header.empname if gpf else '' }}" readonly class="textboxlong" style="width: 250px;">
+                            </td>
+                            <td class="vtext" width="20%">Department</td><td class="colon">:</td>
+                            <td width="25%">
+                                <input type="text" value="{{ gpf.header.department if gpf else '' }}" readonly class="textboxlong" style="width: 250px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vtext">Designation</td><td class="colon">:</td>
+                            <td>
+                                <input type="text" value="{{ gpf.header.designation if gpf else '' }}" readonly class="textboxlong" style="width: 250px;">
+                            </td>
+                            <td class="vtext">Account Number</td><td class="colon">:</td>
+                            <td>
+                                <input type="text" value="{{ gpf.header.gpfno if gpf else '' }}" readonly class="textboxlong" style="width: 250px; font-weight: bold;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vtext">Employee Opening Balance</td><td class="colon">:</td>
+                            <td>
+                                <input type="text" value="{{ "{:,.2f}".format(gpf.header.OpeningBalance|float) if gpf and gpf.header.OpeningBalance else '0.00' }}" readonly class="textboxlong" style="width: 250px; font-weight: bold; color: #2d5a27;">
+                            </td>
+                            <td class="vtext">Finance Year</td><td class="colon">:</td>
+                            <td>
+                                <input type="text" value="{{ (gpf.header.Lyear|int - 1)|string + '-' + gpf.header.Lyear|string if gpf and gpf.header.Lyear else '' }}" readonly class="textboxlong" style="width: 250px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td class="vtext">Select Year</td><td class="colon">:</td>
+                            <td>
+                                <select id="ddlFinYear" class="dropdown" style="width: 260px;" onchange="changeYear(this.value)">
+                                    <option value="">-- Select Financial Year --</option>
+                                    {% for f in fin_years %}
+                                    <option value="{{ f.id }}" {% if (selected_fin_id == f.id) or (not selected_fin_id and gpf and gpf.header.pk_finid == f.id) %}selected{% endif %}>{{ f.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+            
     
             <!-- Monthly Grid -->
     

@@ -1,0 +1,78 @@
+﻿{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<span>Transactions</span>&nbsp;&gt;&nbsp;<span>Increment/Promotion</span>&nbsp;&gt;&nbsp;<strong>Controlling DDO Department Joining</strong>
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="target_emp_id" value="{{ employee_info.pk_empid if employee_info else '' }}">
+
+    {% include 'establishment/_search_modal.html' %}
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">Controlling DDO Department Joining</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+
+            <tr>
+                <td class="vtext" width="15%">Employee Code</td>
+                <td class="colon">:</td>
+                <td class="required" width="30%">
+                    <input type="text" class="textbox w-150" value="{{ employee_info.empcode if employee_info else '' }}" readonly>
+                    <a href="javascript:void(0);" onclick="openEmpSearch('emp_id', '')">
+                        <img src="{{ url_for('static', filename='srec.jpg') }}" border="0" style="vertical-align:middle; cursor:pointer;">
+                    </a>
+                    <span class="required">*</span>
+                </td>
+                <td width="2%"></td>
+                <td class="vtext" width="15%">Employee Name</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="text" class="textbox w-250" value="{{ employee_info.empname if employee_info else '' }}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Status</td>
+                <td class="colon">:</td>
+                <td>
+                    <select class="dropdown w-200" disabled>
+                        <option>--Select Status--</option>
+                    </select>
+                </td>
+                <td></td>
+                <td class="vtext">Approve Date</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="date" name="approve_date" class="textbox w-200" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr><td colspan="7" height="15"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    {% if perm.AllowAdd or perm.AllowUpdate %}
+                    <input type="submit" name="action" value="SUBMIT" class="button-common">
+                    {% endif %}
+                    <input type="submit" name="action" value="RESET" class="button-common" formnovalidate>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function selectItem(id, name) {
+        window.location.href = "{{ url_for('establishment.controlling_ddo_department_joining') }}?emp_id=" + id;
+    }
+</script>
+{% endblock %}

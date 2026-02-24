@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Advisory Creation and Approval Status </span></div>
+    
+    <div style="padding: 10px;">
+        <!-- FILTER FORM -->
+        <form method="GET" id="filterForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td class="required" colspan="4">
+                            <select name="college_id" class="dropdown w-300" required onchange="handleFilterChange()">
+                                <option value="0">--Select College--</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Academic Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" class="dropdown w-200" required>
+                                <option value="0">--Select Academic Session--</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" class="dropdown w-300" required onchange="handleFilterChange()">
+                                <option value="0">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext" width="15%">Class</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="semester_id" id="ddlSemester" class="dropdown w-150" onchange="calculateYear()">
+                                <option value="0"> -- Select Class -- </option>
+                                {% for s in lookups.semesters %}
+                                <option value="{{ s.pk_semesterid }}" {% if filters.semester_id|string == s.pk_semesterid|string %}selected{% endif %} data-order="{{ s.semesterorder }}">{{ s.semester_roman }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Department</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="branch_id" class="dropdown w-300">
+                                <option value="0">-- Select Department --</option>
+                                {% for b in lookups.branches %}
+                                <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext">Year</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <input type="text" id="txtYear" class="textbox w-100" style="background-color:#eee;" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Report Format</td>
+                        <td class="colon">:</td>
+                        <td colspan="4">
+                            <input type="radio" name="format" value="word"> Word Format
+                            <input type="radio" name="format" value="excel"> Excel Format
+                            <input type="radio" name="format" value="pdf" checked> PDF Format
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="10"></td></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="4">
+                            <input type="submit" value="GET STATUS" class="button-common" style="width:120px;">
+                            <input type="button" value="VIEW REPORT" class="button-common" style="width:120px; margin-left:5px;" onclick="viewReport()">
+                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="window.location.href='{{ url_for('academics.advisory_creation_approval_status') }}'">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+        <div class="tablesubheading"><span class="subheadingborderbottom">Advisory Creation and Approval Status </span></div>
+        <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4; margin-top:10px;">
+            <table class="table-grid-view" width="100%" id="gvAdvisoryStatus">
+                <thead>
+                    <tr class="header-style">
+                        <th align="center" scope="col">S.No</th>
+                        <th align="center" scope="col">Admission No</th>
+                        <th align="center" scope="col">Name</th>
+                        <th align="center" scope="col">Department</th>
+                        <th align="center" scope="col">Major Advisor Made</th>
+                        <th align="center" scope="col">Specialization Made</th>
+                        <th align="center" scope="col">Member of Minor & supporting</th>
+                        <th align="center" scope="col">Hod Approval</th>
+                        <th align="center" scope="col">Hod Approval Date</th>
+                        <th align="center" scope="col">College Dean Approval</th>
+                        <th align="center" scope="col">College Dean Approval Date</th>
+                        <th align="center" scope="col">Dean Pgs Approval(Advisory Committe)</th>
+                        <th align="center" scope="col">Dean Pgs Approval(AdvisoryCommitte) Date</th>
+                        <th align="center" scope="col">Course Plan Made</th>
+                        <th align="center" scope="col">Dean Pgs Approval(Course Plan)</th>
+                        <th align="center" scope="col">Dean PgsApproval(CoursePlan) Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in status_list %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ s.AdmissionNo }}</td>
+                        <td>{{ s.fullname }}</td>
+                        <td>{{ s.Branchname }}</td>
+                        <td>{{ s.MajorAdvisorMade }}</td>
+                        <td>{{ s.SpecializationMade }}</td>
+                        <td>{{ s.MemberMinorMade }}</td>
+                        <td>{{ s.HodApproval }}</td>
+                        <td>{{ s.HodApprovalDate or '' }}</td>
+                        <td>{{ s.CollegeDeanApproval }}</td>
+                        <td>{{ s.CollegeDeanApprovalDate or '' }}</td>
+                        <td>{{ s.DeanPgsApproval }}</td>
+                        <td>{{ s.DeanPgsApprovalDate or '' }}</td>
+                        <td>{{ s.CoursePlanMade }}</td>
+                        <td>{{ s.CoursePlanApproval }}</td>
+                        <td>{{ s.CoursePlanApprovalDate or '' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr class="item-style"><td colspan="16" align="center" style="padding:20px; color:#999;">No records found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function viewReport() {
+    const form = document.getElementById('filterForm');
+    const formData = new FormData(form);
+    const params = new URLSearchParams();
+    
+    for (const pair of formData.entries()) {
+        params.append(pair[0], pair[1]);
+    }
+    
+    const format = document.querySelector('input[name="format"]:checked').value;
+    params.append('format', format);
+    
+    window.open('/academics/advisory_status_report?' + params.toString(), '_blank');
+}
+
+function calculateYear() {
+    const ddl = document.getElementById('ddlSemester');
+    const txt = document.getElementById('txtYear');
+    if(!ddl || !txt) return;
+    
+    const opt = ddl.options[ddl.selectedIndex];
+    const order = parseInt(opt.getAttribute('data-order') || '0');
+    
+    if(order <= 0) { txt.value = ""; return; }
+    
+    const years = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
+    const yearIdx = Math.floor((order - 1) / 2);
+    txt.value = years[yearIdx] || "N/A";
+}
+
+function handleFilterChange() {
+    localStorage.setItem('adv_status_scroll', window.scrollY);
+    document.getElementById('filterForm').submit();
+}
+
+window.addEventListener('load', () => {
+    const scrollPos = localStorage.getItem('adv_status_scroll');
+    if (scrollPos) {
+        window.scrollTo(0, parseInt(scrollPos));
+        localStorage.removeItem('adv_status_scroll');
+    }
+    calculateYear();
+});
+</script>
+{% endblock %}

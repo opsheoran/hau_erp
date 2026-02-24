@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    /* Exact styles from live system */
+    .vtext { font-family: Verdana; font-size: 11px; font-weight: bold; color: #333333; }
+    .colon { font-family: Verdana; font-size: 11px; font-weight: bold; color: #333333; text-align: center; width: 15px; }
+    .textboxlong { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; height: 18px; width: 300px; }
+    .textboxmultiline { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; }
+    .dropdown { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; height: 22px; }
+    .button-common { font-family: Verdana; font-size: 11px; font-weight: bold; height: 24px; cursor: pointer; }
+    .tableheading { font-family: Verdana; font-size: 13px; font-weight: bold; color: #ffffff; background-color: #3c8dbc; padding: 5px; text-transform: uppercase; }
+    .tablesubheading { font-family: Verdana; font-size: 12px; font-weight: bold; color: #ffffff; background-color: #3c8dbc; padding: 5px; }
+    .table-grid-view { font-family: Verdana; font-size: 11px; border-collapse: collapse; width: 100%; }
+    .header-style { background-color: #eeeeee; color: #333333; font-weight: bold; text-align: center; }
+    .item-style { background-color: #ffffff; color: #333333; }
+    .item-style-alt { background-color: #f0f0f0; color: #333333; }
+    .box { border: 1px solid #d4d4d4; background: #fff; margin-bottom: 20px; padding: 10px; }
+</style>
+
+<div style="padding: 10px;">
+    <!-- Balance Grid -->
+    <div class="box">
+        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%">
+            <tr><td class="tableheading">Leave Adjustment Request</td></tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr><td><b style="color: Blue;">{{ session.user_name }}</b></td></tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+                <td>
+                    <table class="table-grid-view" border="1" style="border:1px solid #D4D4D4;">
+                        <tr class="header-style">
+                            <td>S.No.</td><td>Leave Type</td><td>Total Leave (Days)</td><td>Availed Leave (Days)</td><td>Adjusted Leave (Days)</td><td>Balance Leave (Days)</td><td>Applied Leave (Days)</td><td>Applied Balance Leave(Days)</td>
+                        </tr>
+                        {% for b in balances %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center">{{ loop.index }}</td>
+                            <td>{{ b.leavetype }}</td>
+                            <td align="right">{{ "{:,.2f}".format(b.total|float) }}</td>
+                            <td align="right">{{ "{:,.2f}".format(b.availed|float) }}</td>
+                            <td align="right">{{ "{:,.2f}".format(b.adjusted|float) }}</td>
+                            <td align="right"><b>{{ "{:,.2f}".format(b.balance|float) }}</b></td>
+                            <td align="right" style="color:red;">{{ "{:,.2f}".format(b.applied|float) }}</td>
+                            <td align="right"><b>{{ "{:,.2f}".format(b.applied_balance|float) }}</b></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Request Form -->
+    <div class="box">
+        <form method="POST">
+            <table border="0" cellpadding="3" cellspacing="0" width="100%">
+                <tr>
+                    <td class="vtext" style="width: 15%">Leave Request</td><td class="colon">:</td>
+                    <td>
+                        <select name="leave_id" class="dropdown" style="width:350px;" onchange="window.location='?leave_id='+this.value">
+                            <option value="">-- Leave Type | From Date | To Date --</option>
+                            {% for l in leaves %}
+                            <option value="{{ l.pk_leavetakenid }}" {% if selected_leave_id == l.pk_leavetakenid|string %}selected{% endif %}>{{ l.name }}</option>
+                            {% endfor %}
+                        </select> <span style="color:red; font-weight:bold;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Reporting To</td><td class="colon">:</td>
+                    <td><input type="text" class="textboxlong" value="{{ reporting_to.name if reporting_to else '' }}" readonly></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Adjust Days</td><td class="colon">:</td>
+                    <td><input type="number" step="0.5" name="adj_days" class="dropdown" style="width:100px;" required> <span style="color:red; font-weight:bold;">*</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Remarks</td><td class="colon">:</td>
+                    <td><textarea name="remarks" class="textboxmultiline" style="width:400px; height:40px;"></textarea></td>
+                </tr>
+                <tr><td style="height:10px;"></td></tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td>
+                        <input type="submit" value="DONE" class="button-common" style="width:100px; background:#3c8dbc; color:white;">
+                        <input type="reset" value="RESET" class="button-common" style="margin-left:10px; width:100px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <!-- History Grid -->
+    <div class="box">
+        <table cellpadding="0" cellspacing="0" border="0" style="width: 100%">
+            <tr><td class="tablesubheading">List of Leave Adjustment Request</td></tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+                <td>
+                    <table class="table-grid-view" border="1" style="border:1px solid #D4D4D4;">
+                        <tr class="header-style">
+                            <td>S.No.</td><td>Reporting To</td><td>Leave Type</td><td>Adj. Req. Date</td><td>From Date</td><td>To Date</td><td>Total Leave Days</td><td>Status</td><td>EDIT</td>
+                        </tr>
+                        {% for h in history %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center">{{ loop.index + (pagination.page - 1) * 10 }}</td>
+                            <td>{{ h.ReportingTo or '' }}</td>
+                            <td>{{ h.LeaveType }}</td>
+                            <td align="center">{{ h.RequestDate }}</td>
+                            <td align="center">{{ h.FromDate }}</td>
+                            <td align="center">{{ h.ToDate }}</td>
+                            <td align="right">{{ "{:,.2f}".format(h.Days|float) }}</td>
+                            <td align="center"><b>{{ h.Status }}</b></td>
+                            <td align="center"><img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer"></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock %}
