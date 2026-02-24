@@ -410,137 +410,210 @@
 </div>
 
 <script>
-let activeSearchTarget = '';
-function ShowSearch(target) { 
-    activeSearchTarget = target; 
-    document.getElementById('SearchDiv').style.display = 'block'; 
-    const ids = ['srch_emp_code','srch_manual_code','srch_emp_name','srch_ddo','srch_loc','srch_dept','srch_desg'];
-    ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-    const res = document.getElementById('search_results'); if (res) res.innerHTML = '';
-    document.getElementById('srch_emp_code')?.focus();
-}
-function HideSearch() { document.getElementById('SearchDiv').style.display = 'none'; }
-
-async function doSimpleSearch() {
-    // Backward compatibility - route this to advanced search.
-    return doAdvancedSearch();
+function resetCalculation() {
+    document.getElementById('hdnTotalDays').value = '';
+    document.getElementById('hdnLeaveDays').value = '';
+    var body = document.getElementById('transBody');
+    if (body) body.innerHTML = '';
+    var days = document.getElementById('txtDays');
+    if (days) days.value = '';
+    var pnl = document.getElementById('pnlCalc');
+    if (pnl) pnl.style.display = 'none';
 }
 
-async function doAdvancedSearch() {
-    const params = new URLSearchParams({
-        emp_code: document.getElementById('srch_emp_code')?.value || '',
-        manual_code: document.getElementById('srch_manual_code')?.value || '',
-        emp_name: document.getElementById('srch_emp_name')?.value || '',
-        ddo_id: document.getElementById('srch_ddo')?.value || '',
-        loc_id: document.getElementById('srch_loc')?.value || '',
-        dept_id: document.getElementById('srch_dept')?.value || '',
-        desg_id: document.getElementById('srch_desg')?.value || '',
+var activeSearchTarget = '';
+
+function _el(id) { return document.getElementById(id); }
+function _val(id) { var el = _el(id); return el ? el.value : ''; }
+function _setVal(id, v) { var el = _el(id); if (el) el.value = v; }
+function _show(id) { var el = _el(id); if (el) el.style.display = 'block'; }
+function _hide(id) { var el = _el(id); if (el) el.style.display = 'none'; }
+function _on(el, evt, fn) {
+    if (!el) return;
+    if (el.addEventListener) el.addEventListener(evt, fn);
+    else if (el.attachEvent) el.attachEvent('on' + evt, fn);
+}
+function _pad2(s) { s = String(s || ''); return s.length === 1 ? ('0' + s) : s; }
+function _jsEscape(s) { s = (s === null || typeof s === 'undefined') ? '' : String(s); return s.replace(/\\/g, '\\\\').replace(/'/g, "\\'"); }
+function _htmlEscape(s) {
+    s = (s === null || typeof s === 'undefined') ? '' : String(s);
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function _xhrGet(url, cb) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) cb(xhr.responseText);
+            else cb('[]');
+        }
+    };
+    xhr.open('GET', url, true);
+    xhr.send(null);
+}
+
+function ShowSearch(target) {
+    activeSearchTarget = target;
+    _show('SearchDiv');
+    var ids = ['srch_emp_code', 'srch_manual_code', 'srch_emp_name', 'srch_ddo', 'srch_loc', 'srch_dept', 'srch_desg'];
+    for (var i = 0; i < ids.length; i++) {
+        var el = _el(ids[i]);
+        if (el) el.value = '';
+    }
+    var res = _el('search_results');
+    if (res) res.innerHTML = '';
+    var first = _el('srch_emp_code');
+    if (first && first.focus) first.focus();
+}
+function HideSearch() { _hide('SearchDiv'); }
+
+function doSimpleSearch() { return doAdvancedSearch(); }
+
+function doAdvancedSearch() {
+    var qs =
+        'emp_code=' + encodeURIComponent(_val('srch_emp_code')) +
+        '&manual_code=' + encodeURIComponent(_val('srch_manual_code')) +
+        '&emp_name=' + encodeURIComponent(_val('srch_emp_name')) +
+        '&ddo_id=' + encodeURIComponent(_val('srch_ddo')) +
+        '&loc_id=' + encodeURIComponent(_val('srch_loc')) +
+        '&dept_id=' + encodeURIComponent(_val('srch_dept')) +
+        '&desg_id=' + encodeURIComponent(_val('srch_desg'));
+
+    _xhrGet('/leave/api/employee/search_advanced?' + qs, function (text) {
+        var data = [];
+        try { data = JSON.parse(text); } catch (e) { data = []; }
+
+        var html = '<table class="table-grid-view"><tr class="header-style"><td>S.No.</td><td>Emp Code</td><td>Employee</td><td>Action</td></tr>';
+        for (var i = 0; i < (data || []).length; i++) {
+            var e = data[i] || {};
+            var disp = e.display || ((e.empname || '') + ' | ' + (e.empcode || '') + ' | ' + (e.designation || ''));
+            var rowClass = (((i + 1) % 2) === 0) ? 'item-style-alt' : 'item-style';
+            html += '<tr class="' + rowClass + '">';
+            html += '<td align="center">' + (i + 1) + '</td>';
+            html += '<td align="center">' + _htmlEscape(e.empcode || '') + '</td>';
+            html += '<td>' + _htmlEscape(disp) + '</td>';
+            html += '<td align="center"><a href="javascript:void(0)" onclick="selectEmployee(\\'' + _jsEscape(e.id || '') + '\\', \\'' + _jsEscape(disp) + '\\')">Select</a></td>';
+            html += '</tr>';
+        }
+        html += '</table>';
+        var res = _el('search_results');
+        if (res) res.innerHTML = html;
     });
-    const res = await fetch(`/leave/api/employee/search_advanced?${params.toString()}`);
-    const data = await res.json();
-    let html = '<table class="table-grid-view"><tr class="header-style"><td>S.No.</td><td>Emp Code</td><td>Employee</td><td>Action</td></tr>';
-    (data || []).forEach((e, idx) => {
-        const disp = e.display || `${e.empname || ''} | ${e.empcode || ''} | ${e.designation || ''}`;
-        const dispArg = String(disp).replace(/\\/g, '\\\\').replace(/'/g, \"\\\\'\"); // safe for single-quoted JS arg
-        html += `<tr class="${((idx + 1) % 2 === 0) ? 'item-style-alt' : 'item-style'}"><td align="center">${idx + 1}</td><td align="center">${e.empcode || ''}</td><td>${disp}</td><td align="center"><a href="javascript:void(0)" onclick="selectEmployee('${e.id}', '${dispArg}')">Select</a></td></tr>`;
-    });
-    html += '</table>';
-    document.getElementById('search_results').innerHTML = html;
 }
 
 function selectEmployee(id, name) {
-    document.getElementById(activeSearchTarget + '_id').value = id;
-    document.getElementById(activeSearchTarget + '_name').value = name;
+    var idEl = _el(activeSearchTarget + '_id');
+    var nameEl = _el(activeSearchTarget + '_name');
+    if (idEl) idEl.value = id;
+    if (nameEl) nameEl.value = name;
     HideSearch();
 }
 
 function onShortChange() {
-    const isShort = document.getElementById('chkShort').checked;
-    document.getElementById('trShortTime').style.display = isShort ? 'table-row' : 'none';
-    const f = document.getElementById('txtFDate');
-    const t = document.getElementById('txtTDate');
-    if (isShort && f && t) {
-        if (f.value) t.value = f.value;
-    }
+    var chk = _el('chkShort');
+    var isShort = chk && chk.checked;
+    var tr = _el('trShortTime');
+    if (tr) tr.style.display = isShort ? 'table-row' : 'none';
+    var f = _el('txtFDate');
+    var t = _el('txtTDate');
+    if (isShort && f && t && f.value) t.value = f.value;
 }
 
 function performCalculation() {
-    const f = document.getElementById('txtFDate').value;
-    const t = document.getElementById('txtTDate').value;
-    const ltext = document.getElementById('ddlLeaveType').options[document.getElementById('ddlLeaveType').selectedIndex].text;
-    const leaveId = document.getElementById('ddlLeaveType').value;
-    if(!f || !t) return;
-    
-    const locId = document.getElementById('hdnLocId')?.value || '';
-    fetch(`/leave/api/calculate_days?from=${encodeURIComponent(f)}&to=${encodeURIComponent(t)}&loc_id=${encodeURIComponent(locId)}&leave_id=${encodeURIComponent(leaveId)}&short=${document.getElementById('chkShort').checked}`)
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById('txtDays').value = data.days;
-            document.getElementById('hdnTotalDays').value = data.total_days ?? '';
-            document.getElementById('hdnLeaveDays').value = data.days ?? '';
-            const body = document.getElementById('transBody');
-            body.innerHTML = '';
-            let i = 1;
-            (data.rows || []).forEach(r => {
-                const row = body.insertRow();
-                row.className = (i % 2 == 0) ? 'item-style-alt' : 'item-style';
-                row.innerHTML = `<td>${i++}</td><td>${r.date || ''}</td><td>${r.day || ''}</td><td>${ltext}</td>`;
-            });
-            document.getElementById('pnlCalc').style.display = (data.rows && data.rows.length) ? 'block' : 'none';
-        });
-}
+    var f = _val('txtFDate');
+    var t = _val('txtTDate');
+    var ddl = _el('ddlLeaveType');
+    if (!ddl) return;
+    var leaveId = ddl.value;
+    if (!f || !t || !leaveId) return;
 
-function resetCalculation() {
-    document.getElementById('hdnTotalDays').value = '';
-    document.getElementById('hdnLeaveDays').value = '';
-    const body = document.getElementById('transBody');
-    if (body) body.innerHTML = '';
-    const days = document.getElementById('txtDays');
-    if (days) days.value = '';
-    const pnl = document.getElementById('pnlCalc');
-    if (pnl) pnl.style.display = 'none';
+    var chk = _el('chkShort');
+    var isShort = (chk && chk.checked) ? 'true' : 'false';
+    var locId = _val('hdnLocId');
+    var url = '/leave/api/calculate_days?from=' + encodeURIComponent(f) +
+        '&to=' + encodeURIComponent(t) +
+        '&loc_id=' + encodeURIComponent(locId) +
+        '&leave_id=' + encodeURIComponent(leaveId) +
+        '&short=' + isShort;
+
+    _xhrGet(url, function (text) {
+        var data = {};
+        try { data = JSON.parse(text); } catch (e) { data = {}; }
+
+        var ltext = ddl.options[ddl.selectedIndex] ? ddl.options[ddl.selectedIndex].text : '';
+        _setVal('txtDays', (typeof data.days !== 'undefined' && data.days !== null) ? data.days : '');
+        _setVal('hdnTotalDays', (typeof data.total_days !== 'undefined' && data.total_days !== null) ? data.total_days : '');
+        _setVal('hdnLeaveDays', (typeof data.days !== 'undefined' && data.days !== null) ? data.days : '');
+
+        var body = _el('transBody');
+        if (body) body.innerHTML = '';
+        var rows = data.rows || [];
+        for (var i = 0; i < rows.length; i++) {
+            var r = rows[i] || {};
+            var tr = document.createElement('tr');
+            tr.className = (((i + 1) % 2) === 0) ? 'item-style-alt' : 'item-style';
+            tr.innerHTML = '<td>' + (i + 1) + '</td><td>' + (r.date || '') + '</td><td>' + (r.day || '') + '</td><td>' + _htmlEscape(ltext) + '</td>';
+            if (body) body.appendChild(tr);
+        }
+
+        var pnl = _el('pnlCalc');
+        if (pnl) pnl.style.display = (rows && rows.length) ? 'block' : 'none';
+    });
 }
 
 function parseTimeStr(s) {
     if (!s) return null;
-    const m = String(s).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    var m = String(s).replace(/^\s+|\s+$/g, '').match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
     if (!m) return null;
-    return { hh: m[1].padStart(2, '0'), mm: m[2], ap: m[3].toUpperCase() };
+    return { hh: _pad2(m[1]), mm: m[2], ap: String(m[3]).toUpperCase() };
 }
 
 function applyTimeToSelects(timeStr, hourId, minId, ampmId) {
-    const p = parseTimeStr(timeStr);
+    var p = parseTimeStr(timeStr);
     if (!p) return;
-    const hh = document.getElementById(hourId);
-    const mm = document.getElementById(minId);
-    const ap = document.getElementById(ampmId);
+    var hh = _el(hourId);
+    var mm = _el(minId);
+    var ap = _el(ampmId);
     if (hh) hh.value = p.hh;
     if (mm) mm.value = p.mm;
     if (ap) ap.value = p.ap;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function _initLeaveRequest() {
     onShortChange();
 
-    const f = document.getElementById('txtFDate');
-    const t = document.getElementById('txtTDate');
-    const ddl = document.getElementById('ddlLeaveType');
-    const chk = document.getElementById('chkShort');
-    if (f && t) {
-        f.addEventListener('change', () => {
-            if (document.getElementById('chkShort')?.checked) {
-                t.value = f.value;
-            }
-            resetCalculation();
-        });
-        t.addEventListener('change', resetCalculation);
-    }
-    ddl?.addEventListener('change', resetCalculation);
-    chk?.addEventListener('change', resetCalculation);
+    var f = _el('txtFDate');
+    var t = _el('txtTDate');
+    var ddl = _el('ddlLeaveType');
+    var chk = _el('chkShort');
 
-    applyTimeToSelects(document.getElementById('edit_start_time')?.value, 's_hour', 's_min', 's_ampm');
-    applyTimeToSelects(document.getElementById('edit_station_start_time')?.value, 'station_start_hour', 'station_start_min', 'station_start_ampm');
-    applyTimeToSelects(document.getElementById('edit_station_end_time')?.value, 'station_end_hour', 'station_end_min', 'station_end_ampm');
-});
+    _on(f, 'change', function () {
+        if (chk && chk.checked && f && t) t.value = f.value;
+        resetCalculation();
+    });
+    _on(t, 'change', resetCalculation);
+    _on(ddl, 'change', resetCalculation);
+    _on(chk, 'change', function () { onShortChange(); resetCalculation(); });
+
+    var s1 = _el('edit_start_time');
+    var s2 = _el('edit_station_start_time');
+    var s3 = _el('edit_station_end_time');
+    applyTimeToSelects(s1 ? s1.value : '', 's_hour', 's_min', 's_ampm');
+    applyTimeToSelects(s2 ? s2.value : '', 'station_start_hour', 'station_start_min', 'station_start_ampm');
+    applyTimeToSelects(s3 ? s3.value : '', 'station_end_hour', 'station_end_min', 'station_end_ampm');
+}
+
+if (document.addEventListener) document.addEventListener('DOMContentLoaded', _initLeaveRequest);
+else _on(window, 'load', _initLeaveRequest);
+
+// Ensure globals for inline onclick handlers.
+if (window) {
+    window.performCalculation = performCalculation;
+    window.onShortChange = onShortChange;
+    window.ShowSearch = ShowSearch;
+    window.HideSearch = HideSearch;
+    window.doAdvancedSearch = doAdvancedSearch;
+    window.doSimpleSearch = doSimpleSearch;
+    window.selectEmployee = selectEmployee;
+}
 </script>
 {% endblock %}
