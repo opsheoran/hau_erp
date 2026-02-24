@@ -156,7 +156,6 @@ class EmployeeModel:
         SELECT E.*, O.*, D.Description as ddo_name, DP.description as dept_name, DS.designation as desg_name,
                LOC.locname as location_name,
                GPF.gpfno, 
-               FA.OrderNo as first_order_no,
                GPF.PFType as pftype_code,
                CASE WHEN GPF.PFType = 'G' THEN 'GPF' WHEN GPF.PFType = 'C' THEN 'CPF' WHEN GPF.PFType = 'P' THEN 'NPS' ELSE GPF.PFType END as pftype_desc,
                BAL.ClosingBal as gpf_balance,
@@ -164,8 +163,8 @@ class EmployeeModel:
                SAL.IT as income_tax,
                SHARE.SharePerc as gpf_share_pct,
                CONVERT(varchar, O.dateofbirth, 23) as dob_fmt,
-               COALESCE(CONVERT(varchar, FA.AppointmentDate, 23), CONVERT(varchar, O.dateofappointment, 23)) as doa_fmt,
-               COALESCE(CONVERT(varchar, FA.JoiningDate, 23), CONVERT(varchar, O.dateofjoining, 23)) as doj_fmt,
+               CONVERT(varchar, O.dateofappointment, 23) as doa_fmt,
+               CONVERT(varchar, O.dateofjoining, 23) as doj_fmt,
                CONVERT(varchar, O.dateOfConfirmation, 23) as doc_fmt,
                COALESCE(CONVERT(varchar, O.dateofretirement, 23), CONVERT(varchar, BM.Retirement, 23)) as dor_fmt,
                CONVERT(varchar, O.dateoflastappointment, 23) as last_doa_fmt,
@@ -180,7 +179,6 @@ class EmployeeModel:
         LEFT JOIN Department_Mst DP ON E.fk_deptid = DP.pk_deptid
         LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid
         LEFT JOIN Location_Mst LOC ON E.fk_locid = LOC.pk_locid
-        LEFT JOIN (SELECT fk_empid, AppointmentDate, JoiningDate, OrderNo, ROW_NUMBER() OVER(PARTITION BY fk_empid ORDER BY pk_appointmentid DESC) as rn FROM SAL_FirstAppointment_Details) FA ON E.pk_empid = FA.fk_empid AND FA.rn = 1
         LEFT JOIN (SELECT fk_empid, EffectiveDate, ROW_NUMBER() OVER(PARTITION BY fk_empid ORDER BY EffectiveDate DESC) as rn FROM SAL_FMAeffective_Trn) FMA ON E.pk_empid = FMA.fk_empid AND FMA.rn = 1
         LEFT JOIN gpf_employee_details GPF ON E.pk_empid = GPF.fk_empid
         LEFT JOIN (SELECT fk_empid, ClosingBal, ROW_NUMBER() OVER(PARTITION BY fk_empid ORDER BY fk_finid DESC) as rn FROM GPF_Balance_Mst) BAL ON E.pk_empid = BAL.fk_empid AND BAL.rn = 1
@@ -193,7 +191,83 @@ class EmployeeModel:
         LEFT JOIN (SELECT fk_empid, SharePerc, ROW_NUMBER() OVER(PARTITION BY fk_empid ORDER BY InsDate DESC) as rn FROM Employee_GPF_Optional_Share) SHARE ON E.pk_empid = SHARE.fk_empid AND SHARE.rn = 1
         WHERE E.pk_empid = ?
         """
-        return DB.fetch_one(query, [emp_id])
+        record = DB.fetch_one(query, [emp_id])
+        if not record:
+            return None
+
+        def fmt_iso(value):
+            if value is None or value == '':
+                return None
+            try:
+                from datetime import datetime, date
+                if isinstance(value, (datetime, date)):
+                    return value.strftime('%Y-%m-%d')
+            except Exception:
+                pass
+
+            s = str(value).strip()
+            if not s:
+                return None
+            for fmt in ('%Y-%m-%d', '%Y/%m/%d', '%d/%m/%Y', '%d-%m-%Y'):
+                try:
+                    from datetime import datetime
+                    return datetime.strptime(s[:10], fmt).strftime('%Y-%m-%d')
+                except Exception:
+                    continue
+            return s[:10]
+
+        def pick_col(cols, candidates):
+            for c in candidates:
+                if c in cols:
+                    return c
+            return None
+
+        # Prefer latest record from SAL_FirstAppointment_Details if those columns exist in this DB.
+        try:
+            fa_cols = set(DB.get_table_columns('SAL_FirstAppointment_Details'))
+        except Exception:
+            fa_cols = set()
+
+        appointment_date_col = pick_col(fa_cols, ['AppointmentDate', 'DateofAppointment', 'dateofappointment'])
+        joining_date_col = pick_col(fa_cols, ['JoiningDate', 'DateofJoining', 'DateofJoinning', 'dateofjoining'])
+        order_no_col = pick_col(fa_cols, ['OrderNo', 'OrderNO', 'Order_No', 'OrderNumber', 'OrderNo1'])
+        has_fk_empid = 'fk_empid' in fa_cols
+
+        if has_fk_empid and (appointment_date_col or joining_date_col or order_no_col):
+            select_cols = []
+            for c in [appointment_date_col, joining_date_col, order_no_col]:
+                if c:
+                    safe = c.replace(']', ']]')
+                    select_cols.append(f'[{safe}]')
+            try:
+                fa = DB.fetch_one(
+                    f"""
+                    SELECT TOP 1 {', '.join(select_cols)}
+                    FROM SAL_FirstAppointment_Details
+                    WHERE fk_empid = ?
+                    ORDER BY pk_appointmentid DESC
+                    """,
+                    [emp_id],
+                )
+            except Exception:
+                fa = None
+
+            if fa:
+                if order_no_col and fa.get(order_no_col) not in (None, ''):
+                    record['first_order_no'] = fa.get(order_no_col)
+                if appointment_date_col and fa.get(appointment_date_col) not in (None, ''):
+                    record['doa_fmt'] = fmt_iso(fa.get(appointment_date_col))
+                if joining_date_col and fa.get(joining_date_col) not in (None, ''):
+                    record['doj_fmt'] = fmt_iso(fa.get(joining_date_col))
+
+        # Fallback for order number if we couldn't find it in SAL_FirstAppointment_Details.
+        if record.get('first_order_no') in (None, ''):
+            for k in ('OrderNo', 'orderno', 'order_no'):
+                if record.get(k) not in (None, ''):
+                    record['first_order_no'] = record.get(k)
+                    break
+
+        return record
 
     @staticmethod
     def get_all_ddos():
@@ -1223,27 +1297,115 @@ class SARModel:
 
 class FirstAppointmentModel:
     @staticmethod
+    def _table_cols():
+        try:
+            return set(DB.get_table_columns('SAL_FirstAppointment_Details'))
+        except Exception:
+            return set()
+
+    @staticmethod
+    def _pick_col(cols, candidates):
+        for c in candidates:
+            if c in cols:
+                return c
+        return None
+
+    @staticmethod
+    def _fmt_date(value):
+        if value is None or value == '':
+            return None
+        try:
+            from datetime import datetime, date
+            if isinstance(value, (datetime, date)):
+                return value.strftime('%d/%m/%Y')
+        except Exception:
+            pass
+
+        s = str(value).strip()
+        if not s:
+            return None
+        for fmt in ('%d/%m/%Y', '%Y-%m-%d', '%Y/%m/%d', '%d-%m-%Y'):
+            try:
+                from datetime import datetime
+                return datetime.strptime(s[:10], fmt).strftime('%d/%m/%Y')
+            except Exception:
+                continue
+        return s
+
+    @staticmethod
     def get_employee_appointments(emp_id):
-        query = """
-            SELECT pk_appointmentid as id, title, OrderNo, 
-                   CONVERT(varchar, JoiningDate, 103) as joining_date_fmt
+        cols = FirstAppointmentModel._table_cols()
+        join_col = FirstAppointmentModel._pick_col(
+            cols,
+            ['JoiningDate', 'DateofJoining', 'DateofJoinning', 'dateofjoining'],
+        )
+        order_col = FirstAppointmentModel._pick_col(
+            cols,
+            ['OrderNo', 'OrderNO', 'Order_No', 'OrderNumber', 'orderno'],
+        )
+        select_parts = ["pk_appointmentid as id", "title"]
+        if order_col:
+            safe_col = order_col.replace(']', ']]')
+            select_parts.append(f"[{safe_col}] as OrderNo")
+        else:
+            select_parts.append("NULL as OrderNo")
+        if join_col:
+            safe_col = join_col.replace(']', ']]')
+            select_parts.append(f"[{safe_col}] as _joining_date_raw")
+        query = f"""
+            SELECT {', '.join(select_parts)}
             FROM SAL_FirstAppointment_Details
             WHERE fk_empid = ?
             ORDER BY pk_appointmentid DESC
         """
-        return DB.fetch_all(query, [emp_id])
+        rows = DB.fetch_all(query, [emp_id])
+        for r in rows:
+            raw = r.pop('_joining_date_raw', None)
+            r['joining_date_fmt'] = FirstAppointmentModel._fmt_date(raw)
+        return rows
 
     @staticmethod
     def get_appointment_by_id(app_id):
-        query = """
-            SELECT *, 
-                   CONVERT(varchar, JoiningDate, 103) as joining_date_fmt,
-                   CONVERT(varchar, AppointmentDate, 103) as appointment_date_fmt,
-                   CONVERT(varchar, ProbationDate, 103) as probation_date_fmt,
-                   CONVERT(varchar, DueDatePP, 103) as due_date_pp_fmt
-            FROM SAL_FirstAppointment_Details WHERE pk_appointmentid = ?
-        """
-        return DB.fetch_one(query, [app_id])
+        record = DB.fetch_one(
+            "SELECT * FROM SAL_FirstAppointment_Details WHERE pk_appointmentid = ?",
+            [app_id],
+        )
+        if not record:
+            return None
+
+        def first_present(candidates):
+            for c in candidates:
+                if c in record and record.get(c) not in (None, ''):
+                    return record.get(c)
+            return None
+
+        record.setdefault(
+            'joining_date_fmt',
+            FirstAppointmentModel._fmt_date(
+                first_present(['JoiningDate', 'DateofJoining', 'DateofJoinning', 'dateofjoining'])
+            ),
+        )
+        record.setdefault(
+            'OrderNo',
+            first_present(['OrderNo', 'OrderNO', 'Order_No', 'OrderNumber', 'orderno']),
+        )
+        record.setdefault(
+            'appointment_date_fmt',
+            FirstAppointmentModel._fmt_date(
+                first_present(['AppointmentDate', 'DateofAppointment', 'dateofappointment'])
+            ),
+        )
+        record.setdefault(
+            'probation_date_fmt',
+            FirstAppointmentModel._fmt_date(
+                first_present(['ProbationDate', 'ProbationCompleted', 'Prob_CompDate'])
+            ),
+        )
+        record.setdefault(
+            'due_date_pp_fmt',
+            FirstAppointmentModel._fmt_date(first_present(['DueDatePP'])),
+        )
+        return record
 
     @staticmethod
     def get_probation_terms(app_id):

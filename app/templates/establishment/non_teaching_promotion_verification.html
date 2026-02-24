@@ -46,9 +46,9 @@
         {% for r in rows %}
         <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
             <td align="center">{{ loop.index }}</td>
-            <td>{{ r.empcode or r.EmpCode }}</td>
-            <td>{{ r.empname }}</td>
-            <td>{{ r.designation }}</td>
+            <td>{{ r.empcode or r.EmpCode or r.EmployeeCode or r.employee_code or r.employeecode }}</td>
+            <td>{{ r.empname or r.EmpName or r.employee_name or r.EmployeeName }}</td>
+            <td>{{ r.designation or r.Designation }}</td>
             <td align="center">{{ r.Status or r.status }}</td>
             <td align="center">
                 {% if perm.AllowUpdate %}

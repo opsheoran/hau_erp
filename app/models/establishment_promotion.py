@@ -288,6 +288,80 @@ class NonTeachingPromotionModel:
             return []
 
     @staticmethod
+    def _emp_join(table: str) -> Optional[Dict[str, str]]:
+        cols = NonTeachingPromotionModel._cols(table)
+        if not cols:
+            return None
+
+        cols_lc = {c.lower(): c for c in cols}
+
+        # Prefer joining via employee id if present.
+        for key in (
+            "fk_empid",
+            "fk_emp_id",
+            "fk_emp",
+            "empid",
+            "emp_id",
+            "fk_employeeid",
+            "fk_employee_id",
+            "employeeid",
+            "employee_id",
+        ):
+            col = cols_lc.get(key)
+            if col:
+                return {"col": col, "mode": "empid"}
+
+        # Fallback: some tables store employee code instead of pk_empid.
+        for key in ("empcode", "emp_code", "employee_code", "employeecode"):
+            col = cols_lc.get(key)
+            if col:
+                return {"col": col, "mode": "empcode"}
+
+        return None
+
+    @staticmethod
+    def _emp_join_cols(table: str) -> List[str]:
+        cols = NonTeachingPromotionModel._cols(table)
+        if not cols:
+            return []
+
+        cols_lc = {c.lower(): c for c in cols}
+
+        join_cols: List[str] = []
+
+        for key in (
+            "fk_empid",
+            "fk_emp_id",
+            "fk_emp",
+            "empid",
+            "emp_id",
+            "fk_employeeid",
+            "fk_employee_id",
+            "employeeid",
+            "employee_id",
+        ):
+            col = cols_lc.get(key)
+            if col and col not in join_cols:
+                join_cols.append(col)
+
+        for key in (
+            "empcode",
+            "emp_code",
+            "employee_code",
+            "employeecode",
+            "employeecode1",
+            "employeecode2",
+            "employeecod",
+            "employee_code1",
+            "employee_code2",
+        ):
+            col = cols_lc.get(key)
+            if col and col not in join_cols:
+                join_cols.append(col)
+
+        return join_cols
+
+    @staticmethod
     def _pk_col(table: str) -> Optional[str]:
         cols = NonTeachingPromotionModel._cols(table)
         for c in cols:
@@ -315,10 +389,10 @@ class NonTeachingPromotionModel:
         return None
 
     @staticmethod
-    def list_verify(status: Optional[str] = None, limit: int = 200) -> List[Dict[str, Any]]:
+    def list_verify(status: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
         table = NonTeachingPromotionModel.TABLE_VERIFY
         pk = NonTeachingPromotionModel._pk_col(table)
-        emp_fk = NonTeachingPromotionModel._emp_fk_col(table)
+        emp_join_cols = NonTeachingPromotionModel._emp_join_cols(table)
         status_col = NonTeachingPromotionModel._status_col(table)
 
         where = ""
@@ -327,14 +401,20 @@ class NonTeachingPromotionModel:
             where = f" WHERE V.[{status_col}] = ?"
             params.append(status)
 
-        top = max(1, min(int(limit or 200), 500))
+        top = max(1, min(int(limit or 100), 500))
         order = f" ORDER BY V.[{pk}] DESC" if pk else ""
 
         join = ""
         select_emp = ""
-        if emp_fk:
-            join = f" LEFT JOIN SAL_Employee_Mst E ON V.[{emp_fk}] = E.pk_empid LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid"
-            select_emp = ", E.empcode, E.empname, DS.designation"
+        if emp_join_cols:
+            conds = []
+            for c in emp_join_cols:
+                val = f"LTRIM(RTRIM(TRY_CONVERT(varchar(50), V.[{c}])))"
+                conds.append(
+                    f"({val} = LTRIM(RTRIM(TRY_CONVERT(varchar(50), E.pk_empid))) OR {val} = LTRIM(RTRIM(E.empcode)))"
+                )
+            join = f" LEFT JOIN SAL_Employee_Mst E ON ({' OR '.join(conds)}) LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid"
+            select_emp = ", E.empcode as empcode, E.empname as empname, DS.designation as designation"
 
         q = f"SELECT TOP {top} V.*{select_emp} FROM {table} V{join}{where}{order}"
         try:
@@ -352,10 +432,10 @@ class NonTeachingPromotionModel:
         return DB.execute(f"UPDATE {table} SET [{status_col}] = ? WHERE [{pk}] = ?", [status, row_id])
 
     @staticmethod
-    def list_approval(status: Optional[str] = None, limit: int = 200) -> List[Dict[str, Any]]:
+    def list_approval(status: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
         table = NonTeachingPromotionModel.TABLE_APPROVAL
         pk = NonTeachingPromotionModel._pk_col(table)
-        emp_fk = NonTeachingPromotionModel._emp_fk_col(table)
+        emp_join_cols = NonTeachingPromotionModel._emp_join_cols(table)
         status_col = NonTeachingPromotionModel._status_col(table)
 
         where = ""
@@ -364,14 +444,20 @@ class NonTeachingPromotionModel:
             where = f" WHERE A.[{status_col}] = ?"
             params.append(status)
 
-        top = max(1, min(int(limit or 200), 500))
+        top = max(1, min(int(limit or 100), 500))
         order = f" ORDER BY A.[{pk}] DESC" if pk else ""
 
         join = ""
         select_emp = ""
-        if emp_fk:
-            join = f" LEFT JOIN SAL_Employee_Mst E ON A.[{emp_fk}] = E.pk_empid LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid"
-            select_emp = ", E.empcode, E.empname, DS.designation"
+        if emp_join_cols:
+            conds = []
+            for c in emp_join_cols:
+                val = f"LTRIM(RTRIM(TRY_CONVERT(varchar(50), A.[{c}])))"
+                conds.append(
+                    f"({val} = LTRIM(RTRIM(TRY_CONVERT(varchar(50), E.pk_empid))) OR {val} = LTRIM(RTRIM(E.empcode)))"
+                )
+            join = f" LEFT JOIN SAL_Employee_Mst E ON ({' OR '.join(conds)}) LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid"
+            select_emp = ", E.empcode as empcode, E.empname as empname, DS.designation as designation"
 
         q = f"SELECT TOP {top} A.*{select_emp} FROM {table} A{join}{where}{order}"
         try:

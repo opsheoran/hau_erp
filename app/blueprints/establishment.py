@@ -1263,10 +1263,6 @@ def employee_first_appointment_details():
                 edit_data['Department'] = employee_info.get('dept_name')
             if _blank(edit_data.get('Designation')) and not _blank(employee_info.get('designation')):
                 edit_data['Designation'] = employee_info.get('designation')
-            if _blank(edit_data.get('BasicPay')) and not _blank(employee_info.get('curbasic')):
-                edit_data['BasicPay'] = employee_info.get('curbasic')
-            if _blank(edit_data.get('PayScale')) and not _blank(employee_info.get('grade_details')):
-                edit_data['PayScale'] = employee_info.get('grade_details')
 
         # Backfill from promotion/increment/payrevision history (latest)
         hist = None
@@ -1300,6 +1296,7 @@ def employee_first_appointment_details():
                       CASE WHEN P.DateofJoinning IS NOT NULL OR P.DateofAppointment IS NOT NULL THEN 0 ELSE 1 END,
                       P.pk_proincid DESC
                 """
+                ,
                 [emp_id, target_join_date, target_join_date, target_appointment_date, target_appointment_date],
             )
         except Exception:
@@ -1311,7 +1308,9 @@ def employee_first_appointment_details():
                 hist_ord = DB.fetch_one(
                     """
                     SELECT TOP 1
-                        P.OrdeNo as OrderNo
+                        P.OrdeNo as OrderNo,
+                        P.NewBasic as BasicPay,
+                        P.NewPayScale as PayScale
                     FROM [HAU_Client_Backup].[dbo].[sal_emp_promotion_increment_payrevision_detail] P
                     WHERE P.fk_empid = ?
                       AND NULLIF(LTRIM(RTRIM(P.OrdeNo)), '') IS NOT NULL
@@ -1331,7 +1330,10 @@ def employee_first_appointment_details():
                 try:
                     hist_ord = DB.fetch_one(
                         """
-                        SELECT TOP 1 P.OrdeNo as OrderNo
+                        SELECT TOP 1
+                            P.OrdeNo as OrderNo,
+                            P.NewBasic as BasicPay,
+                            P.NewPayScale as PayScale
                         FROM [HAU_Client_Backup].[dbo].[sal_emp_promotion_increment_payrevision_detail] P
                         WHERE P.fk_empid = ? AND NULLIF(LTRIM(RTRIM(P.OrdeNo)), '') IS NOT NULL
                         ORDER BY P.pk_proincid DESC
@@ -1343,6 +1345,10 @@ def employee_first_appointment_details():
 
             if hist_ord and not _blank(hist_ord.get('OrderNo')):
                 edit_data['OrderNo'] = hist_ord.get('OrderNo')
+            if hist_ord and _blank(edit_data.get('BasicPay')) and not _blank(hist_ord.get('BasicPay')):
+                edit_data['BasicPay'] = hist_ord.get('BasicPay')
+            if hist_ord and _blank(edit_data.get('PayScale')) and not _blank(hist_ord.get('PayScale')):
+                edit_data['PayScale'] = hist_ord.get('PayScale')
 
         if edit_data and _blank(edit_data.get('probation_date_fmt')):
             hist_prob = None
@@ -1402,6 +1408,13 @@ def employee_first_appointment_details():
                 ]:
                     if _blank(edit_data.get(k)) and not _blank(hist.get(k)):
                         edit_data[k] = hist.get(k)
+
+        # Fallback BasicPay/PayScale from current employee master only if appointment sources didn't provide them.
+        if employee_info and edit_data:
+            if _blank(edit_data.get('BasicPay')) and not _blank(employee_info.get('curbasic')):
+                edit_data['BasicPay'] = employee_info.get('curbasic')
+            if _blank(edit_data.get('PayScale')) and not _blank(employee_info.get('grade_details')):
+                edit_data['PayScale'] = employee_info.get('grade_details')
 
         if edit_data and edit_data.get('pk_appointmentid'):
             terms = FirstAppointmentModel.get_probation_terms(edit_data['pk_appointmentid'])
@@ -3757,7 +3770,7 @@ def non_teaching_promotion_verification():
             flash(f'Error: {str(e)}', 'danger')
         return redirect(url_for('establishment.non_teaching_promotion_verification', status_filter=status_filter))
 
-    rows = NonTeachingPromotionModel.list_verify(status_filter or None)
+    rows = NonTeachingPromotionModel.list_verify(status_filter or None, limit=100)
     try:
         pk = NonTeachingPromotionModel._pk_col(NonTeachingPromotionModel.TABLE_VERIFY)
         if pk:
@@ -3789,7 +3802,7 @@ def non_teaching_promotion_approval():
             flash(f'Error: {str(e)}', 'danger')
         return redirect(url_for('establishment.non_teaching_promotion_approval', status_filter=status_filter))
 
-    rows = NonTeachingPromotionModel.list_approval(status_filter or None)
+    rows = NonTeachingPromotionModel.list_approval(status_filter or None, limit=100)
     try:
         pk = NonTeachingPromotionModel._pk_col(NonTeachingPromotionModel.TABLE_APPROVAL)
         if pk:
@@ -3821,7 +3834,7 @@ def non_teaching_vc_promotion_approval():
             flash(f'Error: {str(e)}', 'danger')
         return redirect(url_for('establishment.non_teaching_vc_promotion_approval', status_filter=status_filter))
 
-    rows = NonTeachingPromotionModel.list_approval(status_filter or None)
+    rows = NonTeachingPromotionModel.list_approval(status_filter or None, limit=100)
     try:
         pk = NonTeachingPromotionModel._pk_col(NonTeachingPromotionModel.TABLE_APPROVAL)
         if pk:
@@ -3836,4 +3849,3 @@ def non_teaching_vc_promotion_approval():
         rows=rows,
         status_filter=status_filter,
     )
-

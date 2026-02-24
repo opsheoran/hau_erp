@@ -2,6 +2,7 @@ from flask import g, has_app_context
 import pyodbc
 import os
 from dotenv import load_dotenv
+from functools import lru_cache
 
 load_dotenv()
 
@@ -102,6 +103,17 @@ class Database:
         finally:
             if not has_app_context():
                 conn.close()
+
+    @lru_cache(maxsize=256)
+    def get_table_columns(self, table_name, schema='dbo'):
+        query = """
+            SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?
+            ORDER BY ORDINAL_POSITION
+        """
+        rows = self.fetch_all(query, [schema, table_name])
+        return [r['COLUMN_NAME'] for r in rows]
 
 DB = Database()
 
