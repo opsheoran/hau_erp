@@ -3770,9 +3770,13 @@ def non_teaching_promotion_verification():
             flash(f'Error: {str(e)}', 'danger')
         return redirect(url_for('establishment.non_teaching_promotion_verification', status_filter=status_filter))
 
+    table = NonTeachingPromotionModel._pick_table(
+        NonTeachingPromotionModel.TABLE_VERIFY_CANDIDATES,
+        NonTeachingPromotionModel.TABLE_VERIFY,
+    )
     rows = NonTeachingPromotionModel.list_verify(status_filter or None, limit=100)
     try:
-        pk = NonTeachingPromotionModel._pk_col(NonTeachingPromotionModel.TABLE_VERIFY)
+        pk = NonTeachingPromotionModel._pk_col(table)
         if pk:
             for r in rows:
                 r['row_id'] = r.get(pk)
@@ -3802,9 +3806,13 @@ def non_teaching_promotion_approval():
             flash(f'Error: {str(e)}', 'danger')
         return redirect(url_for('establishment.non_teaching_promotion_approval', status_filter=status_filter))
 
+    table = NonTeachingPromotionModel._pick_table(
+        NonTeachingPromotionModel.TABLE_APPROVAL_CANDIDATES,
+        NonTeachingPromotionModel.TABLE_APPROVAL,
+    )
     rows = NonTeachingPromotionModel.list_approval(status_filter or None, limit=100)
     try:
-        pk = NonTeachingPromotionModel._pk_col(NonTeachingPromotionModel.TABLE_APPROVAL)
+        pk = NonTeachingPromotionModel._pk_col(table)
         if pk:
             for r in rows:
                 r['row_id'] = r.get(pk)
@@ -3828,15 +3836,19 @@ def non_teaching_vc_promotion_approval():
         row_id = request.form.get('row_id')
         new_status = request.form.get('new_status')
         try:
-            NonTeachingPromotionModel.set_approval_status(row_id, new_status)
+            NonTeachingPromotionModel.set_vc_approval_status(row_id, new_status)
             flash('Status updated successfully.', 'success')
         except Exception as e:
             flash(f'Error: {str(e)}', 'danger')
         return redirect(url_for('establishment.non_teaching_vc_promotion_approval', status_filter=status_filter))
 
-    rows = NonTeachingPromotionModel.list_approval(status_filter or None, limit=100)
+    table = NonTeachingPromotionModel._pick_table(
+        NonTeachingPromotionModel.TABLE_VC_APPROVAL_CANDIDATES,
+        NonTeachingPromotionModel.TABLE_VC_APPROVAL,
+    )
+    rows = NonTeachingPromotionModel.list_vc_approval(status_filter or None, limit=100)
     try:
-        pk = NonTeachingPromotionModel._pk_col(NonTeachingPromotionModel.TABLE_APPROVAL)
+        pk = NonTeachingPromotionModel._pk_col(table)
         if pk:
             for r in rows:
                 r['row_id'] = r.get(pk)

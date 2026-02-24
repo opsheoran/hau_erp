@@ -275,6 +275,28 @@ class AppointingAuthorityModel:
 class NonTeachingPromotionModel:
     TABLE_VERIFY = "SAL_NonTeachingPromotionVerification_Mst"
     TABLE_APPROVAL = "sal_emp_NonteachersPromotion_Approval"
+    TABLE_VC_APPROVAL = "sal_emp_NonteachersPromotion_Approval"
+
+    TABLE_VERIFY_CANDIDATES = [
+        "SAL_NonTeachingPromotionVerification_Mst",
+        "SAL_NonTeachingEmpPromotion_Verification",
+        "SAL_NonTeachingEmpPromotionVerification_Mst",
+        "SAL_NonTeachingPromotionVerification",
+    ]
+    TABLE_APPROVAL_CANDIDATES = [
+        "sal_emp_NonteachersPromotion_Approval",
+        "SAL_NonTeachingVerificationList",
+        "SAL_NonTeachingPromotionApproval_Mst",
+        "SAL_NonTeachingEmpPromotion_Approval",
+        "SAL_NonTeachingPromotion_Approval",
+    ]
+    TABLE_VC_APPROVAL_CANDIDATES = [
+        "SAL_NonTeachingEmpPromotion_VCApproval",
+        "SAL_NonTeachingEmpPromotionVCApproval_Mst",
+        "SAL_NonTeachingPromotionVCApproval_Mst",
+        "SAL_NonTeachingPromotion_VCApproval",
+        "sal_emp_NonteachersPromotion_Approval",
+    ]
 
     @staticmethod
     def _cols(table: str) -> List[str]:
@@ -311,6 +333,16 @@ class NonTeachingPromotionModel:
             return [str(r["COLUMN_NAME"]) for r in rows]
         except Exception:
             return []
+
+    @staticmethod
+    def _pick_table(candidates: List[str], fallback: str) -> str:
+        for t in candidates or []:
+            try:
+                if NonTeachingPromotionModel._cols(t):
+                    return t
+            except Exception:
+                continue
+        return fallback
 
     @staticmethod
     def _emp_join(table: str) -> Optional[Dict[str, str]]:
@@ -415,7 +447,10 @@ class NonTeachingPromotionModel:
 
     @staticmethod
     def list_verify(status: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
-        table = NonTeachingPromotionModel.TABLE_VERIFY
+        table = NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_VERIFY_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_VERIFY,
+        )
         pk = NonTeachingPromotionModel._pk_col(table)
         emp_join_cols = NonTeachingPromotionModel._emp_join_cols(table)
         status_col = NonTeachingPromotionModel._status_col(table)
@@ -449,7 +484,10 @@ class NonTeachingPromotionModel:
 
     @staticmethod
     def set_verify_status(row_id: Any, status: str) -> int:
-        table = NonTeachingPromotionModel.TABLE_VERIFY
+        table = NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_VERIFY_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_VERIFY,
+        )
         pk = NonTeachingPromotionModel._pk_col(table)
         status_col = NonTeachingPromotionModel._status_col(table)
         if not pk or not status_col:
@@ -458,7 +496,10 @@ class NonTeachingPromotionModel:
 
     @staticmethod
     def list_approval(status: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
-        table = NonTeachingPromotionModel.TABLE_APPROVAL
+        table = NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_APPROVAL_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_APPROVAL,
+        )
         pk = NonTeachingPromotionModel._pk_col(table)
         emp_join_cols = NonTeachingPromotionModel._emp_join_cols(table)
         status_col = NonTeachingPromotionModel._status_col(table)
@@ -492,9 +533,39 @@ class NonTeachingPromotionModel:
 
     @staticmethod
     def set_approval_status(row_id: Any, status: str) -> int:
-        table = NonTeachingPromotionModel.TABLE_APPROVAL
+        table = NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_APPROVAL_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_APPROVAL,
+        )
         pk = NonTeachingPromotionModel._pk_col(table)
         status_col = NonTeachingPromotionModel._status_col(table)
         if not pk or not status_col:
             return 0
         return DB.execute(f"UPDATE {table} SET [{status_col}] = ? WHERE [{pk}] = ?", [status, row_id])
+
+    @staticmethod
+    def list_vc_approval(status: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
+        table = NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_VC_APPROVAL_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_VC_APPROVAL,
+        )
+        # Reuse list_approval logic by temporarily overriding the fallback table.
+        original = NonTeachingPromotionModel.TABLE_APPROVAL
+        try:
+            NonTeachingPromotionModel.TABLE_APPROVAL = table
+            return NonTeachingPromotionModel.list_approval(status, limit)
+        finally:
+            NonTeachingPromotionModel.TABLE_APPROVAL = original
+
+    @staticmethod
+    def set_vc_approval_status(row_id: Any, status: str) -> int:
+        table = NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_VC_APPROVAL_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_VC_APPROVAL,
+        )
+        original = NonTeachingPromotionModel.TABLE_APPROVAL
+        try:
+            NonTeachingPromotionModel.TABLE_APPROVAL = table
+            return NonTeachingPromotionModel.set_approval_status(row_id, status)
+        finally:
+            NonTeachingPromotionModel.TABLE_APPROVAL = original
