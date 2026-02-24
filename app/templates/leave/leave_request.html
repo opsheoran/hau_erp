@@ -59,10 +59,24 @@
         {% endfor %}
     </table>
 
+    {% if edit_req %}
+    <div class="lblmessage" style="margin:10px 0; color:red; font-weight:bold;">
+        Editing Leave Request ID: {{ edit_req.id }}
+        &nbsp;|&nbsp; <a href="{{ url_for('leave.leave_request') }}" style="color:#3c8dbc; text-decoration:underline;">Clear</a>
+    </div>
+    {% endif %}
+
     <!-- PIXEL PERFECT FORM (EXACT SEQUENCE) -->
     <form method="POST" id="leaveForm">
         <input type="hidden" name="emp_id" value="{{ emp.pk_empid }}">
-        <input type="hidden" name="loc_id" value="{{ emp.fk_locid }}">
+        <input type="hidden" name="loc_id" id="hdnLocId" value="{{ emp.fk_locid }}">
+        <input type="hidden" name="req_id" value="{{ edit_req.id if edit_req else '' }}">
+        <input type="hidden" name="action" id="hdnAction" value="SUBMIT">
+        <input type="hidden" name="total_days" id="hdnTotalDays" value="{{ edit_req.totaldays if edit_req and edit_req.totaldays is not none else '' }}">
+        <input type="hidden" name="leave_days" id="hdnLeaveDays" value="{{ edit_req.totalleavedays if edit_req and edit_req.totalleavedays is not none else '' }}">
+        <input type="hidden" id="edit_start_time" value="{{ edit_req.start_time if edit_req and edit_req.start_time else '' }}">
+        <input type="hidden" id="edit_station_start_time" value="{{ edit_req.station_start_time if edit_req and edit_req.station_start_time else '' }}">
+        <input type="hidden" id="edit_station_end_time" value="{{ edit_req.station_end_time if edit_req and edit_req.station_end_time else '' }}">
         
         <table class="form-table">
             <!-- Row 1: Reporting To | Leave Type -->
@@ -70,8 +84,8 @@
                 <td class="vtext" width="15%">Reporting To</td>
                 <td class="colon">:</td>
                 <td class="required" width="33%">
-                    <input type="text" id="ro_name" class="textbox" style="width:180px;" readonly value="{{ ro.name if ro else '' }}">
-                    <input type="hidden" name="reporting_to" id="ro_id" value="{{ ro.id if ro else '' }}">
+                    <input type="text" id="ro_name" class="textbox" style="width:180px;" readonly value="{{ edit_req.reporting_to_name if edit_req and edit_req.reporting_to_name else (ro.name if ro else '') }}">
+                    <input type="hidden" name="reporting_to" id="ro_id" value="{{ edit_req.reporting_to if edit_req and edit_req.reporting_to else (ro.id if ro else '') }}">
                     <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="ShowSearch('ro')" style="cursor:pointer; vertical-align:middle;">
                     *
                 </td>
@@ -81,7 +95,7 @@
                     <select name="leave_id" id="ddlLeaveType" class="dropdown" style="width:185px;" required>
                         <option value="">-- Select Leave Type --</option>
                         {% for t in leave_types %}
-                        <option value="{{ t.id }}">{{ t.name }}</option>
+                        <option value="{{ t.id }}" {% if edit_req and edit_req.leave_id|string == t.id|string %}selected{% endif %}>{{ t.name }}</option>
                         {% endfor %}
                     </select> *
                 </td>
@@ -91,11 +105,11 @@
             <tr>
                 <td class="vtext">From Date</td><td class="colon">:</td>
                 <td class="required">
-                    <input type="date" name="from_date" id="txtFDate" class="textboxdate" required> *
+                    <input type="date" name="from_date" id="txtFDate" class="textboxdate" value="{{ edit_req.from_iso if edit_req else '' }}" required> *
                 </td>
                 <td class="vtext">To Date</td><td class="colon">:</td>
                 <td class="required">
-                    <input type="date" name="to_date" id="txtTDate" class="textboxdate" required> *
+                    <input type="date" name="to_date" id="txtTDate" class="textboxdate" value="{{ edit_req.to_iso if edit_req else '' }}" required> *
                 </td>
             </tr>
 
@@ -103,11 +117,11 @@
             <tr>
                 <td class="vtext">Station From</td><td class="colon">:</td>
                 <td class="required">
-                    <input type="date" name="station_from" class="textboxdate">
+                    <input type="date" name="station_from" id="txtStationFrom" class="textboxdate" value="{{ edit_req.station_from_iso if edit_req else '' }}">
                 </td>
                 <td class="vtext">Station To</td><td class="colon">:</td>
                 <td class="required">
-                    <input type="date" name="station_to" class="textboxdate">
+                    <input type="date" name="station_to" id="txtStationTo" class="textboxdate" value="{{ edit_req.station_to_iso if edit_req else '' }}">
                 </td>
             </tr>
 
@@ -115,27 +129,27 @@
             <tr>
                 <td class="vtext">Start Time</td><td class="colon">:</td>
                 <td>
-                    <select name="station_start_hour" class="dropdownverysmall">
+                    <select name="station_start_hour" id="station_start_hour" class="dropdownverysmall">
                         <option value="0">-Hour-</option>
                         {% for i in range(1,13) %}<option value="{{'%02d'|format(i)}}">{{'%02d'|format(i)}}</option>{% endfor %}
                     </select>
-                    <select name="station_start_min" class="dropdownverysmall">
+                    <select name="station_start_min" id="station_start_min" class="dropdownverysmall">
                         <option value="">-Minutes-</option>
                         {% for i in range(0,60) %}<option value="{{'%02d'|format(i)}}">{{'%02d'|format(i)}}</option>{% endfor %}
                     </select>
-                    <select name="station_start_ampm" class="dropdownverysmall"><option value="AM">AM</option><option value="PM">PM</option></select>
+                    <select name="station_start_ampm" id="station_start_ampm" class="dropdownverysmall"><option value="AM">AM</option><option value="PM">PM</option></select>
                 </td>
                 <td class="vtext">End Time</td><td class="colon">:</td>
                 <td>
-                    <select name="station_end_hour" class="dropdownverysmall">
+                    <select name="station_end_hour" id="station_end_hour" class="dropdownverysmall">
                         <option value="0">-Hour-</option>
                         {% for i in range(1,13) %}<option value="{{'%02d'|format(i)}}">{{'%02d'|format(i)}}</option>{% endfor %}
                     </select>
-                    <select name="station_end_min" class="dropdownverysmall">
+                    <select name="station_end_min" id="station_end_min" class="dropdownverysmall">
                         <option value="">-Minutes-</option>
                         {% for i in range(0,60) %}<option value="{{'%02d'|format(i)}}">{{'%02d'|format(i)}}</option>{% endfor %}
                     </select>
-                    <select name="station_end_ampm" class="dropdownverysmall"><option value="AM">AM</option><option value="PM">PM</option></select>
+                    <select name="station_end_ampm" id="station_end_ampm" class="dropdownverysmall"><option value="AM">AM</option><option value="PM">PM</option></select>
                 </td>
             </tr>
 
@@ -143,57 +157,57 @@
             <tr>
                 <td class="vtext">Contact Number</td><td class="colon">:</td>
                 <td class="required">
-                    <input type="text" name="contact" class="textbox" style="width:180px;" value="{{ emp.contactno or '' }}" required> *
+                    <input type="text" name="contact" class="textbox" style="width:180px;" value="{{ (edit_req.contact if edit_req else (emp.contactno or '')) }}" required> *
                 </td>
                 <td class="vtext">Commuted leave</td><td class="colon">:</td>
-                <td><input type="checkbox" name="is_commuted"></td>
+                <td><input type="checkbox" name="is_commuted" {% if edit_req and edit_req.is_commuted %}checked{% endif %}></td>
             </tr>
 
             <!-- Row 6: Recommend Employee | With Medical -->
             <tr>
                 <td class="vtext">Recommend Employee</td><td class="colon">:</td>
                 <td>
-                    <input type="text" id="rec1_name" class="textbox" style="width:180px;" readonly>
-                    <input type="hidden" name="rec1" id="rec1_id">
+                    <input type="text" id="rec1_name" class="textbox" style="width:180px;" readonly value="{{ edit_req.rec1_name if edit_req and edit_req.rec1_name else '' }}">
+                    <input type="hidden" name="rec1" id="rec1_id" value="{{ edit_req.rec1 if edit_req and edit_req.rec1 else '' }}">
                     <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="ShowSearch('rec1')" style="cursor:pointer; vertical-align:middle;">
                 </td>
                 <td class="vtext">With Medical</td><td class="colon">:</td>
-                <td><input type="checkbox" name="is_medical"></td>
+                <td><input type="checkbox" name="is_medical" {% if edit_req and edit_req.is_medical %}checked{% endif %}></td>
             </tr>
 
             <!-- Row 7: Recommend Employee 2 | Leave of Kind Due -->
             <tr>
                 <td class="vtext">Recommend Employee 2</td><td class="colon">:</td>
                 <td>
-                    <input type="text" id="rec2_name" class="textbox" style="width:180px;" readonly>
-                    <input type="hidden" name="rec2" id="rec2_id">
+                    <input type="text" id="rec2_name" class="textbox" style="width:180px;" readonly value="{{ edit_req.rec2_name if edit_req and edit_req.rec2_name else '' }}">
+                    <input type="hidden" name="rec2" id="rec2_id" value="{{ edit_req.rec2 if edit_req and edit_req.rec2 else '' }}">
                     <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="ShowSearch('rec2')" style="cursor:pointer; vertical-align:middle;">
                 </td>
                 <td class="vtext">Leave of Kind Due</td><td class="colon">:</td>
-                <td><input type="checkbox" name="is_study"></td>
+                <td><input type="checkbox" name="is_study" {% if edit_req and edit_req.is_study %}checked{% endif %}></td>
             </tr>
 
             <!-- Row 8: Recommend Employee 3 | Reason For Leave -->
             <tr>
                 <td class="vtext">Recommend Employee 3</td><td class="colon">:</td>
                 <td>
-                    <input type="text" id="rec3_name" class="textbox" style="width:180px;" readonly>
-                    <input type="hidden" name="rec3" id="rec3_id">
+                    <input type="text" id="rec3_name" class="textbox" style="width:180px;" readonly value="{{ edit_req.rec3_name if edit_req and edit_req.rec3_name else '' }}">
+                    <input type="hidden" name="rec3" id="rec3_id" value="{{ edit_req.rec3 if edit_req and edit_req.rec3 else '' }}">
                     <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="ShowSearch('rec3')" style="cursor:pointer; vertical-align:middle;">
                 </td>
                 <td class="vtext">Reason For Leave</td><td class="colon">:</td>
                 <td class="required">
-                    <textarea name="reason" class="textboxmultiline" rows="2" required></textarea> *
+                    <textarea name="reason" class="textboxmultiline" rows="2" required>{{ edit_req.reason if edit_req and edit_req.reason else '' }}</textarea> *
                 </td>
             </tr>
 
             <!-- Row 9: Is Short Leave | Address During Leave -->
             <tr>
                 <td class="vtext">Is Short Leave</td><td class="colon">:</td>
-                <td><input type="checkbox" name="is_short" id="chkShort" onchange="onShortChange()"></td>
+                <td><input type="checkbox" name="is_short" id="chkShort" onchange="onShortChange()" {% if edit_req and edit_req.is_short %}checked{% endif %}></td>
                 <td class="vtext">Address During Leave</td><td class="colon">:</td>
                 <td class="required">
-                    <textarea name="add_inst" class="textboxmultiline" rows="2" required></textarea> *
+                    <textarea name="add_inst" class="textboxmultiline" rows="2" required>{{ edit_req.add_inst if edit_req and edit_req.add_inst else '' }}</textarea> *
                 </td>
             </tr>
 
@@ -201,15 +215,15 @@
             <tr id="trShortTime" style="display:none;">
                 <td class="vtext">Start Time</td><td class="colon">:</td>
                 <td colspan="4">
-                    <select name="s_hour" class="dropdownverysmall">
+                    <select name="s_hour" id="s_hour" class="dropdownverysmall">
                         <option value="00">-Hour-</option>
                         {% for i in range(1,13) %}<option value="{{'%02d'|format(i)}}">{{'%02d'|format(i)}}</option>{% endfor %}
                     </select>
-                    <select name="s_min" class="dropdownverysmall">
+                    <select name="s_min" id="s_min" class="dropdownverysmall">
                         <option value="00">-Minutes-</option>
                         {% for i in range(0,60) %}<option value="{{'%02d'|format(i)}}">{{'%02d'|format(i)}}</option>{% endfor %}
                     </select>
-                    <select name="s_ampm" class="dropdownverysmall"><option value="AM">AM</option><option value="PM">PM</option></select>
+                    <select name="s_ampm" id="s_ampm" class="dropdownverysmall"><option value="AM">AM</option><option value="PM">PM</option></select>
                 </td>
             </tr>
 
@@ -230,7 +244,7 @@
                 <tbody id="transBody"></tbody>
             </table>
             <div style="text-align:center; margin-top:20px;">
-                <input type="submit" value="SUBMIT" class="button-common" style="background:#3c8dbc; color:white; width:100px;">
+                <input type="submit" value="{{ 'UPDATE' if edit_req else 'SUBMIT' }}" class="button-common" style="background:#3c8dbc; color:white; width:100px;">
             </div>
         </div>
     </form>
@@ -246,27 +260,152 @@
             <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
                 <td align="center">{{ loop.index }}</td>
                 <td>{{ r.ReportingTo }}</td><td>{{ r.LeaveType }}</td><td align="center">{{ r.RequestDate }}</td><td align="center">{{ r.RequestTime }}</td><td align="center">{{ r.FromDate }}</td><td align="center">{{ r.ToDate }}</td><td align="center">{{ r.SFrom or '' }}</td><td align="center">{{ r.STo or '' }}</td><td align="right">{{ "{:,.2f}".format(r.Days|float) }}</td><td align="center"><b>{{ r.Status }}</b></td>
-                <td align="center"><img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer"></td>
-                <td align="center"><img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer"></td>
+                <td align="center">
+                    {% if r.StatusCode == 'S' and r.IsCancelled == 'N' %}
+                        <a href="{{ url_for('leave.leave_request', edit_id=r.RequestID, page=pagination.page) }}">
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" border="0">
+                        </a>
+                    {% endif %}
+                </td>
+                <td align="center">
+                    {% if r.StatusCode == 'S' and r.IsCancelled == 'N' %}
+                        <form method="POST" style="display:inline;" onsubmit="return confirm('Cancel this leave request?');">
+                            <input type="hidden" name="action" value="DELETE">
+                            <input type="hidden" name="req_id" value="{{ r.RequestID }}">
+                            <button type="submit" style="border:0; background:none; padding:0;">
+                                <img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer" border="0">
+                            </button>
+                        </form>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
+        </table>
+
+        {% if pagination.total_pages > 1 %}
+        <div class="pager-style">
+            {% if pagination.has_prev %}
+                <a href="{{ url_for('leave.leave_request', page=pagination.page-1) }}">Prev</a>
+            {% else %}
+                <span class="disabled">Prev</span>
+            {% endif %}
+
+            {% set start = pagination.page - 3 if (pagination.page - 3) > 1 else 1 %}
+            {% set end = pagination.page + 3 if (pagination.page + 3) < pagination.total_pages else pagination.total_pages %}
+
+            {% for p in range(start, end + 1) %}
+                {% if p == pagination.page %}
+                    <span class="active">{{ p }}</span>
+                {% else %}
+                    <a href="{{ url_for('leave.leave_request', page=p) }}">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if pagination.has_next %}
+                <a href="{{ url_for('leave.leave_request', page=pagination.page+1) }}">Next</a>
+            {% else %}
+                <span class="disabled">Next</span>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- LEAVE REQUEST RECOMMENDED FOR -->
+    <div style="margin-top:30px;">
+        <table class="form-table"><tr><td class="tablesubheading">Leave Request Recommended For</td></tr></table>
+        <table class="table-grid-view">
+            <tr class="header-style">
+                <td>S.No.</td><td>On Leave Employee</td><td>Leave Type</td><td>From Date</td><td>To Date</td><td>Total Leave Days</td><td>Remarks</td><td>Approver Comment</td><td>Contact No.</td>
+            </tr>
+            {% if recommended and recommended|length %}
+                {% for r in recommended %}
+                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ r.EmployeeName }}</td>
+                    <td>{{ r.LeaveType }}</td>
+                    <td align="center">{{ r.FromDate }}</td>
+                    <td align="center">{{ r.ToDate }}</td>
+                    <td align="right">{{ "{:,.2f}".format(r.Days|float) }}</td>
+                    <td>{{ r.Reason }}</td>
+                    <td>{{ r.Comment }}</td>
+                    <td align="center">{{ r.Contact }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr class="item-style"><td colspan="9" align="center">No record found.</td></tr>
+            {% endif %}
         </table>
     </div>
 </div>
 
-<!-- RESTORED SIMPLE SEARCH MODAL -->
+<!-- EMPLOYEE SEARCH MODAL (LIVE-TEMPLATE STYLE) -->
 <div id="SearchDiv" class="white_content-new">
-    <div style="text-align:right;"><span onclick="HideSearch()" style="cursor:pointer; color:red; font-weight:bold;">X</span></div>
+    <div style="text-align:right;">
+        <span onclick="HideSearch()" style="cursor:pointer; color:red; font-weight:bold;">X</span>
+    </div>
     <div class="tableheading" style="margin-top:-15px;">Employee Search</div>
     <div style="padding:15px;">
-        <table class="form-table">
+        <table class="form-table" style="width:100%;">
             <tr>
-                <td class="vtext">Search Employee</td><td class="colon">:</td>
-                <td><input type="text" id="simple_search_term" class="textbox" style="width:250px;"></td>
-                <td><input type="button" value="SEARCH" class="button-common" onclick="doSimpleSearch()"></td>
+                <td class="vtext">Employee Code</td><td class="colon">:</td>
+                <td><input type="text" id="srch_emp_code" class="textbox" style="width:160px;"></td>
+                <td style="width:20px;"></td>
+                <td class="vtext">Employee Code (M)</td><td class="colon">:</td>
+                <td><input type="text" id="srch_manual_code" class="textbox" style="width:160px;"></td>
+            </tr>
+            <tr>
+                <td class="vtext">Employee Name</td><td class="colon">:</td>
+                <td><input type="text" id="srch_emp_name" class="textbox" style="width:160px;"></td>
+                <td></td>
+                <td class="vtext">DDO</td><td class="colon">:</td>
+                <td>
+                    <select id="srch_ddo" class="dropdown" style="width:170px;">
+                        <option value="">-- Select DDO --</option>
+                        {% for d in lookups.ddos %}
+                        <option value="{{ d.id }}">{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Location</td><td class="colon">:</td>
+                <td>
+                    <select id="srch_loc" class="dropdown" style="width:170px;">
+                        <option value="">-- Select Location --</option>
+                        {% for l in lookups.locs %}
+                        <option value="{{ l.id }}">{{ l.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td></td>
+                <td class="vtext">Department</td><td class="colon">:</td>
+                <td>
+                    <select id="srch_dept" class="dropdown" style="width:170px;">
+                        <option value="">-- Select Department --</option>
+                        {% for d in lookups.depts %}
+                        <option value="{{ d.id }}">{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Designation</td><td class="colon">:</td>
+                <td>
+                    <select id="srch_desg" class="dropdown" style="width:170px;">
+                        <option value="">-- Select Designation --</option>
+                        {% for d in lookups.desgs %}
+                        <option value="{{ d.id }}">{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td></td>
+                <td colspan="3" style="text-align:left;">
+                    <input type="button" value="SEARCH" class="button-common" onclick="doAdvancedSearch()">
+                    <input type="button" value="DONE" class="button-common" style="margin-left:10px;" onclick="HideSearch()">
+                </td>
             </tr>
         </table>
-        <div id="search_results" style="margin-top:20px; max-height:250px; overflow-y:auto;"></div>
+        <div id="search_results" style="margin-top:20px; max-height:280px; overflow-y:auto;"></div>
     </div>
 </div>
 
@@ -275,17 +414,35 @@ let activeSearchTarget = '';
 function ShowSearch(target) { 
     activeSearchTarget = target; 
     document.getElementById('SearchDiv').style.display = 'block'; 
+    const ids = ['srch_emp_code','srch_manual_code','srch_emp_name','srch_ddo','srch_loc','srch_dept','srch_desg'];
+    ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    const res = document.getElementById('search_results'); if (res) res.innerHTML = '';
+    document.getElementById('srch_emp_code')?.focus();
 }
 function HideSearch() { document.getElementById('SearchDiv').style.display = 'none'; }
 
 async function doSimpleSearch() {
-    const term = document.getElementById('simple_search_term').value;
-    if(term.length < 2) return;
-    const res = await fetch(`/leave/api/employee/search?term=${term}`);
+    // Backward compatibility - route this to advanced search.
+    return doAdvancedSearch();
+}
+
+async function doAdvancedSearch() {
+    const params = new URLSearchParams({
+        emp_code: document.getElementById('srch_emp_code')?.value || '',
+        manual_code: document.getElementById('srch_manual_code')?.value || '',
+        emp_name: document.getElementById('srch_emp_name')?.value || '',
+        ddo_id: document.getElementById('srch_ddo')?.value || '',
+        loc_id: document.getElementById('srch_loc')?.value || '',
+        dept_id: document.getElementById('srch_dept')?.value || '',
+        desg_id: document.getElementById('srch_desg')?.value || '',
+    });
+    const res = await fetch(`/leave/api/employee/search_advanced?${params.toString()}`);
     const data = await res.json();
-    let html = '<table class="table-grid-view"><tr class="header-style"><td>Code</td><td>Name</td><td>Action</td></tr>';
-    data.forEach(e => {
-        html += `<tr class="item-style"><td>${e.id}</td><td>${e.name}</td><td><a href="javascript:void(0)" onclick="selectEmployee('${e.id}', '${e.name}')">Select</a></td></tr>`;
+    let html = '<table class="table-grid-view"><tr class="header-style"><td>S.No.</td><td>Emp Code</td><td>Employee</td><td>Action</td></tr>';
+    (data || []).forEach((e, idx) => {
+        const disp = e.display || `${e.empname || ''} | ${e.empcode || ''} | ${e.designation || ''}`;
+        const dispArg = String(disp).replace(/\\/g, '\\\\').replace(/'/g, \"\\\\'\"); // safe for single-quoted JS arg
+        html += `<tr class="${((idx + 1) % 2 === 0) ? 'item-style-alt' : 'item-style'}"><td align="center">${idx + 1}</td><td align="center">${e.empcode || ''}</td><td>${disp}</td><td align="center"><a href="javascript:void(0)" onclick="selectEmployee('${e.id}', '${dispArg}')">Select</a></td></tr>`;
     });
     html += '</table>';
     document.getElementById('search_results').innerHTML = html;
@@ -298,32 +455,92 @@ function selectEmployee(id, name) {
 }
 
 function onShortChange() {
-    document.getElementById('trShortTime').style.display = document.getElementById('chkShort').checked ? 'table-row' : 'none';
+    const isShort = document.getElementById('chkShort').checked;
+    document.getElementById('trShortTime').style.display = isShort ? 'table-row' : 'none';
+    const f = document.getElementById('txtFDate');
+    const t = document.getElementById('txtTDate');
+    if (isShort && f && t) {
+        if (f.value) t.value = f.value;
+    }
 }
 
 function performCalculation() {
     const f = document.getElementById('txtFDate').value;
     const t = document.getElementById('txtTDate').value;
     const ltext = document.getElementById('ddlLeaveType').options[document.getElementById('ddlLeaveType').selectedIndex].text;
+    const leaveId = document.getElementById('ddlLeaveType').value;
     if(!f || !t) return;
     
-    fetch(`/leave/api/calculate_days?from=${f}&to=${t}&short=${document.getElementById('chkShort').checked}`)
+    const locId = document.getElementById('hdnLocId')?.value || '';
+    fetch(`/leave/api/calculate_days?from=${encodeURIComponent(f)}&to=${encodeURIComponent(t)}&loc_id=${encodeURIComponent(locId)}&leave_id=${encodeURIComponent(leaveId)}&short=${document.getElementById('chkShort').checked}`)
         .then(res => res.json())
         .then(data => {
             document.getElementById('txtDays').value = data.days;
+            document.getElementById('hdnTotalDays').value = data.total_days ?? '';
+            document.getElementById('hdnLeaveDays').value = data.days ?? '';
             const body = document.getElementById('transBody');
             body.innerHTML = '';
-            let start = new Date(f);
-            let end = new Date(t);
             let i = 1;
-            while(start <= end) {
+            (data.rows || []).forEach(r => {
                 const row = body.insertRow();
                 row.className = (i % 2 == 0) ? 'item-style-alt' : 'item-style';
-                row.innerHTML = `<td>${i++}</td><td>${start.toLocaleDateString('en-GB')}</td><td>${start.toLocaleDateString('en-GB', {weekday:'long'})}</td><td>${ltext}</td>`;
-                start.setDate(start.getDate() + 1);
-            }
-            document.getElementById('pnlCalc').style.display = 'block';
+                row.innerHTML = `<td>${i++}</td><td>${r.date || ''}</td><td>${r.day || ''}</td><td>${ltext}</td>`;
+            });
+            document.getElementById('pnlCalc').style.display = (data.rows && data.rows.length) ? 'block' : 'none';
         });
 }
+
+function resetCalculation() {
+    document.getElementById('hdnTotalDays').value = '';
+    document.getElementById('hdnLeaveDays').value = '';
+    const body = document.getElementById('transBody');
+    if (body) body.innerHTML = '';
+    const days = document.getElementById('txtDays');
+    if (days) days.value = '';
+    const pnl = document.getElementById('pnlCalc');
+    if (pnl) pnl.style.display = 'none';
+}
+
+function parseTimeStr(s) {
+    if (!s) return null;
+    const m = String(s).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    if (!m) return null;
+    return { hh: m[1].padStart(2, '0'), mm: m[2], ap: m[3].toUpperCase() };
+}
+
+function applyTimeToSelects(timeStr, hourId, minId, ampmId) {
+    const p = parseTimeStr(timeStr);
+    if (!p) return;
+    const hh = document.getElementById(hourId);
+    const mm = document.getElementById(minId);
+    const ap = document.getElementById(ampmId);
+    if (hh) hh.value = p.hh;
+    if (mm) mm.value = p.mm;
+    if (ap) ap.value = p.ap;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    onShortChange();
+
+    const f = document.getElementById('txtFDate');
+    const t = document.getElementById('txtTDate');
+    const ddl = document.getElementById('ddlLeaveType');
+    const chk = document.getElementById('chkShort');
+    if (f && t) {
+        f.addEventListener('change', () => {
+            if (document.getElementById('chkShort')?.checked) {
+                t.value = f.value;
+            }
+            resetCalculation();
+        });
+        t.addEventListener('change', resetCalculation);
+    }
+    ddl?.addEventListener('change', resetCalculation);
+    chk?.addEventListener('change', resetCalculation);
+
+    applyTimeToSelects(document.getElementById('edit_start_time')?.value, 's_hour', 's_min', 's_ampm');
+    applyTimeToSelects(document.getElementById('edit_station_start_time')?.value, 'station_start_hour', 'station_start_min', 'station_start_ampm');
+    applyTimeToSelects(document.getElementById('edit_station_end_time')?.value, 'station_end_hour', 'station_end_min', 'station_end_ampm');
+});
 </script>
 {% endblock %}

@@ -74,6 +74,56 @@ def api_employee_search():
     results = EmployeeModel.search_employees(term)
     return jsonify(results)
 
+@leave_bp.route('/api/employee/search_advanced')
+def api_employee_search_advanced():
+    code = (request.args.get('emp_code') or '').strip()
+    manual = (request.args.get('manual_code') or '').strip()
+    name = (request.args.get('emp_name') or '').strip()
+    ddo = (request.args.get('ddo_id') or '').strip()
+    loc = (request.args.get('loc_id') or '').strip()
+    dept = (request.args.get('dept_id') or '').strip()
+    desg = (request.args.get('desg_id') or '').strip()
+
+    where = ["E.employeeleftstatus = 'N'"]
+    params = []
+
+    if code:
+        where.append("E.empcode LIKE ?")
+        params.append(f"%{code}%")
+    if manual:
+        where.append("E.manualempcode LIKE ?")
+        params.append(f"%{manual}%")
+    if name:
+        where.append("E.empname LIKE ?")
+        params.append(f"%{name}%")
+    if ddo:
+        where.append("E.fk_ddoid = ?")
+        params.append(ddo)
+    if loc:
+        where.append("E.fk_locid = ?")
+        params.append(loc)
+    if dept:
+        where.append("E.fk_deptid = ?")
+        params.append(dept)
+    if desg:
+        where.append("E.fk_desgid = ?")
+        params.append(desg)
+
+    query = f"""
+        SELECT TOP 100
+            E.pk_empid as id,
+            E.empcode,
+            E.manualempcode,
+            E.empname,
+            ISNULL(DS.designation, '') as designation,
+            (E.empname + ' | ' + E.empcode + ' | ' + ISNULL(DS.designation, '')) as display
+        FROM SAL_Employee_Mst E
+        LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid
+        WHERE {' AND '.join(where)}
+        ORDER BY E.empname
+    """
+    return jsonify(DB.fetch_all(query, params))
+
 @leave_bp.route('/api/holiday_details/<locholiday_id>')
 def api_holiday_details(locholiday_id):
     query = """
@@ -104,12 +154,17 @@ def api_holiday_locations():
 @leave_bp.route('/api/calculate_days')
 def api_calculate_days():
     f, t = request.args.get('from'), request.args.get('to')
-    loc = session.get('selected_loc')
+    loc = request.args.get('loc_id') or session.get('selected_loc')
+    leave_id = request.args.get('leave_id')
+    emp_id = session.get('emp_id')
     is_short = request.args.get('short') == 'true'
-    if not (f and t and loc):
-        return jsonify({'days': 0})
-    days = LeaveModel.calculate_days(f, t, loc, is_short)
-    return jsonify({'days': days})
+    if not (f and t and loc and emp_id and leave_id):
+        return jsonify({'days': 0, 'total_days': 0, 'rows': []})
+
+    leave_days, total_days, rows = LeaveModel.calculate_breakup(
+        f, t, loc_id=loc, emp_id=emp_id, leave_id=leave_id, is_short=is_short
+    )
+    return jsonify({'days': leave_days, 'total_days': total_days, 'rows': rows})
 
 @leave_bp.route('/leave_request', methods=['GET', 'POST'])
 def leave_request():
@@ -118,11 +173,39 @@ def leave_request():
         return redirect(url_for('main.index'))
 
     if request.method == 'POST':
+        action = (request.form.get('action') or 'SUBMIT').upper().strip()
+        req_id = request.form.get('req_id')
+
+        if action == 'DELETE':
+            try:
+                if req_id and LeaveModel.cancel_leave_request(req_id, session['user_id']):
+                    flash("Leave request cancelled.", "success")
+                else:
+                    flash("Unable to cancel this leave request (only pending requests can be cancelled).", "danger")
+            except Exception as e:
+                flash(f"Error: {str(e)}", "danger")
+            return redirect(url_for('leave.leave_request'))
+
         sh = request.form.get('s_hour')
         sm = request.form.get('s_min')
         sa = request.form.get('s_ampm')
-        req_time = f"{sh}:{sm} {sa}" if sh and sm else None
-        
+        is_short = request.form.get('is_short') == 'on'
+        if is_short:
+            if sh in (None, '', '00', '0') or sm in (None, '', '00') or sa in (None, ''):
+                flash("Please select Start Time for Short Leave.", "danger")
+                return redirect(url_for('leave.leave_request', edit_id=req_id) if req_id else url_for('leave.leave_request'))
+            req_time = f"{sh}:{sm} {sa}"
+        else:
+            req_time = None
+
+        def compose_time(prefix):
+            hh = request.form.get(f'{prefix}_hour')
+            mm = request.form.get(f'{prefix}_min')
+            ap = request.form.get(f'{prefix}_ampm')
+            if hh in (None, '', '0', '00') or mm in (None, '', '00') or ap in (None, ''):
+                return None
+            return f"{hh}:{mm} {ap}"
+
         data = {
             'emp_id': request.form.get('emp_id'),
             'leave_id': request.form.get('leave_id'),
@@ -143,12 +226,28 @@ def leave_request():
             'is_study': request.form.get('is_study') == 'on',
             'is_commuted': request.form.get('is_commuted') == 'on',
             'add_inst': request.form.get('add_inst'),
-            'is_short': request.form.get('is_short') == 'on',
-            'req_time': req_time
+            'is_short': is_short,
+            'req_time': req_time,
+            'station_start_time': compose_time('station_start'),
+            'station_end_time': compose_time('station_end'),
         }
         try:
-            if LeaveModel.save_leave_request(data, session['user_id']):
-                flash("Leave request submitted successfully.", "success")
+            try:
+                leave_days_val = float(data.get('leave_days') or 0)
+            except Exception:
+                leave_days_val = 0.0
+            if leave_days_val <= 0:
+                flash("Please click CALCULATE before submitting.", "danger")
+                return redirect(url_for('leave.leave_request', edit_id=req_id) if req_id else url_for('leave.leave_request'))
+
+            if req_id:
+                if LeaveModel.update_leave_request(req_id, data, session['user_id']):
+                    flash("Leave request updated successfully.", "success")
+                else:
+                    flash("Unable to update this leave request (only pending requests can be updated).", "danger")
+            else:
+                if LeaveModel.save_leave_request(data, session['user_id']):
+                    flash("Leave request submitted successfully.", "success")
         except Exception as e:
             flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('leave.leave_request'))
@@ -159,6 +258,14 @@ def leave_request():
     approvers = LeaveConfigModel.get_approvers()
     reporting_to = LeaveModel.get_reporting_officer(emp_id)
     
+    edit_id = request.args.get('edit_id')
+    edit_req = None
+    if edit_id:
+        try:
+            edit_req = LeaveModel.get_leave_request_for_edit(edit_id, session['user_id'])
+        except Exception:
+            edit_req = None
+
     page = request.args.get('page', 1, type=int)
     per_page = 10
     requests, total_requests = LeaveModel.get_user_leaves(session['user_id'], page=page, per_page=per_page)
@@ -188,7 +295,8 @@ def leave_request():
                            recommended=recommended,
                            ro=reporting_to,
                            pagination=pagination,
-                           lookups=search_lookups)
+                           lookups=search_lookups,
+                           edit_req=edit_req)
 
 @leave_bp.route('/adjustment', methods=['GET', 'POST'])
 @permission_required('Leave Adjustment Request')

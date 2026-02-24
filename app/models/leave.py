@@ -1,5 +1,5 @@
 from app.db import DB
-from datetime import datetime
+from datetime import datetime, timedelta
 from app.models.nav import NavModel
 import math
 
@@ -190,9 +190,197 @@ class LeaveModel:
 
     @staticmethod
     def save_leave_request(data, user_id):
-        sql = "INSERT INTO SAL_Leave_Request_Mst (fk_requesterid, fk_reqempid, reqdate, fk_leaveid, fromdate, todate, totaldays, totalleavedays, reasonforleave, contactno, issubmit, submitdate, iscancelled, fk_reportingto, leavestatus, fk_insUserID, fk_insDateID, fk_locid, recommendEmpCode, recommendEmpCode2, recommendEmpCode3, Stationfromdate, Stationtodate, HPLWMed, HPLFStd, addInstitution, CommutedLeave, StartTime) VALUES (?, ?, GETDATE(), ?, ?, ?, ?, ?, ?, ?, 'Y', GETDATE(), 'N', ?, 'S', ?, GETDATE(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-        params = [user_id, data['emp_id'], data['leave_id'], data['from_date'], data['to_date'], data['total_days'], data['leave_days'], data['reason'], data['contact'], data['reporting_to'], user_id, data['loc_id'], data.get('rec1'), data.get('rec2'), data.get('rec3'), data.get('station_from'), data.get('station_to'), 1 if data.get('is_medical') else 0, 1 if data.get('is_study') else 0, data.get('add_inst'), 1 if data.get('is_commuted') else 0, data.get('req_time')]
+        sql = """
+        INSERT INTO SAL_Leave_Request_Mst (
+            fk_requesterid, fk_reqempid, reqdate, fk_leaveid,
+            fromdate, todate, totaldays, totalleavedays,
+            reasonforleave, contactno,
+            issubmit, submitdate, iscancelled,
+            fk_reportingto, leavestatus,
+            fk_insUserID, fk_insDateID, fk_updUserID, fk_updDateID,
+            fk_locid,
+            recommendEmpCode, recommendEmpCode2, recommendEmpCode3,
+            Stationfromdate, Stationtodate,
+            HPLWMed, HPLFStd, addInstitution,
+            CommutedLeave, IsShortLeave,
+            StartTime, StationStartTime, StationEndTime
+        ) VALUES (
+            ?, ?, CONVERT(date, GETDATE()), ?,
+            ?, ?, ?, ?,
+            ?, ?,
+            'Y', GETDATE(), 'N',
+            ?, 'S',
+            ?, CONVERT(varchar, GETDATE(), 120), ?, CONVERT(varchar, GETDATE(), 120),
+            ?,
+            ?, ?, ?,
+            ?, ?,
+            ?, ?, ?,
+            ?, ?,
+            ?, ?, ?
+        )
+        """
+        params = [
+            user_id,
+            data["emp_id"],
+            data["leave_id"],
+            data["from_date"],
+            data["to_date"],
+            data.get("total_days") or 0,
+            data.get("leave_days") or 0,
+            data.get("reason"),
+            data.get("contact"),
+            data.get("reporting_to"),
+            user_id,
+            user_id,
+            data.get("loc_id"),
+            data.get("rec1"),
+            data.get("rec2"),
+            data.get("rec3"),
+            data.get("station_from"),
+            data.get("station_to"),
+            1 if data.get("is_medical") else 0,
+            1 if data.get("is_study") else 0,
+            data.get("add_inst"),
+            1 if data.get("is_commuted") else 0,
+            1 if data.get("is_short") else 0,
+            data.get("req_time"),
+            data.get("station_start_time"),
+            data.get("station_end_time"),
+        ]
         return DB.execute(sql, params)
+
+    @staticmethod
+    def get_leave_request_for_edit(req_id, user_id):
+        query = """
+        SELECT
+            R.pk_leavereqid as id,
+            R.fk_leaveid as leave_id,
+            CONVERT(varchar, R.fromdate, 23) as from_iso,
+            CONVERT(varchar, R.todate, 23) as to_iso,
+            CONVERT(varchar, R.Stationfromdate, 23) as station_from_iso,
+            CONVERT(varchar, R.Stationtodate, 23) as station_to_iso,
+            R.totaldays, R.totalleavedays,
+            R.reasonforleave as reason,
+            R.contactno as contact,
+            R.fk_reportingto as reporting_to,
+            (RO.empname + ' | ' + RO.empcode + ' | ' + ISNULL(ROD.designation, '')) as reporting_to_name,
+            R.recommendEmpCode as rec1,
+            R.recommendEmpCode2 as rec2,
+            R.recommendEmpCode3 as rec3,
+            (R1.empname + ' | ' + R1.empcode + ' | ' + ISNULL(R1D.designation, '')) as rec1_name,
+            (R2.empname + ' | ' + R2.empcode + ' | ' + ISNULL(R2D.designation, '')) as rec2_name,
+            (R3.empname + ' | ' + R3.empcode + ' | ' + ISNULL(R3D.designation, '')) as rec3_name,
+            R.HPLWMed as is_medical,
+            R.HPLFStd as is_study,
+            R.CommutedLeave as is_commuted,
+            R.addInstitution as add_inst,
+            R.IsShortLeave as is_short,
+            R.StartTime as start_time,
+            R.StationStartTime as station_start_time,
+            R.StationEndTime as station_end_time,
+            R.leavestatus,
+            R.iscancelled
+        FROM SAL_Leave_Request_Mst R
+        LEFT JOIN SAL_Employee_Mst RO ON R.fk_reportingto = RO.pk_empid
+        LEFT JOIN SAL_Designation_Mst ROD ON RO.fk_desgid = ROD.pk_desgid
+        LEFT JOIN SAL_Employee_Mst R1 ON R.recommendEmpCode = R1.pk_empid
+        LEFT JOIN SAL_Designation_Mst R1D ON R1.fk_desgid = R1D.pk_desgid
+        LEFT JOIN SAL_Employee_Mst R2 ON R.recommendEmpCode2 = R2.pk_empid
+        LEFT JOIN SAL_Designation_Mst R2D ON R2.fk_desgid = R2D.pk_desgid
+        LEFT JOIN SAL_Employee_Mst R3 ON R.recommendEmpCode3 = R3.pk_empid
+        LEFT JOIN SAL_Designation_Mst R3D ON R3.fk_desgid = R3D.pk_desgid
+        WHERE R.pk_leavereqid = ? AND R.fk_requesterid = ?
+        """
+        return DB.fetch_one(query, [req_id, user_id])
+
+    @staticmethod
+    def update_leave_request(req_id, data, user_id):
+        exists = DB.fetch_one(
+            """
+            SELECT pk_leavereqid
+            FROM SAL_Leave_Request_Mst
+            WHERE pk_leavereqid = ? AND fk_requesterid = ? AND leavestatus = 'S' AND iscancelled = 'N'
+            """,
+            [req_id, user_id],
+        )
+        if not exists:
+            return False
+
+        sql = """
+        UPDATE SAL_Leave_Request_Mst SET
+            fk_leaveid = ?,
+            fromdate = ?,
+            todate = ?,
+            totaldays = ?,
+            totalleavedays = ?,
+            reasonforleave = ?,
+            contactno = ?,
+            fk_reportingto = ?,
+            recommendEmpCode = ?,
+            recommendEmpCode2 = ?,
+            recommendEmpCode3 = ?,
+            Stationfromdate = ?,
+            Stationtodate = ?,
+            HPLWMed = ?,
+            HPLFStd = ?,
+            addInstitution = ?,
+            CommutedLeave = ?,
+            IsShortLeave = ?,
+            StartTime = ?,
+            StationStartTime = ?,
+            StationEndTime = ?,
+            fk_updUserID = ?,
+            fk_updDateID = CONVERT(varchar, GETDATE(), 120)
+        WHERE pk_leavereqid = ? AND fk_requesterid = ?
+        """
+        params = [
+            data["leave_id"],
+            data["from_date"],
+            data["to_date"],
+            data.get("total_days") or 0,
+            data.get("leave_days") or 0,
+            data.get("reason"),
+            data.get("contact"),
+            data.get("reporting_to"),
+            data.get("rec1"),
+            data.get("rec2"),
+            data.get("rec3"),
+            data.get("station_from"),
+            data.get("station_to"),
+            1 if data.get("is_medical") else 0,
+            1 if data.get("is_study") else 0,
+            data.get("add_inst"),
+            1 if data.get("is_commuted") else 0,
+            1 if data.get("is_short") else 0,
+            data.get("req_time"),
+            data.get("station_start_time"),
+            data.get("station_end_time"),
+            user_id,
+            req_id,
+            user_id,
+        ]
+        return DB.execute(sql, params)
+
+    @staticmethod
+    def cancel_leave_request(req_id, user_id):
+        exists = DB.fetch_one(
+            """
+            SELECT pk_leavereqid
+            FROM SAL_Leave_Request_Mst
+            WHERE pk_leavereqid = ? AND fk_requesterid = ? AND leavestatus = 'S' AND iscancelled = 'N'
+            """,
+            [req_id, user_id],
+        )
+        if not exists:
+            return False
+        return DB.execute(
+            """
+            UPDATE SAL_Leave_Request_Mst
+            SET iscancelled = 'Y', leavestatus = 'C', fk_updUserID = ?, fk_updDateID = CONVERT(varchar, GETDATE(), 120)
+            WHERE pk_leavereqid = ? AND fk_requesterid = ?
+            """,
+            [user_id, req_id, user_id],
+        )
 
     @staticmethod
     def get_reporting_officer(empid):
@@ -258,12 +446,169 @@ class LeaveModel:
         return DB.fetch_one(query, [empid])
 
     @staticmethod
-    def calculate_days(from_date, to_date, loc_id, is_short=False):
-        if is_short: return 0.33
+    def _get_offcovered_flag(leave_id, emp_id):
+        """
+        offcovered (SAL_Leavetype_Details.offcovered):
+        - When 1: weekly-offs/holidays are treated as covered (count all calendar days).
+        - When 0: weekly-offs/holidays are excluded (count only working days).
+        """
+        query = """
+        SELECT TOP 1 D.offcovered
+        FROM SAL_Leavetype_Details D
+        INNER JOIN SAL_Employee_Mst E ON E.pk_empid = ?
+        WHERE D.fk_leaveid = ?
+          AND (D.fk_natureid = E.fk_natureid OR ISNULL(D.fk_natureid, '') = '')
+        ORDER BY CASE WHEN D.fk_natureid = E.fk_natureid THEN 0 ELSE 1 END, D.pk_id DESC
+        """
+        row = DB.fetch_one(query, [emp_id, leave_id])
+        if row and row.get("offcovered") is not None:
+            try:
+                return bool(row["offcovered"])
+            except Exception:
+                return True
+        return True
+
+    @staticmethod
+    def _get_holiday_dates_for_loc(loc_id, year_id):
+        # Location-wise holidays are stored in SAL_LocationWiseHolidays_Mst (header) and *_Trn (dates).
+        mst = DB.fetch_one(
+            """
+            SELECT TOP 1 pk_locholidayid
+            FROM SAL_LocationWiseHolidays_Mst
+            WHERE fk_locid = ? AND fk_yearid = ?
+            ORDER BY pk_locholidayid DESC
+            """,
+            [loc_id, year_id],
+        )
+        if not mst:
+            return set()
+
+        rows = DB.fetch_all(
+            """
+            SELECT holidaydate, todate
+            FROM SAL_LocationWiseHolidays_Trn
+            WHERE fk_locholidayid = ?
+            """,
+            [mst["pk_locholidayid"]],
+        )
+
+        holiday_dates = set()
+        for r in rows:
+            d1 = r.get("holidaydate")
+            d2 = r.get("todate") or d1
+            if not d1:
+                continue
+            try:
+                cur = d1.date() if hasattr(d1, "date") else d1
+                end = d2.date() if hasattr(d2, "date") else d2
+            except Exception:
+                continue
+            while cur <= end:
+                holiday_dates.add(cur)
+                cur = cur + timedelta(days=1)
+        return holiday_dates
+
+    @staticmethod
+    def _get_weekly_off_days_for_loc(loc_id):
+        row = DB.fetch_one(
+            """
+            SELECT TOP 1 sun, mon, tue, wed, thur, fri, sat
+            FROM SAL_WeeklyOff_Mst
+            WHERE fk_locid = ?
+            ORDER BY pk_woffid DESC
+            """,
+            [loc_id],
+        )
+        if not row:
+            return set()
+
+        def is_on(v):
+            if v is None:
+                return False
+            s = str(v).strip().lower()
+            return s in {"y", "yes", "1", "true", "t", "on"}
+
+        # Python weekday: Mon=0..Sun=6
+        mapping = {
+            6: is_on(row.get("sun")),
+            0: is_on(row.get("mon")),
+            1: is_on(row.get("tue")),
+            2: is_on(row.get("wed")),
+            3: is_on(row.get("thur")),
+            4: is_on(row.get("fri")),
+            5: is_on(row.get("sat")),
+        }
+        return {wd for wd, enabled in mapping.items() if enabled}
+
+    @staticmethod
+    def calculate_breakup(from_date, to_date, loc_id, emp_id, leave_id, is_short=False):
+        """
+        Returns: (leave_days, total_days, rows)
+          - leave_days: counted leave days (numeric)
+          - total_days: calendar days between from/to inclusive
+          - rows: counted day-wise rows [{date, day}...]
+        """
         try:
-            d1 = datetime.strptime(from_date, '%Y-%m-%d'); d2 = datetime.strptime(to_date, '%Y-%m-%d')
-            return (d2 - d1).days + 1
-        except: return 0
+            d1 = datetime.strptime(from_date, "%Y-%m-%d").date()
+            d2 = datetime.strptime(to_date, "%Y-%m-%d").date()
+        except Exception:
+            return 0, 0, []
+
+        if d2 < d1:
+            return 0, 0, []
+
+        if is_short:
+            rows = [{"date": d1.strftime("%d/%m/%Y"), "day": d1.strftime("%A")}]
+            return 1.0, 1.0, rows
+
+        total_days = float((d2 - d1).days + 1)
+        offcovered = LeaveModel._get_offcovered_flag(leave_id, emp_id)
+
+        holiday_dates = set()
+        weekly_off_wds = set()
+        if not offcovered and loc_id:
+            holiday_dates = LeaveModel._get_holiday_dates_for_loc(loc_id, d1.year)
+            weekly_off_wds = LeaveModel._get_weekly_off_days_for_loc(loc_id)
+
+        try:
+            leave_id_int = int(str(leave_id).strip())
+        except Exception:
+            leave_id_int = None
+
+        rows = []
+        cur = d1
+        while cur <= d2:
+            is_holiday = cur in holiday_dates
+            is_weekly_off = cur.weekday() in weekly_off_wds if weekly_off_wds else False
+
+            if leave_id_int == 7:
+                counted = is_holiday
+            elif offcovered:
+                counted = True
+            else:
+                counted = (not is_holiday) and (not is_weekly_off)
+
+            if counted:
+                rows.append({"date": cur.strftime("%d/%m/%Y"), "day": cur.strftime("%A")})
+            cur = cur + timedelta(days=1)
+
+        leave_days = float(len(rows))
+        return leave_days, total_days, rows
+
+    @staticmethod
+    def calculate_days(from_date, to_date, loc_id, is_short=False, emp_id=None, leave_id=None):
+        # Backward-compatible helper (older code only expected days).
+        if emp_id and leave_id:
+            leave_days, _, _ = LeaveModel.calculate_breakup(from_date, to_date, loc_id, emp_id, leave_id, is_short=is_short)
+            return leave_days
+        if is_short:
+            return 1.0
+        try:
+            d1 = datetime.strptime(from_date, "%Y-%m-%d")
+            d2 = datetime.strptime(to_date, "%Y-%m-%d")
+            return float((d2 - d1).days + 1)
+        except Exception:
+            return 0.0
 
     @staticmethod
     def get_user_leaves(user_id, page=1, per_page=10):
@@ -271,7 +616,8 @@ class LeaveModel:
         total = DB.fetch_scalar("SELECT COUNT(*) FROM SAL_Leave_Request_Mst WHERE fk_requesterid = ?", [user_id])
         query = f"""
         SELECT R.pk_leavereqid as RequestID, 
-        E.empname as ReportingTo, L.leavetype as LeaveType,
+        E.empname as ReportingTo,
+        CASE WHEN ISNULL(R.IsShortLeave, 0) = 1 THEN (L.leavetype + ' (Short Leave)') ELSE L.leavetype END as LeaveType,
         CONVERT(varchar, R.reqdate, 103) as RequestDate,
         R.StartTime as RequestTime,
         CONVERT(varchar, R.fromdate, 103) as FromDate,
@@ -279,10 +625,12 @@ class LeaveModel:
         CONVERT(varchar, R.Stationfromdate, 103) as SFrom,
         CONVERT(varchar, R.Stationtodate, 103) as STo,
         R.totalleavedays as Days,
+        R.leavestatus as StatusCode,
+        R.iscancelled as IsCancelled,
         CASE WHEN R.leavestatus = 'A' THEN 'Approved'
              WHEN R.leavestatus = 'R' THEN 'Rejected'
              WHEN R.leavestatus = 'C' THEN 'Cancelled'
-             ELSE 'Pending' END as Status
+             ELSE 'Assigned' END as Status
         FROM SAL_Leave_Request_Mst R 
         LEFT JOIN SAL_Leavetype_Mst L ON R.fk_leaveid = L.pk_leaveid
         LEFT JOIN SAL_Employee_Mst E ON R.fk_reportingto = E.pk_empid
