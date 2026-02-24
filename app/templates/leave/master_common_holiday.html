@@ -1,71 +1,126 @@
 {% extends "base.html" %}
-{% block content %}
-<div class="hau-card">
-    <div class="tablesubheading">Common Holiday Master</div>
-    <div style="padding: 15px;">
-        <form method="POST">
-            <input type="hidden" name="id" id="h_id">
-            <table class="form-table">
-                <tr>
-                    <td class="vtext" width="15%">Holiday Name</td><td class="colon">:</td>
-                    <td><input type="text" name="name" id="h_name" class="textbox" style="width: 250px;" required></td>
-                    <td class="vtext" width="15%">Holiday Type</td><td class="colon">:</td>
-                    <td>
-                        <select name="type_id" id="h_type" class="dropdown" style="width: 200px;" required>
-                            {% for t in types %}
-                            <option value="{{ t.id }}">{{ t.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="vtext">Display Order</td><td class="colon">:</td>
-                    <td><input type="number" name="order" id="h_order" class="textbox" value="1" style="width: 100px;"></td>
-                    <td class="vtext">Remarks</td><td class="colon">:</td>
-                    <td><input type="text" name="remarks" id="h_remarks" class="textbox" style="width: 250px;"></td>
-                </tr>
-                <tr>
-                    <td colspan="2"></td>
-                    <td colspan="4" style="padding-top: 15px;">
-                        <input type="submit" value="SAVE HOLIDAY" class="button-common">
-                        <input type="reset" value="RESET" class="button-common" style="margin-left: 10px;">
-                    </td>
-                </tr>
-            </table>
-        </form>
 
-        <div style="margin-top: 25px;">
-            <table class="table-grid-view">
-                <thead>
-                    <tr class="header-style">
-                        <td width="60">Order</td><td>Holiday Name</td><td>Type</td><td>Remarks</td><td width="60">Edit</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for h in holidays %}
-                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
-                        <td align="center">{{ h.displayorder }}</td>
-                        <td>{{ h.commonholiday }}</td>
-                        <td>{{ h.holidaytype }}</td>
-                        <td>{{ h.remarks or '' }}</td>
-                        <td align="center">
-                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick="editH('{{ h.pk_commonholidayid }}', '{{ h.commonholiday }}', '{{ h.fk_holidaytypeid }}', '{{ h.displayorder }}', '{{ h.remarks or '' }}')">
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+{% block content %}
+<div class="tableheading">Common Holidays Master</div>
+
+<div class="hau-card" style="padding: 15px; margin-bottom: 20px;">
+    <form method="POST" id="holidayForm">
+        <input type="hidden" name="id" id="h_id">
+        <input type="hidden" name="action" id="h_action" value="SAVE">
+        
+        <table class="form-table" style="width: 100%;">
+            <tr>
+                <td class="vtext" style="width: 15%;">Holiday Type</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="type_id" id="h_type" class="dropdown" style="width: 250px;" required>
+                        <option value="">-- Select Holiday Type --</option>
+                        {% for t in types %}
+                        <option value="{{ t.pk_holidaytypeid }}">{{ t.holidaytype }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Holiday</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="name" id="h_name" class="textbox w-250" maxlength="45" required> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Display Order</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="number" name="order" id="h_order" class="textbox w-100" maxlength="3" required value="1"> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td>
+                    <textarea name="remarks" id="h_remarks" class="textbox" rows="2" style="width: 300px; height: auto;"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td style="padding-top: 15px;">
+                    <button type="submit" class="button-common">SAVE</button>
+                    <button type="button" class="button-common" style="margin-left: 10px;" onclick="resetForm()">RESET</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div class="tablesubheading">List of Common Holidays</div>
+<div class="hau-card" style="padding: 10px;">
+    <table class="table-grid-view">
+        <thead>
+            <tr class="header-style">
+                <th width="50">S.No.</th>
+                <th style="width: 25%;">Holiday</th>
+                <th style="width: 25%;">Holiday Type</th>
+                <th style="width: 25%;">Display Order</th>
+                <th width="80">EDIT</th>
+                <th width="80">DELETE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for h in holidays %}
+            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                <td align="center">{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                <td>{{ h.commonholiday }}</td>
+                <td>{{ h.holidaytype }}</td>
+                <td align="center">{{ h.displayorder }}</td>
+                <td align="center">
+                    <img src="{{ url_for('static', filename='images/Edit.gif') }}" class="edit-btn" style="cursor:pointer" alt="Edit" title="Edit" 
+                         data-id="{{ h.pk_commonholidayid }}"
+                         data-typeid="{{ h.fk_holidaytypeid }}"
+                         data-name="{{ h.commonholiday }}"
+                         data-order="{{ h.displayorder }}"
+                         data-remarks="{{ h.remarks or '' }}">
+                </td>
+                <td align="center">
+                    <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this holiday?')">
+                        <input type="hidden" name="id" value="{{ h.pk_commonholidayid }}">
+                        <input type="hidden" name="action" value="DELETE">
+                        <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete" title="Delete">
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" align="center" style="padding: 20px;">No holidays found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% include "includes/pagination.html" %}
 </div>
 
 <script>
-function editH(id, name, type, order, remarks) {
-    document.getElementById('h_id').value = id;
-    document.getElementById('h_name').value = name;
-    document.getElementById('h_type').value = type;
-    document.getElementById('h_order').value = order;
-    document.getElementById('h_remarks').value = remarks;
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('h_id').value = this.getAttribute('data-id');
+            document.getElementById('h_type').value = this.getAttribute('data-typeid');
+            document.getElementById('h_name').value = this.getAttribute('data-name');
+            document.getElementById('h_order').value = this.getAttribute('data-order');
+            document.getElementById('h_remarks').value = this.getAttribute('data-remarks');
+            document.getElementById('h_action').value = 'SAVE';
+            
+            // Smooth scroll to top form
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+});
+
+function resetForm() {
+    document.getElementById('h_id').value = '';
+    document.getElementById('h_action').value = 'SAVE';
+    document.getElementById('holidayForm').reset();
 }
 </script>
 {% endblock %}

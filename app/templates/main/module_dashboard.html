@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="hau-card">
-    <div class="tableheading" style="font-size: 15px;">
+    <div class="tableheading" style="font-size: 15px; display: flex; align-items: center;">
+        {% if current_mod_icon %}
+        <div class="module-icon-circle" style="width: 20px; height: 20px; margin-right: 8px;">
+            <img src="{{ url_for('static', filename='images/' + current_mod_icon) }}" alt="Icon">
+        </div>
+        {% endif %}
         {{ current_mod.modulename }} DASHBOARD
     </div>
     <div style="padding: 20px; background: #fff;">
@@ -13,6 +18,15 @@
             {% for top_name, top_data in menu.items() %}
             <div class="dashboard-group">
                 <div class="group-header">
+                    {% if top_name|lower == 'master' %}
+                        <i class="fas fa-database me-2"></i>
+                    {% elif top_name|lower == 'transaction' %}
+                        <i class="fas fa-sync-alt me-2"></i>
+                    {% elif top_name|lower == 'reports' %}
+                        <i class="fas fa-file-invoice me-2"></i>
+                    {% else %}
+                        <i class="fas fa-folder me-2"></i>
+                    {% endif %}
                     <strong>{{ top_name }}</strong>
                 </div>
                 

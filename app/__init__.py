@@ -108,6 +108,7 @@ def inject_navigation():
     ctx = {
         'menu': {},
         'current_mod': None,
+        'current_mod_icon': None,
         'announcements': [],
         'pending_leaves_count': 0,
         'assigned_modules': [],
@@ -121,6 +122,30 @@ def inject_navigation():
         'umm_breadcrumb': [],
         # Default so templates never crash if a route forgets to pass pagination
         'pagination': {'page': 1, 'per_page': 10, 'total': 0, 'total_pages': 1, 'has_prev': False, 'has_next': False}
+    }
+
+    module_icon_map = {
+        'Admission & Academics': 'Admission_Academics.png',
+        'Employee Portal': 'Employee_Portal.png',
+        'Financial Accounts': 'Financial_Accounts.png',
+        'PF': 'PF.png',
+        'Research': 'Research.png',
+        'Student Attendance': 'Student_Attendance.png',
+        'Agriculture Farm Management': 'Agriculture_Farm_Management.png',
+        'Establishment': 'Establishment.png',
+        'HRMS': 'HRMS.png',
+        'PreAdmission': 'PreAdmission.png',
+        'RTI': 'RTI.png',
+        'Tax Management': 'Tax_Management.png',
+        'Bill Tracking': 'Bill_Tracking.png',
+        'Examination & Results': 'Examination_Results.png',
+        'Leave Management': 'Leave_Management.png',
+        'Pre-Examination': 'Pre_Examination.png',
+        'SAR Module': 'SAR_Module.png',
+        'User Management': 'User_Management.png',
+        'Budget Management': 'Budget_Management.png',
+        'Fee Management': 'Fee_Management.png',
+        'Pension Management': 'Pension_Management.png'
     }
 
     def _norm(s):
@@ -147,6 +172,12 @@ def inject_navigation():
 
     if current_mod_id and str(current_mod_id).isdigit():
         ctx['current_mod'] = DB.fetch_one("SELECT pk_moduleId, modulename FROM UM_Module_Mst WHERE pk_moduleId = ?", [current_mod_id])
+        if ctx['current_mod']:
+            m_name = ctx['current_mod']['modulename'].strip()
+            for key, icon in module_icon_map.items():
+                if key.lower() in m_name.lower() or m_name.lower() in key.lower():
+                    ctx['current_mod_icon'] = icon
+                    break
 
     ctx['assigned_modules'] = NavModel.get_user_modules(user_id, selected_loc)
 

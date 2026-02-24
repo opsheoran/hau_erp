@@ -143,6 +143,16 @@ def api_holiday_details(locholiday_id):
     """
     return jsonify(DB.fetch_all(query, [locholiday_id]))
 
+@leave_bp.route('/api/common_holidays')
+def api_common_holidays():
+    query = """
+        SELECT C.pk_commonholidayid, C.commonholiday, HT.holidaytype 
+        FROM SAL_CommonHolidays_Mst C
+        LEFT JOIN SAL_HolidayType_Mst HT ON C.fk_holidaytypeid = HT.pk_holidaytypeid
+        ORDER BY C.displayorder
+    """
+    return jsonify(DB.fetch_all(query))
+
 @leave_bp.route('/api/el_balance')
 def api_el_balance():
     emp_id = session.get('emp_id')
@@ -154,6 +164,23 @@ def api_el_balance():
 def api_holiday_locations():
     return jsonify(HolidayModel.get_holiday_locations())
 
+@leave_bp.route('/api/check_mapping_exists')
+def api_check_mapping_exists():
+    hloc_id = request.args.get('hloc_id')
+    lyear = request.args.get('lyear')
+    if not hloc_id or not lyear:
+        return jsonify({'exists': False})
+    
+    mapping = DB.fetch_one("""
+        SELECT pk_locholidayid 
+        FROM SAL_LocationWiseHolidays_Mst 
+        WHERE fk_holidaylocid = ? AND fk_yearid = ?
+    """, [hloc_id, lyear])
+    
+    if mapping:
+        return jsonify({'exists': True, 'id': mapping['pk_locholidayid']})
+    return jsonify({'exists': False})
+
 @leave_bp.route('/api/calculate_days')
 def api_calculate_days():
     f, t = request.args.get('from'), request.args.get('to')
@@ -161,13 +188,17 @@ def api_calculate_days():
     leave_id = request.args.get('leave_id')
     emp_id = session.get('emp_id')
     is_short = request.args.get('short') == 'true'
+    
     if not (f and t and loc and emp_id and leave_id):
         return jsonify({'days': 0, 'total_days': 0, 'rows': []})
 
-    leave_days, total_days, rows = LeaveModel.calculate_breakup(
-        f, t, loc_id=loc, emp_id=emp_id, leave_id=leave_id, is_short=is_short
-    )
-    return jsonify({'days': leave_days, 'total_days': total_days, 'rows': rows})
+    try:
+        leave_days, total_days, rows = LeaveModel.calculate_breakup(
+            f, t, loc_id=loc, emp_id=emp_id, leave_id=leave_id, is_short=is_short
+        )
+        return jsonify({'days': leave_days, 'total_days': total_days, 'rows': rows})
+    except Exception as e:
+        return jsonify({'days': 0, 'total_days': 0, 'rows': [], 'error': str(e)})
 
 @leave_bp.route('/leave_request', methods=['GET', 'POST'])
 def leave_request():
@@ -1178,6 +1209,21 @@ def leave_encashment():
 @permission_required('Common Holidays Master')
 def common_holiday_master():
     if request.method == 'POST':
+        action = request.form.get('action', 'SAVE')
+        if action == 'DELETE':
+            try:
+                h_id = request.form.get('id')
+                # Check if used in location wise holidays
+                used = DB.fetch_scalar("SELECT COUNT(*) FROM SAL_LocationWiseHolidays_Trn WHERE fk_commonholidayid = ?", [h_id])
+                if used > 0:
+                    flash("Cannot delete: This holiday is assigned to one or more locations.", "warning")
+                else:
+                    DB.execute("DELETE FROM SAL_CommonHolidays_Mst WHERE pk_commonholidayid = ?", [h_id])
+                    flash("Holiday deleted successfully.", "success")
+            except Exception as e:
+                flash(f"Error: {str(e)}", "danger")
+            return redirect(url_for('leave.common_holiday_master'))
+
         data = {
             'id': request.form.get('id'),
             'type_id': request.form.get('type_id'),
@@ -1186,20 +1232,50 @@ def common_holiday_master():
             'remarks': request.form.get('remarks')
         }
         try:
-            if HolidayModel.save_common_holiday(data):
+            if HolidayModel.save_common_holiday(data, session['user_id']):
                 flash("Holiday saved successfully.", "success")
         except Exception as e:
             flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('leave.common_holiday_master'))
     
-    holidays = HolidayModel.get_common_holidays()
+    from app.utils import get_pagination
+    page = request.args.get('page', 1, type=int)
+    pagination, sql_limit = get_pagination("SAL_CommonHolidays_Mst", page, per_page=10, 
+                                           order_by="ORDER BY displayorder ASC")
+    
+    query = f"""
+        SELECT C.*, HT.holidaytype 
+        FROM SAL_CommonHolidays_Mst C
+        LEFT JOIN SAL_HolidayType_Mst HT ON C.fk_holidaytypeid = HT.pk_holidaytypeid
+        {sql_limit}
+    """
+    holidays = DB.fetch_all(query)
     types = HolidayModel.get_holiday_types()
-    return render_template('leave/master_common_holiday.html', holidays=holidays, types=types)
+    
+    return render_template('leave/master_common_holiday.html', 
+                           holidays=holidays, 
+                           types=types, 
+                           pagination=pagination)
 
 @leave_bp.route('/holiday_location_master', methods=['GET', 'POST'])
 @permission_required('Holiday Location Master')
 def holiday_location_master():
     if request.method == 'POST':
+        action = request.form.get('action', 'SAVE')
+        if action == 'DELETE':
+            try:
+                loc_id = request.form.get('id')
+                # Check if used
+                used = DB.fetch_scalar("SELECT COUNT(*) FROM SAL_LocationWiseHolidays_Mst WHERE fk_holidaylocid = ?", [loc_id])
+                if used > 0:
+                    flash("Cannot delete: This location has holidays assigned to it.", "warning")
+                else:
+                    DB.execute("DELETE FROM SAL_HolidayLocation_Mst WHERE pk_holidaylocid = ?", [loc_id])
+                    flash("Holiday location deleted successfully.", "success")
+            except Exception as e:
+                flash(f"Error: {str(e)}", "danger")
+            return redirect(url_for('leave.holiday_location_master'))
+
         data = {
             'id': request.form.get('id'),
             'name': request.form.get('name'),
@@ -1207,14 +1283,21 @@ def holiday_location_master():
             'remarks': request.form.get('remarks')
         }
         try:
-            if HolidayModel.save_holiday_location(data):
+            if HolidayModel.save_holiday_location(data, session['user_id']):
                 flash("Location saved successfully.", "success")
         except Exception as e:
             flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('leave.holiday_location_master'))
     
-    locations = HolidayModel.get_holiday_locations()
-    return render_template('leave/master_holiday_location.html', locations=locations)
+    from app.utils import get_pagination
+    page = request.args.get('page', 1, type=int)
+    pagination, sql_limit = get_pagination("SAL_HolidayLocation_Mst", page, per_page=10, 
+                                           order_by="ORDER BY displayorder ASC")
+    
+    locations = DB.fetch_all(f"SELECT * FROM SAL_HolidayLocation_Mst {sql_limit}")
+    return render_template('leave/master_holiday_location.html', 
+                           locations=locations, 
+                           pagination=pagination)
 
 @leave_bp.route('/loc_wise_holiday_master', methods=['GET', 'POST'])
 @permission_required('Location Wise Holidays Master')
@@ -1224,16 +1307,32 @@ def loc_wise_holiday_master():
         action = request.form.get('action')
         try:
             if action == 'SAVE':
-                data = {
-                    'pk_locholidayid': request.form.get('pk_locholidayid'),
-                    'holiday_loc_id': request.form.get('holiday_loc_id'),
-                    'year_id': request.form.get('year_id'),
-                    'loc_id': request.form.get('loc_id'),
-                    'remarks': request.form.get('remarks')
-                }
-                loc_holiday_id = HolidayModel.save_loc_wise_holiday(data, user_id)
+                pk_id = request.form.get('pk_id')
+                hloc_id = request.form.get('holiday_loc_id')
+                year_id = request.form.get('year_id')
+                # Automate University Location mapping based on Holiday Location
+                # Live data shows: 1 -> VC-52, 51/53 -> VC-1
+                loc_id = 'VC-52' if str(hloc_id) == '1' else 'VC-1'
+                remarks = request.form.get('remarks') or ''
                 
-                # Handle details if submitted in lists
+                if pk_id:
+                    # Update mode
+                    DB.execute("""
+                        UPDATE SAL_LocationWiseHolidays_Mst 
+                        SET remarks=?, fk_updUserID=?, fk_updDateID=GETDATE() 
+                        WHERE pk_locholidayid=?
+                    """, [remarks, user_id, pk_id])
+                    loc_holiday_id = pk_id
+                else:
+                    # Insert mode
+                    loc_holiday_id = DB.fetch_scalar("""
+                        INSERT INTO SAL_LocationWiseHolidays_Mst 
+                        (fk_holidaylocid, fk_yearid, fk_locid, remarks, fk_updUserID, fk_updDateID) 
+                        OUTPUT INSERTED.pk_locholidayid
+                        VALUES (?, ?, ?, ?, ?, GETDATE())
+                    """, [hloc_id, year_id, loc_id, remarks, user_id])
+                
+                # Handle details
                 h_ids = request.form.getlist('h_ids[]')
                 f_dates = request.form.getlist('f_dates[]')
                 t_dates = request.form.getlist('t_dates[]')
@@ -1241,78 +1340,88 @@ def loc_wise_holiday_master():
                 
                 if h_ids:
                     for i in range(len(h_ids)):
-                        if i < len(f_dates) and f_dates[i]: 
-                            detail_data = {
-                                'loc_holiday_id': loc_holiday_id,
-                                'common_holiday_id': h_ids[i],
-                                'holiday_date': f_dates[i],
-                                'to_date': t_dates[i] if i < len(t_dates) else None,
-                                'remarks': h_remarks[i] if i < len(h_remarks) else ''
-                            }
+                        hid = h_ids[i]
+                        f_date = f_dates[i] if i < len(f_dates) and f_dates[i] else None
+                        t_date = t_dates[i] if i < len(t_dates) and t_dates[i] else None
+                        h_rem = h_remarks[i] if i < len(h_remarks) and h_remarks[i] else None
+                        
+                        if f_date:
+                            # Update or Insert mapping
                             exists = DB.fetch_one("SELECT pk_locholidaytrnid FROM SAL_LocationWiseHolidays_Trn WHERE fk_locholidayid=? AND fk_commonholidayid=?", 
-                                                [loc_holiday_id, h_ids[i]])
+                                                [loc_holiday_id, hid])
                             if exists:
-                                detail_data['pk_locholidaytrnid'] = exists['pk_locholidaytrnid']
-                            
-                            HolidayModel.save_loc_holiday_detail(detail_data, user_id)
+                                DB.execute("""
+                                    UPDATE SAL_LocationWiseHolidays_Trn 
+                                    SET holidaydate=?, todate=?, remarks=?, fk_updUserID=?, fk_updDateID=GETDATE() 
+                                    WHERE pk_locholidaytrnid=?
+                                """, [f_date, t_date, h_rem, user_id, exists['pk_locholidaytrnid']])
+                            else:
+                                DB.execute("""
+                                    INSERT INTO SAL_LocationWiseHolidays_Trn 
+                                    (fk_locholidayid, fk_commonholidayid, holidaydate, todate, remarks, fk_updUserID, fk_updDateID) 
+                                    VALUES (?, ?, ?, ?, ?, ?, GETDATE())
+                                """, [loc_holiday_id, hid, f_date, t_date, h_rem, user_id])
+                        else:
+                            # Blank date: If a mapping existed, remove it (allows "clearing" a holiday)
+                            DB.execute("DELETE FROM SAL_LocationWiseHolidays_Trn WHERE fk_locholidayid=? AND fk_commonholidayid=?", [loc_holiday_id, hid])
                 
-                flash("Location-wise holiday and details saved.", "success")
-            elif action == 'SAVE_DETAIL':
-                data = {
-                    'pk_locholidaytrnid': request.form.get('pk_locholidaytrnid'),
-                    'loc_holiday_id': request.form.get('loc_holiday_id'),
-                    'common_holiday_id': request.form.get('common_holiday_id'),
-                    'holiday_date': request.form.get('holiday_date'),
-                    'to_date': request.form.get('to_date'),
-                    'remarks': request.form.get('detail_remarks')
-                }
-                HolidayModel.save_loc_holiday_detail(data, user_id)
-                flash("Holiday detail saved.", "success")
+                flash("Location-wise holiday details saved successfully.", "success")
             elif action == 'DELETE':
-                DB.execute("DELETE FROM SAL_LocationWiseHolidays_Trn WHERE fk_locholidayid = ?", [request.form.get('id')])
-                DB.execute("DELETE FROM SAL_LocationWiseHolidays_Mst WHERE pk_locholidayid = ?", [request.form.get('id')])
-                flash("Location-wise holiday deleted.", "success")
-            elif action == 'DELETE_DETAIL':
-                HolidayModel.delete_loc_holiday_detail(request.form.get('trn_id'))
-                flash("Holiday detail deleted.", "success")
+                h_id = request.form.get('id')
+                DB.execute("DELETE FROM SAL_LocationWiseHolidays_Trn WHERE fk_locholidayid = ?", [h_id])
+                DB.execute("DELETE FROM SAL_LocationWiseHolidays_Mst WHERE pk_locholidayid = ?", [h_id])
+                flash("Location-wise holiday mapping deleted.", "success")
         except Exception as e:
             flash(f"Error: {str(e)}", "danger")
-        # To avoid confusion, redirect without specific filters or ensure parameter names match the GET expected ones
-        return redirect(url_for('leave.loc_wise_holiday_master', hloc_id=request.form.get('holiday_loc_id'), lyear=request.form.get('year_id')))
+        # Redirect to main list without filters to keep all records visible
+        return redirect(url_for('leave.loc_wise_holiday_master'))
 
-    hloc_id = request.args.get('hloc_id') # Filter for Holiday Location (Int)
+    hloc_id = request.args.get('hloc_id') 
     lyear = request.args.get('lyear')
-    univ_loc_id = request.args.get('univ_loc_id') # Filter for University Location (Varchar)
     
-    # Fallback for old templates or links using 'loc_id'
-    if not hloc_id and request.args.get('loc_id'):
-        raw_val = request.args.get('loc_id')
-        if str(raw_val).isdigit():
-            hloc_id = raw_val
-        else:
-            univ_loc_id = raw_val
+    # Safety: ensure numeric filters are actually numeric
+    if hloc_id and not str(hloc_id).isdigit(): hloc_id = None
+    if lyear and not str(lyear).isdigit(): lyear = None
 
-    holidays = HolidayModel.get_loc_wise_holidays(hloc_id=hloc_id, lyear=lyear, univ_loc_id=univ_loc_id)
+    where = ""
+    params = []
+    if hloc_id:
+        where += " AND M.fk_holidaylocid = ?"
+        params.append(hloc_id)
+    if lyear:
+        where += " AND M.fk_yearid = ?"
+        params.append(lyear)
+
+    from app.utils import get_pagination
+    page = request.args.get('page', 1, type=int)
+    # Custom pagination query since it involves joins
+    total = DB.fetch_scalar(f"SELECT COUNT(*) FROM SAL_LocationWiseHolidays_Mst M WHERE 1=1 {where}", params)
+    per_page = 10
+    total_pages = (total + per_page - 1) // per_page if total > 0 else 1
+    offset = (page - 1) * per_page
+    pagination = {'page': page, 'per_page': per_page, 'total': total, 'total_pages': total_pages, 'has_prev': page > 1, 'has_next': page < total_pages}
+    
+    query = f"""
+        SELECT M.*, H.holidayloc, L.locname, CAST(Y.Lyear as varchar) as year_name
+        FROM SAL_LocationWiseHolidays_Mst M 
+        INNER JOIN SAL_HolidayLocation_Mst H ON M.fk_holidaylocid = H.pk_holidaylocid 
+        INNER JOIN Location_Mst L ON M.fk_locid = L.pk_locid 
+        INNER JOIN SAL_Financial_Year Y ON M.fk_yearid = Y.Lyear
+        WHERE 1=1 {where}
+        ORDER BY Y.Lyear DESC, H.holidayloc ASC
+        OFFSET {offset} ROWS FETCH NEXT {per_page} ROWS ONLY
+    """
+    holidays = DB.fetch_all(query, params)
     locations = DB.fetch_all("SELECT pk_locid as id, locname as name FROM Location_Mst ORDER BY locname")
     holiday_locations = HolidayModel.get_holiday_locations()
     years = NavModel.get_years()
-    common_holidays = HolidayModel.get_common_holidays()
-    
-    selected_locholiday_id = request.args.get('locholiday_id')
-    holiday_details = []
-    if selected_locholiday_id:
-        holiday_details = HolidayModel.get_loc_holiday_details(selected_locholiday_id)
     
     return render_template('leave/master_loc_wise_holiday.html', 
                            holidays=holidays, 
                            locations=locations, 
                            holiday_locations=holiday_locations,
                            years=years,
-                           common_holidays=common_holidays,
-                           holiday_details=holiday_details,
-                           selected_locholiday_id=selected_locholiday_id,
-                           selected_loc=hloc_id or univ_loc_id,
-                           selected_year=lyear)
+                           pagination=pagination)
 
 @leave_bp.route('/weekly_off_master', methods=['GET', 'POST'])
 @permission_required('Weekly Off Master')

@@ -1,11 +1,9 @@
-﻿
 # Mandatory Git Workflow (Safety First)
 
-To prevent code loss and ensure complete version control, the following rules are MANDATORY for all operations:
+To ensure code integrity and follow the user's preferred version control strategy, the following rules are MANDATORY:
 
-1. **Pre-Task Save:** Before making any modifications to the codebase, check for uncommitted changes. If they exist, commit them with the message: "Pre-task save: [Brief description of pending work]".
-2. **Surgical Commits:** After completing a specific task or edit, immediately stage and commit the changes.
-3. **Descriptive Messages:** Every commit message must clearly state WHAT was changed and WHY (e.g., "Fix: Resolved null pointer in Employee Master login").
-4. **Cloud Sync:** After every commit, perform a 'git push' to ensure the GitHub repository (origin/main) is synchronized.
-5. **No Force Push:** Never use force push unless explicitly directed by the user.
-
+1. **User-Directed Commits:** Perform stage, commit, and push operations ONLY when explicitly requested by the user.
+2. **Task Transition Commit:** Before initiating a newly assigned task, ensure any pending changes from the previous task are committed and pushed to the GitHub repository.
+3. **Cloud Sync:** Every commit operation must be immediately followed by a 'git push' to 'origin/main'.
+4. **Descriptive Messages:** Commit messages must clearly state WHAT was changed and WHY (e.g., "Feature: Integrated new sidebar icons in Employee Portal").
+5. **No Force Push:** Force pushing is strictly prohibited unless explicitly instructed by the user.

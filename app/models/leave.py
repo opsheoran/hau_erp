@@ -6,21 +6,35 @@ import math
 class HolidayModel:
     @staticmethod
     def get_holiday_types():
-        return DB.fetch_all("SELECT pk_holidaytypeid as id, holidaytype as name FROM SAL_HolidayType_Mst ORDER BY holidaytype")
+        return DB.fetch_all("SELECT pk_holidaytypeid, holidaytype FROM SAL_HolidayType_Mst ORDER BY displayorder")
 
     @staticmethod
     def get_common_holidays():
-        query = "SELECT C.*, T.holidaytype FROM SAL_CommonHolidays_Mst C LEFT JOIN SAL_HolidayType_Mst T ON C.fk_holidaytypeid = T.pk_holidaytypeid ORDER BY C.displayorder"
+        query = """
+            SELECT C.*, T.holidaytype 
+            FROM SAL_CommonHolidays_Mst C 
+            LEFT JOIN SAL_HolidayType_Mst T ON C.fk_holidaytypeid = T.pk_holidaytypeid 
+            ORDER BY C.displayorder
+        """
         return DB.fetch_all(query)
 
     @staticmethod
     def save_common_holiday(data, user_id):
         if data.get('id'):
-            sql = "UPDATE SAL_CommonHolidays_Mst SET holidayname=?, fk_holidaytypeid=?, hdate=?, displayorder=?, fk_updUserID=?, fk_updDateID=GETDATE() WHERE pk_cholidayid=?"
-            return DB.execute(sql, [data['name'], data['type_id'], data['date'], data['order'], user_id, data['id']])
+            sql = """
+                UPDATE SAL_CommonHolidays_Mst 
+                SET commonholiday=?, fk_holidaytypeid=?, displayorder=?, remarks=?, 
+                    lastupdatedby=?, lastupdateddate=GETDATE() 
+                WHERE pk_commonholidayid=?
+            """
+            return DB.execute(sql, [data['name'], data['type_id'], data['order'], data.get('remarks'), user_id, data['id']])
         else:
-            sql = "INSERT INTO SAL_CommonHolidays_Mst (holidayname, fk_holidaytypeid, hdate, displayorder, fk_insUserID, fk_insDateID) VALUES (?, ?, ?, ?, ?, GETDATE())"
-            return DB.execute(sql, [data['name'], data['type_id'], data['date'], data['order'], user_id])
+            sql = """
+                INSERT INTO SAL_CommonHolidays_Mst 
+                (commonholiday, fk_holidaytypeid, displayorder, remarks, lastupdatedby, lastupdateddate) 
+                VALUES (?, ?, ?, ?, ?, GETDATE())
+            """
+            return DB.execute(sql, [data['name'], data['type_id'], data['order'], data.get('remarks'), user_id])
 
     @staticmethod
     def get_holiday_locations():
@@ -29,8 +43,20 @@ class HolidayModel:
     @staticmethod
     def save_holiday_location(data, user_id):
         if data.get('id'):
-            return DB.execute("UPDATE SAL_HolidayLocation_Mst SET holidayloc=?, displayorder=?, fk_updUserID=?, fk_updDateID=GETDATE() WHERE pk_holidaylocid=?", [data['name'], data['order'], user_id, data['id']])
-        return DB.execute("INSERT INTO SAL_HolidayLocation_Mst (holidayloc, displayorder, fk_insUserID, fk_insDateID) VALUES (?, ?, ?, GETDATE())", [data['name'], data['order'], user_id])
+            sql = """
+                UPDATE SAL_HolidayLocation_Mst 
+                SET holidayloc=?, displayorder=?, remarks=?, 
+                    lastupdatedby=?, lastupdateddate=GETDATE() 
+                WHERE pk_holidaylocid=?
+            """
+            return DB.execute(sql, [data['name'], data['order'], data.get('remarks'), user_id, data['id']])
+        else:
+            sql = """
+                INSERT INTO SAL_HolidayLocation_Mst 
+                (holidayloc, displayorder, remarks, lastupdatedby, lastupdateddate) 
+                VALUES (?, ?, ?, ?, GETDATE())
+            """
+            return DB.execute(sql, [data['name'], data['order'], data.get('remarks'), user_id])
 
     @staticmethod
     def get_loc_wise_holidays(hloc_id=None, lyear=None, univ_loc_id=None):

@@ -284,15 +284,26 @@ def get_pagination_range(current_page, total_pages):
         res.extend(['...', total_pages - 1, total_pages])
     return res
 
-def get_pagination(table, page, per_page=10, where="", params=None):
+def get_pagination(table, page, per_page=10, where="", params=None, order_by=""):
     from app.db import DB
     if params is None:
         params = []
-    total = DB.fetch_scalar(f"SELECT COUNT(*) FROM {table} {where}", params)
+    
+    # Remove ORDER BY from the count query
+    count_query = f"SELECT COUNT(*) FROM {table} {where}"
+    total = DB.fetch_scalar(count_query, params)
+    
     total_pages = (total + per_page - 1) // per_page if total > 0 else 1
     offset = (page - 1) * per_page
     pagination = {'page': page, 'per_page': per_page, 'total': total, 'total_pages': total_pages, 'has_prev': page > 1, 'has_next': page < total_pages}
-    sql_limit = f"OFFSET {offset} ROWS FETCH NEXT {per_page} ROWS ONLY"
+    
+    sql_limit = ""
+    if order_by:
+        sql_limit = f"{order_by} OFFSET {offset} ROWS FETCH NEXT {per_page} ROWS ONLY"
+    else:
+        # SQL Server requires ORDER BY for OFFSET/FETCH
+        sql_limit = f"ORDER BY (SELECT NULL) OFFSET {offset} ROWS FETCH NEXT {per_page} ROWS ONLY"
+        
     return pagination, sql_limit
 
 def get_page_url(page_name):
