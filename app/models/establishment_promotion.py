@@ -505,7 +505,6 @@ class NonTeachingPromotionModel:
             NonTeachingPromotionModel.TABLE_APPROVAL,
         )
         pk = NonTeachingPromotionModel._pk_col(table)
-        emp_join_cols = NonTeachingPromotionModel._emp_join_cols(table)
         status_col = NonTeachingPromotionModel._status_col(table)
 
         where = ""
@@ -517,17 +516,57 @@ class NonTeachingPromotionModel:
         top = max(1, min(int(limit or 100), 500))
         order = f" ORDER BY A.[{pk}] DESC" if pk else ""
 
+        # Approval table typically points to verification rows via fk_VerId. Emp details live in verification.
+        a_cols = {c.lower(): c for c in NonTeachingPromotionModel._cols(table)}
+        fk_ver_col = None
+        for cand in ("fk_verid", "fk_ver_id", "fk_verificationid", "fk_verification_id"):
+            fk_ver_col = a_cols.get(cand)
+            if fk_ver_col:
+                break
+
+        v_table = NonTeachingPromotionModel._pick_table(
+            NonTeachingPromotionModel.TABLE_VERIFY_CANDIDATES,
+            NonTeachingPromotionModel.TABLE_VERIFY,
+        )
+        v_pk = NonTeachingPromotionModel._pk_col(v_table) or "Pk_VerId"
+        v_cols = {c.lower(): c for c in NonTeachingPromotionModel._cols(v_table)}
+        v_empid_col = None
+        for cand in ("fk_empid", "fk_emp_id", "empid", "emp_id", "fk_employeeid", "employeeid"):
+            v_empid_col = v_cols.get(cand)
+            if v_empid_col:
+                break
+
+        v_desg_col = v_cols.get("fk_desgid") or v_cols.get("fk_desg_id") or v_cols.get("desgid") or v_cols.get("desg_id")
+        v_empcode_col = v_cols.get("empcode") or v_cols.get("emp_code") or v_cols.get("employeecode")
+
         join = ""
-        select_emp = ""
-        if emp_join_cols:
-            conds = []
-            for c in emp_join_cols:
-                val = f"LTRIM(RTRIM(TRY_CONVERT(varchar(50), A.[{c}])))"
-                conds.append(
-                    f"({val} = LTRIM(RTRIM(TRY_CONVERT(varchar(50), E.pk_empid))) OR {val} = LTRIM(RTRIM(E.empcode)))"
-                )
-            join = f" LEFT JOIN SAL_Employee_Mst E ON ({' OR '.join(conds)}) LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid"
-            select_emp = ", E.empcode as empcode, E.empname as empname, DS.designation as designation"
+        select_emp = ", E.empcode as empcode, E.empname as empname, DS.designation as designation"
+        if fk_ver_col:
+            join = f" LEFT JOIN {v_table} V ON A.[{fk_ver_col}] = V.[{v_pk}]"
+            if v_empid_col:
+                join += f" LEFT JOIN SAL_Employee_Mst E ON V.[{v_empid_col}] = E.pk_empid"
+            elif v_empcode_col:
+                join += f" LEFT JOIN SAL_Employee_Mst E ON V.[{v_empcode_col}] = E.empcode"
+            else:
+                join += " LEFT JOIN SAL_Employee_Mst E ON 1=0"
+
+            if v_desg_col:
+                join += f" LEFT JOIN SAL_Designation_Mst DS ON V.[{v_desg_col}] = DS.pk_desgid"
+            else:
+                join += " LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid"
+        else:
+            # Fallback: if there's no fk_VerId, try joining directly by any emp columns on approval table.
+            emp_join_cols = NonTeachingPromotionModel._emp_join_cols(table)
+            if emp_join_cols:
+                conds = []
+                for c in emp_join_cols:
+                    val = f"LTRIM(RTRIM(TRY_CONVERT(varchar(50), A.[{c}])))"
+                    conds.append(
+                        f"({val} = LTRIM(RTRIM(TRY_CONVERT(varchar(50), E.pk_empid))) OR {val} = LTRIM(RTRIM(E.empcode)))"
+                    )
+                join = f" LEFT JOIN SAL_Employee_Mst E ON ({' OR '.join(conds)}) LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid"
+            else:
+                select_emp = ""
 
         q = f"SELECT TOP {top} A.*{select_emp} FROM {table} A{join}{where}{order}"
         try:
