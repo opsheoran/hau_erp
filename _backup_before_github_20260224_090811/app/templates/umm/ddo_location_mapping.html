@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">DDO & Location Mapping</span>
+    </div>
+    
+    <div style="padding: 15px;">
+        <form method="POST" id="mainForm">
+            <input type="hidden" name="edit_id" value="{{ edit_data.pk_mapid if edit_data else '' }}">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">DDO</td><td class="colon">:</td>
+                    <td class="required">
+                        <select name="ddo_id" id="ddlDDO" class="dropdownlong" required onchange="filterGrid()">
+                            <option value="">-- Select DDO --</option>
+                            {% for d in ddos %}<option value="{{ d.id }}" {% if selected_ddo==d.id %}selected{% endif %}>{{ d.name }}</option>{% endfor %}
+                        </select>
+                        <span style="color:red;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Location</td><td class="colon">:</td>
+                    <td class="required">
+                        <select name="loc_id" id="ddlLocation" class="dropdownlong" required>
+                            <option value="">-- Select Location --</option>
+                            {% for l in locations %}
+                                <option value="{{ l.id }}" {% if edit_data and edit_data.fk_locid==l.id %}selected{% endif %}>{{ l.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span style="color:red;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td><td></td>
+                    <td style="padding-top: 15px;">
+                        <input type="submit" value="SAVE" class="button-common">
+                        <a href="{{ url_for('umm.ddo_location_mapping') }}" class="button-common" style="text-decoration:none; display:inline-block; padding: 2px 10px;">RESET</a>
+                        <input type="button" value="Print" class="button-common" onclick="window.print();">
+                        <span id="lblMsg" class="lblmessage" style="margin-left: 10px;"></span>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 40px;">
+            <div class="tablesubheading">
+                <span class="subheadingborderbottom">List of DDO & Location Mapping</span>
+            </div>
+            
+            <div style="margin-bottom: 15px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd;">
+                <form method="GET" id="searchForm">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td class="vtext" style="padding-right: 5px;">Search</td>
+                            <td class="colon" style="padding-right: 5px;">:</td>
+                            <td>
+                                <select name="s_type" class="dropdown" style="width: 120px;">
+                                    <option value="--Select--" {% if s_type == '--Select--' %}selected{% endif %}>--Select--</option>
+                                    <option value="DDOName" {% if s_type == 'DDOName' %}selected{% endif %}>DDOName</option>
+                                    <option value="LocName" {% if s_type == 'LocName' %}selected{% endif %}>LocName</option>
+                                </select>
+                                <input type="text" name="s_val" class="textbox" style="width: 200px;" value="{{ s_val or '' }}">
+                                <input type="submit" value="Search" class="button-common">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td>S. No.</td><td>DDO</td><td>Location</td><td>EDIT</td><td>DELETE</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in mappings %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center" style="width: 10%;">{{ loop.index + pagination.per_page * (pagination.page - 1) }}</td>
+                        <td>{{ m.ddo }}</td>
+                        <td>{{ m.location }}</td>
+                        <td align="center" style="width: 10%;">
+                            <a href="{{ url_for('umm.ddo_location_mapping', edit_id=m.id, ddo_id=selected_ddo) }}">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}">
+                            </a>
+                        </td>
+                        <td align="center" style="width: 10%;">
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="delete_id" value="{{ m.id }}">
+                                <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}">
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" align="center">No records found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'includes/pagination.html' %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterGrid() {
+        const ddoId = document.getElementById('ddlDDO').value;
+        if (ddoId) {
+            window.location.href = `{{ url_for('umm.ddo_location_mapping') }}?ddo_id=${ddoId}`;
+        } else {
+            window.location.href = `{{ url_for('umm.ddo_location_mapping') }}`;
+        }
+    }
+</script>
+
+{% if get_flashed_messages() %}
+<script>
+    document.getElementById('lblMsg').innerText = "{{ get_flashed_messages()[0] }}";
+</script>
+{% endif %}
+{% endblock %}

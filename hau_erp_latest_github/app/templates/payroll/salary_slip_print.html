@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Salary Slip - CCSHAU</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 10px; margin: 0; padding: 20px; }
+        .slip-container { width: 800px; margin: auto; border: 1px solid #000; padding: 15px; }
+        .header { text-align: center; border-bottom: 1px solid #000; padding-bottom: 10px; }
+        .header h2 { margin: 0; font-size: 16px; }
+        .header h3 { margin: 5px 0; font-size: 12px; text-decoration: underline; }
+        
+        .info-table { width: 100%; border-collapse: collapse; margin-top: 10px; border-bottom: 1px solid #000; padding-bottom: 10px; }
+        .info-table td { padding: 2px 5px; vertical-align: top; }
+        .label { font-weight: bold; width: 100px; }
+        .colon { width: 10px; }
+        
+        .data-sections { display: flex; width: 100%; margin-top: 10px; min-height: 200px; }
+        .earnings, .deductions, .loans { border: 1px solid #000; }
+        .earnings { width: 35%; border-right: none; }
+        .deductions { width: 35%; border-right: none; }
+        .loans { width: 30%; }
+        
+        .section-title { background: #eee; text-align: center; font-weight: bold; border-bottom: 1px solid #000; padding: 3px; font-size: 11px; }
+        .grid-table { width: 100%; border-collapse: collapse; }
+        .grid-table td { padding: 3px 5px; border-bottom: 1px dotted #ccc; }
+        .amt { text-align: right; }
+        
+        .summary { margin-top: 10px; border-top: 1px solid #000; padding-top: 5px; font-weight: bold; }
+        .net-payable { border: 1px solid #000; padding: 10px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+        
+        .footer { margin-top: 50px; display: flex; justify-content: space-between; }
+        .btn-print { margin-bottom: 20px; }
+        @media print { .btn-print { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="text-center btn-print">
+        <button onclick="window.print()">PRINT SLIP</button>
+        <button onclick="window.history.back()">BACK</button>
+    </div>
+
+    <div class="slip-container">
+        <div class="header">
+            <h2>CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY, HISAR</h2>
+            <h3>PAY SLIP FOR {{ s.month_name }} - {{ s.year }}</h3>
+        </div>
+
+        <table class="info-table">
+            <tr>
+                <td class="label">DEPARTMENT</td><td class="colon">:</td><td colspan="4">{{ s.master.department }}</td>
+                <td class="label">Scheme</td><td class="colon">:</td><td>{{ s.master.fk_anc }}</td>
+            </tr>
+            <tr>
+                <td class="label">EMP NO</td><td class="colon">:</td><td>{{ s.master.empcode }}</td>
+                <td class="label">PAY BAND</td><td class="colon">:</td><td>{{ s.master.level_name or '14' }}</td>
+                <td class="label">PAN NO</td><td class="colon">:</td><td>{{ s.master.panno }}</td>
+            </tr>
+            <tr>
+                <td class="label">NAME</td><td class="colon">:</td><td>{{ s.master.empname }}</td>
+                <td class="label">Grade Pay</td><td class="colon">:</td><td>{{ "{:.2f}".format(s.master.gradepay) }}</td>
+                <td class="label">Bank Name</td><td class="colon">:</td><td>{{ s.master.bankname }}</td>
+            </tr>
+            <tr>
+                <td class="label">PAID DAYS</td><td class="colon">:</td><td>{{ "{:.2f}".format(s.master.ELDays or 31.00) }}</td>
+                <td class="label">PF Code</td><td class="colon">:</td><td>{{ s.master.gpf_nps_no or '' }}</td>
+                <td class="label">BANK A/C</td><td class="colon">:</td><td>{{ s.master.bankaccountno }}</td>
+            </tr>
+            <tr>
+                <td class="label">DESIG</td><td class="colon">:</td><td>{{ s.master.designation }}</td>
+                <td class="label">DOB</td><td class="colon">:</td><td>{{ s.master.dob_fmt or '' }}</td>
+                <td colspan="3"></td>
+            </tr>
+        </table>
+
+        <div class="data-sections">
+            <div class="earnings">
+                <div class="section-title">EARNINGS</div>
+                <table class="grid-table">
+                    {% for e in s.earnings %}
+                    <tr>
+                        <td>{{ e.description }}</td>
+                        <td class="amt">{{ "{:,.2f}".format(e.paid_amount) }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="deductions">
+                <div class="section-title">DEDUCTIONS</div>
+                <table class="grid-table">
+                    {% for d in s.deductions %}
+                    <tr>
+                        <td>{{ d.description }}</td>
+                        <td class="amt">{{ "{:,.2f}".format(d.paid_amount) }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="loans">
+                <div class="section-title">Loan Details</div>
+                <table class="grid-table" style="font-size: 9px;">
+                    <tr style="font-weight: bold; background: #fafafa;">
+                        <td>Loan</td><td>Ins.Amt</td><td>Bal Amt</td>
+                    </tr>
+                    {% for l in s.loans %}
+                    <tr>
+                        <td>{{ l.description }}</td>
+                        <td class="amt">{{ "{:,.0f}".format(l.InstalmentAmount) }}</td>
+                        <td class="amt">{{ "{:,.0f}".format(l.balAmount) }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <table width="100%" class="summary">
+            <tr>
+                <td width="35%" style="border: 1px solid #000; border-top: none; padding: 5px;">
+                    Total Earnings : <span style="float:right;">{{ "{:,.2f}".format(s.master.GrossTotal) }}</span>
+                </td>
+                <td width="35%" style="border: 1px solid #000; border-top: none; border-left: none; padding: 5px;">
+                    Total Deductions : <span style="float:right;">{{ "{:,.2f}".format(s.master.TotalDeductions) }}</span>
+                </td>
+                <td width="30%"></td>
+            </tr>
+        </table>
+
+        <div class="net-payable">
+            <div>
+                <strong>Net Payable (In words):</strong> Rs. {{ s.net_words }}
+            </div>
+            <div style="text-align: right;">
+                <strong>Net Payable :</strong> <span style="font-size: 14px;">{{ "{:,.2f}".format(s.master.NetPay) }}</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div style="margin-top: 20px;">
+                <p>This is a computer generated document and does not require signature.</p>
+            </div>
+            <div style="text-align: center; border-top: 1px solid #000; width: 150px; margin-top: 40px;">
+                D.D.O/Officer Incharge
+            </div>
+        </div>
+    </div>
+</body>
+</html>

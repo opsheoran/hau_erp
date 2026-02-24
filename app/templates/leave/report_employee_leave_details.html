@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="tableheading">Employee Leave Details Report</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label vtext">Search Employee</label>
+                <div class="input-group">
+                    <input type="text" id="emp_search" class="textbox w-250" placeholder="Type name or code..." autocomplete="off">
+                    <input type="hidden" name="emp_id" id="emp_id_val" value="{{ selected_emp or '' }}">
+                </div>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="button-common">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if selected_emp %}
+<div class="tableheading mt-4">Current Leave Summary</div>
+<table class="table-grid-view">
+    <thead>
+        <tr class="header-style">
+            <th>Leave Type</th>
+            <th>Opening</th>
+            <th>Entitled</th>
+            <th>Taken</th>
+            <th>Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in summary %}
+        <tr class="item-style text-center">
+            <td>{{ s.LeaveTypeName }}</td>
+            <td>{{ s.OpeningBal }}</td>
+            <td>{{ s.Entitled }}</td>
+            <td>{{ s.Taken }}</td>
+            <td>{{ s.Balance }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="tableheading mt-4">Leave History</div>
+<table class="table-grid-view">
+    <thead>
+        <tr class="header-style">
+            <th>S.No</th>
+            <th>Leave Type</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th>Days</th>
+            <th>Status</th>
+            <th>Applied On</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for h in details %}
+        <tr class="item-style text-center">
+            <td>{{ loop.index }}</td>
+            <td>{{ h.LeaveTypeName }}</td>
+            <td>{{ h.fromdate.strftime('%d/%m/%Y') if h.fromdate else '-' }}</td>
+            <td>{{ h.todate.strftime('%d/%m/%Y') if h.todate else '-' }}</td>
+            <td>{{ h.totalleavedays }}</td>
+            <td>
+                {% if h.leavestatus == 'A' %}<span class="text-success fw-bold">Approved</span>
+                {% elif h.leavestatus == 'R' %}<span class="text-danger fw-bold">Rejected</span>
+                {% else %}<span class="text-primary fw-bold">Pending</span>
+                {% endif %}
+            </td>
+            <td>{{ h.requestdate.strftime('%d/%m/%Y') if h.requestdate else '-' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-info mt-4">Please select an employee to view their leave details.</div>
+{% endif %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('emp_search');
+        const idInput = document.getElementById('emp_id_val');
+
+        if (searchInput) {
+            searchInput.addEventListener('input', async function() {
+                const term = this.value;
+                if (term.length < 2) return;
+                
+                const res = await fetch(`/leave/api/employee/search?term=${term}`);
+                const data = await res.json();
+                
+                // Simplified UI: using a datalist or dropdown would be better
+                // For now, let's assume we pick the first match if user continues
+                if (data.length > 0) {
+                    // Update hidden ID when a selection is made (should be handled via UI click)
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

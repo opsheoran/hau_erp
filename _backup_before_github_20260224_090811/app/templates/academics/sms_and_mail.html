@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Mail And SMS Alert To Students</span>
+    </div>
+
+    <form id="filterForm" method="GET">
+        <table width="100%" class="filter-table">
+            <tr>
+                <td class="vtext">College</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="ddlCollege" class="dropdown w-300" onchange="loadDegrees()">
+                        <option value="">--Select College--</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Academic Session</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="session_id" id="ddlSession" class="dropdown w-200" onchange="refreshGrid()">
+                        <option value="">--Select Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="degree_id" id="ddlDegree" class="dropdown w-300" onchange="onDegreeChange()">
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Class</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="semester_id" id="ddlSemester" class="dropdown w-150" onchange="refreshGrid()">
+                        <option value="">--Select Class--</option>
+                        {% for s in lookups.semesters %}
+                        <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.semester_roman }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext">Subject/Branch</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="branch_id" id="ddlBranch" class="dropdown w-250" onchange="refreshGrid()">
+                        <option value="0">--Select Department--</option>
+                        {% for b in lookups.branches %}
+                        <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="5" style="padding-top: 10px;">
+                    <input type="submit" value="GET STUDENT" class="button-common" style="width: 120px;">
+                    <input type="button" value="RESET" class="button-common" style="width: 100px; margin-left: 10px;" onclick="window.location.href='{{ url_for('academics_mgmt.sms_and_mail') }}'">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div style="margin-top: 25px; padding: 15px; border: 1px solid #ddd; background: #fdfdfd;">
+        <form method="POST" onsubmit="return validateMessage()">
+            <input type="hidden" name="college_id" value="{{ filters.college_id }}">
+            <input type="hidden" name="session_id" value="{{ filters.session_id }}">
+            <input type="hidden" name="degree_id" value="{{ filters.degree_id }}">
+            <input type="hidden" name="semester_id" value="{{ filters.semester_id }}">
+            <input type="hidden" name="branch_id" value="{{ filters.branch_id }}">
+
+            <table width="100%">
+                <tr>
+                    <td colspan="6">
+                        <div style="margin-bottom: 10px;">
+                            <label><input type="radio" name="msg_type" value="1" onclick="updateLimit(3000)"> Mail</label>
+                            <label style="margin-left: 20px;"><input type="radio" name="msg_type" value="2" checked onclick="updateLimit(160)"> SMS</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext" style="vertical-align: top; padding-top: 5px;">Message</td>
+                    <td class="colon" style="vertical-align: top; padding-top: 5px;">:</td>
+                    <td colspan="4">
+                        <textarea name="message" id="txtMessage" class="textboxmultiline" style="height:100px; width:400px;" onkeyup="checkCharLimit()"></textarea>
+                        <div id="charCount" style="font-size: 11px; color: red; margin-top: 5px;"></div>
+                    </td>
+                </tr>
+            </table>
+
+            <div style="margin-top: 20px;">
+                <div class="tablesubheading">
+                    <span class="subheadingborderbottom">List of Students</span>
+                </div>
+                <table class="table-grid-view">
+                    <thead>
+                        <tr class="header-style">
+                            <th style="width: 5%;">S.No.</th>
+                            <th style="width: 30%;">Student Name</th>
+                            <th style="width: 15%;">Admission No.</th>
+                            <th style="width: 20%;">Email Id</th>
+                            <th style="width: 15%;">Phone No.</th>
+                            <th style="width: 10%;">
+                                Select <input type="checkbox" id="chkAll" onclick="selectAll(this)">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in students %}
+                        <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                            <td align="center">{{ loop.index }}</td>
+                            <td>{{ s.studentname }}</td>
+                            <td align="center">{{ s.AdmissionNo }}</td>
+                            <td>{{ s.emailid }}</td>
+                            <td align="center">{{ s.mobileno }}</td>
+                            <td align="center">
+                                <input type="checkbox" name="student_ids" value="{{ s.pk_sid }}" class="student-chk">
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" align="center" style="color: red; padding: 20px;">No students found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <input type="submit" value="SEND" class="button-common" style="width: 100px;">
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+var currentLimit = 160;
+
+function updateLimit(limit) {
+    currentLimit = limit;
+    checkCharLimit();
+}
+
+function checkCharLimit() {
+    var txt = document.getElementById('txtMessage');
+    var count = txt.value.length;
+    var info = document.getElementById('charCount');
+    
+    if (currentLimit === 160) {
+        if (count > 160) {
+            info.textContent = 'You cannot write more than 160 characters!';
+            txt.value = txt.value.substring(0, 160);
+        } else {
+            info.textContent = 'You have ' + (160 - count) + ' characters left.';
+        }
+    } else {
+        info.textContent = 'You have written ' + count + ' characters.';
+    }
+}
+
+function selectAll(chk) {
+    var checkboxes = document.getElementsByClassName('student-chk');
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = chk.checked;
+    }
+}
+
+function validateMessage() {
+    var txt = document.getElementById('txtMessage').value;
+    if (!txt.trim()) {
+        alert("Please fill Message Box");
+        return false;
+    }
+    
+    var checked = document.querySelectorAll('.student-chk:checked');
+    if (checked.length === 0) {
+        alert("Please select students");
+        return false;
+    }
+    return true;
+}
+
+function loadDegrees() {
+    var cid = document.getElementById('ddlCollege').value;
+    if (!cid) return;
+    fetch('/academics/api/college/' + cid + '/degrees')
+        .then(r => r.json())
+        .then(data => {
+            setOptions(document.getElementById('ddlDegree'), data, '--Select Degree--');
+        });
+}
+
+function onDegreeChange() {
+    var did = document.getElementById('ddlDegree').value;
+    var cid = document.getElementById('ddlCollege').value;
+    if (!did || !cid) return;
+    fetch('/academics/api/degree/' + did + '/branches')
+        .then(r => r.json())
+        .then(data => {
+            setOptions(document.getElementById('ddlBranch'), data, '--Select Department--');
+        });
+}
+
+function setOptions(dropdown, data, defaultText) {
+    dropdown.innerHTML = '<option value="">' + defaultText + '</option>';
+    data.forEach(function(item) {
+        var opt = document.createElement('option');
+        opt.value = item.id || item.pk_branchid;
+        opt.textContent = item.name || item.Branchname;
+        dropdown.appendChild(opt);
+    });
+}
+
+function refreshGrid() {
+    // Optional: add some validation before submit
+}
+
+checkCharLimit();
+</script>
+
+<style>
+    .filter-table td { padding: 5px; }
+    .vtext { font-size: 11px; font-weight: bold; width: 120px; }
+</style>
+{% endblock %}

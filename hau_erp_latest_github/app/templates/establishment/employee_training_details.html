@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<span>Transactions</span>&nbsp;&gt;&nbsp;<span>Job Details</span>&nbsp;&gt;&nbsp;<strong>Employee Training Details</strong>
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="target_emp_id" value="{{ employee_info.pk_empid if employee_info else '' }}">
+    <input type="hidden" name="training_id" value="{{ edit_data.id if edit_data else '' }}">
+
+    <!-- SHARED SEARCH MODAL -->
+    {% include 'establishment/_search_modal.html' %}
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">Employee Training Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Employee Code</td>
+                <td class="colon">:</td>
+                <td class="required" width="30%">
+                    <input name="empcode" type="text" class="textbox w-150" value="{{ employee_info.empcode if employee_info else '' }}" readonly>
+                    <a href="javascript:void(0);" onclick="openEmpSearch('emp_id', '')">
+                        <img src="{{ url_for('static', filename='srec.jpg') }}" border="0" style="vertical-align:middle; cursor:pointer;">
+                    </a>
+                    <span class="required">*</span>
+                </td>
+                <td width="2%"></td>
+                <td class="vtext" width="15%">Employee Name</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="text" class="textbox w-250" value="{{ employee_info.empname if employee_info else '' }}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ employee_info.dept_name if employee_info else '' }}" readonly>
+                </td>
+                <td></td>
+                <td class="vtext">Designation</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ employee_info.designation if employee_info else '' }}" readonly>
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td class="vtext">Title / Description</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <textarea name="description" class="textbox w-300" rows="2" required>{{ edit_data.description if edit_data else '' }}</textarea>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Venue</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="venue" type="text" class="textbox w-250" value="{{ edit_data.venue if edit_data else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">From Date</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="from_date" type="text" class="textboxdate w-150" value="{{ edit_data.from_date_fmt if edit_data else '' }}" required placeholder="DD/MM/YYYY">
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">To Date</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="to_date" type="text" class="textboxdate w-150" value="{{ edit_data.to_date_fmt if edit_data else '' }}" required placeholder="DD/MM/YYYY">
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Organizing Details</td>
+                <td class="colon">:</td>
+                <td>
+                    <textarea name="org_details" class="textbox w-300" rows="2">{{ edit_data.torganizationdtl if edit_data else '' }}</textarea>
+                </td>
+                <td></td>
+                <td class="vtext">Training Type</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="training_type" class="dropdown w-200">
+                        <option value="In India" {% if edit_data and edit_data.TrainingType == 'In India' %}selected{% endif %}>In India</option>
+                        <option value="Abroad" {% if edit_data and edit_data.TrainingType == 'Abroad' %}selected{% endif %}>Abroad</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Fund Sponsor</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="sponsor_id" class="dropdown w-250">
+                        <option value="">-- Select Sponsor --</option>
+                        {% for s in lookups.sponsors %}
+                        <option value="{{ s.id }}" {% if edit_data and edit_data.FK_FSponsor_Id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td></td>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td>
+                    <textarea name="remarks" class="textbox w-250" rows="2">{{ edit_data.remarks if edit_data else '' }}</textarea>
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="20"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    {% if (edit_data and perm.AllowUpdate) or (not edit_data and perm.AllowAdd) %}
+                    <input type="submit" name="action" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" class="button-common">
+                    {% endif %}
+                    <input type="submit" name="action" value="RESET" class="button-common" formnovalidate>
+                </td>
+            </tr>
+            
+            {% if employee_info %}
+            <tr><td colspan="7" height="30"></td></tr>
+            <tr>
+                <td colspan="7" class="tablesubheading">
+                    <span class="subheadingborderbottom">List of Employee Training Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td colspan="7">
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="5%">S. No.</th>
+                                <th width="30%">Title / Description</th>
+                                <th width="15%">Venue</th>
+                                <th width="12%">From Date</th>
+                                <th width="12%">To Date</th>
+                                <th width="10%">Type</th>
+                                <th width="8%">EDIT</th>
+                                <th width="8%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for t in trainings %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                <td align="center">{{ loop.index }}</td>
+                                <td>{{ t.description }}</td>
+                                <td>{{ t.venue }}</td>
+                                <td align="center">{{ t.from_date_fmt }}</td>
+                                <td align="center">{{ t.to_date_fmt }}</td>
+                                <td align="center">{{ t.TrainingType }}</td>
+                                <td align="center">
+                                    <a href="{{ url_for('establishment.employee_training_details', emp_id=emp_id, edit_id=t.id) }}">
+                                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    {% if perm.AllowDelete %}
+                                    <a href="{{ url_for('establishment.employee_training_details', emp_id=emp_id, delete_id=t.id) }}" onclick="return confirm('Are you sure you want to delete this record?')">
+                                        <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="8" align="center" style="padding:10px;">No training details found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function selectItem(id, name) {
+        window.location.href = "{{ url_for('establishment.employee_training_details') }}?emp_id=" + id;
+    }
+</script>
+{% endblock %}

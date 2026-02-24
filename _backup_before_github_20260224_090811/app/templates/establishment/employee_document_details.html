@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<span>Transactions</span>&nbsp;&gt;&nbsp;<span>Personal Details</span>&nbsp;&gt;&nbsp;<strong>Employee Document Details</strong>
+{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="target_emp_id" value="{{ employee_info.pk_empid if employee_info else '' }}">
+    <input type="hidden" name="doc_id" value="{{ edit_data.id if edit_data else '' }}">
+
+    <!-- SHARED SEARCH MODAL -->
+    {% include 'establishment/_search_modal.html' %}
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">Employee Document Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Employee Code</td>
+                <td class="colon">:</td>
+                <td class="required" width="30%">
+                    <input name="empcode" type="text" class="textbox w-150" value="{{ employee_info.empcode if employee_info else '' }}" readonly>
+                    <a href="javascript:void(0);" onclick="openEmpSearch('emp_id', '')">
+                        <img src="{{ url_for('static', filename='srec.jpg') }}" border="0" style="vertical-align:middle; cursor:pointer;">
+                    </a>
+                    <span class="required">*</span>
+                </td>
+                <td width="2%"></td>
+                <td class="vtext" width="15%">Employee Name</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="text" class="textbox w-250" value="{{ employee_info.empname if employee_info else '' }}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ employee_info.dept_name if employee_info else '' }}" readonly>
+                </td>
+                <td></td>
+                <td class="vtext">Designation</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ employee_info.designation if employee_info else '' }}" readonly>
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td class="vtext">Document Category</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="doc_cat_id" class="dropdown w-200" required>
+                        <option value="">-- Select Document Category --</option>
+                        {% for c in lookups.doc_categories %}
+                        <option value="{{ c.id }}" {% if edit_data and edit_data.fk_doccatid|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Designation (Attesting Officer)</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="att_designation" type="text" class="textbox w-250" value="{{ edit_data.att_designation if edit_data else '' }}">
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Document</td>
+                <td class="colon">:</td>
+                <td colspan="5">
+                    <input type="file" name="document_file" class="textbox w-300" {% if not edit_data %}required{% endif %}>
+                    {% if edit_data and edit_data.filename %}
+                    <div style="margin-top:5px;">
+                        Currently: <a href="{{ url_for('static', filename='uploads/employee_docs/' + edit_data.filename) }}" target="_blank">{{ edit_data.filename }}</a>
+                    </div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5" style="font-size:11px; font-weight:bold; color:#666; padding-top:5px;">
+                    [File size should not be more than 2 Mb and supported file types are .jpg, .jpeg, .pjpeg, .bmp, .gif and .png. PDF up to 5 Mb is supported]
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="20"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    {% if (edit_data and perm.AllowUpdate) or (not edit_data and perm.AllowAdd) %}
+                    <input type="submit" name="action" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" class="button-common">
+                    {% endif %}
+                    <input type="submit" name="action" value="RESET" class="button-common" formnovalidate>
+                </td>
+            </tr>
+            
+            {% if employee_info %}
+            <tr><td colspan="7" height="30"></td></tr>
+            <tr>
+                <td colspan="7" class="tablesubheading">
+                    <span class="subheadingborderbottom">List of Employee Document Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td colspan="7">
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="10%">S. No.</th>
+                                <th width="50%">Document Category</th>
+                                <th width="15%">Is Active ?</th>
+                                <th width="10%">EDIT</th>
+                                <th width="10%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for d in documents %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                <td align="center">{{ loop.index }}</td>
+                                <td>{{ d.category_name }}</td>
+                                <td align="center">{{ 'YES' if d.isactive else 'NO' }}</td>
+                                <td align="center">
+                                    <a href="{{ url_for('establishment.employee_document_details', emp_id=emp_id, edit_id=d.id) }}">
+                                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    {% if perm.AllowDelete %}
+                                    <a href="{{ url_for('establishment.employee_document_details', emp_id=emp_id, delete_id=d.id) }}" onclick="return confirm('Are you sure you want to delete this document?')">
+                                        <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="5" align="center" style="padding:10px;">No documents found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function selectItem(id, name) {
+        window.location.href = "{{ url_for('establishment.employee_document_details') }}?emp_id=" + id;
+    }
+</script>
+{% endblock %}

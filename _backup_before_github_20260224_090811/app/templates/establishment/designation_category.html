@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<span>Masters</span>&nbsp;&gt;&nbsp;<span>Establishment Masters</span>&nbsp;&gt;&nbsp;<strong>Designation Category</strong>
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="3" class="tableheading">
+                    <span class="mainheadingborderbottom">Designation Category Master</span>
+                </td>
+            </tr>
+            <tr><td colspan="3" height="15"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="20%">Designation Category</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="description" type="text" class="textbox w-300" value="{{ edit_data.description if edit_data else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Order</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="order_no" type="text" class="textbox w-100" value="{{ edit_data.order_no if edit_data else '' }}" required onkeypress="return isNumberKey(event)">
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Using Recruitment</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="using_recruitment" type="checkbox" value="1" {% if edit_data and edit_data.usingrecruitment %}checked{% endif %}>
+                </td>
+            </tr>
+            
+            <tr><td colspan="3" height="20"></td></tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>
+                    {% if (edit_data and perm.AllowUpdate) or (not edit_data and perm.AllowAdd) %}
+                    <input type="submit" name="action" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" class="button-common">
+                    {% endif %}
+                    <input type="submit" name="action" value="RESET" class="button-common" formnovalidate>
+                </td>
+            </tr>
+            
+            <tr><td colspan="3" height="30"></td></tr>
+            <tr>
+                <td colspan="3" class="tablesubheading">
+                    <span class="subheadingborderbottom">List of Designation Types</span>
+                </td>
+            </tr>
+            <tr><td colspan="3" height="10"></td></tr>
+            
+            <tr>
+                <td colspan="3">
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="10%">S. No.</th>
+                                <th>Designation Category</th>
+                                <th width="15%">Order</th>
+                                <th width="10%">EDIT</th>
+                                <th width="10%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in categories %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                <td align="center">{{ loop.index }}</td>
+                                <td>{{ c.description }}</td>
+                                <td align="center">{{ c.order_no }}</td>
+                                <td align="center">
+                                    <a href="{{ url_for('establishment.designation_category_master', edit_id=c.id) }}">
+                                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    {% if perm.AllowDelete %}
+                                    <a href="{{ url_for('establishment.designation_category_master', delete_id=c.id) }}" onclick="return confirm('Are you sure you want to delete this record?')">
+                                        <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="5" align="center" style="padding:10px;">No records found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+</script>
+{% endblock %}

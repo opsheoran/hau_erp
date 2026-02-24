@@ -450,6 +450,7 @@ PAGE_URL_MAPPING = {
     'Leave Assignment': 'leave.leave_assignment',
     'Leave Transaction Reports': 'leave.leave_report_transactions',
     'Leave Reconcilliation Report': 'leave.leave_report_el_reconciliation',
+    'Employee Leave Details': 'leave.employee_leave_details',
     'Leave Encashment': 'leave.leave_encashment',
     'Update Earned Leave Balance': 'leave.leave_update_el',
     'Leave Type Master': 'leave.leave_type_master',

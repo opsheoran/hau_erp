@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#estNavbar" aria-controls="estNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="estNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="createMastersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Create Masters
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="createMastersDropdown">
+            <li><a class="dropdown-item" href="{{ url_for('establishment.district_master') }}">District Master</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('establishment.location_master') }}">Location Master</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('establishment.class_master') }}">Class Master</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('establishment.religion_master') }}">Religion Master</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('establishment.designation_spec_master') }}">Designation Specialization Master</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('establishment.ddo_master') }}">DDO Master</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('establishment.section_master') }}">Section Master</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('establishment.grade_master') }}">Grade Master</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('establishment.ddo_location_mapping') }}">DDO Location Mapping</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('establishment.controlling_office_master') }}">Controlling Office Master</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('establishment.office_type_master') }}">Office Type Master</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('establishment.department_master') }}">Department Master</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('establishment.designation_master') }}">Designation Master</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('establishment.country_state_dist_city_master') }}">Country State District City Master</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Teacher Course Assignment</span></div>
+    <div style="padding:10px;">
+        <form method="GET" id="filterForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td class="required" colspan="4">
+                            <select name="college_id" id="ddlCollege" class="dropdown w-300" onchange="loadDegrees()">
+                                <option value="">--Select College--</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Academic Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" id="ddlSession" class="dropdown w-200">
+                                <option value="">Select Academic Session</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" id="ddlDegree" class="dropdown w-300" onchange="onDegreeChange()">
+                                <option value="">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                        <td class="vtext">Class</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="semester_id" id="ddlSemester" class="dropdown w-150" onchange="onSemesterChange()">
+                                <option value=""> -- Select Semester -- </option>
+                                {% for s in lookups.semesters %}
+                                <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Year</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select id="ddlYear" class="dropdown w-100" style="background-color: #f0f0f0;" disabled>
+                                <option value="">--Year--</option>
+                                {% for y in lookups.years %}
+                                <option value="{{ y.pk_degreeyearid }}" {% if filters.year_id|string == y.pk_degreeyearid|string %}selected{% endif %}>{{ y.degreeyear_char }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" name="year_id" id="year_id_hidden" value="{{ filters.year_id or '' }}">
+                        </td>
+                        <td class="vtext">Teacher</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="employee_id" id="ddlEmployee" class="dropdown w-300">
+                                <option value="">--Select Employee --</option>
+                                {% for e in lookups.employees %}
+                                <option value="{{ e.id }}" {% if filters.employee_id|string == e.id|string %}selected{% endif %}>{{ e.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Teacher Search</td>
+                        <td class="colon">:</td>
+                        <td colspan="4">
+                            <input type="text" id="teacherSearch" class="textbox w-250" placeholder="Name / Code">
+                            <input type="button" value="SEARCH" class="button-common" onclick="searchTeachers()">
+                            <input type="button" value="RESET" class="button-common" onclick="resetTeacherSearch()" title="Restore departmental list">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Exam Config.</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="exconfig_id" id="ddlExamConfig" class="dropdown" style="width: 500px;">
+                                <option value=""> -- Select ExamConfig. -- </option>
+                                {% for ec in lookups.exam_configs %}
+                                <option value="{{ ec.pk_exconfigid }}" {% if filters.exconfig_id|string == ec.pk_exconfigid|string %}selected{% endif %}>{{ ec.display_name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                        <td class="vtext">Theory/Practical</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="coursetype" id="ddlCourseType" class="dropdown w-150" onchange="loadBatches()">
+                                <option value="0">---Select---</option>
+                                <option value="T" {% if filters.coursetype == 'T' %}selected{% endif %}>Theory</option>
+                                <option value="P" {% if filters.coursetype == 'P' %}selected{% endif %}>Practical</option>
+                            </select>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Batch</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="batch_id" id="ddlBatch" class="dropdown w-200">
+                                <option value="">--Select Batch--</option>
+                                {% for b in lookups.batches %}
+                                <option value="{{ b.id }}" {% if filters.batch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="10"></td></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="4">
+                            <input type="button" value="GET COURSES" class="button-common" style="width:120px;" onclick="validateAndSubmit()">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+        {% if courses %}
+        <div class="tablesubheading"><span class="subheadingborderbottom">List of Courses</span></div>
+        <form method="POST" id="assignForm">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="college_id" value="{{ filters.college_id or '' }}">
+            <input type="hidden" name="session_id" value="{{ filters.session_id or '' }}">
+            <input type="hidden" name="degree_id" value="{{ filters.degree_id or '' }}">
+            <input type="hidden" name="semester_id" value="{{ filters.semester_id or '' }}">
+            <input type="hidden" name="year_id" value="{{ filters.year_id or '' }}">
+            <input type="hidden" name="employee_id" value="{{ filters.employee_id or '' }}">
+            <input type="hidden" name="exconfig_id" value="{{ filters.exconfig_id or '' }}">
+            <input type="hidden" name="coursetype" value="{{ filters.coursetype or '' }}">
+            <input type="hidden" name="batch_id" value="{{ filters.batch_id or '' }}">
+
+            <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4; max-height: 400px;">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="50" align="center">S.No.</th>
+                            <th width="50" align="center">
+                                <span class="chkbox">
+                                    <input type="checkbox" id="chkAllCourses" onclick="toggleAllCourses(this.checked)">
+                                    <label for="chkAllCourses">ALL</label>
+                                </span>
+                            </th>
+                            <th align="left">Course Code</th>
+                            <th width="150" align="center">Course Main Teacher</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in courses %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center">{{ loop.index }}</td>
+                            <td align="center">
+                                <input type="checkbox" class="course-chk" data-course-id="{{ c.pk_courseid }}" name="course_ids[]"
+                                       id="course_{{ c.pk_courseid }}" value="{{ c.pk_courseid }}"
+                                       {% if c.pk_courseid in selected_ids %}checked{% endif %}>
+                            </td>
+                            <td align="left">
+                                <label for="course_{{ c.pk_courseid }}" style="cursor: pointer; display: block; width: 100%;">
+                                    {{ c.display_name }}
+                                </label>
+                            </td>
+                            <td align="center">
+                                <input type="checkbox" class="main-chk" data-course-id="{{ c.pk_courseid }}" name="main_course_ids[]"
+                                       id="main_{{ c.pk_courseid }}" value="{{ c.pk_courseid }}"
+                                       {% if c.pk_courseid in main_ids %}checked{% endif %}>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top:15px; text-align: center;">
+                <button type="submit" name="action" value="SAVE" class="button-common" style="width: 120px; font-weight: bold;">SAVE</button>
+                <button type="button" class="button-common" style="width: 120px; font-weight: bold; margin-left: 10px;" onclick="window.location.reload()">RESET</button>
+                <button type="submit" name="action" value="DELETE" class="button-common" style="width: 120px; font-weight: bold; margin-left: 10px;" onclick="return confirm('Are you sure you want to delete selected assignments?')">Delete</button>
+            </div>
+        </form>
+        {% elif request.args.get('employee_id') %}
+        <div class="item-style" style="padding:20px; text-align:center; color:red; border:1px solid #ddd;">
+            No courses found for the selected criteria.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .w-300 { width: 300px; }
+    .w-250 { width: 250px; }
+    .w-200 { width: 200px; }
+    .w-150 { width: 150px; }
+    .w-100 { width: 100px; }
+    .header-style th { background-color: #e9e9e9; padding: 8px; border: 1px solid #ccc; }
+</style>
+
+<script>
+var originalTeachersHtml = "";
+var initialEmployeeId = {{ (filters.employee_id or '')|tojson }};
+
+function setOptions(select, items, placeholder) {
+    select.innerHTML = '';
+    var opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = placeholder;
+    select.appendChild(opt);
+    for (var i = 0; i < items.length; i++) {
+        var o = document.createElement('option');
+        o.value = items[i].id || items[i].pk_degreeid || items[i].pk_semesterid || items[i].pk_exconfigid;
+        o.textContent = items[i].name || items[i].degreename || items[i].semester_roman || items[i].display_name || '';
+        select.appendChild(o);
+    }
+}
+
+function toggleAllCourses(checked) {
+    var boxes = document.querySelectorAll('input.course-chk');
+    for (var i = 0; i < boxes.length; i++) {
+        boxes[i].checked = checked;
+        if (!checked) {
+            var cid = boxes[i].getAttribute('data-course-id');
+            var main = document.querySelector('input.main-chk[data-course-id=\"' + cid + '\"]');
+            if (main) { main.checked = false; }
+        }
+    }
+}
+
+function loadDegrees() {
+    var collegeId = document.getElementById('ddlCollege').value;
+    if (!collegeId) {
+        setOptions(document.getElementById('ddlDegree'), [], '--Select Degree--');
+        resetDependentDropdowns('college');
+        return Promise.resolve();
+    }
+    return fetch('/academics/api/college/' + collegeId + '/degrees')
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            setOptions(document.getElementById('ddlDegree'), data, '--Select Degree--');
+        });
+}
+
+function resetDependentDropdowns(trigger) {
+    if (trigger === 'college') {
+        setOptions(document.getElementById('ddlDegree'), [], '--Select Degree--');
+        setOptions(document.getElementById('ddlSemester'), [], ' -- Select Semester -- ');
+        setOptions(document.getElementById('ddlExamConfig'), [], ' -- Select ExamConfig. -- ');
+        setOptions(document.getElementById('ddlBatch'), [], '--Select Batch--');
+        setOptions(document.getElementById('ddlEmployee'), [], '--Select Employee --');
+        document.getElementById('ddlYear').value = '';
+        document.getElementById('year_id_hidden').value = '';
+        originalTeachersHtml = "";
+        return;
+    }
+    if (trigger === 'degree') {
+        setOptions(document.getElementById('ddlSemester'), [], ' -- Select Semester -- ');
+        setOptions(document.getElementById('ddlExamConfig'), [], ' -- Select ExamConfig. -- ');
+        setOptions(document.getElementById('ddlBatch'), [], '--Select Batch--');
+        setOptions(document.getElementById('ddlEmployee'), [], '--Select Employee --');
+        document.getElementById('ddlYear').value = '';
+        document.getElementById('year_id_hidden').value = '';
+        originalTeachersHtml = "";
+    } else if (trigger === 'semester') {
+        setOptions(document.getElementById('ddlExamConfig'), [], ' -- Select ExamConfig. -- ');
+        setOptions(document.getElementById('ddlBatch'), [], '--Select Batch--');
+    }
+}
+
+function loadSemesters() {
+    var degreeId = document.getElementById('ddlDegree').value;
+    if (!degreeId) {
+        setOptions(document.getElementById('ddlSemester'), [], ' -- Select Semester -- ');
+        resetDependentDropdowns('degree');
+        return Promise.resolve();
+    }
+    return fetch('/academics/api/get_degree_semesters/' + degreeId)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            setOptions(document.getElementById('ddlSemester'), data, ' -- Select Semester -- ');
+        });
+}
+
+function loadTeachers() {
+    var semesterId = document.getElementById('ddlSemester').value;
+    if (!semesterId) {
+        setOptions(document.getElementById('ddlEmployee'), [], '--Select Employee --');
+        return Promise.resolve();
+    }
+    // Teachers are loaded after class (semester) is selected
+    var includeAll = '0'; // default
+    return fetch('/academics/api/search_teachers?q=&all=' + includeAll)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            setOptions(document.getElementById('ddlEmployee'), data, '--Select Employee --');
+            originalTeachersHtml = document.getElementById('ddlEmployee').innerHTML;
+            if (initialEmployeeId) {
+                document.getElementById('ddlEmployee').value = initialEmployeeId;
+            }
+        });
+}
+
+function onDegreeChange() {
+    resetDependentDropdowns('degree');
+    return loadSemesters().then(function() {
+        return loadExamConfigs();
+    });
+}
+
+function onSemesterChange() {
+    loadTeachers();
+    return loadYear().then(function() {
+        return loadExamConfigs().then(loadBatches);
+    });
+}
+
+function loadYear() {
+    var semesterId = document.getElementById('ddlSemester').value;
+    var ddlYear = document.getElementById('ddlYear');
+    var yearHidden = document.getElementById('year_id_hidden');
+    if (!semesterId) {
+        ddlYear.value = '';
+        yearHidden.value = '';
+        return Promise.resolve();
+    }
+    return fetch('/academics/api/get_semester_year/' + semesterId)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            if (data && data.pk_degreeyearid) {
+                ddlYear.value = data.pk_degreeyearid;
+                yearHidden.value = data.pk_degreeyearid;
+            } else {
+                ddlYear.value = '';
+                yearHidden.value = '';
+            }
+        });
+}
+
+function loadExamConfigs() {
+    var degreeId = document.getElementById('ddlDegree').value;
+    var sessionId = document.getElementById('ddlSession').value;
+    var semesterId = document.getElementById('ddlSemester').value;
+    if (!degreeId || !sessionId || !semesterId) {
+        setOptions(document.getElementById('ddlExamConfig'), [], ' -- Select ExamConfig. -- ');
+        return Promise.resolve();
+    }
+    var url = '/academics/api/get_exam_configs?degree_id=' + degreeId + '&session_id=' + sessionId + '&semester_id=' + semesterId;
+    return fetch(url)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            setOptions(document.getElementById('ddlExamConfig'), data, ' -- Select ExamConfig. -- ');
+        });
+}
+
+function loadBatches() {
+   var collegeId = document.getElementById('ddlCollege').value;
+   var degreeId = document.getElementById('ddlDegree').value;
+   var semesterId = document.getElementById('ddlSemester').value;
+   var typeTp = document.getElementById('ddlCourseType').value;
+    if (!collegeId || !degreeId || !semesterId || !typeTp || typeTp === '0') {
+        setOptions(document.getElementById('ddlBatch'), [], '--Select Batch--');
+        return Promise.resolve();
+    }
+    var url = '/academics/api/get_batches?college_id=' + collegeId + '&degree_id=' + degreeId + '&semester_id=' + semesterId + '&type_tp=' + typeTp;
+    return fetch(url)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            setOptions(document.getElementById('ddlBatch'), data, '--Select Batch--');
+        });
+}
+
+function resetTeacherSearch() {
+    var teacherSearch = document.getElementById('teacherSearch');
+    if (teacherSearch) teacherSearch.value = '';
+    if (originalTeachersHtml) {
+        document.getElementById('ddlEmployee').innerHTML = originalTeachersHtml;
+        if (initialEmployeeId) {
+            document.getElementById('ddlEmployee').value = initialEmployeeId;
+        }
+    } else {
+        loadTeachers();
+    }
+}
+
+function searchTeachers() {
+    var term = (document.getElementById('teacherSearch').value || '').trim();
+    if (!term) { alert('Please enter teacher name or code to search'); return; }
+
+    // Global search to support selecting teachers outside the current college/location
+    var url = '/academics/api/search_teachers?q=' + encodeURIComponent(term) + '&all=1';
+    fetch(url)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            var select = document.getElementById('ddlEmployee');
+            if (data && data.length > 0) {
+                select.innerHTML = '<option value=\"\">--Select Employee --</option>';
+                for (var i = 0; i < data.length; i++) {
+                    var o = document.createElement('option');
+                    o.value = data[i].id;
+                    o.textContent = data[i].name;
+                    select.appendChild(o);
+                }
+                select.value = data[0].id;
+            } else {
+                alert('No teachers found for the given search term.');
+            }
+        });
+}
+
+function validateAndSubmit() {
+    var fields = [
+        {id: 'ddlCollege', name: 'College'},
+        {id: 'ddlSession', name: 'Academic Session'},
+        {id: 'ddlDegree', name: 'Degree'},
+        {id: 'ddlSemester', name: 'Semester'},
+        {id: 'ddlEmployee', name: 'Teacher'},
+        {id: 'ddlExamConfig', name: 'Exam Config'},
+        {id: 'ddlCourseType', name: 'Theory/Practical'},
+        {id: 'ddlBatch', name: 'Batch'}
+    ];
+    
+    for (var i=0; i<fields.length; i++) {
+        var val = document.getElementById(fields[i].id).value;
+        // Allow '0' for batch (ALL) but not for other fields
+        if (!val || (val === '0' && fields[i].id !== 'ddlBatch') || val.indexOf('--') !== -1) {
+            alert('Please select ' + fields[i].name);
+            return;
+        }
+    }
+    
+    // Sync year
+    document.getElementById('year_id_hidden').value = document.getElementById('ddlYear').value;
+    
+    var url = window.location.pathname + '?';
+    var params = new URLSearchParams();
+    params.set('college_id', document.getElementById('ddlCollege').value);
+    params.set('session_id', document.getElementById('ddlSession').value);
+    params.set('degree_id', document.getElementById('ddlDegree').value);
+    params.set('semester_id', document.getElementById('ddlSemester').value);
+    params.set('year_id', document.getElementById('year_id_hidden').value);
+    params.set('employee_id', document.getElementById('ddlEmployee').value);
+    params.set('exconfig_id', document.getElementById('ddlExamConfig').value);
+    params.set('coursetype', document.getElementById('ddlCourseType').value);
+    params.set('batch_id', document.getElementById('ddlBatch').value);
+    
+    window.location.href = url + params.toString();
+}
+
+document.getElementById('ddlCollege').addEventListener('change', function() {
+    loadDegrees();
+});
+document.getElementById('ddlDegree').addEventListener('change', function() {
+    loadSemesters().then(loadExamConfigs);
+});
+document.getElementById('ddlSemester').addEventListener('change', function() {
+    loadYear().then(function() {
+        loadExamConfigs().then(loadBatches);
+    });
+});
+document.getElementById('ddlSession').addEventListener('change', function() {
+    loadExamConfigs();
+});
+document.getElementById('ddlCourseType').addEventListener('change', function() {
+    loadBatches();
+});
+
+document.querySelectorAll('input.course-chk').forEach(function(chk) {
+    chk.addEventListener('change', function() {
+        if (!this.checked) {
+            var cid = this.getAttribute('data-course-id');
+            var main = document.querySelector('input.main-chk[data-course-id=\"' + cid + '\"]');
+            if (main) { main.checked = false; }
+        }
+    });
+});
+
+window.addEventListener('load', function() {
+    var hasDegree = !!document.getElementById('ddlDegree').value;
+    var hasSession = !!document.getElementById('ddlSession').value;
+    var hasSemester = !!document.getElementById('ddlSemester').value;
+    if (hasSemester && !document.getElementById('ddlYear').value) {
+        loadYear();
+    }
+    if (hasDegree && hasSession && hasSemester) {
+        loadExamConfigs();
+        loadTeachers();
+        if (document.getElementById('ddlCourseType').value && document.getElementById('ddlCourseType').value !== '0') {
+            loadBatches();
+        }
+    }
+    if (!originalTeachersHtml) {
+        originalTeachersHtml = document.getElementById('ddlEmployee').innerHTML;
+    }
+});
+</script>
+{% endblock %}

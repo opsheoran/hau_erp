@@ -35,7 +35,7 @@ def index():
         session['current_module_id'] = mod_id
         # Set UI Mode based on module
         mod = DB.fetch_one("SELECT modulename FROM UM_Module_Mst WHERE pk_moduleId = ?", [mod_id])
-        if mod and mod['modulename'].strip() in ['Employee Portal', 'HRMS', 'Leave Management']:
+        if mod and mod['modulename'].strip() in ['Employee Portal', 'HRMS']:
             session['ui_mode'] = 'portal'
         else:
             session['ui_mode'] = 'standard'

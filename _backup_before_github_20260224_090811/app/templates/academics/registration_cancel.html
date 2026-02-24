@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Student Registration Cancel</span>
+    </div>
+
+    <form id="filterForm" method="GET">
+        <table width="100%" class="filter-table">
+            <tr>
+                <td class="vtext">College</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="ddlCollege" class="dropdown w-350" onchange="onCollegeChange()">
+                        <option value="">--Select College--</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Academic Session</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="session_id" id="ddlSession" class="dropdown w-250">
+                        <option value="">--Select Academic Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="degree_id" id="ddlDegree" class="dropdown w-350" onchange="onDegreeChange()">
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                    <br>
+                    <span style="display:none;"></span>
+                </td>
+                <td class="vtext">Class</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="semester_id" id="ddlSemester" class="dropdown w-200" onchange="loadYear()">
+                        <option value="">--Select Class--</option>
+                        {% for s in lookups.semesters %}
+                        <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="branch_id" id="ddlBranch" class="dropdown w-350">
+                        <option value="0">--Select Department--</option>
+                        {% for b in lookups.branches %}
+                        <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td class="vtext">Year</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" id="txtYear" class="textbox w-200" value="" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td width="17%"></td>
+                            <td style="padding-top:6px;">
+                                <input type="submit" value="VIEW" class="button-common" style="width:110px;">
+                                <input type="button" value="RESET" class="button-common" style="width:110px; margin-left:10px;" onclick="window.location.href='{{ url_for('academics_mgmt.registration_cancel') }}'">
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div style="margin-top: 20px;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">List of Students</span>
+        </div>
+
+        <form method="POST" onsubmit="return validateUpdate()">
+            <input type="hidden" name="action" value="UPDATE">
+            <input type="hidden" name="college_id" value="{{ filters.college_id or '' }}">
+            <input type="hidden" name="session_id" value="{{ filters.session_id or '' }}">
+            <input type="hidden" name="degree_id" value="{{ filters.degree_id or '' }}">
+            <input type="hidden" name="semester_id" value="{{ filters.semester_id or '' }}">
+            <input type="hidden" name="branch_id" value="{{ filters.branch_id or 0 }}">
+            <input type="hidden" name="page" value="{{ pagination.page }}">
+
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <th style="width: 4%; text-align:center;">
+                            <span class="chkbox"><input type="checkbox" id="chkAll" onclick="checkAllOnGrid()"></span>
+                        </th>
+                        <th style="width: 6%;">S.No.</th>
+                        <th style="width: 50%;">Student Name</th>
+                        <th style="width: 20%;">Admission No.</th>
+                        <th style="width: 10%;">Due Amount</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in items %}
+                    <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                        <td align="center">
+                            <span class="chkbox"><input type="checkbox" name="student_ids" value="{{ r.pk_sid }}" class="row-chk" onclick="unCheckHeader()"></span>
+                        </td>
+                        <td align="center">{{ loop.index + (pagination.page - 1) * pagination.per_page }}</td>
+                        <td align="left">{{ r.Name }}</td>
+                        <td align="left">{{ r.Admission_No }}</td>
+                        <td align="left">{{ r.returnAmount }}</td>
+                        <td align="center">
+                            <input type="hidden" name="amount_{{ r.pk_sid }}" value="{{ r.returnAmount }}">
+                            <input type="text" name="remarks_{{ r.pk_sid }}" value="0" class="textbox w-250" style="width: 95%;">
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" align="center" style="color: red; padding: 20px;">No records found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% include "includes/pagination.html" %}
+
+            <div style="margin-top: 10px;">
+                <input type="submit" value="UPDATE" class="button-common" {% if not items %}disabled{% endif %}>
+                <span class="lblmessage" style="margin-left:10px;"></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function setDisabled(selectEl, disabled) {
+    if (!selectEl) return;
+    selectEl.disabled = !!disabled;
+    if (disabled) {
+        selectEl.style.backgroundColor = '#eee';
+        selectEl.style.color = '#666';
+    } else {
+        selectEl.style.backgroundColor = '';
+        selectEl.style.color = '';
+    }
+}
+
+async function onCollegeChange() {
+    const collegeId = document.getElementById('ddlCollege').value;
+
+    document.getElementById('ddlSession').value = '';
+    document.getElementById('ddlDegree').innerHTML = '<option value="">--Select Degree--</option>';
+    document.getElementById('ddlSemester').value = '';
+    document.getElementById('ddlBranch').innerHTML = '<option value="0">--Select Department--</option>';
+    document.getElementById('txtYear').value = '';
+
+    setDisabled(document.getElementById('ddlSemester'), true);
+    setDisabled(document.getElementById('ddlBranch'), true);
+
+    if (!collegeId) return;
+    await loadDegrees(collegeId);
+}
+
+async function loadDegrees(collegeId) {
+    try {
+        const resp = await fetch(`{{ url_for('academics.get_college_degrees_api', college_id=0) }}`.replace('/0/', `/${collegeId}/`));
+        const rows = await resp.json();
+        const ddl = document.getElementById('ddlDegree');
+        ddl.innerHTML = '<option value="">--Select Degree--</option>';
+        (rows || []).forEach(r => {
+            const opt = document.createElement('option');
+            opt.value = r.id;
+            opt.textContent = r.name;
+            ddl.appendChild(opt);
+        });
+    } catch (e) {
+        console.error('Degree load failed', e);
+    }
+}
+
+async function onDegreeChange() {
+    const degreeId = document.getElementById('ddlDegree').value;
+    const collegeId = document.getElementById('ddlCollege').value;
+
+    document.getElementById('ddlSemester').value = '';
+    document.getElementById('ddlBranch').innerHTML = '<option value="0">--Select Department--</option>';
+    document.getElementById('txtYear').value = '';
+
+    setDisabled(document.getElementById('ddlSemester'), !degreeId);
+    setDisabled(document.getElementById('ddlBranch'), true);
+
+    if (!degreeId) return;
+
+    // Department enablement depends on UG/PG as per live: enable for PG/PHD.
+    let isUg = null;
+    try {
+        const degResp = await fetch(`{{ url_for('academics.get_degree_details_api', degree_id=0) }}`.replace('/0', `/${degreeId}`));
+        const deg = await degResp.json();
+        isUg = (deg && (deg.isug === 1 || deg.isug === true));
+    } catch (e) {
+        console.error('Degree details failed', e);
+    }
+
+    await loadBranches(collegeId, degreeId);
+    // If degree is UG, keep disabled; otherwise enable when options exist.
+    if (isUg === true) {
+        setDisabled(document.getElementById('ddlBranch'), true);
+    } else {
+        const ddl = document.getElementById('ddlBranch');
+        setDisabled(ddl, ddl.options.length <= 1);
+    }
+}
+
+async function loadBranches(collegeId, degreeId) {
+    try {
+        if (!collegeId || !degreeId) return;
+        const resp = await fetch(`{{ url_for('academics.get_college_degree_specializations_api', college_id=0, degree_id=0) }}`
+            .replace('/0/degree/0', `/${collegeId}/degree/${degreeId}`));
+        const rows = await resp.json();
+        const ddl = document.getElementById('ddlBranch');
+        ddl.innerHTML = '<option value="0">--Select Department--</option>';
+        (rows || []).forEach(r => {
+            const opt = document.createElement('option');
+            opt.value = r.id;
+            opt.textContent = r.name;
+            ddl.appendChild(opt);
+        });
+        // Enable/disable handled by onDegreeChange (needs UG/PG decision).
+    } catch (e) {
+        console.error('Branch load failed', e);
+        setDisabled(document.getElementById('ddlBranch'), true);
+    }
+}
+
+async function loadYear() {
+    const semId = document.getElementById('ddlSemester').value;
+    document.getElementById('txtYear').value = '';
+    if (!semId) return;
+    try {
+        const resp = await fetch(`{{ url_for('academics.get_semester_year_api', semester_id=0) }}`.replace('/0', `/${semId}`));
+        const row = await resp.json();
+        document.getElementById('txtYear').value = row.degreeyear_char || '';
+    } catch (e) {
+        console.error('Year load failed', e);
+    }
+}
+
+function checkAllOnGrid() {
+    const chkAll = document.getElementById('chkAll');
+    const rows = document.querySelectorAll('.row-chk');
+    rows.forEach(c => { c.checked = !!chkAll.checked; });
+}
+
+function unCheckHeader() {
+    const chkAll = document.getElementById('chkAll');
+    if (chkAll && chkAll.checked) chkAll.checked = false;
+}
+
+function validateUpdate() {
+    const selected = Array.from(document.querySelectorAll('.row-chk')).some(c => c.checked);
+    if (!selected) {
+        alert('Please select at least one student.');
+        return false;
+    }
+    return confirm('Update registration cancel for selected students?');
+}
+
+(function init() {
+    const hasDegree = !!(document.getElementById('ddlDegree').value || '').trim();
+    setDisabled(document.getElementById('ddlSemester'), !hasDegree);
+
+    const branchesCount = document.getElementById('ddlBranch').options.length;
+    // Default: disabled until we determine UG/PG from degree details.
+    setDisabled(document.getElementById('ddlBranch'), branchesCount <= 1);
+
+    loadYear();
+
+    // If page loaded with a selected degree, apply UG/PG rules + reload dept list.
+    if (hasDegree) {
+        onDegreeChange();
+    }
+})();
+</script>
+{% endblock %}

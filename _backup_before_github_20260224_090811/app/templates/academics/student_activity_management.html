@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Student Activity Management</span>
+    </div>
+
+    <div style="padding: 15px;">
+        <form method="GET">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="20%">Search Student</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <input type="text" name="enrollment_no" class="textbox w-200" placeholder="Admission/Enrollment No." value="{{ request.args.get('enrollment_no', '') }}" required>
+                        <input type="submit" value="Show" class="button-common" style="margin-left:5px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top:20px;">
+            <table class="table-grid-view" width="100%">
+                <thead>
+                    <tr class="header-style">
+                        <th width="5%">S.No.</th>
+                        <th>Activity Name</th>
+                        <th width="15%">Role</th>
+                        <th width="15%">From Date</th>
+                        <th width="15%">To Date</th>
+                        <th width="10%">DEL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="item-style">
+                        <td align="center">1</td>
+                        <td>
+                            <select name="activity[]" class="dropdown w-200">
+                                <option value="">--Select Activity--</option>
+                                <option value="NSS">NSS</option>
+                                <option value="NCC">NCC</option>
+                                <option value="Cultural">Cultural</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="role[]" class="textbox w-150"></td>
+                        <td align="center"><input type="date" name="from[]" class="textbox w-120"></td>
+                        <td align="center"><input type="date" name="to[]" class="textbox w-120"></td>
+                        <td align="center"><img src="{{ url_for('static', filename='images/delete.gif') }}" style="cursor:pointer"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="text-align:right; margin-top:5px;">
+                <input type="button" value="ADD MORE" class="button-common" style="width:100px;">
+            </div>
+            
+            <div style="text-align:center; margin-top:20px;">
+                <input type="button" value="SAVE ACTIVITIES" class="button-common" style="width:150px; background:#3c8dbc; color:white;">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

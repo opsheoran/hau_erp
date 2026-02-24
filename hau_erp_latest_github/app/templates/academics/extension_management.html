@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">PG Phd Extension Management</span>
+    </div>
+
+    <form id="filterForm" method="GET">
+        <input type="hidden" name="action" value="GET_STUDENT">
+        <table width="100%" class="filter-table">
+            <tr>
+                <td class="vtext">College</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="college_id" id="ddlCollege" class="dropdown w-300" onchange="loadDegrees()">
+                        <option value="">--Select College--</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext">Session</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="session_id" id="ddlSession" class="dropdown w-200" onchange="resetStudentAndCourses()">
+                        <option value="">--Select Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="degree_id" id="ddlDegree" class="dropdown w-300" onchange="onDegreeChange()">
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="branch_id" id="ddlBranch" class="dropdown w-250" onchange="resetStudentAndCourses()" {% if not lookups.branches %}disabled{% endif %}>
+                        <option value="0">-- Select Department --</option>
+                        {% for b in lookups.branches %}
+                        <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Semester</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="semester_id" id="ddlSemester" class="dropdown w-150" onchange="resetStudentAndCourses()">
+                        <option value=""> -- Select Semester -- </option>
+                        {% for sem in lookups.semesters %}
+                        <option value="{{ sem.id }}" {% if filters.semester_id|string == sem.id|string %}selected{% endif %}>{{ sem.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td colspan="3" class="required" style="padding-top: 6px;">
+                    <input type="submit" value="GET STUDENT" class="button-common" style="width: 120px;">
+                    <input type="button" value="RESET" class="button-common" style="width: 100px; margin-left: 10px;" onclick="window.location.href='{{ url_for('academics_mgmt.extension_management') }}'">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div style="margin-top: 15px;">
+        <form id="courseForm" method="GET">
+            <input type="hidden" name="action" value="VIEW_COURSES">
+            <input type="hidden" name="college_id" value="{{ filters.college_id }}">
+            <input type="hidden" name="session_id" value="{{ filters.session_id }}">
+            <input type="hidden" name="degree_id" value="{{ filters.degree_id }}">
+            <input type="hidden" name="branch_id" value="{{ filters.branch_id or 0 }}">
+            <input type="hidden" name="semester_id" value="{{ filters.semester_id }}">
+
+            <table width="100%" class="filter-table">
+                <tr>
+                    <td class="vtext" style="width: 15%;">Student List</td>
+                    <td class="colon">:</td>
+                    <td class="required" style="width: 55%;">
+                        <select name="student_id" id="ddlStudent" class="dropdown w-300" {% if not students %}disabled{% endif %}>
+                            <option value="">--Select Student--</option>
+                            {% for st in students %}
+                            <option value="{{ st.pk_sid }}" {% if filters.student_id|string == st.pk_sid|string %}selected{% endif %}>{{ st.enrollmentno }}||{{ st.fullname }}</option>
+                            {% endfor %}
+                        </select> <span class="required">*</span>
+                        <input type="submit" value="VIEW COURSES" class="button-common" style="width: 130px; margin-left: 10px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">Course List</span>
+        </div>
+
+        <div style="max-height: 500px; overflow: auto; border: 1px solid #ddd;">
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <th style="width: 6%;">S.No.</th>
+                        <th style="width: 40%;">Course Name</th>
+                        <th style="width: 14%;">Course Type</th>
+                        <th style="width: 18%;">RT/RNT</th>
+                        <th style="width: 10%;">CR_Th</th>
+                        <th style="width: 10%;">CR_Pr</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in courses %}
+                    <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td>{{ c.coursename }}({{ c.coursecode }})</td>
+                        <td align="center">{{ c.coursetype }}</td>
+                        <td align="center">
+                            <select class="dropdown w-150">
+                                <option>---Select RT/RNT Type--</option>
+                                <option>RT</option>
+                                <option>RNT</option>
+                            </select>
+                        </td>
+                        <td align="center">{{ c.cr_th }}</td>
+                        <td align="center">{{ c.cr_pr }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" align="center" style="color: red; padding: 20px;">
+                            {% if filters.student_id %}No courses found.{% else %}Select student and click VIEW COURSES.{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function resetStudentAndCourses() {
+    var ddlStudent = document.getElementById('ddlStudent');
+    if (ddlStudent) {
+        ddlStudent.innerHTML = '<option value=\"\">--Select Student--</option>';
+        ddlStudent.disabled = true;
+    }
+}
+
+function loadDegrees() {
+    var cid = document.getElementById('ddlCollege').value;
+    // Reset everything on college change (live behavior).
+    document.getElementById('ddlSession').value = '';
+    document.getElementById('ddlDegree').innerHTML = '<option value=\"\">--Select Degree--</option>';
+    var branch = document.getElementById('ddlBranch');
+    branch.innerHTML = '<option value=\"0\">-- Select Department --</option>';
+    branch.disabled = true;
+    document.getElementById('ddlSemester').value = '';
+    resetStudentAndCourses();
+
+    if (!cid) return;
+    fetch('/academics/api/college/' + cid + '/degrees')
+        .then(r => r.json())
+        .then(data => {
+            var ddl = document.getElementById('ddlDegree');
+            ddl.innerHTML = '<option value=\"\">--Select Degree--</option>';
+            data.forEach(function(d) {
+                var o = document.createElement('option');
+                o.value = d.id;
+                o.textContent = d.name;
+                ddl.appendChild(o);
+            });
+            document.getElementById('ddlBranch').innerHTML = '<option value=\"0\">-- Select Department --</option>';
+        });
+}
+
+function onDegreeChange() {
+    var did = document.getElementById('ddlDegree').value;
+    var cid = document.getElementById('ddlCollege').value;
+    // Reset dependent fields when degree changes.
+    var ddlBranch = document.getElementById('ddlBranch');
+    ddlBranch.innerHTML = '<option value=\"0\">-- Select Department --</option>';
+    ddlBranch.disabled = true;
+    document.getElementById('ddlSemester').value = '';
+    resetStudentAndCourses();
+
+    if (!did || !cid) return;
+    fetch('/academics/api/degree/' + did + '/branches')
+        .then(r => r.json())
+        .then(data => {
+            var ddl = document.getElementById('ddlBranch');
+            ddl.innerHTML = '<option value=\"0\">-- Select Department --</option>';
+            data.forEach(function(b) {
+                var o = document.createElement('option');
+                o.value = b.id || b.pk_branchid;
+                o.textContent = b.name || b.Branchname;
+                ddl.appendChild(o);
+            });
+            // Department is optional; enable only if any options are returned.
+            ddl.disabled = (data.length === 0);
+        });
+}
+</script>
+{% endblock %}

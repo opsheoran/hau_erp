@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)https://hauiums.in/Modules.aspx -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./modules assigned_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./modules assigned_files/default.css" type="text/css" rel="stylesheet"><link href="./modules assigned_files/font.css" type="text/css" rel="stylesheet"><link href="./modules assigned_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./modules assigned_files/stylesheet.css" type="text/css" rel="stylesheet"></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/Modules.aspx" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTIwNDA2MzA2NzYPZBYCZg8PFgIeB1BlbmRpbmcFATBkFgICAQ9kFhJmDxYCHgdWaXNpYmxlaGQCAg8PFgIeBFRleHQFEERyLiBPLlAuIFNoZW9yYW5kZAIEDw8WAh8CBRtMTFQuIC0gMS8yNi8yMDI2IDc6MTU6MzEgQU1kZAIFDw8WAh8CBRtDTFQuIC0gMS8yNy8yMDI2IDc6MTE6MDMgQU1kZAIGDw8WAh8CBRBEci4gTy5QLiBTaGVvcmFuZGQCBw8PFgIfAgUNQ09CUyZILCBIaXNhcmRkAgkPFgIfAWgWAgIBDw8WAh8BaGRkAgoPZBYGAgEPEA8WBh4NRGF0YVRleHRGaWVsZAUHbG9jbmFtZR4ORGF0YVZhbHVlRmllbGQFCHBrX2xvY2lkHgtfIURhdGFCb3VuZGdkEBUNFS0tIFNlbGVjdCBMb2NhdGlvbiAtLQtDRlNULCBIaXNhcgpDT0EsIEhpc2FyCUNPQSwgS2F1bAlDT0EsQmF3YWwOQ09BRSZUICwgSGlzYXIKQ09CLCBIaXNhcg1DT0JTJkgsIEhpc2FyC0NPRlMsIEhpc2FyC0NPSFMsIEhpc2FyDENTU1JJIEtBUk5BTA5JQk1BLCBHdXJ1Z3JhbQ1JSVdCUiwgS2FybmFsFQ0ABVZDLTQ4BVZDLTQ5BVZDLTM5BUVTLTcxBVZDLTUwBUFYLTg3BFZDLTMFQVgtODAFVkMtNTEFQVgtODQFQVgtODYFQlctODEUKwMNZ2dnZ2dnZ2dnZ2dnZxYBAgdkAgMPPCsACQEADxYEHghEYXRhS2V5cxYAHgtfIUl0ZW1Db3VudAIHZBYOZg9kFgJmDxUFBE5UVT0NYWRtaXNzaW9uLnBuZxVBZG1pc3Npb24gJiBBY2FkZW1pY3METlRVPRVBZG1pc3Npb24gJiBBY2FkZW1pY3NkAgEPZBYCZg8VBQROak09E2VtcGxveWVlLXBvcnRhbC5wbmcPRW1wbG95ZWUgUG9ydGFsBE5qTT0PRW1wbG95ZWUgUG9ydGFsZAICD2QWAmYPFQUETlRZPQ9FeGFtaW5hdGlvbi5wbmcVRXhhbWluYXRpb24gJiBSZXN1bHRzBE5UWT0VRXhhbWluYXRpb24gJiBSZXN1bHRzZAIDD2QWAmYPFQUETVRRPQtGaW5hbmNlLnBuZxJGaW5hbmNpYWwgQWNjb3VudHMETVRRPRJGaW5hbmNpYWwgQWNjb3VudHNkAgQPZBYCZg8VBQROelU9CUxlYXZlLnBuZxBMZWF2ZSBNYW5hZ2VtZW50BE56VT0QTGVhdmUgTWFuYWdlbWVudGQCBQ9kFgJmDxUFBE5Uaz0McmVzZWFyY2gucG5nCFJlc2VhcmNoBE5Uaz0IUmVzZWFyY2hkAgYPZBYCZg8VBQROelE9DmF0dGVuZGFuY2UucG5nElN0dWRlbnQgQXR0ZW5kYW5jZQROelE9ElN0dWRlbnQgQXR0ZW5kYW5jZWQCBQ8PFgIfAWdkZAILDw8WBB8CZR8BZ2RkZBfo7DrLr0yb9tfOGquc4M8VMUtMz9+2JuisyQeBOQ66">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./modules assigned_files/WebResource.axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./modules assigned_files/WebResource(1).axd" type="text/javascript"></script>
+<script src="./modules assigned_files/WebResource(2).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="B1055D00">
+	<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+	<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAA6otAd8l0Gl/8cLLn0XdHfvXgCxb1GigANbj8zTpGxrkJ/gAumC8O341XuOrI1F+vFUNMEjZIJPNnh2pl52I/O3D5ynYqWKSH5x3ZEUPPJPO+LmGPaGkJe2VSfXgFAJ/k+Fzsa1JORD/ekoU9RtqqjftKilT0NHVw16di0ep8bW3ejJUkxEbX5OJWO1+YVD8kXVPx484WJBMoCw18B4205rQuS4XrN1MR0G7Xc/xpRzwH9c2qkr3Bx30eoCCb/+rSFjVIHGX0grdHS84yJE56qKjAqcDtlSrZv8PMhzrF7tEqBNrmGU/wTov2DN4mrypSlqdupbXsytOr8GfTrPG/t/">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/Modules.aspx#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment">Dr. O.P. Sheoran</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName">Dr. O.P. Sheoran</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COBS&amp;H, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            
+                            <div class="body-form">
+                                
+
+ <script type="text/javascript">
+
+     function preventBack() { window.history.forward(); }
+     setTimeout("preventBack()", 0);
+     window.onunload = function () { null };
+</script>
+    <link href="./modules assigned_files/moduleicon.css" rel="stylesheet" type="text/css">
+    <!--[if IE 8]>
+        <style>
+           span.round {
+	       display:none !important;
+         }
+         .moduleicon a.green {
+	       background: none !important;
+           border: none !important;
+         }
+        </style>
+     <![endif]-->
+
+     <!--[if IE 7]>
+        <style>
+           span.round {
+	       display:none !important;
+         }
+         .moduleicon a.green {
+	       background: none !important;
+           border: none !important;
+         }
+        </style>
+     <![endif]-->
+
+    <style>
+        #ctl00_ContentPlaceHolder1_popupWindow_content{
+        text-align:left !important;
+}
+    </style>
+
+
+
+<table border="0" class="modulebody" align="center" cellpadding="0" cellspacing="0" width="100%">        
+        <tbody><tr>
+            <td colspan="5" align="right" class="moduleselectmenu">
+               <h1>
+               
+                <span class="borderbottom">MODULES ASSIGNED</span>
+               
+               <div class="modulelistfild">
+               <span id="Anthem_ctl00_ContentPlaceHolder1_ddlloc__"><select name="ctl00$ContentPlaceHolder1$ddlloc" id="ctl00_ContentPlaceHolder1_ddlloc" class="dropdownveryvlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlloc&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" style="width:300px;">
+	<option value="">-- Select Location --</option>
+	<option value="VC-48">CFST, Hisar</option>
+	<option value="VC-49">COA, Hisar</option>
+	<option value="VC-39">COA, Kaul</option>
+	<option value="ES-71">COA,Bawal</option>
+	<option value="VC-50">COAE&amp;T , Hisar</option>
+	<option value="AX-87">COB, Hisar</option>
+	<option selected="selected" value="VC-3">COBS&amp;H, Hisar</option>
+	<option value="AX-80">COFS, Hisar</option>
+	<option value="VC-51">COHS, Hisar</option>
+	<option value="AX-84">CSSRI KARNAL</option>
+	<option value="AX-86">IBMA, Gurugram</option>
+	<option value="BW-81">IIWBR, Karnal</option>
+
+</select></span>
+
+                    </div>
+               </h1>  
+            </td>
+        </tr>
+    
+    <tr>
+        <td align="center" style="padding-top:10px;">
+            <div id="Anthem_ctl00_ContentPlaceHolder1_DataList1__"><table id="ctl00_ContentPlaceHolder1_DataList1" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;">
+	<tbody><tr>
+		<td>
+                    <table border="0" align="center" cellpadding="0" cellspacing="0">
+                        <tbody><tr>
+                            <td align="center">
+                            <div class="module_icon_main_div">
+                            <ul class="moduleicon">
+                              <li><a href="https://hauiums.in/UMM/Admin_Home.aspx?MID=NTU=" class="round green">
+                              <img src="./modules assigned_files/admission.png" oncontextmenu="return false;">
+                              <span class="round">Admission &amp; Academics</span></a></li>
+                            </ul>
+                            
+                            <div class="modulename">
+                                <a class="home_link" href="https://hauiums.in/UMM/Admin_Home.aspx?MID=NTU=">
+                                    Admission &amp; Academics
+                                </a>
+                                </div>
+                                </div>
+                            
+                            
+                            
+                                
+                            </td>
+                        </tr>
+                        
+                    </tbody></table>
+                </td><td>
+                    <table border="0" align="center" cellpadding="0" cellspacing="0">
+                        <tbody><tr>
+                            <td align="center">
+                            <div class="module_icon_main_div">
+                            <ul class="moduleicon">
+                              <li><a href="https://hauiums.in/UMM/Admin_Home.aspx?MID=NTY=" class="round green">
+                              <img src="./modules assigned_files/Examination.png" oncontextmenu="return false;">
+                              <span class="round">Examination &amp; Results</span></a></li>
+                            </ul>
+                            
+                            <div class="modulename">
+                                <a class="home_link" href="https://hauiums.in/UMM/Admin_Home.aspx?MID=NTY=">
+                                    Examination &amp; Results
+                                </a>
+                                </div>
+                                </div>
+                            
+                            
+                            
+                                
+                            </td>
+                        </tr>
+                        
+                    </tbody></table>
+                </td><td>
+                    <table border="0" align="center" cellpadding="0" cellspacing="0">
+                        <tbody><tr>
+                            <td align="center">
+                            <div class="module_icon_main_div">
+                            <ul class="moduleicon">
+                              <li><a href="https://hauiums.in/UMM/Admin_Home.aspx?MID=MTQ=" class="round green">
+                              <img src="./modules assigned_files/Finance.png" oncontextmenu="return false;">
+                              <span class="round">Financial Accounts</span></a></li>
+                            </ul>
+                            
+                            <div class="modulename">
+                                <a class="home_link" href="https://hauiums.in/UMM/Admin_Home.aspx?MID=MTQ=">
+                                    Financial Accounts
+                                </a>
+                                </div>
+                                </div>
+                            
+                            
+                            
+                                
+                            </td>
+                        </tr>
+                        
+                    </tbody></table>
+                </td><td>
+                    <table border="0" align="center" cellpadding="0" cellspacing="0">
+                        <tbody><tr>
+                            <td align="center">
+                            <div class="module_icon_main_div">
+                            <ul class="moduleicon">
+                              <li><a href="https://hauiums.in/UMM/Admin_Home.aspx?MID=NzU=" class="round green">
+                              <img src="./modules assigned_files/Leave.png" oncontextmenu="return false;">
+                              <span class="round">Leave Management</span></a></li>
+                            </ul>
+                            
+                            <div class="modulename">
+                                <a class="home_link" href="https://hauiums.in/UMM/Admin_Home.aspx?MID=NzU=">
+                                    Leave Management
+                                </a>
+                                </div>
+                                </div>
+                            
+                            
+                            
+                                
+                            </td>
+                        </tr>
+                        
+                    </tbody></table>
+                </td><td>
+                    <table border="0" align="center" cellpadding="0" cellspacing="0">
+                        <tbody><tr>
+                            <td align="center">
+                            <div class="module_icon_main_div">
+                            <ul class="moduleicon">
+                              <li><a href="https://hauiums.in/UMM/Admin_Home.aspx?MID=NTk=" class="round green">
+                              <img src="./modules assigned_files/research.png" oncontextmenu="return false;">
+                              <span class="round">Research</span></a></li>
+                            </ul>
+                            
+                            <div class="modulename">
+                                <a class="home_link" href="https://hauiums.in/UMM/Admin_Home.aspx?MID=NTk=">
+                                    Research
+                                </a>
+                                </div>
+                                </div>
+                            
+                            
+                            
+                                
+                            </td>
+                        </tr>
+                        
+                    </tbody></table>
+                </td><td>
+                    <table border="0" align="center" cellpadding="0" cellspacing="0">
+                        <tbody><tr>
+                            <td align="center">
+                            <div class="module_icon_main_div">
+                            <ul class="moduleicon">
+                              <li><a href="https://hauiums.in/UMM/Admin_Home.aspx?MID=NzQ=" class="round green">
+                              <img src="./modules assigned_files/attendance.png" oncontextmenu="return false;">
+                              <span class="round">Student Attendance</span></a></li>
+                            </ul>
+                            
+                            <div class="modulename">
+                                <a class="home_link" href="https://hauiums.in/UMM/Admin_Home.aspx?MID=NzQ=">
+                                    Student Attendance
+                                </a>
+                                </div>
+                                </div>
+                            
+                            
+                            
+                                
+                            </td>
+                        </tr>
+                        
+                    </tbody></table>
+                </td>
+	</tr><tr>
+		<td>
+                    <table border="0" align="center" cellpadding="0" cellspacing="0">
+                        <tbody><tr>
+                            <td align="center">
+                            <div class="module_icon_main_div">
+                            <ul class="moduleicon">
+                              <li><a href="https://hauiums.in/UMM/Admin_Home.aspx?MID=NjM=" class="round green">
+                              <img src="./modules assigned_files/employee-portal.png" oncontextmenu="return false;">
+                              <span class="round">Employee Portal</span></a></li>
+                            </ul>
+                            
+                            <div class="modulename">
+                                <a class="home_link" href="https://hauiums.in/UMM/Admin_Home.aspx?MID=NjM=">
+                                    Employee Portal
+                                </a>
+                                </div>
+                                </div>
+                            
+                            
+                            
+                                
+                            </td>
+                        </tr>
+                        
+                    </tbody></table>
+                </td><td></td><td></td><td></td><td></td><td></td>
+	</tr>
+</tbody></table></div>
+        </td>
+       
+    </tr>
+    
+</tbody></table>
+<script type="text/javascript">
+      //<![CDATA[
+        var ctl00_ContentPlaceHolder1_popupWindowoldonloadHndlr=window.onload, ctl00_ContentPlaceHolder1_popupWindowpopupHgt, ctl00_ContentPlaceHolder1_popupWindowactualHgt, ctl00_ContentPlaceHolder1_popupWindowtmrId=-1, ctl00_ContentPlaceHolder1_popupWindowresetTimer;
+        var ctl00_ContentPlaceHolder1_popupWindowtitHgt, ctl00_ContentPlaceHolder1_popupWindowcntDelta, ctl00_ContentPlaceHolder1_popupWindowtmrHide=-1, ctl00_ContentPlaceHolder1_popupWindowhideAfter=15000, ctl00_ContentPlaceHolder1_popupWindowhideAlpha, ctl00_ContentPlaceHolder1_popupWindowhasFilters=false;
+        var ctl00_ContentPlaceHolder1_popupWindownWin, ctl00_ContentPlaceHolder1_popupWindowshowBy=null, ctl00_ContentPlaceHolder1_popupWindowdxTimer=-1, ctl00_ContentPlaceHolder1_popupWindowpopupBottom, ctl00_ContentPlaceHolder1_popupWindowoldLeft;
+        var ctl00_ContentPlaceHolder1_popupWindownText,ctl00_ContentPlaceHolder1_popupWindownMsg,ctl00_ContentPlaceHolder1_popupWindownTitle,ctl00_ContentPlaceHolder1_popupWindowbChangeTexts=false;
+        window.onload=ctl00_ContentPlaceHolder1_popupWindowespopup_winLoad;
+
+        var ctl00_ContentPlaceHolder1_popupWindowoldonscrollHndr=window.onscroll;
+        window.onscroll=ctl00_ContentPlaceHolder1_popupWindowespopup_winScroll;
+        ctl00_ContentPlaceHolder1_popupWindownText="<head><title><h5>Quick Message</h5></title><style type=\"text/css\">body {    background:#C8DCC8; padding:5px;    filter:progid:DXImageTransform.Microsoft.Gradient(     GradientType=0,StartColorStr='#FFC8DCC8', EndColorStr='#FFFFFFFF');  }  h1 {    font:bold 16px arial,sans-serif; color:#004000;     text-align:center; margin:0px;  }  p {    font:14px arial,sans-serif; color:#004000;  }</style></head><body><h1><h5>Quick Message</h5></h1><p>Text to display in new window.</p></body>";
+
+        function ctl00_ContentPlaceHolder1_popupWindowespopup_winScroll()
+        {
+          if (ctl00_ContentPlaceHolder1_popupWindowoldonscrollHndr!=null) ctl00_ContentPlaceHolder1_popupWindowoldonscrollHndr();
+          if (ctl00_ContentPlaceHolder1_popupWindowtmrHide!=-1)
+          {
+            el=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow');
+            el.style.display='none'; el.style.display='block';
+          }
+        }
+
+        function ctl00_ContentPlaceHolder1_popupWindowespopup_ShowPopup(show)
+        {
+          if (ctl00_ContentPlaceHolder1_popupWindowdxTimer!=-1) { el.filters.blendTrans.stop(); }
+
+          if ((ctl00_ContentPlaceHolder1_popupWindowtmrHide!=-1) && ((show!=null) && (show==ctl00_ContentPlaceHolder1_popupWindowshowBy)))
+          {
+            clearInterval(ctl00_ContentPlaceHolder1_popupWindowtmrHide);
+            ctl00_ContentPlaceHolder1_popupWindowtmrHide=setInterval(ctl00_ContentPlaceHolder1_popupWindowespopup_tmrHideTimer,ctl00_ContentPlaceHolder1_popupWindowhideAfter);
+            return;
+          }
+          if (ctl00_ContentPlaceHolder1_popupWindowtmrId!=-1) return;
+          ctl00_ContentPlaceHolder1_popupWindowshowBy=show;
+
+          elCnt=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_content')
+          elTit=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_header');
+          el=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow');
+          el.style.left=ctl00_ContentPlaceHolder1_popupWindowoldLeft;
+          el.style.top='';
+          el.style.filter='';
+
+          if (ctl00_ContentPlaceHolder1_popupWindowtmrHide!=-1) clearInterval(ctl00_ContentPlaceHolder1_popupWindowtmrHide); ctl00_ContentPlaceHolder1_popupWindowtmrHide=-1;
+
+          document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_header').style.display='none';
+          document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_content').style.display='none';
+
+          if (navigator.userAgent.indexOf('Opera')!=-1)
+            el.style.bottom=(document.body.scrollHeight*1-document.body.scrollTop*1
+                            -document.body.offsetHeight*1+1*ctl00_ContentPlaceHolder1_popupWindowpopupBottom)+'px';
+          
+          if (ctl00_ContentPlaceHolder1_popupWindowbChangeTexts)
+          {
+            ctl00_ContentPlaceHolder1_popupWindowbChangeTexts=false;
+            document.getElementById('ctl00_ContentPlaceHolder1_popupWindowaCnt').innerHTML=ctl00_ContentPlaceHolder1_popupWindownMsg;
+            document.getElementById('ctl00_ContentPlaceHolder1_popupWindowtitleEl').innerHTML=ctl00_ContentPlaceHolder1_popupWindownTitle;
+          }
+
+          ctl00_ContentPlaceHolder1_popupWindowactualHgt=0; el.style.height=ctl00_ContentPlaceHolder1_popupWindowactualHgt+'px';
+          el.style.visibility='';
+          if (!ctl00_ContentPlaceHolder1_popupWindowresetTimer) el.style.display='';
+          ctl00_ContentPlaceHolder1_popupWindowtmrId=setInterval(ctl00_ContentPlaceHolder1_popupWindowespopup_tmrTimer,(ctl00_ContentPlaceHolder1_popupWindowresetTimer?1000:20));
+        }
+
+        function ctl00_ContentPlaceHolder1_popupWindowespopup_winLoad()
+        {
+          if (ctl00_ContentPlaceHolder1_popupWindowoldonloadHndlr!=null) ctl00_ContentPlaceHolder1_popupWindowoldonloadHndlr();
+
+          elCnt=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_content')
+          elTit=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_header');
+          el=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow');
+					ctl00_ContentPlaceHolder1_popupWindowoldLeft=el.style.left;
+          ctl00_ContentPlaceHolder1_popupWindowpopupBottom=el.style.bottom.substr(0,el.style.bottom.length-2);
+          
+          ctl00_ContentPlaceHolder1_popupWindowtitHgt=elTit.style.height.substr(0,elTit.style.height.length-2);
+          ctl00_ContentPlaceHolder1_popupWindowpopupHgt=el.style.height;
+          ctl00_ContentPlaceHolder1_popupWindowpopupHgt=ctl00_ContentPlaceHolder1_popupWindowpopupHgt.substr(0,ctl00_ContentPlaceHolder1_popupWindowpopupHgt.length-2); ctl00_ContentPlaceHolder1_popupWindowactualHgt=0;
+          ctl00_ContentPlaceHolder1_popupWindowcntDelta=ctl00_ContentPlaceHolder1_popupWindowpopupHgt-(elCnt.style.height.substr(0,elCnt.style.height.length-2));
+
+          if (true)
+          {
+            ctl00_ContentPlaceHolder1_popupWindowresetTimer=true;
+            ctl00_ContentPlaceHolder1_popupWindowespopup_ShowPopup(null);
+          }
+        }
+
+        function ctl00_ContentPlaceHolder1_popupWindowespopup_tmrTimer()
+        {
+          el=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow');
+          if (ctl00_ContentPlaceHolder1_popupWindowresetTimer)
+          {
+            el.style.display='';
+            clearInterval(ctl00_ContentPlaceHolder1_popupWindowtmrId); ctl00_ContentPlaceHolder1_popupWindowresetTimer=false;
+            ctl00_ContentPlaceHolder1_popupWindowtmrId=setInterval(ctl00_ContentPlaceHolder1_popupWindowespopup_tmrTimer,20);
+          }
+          ctl00_ContentPlaceHolder1_popupWindowactualHgt+=5;
+          if (ctl00_ContentPlaceHolder1_popupWindowactualHgt>=ctl00_ContentPlaceHolder1_popupWindowpopupHgt)
+          {
+            ctl00_ContentPlaceHolder1_popupWindowactualHgt=ctl00_ContentPlaceHolder1_popupWindowpopupHgt; clearInterval(ctl00_ContentPlaceHolder1_popupWindowtmrId); ctl00_ContentPlaceHolder1_popupWindowtmrId=-1;
+            document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_content').style.display='';
+            if (ctl00_ContentPlaceHolder1_popupWindowhideAfter!=-1) ctl00_ContentPlaceHolder1_popupWindowtmrHide=setInterval(ctl00_ContentPlaceHolder1_popupWindowespopup_tmrHideTimer,ctl00_ContentPlaceHolder1_popupWindowhideAfter);
+          }
+          if (ctl00_ContentPlaceHolder1_popupWindowtitHgt<ctl00_ContentPlaceHolder1_popupWindowactualHgt-6)
+            document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_header').style.display='';
+          if ((ctl00_ContentPlaceHolder1_popupWindowactualHgt-ctl00_ContentPlaceHolder1_popupWindowcntDelta)>0)
+          {
+            elCnt=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_content')
+            elCnt.style.display='';
+            elCnt.style.height=(ctl00_ContentPlaceHolder1_popupWindowactualHgt-ctl00_ContentPlaceHolder1_popupWindowcntDelta)+'px';
+          }
+          el.style.height=ctl00_ContentPlaceHolder1_popupWindowactualHgt+'px';
+        }
+        
+        function ctl00_ContentPlaceHolder1_popupWindowespopup_tmrHideTimer()
+        {
+          clearInterval(ctl00_ContentPlaceHolder1_popupWindowtmrHide); ctl00_ContentPlaceHolder1_popupWindowtmrHide=-1;
+          el=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow');
+          if (ctl00_ContentPlaceHolder1_popupWindowhasFilters)
+          {
+            backCnt=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_content').innerHTML;
+            backTit=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_header').innerHTML;
+            document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_content').innerHTML='';
+            document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_header').innerHTML='';
+            el.style.filter='blendTrans(duration=1)';
+            el.filters.blendTrans.apply();
+            el.style.visibility='hidden';
+            el.filters.blendTrans.play();
+            document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_content').innerHTML=backCnt;
+            document.getElementById('ctl00_ContentPlaceHolder1_popupWindow_header').innerHTML=backTit;
+            
+            ctl00_ContentPlaceHolder1_popupWindowdxTimer=setInterval(ctl00_ContentPlaceHolder1_popupWindowespopup_dxTimer,1000);
+          }
+          else el.style.visibility='hidden';
+        }
+        
+        function ctl00_ContentPlaceHolder1_popupWindowespopup_dxTimer()
+        {
+          clearInterval(ctl00_ContentPlaceHolder1_popupWindowdxTimer); ctl00_ContentPlaceHolder1_popupWindowdxTimer=-1;
+        }
+     
+        function ctl00_ContentPlaceHolder1_popupWindowespopup_Close()
+        {
+          if (ctl00_ContentPlaceHolder1_popupWindowtmrId==-1)
+          {
+            el=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow');
+            el.style.filter='';
+            el.style.display='none';
+            if (ctl00_ContentPlaceHolder1_popupWindowtmrHide!=-1) clearInterval(ctl00_ContentPlaceHolder1_popupWindowtmrHide); ctl00_ContentPlaceHolder1_popupWindowtmrHide=-1;
+            
+          }
+        }
+    
+        function ctl00_ContentPlaceHolder1_popupWindowespopup_ShowWindow()
+        {
+          
+          if (ctl00_ContentPlaceHolder1_popupWindownWin!=null) ctl00_ContentPlaceHolder1_popupWindownWin.close();
+          ctl00_ContentPlaceHolder1_popupWindownWin=window.open('','ctl00_ContentPlaceHolder1_popupWindownWin','width=400,height=250,scrollbars=yes, '+
+            'menubar=no, resizable=no, status=no, toolbar=no, location=no');
+          ctl00_ContentPlaceHolder1_popupWindownWin.document.write(ctl00_ContentPlaceHolder1_popupWindownText);
+        }
+
+        var ctl00_ContentPlaceHolder1_popupWindowmousemoveBack,ctl00_ContentPlaceHolder1_popupWindowmouseupBack;
+        var ctl00_ContentPlaceHolder1_popupWindowofsX,ctl00_ContentPlaceHolder1_popupWindowofsY;
+        function ctl00_ContentPlaceHolder1_popupWindowespopup_DragDrop(e)
+        {
+          ctl00_ContentPlaceHolder1_popupWindowmousemoveBack=document.body.onmousemove;
+          ctl00_ContentPlaceHolder1_popupWindowmouseupBack=document.body.onmouseup;
+          ox=(e.offsetX==null)?e.layerX:e.offsetX;
+          oy=(e.offsetY==null)?e.layerY:e.offsetY;
+          ctl00_ContentPlaceHolder1_popupWindowofsX=ox; ctl00_ContentPlaceHolder1_popupWindowofsY=oy;
+
+          document.body.onmousemove=ctl00_ContentPlaceHolder1_popupWindowespopup_DragDropMove;
+          document.body.onmouseup=ctl00_ContentPlaceHolder1_popupWindowespopup_DragDropStop;
+          if (ctl00_ContentPlaceHolder1_popupWindowtmrHide!=-1) clearInterval(ctl00_ContentPlaceHolder1_popupWindowtmrHide);
+        }
+
+        function ctl00_ContentPlaceHolder1_popupWindowespopup_DragDropMove(e)
+        {
+          el=document.getElementById('ctl00_ContentPlaceHolder1_popupWindow');          
+          if (e==null&&event!=null)
+          {
+            el.style.left=(event.clientX*1+document.body.scrollLeft-ctl00_ContentPlaceHolder1_popupWindowofsX)+'px';
+            el.style.top=(event.clientY*1+document.body.scrollTop-ctl00_ContentPlaceHolder1_popupWindowofsY)+'px';
+            event.cancelBubble=true;
+          }
+          else
+          {
+            el.style.left=(e.pageX*1-ctl00_ContentPlaceHolder1_popupWindowofsX)+'px';
+            el.style.top=(e.pageY*1-ctl00_ContentPlaceHolder1_popupWindowofsY)+'px';
+            e.cancelBubble=true;
+          }
+          if ((event.button&1)==0) ctl00_ContentPlaceHolder1_popupWindowespopup_DragDropStop();
+        }
+
+        function ctl00_ContentPlaceHolder1_popupWindowespopup_DragDropStop()
+        {
+          document.body.onmousemove=ctl00_ContentPlaceHolder1_popupWindowmousemoveBack;
+          document.body.onmouseup=ctl00_ContentPlaceHolder1_popupWindowmouseupBack;
+        }
+
+      //]]>
+      </script><div id="ctl00_ContentPlaceHolder1_popupWindow" style="background: rgb(200, 220, 200); border-width: 1px; border-style: solid; border-color: rgb(170, 200, 170) rgb(0, 128, 0) rgb(0, 128, 0) rgb(170, 200, 170); position: absolute; z-index: 9999; width: 300px; height: 250px; right: 15px; bottom: 15px; visibility: hidden;" onselectstart="return false;" onmousedown="return ctl00_ContentPlaceHolder1_popupWindowespopup_DragDrop(event);"><div id="ctl00_ContentPlaceHolder1_popupWindow_header" style="cursor: default; position: absolute; left: 2px; width: 294px; top: 2px; height: 14px; font: 12px arial, sans-serif; color: rgb(0, 64, 0); text-decoration: none;"><span id="ctl00_ContentPlaceHolder1_popupWindowtitleEl"><h5>Quick Message</h5></span><span style="position:absolute; right:0px; top:0px; cursor:pointer; color:#5AA05A; font:bold 12px arial,sans-serif; 
+                  position:absolute; right:3px;" onclick="ctl00_ContentPlaceHolder1_popupWindowespopup_Close()" onmousedown="event.cancelBubble=true;" onmouseover="style.color=&#39;#008000&#39;;" onmouseout="style.color=&#39;#5AA05A&#39;;">X</span></div><div id="ctl00_ContentPlaceHolder1_popupWindow_content" onmousedown="event.cancelBubble=true;" style="border-width: 1px; border-style: solid; border-color: rgb(90, 160, 90) rgb(170, 200, 170) rgb(170, 200, 170) rgb(90, 160, 90); background: rgb(200, 220, 200); padding: 2px; overflow: hidden; text-align: center; position: absolute; left: 2px; width: 294px; top: 20px; height: 226px;"><span style="font:12px arial,sans-serif; color:#004000; text-decoration:none;" id="ctl00_ContentPlaceHolder1_popupWindowaCnt"><h5><ul></ul></h5></span></div></div>
+
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_DataList1');//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./modules assigned_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./modules assigned_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

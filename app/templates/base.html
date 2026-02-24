@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
     <title>CCS HAU ERP</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     
     {% block extra_head %}{% endblock %}
@@ -157,84 +158,88 @@
         <ul class="nav-list">
             <li class="nav-item"><a href="{{ url_for('main.index') }}" class="nav-link">HOME</a></li>
             
-            {% if current_mod_id|string == '55' %}
-                {% set active_menu = processed_academic_menu %}
-            {% elif current_mod_id|string == '30' %}
-                {% set active_menu = processed_umm_menu %}
-            {% elif current_mod_id|string == '72' %}
-                {% set active_menu = processed_establishment_menu %}
-            {% else %}
-                {% set active_menu = menu %}
-            {% endif %}
+            {% if session.ui_mode != 'portal' %}
+                {% if current_mod_id|string == '55' %}
+                    {% set active_menu = processed_academic_menu %}
+                {% elif current_mod_id|string == '30' %}
+                    {% set active_menu = processed_umm_menu %}
+                {% elif current_mod_id|string == '72' %}
+                    {% set active_menu = processed_establishment_menu %}
+                {% elif current_mod_id|string == '75' %}
+                    {% set active_menu = processed_leave_menu %}
+                {% else %}
+                    {% set active_menu = menu %}
+                {% endif %}
 
-            {% macro render_sub_items(items) %}
-                {% for item in items %}
-                    {% set has_children = item.subs or item.pages %}
-                    <div class="dropdown-submenu">
-                        <a href="{{ item.url if item.url else 'javascript:void(0)' }}" class="dropdown-item {{ 'has-children' if has_children else '' }}">
-                            <b>{{ item.name }}</b>
-                        </a>
-                        {% if has_children %}
+                {% macro render_sub_items(items) %}
+                    {% for item in items %}
+                        {% set has_children = item.subs or item.pages %}
+                        <div class="dropdown-submenu">
+                            <a href="{{ item.url if item.url else 'javascript:void(0)' }}" class="dropdown-item {{ 'has-children' if has_children else '' }}">
+                                <b>{{ item.name }}</b>
+                            </a>
+                            {% if has_children %}
+                            <div class="dropdown-menu">
+                                {% if item.pages %}
+                                    {% for p in item.pages %}
+                                        <a href="{{ p.url }}" class="dropdown-item">{{ p.name }}</a>
+                                    {% endfor %}
+                                {% endif %}
+                                {% if item.subs %}
+                                    {{ render_sub_items(item.subs) }}
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endmacro %}
+
+                {% if active_menu is mapping %}
+                    {# Other modules using recursive builder mapping #}
+                    {% for main_name, main_data in active_menu.items() %}
+                    <li class="nav-item">
+                        <a href="javascript:void(0)" class="nav-link">{{ main_name }}</a>
                         <div class="dropdown-menu">
-                            {% if item.pages %}
-                                {% for p in item.pages %}
+                            {% if main_data.pages %}
+                                {% for p in main_data.pages %}
                                     <a href="{{ p.url }}" class="dropdown-item">{{ p.name }}</a>
                                 {% endfor %}
                             {% endif %}
-                            {% if item.subs %}
-                                {{ render_sub_items(item.subs) }}
+                            {% if main_data.subs %}
+                                {{ render_sub_items(main_data.subs) }}
                             {% endif %}
                         </div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            {% endmacro %}
-
-            {% if active_menu is mapping %}
-                {# Other modules using recursive builder mapping #}
-                {% for main_name, main_data in active_menu.items() %}
-                <li class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link">{{ main_name }}</a>
-                    <div class="dropdown-menu">
-                        {% if main_data.pages %}
-                            {% for p in main_data.pages %}
-                                <a href="{{ p.url }}" class="dropdown-item">{{ p.name }}</a>
-                            {% endfor %}
-                        {% endif %}
-                        {% if main_data.subs %}
-                            {{ render_sub_items(main_data.subs) }}
-                        {% endif %}
-                    </div>
-                </li>
-                {% endfor %}
-            {% else %}
-                {# UMM / Academics using processed list #}
-                {% for main_item in active_menu %}
-                <li class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link">{{ main_item.name }}</a>
-                    <div class="dropdown-menu">
-                        {% if main_item.pages %}
-                            {% for p in main_item.pages %}
-                                <a href="{{ p.url }}" class="dropdown-item">{{ p.name }}</a>
-                            {% endfor %}
-                        {% endif %}
-                        {% if main_item.subs %}
-                            {{ render_sub_items(main_item.subs) }}
-                        {% endif %}
-                    </div>
-                </li>
-                {% endfor %}
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    {# UMM / Academics using processed list #}
+                    {% for main_item in active_menu %}
+                    <li class="nav-item">
+                        <a href="javascript:void(0)" class="nav-link">{{ main_item.name }}</a>
+                        <div class="dropdown-menu">
+                            {% if main_item.pages %}
+                                {% for p in main_item.pages %}
+                                    <a href="{{ p.url }}" class="dropdown-item">{{ p.name }}</a>
+                                {% endfor %}
+                            {% endif %}
+                            {% if main_item.subs %}
+                                {{ render_sub_items(main_item.subs) }}
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% endfor %}
+                {% endif %}
             {% endif %}
         </ul>
     </div>
 
     <!-- BREADCRUMBS -->
-    {% if academic_breadcrumb or umm_breadcrumb or establishment_breadcrumb %}
+    {% if academic_breadcrumb or umm_breadcrumb or establishment_breadcrumb or leave_breadcrumb %}
     <div class="brdcums no-print">
         <div class="brdcrmsinnerdiv" style="display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; align-items: center;">
                 <img style="margin-right: 10px;" src="{{ url_for('static', filename='images/home-icon.png') }}">
-                {% set breadcrumb = academic_breadcrumb if academic_breadcrumb else (umm_breadcrumb if umm_breadcrumb else establishment_breadcrumb) %}
+                {% set breadcrumb = academic_breadcrumb or umm_breadcrumb or establishment_breadcrumb or leave_breadcrumb %}
                 {% for item in breadcrumb %}
                     {% if not loop.last %}
                         <span>{{ item }}</span>&nbsp;&gt;&nbsp;
@@ -251,11 +256,11 @@
     {% endif %}
 
     <!-- TABBED MENU -->
-    {% if academic_tabs or umm_tabs or establishment_tabs %}
+    {% if academic_tabs or umm_tabs or establishment_tabs or leave_tabs %}
     <table class="tabbing-table no-print" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class="tabbing-td">
-                {% set active_tabs = academic_tabs if academic_tabs else (umm_tabs if umm_tabs else establishment_tabs) %}
+                {% set active_tabs = academic_tabs or umm_tabs or establishment_tabs or leave_tabs %}
                 {% for tab in active_tabs %}
                 <a href="{{ tab.url }}" class="{{ 'tabgs' if tab.active else 'tabg' }}">{{ tab.name }}</a>
                 {% endfor %}
@@ -268,8 +273,14 @@
 
     <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none;"></div>
 
-    <div class="content-wrapper">
-        {% block content %}{% endblock %}
+    <div class="d-flex" style="min-height: calc(100vh - 100px); background: #fdfdfd; align-items: stretch;">
+        {% if session.ui_mode == 'portal' %}
+            {% include "includes/sidebar.html" %}
+        {% endif %}
+
+        <div class="content-wrapper" style="flex: 1; padding: 15px; background: #fff; overflow-x: auto;">
+            {% block content %}{% endblock %}
+        </div>
     </div>
 
     <script>

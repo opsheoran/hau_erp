@@ -50,3 +50,13 @@ This workflow was established on 23/02/2026 to ensure 100% data accuracy and par
 1. **Never assume a table name**: Always perform Step 1 (Discovery) for new modules to find the "Production" version of a table.
 2. **Auto-Populate References**: Every new template must produce a corresponding mapping file.
 3. **Daily Backups**: Perform a timestamped ZIP backup after every major template completion.
+
+---
+
+## 4. Current Focus (Leave Management)
+**Scope note (24/02/2026):** From this point onward, focus only on the **Leave Management module** workstreams. Avoid unrelated module changes unless explicitly requested.
+
+**Live template references currently available locally:**
+- `leave/leave dashboar.html` (saved from `UMM/Admin_Home.aspx?MID=NzU=`) + assets in `leave/leave dashboar_files/`.
+
+If additional live Leave pages are needed for pixel-perfect parity, export/save them into `leave/` before implementing changes so field-to-column mapping can be verified against the exact UI.

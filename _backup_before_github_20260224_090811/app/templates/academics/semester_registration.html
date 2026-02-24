@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Semester Registration Details</span>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="id" id="edit_id">
+        <table width="100%" class="filter-table">
+            <tr>
+                <td class="vtext">College</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="ddlCollege" class="dropdown w-300" required onchange="loadDegrees()">
+                        <option value="">--Select College--</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}">{{ c.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Academic Session</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="session_id" id="ddlSession" class="dropdown w-200" required>
+                        <option value="">--Select Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="degree_id" id="ddlDegree" class="dropdown w-300" required>
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}">{{ d.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Semester</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="semester_id" id="ddlSemester" class="dropdown w-150" required onchange="loadYear()">
+                        <option value="">--Select Semester--</option>
+                        {% for s in lookups.semesters %}
+                        <option value="{{ s.id }}">{{ s.semester_roman }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext">Year</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="year_id" id="ddlYear" class="dropdown w-150" required>
+                        <option value="">--Select Year--</option>
+                        {% for y in lookups.years %}
+                        <option value="{{ y.pk_degreeyearid }}">{{ y.degreeyear_char }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Semester Begin Date</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="date" name="reg_date" id="txtRegDate" class="textbox w-150" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="5" style="padding-top: 10px;">
+                    <input type="submit" value="SAVE" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div style="margin-top: 25px;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">List of Semester Registration</span>
+        </div>
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <th style="width: 5%;">S.No.</th>
+                    <th style="width: 25%;">College</th>
+                    <th style="width: 15%;">Degree</th>
+                    <th style="width: 15%;">Session</th>
+                    <th style="width: 10%;">Semester</th>
+                    <th style="width: 15%;">Sem Begin Date</th>
+                    <th style="width: 7%;">EDIT</th>
+                    <th style="width: 8%;">DELETE</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                    <td align="center">{{ pagination.page * 10 - 10 + loop.index }}</td>
+                    <td>{{ item.collegename }}</td>
+                    <td align="center">{{ item.degreename }}</td>
+                    <td align="center">{{ item.sessionname }}</td>
+                    <td align="center">{{ item.semester_roman }}</td>
+                    <td align="center">{{ item.SemRegister_Date }}</td>
+                    <td align="center">
+                        <a href="javascript:void(0)" onclick='editReg({{ item | tojson | safe }})'>
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                        </a>
+                    </td>
+                    <td align="center">
+                        <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this registration?')">
+                            <input type="hidden" name="action" value="DELETE">
+                            <input type="hidden" name="id" value="{{ item.pk_SemRegisterID }}">
+                            <button type="submit" style="background:none; border:none; padding:0; cursor:pointer;">
+                                <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% include "includes/pagination.html" %}
+    </div>
+</div>
+
+<script>
+function loadDegrees() {
+    var cid = document.getElementById('ddlCollege').value;
+    if (!cid) return;
+    fetch('/academics/api/college/' + cid + '/degrees')
+        .then(r => r.json())
+        .then(data => {
+            var select = document.getElementById('ddlDegree');
+            select.innerHTML = '<option value="">--Select Degree--</option>';
+            data.forEach(d => {
+                var o = document.createElement('option');
+                o.value = d.id;
+                o.textContent = d.name;
+                select.appendChild(o);
+            });
+        });
+}
+
+function loadYear() {
+    var sid = document.getElementById('ddlSemester').value;
+    if (!sid) return;
+    fetch('/academics/api/get_semester_year/' + sid)
+        .then(r => r.json())
+        .then(data => {
+            if (data && data.pk_degreeyearid) {
+                document.getElementById('ddlYear').value = data.pk_degreeyearid;
+            }
+        });
+}
+
+function editReg(item) {
+    document.getElementById('edit_id').value = item.pk_SemRegisterID;
+    document.getElementById('ddlCollege').value = item.fk_collegeid;
+    
+    // Degrees need to be loaded first
+    loadDegrees();
+    // Use timeout to set degree value after fetch
+    setTimeout(() => {
+        document.getElementById('ddlDegree').value = item.fk_degreeid;
+    }, 500);
+
+    document.getElementById('ddlSession').value = item.fk_Sessionid;
+    document.getElementById('ddlSemester').value = item.fk_semesterid;
+    document.getElementById('ddlYear').value = item.fk_degreeyearid;
+    
+    // Format date for input type=date (YYYY-MM-DD)
+    if (item.SemRegister_Date) {
+        var d = item.SemRegister_Date.split('/');
+        if (d.length === 3) {
+            document.getElementById('txtRegDate').value = d[2] + '-' + d[1] + '-' + d[0];
+        }
+    }
+    window.scrollTo(0, 0);
+}
+
+function resetForm() {
+    document.getElementById('edit_id').value = '';
+    document.getElementById('ddlCollege').value = '';
+    document.getElementById('ddlSession').value = '';
+    document.getElementById('ddlDegree').value = '';
+    document.getElementById('ddlSemester').value = '';
+    document.getElementById('ddlYear').value = '';
+    document.getElementById('txtRegDate').value = '';
+}
+</script>
+
+<style>
+    .filter-table td { padding: 8px 5px; }
+    .vtext { font-size: 11px; font-weight: bold; width: 150px; }
+</style>
+{% endblock %}

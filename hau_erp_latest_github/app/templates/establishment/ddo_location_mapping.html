@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-12">
+    <div class="card card-hau">
+        <div class="tablesubheading">DDO & Location Mapping</div>
+        <div class="card-body p-3">
+            <form method="POST">
+                <input type="hidden" name="edit_id" value="{{ edit_data.pk_mapid if edit_data else '' }}">
+                
+                <table width="100%" cellpadding="3" cellspacing="0">
+                    <tr>
+                        <td class="vtext" width="15%">DDO <span class="text-danger">*</span></td>
+                        <td class="colon">:</td>
+                        <td width="34%">
+                            <select class="dropdown" name="ddo_id" required>
+                                <option value="">-- Select DDO --</option>
+                                {% for d in ddos %}
+                                <option value="{{ d.id }}" {% if edit_data and edit_data.fk_ddoid==d.id %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td class="vtext" width="15%">Location <span class="text-danger">*</span></td>
+                        <td class="colon">:</td>
+                        <td width="34%">
+                            <select class="dropdown" name="loc_id" required>
+                                <option value="">-- Select Location --</option>
+                                {% for l in locations %}
+                                <option value="{{ l.id }}" {% if edit_data and edit_data.fk_locid==l.id %}selected{% endif %}>{{ l.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-center pt-3">
+                            <button type="submit" class="btn-hau btn-hau-primary">SAVE</button>
+                            <a href="{{ url_for('establishment.ddo_location_mapping') }}" class="btn-hau btn-hau-secondary ms-2 text-decoration-none d-inline-block">RESET</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+
+            <hr class="my-3">
+
+            <div class="tablesubheading" style="border-radius: 0;">List of DDO & Location Mapping</div>
+            <div class="table-responsive">
+                <table class="hau-table mt-0">
+                    <thead>
+                        <tr>
+                            <th width="80px">S. No.</th>
+                            <th class="text-start">DDO</th>
+                            <th class="text-start">Location</th>
+                            <th width="80px">EDIT</th>
+                            <th width="80px">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in mappings %}
+                        <tr>
+                            <td class="text-center">{{ loop.index }}</td>
+                            <td class="fw-bold">{{ m.ddo }}</td>
+                            <td>{{ m.location }}</td>
+                            <td class="text-center">
+                                <a href="{{ url_for('establishment.ddo_location_mapping', edit_id=m.id) }}" class="text-decoration-none">
+                                    <i class="bi bi-pencil-square text-primary fs-6"></i>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ url_for('establishment.delete_ddo_location_mapping', id=m.id) }}" class="text-decoration-none text-danger" onclick="return confirm('Are you sure?')">
+                                    <i class="bi bi-trash fs-6"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        {% include 'establishment/_pagination.html' %}
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

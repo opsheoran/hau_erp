@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card" id="editCard" style="display:none;">
+    <div class="tablesubheading" id="editCardTitle">Edit Holiday Mapping</div>
+    <div style="padding: 15px;">
+        <form method="POST" id="editForm">
+            <input type="hidden" name="action" value="SAVE">
+            <input type="hidden" name="pk_id" id="form_pk_id">
+            
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">University Location</td><td class="colon">:</td>
+                    <td>
+                        <select name="loc_id" id="form_loc_id" class="dropdown" style="width: 250px;" required>
+                            <option value="">-- Select --</option>
+                            {% for l in locations %}
+                            <option value="{{ l.id }}">{{ l.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext" width="15%">Holiday Location</td><td class="colon">:</td>
+                    <td>
+                        <select name="holiday_loc_id" id="form_hloc_id" class="dropdown" style="width: 250px;" required>
+                            <option value="">-- Select --</option>
+                            {% for hl in holiday_locations %}
+                            <option value="{{ hl.pk_holidaylocid }}">{{ hl.holidayloc }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Year</td><td class="colon">:</td>
+                    <td>
+                        <select name="year_id" id="form_year_id" class="dropdown" style="width: 150px;" required>
+                            {% for y in years %}
+                            <option value="{{ y.id }}">{{ y.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext">Remarks</td><td class="colon">:</td>
+                    <td><input type="text" name="remarks" id="form_remarks" class="textbox" style="width: 250px;"></td>
+                </tr>
+            </table>
+
+            <div id="divHolidayDetails" style="display:none; margin-top:20px;">
+                <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">List of Holidays</div>
+                <table class="table-grid-view">
+                    <thead>
+                        <tr class="header-style">
+                            <td>S.No.</td><td>Holiday</td><td>Type</td><td>From Date</td><td>To Date</td><td>Remarks</td>
+                        </tr>
+                    </thead>
+                    <tbody id="holidayDetailBody"></tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <input type="submit" value="UPDATE DETAILS" class="button-common" style="background:#3c8dbc; color:white;">
+                <input type="button" value="RESET" class="button-common" style="margin-left:10px;" onclick="resetEditForm()">
+                <input type="button" value="CANCEL" class="button-common" style="margin-left:10px;" onclick="hideEditForm()">
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="hau-card">
+    <div class="tablesubheading" style="display: flex; justify-content: space-between; align-items: center;">
+        <span>Location Wise Holiday Master</span>
+        <input type="button" value="+ Add New Mapping" class="button-common" style="background:white; color:#3c8dbc; border:none;" onclick="showAddForm()">
+    </div>
+    <div style="padding: 15px;">
+        <form method="GET" class="no-print">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Holiday Location</td><td class="colon">:</td>
+                    <td>
+                        <select name="loc_id" id="filter_loc" class="dropdown" style="width: 250px;">
+                            <option value="">-- All --</option>
+                            {% for hl in holiday_locations %}
+                            <option value="{{ hl.pk_holidaylocid }}" {% if hl.pk_holidaylocid|string == request.args.get('loc_id') %}selected{% endif %}>{{ hl.holidayloc }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext" width="10%">Year</td><td class="colon">:</td>
+                    <td>
+                        <select name="lyear" id="filter_year" class="dropdown" style="width: 120px;">
+                            {% for y in years %}
+                            <option value="{{ y.id }}" {% if y.id|string == request.args.get('lyear') %}selected{% endif %}>{{ y.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="submit" value="VIEW HOLIDAYS" class="button-common" style="background:#3c8dbc; color:white;">
+                        <input type="button" value="PRINT" class="button-common" style="margin-left:5px;" onclick="window.print()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 20px;">
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td width="60">Sr. No.</td>
+                        <td>Holiday Location</td>
+                        <td>University Location</td>
+                        <td>Year</td>
+                        <td>Remarks</td>
+                        <td class="no-print" width="80">Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in holidays %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td>{{ h.holidayloc }}</td>
+                        <td>{{ h.locname }}</td>
+                        <td align="center">{{ h.fk_yearid }}</td>
+                        <td>{{ h.remarks or '' }}</td>
+                        <td align="center" class="no-print">
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editHoliday({{ h|tojson }})' alt="Edit">
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="id" value="{{ h.pk_locholidayid }}">
+                                <input type="hidden" name="loc_id" value="{{ request.args.get('loc_id') }}">
+                                <input type="hidden" name="year_id" value="{{ request.args.get('lyear') }}">
+                                <button type="submit" style="border:none; background:none; padding:0; margin-left:5px; cursor:pointer;">
+                                    <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="6" align="center" style="padding:20px;">No mappings found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentMapping = null;
+function showAddForm() {
+    currentMapping = null;
+    document.getElementById('editCardTitle').innerText = 'Add Holiday Mapping';
+    document.getElementById('form_pk_id').value = '';
+    document.getElementById('editForm').reset();
+    document.getElementById('divHolidayDetails').style.display = 'none';
+    document.getElementById('editCard').style.display = 'block';
+    window.scrollTo(0, 0);
+}
+function hideEditForm() { document.getElementById('editCard').style.display = 'none'; }
+function resetEditForm() { if (currentMapping) { editHoliday(currentMapping); } else { showAddForm(); } }
+
+function editHoliday(h) {
+    currentMapping = h;
+    document.getElementById('editCardTitle').innerText = 'Edit Holiday Mapping';
+    document.getElementById('form_pk_id').value = h.pk_locholidayid;
+    document.getElementById('form_loc_id').value = h.fk_locid;
+    document.getElementById('form_hloc_id').value = h.fk_holidaylocid;
+    document.getElementById('form_year_id').value = h.fk_yearid;
+    document.getElementById('form_remarks').value = h.remarks || '';
+    
+    fetch(`/leave/api/holiday_details/${h.pk_locholidayid}`)
+        .then(res => res.json())
+        .then(data => {
+            const body = document.getElementById('holidayDetailBody');
+            body.innerHTML = '';
+            if (data.length > 0) {
+                data.forEach((d, i) => {
+                    const row = body.insertRow();
+                    row.className = 'item-style';
+                    row.innerHTML = `
+                        <td align="center">${i + 1}</td>
+                        <td>${d.Holiday} <input type="hidden" name="h_ids[]" value="${d.pk_commonholidayid}"></td>
+                        <td align="center">${d.HolidayType || ''}</td>
+                        <td><input type="date" name="f_dates[]" value="${d.FromDate || ''}" class="textbox" style="width:120px;"></td>
+                        <td><input type="date" name="t_dates[]" value="${d.ToDate || ''}" class="textbox" style="width:120px;"></td>
+                        <td><input type="text" name="h_remarks[]" value="${d.Remarks || ''}" class="textbox" style="width:150px;"></td>
+                    `;
+                });
+                document.getElementById('divHolidayDetails').style.display = 'block';
+            }
+            document.getElementById('editCard').style.display = 'block';
+            window.scrollTo(0, 0);
+        });
+}
+</script>
+{% endblock %}

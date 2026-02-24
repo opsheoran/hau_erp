@@ -50,8 +50,17 @@ PORTAL_MENU_CONFIG = {
     }
 }
 
+@auth_bp.route('/splash')
+def splash():
+    session['splash_shown'] = True
+    return render_template('auth/splash.html')
+
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    # If splash screen hasn't been shown in this session, redirect to it
+    if not session.get('splash_shown'):
+        return redirect(url_for('auth.splash'))
+
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')

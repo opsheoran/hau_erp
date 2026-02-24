@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)https://hauiums.in/HRMS/SAL_EmployeeDocument_Details.aspx?Mwpid=4481 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Employee Document Details_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Employee Document Details_files/default.css" type="text/css" rel="stylesheet"><link href="./Employee Document Details_files/font.css" type="text/css" rel="stylesheet"><link href="./Employee Document Details_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Employee Document Details_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style><script type="text/javascript" src="./Employee Document Details_files/WebResource.axd"></script><script type="text/javascript" src="./Employee Document Details_files/WebResource(1).axd"></script><script type="text/javascript" src="./Employee Document Details_files/WebResource(2).axd"></script><script type="text/javascript" src="./Employee Document Details_files/WebResource(3).axd"></script><script type="text/javascript" src="./Employee Document Details_files/CommonJS.js.download"></script><script type="text/javascript" src="./Employee Document Details_files/jquery-2.2.0.min.js.download"></script><script type="text/javascript">
+//<![CDATA[
+var Page_Validators = new Array();
+function WebForm_OnSubmit() {
+    return true;
+}
+//]]></script><script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script><script type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script><script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script><script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script><script type="text/javascript">
+        function ShowSearch(obj) {
+            document.getElementById('SearchDiv').style.display = 'block';
+        }
+    </script><script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script><script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_D_ddlDocumentCategory');//]]>
+</script><script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/HRMS/SAL_EmployeeDocument_Details.aspx?Mwpid=4481" id="aspnetForm" autocomplete="off" enctype="multipart/form-data">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./Employee Document Details_files/WebResource(4).axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Employee Document Details_files/WebResource(5).axd" type="text/javascript"></script>
+<script src="./Employee Document Details_files/WebResource(6).axd" type="text/javascript"></script>
+<script src="./Employee Document Details_files/WebResource(7).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="31E822E0">
+	<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="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">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Employee Document Details_files/Establishment.png">
+                            Establishment
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/HRMS/SAL_EmployeeDocument_Details.aspx?Mwpid=4481#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment">Ms. Renu</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName">Ms. Renu</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COBS&amp;H, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/HRMS/SAL_EmployeeDocument_Details.aspx?Mwpid=4481#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Employee Document Details_files/WebResource(8).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Masters" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3191#" tabindex="-1">Masters</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:3" role="menuitem" style="position: relative;"><a title="Establishment Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5041#" tabindex="-1">Establishment Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:3" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="City Category Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_CityCategory_Mst.aspx?Mwpid=76" tabindex="-1">City-Category Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="City Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_City_Mst.aspx?Mwpid=75" tabindex="-1">City Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Salutation  Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Salutation_Mst.aspx?Mwpid=3717" tabindex="-1">Salutation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Religion Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Religion_Mst.aspx?Mwpid=855" tabindex="-1">Religion Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Relation Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Relation_MST.aspx?Mwpid=3709" tabindex="-1">Relation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Category Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Category_Mst.aspx?Mwpid=74" tabindex="-1">Category Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Gad-Nongad Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_GadNongad_Mst.aspx?Mwpid=89" tabindex="-1">Gad-Nongad Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Class Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Class_Mst.aspx?Mwpid=77" tabindex="-1">Class Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Discipline Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Discipline_Mst.aspx?Mwpid=1892" tabindex="-1">Discipline Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marital Status Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Marital_Status_Mst.aspx?Mwpid=3710" tabindex="-1">Marital Status Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Funds Sponsor Master" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_Fund_Sponsor_Mst.aspx?Mwpid=5080" tabindex="-1">Funds Sponsor Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="ExamType Master" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_ExamType_Master.aspx?Mwpid=5081" tabindex="-1">ExamType Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Category" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_DesignationCategory_Mst.aspx?Mwpid=5085" tabindex="-1">Designation Category</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:18" role="menuitem" style="position: relative;"><a title="Employee Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5042#" tabindex="-1">Employee Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:18" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Department Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Department_Mst.aspx?Mwpid=1948" tabindex="-1">Department Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Section Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Section_Mst.aspx?Mwpid=1947" tabindex="-1">Section Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=80" tabindex="-1">Designation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Employee_Mst.aspx?Mwpid=3194" tabindex="-1">Employee Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Master Scheme Wise" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Employee_Mst_Scheme.aspx?Mwpid=5279" tabindex="-1">Employee Master Scheme Wise</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:25" role="menuitem" style="position: relative;"><a title="SAR Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5044#" tabindex="-1">SAR Maters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:25" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Category Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Category_mst.aspx?Mwpid=5045" tabindex="-1">SAR Category Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Activity Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Activity_mst.aspx?Mwpid=5046" tabindex="-1">SAR Activity Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Grade Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Grade_mst.aspx?Mwpid=5047" tabindex="-1">SAR Grade Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Employee_mst.aspx?Mwpid=5048" tabindex="-1">SAR Employee Master</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:32" role="menuitem" style="position: relative; float: left;"><a title="Transactions" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3192#" tabindex="-1">Transactions</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:32" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:33" role="menuitem" style="position: relative;"><a title="Personal Details" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5049#" tabindex="-1">Personal Details</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:33" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Demographic Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Employee_Demographic_Details.aspx?Mwpid=1665" tabindex="-1">Employee Demographic Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="SAL_EmployeeDocument_Details.aspx" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeDocument_Details.aspx?Mwpid=4481" tabindex="-1">Employee Document Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Qualification Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeQualification_Details.aspx?Mwpid=1955" tabindex="-1">Education Qualification Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Permission of Qualification Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeEducation_Details.aspx?Mwpid=5253" tabindex="-1">Employee Permission of Qualification Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Family Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeFamily_Details.aspx?Mwpid=1954" tabindex="-1">Employee Family Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Nominee Details" class="level3 dynamic" href="https://hauiums.in/HRMS/GPF_Employee_Details_Mst.aspx?Mwpid=4497" tabindex="-1">Employee Nominee Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Books Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeMemo_Details.aspx?Mwpid=1979" tabindex="-1">Employee Books Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="LTC Detail" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_LTC_Detail.aspx?Mwpid=4832" tabindex="-1">LTC Detail</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Earned Leave Details" class="level3 dynamic" href="https://hauiums.in/Leave/SAL_EarnedLeave_Details.aspx?Mwpid=5190" tabindex="-1">Earned Leave Details</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:44" role="menuitem" style="position: relative;"><a title="Job Details" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5050#" tabindex="-1">Job Details</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:44" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Previous Job Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeePreviousJob_Details.aspx?Mwpid=1667" tabindex="-1">Employee Previous Job Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Foreign Visit Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeForeignVisit_Details.aspx?Mwpid=1961" tabindex="-1">Employee Foreign Visit Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Training Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeTraining_Details.aspx?Mwpid=1957" tabindex="-1">Employee Training Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Departmental Exam Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeDepartmentalExam_Details.aspx?Mwpid=4797" tabindex="-1">Employee Departmental Exam Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Service Verification Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeServiceVerification_Details.aspx?Mwpid=4798" tabindex="-1">Employee Service Verification Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Disciplinary Action/Reward Details" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_Disciplinary_Action_Details.aspx?Mwpid=368" tabindex="-1">Disciplinary Action/Reward Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Loan Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_LoanDetails.aspx?Mwpid=5232" tabindex="-1">Employee Loan Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Book Grant Amount Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_BookGrantAmount.aspx?Mwpid=5233" tabindex="-1">Employee Book Grant Amount Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Bonus Amount Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeBonusAmont_dtl.aspx?Mwpid=5247" tabindex="-1">Employee Bonus Amount Details</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:55" role="menuitem" style="position: relative;"><a title="Increment/Promotion" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5051#" tabindex="-1">Increment/Promotion</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:55" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="SAR/ACR Admin Transaction" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Admin_Transaction.aspx?Mwpid=5054" tabindex="-1">SAR/ACR Admin Transaction</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee First Appointment Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_FirstAppointment_Details.aspx?Mwpid=4823" tabindex="-1">Employee First Appointment Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Emp Increment Payrevision" class="level3 dynamic" href="https://hauiums.in/HRMS/sal_emp_increment_payrevision_detailt.aspx?Mwpid=4802" tabindex="-1">Emp Increment Payrevision</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Promotion/Financial Up-gradation Details" class="level3 dynamic" href="https://hauiums.in/HRMS/sal_emp_promotion_detail.aspx?Mwpid=4820" tabindex="-1">Employee Promotion/Financial Up-gradation</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee No-Dues Detail" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Emp_NoDues_Detail.aspx?Mwpid=5151" tabindex="-1">Employee No-Dues Detail</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:63" role="menuitem" style="position: relative; float: left;"><a title="Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3193#" tabindex="-1">Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:63" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:64" role="menuitem" style="position: relative;"><a title="Reports" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5052#" tabindex="-1">Reports</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:64" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Service Book Report" class="level3 dynamic" href="https://hauiums.in/HRMS/Reports/EST_EmpServiceBookDigitizedView_Rpt.aspx?Mwpid=1653" tabindex="-1">Employee Service Book Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Establishment OfficeWise Report" class="level3 dynamic" href="https://hauiums.in/HRMS/Reports/EST_Establishment_OfficeWise_Rpt.aspx?Mwpid=1875" tabindex="-1">Establishment OfficeWise Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Organisation Data" class="level3 dynamic" href="https://hauiums.in/HRMS/OrganisationStruct.aspx?Mwpid=5114" tabindex="-1">Organisation Data</a></li>
+			</ul></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><div style="clear: left;"></div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Transactions</span>&nbsp;&gt;&nbsp;<span>Personal Details</span>&nbsp;&gt;&nbsp;<strong>Employee Document Details</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Employee Document Details_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <script type="text/javascript" language="javascript">
+        function ShowSearch(obj) {
+            document.getElementById('SearchDiv').style.display = 'block';
+        }
+    </script>
+    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%" align="left">
+        <tbody><tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tableheading">Employee Document Details
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblEmpCode" style="width: 15%">Employee Code
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtEmpCode__"><input name="ctl00$ContentPlaceHolder1$R_txtEmpCode" type="text" value="HAU00212" readonly="readonly" id="ctl00_ContentPlaceHolder1_R_txtEmpCode" class="textboxlong" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeydown="event.returnValue=false"></span>
+                *
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lnkSearchClient__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$lnkSearchClient&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Searching...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_lnkSearchClient" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$lnkSearchClient&#39;,&#39;&#39;)"><img src="./Employee Document Details_files/srec.jpg" id="ctl00_ContentPlaceHolder1_CodeSearchA" border="0" onclick="ShowSearch(this);"></a></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lblEmpId__" style="display: none;"></span>
+            </td>
+            <td></td>
+            <td class="vtext">Employee Name
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtEmpName__"><input name="ctl00$ContentPlaceHolder1$txtEmpName" type="text" value="Om Parkash Sheoran" maxlength="100" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtEmpName" class="textboxlong"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Department
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtDepartment__"><input name="ctl00$ContentPlaceHolder1$txtDepartment" type="text" value="Mathematics and Statistics" maxlength="100" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtDepartment" class="textboxlong"></span>
+            </td>
+            <td></td>
+            <td class="vtext">Designation
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtDesignation__"><input name="ctl00$ContentPlaceHolder1$txtDesignation" type="text" value="Professor" maxlength="100" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtDesignation" class="textboxlong"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblDocumentCategory">Document Category
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlDocumentCategory__"><select name="ctl00$ContentPlaceHolder1$D_ddlDocumentCategory" id="ctl00_ContentPlaceHolder1_D_ddlDocumentCategory" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlDocumentCategory&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value="-- Select Document Category --">-- Select Document Category --</option>
+	<option selected="selected" value="1">Photo</option>
+	<option value="3">Signature</option>
+	<option value="4">Fore Finger</option>
+	<option value="5">Middle Finger</option>
+	<option value="6">Ring Finger</option>
+	<option value="7">Little Finger</option>
+	<option value="8">Thumb</option>
+	<option value="9">Signature of Head</option>
+	<option value="10">pdf service book</option>
+	<option value="11">Joint Photo</option>
+	<option value="12">Wife Signature</option>
+
+</select></span>
+                *
+            </td>
+            <td></td>
+            <td class="vtext">Designation (In case of Signature of Attesting Officer)
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtAttDesignation__"><input name="ctl00$ContentPlaceHolder1$txtAttDesignation" type="text" maxlength="100" id="ctl00_ContentPlaceHolder1_txtAttDesignation" class="textboxlong"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Document
+            </td>
+            <td class="colon">:
+            </td>
+            <td>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_flUpload__"><input type="file" name="ctl00$ContentPlaceHolder1$flUpload" id="ctl00_ContentPlaceHolder1_flUpload" class="uploadfiles"></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lblPath__"><span id="ctl00_ContentPlaceHolder1_lblPath" precallbackfunction="lblPath_PreCallBack"><a target="_blank" href="https://hauiums.in/FTPsite/HAU/HRMS/EmpDocumentDetail/Photo20200116164558884.jpg">Dr OPS.jpg</a></span></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lnkPath__"><a id="ctl00_ContentPlaceHolder1_lnkPath" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$lnkPath&#39;,&#39;&#39;)"></a></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_hflnkupload__"><input type="hidden" name="ctl00$ContentPlaceHolder1$hflnkupload" id="ctl00_ContentPlaceHolder1_hflnkupload" value="Dr OPS.jpg/Photo20200116164558884.jpg"></span>
+            </td>
+            <td></td>
+            
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="5">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lblPic__"><span id="ctl00_ContentPlaceHolder1_lblPic" style="font-size:11px;font-weight:bold;">[File size should not be more than 2 Mb and supported file types are .jpg, .jpeg, .pjpeg, .bmp, .gif and .png and if its PDF File size not be more than 5 Mb is supported]</span></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="5">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tbody><tr>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnSave__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="UPDATE" id="ctl00_ContentPlaceHolder1_btnSave" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tablesubheading">List of Employee Document Details
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_dgDetails__" style=""><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td>S. No.</td><td style="width:65%;">Document Category</td><td style="width:10%;">Is Active ?</td><td>EDIT</td><td>DELETE</td>
+	</tr><tr class="item-style" style="color:Black;background-color:#E4EAFF;font-weight:normal;">
+		<td align="center" style="width:5%;">1</td><td>Photo</td><td>YES</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;)">
+                                    <img src="./Employee Document Details_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;)">
+                                    <img src="./Employee Document Details_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete--></span>
+                            </td>
+	</tr><tr class="pager-style" align="center" style="color:#000000;">
+		<td colspan="6"><span>1</span></td>
+	</tr>
+</tbody></table></div>
+            </td>
+        </tr>
+    </tbody></table>
+    <div id="SearchDiv" class="white_content-new" style="display: none; overflow: scroll;">
+        <div class="popupboxouter">
+            <div class="popupbox">
+                <div onclick="document.getElementById(&#39;SearchDiv&#39;).style.display=&#39;none&#39;;" class="close">
+                    X
+                </div>
+                <table border="0" width="100%" class="table">
+                    <tbody><tr>
+                        <td align="left" class="tableheading">Employee Search
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="Anthem_ctl00_ContentPlaceHolder1_Panel1__"><div id="ctl00_ContentPlaceHolder1_Panel1" style="width:100%;">
+	
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                    <tbody><tr>
+                                        <td class="vtext">Employee Code
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td>
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtSearchEmpCode__"><!--START:ctl00$ContentPlaceHolder1$txtSearchEmpCode--><input name="ctl00$ContentPlaceHolder1$txtSearchEmpCode" type="text" value="hau00212" maxlength="25" id="ctl00_ContentPlaceHolder1_txtSearchEmpCode" class="textbox"><!--END:ctl00$ContentPlaceHolder1$txtSearchEmpCode--></span>
+                                        </td>
+                                        <td></td>
+                                        <td class="vtext">Employee Code (M)
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td>
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtSearchManualEmpCode__"><!--START:ctl00$ContentPlaceHolder1$txtSearchManualEmpCode--><input name="ctl00$ContentPlaceHolder1$txtSearchManualEmpCode" type="text" maxlength="50" id="ctl00_ContentPlaceHolder1_txtSearchManualEmpCode" class="textbox"><!--END:ctl00$ContentPlaceHolder1$txtSearchManualEmpCode--></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="vtext">Employee Name
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td>
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtSearchEmpName__"><!--START:ctl00$ContentPlaceHolder1$txtSearchEmpName--><input name="ctl00$ContentPlaceHolder1$txtSearchEmpName" type="text" maxlength="255" id="ctl00_ContentPlaceHolder1_txtSearchEmpName" class="textbox"><!--END:ctl00$ContentPlaceHolder1$txtSearchEmpName--></span>
+                                        </td>
+                                        <td></td>
+                                        <td id="lblDDOSearch" class="vtext">Controlling Officer
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td class="required">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlDDOSearch__"><!--START:ctl00$ContentPlaceHolder1$D_ddlDDOSearch--><select name="ctl00$ContentPlaceHolder1$D_ddlDDOSearch" id="ctl00_ContentPlaceHolder1_D_ddlDDOSearch" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlDDOSearch&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+		<option value="">--Select Controlling Officer--</option>
+		<option value="AX-94">[199] HAU Agri Tourism</option>
+		<option value="AX-99">[202] College of Biotechnology</option>
+		<option value="AZ-96">[201] COFS, Hisar</option>
+		<option value="CB-95">[200] Campus Hospital</option>
+		<option value="CO-100">[203] Regional Director, NCRS Gokalpura</option>
+		<option value="CO-101">[204] Sr. Coordinator, KVK, Chhappera, Nuh</option>
+		<option value="CO-97">[ABIC] ABIC</option>
+		<option value="CO-98">[120] DDO Agri Tourism</option>
+		<option value="ES-40">[132] A&amp;AO, Registrar</option>
+		<option value="HA-92">[173] Deen Dayal Upadhaya Centre of Excellence for Organic Farming</option>
+		<option value="KV-85">[186] HOD, Microbiology</option>
+		<option value="KV-86">[131] Sr. Coordinator, KVK Bawal</option>
+		<option value="KV-87">[166] HOD, Instrumentation Cell</option>
+		<option value="KV-88">[171] HOD, Transport Organization</option>
+		<option value="KV-89">[172] HOD, Renewable &amp; Bio-energy</option>
+		<option value="KZ-90">[178] HOD, Chemistry</option>
+		<option value="KZ-91">[179] HOD, Physics</option>
+		<option value="KZ-93">[158] Principal, COA, Bawal</option>
+		<option value="VC-1">[102] Director, CFST</option>
+		<option value="VC-11">[106] Regional Director, RRS Karnal</option>
+		<option value="VC-12">[112] Sr. Coorinator, KVK, Jind</option>
+		<option value="VC-14">[114] Sr. Coordinator, KVK, Kurukshetra</option>
+		<option value="VC-15">[115] Sr. Coordinator, KVK, Pinjore</option>
+		<option value="VC-16">[107] Regional Director, RRS Kaul</option>
+		<option value="VC-17">[187] DDO, EOCE</option>
+		<option value="VC-19">[142] A&amp;AO, COA</option>
+		<option value="VC-2">[113] Sr. Coordinator, KVK, Sadalpur</option>
+		<option value="VC-21">[119] Sr. Coordinator, KVK, Karnal</option>
+		<option value="VC-22">[110] Regional Director, CRS Sirsa</option>
+		<option value="VC-23">[100] DDO, VC Office</option>
+		<option value="VC-24">[105] DDO, Directorate of Research</option>
+		<option value="VC-25">[116] Sr. Coordinator, KVK, Panipat</option>
+		<option value="VC-26">[134] Director, Directorate of Farms</option>
+		<option value="VC-27">[117] Sr. Coordinator, KVK, Sonipat</option>
+		<option value="VC-28">[109] Regional Director, RRS, Bawal</option>
+		<option value="VC-29">[120] Sr. Coordinator, KVK, Sirsa</option>
+		<option value="VC-3">[168] A&amp;AO, COAE&amp;T</option>
+		<option value="VC-30">[101] Dean, PGS</option>
+		<option selected="selected" value="VC-32">[185] A&amp;AO, COBS&amp;H</option>
+		<option value="VC-33">[118] Sr. Coordinator, KVK, Mahendergarh</option>
+		<option value="VC-34">[137] Director, DSW</option>
+		<option value="VC-35">[111] A&amp;AO, DEE</option>
+		<option value="VC-36">[121] Sr. Coordinator, KVK, Jhajjar</option>
+		<option value="VC-37">[103] Comptroller</option>
+		<option value="VC-38">[127] Sr. Coordinator, KVK, Mandkola</option>
+		<option value="VC-39">[126] Sr. Coordinator, KVK, Yamunanagar</option>
+		<option value="VC-4">[128] Regional Director, EEI Nilokheri</option>
+		<option value="VC-40">[125] Sr. Coordinator, KVK Fatehabad</option>
+		<option value="VC-41">[124] Sr. Coordinator, KVK Faridabad</option>
+		<option value="VC-42">[123] Sr. Coordinator, KVK Bhiwani</option>
+		<option value="VC-43">[122] Sr. Coordinator, KVK Ambala</option>
+		<option value="VC-44">[146] HOD, Agricultural Economics</option>
+		<option value="VC-45">[145] HOD, Agricultural Meteorology</option>
+		<option value="VC-46">[180] HOD, Languages and Haryanvi Culture</option>
+		<option value="VC-47">[147] HOD, Entomology</option>
+		<option value="VC-48">[143] HOD, Agronomy</option>
+		<option value="VC-49">[183] HOD, MBBB</option>
+		<option value="VC-5">[108] Regional Director, RRS Rohtak</option>
+		<option value="VC-50">[184] Incharge, Computer Section</option>
+		<option value="VC-51">[104] Director, Stores and Purchase Office</option>
+		<option value="VC-52">[149] HOD, GPB</option>
+		<option value="VC-53">[159] HOD, Dry land Agriculture</option>
+		<option value="VC-54">[165] HOD, Textile and Apparel Designing</option>
+		<option value="VC-55">[164] HOD, Foods and Nutrition</option>
+		<option value="VC-56">[156] HOD, Bussiness Management</option>
+		<option value="VC-57">[150] HOD, Nematology</option>
+		<option value="VC-58">[162] HOD, HDFS</option>
+		<option value="VC-59">[154] HOD, Vegetable Science</option>
+		<option value="VC-60">[148] HOD, Horticulture</option>
+		<option value="VC-61">[155] HOD, Soil Science</option>
+		<option value="VC-62">[144] HOD, Extension Education</option>
+		<option value="VC-63">[153] HOD, Seed Science &amp; Technology</option>
+		<option value="VC-64">[174] HOD, Soil and Water Engineering</option>
+		<option value="VC-65">[161] HOD, EECM</option>
+		<option value="VC-66">[188] CO, LSU</option>
+		<option value="VC-67">[167] HOD, FMPE</option>
+		<option value="VC-68">[157] HOD, Plant Pathology</option>
+		<option value="VC-7">[130] Sr. Coordinator, KVK, Rohtak</option>
+		<option value="VC-70">[133] Principal, Campus School</option>
+		<option value="VC-71">[195] HOD, Forage</option>
+		<option value="VC-72">[182] HOD, Sociology</option>
+		<option value="VC-73">[160] HOD, Family Resource Management</option>
+		<option value="VC-74">[169] HOD, Basic Engineering</option>
+		<option value="VC-75">[175] HOD, Mathematics and&nbsp;Statistics</option>
+		<option value="VC-76">[176] HOD, Botany &amp; Plant Physiology</option>
+		<option value="VC-77">[177] HOD, Zoology</option>
+		<option value="VC-78">[152] HOD, Forestry</option>
+		<option value="VC-79">[170] HOD, Processing and Food Engineering</option>
+		<option value="VC-8">[163] A&amp;AO, COHS</option>
+		<option value="VC-80">[151] Principal, COA Kaul</option>
+		<option value="VC-81">[181] HOD, Biochemistry</option>
+		<option value="VC-82">[136] University Librarian</option>
+		<option value="VC-83">[189] DHRM</option>
+		<option value="VC-84">[135] Director, RDS Farm</option>
+		<option value="VC-9">[129] Sr. Coordinator, KVK, Kaithal</option>
+
+	</select><!--END:ctl00$ContentPlaceHolder1$D_ddlDDOSearch--></span>
+                                            *
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="vtext">Location
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td>
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_ddlSearchLocation__"><!--START:ctl00$ContentPlaceHolder1$ddlSearchLocation--><select name="ctl00$ContentPlaceHolder1$ddlSearchLocation" id="ctl00_ContentPlaceHolder1_ddlSearchLocation" class="dropdownlong">
+		<option selected="selected" value="">-- Select Location --</option>
+		<option value="VC-3">COBS&amp;H, Hisar</option>
+
+	</select><!--END:ctl00$ContentPlaceHolder1$ddlSearchLocation--></span>
+                                        </td>
+                                        <td></td>
+                                        <td class="vtext">Department
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td>
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_ddlSearchDepartment__"><!--START:ctl00$ContentPlaceHolder1$ddlSearchDepartment--><select name="ctl00$ContentPlaceHolder1$ddlSearchDepartment" id="ctl00_ContentPlaceHolder1_ddlSearchDepartment" class="dropdownlong">
+		<option selected="selected" value="">-- Select Department --</option>
+		<option value="ES-115">ADSW</option>
+		<option value="AS-126">ADSW(C&amp;P)</option>
+		<option value="AS-127">ADSW(Sports)</option>
+		<option value="CO-148">Agricultural Biotechnology</option>
+		<option value="VC-1">Agricultural Economics</option>
+		<option value="VC-10">Agricultural Meteorology</option>
+		<option value="VC-101">Agricultural Technology Information Centre</option>
+		<option value="VC-13">Agronomy</option>
+		<option value="VC-22">Apparel and Textile Science</option>
+		<option value="AX-129">Aquaculture</option>
+		<option value="AE-135">AQUATIC ANIMAL HEALTH MANAGEMENT</option>
+		<option value="CO-157">Aquatic Environment Management</option>
+		<option value="VC-59">Architect</option>
+		<option value="CO-136">Ari Tourism</option>
+		<option value="VC-94">Associate Director (Publications)</option>
+		<option value="VC-78">Basic Engineering</option>
+		<option value="CO-152">Bio-Nanotechnology</option>
+		<option value="VC-87">Biochemistry</option>
+		<option value="CO-151">Bioinformatics &amp; Computational Biology</option>
+		<option value="VC-82">Botany &amp; Plant Physiology</option>
+		<option value="VC-32">Business Management</option>
+		<option value="VC-97">Campus Hospital</option>
+		<option value="VC-68">Campus School</option>
+		<option value="AP-137">CBNT</option>
+		<option value="VC-65">Centre of Food Science and Technology</option>
+		<option value="KZ-119">Chemistry</option>
+		<option value="AS-128">COA Associate Dean</option>
+		<option value="BW-138">COA Bawal</option>
+		<option value="KZ-121">College of Agriculture, Bawal</option>
+		<option value="VC-86">College Of Agriculture, Kaul</option>
+		<option value="AX-147">College of Biotechnology</option>
+		<option value="CO-132">College of Fishery Science</option>
+		<option value="VC-72">Comptroller Office</option>
+		<option value="VC-17">Computer Section</option>
+		<option value="VC-27">Cotton Research Station, Sirsa</option>
+		<option value="CB-140">CSSRI, Karnal</option>
+		<option value="HA-131">Dean Office</option>
+		<option value="VC-46">Dean office, COA</option>
+		<option value="VC-34">Dean office, COAE&amp;T</option>
+		<option value="VC-31">Dean office, COBS&amp;H</option>
+		<option value="VC-9">Dean office,COHS</option>
+		<option value="VC-29">Dean, Post Graduate Studies</option>
+		<option value="VH-120">Deendayal Upadhyay Center Of Excel Organic Farming</option>
+		<option value="VC-79">Deputy Estate Office</option>
+		<option value="CO-158">Director CS</option>
+		<option value="VC-25">Director Farm</option>
+		<option value="VC-75">Director Students Welfare Office</option>
+		<option value="VC-15">Directorate Human Resource Manangement</option>
+		<option value="VC-50">Directorate of Extension Education</option>
+		<option value="VC-77">Directorate of Research</option>
+		<option value="ES-123">Drawing Branch</option>
+		<option value="VC-21">Dry land Agriculture</option>
+		<option value="VC-49">EEI Nilokheri</option>
+		<option value="VC-12">Entomology</option>
+		<option value="VC-42">Estate Officer-cum Chief Engineer</option>
+		<option value="VC-44">Extension Education</option>
+		<option value="VC-54">Extension Education and Communication Management</option>
+		<option value="VC-8">Faculty House cum Faculty</option>
+		<option value="VC-76">Family Resource Management</option>
+		<option value="VC-56">Farm Machinery and Power Engineering</option>
+		<option value="CO-155">Fish Engineering</option>
+		<option value="CO-154">Fish Processing Technology</option>
+		<option value="CO-156">Fisheries Extension Economics and Statistics</option>
+		<option value="AX-130">Fisheries Resource Management</option>
+		<option value="VC-24">Foods and Nutrition</option>
+		<option value="VC-84">Forestry</option>
+		<option value="VC-23">Genetics and Plant Breeding</option>
+		<option value="VH-124">HAU Agri Tourism</option>
+		<option value="VC-43">Horticulture</option>
+		<option value="VC-36">Human Development and Family Studies</option>
+		<option value="AE-139">IIWBR, Karnal</option>
+		<option value="CO-150">Industrial Biotechnology</option>
+		<option value="AK-134">Innovation Centre for Agri Waste Management</option>
+		<option value="ES-110">Joint Director (Extension)</option>
+		<option value="CO-159">KVK Chappera</option>
+		<option value="VC-89">KVK, Ambala</option>
+		<option value="VC-108">KVK, Bawal</option>
+		<option value="VC-69">KVK, Bhiwani</option>
+		<option value="VC-61">KVK, Faridabad</option>
+		<option value="VC-14">KVK, Fatehabad</option>
+		<option value="VC-80">KVK, Jhajjar</option>
+		<option value="VC-4">KVK, Jind</option>
+		<option value="VC-52">KVK, Kaithal</option>
+		<option value="VC-109">KVK, Karnal</option>
+		<option value="VC-35">KVK, Kurukshetra</option>
+		<option value="VC-90">KVK, Mandkola</option>
+		<option value="VC-62">KVK, Mohindergarh</option>
+		<option value="VC-41">KVK, Panipat</option>
+		<option value="VC-91">KVK, Pinjore</option>
+		<option value="VC-39">KVK, Rohtak</option>
+		<option value="VC-60">KVK, Sadalpur</option>
+		<option value="VC-5">KVK, Sirsa</option>
+		<option value="VC-57">KVK, Sonepat</option>
+		<option value="VC-66">KVK, Yamunanagar</option>
+		<option value="VC-55">Landscape Office</option>
+		<option value="VC-11">Languages and Haryanvi Culture</option>
+		<option value="Ii-141">Livestock and Poultry Management</option>
+		<option value="VC-81">Mathematics and Statistics</option>
+		<option value="VC-2">Microbiology</option>
+		<option value="CO-149">Molecular Biology &amp; Biotechnology</option>
+		<option value="VC-16">Molecular Biology, Biotechnology &amp; Bioinformatics</option>
+		<option value="VC-33">Nematology</option>
+		<option value="CO-146">OSD</option>
+		<option value="VC-98">Pension Branch</option>
+		<option value="KZ-118">Physics</option>
+		<option value="VC-6">Plant Pathology</option>
+		<option value="AP-125">Principal Campus School</option>
+		<option value="VC-85">Processing and Food Engineering</option>
+		<option value="VC-63">Public Health</option>
+		<option value="VC-51">Public Relation Office</option>
+		<option value="ab-133">RABI-ABIC</option>
+		<option value="VC-48">RDS Seed Farm</option>
+		<option value="AK-144">Regi HAU</option>
+		<option value="CO-153">Regional Director, NCRS Gokalpura</option>
+		<option value="VC-67">Regional Research Station, Bawal</option>
+		<option value="VC-64">Regional Research Station, Karnal</option>
+		<option value="VC-70">Regional Research Station, Kaul</option>
+		<option value="VC-58">Regional Research Station, Rohtak</option>
+		<option value="VC-3">Registrar's Office</option>
+		<option value="KV-117">Renewable &amp; Bio-energy Engineering</option>
+		<option value="VC-73">Security Orgnaization</option>
+		<option value="VC-47">Seed Science &amp; Technology</option>
+		<option value="VC-102">SNIATTE</option>
+		<option value="VC-74">Sociology</option>
+		<option value="VC-53">Soil and Water Engineering</option>
+		<option value="VC-45">Soil Science</option>
+		<option value="CO-142">SPS to VC</option>
+		<option value="CO-145">Staff Dean PGS</option>
+		<option value="VC-18">Stores and Purchase Office</option>
+		<option value="VC-26">Transport Organization</option>
+		<option value="VC-88">University Library</option>
+		<option value="CO-143">VC PS</option>
+		<option value="VC-38">Vegetable Science</option>
+		<option value="VC-20">Vice-Chancellor's Office</option>
+		<option value="VC-28">XEN (C-1)</option>
+		<option value="VC-71">XEN (C-II)</option>
+		<option value="VC-40">XEN (E)</option>
+		<option value="VC-83">Zoology &amp; Aquaculture</option>
+
+	</select><!--END:ctl00$ContentPlaceHolder1$ddlSearchDepartment--></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="vtext">Designation
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td>
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_ddlSearchDesignation__"><!--START:ctl00$ContentPlaceHolder1$ddlSearchDesignation--><select name="ctl00$ContentPlaceHolder1$ddlSearchDesignation" id="ctl00_ContentPlaceHolder1_ddlSearchDesignation" class="dropdownlong">
+		<option selected="selected" value="">-- Select Designation --</option>
+		<option value="FS-499">AAHM</option>
+		<option value="VC-3">Addl. Director of Research</option>
+		<option value="VC-2">Admin-cum-Accounts Officer</option>
+		<option value="VC-4">ADRI</option>
+		<option value="VC-5">Agricultural Inspector</option>
+		<option value="VC-6">Agril. Engineer</option>
+		<option value="DH-488">Agromet Observer</option>
+		<option value="AX-451">Agrometeorology</option>
+		<option value="VC-7">Agrometerologist</option>
+		<option value="VC-8">Agronomist</option>
+		<option value="VC-9">Animal Attendant</option>
+		<option value="VC-10">Applied Microbiologist</option>
+		<option value="VC-11">Apprentice in Book-binding</option>
+		<option value="VC-12">Apprentice in Hand Composing</option>
+		<option value="VC-13">Apprentice in Machine-Minder</option>
+		<option value="VC-14">Architect</option>
+		<option value="VC-15">Archtectural Assistant</option>
+		<option value="VC-16">Artist-cum-Photographer</option>
+		<option value="VC-17">Asistant Editor(Hindi)</option>
+		<option value="VC-19">Assistant</option>
+		<option value="VC-20">Assistant Agril. Engineer</option>
+		<option value="VC-21">Assistant Agronomist</option>
+		<option value="ES-433">Assistant Architect</option>
+		<option value="VC-23">Assistant Bacteriologist</option>
+		<option value="VC-24">Assistant Biochemist</option>
+		<option value="VC-25">Assistant Botanist (Barley Breeder)</option>
+		<option value="VC-26">Assistant Botanist-cum-Supdt.</option>
+		<option value="VC-27">Assistant Breeder</option>
+		<option value="VC-28">Assistant Chemist</option>
+		<option value="VC-29">Assistant Cotton Botanist</option>
+		<option value="AE-470">Assistant Director</option>
+		<option value="VC-30">Assistant Director (Agri.)</option>
+		<option value="AE-466">Assistant Director (DDUCEOF)</option>
+		<option value="AJ-457">Assistant Director (Rel.)</option>
+		<option value="AE-514">Assistant Director(Agronomy)</option>
+		<option value="CS-495">Assistant Director(Campus School)</option>
+		<option value="AE-512">Assistant Director(DDUCE-OF)</option>
+		<option value="VC-31">Assistant Director(Evaluation)</option>
+		<option value="AE-510">Assistant Director(FMPE/PFE)</option>
+		<option value="AE-509">Assistant Director(Horticulture)</option>
+		<option value="AE-467">Assistant Director(Plant Protection)</option>
+		<option value="AE-511">Assistant Director(Soil Science)</option>
+		<option value="VC-32">Assistant Director(Stat.)</option>
+		<option value="VC-33">Assistant Draftsman</option>
+		<option value="VC-34">Assistant DSW</option>
+		<option value="VC-35">Assistant Economic Botanist</option>
+		<option value="VC-36">Assistant Economic Botanist (Rice)</option>
+		<option value="VC-37">Assistant Engineer</option>
+		<option value="VC-38">Assistant Entomologist</option>
+		<option value="CB-449">Assistant Extn. Training Specialist</option>
+		<option value="VC-39">Assistant Farm Manager</option>
+		<option value="VC-40">Assistant Foreman</option>
+		<option value="VC-41">Assistant Fruit Breeder</option>
+		<option value="VC-42">Assistant Geneticist</option>
+		<option value="VC-43">Assistant Horticulturist</option>
+		<option value="VC-45">Assistant Ichthylogist</option>
+		<option value="VC-46">Assistant Information Officer</option>
+		<option value="VC-47">Assistant Librarian</option>
+		<option value="VC-48">Assistant Maize Breeder</option>
+		<option value="VC-49">Assistant Maize Entomology</option>
+		<option value="VC-50">Assistant Manager(HOSP.)</option>
+		<option value="VC-51">Assistant Meteorologist</option>
+		<option value="VC-52">Assistant Microbiologist</option>
+		<option value="VC-53">Assistant Nematologist</option>
+		<option value="VC-54">Assistant Oilseed Botanist</option>
+		<option value="VC-55">Assistant Pathologist</option>
+		<option value="VC-56">Assistant Physiologist</option>
+		<option value="VC-57">Assistant Physiologist (Biochemist)</option>
+		<option value="VC-58">Assistant Plant Pathologist</option>
+		<option value="VC-60">Assistant Potato Specialist</option>
+		<option value="VC-61">Assistant Professor</option>
+		<option value="RR-528">Assistant Professor ( Animal Nutrition)</option>
+		<option value="DH-506">Assistant Professor Bioinformatics</option>
+		<option value="DH-504">Assistant Professor Biotechnology</option>
+		<option value="DH-501">Assistant Professor MBB</option>
+		<option value="FS-536">Assistant Professor(Fishing Technology /FE)</option>
+		<option value="AP-515">Assistant Professor(HORT)</option>
+		<option value="AZ-518">Assistant Professor(Horticulture)</option>
+		<option value="VC-74">Assistant Registrar</option>
+		<option value="VC-75">Assistant Research Officer</option>
+		<option value="VC-76">Assistant Residue Chemist</option>
+		<option value="VC-77">Assistant Rice Breeder</option>
+		<option value="VC-78">Assistant Rural Sociologist</option>
+		<option value="VC-79">Assistant Scientist</option>
+		<option value="KZ-440">Assistant Scientist (Agri. Econ.)</option>
+		<option value="RR-527">Assistant Scientist (Agro Forestry)</option>
+		<option value="RR-524">Assistant Scientist (Agronomy)</option>
+		<option value="RR-525">Assistant Scientist (Animal Sci.)</option>
+		<option value="CO-533">Assistant Scientist (Entomology)</option>
+		<option value="CO-532">Assistant Scientist (Fruit Breeder)</option>
+		<option value="RR-521">Assistant Scientist (PB)</option>
+		<option value="CO-534">Assistant Scientist (Plant Pathology)</option>
+		<option value="VC-59">Assistant Scientist (Plant Physiologist)</option>
+		<option value="RR-522">Assistant Scientist (Silvaculture)</option>
+		<option value="RR-523">Assistant Scientist (Soil)</option>
+		<option value="RR-526">Assistant Scientist (Veg.Science)</option>
+		<option value="DH-507">Assistant Scientist Biotechnology</option>
+		<option value="DH-502">Assistant Scientist Geneticist</option>
+		<option value="DH-505">Assistant Scientist Microbial Biotechnology</option>
+		<option value="DH-503">Assistant Scientist Nanobiotechnology</option>
+		<option value="AX-498">Assistant Scientist Soil Chemist</option>
+		<option value="AX-538">Assistant Scientist(Agrimet)</option>
+		<option value="RO-516">Assistant Scientist(Agronomy)</option>
+		<option value="AX-539">Assistant Scientist(Cartography)</option>
+		<option value="RO-517">Assistant Scientist(Entomology)</option>
+		<option value="VC-97">Assistant Security Officer</option>
+		<option value="VC-98">Assistant Seed Production Officer</option>
+		<option value="VC-99">Assistant Soil Chemist</option>
+		<option value="VC-100">Assistant Sports Officer</option>
+		<option value="VC-101">Assistant Statistician</option>
+		<option value="VC-102">Assistant Statistician(Extn.)</option>
+		<option value="KZ-445">Assistant Store Purchase Officer</option>
+		<option value="VC-103">Assistant Sugarcane Breeder</option>
+		<option value="VC-104">Assistant Veg Physiologist</option>
+		<option value="VC-105">Assistant Veg. Agronomist</option>
+		<option value="VC-106">Assistant Vegetable Botanist</option>
+		<option value="VC-107">Assistant Vegetable Breeder</option>
+		<option value="VC-108">Assistant Weed Res. Officer</option>
+		<option value="CO-531">Assistant.Scientist (Plant Pathology)</option>
+		<option value="AE-469">Assitant Director</option>
+		<option value="VC-109">Assoc. Director(FAS)</option>
+		<option value="VC-110">Associate Dean</option>
+		<option value="CO-494">Associate Director ( COBS&amp;H)</option>
+		<option value="EE-476">Associate Director (Plant Pathology)</option>
+		<option value="VC-111">Associate Professor</option>
+		<option value="CB-479">Asstt. Boichemist</option>
+		<option value="VC-116">Astt. Extn. Officer (Cotton)</option>
+		<option value="VC-117">Attendant</option>
+		<option value="VC-118">Attendant Impositor</option>
+		<option value="VC-119">Auto Elecrician</option>
+		<option value="VC-120">Auxillary Nurse</option>
+		<option value="VC-121">Bajra Breeder</option>
+		<option value="VC-122">Barley Breeder</option>
+		<option value="VC-123">Beldar</option>
+		<option value="VC-124">Beldar (Supernumerary)</option>
+		<option value="VC-125">Bindry Attendant</option>
+		<option value="VC-126">Bindry Foreman</option>
+		<option value="CB-478">Bio-chemist</option>
+		<option value="VC-127">Blacksmith</option>
+		<option value="VC-128">Bochemical Geneticist</option>
+		<option value="VC-129">Book-Binder</option>
+		<option value="VC-130">Breeder</option>
+		<option value="VC-131">Bus Driver</option>
+		<option value="VC-132">Caliographer</option>
+		<option value="VC-133">Camera Operator</option>
+		<option value="VC-134">Cane Weaver</option>
+		<option value="VC-135">Car/Jeep Driver</option>
+		<option value="VC-136">Care-Taker</option>
+		<option value="VC-137">Carpenter</option>
+		<option value="VC-138">Cashier</option>
+		<option value="VC-139">Chargeman</option>
+		<option value="VC-140">Chief Agronomist</option>
+		<option value="VC-141">Chief Cook</option>
+		<option value="VC-142">Chief Mechanic</option>
+		<option value="VC-143">Chief Scientist</option>
+		<option value="RH-492">Chief Security Officer</option>
+		<option value="VC-145">Circle Head Draftmen</option>
+		<option value="VC-146">Clerk</option>
+		<option value="KZ-435">Clerk-cum-store keeper</option>
+		<option value="VC-147">Clerk-Cum-Typist</option>
+		<option value="VC-148">Coach Athletics</option>
+		<option value="VC-149">COE</option>
+		<option value="VC-150">Compositor</option>
+		<option value="VC-151">Comptroller</option>
+		<option value="CB-461">Computer</option>
+		<option value="VC-152">Computer</option>
+		<option value="VC-153">Computer Operator</option>
+		<option value="VC-154">Computer Programmer</option>
+		<option value="VC-155">Console Operator cum Data Entry Operator</option>
+		<option value="CO-493">Consultant Faculty</option>
+		<option value="VC-156">Cook</option>
+		<option value="VC-157">Cook Helper</option>
+		<option value="VC-158">Cook-cum-Chowkidar</option>
+		<option value="VC-159">Coordinator</option>
+		<option value="VC-160">Cotton Breeder</option>
+		<option value="VC-161">Curator</option>
+		<option value="VC-162">D S W</option>
+		<option value="VC-163">D.P.P.Operator</option>
+		<option value="AX-454">D.T.P. Operator</option>
+		<option value="VC-164">Dark Room Attendant</option>
+		<option value="VC-165">Dean</option>
+		<option value="CO-497">Dean PGS</option>
+		<option value="VC-166">Dental Surgeon</option>
+		<option value="VC-167">Deputy Comptroller</option>
+		<option value="VC-168">Deputy Director</option>
+		<option value="KZ-441">Deputy Estate Officer</option>
+		<option value="ES-430">Deputy Librarian</option>
+		<option value="VC-169">DEPUTY REGISTRAR</option>
+		<option value="VC-170">Deputy Supdt.</option>
+		<option value="VC-171">DES</option>
+		<option value="VC-173">Dholak Performer</option>
+		<option value="CS-529">Director Campus School</option>
+		<option value="CO-475">Director DDUCE-OF</option>
+		<option value="CB-464">Director FST</option>
+		<option value="VC-174">Director HRM</option>
+		<option value="AX-472">Director Incharge</option>
+		<option value="VC-175">Director Of Extn.Education</option>
+		<option value="VC-176">Director of Research</option>
+		<option value="CB-463">Director Students Welfare</option>
+		<option value="CO-480">Director Technical</option>
+		<option value="VC-177">Distribution Assistant</option>
+		<option value="VC-178">Distributor</option>
+		<option value="VC-179">Divisional Accountant</option>
+		<option value="VC-1">Dome</option>
+		<option value="VC-180">DPL</option>
+		<option value="AJ-543">Draftsman</option>
+		<option value="VC-181">Driver</option>
+		<option value="AX-450">Driver-Cum-Mechanic</option>
+		<option value="VC-182">Driver-cum-Mechanic(Jeep)</option>
+		<option value="VC-183">Driver-cum-Mechanic(Tractor)</option>
+		<option value="VC-184">Dy. Estate Officer</option>
+		<option value="VC-185">Dy. PRO</option>
+		<option value="VC-186">Economic Botanist</option>
+		<option value="VC-187">Editor(English)</option>
+		<option value="VC-188">Editor(Research)</option>
+		<option value="VC-189">Editorial Assistant</option>
+		<option value="VC-190">Electric Chargeman</option>
+		<option value="VC-191">Electrician</option>
+		<option value="VC-193">electrician</option>
+		<option value="VC-192">Electrician Gr II</option>
+		<option value="CB-443">Emeritus Professor</option>
+		<option value="ES-432">Estate Officer-cum Chief Engineer</option>
+		<option value="VC-195">Executive Engineer</option>
+		<option value="VC-196">Exhibition Officer</option>
+		<option value="VC-197">Extn. Agronomist/Joint Director (REL)</option>
+		<option value="VC-198">Extn. Specialists</option>
+		<option value="VC-199">Farash</option>
+		<option value="VC-200">Farm Manager</option>
+		<option value="VC-201">FCA</option>
+		<option value="VC-202">Ferro Khalasi</option>
+		<option value="VC-203">Ferro Printer</option>
+		<option value="VC-204">Field Supervisor</option>
+		<option value="VC-205">Fieldman</option>
+		<option value="VC-206">Fitter-cum-Operator</option>
+		<option value="VC-207">Fitter-cum-Operator Gr. II</option>
+		<option value="VC-208">Folk Dramatist</option>
+		<option value="VC-209">Folk Musician</option>
+		<option value="VC-210">Forage Breeder</option>
+		<option value="VC-211">Foreman</option>
+		<option value="CO-462">Foreman(Ref &amp; AC)</option>
+		<option value="VC-212">Game Organizer</option>
+		<option value="VC-213">Generator Operator</option>
+		<option value="VC-214">Geneticist</option>
+		<option value="AS-444">Gestetner Operator-cum-Daftri</option>
+		<option value="VC-215">Glazier</option>
+		<option value="VC-216">GO cum Daftri</option>
+		<option value="CO-458">Graphic Designer</option>
+		<option value="VC-217">Harmonium Performer</option>
+		<option value="VC-218">Head Draftsman</option>
+		<option value="VC-219">Head Mali</option>
+		<option value="DH-471">Heavy Vehicle Driver</option>
+		<option value="VC-220">Helper</option>
+		<option value="VC-408">Helper</option>
+		<option value="AJ-460">Helper (Supernumery)</option>
+		<option value="VC-222">Horticulture Inspector</option>
+		<option value="VC-223">Horticulturist</option>
+		<option value="VC-224">Hostel Clerk</option>
+		<option value="FS-544">Hostel Warden</option>
+		<option value="VC-44">Hostel Warden(Female)</option>
+		<option value="VC-225">Hostel Warden(Male)</option>
+		<option value="VC-226">Information Categoriser</option>
+		<option value="VC-227">Inpsector (Security)</option>
+		<option value="VC-228">Insect Ecologist</option>
+		<option value="CB-541">Inseminator</option>
+		<option value="VC-229">Instructor</option>
+		<option value="VC-230">Instrumentation Engineer</option>
+		<option value="VC-231">Instruments Foreman</option>
+		<option value="VC-232">Investigator</option>
+		<option value="VC-233">Jeep Driver</option>
+		<option value="AJ-448">Joint director</option>
+		<option value="VC-234">Joint Director (Crops)</option>
+		<option value="VC-235">Joint Director (Extn.)</option>
+		<option value="VC-236">Joint Director (Stat.)</option>
+		<option value="VC-237">Joint Director(Evaluation)</option>
+		<option value="VC-238">Joint Director(Planning)</option>
+		<option value="AE-513">Joint director(SWE)</option>
+		<option value="VC-239">Jr. Agronomist</option>
+		<option value="VC-240">Jr. Bio-Chemist</option>
+		<option value="VC-241">Jr. Breeder</option>
+		<option value="VC-242">Jr. Breeder(AssistantScientist)</option>
+		<option value="VC-243">Jr. Draftsmen</option>
+		<option value="VC-245">Jr. Entomologist</option>
+		<option value="VC-246">Jr. Microbiologist/Assistant Microbiologist</option>
+		<option value="VC-247">Jr. Nematologist</option>
+		<option value="VC-248">Jr. Pathologist</option>
+		<option value="VC-249">Jr. Pedologist</option>
+		<option value="VC-250">Jr. Photographer</option>
+		<option value="VC-251">Jr. Physiologist</option>
+		<option value="VC-252">Jr. Plant Pathologist</option>
+		<option value="VC-253">Jr. Programmer</option>
+		<option value="VC-254">Jr. Scientist</option>
+		<option value="VC-257">Jr. Soil Chemist</option>
+		<option value="VC-258">Jr. Soil Water Engineer</option>
+		<option value="VC-259">Jr. Wheat Breeder</option>
+		<option value="CB-453">JRF</option>
+		<option value="VC-260">JSS</option>
+		<option value="VC-261">Jt. Director (Basic Sciences &amp; Humanities and Home Science)</option>
+		<option value="VC-262">Junior Engineer</option>
+		<option value="AJ-542">Junior Engineer (Civil)</option>
+		<option value="CO-455">Junior Phytochemist</option>
+		<option value="CO-485">Junior Technical Supervisor</option>
+		<option value="VC-263">Lab. Assistant</option>
+		<option value="VC-264">Lab. Attendant</option>
+		<option value="VC-265">Lab. Technician</option>
+		<option value="VC-266">Lady Hostel Warden</option>
+		<option value="VC-267">Lady Medical Officer</option>
+		<option value="VC-268">Lecturer</option>
+		<option value="VC-269">Legal Remembrancer</option>
+		<option value="VC-270">Librarian</option>
+		<option value="VC-271">Library Assistant</option>
+		<option value="VC-272">Library Attendant</option>
+		<option value="VC-273">Lift Operator</option>
+		<option value="VC-274">Machineman</option>
+		<option value="VC-275">Mahila Sevika</option>
+		<option value="VC-276">Maize Breeder</option>
+		<option value="VC-277">Mali</option>
+		<option value="VC-278">Masalchi</option>
+		<option value="VC-279">Mason</option>
+		<option value="CB-447">Mason Gr.II</option>
+		<option value="VC-280">Mason-cum-Glaziar Carpenters</option>
+		<option value="VC-281">Mate</option>
+		<option value="VC-282">Mechanic</option>
+		<option value="VC-283">Mechanic (Aids)</option>
+		<option value="KZ-438">Mechanic (Farm)</option>
+		<option value="VC-284">Mechanic (Instruments)</option>
+		<option value="VC-285">Mechanic (Ref. &amp; AC)</option>
+		<option value="KZ-439">Mechanic (Tractor)</option>
+		<option value="VC-286">Mechanic Operator</option>
+		<option value="VC-287">Mechanic Operator (AC)</option>
+		<option value="VC-288">Mechanic-cum-Electrician/Technical Assistant</option>
+		<option value="VC-289">Mechanic-cum-fitter</option>
+		<option value="VC-290">Medical Officer</option>
+		<option value="VC-291">Medical Recordkeeper</option>
+		<option value="VC-292">Mess Supervisor</option>
+		<option value="VC-293">Messenger</option>
+		<option value="VC-294">Meteorological Observer</option>
+		<option value="VC-295">Microbiologist</option>
+		<option value="VC-296">Modeller</option>
+		<option value="VC-297">Mortar Mate</option>
+		<option value="VC-298">Nematologist</option>
+		<option value="VC-299">Nursery Teacher</option>
+		<option value="VC-300">Nursing Sister</option>
+		<option value="CO-477">OSD Finance</option>
+		<option value="VC-301">PA to VC</option>
+		<option value="VC-302">Painter</option>
+		<option value="VC-303">Painter Gr. II</option>
+		<option value="AJ-459">Part Time Clerk</option>
+		<option value="VC-304">Part Time Doctor</option>
+		<option value="VC-305">Part time Medical officer</option>
+		<option value="VC-306">Part Time Sweeper</option>
+		<option value="VC-307">Pedologist</option>
+		<option value="VC-308">Personal Assistant</option>
+		<option value="VC-309">Petrol Men</option>
+		<option value="VC-310">Pharmacist</option>
+		<option value="AX-486">Photographer</option>
+		<option value="VC-311">Photographic Assistant</option>
+		<option value="VC-312">Plant Breeder</option>
+		<option value="VC-313">Plant Engineer-cum-Manager</option>
+		<option value="VC-314">Plant Obeserver</option>
+		<option value="VC-315">Plant Obeserver-cum-Head Mali</option>
+		<option value="VC-316">Plant Pathologist</option>
+		<option value="VC-317">Plant Virologist</option>
+		<option value="VC-318">Plate-Grainer</option>
+		<option value="VC-319">Plate-Maker</option>
+		<option value="VC-320">Plumber</option>
+		<option value="AX-446">Plumber-cum-Electrician</option>
+		<option value="VC-321">Primary Teacher</option>
+		<option value="VC-322">Principal</option>
+		<option value="ES-431">Principal Extension Specialist</option>
+		<option value="VC-323">Principal Scientist</option>
+		<option value="VC-324">Private Secretary</option>
+		<option value="VC-325">PRO</option>
+		<option value="CO-481">Production Scientist</option>
+		<option value="VC-326">Professor</option>
+		<option value="CO-474">Professor and Comptroller</option>
+		<option value="FS-537">Professor(Fishing Technology /FE)</option>
+		<option value="VC-327">Programmer</option>
+		<option value="VC-328">Project Director</option>
+		<option value="AX-456">Projectionist</option>
+		<option value="VC-330">Projector Operator</option>
+		<option value="VC-331">Proof Reader</option>
+		<option value="VC-332">Receptionist</option>
+		<option value="VC-333">Receptionist cum Clerk</option>
+		<option value="VC-334">Refrigeration Mechanic</option>
+		<option value="VC-335">Regional Director</option>
+		<option value="VC-336">Registrar</option>
+		<option value="VC-337">Research Associate</option>
+		<option value="KZ-437">Research Engineer</option>
+		<option value="VC-339">Retoucher/Artist</option>
+		<option value="VC-340">Rice Breeder /Sr. Scientiest/Equivalent</option>
+		<option value="VC-341">Road Inspector</option>
+		<option value="VC-342">Road Roller Driver</option>
+		<option value="VC-343">Router-Cum-Mounter</option>
+		<option value="VC-344">Sales Assistant(Pub.)</option>
+		<option value="VC-345">Sales Promotion Assistant</option>
+		<option value="VC-346">Sanitary Inspector</option>
+		<option value="VC-347">Saw Operator</option>
+		<option value="RH-473">School Lecturer</option>
+		<option value="VC-348">School Teacher</option>
+		<option value="VC-349">Scientist</option>
+		<option value="AX-535">Scientist ( Nematodes Taxonomist)</option>
+		<option value="VC-352">Scientist (PP)</option>
+		<option value="VC-353">SDE</option>
+		<option value="VC-396">Secretary to Vice-Chancellor</option>
+		<option value="VC-354">Section Officer</option>
+		<option value="VC-355">Security Guard</option>
+		<option value="VC-144">Security Officer</option>
+		<option value="VC-356">Security Officer</option>
+		<option value="VC-357">Seed Production Assistant</option>
+		<option value="VC-358">Seed Production Officer</option>
+		<option value="VC-359">Seed Research Officer</option>
+		<option value="CO-483">Senior Scientific Officer-I</option>
+		<option value="CO-484">Senior Scientific Officer-II</option>
+		<option value="CO-482">Senior Scientist</option>
+		<option value="VC-360">SMO</option>
+		<option value="VC-361">Soil Chemist</option>
+		<option value="VC-362">Soil Physicist</option>
+		<option value="VC-363">Soil Scientist</option>
+		<option value="VC-364">SPO</option>
+		<option value="VC-365">SPS</option>
+		<option value="AX-540">Sr. Acarologist</option>
+		<option value="VC-366">Sr. Agronomist</option>
+		<option value="CO-489">Sr. Analytical Chemist</option>
+		<option value="VC-367">Sr. Biochemist</option>
+		<option value="VC-368">Sr. Breeder</option>
+		<option value="VC-369">Sr. Cotton Breeder</option>
+		<option value="VC-370">Sr. Draftsman</option>
+		<option value="CO-491">Sr. Extension Specialist</option>
+		<option value="VC-371">Sr. Lab Techinician</option>
+		<option value="VC-372">Sr. Lab. Assistant</option>
+		<option value="VC-373">Sr. Mechanic</option>
+		<option value="VC-374">Sr. Motor Rewinder</option>
+		<option value="VC-375">Sr. Photographer</option>
+		<option value="KZ-434">Sr. Private secretary</option>
+		<option value="VC-376">Sr. Professor Reader</option>
+		<option value="KZ-436">Sr. Proof Reader</option>
+		<option value="VC-377">Sr. Scientist</option>
+		<option value="VC-194">Sr. Scientist (Entomologist)</option>
+		<option value="UH-508">Sr. Scientist (Plant Pathology)</option>
+		<option value="VC-378">Sr. Technical Assistant</option>
+		<option value="VC-379">Sr. Technician</option>
+		<option value="VC-380">Sr. Technician(Video Prodn.)</option>
+		<option value="VC-381">Sr. Tractor Mechanic</option>
+		<option value="DH-500">Sr.Scientist (Biotechnology)</option>
+		<option value="CO-530">Sr.Scientist (Horticulture)</option>
+		<option value="AX-520">Sr.Scientist (Panthologist)</option>
+		<option value="VC-351">Sr.Scientist (PB)</option>
+		<option value="LH-519">Sr.Scientist (Soil )</option>
+		<option value="CB-442">SRF</option>
+		<option value="VC-382">SSS</option>
+		<option value="VC-383">SSS(Hindi)</option>
+		<option value="VC-384">Staff Nurse</option>
+		<option value="VC-385">Steno-Typist</option>
+		<option value="VC-387">Store Verification Officer</option>
+		<option value="VC-388">Store-Keeper</option>
+		<option value="VC-389">Store-Khalasi</option>
+		<option value="VC-390">Sub-Inspector (Security)</option>
+		<option value="CB-490">Subject Matter Specialist</option>
+		<option value="VC-391">Sugarcane Agronomist</option>
+		<option value="VC-392">Sugarcane Breeder</option>
+		<option value="VC-393">Sugarcane Chemist</option>
+		<option value="VC-394">Supdt.</option>
+		<option value="RH-487">Superintending Engineer</option>
+		<option value="VC-395">Surveyer</option>
+		<option value="VC-397">Sweeper</option>
+		<option value="VC-398">Tabla Performer</option>
+		<option value="VC-399">Teacher</option>
+		<option value="VC-400">Technical Assistant</option>
+		<option value="VC-401">Telephone Attendant</option>
+		<option value="VC-402">Telephone Operator</option>
+		<option value="VC-403">Telex Operator</option>
+		<option value="VC-404">Tracer</option>
+		<option value="VC-405">Tractor Driver</option>
+		<option value="VC-406">Training Assistant</option>
+		<option value="VC-407">Training Assistant (KVK Farm)</option>
+		<option value="VC-409">Translator</option>
+		<option value="VC-410">Transport Officer</option>
+		<option value="VC-411">Tubewell Electrician</option>
+		<option value="VC-412">Turner</option>
+		<option value="VC-413">Typist</option>
+		<option value="VC-414">Vegetable Botanist</option>
+		<option value="VC-415">Vegetable Breeder</option>
+		<option value="VC-416">Vehicle Attendant</option>
+		<option value="VC-417">Vice Chancellor</option>
+		<option value="VC-418">VLDA</option>
+		<option value="VC-419">Ward Attendant</option>
+		<option value="VC-420">Ward Attendant cum Operation Theatre Attendant</option>
+		<option value="VC-421">Welder</option>
+		<option value="VC-422">Well Observer</option>
+		<option value="VC-423">Wheat Breeder</option>
+		<option value="VC-424">White washer</option>
+		<option value="VC-425">Work Inspector</option>
+		<option value="VC-426">Workshop Engineer</option>
+		<option value="VC-427">Workshop Mate</option>
+		<option value="VC-428">WPO</option>
+		<option value="VC-429">WPO Gr. II</option>
+		<option value="AX-452">WPO Grade-II (Supernumerary)</option>
+		<option value="DH-496">Young Professional-II</option>
+
+	</select><!--END:ctl00$ContentPlaceHolder1$ddlSearchDesignation--></span>
+                                        </td>
+                                        <td></td>
+                                        
+                                    </tr>
+                                   
+                                    <tr>
+                                        <td colspan="7" class="tdgap"></td>
+                                    </tr>
+                                </tbody></table>
+                            
+</div></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnSearch__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSearch" value="SEARCH" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSearch&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSearch" class="button-common" cellpadding="0" cellspacing="0"></span>&nbsp;&nbsp;
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_btnResetSearch__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnResetSearch" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnResetSearch&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnResetSearch" class="button-common" cellpadding="0" cellspacing="0" style="width: 63px"></span>&nbsp;&nbsp;
+                    <input type="button" id="Button3" value="DONE" class="button-common" onclick="document.getElementById(&#39;SearchDiv&#39;).style.display = &#39;none&#39;;">&nbsp;&nbsp;
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_lblEmpSearchDivMsg__"><span id="ctl00_ContentPlaceHolder1_lblEmpSearchDivMsg" class="lblmessage"></span></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" class="tablesubheading">List of Employee Detail
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="Anthem_ctl00_ContentPlaceHolder1_dgEmpSearchDetails__" style=""><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgEmpSearchDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td align="center">S. No.</td><td align="center">SELECT</td><td align="center">Emp Code</td><td align="center">Employee Name</td><td align="center">DDO</td><td align="center">Department</td>
+	</tr><tr class="item-style" style="color:Black;background-color:#E4EAFF;font-weight:normal;">
+		<td align="center" style="width:7%;">1</td><td align="center" style="width:5%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgEmpSearchDetails_ctl03_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgEmpSearchDetails$ctl03$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgEmpSearchDetails$ctl03$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgEmpSearchDetails_ctl03_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgEmpSearchDetails$ctl03$lnkEdit&#39;,&#39;&#39;)">
+                                    <img src="./Employee Document Details_files/Edit.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgEmpSearchDetails$ctl03$lnkEdit--></span>
+                                        </td><td align="center" style="width:12%;">HAU00212</td><td style="width:30%;">Om Parkash Sheoran | Professor</td><td>A&amp;AO, COBS&amp;H</td><td>Mathematics and Statistics</td>
+	</tr><tr class="pager-style" align="center" style="color:#000000;">
+		<td colspan="8"><span>1</span></td>
+	</tr>
+</tbody></table></div>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </div>
+        </div>
+        </div>
+        <iframe width="174" height="189" name="gToday:normal:agenda.js" id="gToday:normal:agenda.js" src="./Employee Document Details_files/ipopeng.html" scrolling="no" frameborder="0" style="visibility: visible; z-index: 119; position: absolute; top: -500px; left: -500px;"></iframe>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_R_txtEmpCode');//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./Employee Document Details_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Employee Document Details_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Create DDO Master</span>
+    </div>
+    
+    <div style="padding: 15px;">
+        <form method="POST">
+            <input type="hidden" name="edit_id" value="{{ edit_data.pk_ddoid if edit_data else '' }}">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">DDO Code</td><td class="colon">:</td>
+                    <td width="34%"><input type="text" name="code" class="textbox" style="width: 150px;" value="{{ edit_data.Code if edit_data else '' }}" required></td>
+                    <td class="vtext" width="15%">Description</td><td class="colon">:</td>
+                    <td><input type="text" name="description" class="textbox" style="width: 300px;" value="{{ edit_data.Description if edit_data else '' }}" required></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Dated</td><td class="colon">:</td>
+                    <td><input type="date" name="dated" class="textbox" style="width: 150px;" value="{{ edit_data.Dated if edit_data else '' }}"></td>
+                    <td class="vtext">DDO Alias</td><td class="colon">:</td>
+                    <td><input type="text" name="alias" class="textbox" style="width: 200px;" value="{{ edit_data.ddoAlias if edit_data else '' }}"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">TAN No</td><td class="colon">:</td>
+                    <td><input type="text" name="tan" class="textbox" style="width: 200px;" value="{{ edit_data.TANNo if edit_data else '' }}"></td>
+                    <td class="vtext">District</td><td class="colon">:</td>
+                    <td>
+                        <select name="district_id" class="dropdown" style="width: 250px;">
+                            <option value="">--Select--</option>
+                            {% for d in districts %}<option value="{{ d.id }}" {% if edit_data and edit_data.fk_districid==d.id %}selected{% endif %}>{{ d.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Controlling Office</td><td class="colon">:</td>
+                    <td>
+                        <select name="controlling_id" class="dropdown" style="width: 250px;">
+                            <option value="">--Select--</option>
+                            {% for c in cont_offices %}<option value="{{ c.id }}" {% if edit_data and edit_data.fk_Controllid==c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext">DDO Officer</td><td class="colon">:</td>
+                    <td>
+                        <input type="hidden" name="officer_id" id="officer_id" value="{{ edit_data.fk_DDOOfficerID if edit_data else '' }}">
+                        <input type="text" id="officer_name" class="textbox" style="width: 200px;" readonly value="{{ edit_data.officer_name if edit_data else '' }}">
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="openEmpSearch('officer_id', 'officer_name')" style="cursor:pointer; vertical-align:middle;">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Remarks</td><td class="colon">:</td>
+                    <td colspan="4"><input type="text" name="remarks" class="textbox" style="width: 500px;" value="{{ edit_data.Remarks if edit_data else '' }}"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top: 15px;">
+                        <input type="submit" value="SAVE" class="button-common">
+                        <a href="{{ url_for('umm.ddo_master') }}" class="button-common" style="text-decoration:none; display:inline-block; padding: 2px 10px;">RESET</a>
+                        <span id="lblMsg" class="lblmessage" style="margin-left: 10px;"></span>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 40px;">
+            <div class="tablesubheading">
+                <span class="subheadingborderbottom">List of DDOs</span>
+            </div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td>S. No.</td><td>Code</td><td>Description</td><td>District</td><td>Cont. Office</td><td>Alias</td><td>EDIT</td><td>DELETE</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for d in ddos %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index + pagination.per_page * (pagination.page - 1) }}</td>
+                        <td align="center"><b>{{ d.Code }}</b></td>
+                        <td>{{ d.Description }}</td>
+                        <td>{{ d.District or '' }}</td>
+                        <td>{{ d.ContOffice or '' }}</td>
+                        <td>{{ d.ddoAlias or '' }}</td>
+                        <td align="center">
+                            <a href="{{ url_for('umm.ddo_master', edit_id=d.id) }}">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}">
+                            </a>
+                        </td>
+                        <td align="center">
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="delete_id" value="{{ d.id }}">
+                                <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'includes/pagination.html' %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function openEmpSearch(idField, nameField) {
+        // Simple prompt for now, can be replaced with a real modal if needed
+        let code = prompt("Enter Employee Code:");
+        if (code) {
+            fetch(`/api/employee/details_by_code?code=${code}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.id) {
+                        document.getElementById(idField).value = data.id;
+                        document.getElementById(nameField).value = data.name;
+                    } else {
+                        alert("Employee not found.");
+                    }
+                });
+        }
+    }
+</script>
+
+{% if get_flashed_messages() %}
+<script>
+    document.getElementById('lblMsg').innerText = "{{ get_flashed_messages()[0] }}";
+</script>
+{% endif %}
+{% endblock %}

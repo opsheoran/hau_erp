@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="edit_id" value="{{ edit_data.id if edit_data else '' }}">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">Location Master</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%" id="lblLocation">Location</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="name" id="ctl00_ContentPlaceHolder1_R_txtLocation" class="textboxlong" value="{{ edit_data.name if edit_data else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+                <td class="colon"></td>
+                <td class="vtext" width="15%" id="lblOffice">Office</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="office_id" id="ctl00_ContentPlaceHolder1_D_ddlOffice" class="dropdownlong" required>
+                        <option value="">--Select Office--</option>
+                        {% for o in offices %}
+                        <option value="{{ o.id }}" {% if edit_data and edit_data.office_id|string == o.id|string %}selected{% endif %}>{{ o.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" id="lblDistrict">District</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="dist_id" id="ctl00_ContentPlaceHolder1_D_ddlDistrict" class="dropdownlong" required>
+                        <option value="">--Select District--</option>
+                        {% for d in districts %}
+                        <option value="{{ d.id }}" {% if edit_data and edit_data.dist_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td class="colon"></td>
+                <td class="vtext">Upload Map</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="file" id="ctl00_ContentPlaceHolder1_FileUpload1" class="uploadfiles">
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Parent Location</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="parent_id" id="ctl00_ContentPlaceHolder1_ddlLocation" class="dropdownlong">
+                        <option value="">-- Select Parent Location --</option>
+                        {% for pl in parent_locations %}
+                        <option value="{{ pl.id }}" {% if edit_data and edit_data.parent_id == pl.id %}selected{% endif %}>{{ pl.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td class="colon"></td>
+                <td class="vtext" id="lblAlias">Alias</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="alias" id="ctl00_ContentPlaceHolder1_R_txtAlias" class="textbox4" maxlength="2" value="{{ edit_data.alias if edit_data else '' }}">
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" valign="top">Address</td>
+                <td class="colon" valign="top">:</td>
+                <td class="required">
+                    <textarea name="address" id="ctl00_ContentPlaceHolder1_txtAddress" rows="2" cols="20" class="textboxmultiline">{{ edit_data.address if edit_data else '' }}</textarea>
+                </td>
+                <td class="colon"></td>
+                <td class="vtext" valign="top">Remarks</td>
+                <td class="colon" valign="top">:</td>
+                <td class="required">
+                    <textarea name="remarks" id="ctl00_ContentPlaceHolder1_txtRemarks" rows="2" cols="20" class="textboxmultiline">{{ edit_data.remarks if edit_data else '' }}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Uploaded File</td>
+                <td class="colon">:</td>
+                <td>
+                    <span id="ctl00_ContentPlaceHolder1_lblFilename" class="lblmessage"></span>
+                </td>
+                <td class="colon"></td>
+                <td class="vtext" id="lblholidayLoc">Holiday Location</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="holiday_loc_id" id="ctl00_ContentPlaceHolder1_D_ddlholidayLoc" class="dropdownlong">
+                        <option value="">--Select--</option>
+                        {% for hl in holiday_locations %}
+                        <option value="{{ hl.id }}" {% if edit_data and edit_data.holiday_loc_id|string == hl.id|string %}selected{% endif %}>{{ hl.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="15"></td></tr>
+            <tr>
+                <td></td><td></td>
+                <td colspan="5">
+                    {% if perm.AllowAdd or perm.AllowUpdate %}
+                    <input type="submit" value="SAVE" class="button-common" id="ctl00_ContentPlaceHolder1_btnSave">
+                    {% endif %}
+                    <span style="margin-left:10px;"></span>
+                    <a href="{{ url_for('umm.location_master') }}" class="button-common" style="text-decoration:none; display:inline-block; line-height:24px; padding:0 12px; vertical-align:middle;" id="ctl00_ContentPlaceHolder1_btnReset">RESET</a>
+                    
+                    <span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage" style="margin-left:20px; font-weight:bold; color:Green;">
+                        {% with messages = get_flashed_messages(category_filter=["success"]) %}
+                            {% if messages %}{{ messages[-1] }}{% endif %}
+                        {% endwith %}
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="margin-top:20px;">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="7">
+                <span class="subheadingborderbottom">List of Location(s)</span>
+            </td>
+        </tr>
+        <tr><td height="10" colspan="7"></td></tr>
+        <tr>
+            <td colspan="7">
+                <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1" style="border-collapse:collapse;" id="ctl00_ContentPlaceHolder1_dgDetails">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="10%">S. No.</th>
+                            <th align="left">Location</th>
+                            <th align="left">Parent Location</th>
+                            <th width="10%">Alias</th>
+                            <th width="15%">File Name</th>
+                            <th width="8%">EDIT</th>
+                            <th width="8%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for l in locations %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center">{{ loop.index + (pagination.page - 1) * pagination.per_page }}</td>
+                            <td style="font-weight:bold;">{{ l.name }}</td>
+                            <td>{{ l.parent_name or '' }}</td>
+                            <td align="center">{{ l.alias or '' }}</td>
+                            <td align="center"></td>
+                            <td align="center">
+                                <a href="{{ url_for('umm.location_master', edit_id=l.id, page=pagination.page) }}">
+                                    <img src="{{ url_for('static', filename='images/Edit.gif') }}" border="0">
+                                </a>
+                            </td>
+                            <td align="center">
+                                <form method="POST" onsubmit="return confirm('Are you sure you want to delete this location?');" style="display:inline;">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="delete_id" value="{{ l.id }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete" style="border:none;">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div style="margin-top:10px;">{% include 'includes/pagination.html' %}</div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

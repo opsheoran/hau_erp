@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Student Transfer Details</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 11px; }
+        .hdr { margin-bottom: 12px; }
+        .hdr h2 { margin: 0 0 6px 0; font-size: 16px; }
+        .meta { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+        .meta td { padding: 2px 4px; vertical-align: top; }
+        table.grid { width: 100%; border-collapse: collapse; }
+        table.grid th, table.grid td { border: 1px solid #333; padding: 5px; }
+        table.grid th { background: #f0f0f0; text-align: left; }
+        .right { text-align: right; }
+        .center { text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="hdr">
+        <h2>Student Transfer Details</h2>
+        <div>Generated: {{ now }}</div>
+    </div>
+
+    <table class="meta">
+        <tr>
+            <td><b>College</b></td><td>: {{ hdr.college or '-' }}</td>
+            <td><b>Session</b></td><td>: {{ hdr.session or '-' }}</td>
+        </tr>
+        <tr>
+            <td><b>Degree</b></td><td>: {{ hdr.degree or '-' }}</td>
+            <td><b>Class</b></td><td>: {{ hdr.semester or '-' }}</td>
+        </tr>
+        <tr>
+            <td><b>Department</b></td><td>: {{ hdr.branch or '-' }}</td>
+            <td></td><td></td>
+        </tr>
+    </table>
+
+    <table class="grid">
+        <thead>
+            <tr>
+                <th style="width:6%;" class="center">S No.</th>
+                <th style="width:54%;">Student Name</th>
+                <th style="width:20%;">Admission No.</th>
+                <th style="width:20%;">Enrollment No.</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in data %}
+            <tr>
+                <td class="center">{{ loop.index }}</td>
+                <td>{{ r.fullname }}</td>
+                <td>{{ r.AdmissionNo }}</td>
+                <td>{{ r.enrollmentno }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+

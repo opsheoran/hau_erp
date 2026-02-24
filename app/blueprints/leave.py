@@ -10,7 +10,7 @@ leave_bp = Blueprint('leave', __name__)
 LEAVE_MENU_CONFIG = {
     'Master': {
         'Main Menu': {
-            'Master': [
+            'Leave Masters': [
                 'Common Holidays Master', 'Holiday Location Master', 
                 'Location Wise Holidays Master', 'Weekly Off Master', 'Leave Type Master'
             ]
@@ -18,7 +18,7 @@ LEAVE_MENU_CONFIG = {
     },
     'Transaction': {
         'Main Menu': {
-            'Transaction': [
+            'Leave Transactions': [
                 'Employee Previous Leave Assign', 'Leave Request', 'Service Departure Details',
                 'Employee Leave Assignment', 'Service Departure Status', 'Service Departure from Admin',
                 'Employee CPL Assignment', 'Service Joining Date', 'Leave Approval',
@@ -30,7 +30,7 @@ LEAVE_MENU_CONFIG = {
     },
     'Reports': {
         'Main Menu': {
-            'Reports': [
+            'Leave Reports': [
                 'Leave Transaction Reports', 'Leave Reconcilliation Report', 'Employee Leave Details'
             ]
         }
@@ -41,9 +41,12 @@ LEAVE_MENU_CONFIG = {
 def ensure_module():
     if 'user_id' not in session:
         return redirect(url_for('auth.login'))
+    
+    # Check if we are in Portal or Admin mode
     if session.get('ui_mode') == 'portal':
         session['current_module_id'] = 63
     else:
+        # Admin Leave Management ID
         session['current_module_id'] = 75
 
 def permission_required(page_caption):
@@ -1082,6 +1085,22 @@ def leave_report_el_reconciliation():
     emp_id = request.args.get('emp_id')
     results = LeaveReportModel.get_el_reconciliation(emp_id)
     return render_template('leave/report_el_reconciliation.html', results=results, selected_emp=emp_id)
+
+@leave_bp.route('/report/emp_details')
+@permission_required('Employee Leave Details')
+def employee_leave_details():
+    emp_id = request.args.get('emp_id')
+    details = []
+    summary = []
+    if emp_id:
+        # In a real system, this would fetch comprehensive leave history for the employee
+        details, _ = LeaveModel.get_leaves_taken(emp_id, page=1, per_page=100)
+        summary = LeaveModel.get_leave_summary(emp_id)
+    
+    return render_template('leave/report_employee_leave_details.html', 
+                           details=details, 
+                           summary=summary, 
+                           selected_emp=emp_id)
 
 @leave_bp.route('/update_el', methods=['GET', 'POST'])
 @permission_required('Update Earned Leave Balance')

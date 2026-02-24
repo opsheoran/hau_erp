@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Event Assignment</span>
+    </div>
+
+    <form id="filterForm" method="GET">
+        <table width="100%" class="filter-table">
+            <tr>
+                <td class="vtext">College</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="ddlCollege" class="dropdown w-300" onchange="loadDegrees()">
+                        <option value="">--Select College--</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Academic Session</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="session_id" id="ddlSession" class="dropdown w-200" onchange="refreshGrid()">
+                        <option value="">--Select Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="degree_id" id="ddlDegree" class="dropdown w-300" onchange="refreshGrid()">
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext">Year</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="year_id" id="ddlYear" class="dropdown w-150" onchange="refreshGrid()">
+                        <option value="">--Select Degree Year--</option>
+                        {% for y in lookups.years %}
+                        <option value="{{ y.pk_degreeyearid }}" {% if filters.year_id|string == y.pk_degreeyearid|string %}selected{% endif %}>{{ y.degreeyear_char }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    {% if events %}
+    <div style="margin-top: 20px;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">List of Events</span>
+        </div>
+        <form method="POST">
+            <input type="hidden" name="college_id" value="{{ filters.college_id }}">
+            <input type="hidden" name="session_id" value="{{ filters.session_id }}">
+            <input type="hidden" name="degree_id" value="{{ filters.degree_id }}">
+            <input type="hidden" name="year_id" value="{{ filters.year_id }}">
+
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <th style="width: 5%;">S.No.</th>
+                        <th style="width: 20%;">Events</th>
+                        <th style="width: 25%;">Odd Class</th>
+                        <th style="width: 25%;">Even Class</th>
+                        <th style="width: 15%;">Remarks</th>
+                        <th style="width: 10%;">Events For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in events %}
+                    {% set assign = assignments.get(e.id, {}) %}
+                    <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                        <td align="center">
+                            {{ loop.index }}
+                            <input type="hidden" name="event_ids" value="{{ e.id }}">
+                        </td>
+                        <td>{{ e.name }}</td>
+                        <td>
+                            <table border="0" width="100%">
+                                <tr>
+                                    <td align="right" style="font-size: 10px;">From:</td>
+                                    <td><input type="date" name="odd_from_{{ e.id }}" value="{{ assign.odd_fromDate or '' }}" class="textbox" style="width: 110px;"></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" style="font-size: 10px;">To:</td>
+                                    <td><input type="date" name="odd_to_{{ e.id }}" value="{{ assign.odd_toDate or '' }}" class="textbox" style="width: 110px;"></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table border="0" width="100%">
+                                <tr>
+                                    <td align="right" style="font-size: 10px;">From:</td>
+                                    <td><input type="date" name="even_from_{{ e.id }}" value="{{ assign.even_fromDate or '' }}" class="textbox" style="width: 110px;"></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" style="font-size: 10px;">To:</td>
+                                    <td><input type="date" name="even_to_{{ e.id }}" value="{{ assign.even_toDate or '' }}" class="textbox" style="width: 110px;"></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <textarea name="remarks_{{ e.id }}" class="textbox" style="width: 100%; height: 40px;">{{ assign.remarks or '' }}</textarea>
+                        </td>
+                        <td align="center">
+                            <select name="events_for_{{ e.id }}" class="dropdown" style="width: 80px;">
+                                <option value="A" {% if assign.events_for == 'A' %}selected{% endif %}>All</option>
+                                <option value="T" {% if assign.events_for == 'T' %}selected{% endif %}>Teacher</option>
+                                <option value="P" {% if assign.events_for == 'P' %}selected{% endif %}>Student</option>
+                                <option value="B" {% if assign.events_for == 'B' %}selected{% endif %}>Both</option>
+                            </select>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div style="margin-top: 15px; text-align: center;">
+                <input type="submit" value="SAVE ASSIGNMENTS" class="button-common">
+                <input type="button" value="RESET" class="button-common" onclick="refreshGrid()">
+            </div>
+        </form>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function loadDegrees() {
+    var cid = document.getElementById('ddlCollege').value;
+    if (!cid) return;
+    fetch('/academics/api/college/' + cid + '/degrees')
+        .then(r => r.json())
+        .then(data => {
+            var select = document.getElementById('ddlDegree');
+            select.innerHTML = '<option value="">--Select Degree--</option>';
+            data.forEach(d => {
+                var o = document.createElement('option');
+                o.value = d.id;
+                o.textContent = d.name;
+                select.appendChild(o);
+            });
+        });
+}
+
+function refreshGrid() {
+    var cid = document.getElementById('ddlCollege').value;
+    var sid = document.getElementById('ddlSession').value;
+    var did = document.getElementById('ddlDegree').value;
+    var yid = document.getElementById('ddlYear').value;
+    
+    if (cid && sid && did && yid) {
+        document.getElementById('filterForm').submit();
+    }
+}
+</script>
+
+<style>
+    .filter-table td { padding: 5px; }
+    .vtext { font-size: 11px; font-weight: bold; }
+</style>
+{% endblock %}

@@ -1,0 +1,216 @@
+<style>
+    /* SIDEBAR STYLING - MIMICKING PROJECT THEME & LIVE PORTAL BEHAVIOR */
+    #sidebar {
+        min-width: 210px;
+        max-width: 210px;
+        background: #fff;
+        color: #333;
+        transition: all 0.3s;
+        border-right: 1px solid #ddd;
+        height: auto;
+        min-height: calc(100vh - 120px);
+        z-index: 999;
+        padding-top: 10px;
+    }
+
+    #sidebar.active {
+        margin-left: -210px;
+    }
+
+    .profile-section {
+        padding: 15px;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 10px;
+    }
+
+    .profile-section img {
+        width: 100px;
+        height: 100px;
+        border: 1px solid #ccc;
+        padding: 4px;
+        border-radius: 50%; /* Circle looks more modern for avatars */
+        background: #fff;
+        object-fit: cover;
+    }
+
+    .avatar-circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #3c8dbc 0%, #2c729e 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        border: 3px solid #fff;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .avatar-circle img {
+        width: 80% !important;
+        height: 80% !important;
+        border: none !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+
+    #sidebar ul.components {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    #sidebar ul li {
+        border-bottom: 1px solid #f1f1f1;
+    }
+
+    #sidebar ul li a {
+        padding: 10px 15px;
+        font-size: 11px;
+        display: block;
+        color: #3c8dbc;
+        text-decoration: none;
+        font-weight: bold;
+        background: #fff;
+        position: relative;
+    }
+
+    #sidebar ul li a:hover {
+        background: #f9f9f9;
+        color: #2c729e;
+    }
+
+    #sidebar ul li a.dropdown-toggle::after {
+        content: '+';
+        position: absolute;
+        right: 15px;
+        font-size: 14px;
+    }
+
+    #sidebar ul li a.dropdown-toggle[aria-expanded="true"]::after {
+        content: '-';
+    }
+
+    .sidebar-submenu {
+        list-style: none;
+        padding-left: 0;
+        background: #fcfcfc;
+    }
+
+    .sidebar-submenu li a {
+        padding-left: 25px !important;
+        font-weight: normal !important;
+        color: #555 !important;
+        border-bottom: 1px solid #f9f9f9;
+    }
+
+    .sidebar-submenu li a:hover {
+        background: #3c8dbc !important;
+        color: #fff !important;
+    }
+
+    .announcement-box {
+        margin: 20px 10px;
+        border: 1px solid #ddd;
+        background: #fff;
+    }
+
+    .announcement-header {
+        background: #eee;
+        padding: 5px;
+        font-weight: bold;
+        font-size: 10px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .sidebar-toggle-btn {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        z-index: 1001;
+        background: #3c8dbc;
+        color: #fff;
+        border: none;
+        padding: 8px;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+    }
+</style>
+
+<nav id="sidebar" class="no-print">
+    <div class="profile-section">
+        {% if session.photo and session.photo != 'None' %}
+            <img src="{{ session.photo }}" alt="User">
+        {% else %}
+            <div class="avatar-circle">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+            </div>
+        {% endif %}
+    </div>
+
+    <ul class="list-unstyled components">
+        {% for main_name, main_data in menu.items() %}
+        <li>
+            <a href="#menu-{{ loop.index }}" data-bs-toggle="collapse" aria-expanded="{{ 'true' if loop.first else 'false' }}" class="dropdown-toggle">
+                {{ main_name }}
+            </a>
+            <ul class="collapse {{ 'show' if loop.first else '' }} sidebar-submenu list-unstyled" id="menu-{{ loop.index }}">
+                {% if main_data.pages %}
+                    {% for p in main_data.pages %}
+                        <li>
+                            <a href="{{ p.url }}">{{ p.name }}</a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+                {% if main_data.subs %}
+                    {% for sub in main_data.subs %}
+                        <li>
+                            <a href="#sub-{{ loop.index }}-{{ loop.index0 }}" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="padding-left: 15px !important; background: #f4f4f4;">
+                                {{ sub.name }}
+                            </a>
+                            <ul class="collapse sidebar-submenu list-unstyled" id="sub-{{ loop.index }}-{{ loop.index0 }}">
+                                {% for sp in sub.pages %}
+                                    <li><a href="{{ sp.url }}">{{ sp.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div class="announcement-box">
+        <div class="announcement-header">ERP Announcements</div>
+        <div style="padding: 5px; font-size: 10px;">
+            <marquee direction="up" scrollamount="1" height="60">
+                Welcome to CCSHAU ERP Portal. Please update your profile details for HRMS records.
+            </marquee>
+        </div>
+    </div>
+</nav>
+
+<button type="button" id="sidebarCollapse" class="sidebar-toggle-btn no-print">
+    <span>☰ TOGGLE MENU</span>
+</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebar');
+        const sidebarCollapse = document.getElementById('sidebarCollapse');
+        
+        if (sidebarCollapse) {
+            sidebarCollapse.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+        }
+    });
+</script>

@@ -160,19 +160,41 @@ def inject_navigation():
             built_menu = {}
             for main_cat, subs in config.items():
                 cat_obj = {'subs': [], 'pages': []}
-                for _sub_cat, sub_subs in subs.items():
-                    for folder_name, pages in sub_subs.items():
+                for sub_cat, sub_subs in subs.items():
+                    # Check if 'sub_subs' is actually a list (flat) or a dict (nested folders)
+                    if isinstance(sub_subs, list):
                         visible_pages = []
-                        for p in pages:
+                        for p in sub_subs:
                             if is_super or _norm(p) in allowed_pages_norm:
                                 visible_pages.append({'name': p, 'url': get_page_url(p)})
                         if visible_pages:
-                            cat_obj['subs'].append({
-                                'name': folder_name,
-                                'url': visible_pages[0]['url'],
-                                'pages': visible_pages
-                            })
-                if cat_obj['subs']:
+                            # If sub_cat is "Main Menu", we might want to put pages directly in cat_obj.pages
+                            if sub_cat == 'Main Menu':
+                                cat_obj['pages'].extend(visible_pages)
+                            else:
+                                cat_obj['subs'].append({
+                                    'name': sub_cat,
+                                    'url': visible_pages[0]['url'],
+                                    'pages': visible_pages
+                                })
+                    elif isinstance(sub_subs, dict):
+                        for folder_name, pages in sub_subs.items():
+                            visible_pages = []
+                            for p in pages:
+                                if is_super or _norm(p) in allowed_pages_norm:
+                                    visible_pages.append({'name': p, 'url': get_page_url(p)})
+                            if visible_pages:
+                                # If folder name matches the main category or is "Main Menu", 
+                                # pull pages up to the top level to avoid double menu entries.
+                                if _norm(folder_name) == _norm(main_cat) or _norm(folder_name) == 'main menu':
+                                    cat_obj['pages'].extend(visible_pages)
+                                else:
+                                    cat_obj['subs'].append({
+                                        'name': folder_name,
+                                        'url': visible_pages[0]['url'],
+                                        'pages': visible_pages
+                                    })
+                if cat_obj['subs'] or cat_obj['pages']:
                     built_menu[main_cat] = cat_obj
             return built_menu
 
@@ -244,6 +266,9 @@ def inject_navigation():
     ctx['establishment_tabs'] = []
     ctx['processed_establishment_menu'] = []
     ctx['establishment_breadcrumb'] = []
+    ctx['leave_tabs'] = []
+    ctx['processed_leave_menu'] = []
+    ctx['leave_breadcrumb'] = []
     
     allowed_pages = {r['PageName'] for r in all_rights if r['AllowView']}
     allowed_pages_norm = {_norm(p) for p in allowed_pages}
@@ -294,7 +319,7 @@ def inject_navigation():
     ctx['all_rights'] = all_rights
 
     # Build Top Menu AND Detect Active Tab Group
-    if str(current_mod_id) in ['30', '55', '72']:
+    if str(current_mod_id) in ['30', '55', '72', '75']:
         is_super = NavModel._is_super_admin(user_id)
         if str(current_mod_id) == '30':
             config = UMM_MENU_CONFIG
@@ -306,6 +331,12 @@ def inject_navigation():
             processed_menu_key = 'processed_academic_menu'
             tabs_key = 'academic_tabs'
             breadcrumb_key = 'academic_breadcrumb'
+        elif str(current_mod_id) == '75':
+            from app.blueprints.leave import LEAVE_MENU_CONFIG
+            config = LEAVE_MENU_CONFIG
+            processed_menu_key = 'processed_leave_menu'
+            tabs_key = 'leave_tabs'
+            breadcrumb_key = 'leave_breadcrumb'
         else: # 72
             from app.blueprints.establishment import ESTABLISHMENT_MENU_CONFIG
             config = ESTABLISHMENT_MENU_CONFIG
