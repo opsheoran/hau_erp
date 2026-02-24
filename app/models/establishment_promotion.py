@@ -495,8 +495,12 @@ class NonTeachingPromotionModel:
         return DB.execute(f"UPDATE {table} SET [{status_col}] = ? WHERE [{pk}] = ?", [status, row_id])
 
     @staticmethod
-    def list_approval(status: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
-        table = NonTeachingPromotionModel._pick_table(
+    def list_approval(
+        status: Optional[str] = None,
+        limit: int = 100,
+        table_override: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
+        table = table_override or NonTeachingPromotionModel._pick_table(
             NonTeachingPromotionModel.TABLE_APPROVAL_CANDIDATES,
             NonTeachingPromotionModel.TABLE_APPROVAL,
         )
@@ -532,8 +536,8 @@ class NonTeachingPromotionModel:
             return []
 
     @staticmethod
-    def set_approval_status(row_id: Any, status: str) -> int:
-        table = NonTeachingPromotionModel._pick_table(
+    def set_approval_status(row_id: Any, status: str, table_override: Optional[str] = None) -> int:
+        table = table_override or NonTeachingPromotionModel._pick_table(
             NonTeachingPromotionModel.TABLE_APPROVAL_CANDIDATES,
             NonTeachingPromotionModel.TABLE_APPROVAL,
         )
@@ -549,13 +553,7 @@ class NonTeachingPromotionModel:
             NonTeachingPromotionModel.TABLE_VC_APPROVAL_CANDIDATES,
             NonTeachingPromotionModel.TABLE_VC_APPROVAL,
         )
-        # Reuse list_approval logic by temporarily overriding the fallback table.
-        original = NonTeachingPromotionModel.TABLE_APPROVAL
-        try:
-            NonTeachingPromotionModel.TABLE_APPROVAL = table
-            return NonTeachingPromotionModel.list_approval(status, limit)
-        finally:
-            NonTeachingPromotionModel.TABLE_APPROVAL = original
+        return NonTeachingPromotionModel.list_approval(status, limit, table_override=table)
 
     @staticmethod
     def set_vc_approval_status(row_id: Any, status: str) -> int:
@@ -563,9 +561,4 @@ class NonTeachingPromotionModel:
             NonTeachingPromotionModel.TABLE_VC_APPROVAL_CANDIDATES,
             NonTeachingPromotionModel.TABLE_VC_APPROVAL,
         )
-        original = NonTeachingPromotionModel.TABLE_APPROVAL
-        try:
-            NonTeachingPromotionModel.TABLE_APPROVAL = table
-            return NonTeachingPromotionModel.set_approval_status(row_id, status)
-        finally:
-            NonTeachingPromotionModel.TABLE_APPROVAL = original
+        return NonTeachingPromotionModel.set_approval_status(row_id, status, table_override=table)
