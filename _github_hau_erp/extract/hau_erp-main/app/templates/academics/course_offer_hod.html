@@ -1,0 +1,324 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Course Offered By HOD</span></div>
+    <div style="padding:10px;">
+        <form method="GET" id="filterForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td class="required" colspan="4">
+                            <select name="college_id" id="ddlCollege" class="dropdown w-300">
+                                <option value="">-- Select College --</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Academic Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" id="ddlSession" class="dropdown w-200">
+                                <option value="">-- Select Session --</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" id="ddlDegree" class="dropdown w-300">
+                                <option value="">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                        <td class="vtext">Semester</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="semester_id" id="ddlSemester" class="dropdown w-150">
+                                <option value=""> -- Select Semester -- </option>
+                                {% for s in lookups.semesters %}
+                                <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Year</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select id="ddlYear" class="dropdown w-100" style="background-color: #f0f0f0; cursor: not-allowed;" disabled>
+                                <option value="">--Year--</option>
+                                {% for y in lookups.years %}
+                                <option value="{{ y.pk_degreeyearid }}" {% if filters.year_id|string == y.pk_degreeyearid|string %}selected{% endif %}>{{ y.degreeyear_char }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" name="year_id" id="year_id_hidden" value="{{ filters.year_id or '' }}">
+                        </td>
+                        <td class="vtext">Exam Config</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="exconfig_id" id="ddlExamConfig" class="dropdown w-300">
+                                <option value="">-- Select Exam Config.--</option>
+                                {% for ex in lookups.exam_configs %}
+                                <option value="{{ ex.pk_exconfigid }}" {% if filters.exconfig_id|string == ex.pk_exconfigid|string %}selected{% endif %}>{{ ex.display_name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table width="100%">
+                <tr>
+                    <td width="16%"></td>
+                    <td>
+                        <input type="button" value="GET COURSES" class="button-common" style="margin-right: 5px;" onclick="validateAndSubmit()">
+                        <input type="button" value="RESET" class="button-common" onclick="resetFilters()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <br>
+        {% if courses %}
+        <div class="tablesubheading"><span class="subheadingborderbottom">List of Courses</span></div>
+        <form method="POST" id="saveForm">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="college_id" value="{{ filters.college_id or '' }}">
+            <input type="hidden" name="session_id" value="{{ filters.session_id or '' }}">
+            <input type="hidden" name="degree_id" value="{{ filters.degree_id or '' }}">
+            <input type="hidden" name="semester_id" value="{{ filters.semester_id or '' }}">
+            <input type="hidden" name="year_id" value="{{ filters.year_id or '' }}">
+            <input type="hidden" name="exconfig_id" value="{{ filters.exconfig_id or '' }}">
+            <input type="hidden" name="branch_id" value="{{ filters.branch_id or '' }}">
+
+            <div style="margin: 5px 0;">
+                <input type="checkbox" id="chkAllCourses" onclick="toggleAllCourses(this.checked)">
+                <label for="chkAllCourses" style="cursor:pointer;">ALL</label>
+            </div>
+
+            <div style="border:1px solid #D4D4D4; max-height:400px; overflow:auto; padding: 5px;">
+                <table border="0" width="100%">
+                    <tbody>
+                    {% for c in courses %}
+                        <tr>
+                            <td>
+                                <span style="display:inline-block; padding: 2px 0;">
+                                    <input type="checkbox" id="course_{{ c.pk_courseid }}" name="course_ids[]" value="{{ c.pk_courseid }}"
+                                           {% if c.pk_courseid in selected_ids %}checked{% endif %}>
+                                    <label for="course_{{ c.pk_courseid }}" style="cursor: pointer;">
+                                        {{ c.display_name }}
+                                    </label>
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top:15px; text-align: center;">
+                <input type="submit" value="UPDATE" class="button-common" style="margin-right: 5px;">
+            </div>
+        </form>
+        {% elif request.args.get('degree_id') %}
+        <div class="item-style" style="padding:20px; text-align:center; color:red; border:1px solid #ddd;">
+            No courses found for the selected criteria.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .w-300 { width: 300px; }
+    .w-200 { width: 200px; }
+    .w-150 { width: 150px; }
+    .w-100 { width: 100px; }
+</style>
+
+<script>
+function setOptions(select, items, placeholder) {
+    select.innerHTML = '';
+    var opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = placeholder;
+    select.appendChild(opt);
+    for (var i = 0; i < items.length; i++) {
+        var o = document.createElement('option');
+        o.value = items[i].id || items[i].pk_degreeid || items[i].pk_semesterid || items[i].pk_exconfigid;
+        o.textContent = items[i].name || items[i].degreename || items[i].semester_roman || items[i].display_name || '';
+        select.appendChild(o);
+    }
+}
+
+function toggleAllCourses(checked) {
+    var boxes = document.querySelectorAll('input[name=\"course_ids[]\"]');
+    for (var i = 0; i < boxes.length; i++) {
+        boxes[i].checked = checked;
+    }
+}
+
+function resetFilters() {
+    window.location.href = window.location.pathname;
+}
+
+function loadDegrees() {
+    var collegeId = document.getElementById('ddlCollege').value;
+    var ddlDegree = document.getElementById('ddlDegree');
+    if (!collegeId) {
+        setOptions(ddlDegree, [], '--Select Degree--');
+        resetDependentDropdowns('college');
+        return Promise.resolve();
+    }
+    return fetch('/academics/api/college/' + collegeId + '/degrees')
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            setOptions(ddlDegree, data, '--Select Degree--');
+        });
+}
+
+function loadSemesters() {
+    var degreeId = document.getElementById('ddlDegree').value;
+    var ddlSemester = document.getElementById('ddlSemester');
+    if (!degreeId) {
+        setOptions(ddlSemester, [], ' -- Select Semester -- ');
+        resetDependentDropdowns('degree');
+        return Promise.resolve();
+    }
+    return fetch('/academics/api/get_degree_semesters/' + degreeId)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            setOptions(ddlSemester, data, ' -- Select Semester -- ');
+        });
+}
+
+function loadExamConfigs() {
+    var degreeId = document.getElementById('ddlDegree').value;
+    var sessionId = document.getElementById('ddlSession').value;
+    var semesterId = document.getElementById('ddlSemester').value;
+    var ddlExamConfig = document.getElementById('ddlExamConfig');
+
+    if (!degreeId || !sessionId || !semesterId) {
+        setOptions(ddlExamConfig, [], '-- Select Exam Config.--');
+        return Promise.resolve();
+    }
+
+    var url = '/academics/api/get_exam_configs?degree_id=' + degreeId + '&session_id=' + sessionId + '&semester_id=' + semesterId;
+    return fetch(url)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            setOptions(ddlExamConfig, data, '-- Select Exam Config.--');
+        });
+}
+
+function loadYear() {
+    var semesterId = document.getElementById('ddlSemester').value;
+    var ddlYear = document.getElementById('ddlYear');
+    var yearHidden = document.getElementById('year_id_hidden');
+
+    if (!semesterId) {
+        ddlYear.value = '';
+        yearHidden.value = '';
+        return Promise.resolve();
+    }
+
+    return fetch('/academics/api/get_semester_year/' + semesterId)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            if (data && data.pk_degreeyearid) {
+                ddlYear.value = data.pk_degreeyearid;
+                yearHidden.value = data.pk_degreeyearid;
+            } else {
+                ddlYear.value = '';
+                yearHidden.value = '';
+            }
+        });
+}
+
+function resetDependentDropdowns(trigger) {
+    if (trigger === 'college') {
+        setOptions(document.getElementById('ddlDegree'), [], '--Select Degree--');
+        setOptions(document.getElementById('ddlSemester'), [], ' -- Select Semester -- ');
+        setOptions(document.getElementById('ddlExamConfig'), [], '-- Select Exam Config.--');
+        document.getElementById('ddlYear').value = '';
+        document.getElementById('year_id_hidden').value = '';
+    } else if (trigger === 'session') {
+        setOptions(document.getElementById('ddlExamConfig'), [], '-- Select Exam Config.--');
+    } else if (trigger === 'degree') {
+        setOptions(document.getElementById('ddlSemester'), [], ' -- Select Semester -- ');
+        setOptions(document.getElementById('ddlExamConfig'), [], '-- Select Exam Config.--');
+        document.getElementById('ddlYear').value = '';
+        document.getElementById('year_id_hidden').value = '';
+    } else if (trigger === 'semester') {
+        setOptions(document.getElementById('ddlExamConfig'), [], '-- Select Exam Config.--');
+        document.getElementById('ddlYear').value = '';
+        document.getElementById('year_id_hidden').value = '';
+    }
+}
+
+function validateAndSubmit() {
+    var college = document.getElementById('ddlCollege').value;
+    var session = document.getElementById('ddlSession').value;
+    var degree = document.getElementById('ddlDegree').value;
+    var semester = document.getElementById('ddlSemester').value;
+    var exam = document.getElementById('ddlExamConfig').value;
+
+    if (!college) { alert('Please select College'); return; }
+    if (!session) { alert('Please select Academic Session'); return; }
+    if (!degree) { alert('Please select Degree'); return; }
+    if (!semester) { alert('Please select Semester'); return; }
+    if (!exam) { alert('Please select Exam Config'); return; }
+
+    document.getElementById('year_id_hidden').value = document.getElementById('ddlYear').value;
+
+    var url = window.location.pathname
+        + '?college_id=' + encodeURIComponent(college)
+        + '&session_id=' + encodeURIComponent(session)
+        + '&degree_id=' + encodeURIComponent(degree)
+        + '&semester_id=' + encodeURIComponent(semester)
+        + '&exconfig_id=' + encodeURIComponent(exam)
+        + '&year_id=' + encodeURIComponent(document.getElementById('ddlYear').value);
+    window.location.href = url;
+}
+
+document.getElementById('ddlCollege').addEventListener('change', function() {
+    resetDependentDropdowns('college');
+    loadDegrees();
+});
+
+document.getElementById('ddlSession').addEventListener('change', function() {
+    resetDependentDropdowns('session');
+    loadExamConfigs();
+});
+
+document.getElementById('ddlDegree').addEventListener('change', function() {
+    resetDependentDropdowns('degree');
+    loadSemesters().then(loadExamConfigs);
+});
+
+document.getElementById('ddlSemester').addEventListener('change', function() {
+    loadYear().then(loadExamConfigs);
+});
+
+window.onload = function() {
+    if (document.getElementById('ddlSemester').value && !document.getElementById('ddlYear').value) {
+        loadYear();
+    }
+};
+</script>
+{% endblock %}

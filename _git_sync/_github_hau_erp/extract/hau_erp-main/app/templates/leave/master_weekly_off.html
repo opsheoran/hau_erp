@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tablesubheading">Weekly Off Master</div>
+    <div style="padding: 15px;">
+        <div style="border:1px solid #3c8dbc; background:#f0f7ff; padding:10px; font-family:Verdana; font-size:11px; margin-bottom:20px;">
+            Configure standard weekly off days for different employee categories or locations.
+        </div>
+        
+        <form method="POST" style="max-width: 800px; margin: 0 auto;">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="20%">Location</td><td class="colon">:</td>
+                    <td>
+                        <select name="loc_id" class="dropdown" style="width: 300px;">
+                            <option value="">-- All --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Employee Nature</td><td class="colon">:</td>
+                    <td>
+                        <select name="nature_id" class="dropdown" style="width: 300px;">
+                            <option value="">-- All --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div class="tablesubheading" style="background:#eee; color:#333; margin-top:20px; margin-bottom:15px;">Select Weekly Off Days</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; padding: 15px; border: 1px solid #ddd; background: #fcfcfc;">
+                            <label><input type="checkbox" name="days" value="Sunday" checked> Sunday</label>
+                            <label><input type="checkbox" name="days" value="Monday"> Monday</label>
+                            <label><input type="checkbox" name="days" value="Tuesday"> Tuesday</label>
+                            <label><input type="checkbox" name="days" value="Wednesday"> Wednesday</label>
+                            <label><input type="checkbox" name="days" value="Thursday"> Thursday</label>
+                            <label><input type="checkbox" name="days" value="Friday"> Friday</label>
+                            <label><input type="checkbox" name="days" value="Saturday"> Saturday (2nd)</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="padding-top: 25px; text-align: center;">
+                        <input type="submit" value="SAVE CONFIGURATION" class="button-common" style="background:#3c8dbc; color:white; padding: 5px 30px;">
+                        <input type="reset" value="RESET" class="button-common" style="margin-left:10px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+{% endblock %}

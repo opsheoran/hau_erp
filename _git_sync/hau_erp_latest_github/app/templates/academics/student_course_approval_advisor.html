@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Student Course Approval (By Advisor)</span>
+    </div>
+
+    <form id="filterForm" method="GET">
+        <input type="hidden" name="view" value="1">
+        <table width="100%" class="filter-table">
+            <tr>
+                <td class="vtext">College</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="ddlCollege" class="dropdown w-300" onchange="loadDegrees()">
+                        <option value="">-- Select College --</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Academic Session</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="session_id" id="ddlSession" class="dropdown w-200">
+                        <option value="">-- Select Session --</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="degree_id" id="ddlDegree" class="dropdown w-300" onchange="onDegreeChange()">
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                <td class="vtext">Semester</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="semester_id" id="ddlSemester" class="dropdown w-150" onchange="onSemesterChange()">
+                        <option value=""> -- Select Semester -- </option>
+                        {% for s in lookups.semesters %}
+                        <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Year</td>
+                <td class="colon">:</td>
+                <td>
+                    <select id="ddlYear" class="dropdown w-100" disabled style="background-color: #f0f0f0;">
+                        <option value="">--Year--</option>
+                        {% for y in lookups.years %}
+                        <option value="{{ y.pk_degreeyearid }}">{{ y.degreeyear_char }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td class="vtext">Exam Config</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="exconfig_id" id="ddlExamConfig" class="dropdown w-300">
+                        <option value="">-- Select Exam Config.--</option>
+                        {% for ec in lookups.exam_configs %}
+                        <option value="{{ ec.pk_exconfigid }}" {% if filters.exconfig_id|string == ec.pk_exconfigid|string %}selected{% endif %}>{{ ec.display_name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="5" style="padding-top: 10px;">
+                    <input type="button" value="GET STUDENTS" class="button-common" onclick="validateAndSubmit()">
+                    <input type="button" value="RESET" class="button-common" onclick="window.location.href='{{ url_for('academics.student_course_approval_advisor') }}'">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    {% if filters.view == '1' %}
+    <div style="margin-top: 20px;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">List of Students</span>
+        </div>
+        <form method="POST" id="approvalForm">
+            <input type="hidden" name="exconfig_id" value="{{ filters.exconfig_id }}">
+            <input type="hidden" name="session_id" value="{{ filters.session_id }}">
+            
+            <div class="DivStyleWithScroll" style="max-height: 600px; overflow-y: auto;">
+                <table class="table-grid-view" id="gvdetails" style="width: 100%;">
+                    <tr class="header-style">
+                        <th style="width: 5%;">S.No.</th>
+                        <th style="width: 15%;">Admission No.</th>
+                        <th style="width: 20%;">Name</th>
+                        <th style="width: 40%;">Courses</th>
+                        <th style="width: 10%;">
+                            Approval All<br>
+                            <input type="checkbox" id="chkAppall" onclick="toggleAllApprovals(this)">
+                        </th>
+                        <th style="width: 10%;">Remarks</th>
+                    </tr>
+                    {% for s in students %}
+                    <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td align="center">{{ s.AdmissionNo }}</td>
+                        <td>{{ s.fullname }}</td>
+                        <td align="left">
+                            <div style="font-size: 11px; color: #333;">
+                                {% if s.courses_info %}
+                                    {% set courses = s.courses_info.split(', ') %}
+                                    <table class="chkboxlist" border="0" style="width: 100%;">
+                                    {% for c in courses %}
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" checked disabled>
+                                                <label style="font-size: 11px;">{{ c }}</label>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </table>
+                                {% else %}
+                                    <span style="color: red;">No courses allocated</span>
+                                {% endif %}
+                            </div>
+                            <input type="hidden" name="student_ids" value="{{ s.pk_sid }}">
+                        </td>
+                        <td align="center">
+                            <input type="checkbox" name="approved_ids" value="{{ s.pk_sid }}" class="chk-approve chkbox" {% if s.approved %}checked{% endif %}>
+                        </td>
+                        <td align="center">
+                            <textarea name="remarks" class="textbox" style="width: 150px; height: 60px;">{{ s.remarks or '' }}</textarea>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" align="center" style="color: red; padding: 20px;">No students found for approval.</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            {% if students %}
+            <div style="margin-top: 15px; text-align: center;">
+                <input type="submit" name="action" value="APPROVE" class="button-common">
+                <input type="submit" name="action" value="Hold" class="button-common" style="margin: 0 10px;">
+                <input type="button" value="cancel" class="button-common" onclick="if(confirm('Are you sure you want to Cancel the Change?')) window.location.reload();">
+            </div>
+            {% endif %}
+        </form>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+var initialExconfigId = {{ (filters.exconfig_id or '')|tojson }};
+
+function setOptions(dropdown, data, defaultText) {
+    dropdown.innerHTML = '<option value="">' + defaultText + '</option>';
+    data.forEach(function(item) {
+        var opt = document.createElement('option');
+        opt.value = item.id || item.pk_exconfigid || item.pk_semesterid || item.pk_degreeyearid;
+        opt.textContent = item.name || item.display_name || item.semester_roman || item.degreeyear_char;
+        dropdown.appendChild(opt);
+    });
+}
+
+function loadDegrees() {
+    var collegeId = document.getElementById('ddlCollege').value;
+    if (!collegeId) return;
+    fetch('/academics/api/college/' + collegeId + '/degrees')
+        .then(r => r.json())
+        .then(data => setOptions(document.getElementById('ddlDegree'), data, '--Select Degree--'));
+}
+
+function onDegreeChange() {
+    var degreeId = document.getElementById('ddlDegree').value;
+    if (!degreeId) return;
+    
+    // Reset dependent
+    setOptions(document.getElementById('ddlSemester'), [], '-- Select Semester --');
+    setOptions(document.getElementById('ddlExamConfig'), [], '-- Select Exam Config.--');
+
+    fetch('/academics/api/get_degree_semesters/' + degreeId)
+        .then(r => r.json())
+        .then(data => setOptions(document.getElementById('ddlSemester'), data, '-- Select Semester --'));
+}
+
+function onSemesterChange() {
+    var degreeId = document.getElementById('ddlDegree').value;
+    var sessionId = document.getElementById('ddlSession').value;
+    var semesterId = document.getElementById('ddlSemester').value;
+    
+    if (!degreeId || !sessionId || !semesterId) return;
+
+    // Load Year
+    fetch('/academics/api/get_semester_year/' + semesterId)
+        .then(r => r.json())
+        .then(data => {
+            if (data && data.pk_degreeyearid) {
+                document.getElementById('ddlYear').value = data.pk_degreeyearid;
+            }
+        });
+
+    // Load Exam Config
+    fetch('/academics/api/get_exam_configs?degree_id=' + degreeId + '&session_id=' + sessionId + '&semester_id=' + semesterId)
+        .then(r => r.json())
+        .then(data => {
+            var ddl = document.getElementById('ddlExamConfig');
+            setOptions(ddl, data, '-- Select Exam Config.--');
+            if (initialExconfigId) {
+                ddl.value = initialExconfigId;
+            }
+        });
+}
+
+function validateAndSubmit() {
+    var college = document.getElementById('ddlCollege').value;
+    var session = document.getElementById('ddlSession').value;
+    var degree = document.getElementById('ddlDegree').value;
+    var semester = document.getElementById('ddlSemester').value;
+    var exconfig = document.getElementById('ddlExamConfig').value;
+
+    if (!college) { alert('Please select College'); return; }
+    if (!session) { alert('Please select Academic Session'); return; }
+    if (!degree) { alert('Please select Degree'); return; }
+    if (!semester) { alert('Please select Semester'); return; }
+    if (!exconfig) { alert('Please select Exam Config'); return; }
+
+    document.getElementById('filterForm').submit();
+}
+
+function toggleAllApprovals(chk) {
+    var checkboxes = document.getElementsByClassName('chk-approve');
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = chk.checked;
+    }
+}
+
+window.addEventListener('load', function() {
+    var semesterId = document.getElementById('ddlSemester').value;
+    var sessionId = document.getElementById('ddlSession').value;
+    var degreeId = document.getElementById('ddlDegree').value;
+    if (semesterId && sessionId && degreeId) {
+        onSemesterChange();
+    }
+});
+</script>
+
+<style>
+    .filter-table td { padding: 5px; }
+    .vtext { font-weight: bold; width: 150px; font-size: 11px; }
+    .colon { width: 10px; }
+    .w-300 { width: 300px !important; }
+    .w-200 { width: 200px !important; }
+    .w-150 { width: 150px !important; }
+    .w-100 { width: 100px !important; }
+    
+    .chkboxlist label { margin-left: 5px; cursor: default; }
+    .chkboxlist td { padding: 2px 0; }
+</style>
+{% endblock %}

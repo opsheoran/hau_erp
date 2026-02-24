@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="GET" id="aspnetForm_GET">
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="6" class="tableheading">
+                    <span class="mainheadingborderbottom">Manage Role Rights</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="10"></td></tr>
+            <tr>
+                <td class="vtext" width="15%">Role</td>
+                <td class="colon" width="2%">:</td>
+                <td>
+                    <select name="role_id" id="ctl00_ContentPlaceHolder1_D_ddlRole" class="dropdownlong" onchange="this.form.submit()">
+                        <option value="">-- Select Role Name --</option>
+                        {% for r in roles %}
+                        <option value="{{ r.id }}" {% if sel_role == r.id|string %}selected{% endif %}>{{ r.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                    <span style="margin-left:15px;"></span>
+                    <a href="{{ url_for('umm.role_page_rights') }}" class="button-common" style="text-decoration:none; display:inline-block; line-height:24px; padding:0 12px; vertical-align:middle;">RESET</a>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="15"></td></tr>
+            <tr>
+                <td colspan="6" class="tablesubheading">
+                    <span class="subheadingborderbottom">Select module (s) to assign pages</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="10"></td></tr>
+            <tr>
+                <td colspan="6" valign="top">
+                    <div id="ctl00_ContentPlaceHolder1_gvUserModules_div">
+                        <table class="table-grid-view" cellspacing="1" cellpadding="1" border="1" id="ctl00_ContentPlaceHolder1_gvUserModules" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+                            <tbody>
+                                <tr class="header-style" align="left">
+                                    <th scope="col">S.No</th><th scope="col">Module(s) Name</th>
+                                </tr>
+                                {% for m in all_modules %}
+                                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                                    <td align="center" style="width:50px;">{{ loop.index }}</td>
+                                    <td>
+                                        <a href="javascript:void(0);" onclick="viewRoleModulePages('{{ m.id }}')" class="gridlink">{{ m.name }}</a>
+                                        <span style="color:#666; font-size:10px;"> (Click to view webpages of the module)</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+{% if sel_role and sel_module %}
+<form method="POST" id="aspnetForm" style="margin-top:20px;">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="role_id" value="{{ sel_role }}">
+    <input type="hidden" name="module_id" value="{{ sel_module }}">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tablesubheading">
+                    <span class="subheadingborderbottom">Manage Rights</span>
+                </td>
+            </tr>
+            <tr><td height="10"></td></tr>
+            <tr>
+                <td style="background-color: #f9f9f9; padding: 10px; border: 1px solid #ddd; margin-bottom: 10px; display: block;">
+                    <span class="vtext" style="color: #3c8dbc; font-weight: bold;">BULK ACTIONS:</span>
+                    <span style="margin-left: 20px;"></span>
+                    <span class="chkbox">
+                        <input type="checkbox" id="bulkView" onclick="toggleBulk('view')"> <label for="bulkView">Toggle View</label>
+                        <span style="margin-left: 15px;"></span>
+                        <input type="checkbox" id="bulkAdd" onclick="toggleBulk('add')"> <label for="bulkAdd">Toggle Add</label>
+                        <span style="margin-left: 15px;"></span>
+                        <input type="checkbox" id="bulkUpdate" onclick="toggleBulk('update')"> <label for="bulkUpdate">Toggle Update</label>
+                        <span style="margin-left: 15px;"></span>
+                        <input type="checkbox" id="bulkDelete" onclick="toggleBulk('delete')"> <label for="bulkDelete">Toggle Delete</label>
+                    </span>
+                </td>
+            </tr>
+            <tr><td height="10"></td></tr>
+            <tr>
+                <td>
+                    <div style="overflow-y: scroll; max-height: 550px; border: 1px solid #ccc; background:#fff;">
+                        <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1" style="border-collapse:collapse;" id="ctl00_ContentPlaceHolder1_gvWebPages">
+                            <thead>
+                                <tr class="header-style">
+                                    <th width="50px">S.No</th>
+                                    <th align="left">Web Page Name</th>
+                                    <th width="80px">VIEW <input id="chkAllView" type="checkbox" onclick="chkAll(this)"></th>
+                                    <th width="80px">ADD <input id="chkAllAdd" type="checkbox" onclick="chkAll(this)"></th>
+                                    <th width="80px">UPDATE <input id="chkAllUpdate" type="checkbox" onclick="chkAll(this)"></th>
+                                    <th width="80px">DELETE <input id="chkAllDelete" type="checkbox" onclick="chkAll(this)"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for p in pages %}
+                                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                    <td align="center">{{ loop.index }}</td>
+                                    <td style="font-weight:bold;">{{ p.name }}</td>
+                                    <td align="center">
+                                        <input type="checkbox" name="view_{{ p.id }}" class="chk-view" {% if p.rights.AllowView %}checked{% endif %}>
+                                    </td>
+                                    <td align="center">
+                                        <input type="checkbox" name="add_{{ p.id }}" class="chk-add" {% if p.rights.AllowAdd %}checked{% endif %}>
+                                    </td>
+                                    <td align="center">
+                                        <input type="checkbox" name="update_{{ p.id }}" class="chk-update" {% if p.rights.AllowUpdate %}checked{% endif %}>
+                                    </td>
+                                    <td align="center">
+                                        <input type="checkbox" name="delete_{{ p.id }}" class="chk-delete" {% if p.rights.AllowDelete %}checked{% endif %}>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr><td height="20"></td></tr>
+            <tr>
+                <td align="center">
+                    <input type="submit" value="SAVE ROLE RIGHTS" class="button-common" style="height: 30px; font-weight: bold;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+{% else %}
+<div style="text-align:center; padding: 40px; color: #666; font-style: italic; border: 1px solid #ddd; background: #fafafa; margin-top:20px;">
+    Please select a Role then click on a module to manage page rights.
+</div>
+{% endif %}
+
+<script>
+function viewRoleModulePages(moduleId) {
+    const roleId = document.getElementById('ctl00_ContentPlaceHolder1_D_ddlRole').value;
+
+    if (!roleId) {
+        if (window.showToast) {
+            window.showToast("First select Role Name!", "warning");
+        } else {
+            alert("First select Role Name!");
+        }
+        return;
+    }
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('role_id', roleId);
+    url.searchParams.set('module_id', moduleId);
+    window.location.href = url.toString();
+}
+
+function chkAll(chkbok) {
+    var chkId = chkbok.id;
+    var check = chkbok.checked;
+    var checkboxes;
+    if (chkId == "chkAllAdd") checkboxes = document.querySelectorAll('.chk-add');
+    if (chkId == "chkAllUpdate") checkboxes = document.querySelectorAll('.chk-update');
+    if (chkId == "chkAllDelete") checkboxes = document.querySelectorAll('.chk-delete');
+    if (chkId == "chkAllView") checkboxes = document.querySelectorAll('.chk-view');
+    
+    if (checkboxes) {
+        checkboxes.forEach(chk => chk.checked = check);
+    }
+}
+
+function toggleBulk(type) {
+    const checkboxes = document.querySelectorAll('.chk-' + type);
+    const bulkChk = document.getElementById('chkAll' + type.charAt(0).toUpperCase() + type.slice(1));
+    // Simple toggle based on the checkbox that was clicked
+    const master = document.getElementById('bulk' + type.charAt(0).toUpperCase() + type.slice(1));
+    checkboxes.forEach(chk => chk.checked = master.checked);
+}
+</script>
+{% endblock %}

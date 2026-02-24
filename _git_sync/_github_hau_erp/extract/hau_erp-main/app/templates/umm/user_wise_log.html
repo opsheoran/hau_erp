@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" id="aspnetForm">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="3" class="tableheading">
+                    <span class="mainheadingborderbottom">User Login Log Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="3" height="10"></td></tr>
+
+            <tr>
+                <td class="vtext" width="20%">User Name</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="user_id" id="ddlUser" class="dropdown w-250">
+                        <option value="">--Select User--</option>
+                        {% for u in users %}
+                        <option value="{{ u.id }}" {% if (sel_user|string) == (u.id|string) %}selected{% endif %}>{{ u.loginname }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">From Date</td>
+                <td class="colon">:</td>
+                <td>
+                    <input name="from_date" type="date" id="txtFromDate" class="textbox w-150" value="{{ from_date }}">
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">To Date</td>
+                <td class="colon">:</td>
+                <td>
+                    <input name="to_date" type="date" id="txtToDate" class="textbox w-150" value="{{ to_date }}">
+                </td>
+            </tr>
+
+            <tr><td colspan="3" height="15"></td></tr>
+            <tr>
+                <td></td><td></td>
+                <td>
+                    <input type="submit" name="action" value="SEARCH" id="btnSearch" class="button-common">
+                    <span style="margin-left:10px;"></span>
+                    <a href="{{ url_for('umm.user_wise_log') }}" class="button-common" style="text-decoration:none; display:inline-block; line-height:24px; padding:0 12px; vertical-align:middle;">RESET</a>
+                    <span style="margin-left:10px;"></span>
+                    <input type="button" name="action" value="Print" id="btnPrint" class="button-common" onclick="window.print();">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="margin-top:30px;">
+        <tbody>
+            <tr>
+                <td class="tablesubheading" colspan="3">
+                    <span class="subheadingborderbottom">List of User Login Details</span>
+                </td>
+            </tr>
+            <tr><td height="10" colspan="3"></td></tr>
+            
+            <tr>
+                <td colspan="3">
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1" style="border-collapse:collapse;" id="dgDetails">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="8%">S. No.</th>
+                                <th>User Name</th>
+                                <th>Login Time</th>
+                                <th>Logout Time</th>
+                                <th>IP Address</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in logs %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                <td align="center">{{ loop.index }}</td>
+                                <td>{{ log.user_name }}</td>
+                                <td align="center">{{ log.logintime.strftime('%d/%m/%Y %H:%M:%S') if log.logintime else '' }}</td>
+                                <td align="center">{{ log.logouttime.strftime('%d/%m/%Y %H:%M:%S') if log.logouttime else '' }}</td>
+                                <td align="center">{{ log.UserIP }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" align="center" style="padding:10px;">No records found for the selected criteria.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+{% endblock %}

@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./role_page_rights_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./role_page_rights_files/default.css" type="text/css" rel="stylesheet"><link href="./role_page_rights_files/font.css" type="text/css" rel="stylesheet"><link href="./role_page_rights_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./role_page_rights_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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ZS1FeGFtaW5hdGlvbmRkAmcPZBYEZg9kFgJmDxUBAzEwM2QCAQ9kFgICAQ8PFgQfAgUPUHJlLUV4YW1pbmF0aW9uHwcFEjg2LFByZS1FeGFtaW5hdGlvbmRkAmgPZBYEZg9kFgJmDxUBAzEwNGQCAQ9kFgICAQ8PFgQfAgUPUHJlLUV4YW1pbmF0aW9uHwcFEjg2LFByZS1FeGFtaW5hdGlvbmRkAmkPZBYEZg9kFgJmDxUBAzEwNWQCAQ9kFgICAQ8PFgQfAgUPUHJlLUV4YW1pbmF0aW9uHwcFEjg2LFByZS1FeGFtaW5hdGlvbmRkAmoPZBYEZg9kFgJmDxUBAzEwNmQCAQ9kFgICAQ8PFgQfAgUPUHJlLUV4YW1pbmF0aW9uHwcFEjg2LFByZS1FeGFtaW5hdGlvbmRkAmsPZBYEZg9kFgJmDxUBAzEwN2QCAQ9kFgICAQ8PFgQfAgUPUHJlLUV4YW1pbmF0aW9uHwcFEjg2LFByZS1FeGFtaW5hdGlvbmRkAmwPZBYEZg9kFgJmDxUBAzEwOGQCAQ9kFgICAQ8PFgQfAgUPUHJlLUV4YW1pbmF0aW9uHwcFEjg2LFByZS1FeGFtaW5hdGlvbmRkAm0PZBYEZg9kFgJmDxUBAzEwOWQCAQ9kFgICAQ8PFgQfAgUPUHJlLUV4YW1pbmF0aW9uHwcFEjg2LFByZS1FeGFtaW5hdGlvbmRkAm4PZBYEZg9kFgJmDxUBAzExMGQCAQ9kFgICAQ8PFgQfAgUPUHJlLUV4YW1pbmF0aW9uHwcFEjg2LFByZS1FeGFtaW5hdGlvbmRkAm8PZBYEZg9kFgJmDxUBAzExMWQCAQ9kFgICAQ8PFgQfAgUPUHJlLUV4YW1pbmF0aW9uHwcFEjg2LFByZS1FeGFtaW5hdGlvbmRkAnAPZBYEZg9kFgJmDxUBAzExMmQCAQ9kFgICAQ8PFgQfAgUPUHJlLUV4YW1pbmF0aW9uHwcFEjg2LFByZS1FeGFtaW5hdGlvbmRkAnEPZBYEZg9kFgJmDxUBAzExM2QCAQ9kFgICAQ8PFgQfAgUPUHJlLUV4YW1pbmF0aW9uHwcFEjg2LFByZS1FeGFtaW5hdGlvbmRkAnIPDxYCHgdWaXNpYmxlaGRkAgcPPCsAEQMADxYEHwVnHwZmZAEQFgAWABYADBQrAABkAgkPDxYCHg1BbnRoZW1WaXNpYmxlaGQWBAIBDw8WBh8CBQRTQVZFHgtDb21tYW5kTmFtZQUEU0FWRR4XQXV0b1VwZGF0ZUFmdGVyQ2FsbEJhY2toZGQCAw8PFgQfC2gfAgUFUkVTRVRkZAILDw8WAh8CZWRkGAMFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYBBQxjdGwwMCRocGxCdG4FJGN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkZ3ZXZWJQYWdlcw88KwAMAgYVAgxwa193ZWJwYWdlSWQIcGFyZW50SWQIZmQFJ2N0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkZ3ZVc2VyTW9kdWxlcw88KwAMAQgCAWSj5i6e6fe3qmrf8+EzfaBnEekc4p0reoi1ySbXJYPfyQ==">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./role_page_rights_files/WebResource.axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./role_page_rights_files/WebResource(1).axd" type="text/javascript"></script>
+<script src="./role_page_rights_files/WebResource(2).axd" type="text/javascript"></script>
+<script src="./role_page_rights_files/WebResource(3).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="6747F3B2">
+	<input type="hidden" name="__PREVIOUSPAGE" id="__PREVIOUSPAGE" value="QAE5Z7mWk02C9kBrfX12YmjTmYLZZxRwW6ZNojqmOgYAgfjaWDwLYKZo4XoScNgzH7eTsOWUNTNN4zUzZn0p5kmcP-NxLGmF3jwfoHM4tci57v4hnhH4wntshdtorp7-0">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="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">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./role_page_rights_files/user-management.png">
+                            User Management
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> Ayush</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> Ayush</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COBS&amp;H, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./role_page_rights_files/WebResource(4).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Create Masters" class="level1 static" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793#?Mwpid=1032" tabindex="-1">Create Masters</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create District Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_District_Mst.aspx?Mwpid=1054" tabindex="-1">District Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create DDO Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Mst.aspx?Mwpid=1034" tabindex="-1">DDO Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Office Type Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_OfficeType_Mst.aspx?Mwpid=1052" tabindex="-1">Office Type Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Location Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_Location_Mst.aspx?Mwpid=1053" tabindex="-1">Location Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Section Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Section_Mst.aspx?Mwpid=1937" tabindex="-1">Section Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Department Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Department_Mst.aspx?Mwpid=1056" tabindex="-1">Department Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Class Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Class_Mst.aspx?Mwpid=1059" tabindex="-1">Class Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Grade Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Grade_Mst.aspx?Mwpid=1060" tabindex="-1">Grade Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Designation Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=1057" tabindex="-1">Designation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Religion Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Religion_Mst.aspx?Mwpid=1058" tabindex="-1">Religion Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Comm_DDO_Location_Mapping" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870" tabindex="-1">DDO Location Mapping</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Country State District City Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_Country_State_City_Mst.aspx?Mwpid=2061" tabindex="-1">Country State District City Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Specialization Master" class="level2 dynamic" href="https://hauiums.in/UMM/UMM_Designation_Specialization.aspx?Mwpid=5068" tabindex="-1">Designation Specialization Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Controlling Office Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_ControllingOfficer_Mst.aspx?Mwpid=5076" tabindex="-1">Controlling Office Master</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:18" role="menuitem" style="position: relative; float: left;"><a title="Manage Users" class="level1 static highlighted" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793#?Mwpid=1033" tabindex="-1">Manage Users</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:18" style="display: block; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create User Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035" tabindex="-1">User Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="ResetPassword" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_ResetPassword.aspx?Mwpid=4839" tabindex="-1">Reset Password</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Manage Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_UserAuthorization.aspx?Mwpid=1044" tabindex="-1">Manage Page Rights</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Page Type Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_PageTypeMaster.aspx?Mwpid=1364" tabindex="-1">Page Type Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Role Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793" tabindex="-1">Role Page Rights</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Role Level Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_RoleLevelsMaster.aspx?Mwpid=1365" tabindex="-1">Role Level Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Role Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_RolesMaster.aspx?Mwpid=1366" tabindex="-1">Role Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="PageType-Role Link" class="level2 dynamic highlighted" href="https://hauiums.in/UMM/Admin_AssignRolePageType.aspx?Mwpid=1046" tabindex="-1">PageType-Role Link</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Module Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_ModuleMaster.aspx?Mwpid=1363" tabindex="-1">Module Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Page Master" class="level2 dynamic" href="https://hauiums.in/UMM/WebpageMst.aspx?Mwpid=1040" tabindex="-1">Web Page Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="User Login Management" class="level2 dynamic" href="https://hauiums.in/sms/masters/LoginPage_ImageChange.aspx?Mwpid=4853" tabindex="-1">User Login Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Module Rights Detail" class="level2 dynamic" href="https://hauiums.in/UMM/User_ModulDetails.aspx?Mwpid=4951" tabindex="-1">Module Rights Detail</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Fetch Password" class="level2 dynamic" href="https://hauiums.in/UMM/FetchPass.aspx?Mwpid=5165" tabindex="-1">Fetch Password</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Multiple Users Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/MultipleUsers_PageRights.aspx?Mwpid=5245" tabindex="-1">Multiple Users Page Rights</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:34" role="menuitem" style="position: relative; float: left;"><a title="View User Logs" class="level1 static" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793#?Mwpid=1883" tabindex="-1">View User Logs</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:34" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="User Wise Log" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_UserLoginDetail_Rpt.aspx?Mwpid=1884" tabindex="-1">User Wise Log</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Send Message" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_CommonMessages.aspx?Mwpid=1885" tabindex="-1">Send Message</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:38" role="menuitem" style="position: relative; float: left;"><a title="Database Backup" class="level1 static" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793#?Mwpid=1968" tabindex="-1">Backup</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:38" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Database Backup" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DbOperations.aspx?Mwpid=1969" tabindex="-1">Database Backup</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:41" role="menuitem" style="position: relative; float: left;"><a title="Other Configurations" class="level1 static" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793#?Mwpid=3286" tabindex="-1">Other Configurations</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:41" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:42" role="menuitem" style="position: relative;"><a title="Hostel Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793#?Mwpid=3287" tabindex="-1">Hostel Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:42" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Hostel Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_Hosteltype.aspx?Mwpid=3252" tabindex="-1">Create &amp; Manage Hostel Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Room Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_Rromtypemst.aspx?Mwpid=3253" tabindex="-1">Create &amp; Manage Room Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Building" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_Building_Mst.aspx?Mwpid=3254" tabindex="-1">Create &amp; Manage Building</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Floor" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_Floor_Mst.aspx?Mwpid=3274" tabindex="-1">Create &amp; Manage Floor</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Map Floor With Building" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_FloorMap.aspx?Mwpid=3275" tabindex="-1">Map Floor With Building</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Facility Name" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_RoomFacility_Mst.aspx?Mwpid=3255" tabindex="-1">Create &amp; Manage Facility Name</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_HostelMaster.aspx?Mwpid=3256" tabindex="-1">Create &amp; Manage Hostel</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Assign Asst. Warden To Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Trns/HST_hostelwardendtl.aspx?Mwpid=3261" tabindex="-1">Assign Asst. Warden To Hostel</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Assign User For Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/Hst_AssignedUser_Mst.aspx?Mwpid=4150" tabindex="-1">Assign User For Hostel</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:53" role="menuitem" style="position: relative;"><a title="Fee Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793#?Mwpid=3700" tabindex="-1">Fee Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:53" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeTypeMaster.aspx?Mwpid=3538" tabindex="-1">Create &amp; Manage Fee Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Head" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeHeads.aspx?Mwpid=3539" tabindex="-1">Create &amp; Manage Fee Head</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Structure" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeStructure.aspx?Mwpid=3540" tabindex="-1">Create &amp; Manage Fee Structure</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Exemption" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_Exemption.aspx?Mwpid=3550" tabindex="-1">Create &amp; Manage Fee Exemption</a></li>
+			</ul></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="NULL" class="level2 dynamic" href="https://hauiums.in/UMM/UMM_PasswordPolicyManager.aspx?Mwpid=3811" tabindex="-1">Password Policies</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:61" role="menuitem" style="position: relative; float: left;"><a title="Farms/Plants" class="level1 static" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793#?Mwpid=3982" tabindex="-1">Farms/Plants</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:61" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Scheme Master" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_Scheme_Mst.aspx?Mwpid=2447" tabindex="-1">Scheme Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="User Location Scheme Map" class="level2 dynamic" href="https://hauiums.in/LRS/Location_SchemeMapping_Mst.aspx?Mwpid=2448" tabindex="-1">User Location Scheme Map</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Financial Year Master" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_FinYear_Mst.aspx?Mwpid=2443" tabindex="-1">Financial Year Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Change Financial Year" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_Change_FinancialYear.aspx?Mwpid=2484" tabindex="-1">Change Financial Year</a></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Manage Users</span>&nbsp;&gt;&nbsp;<strong>Role Page Rights</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./role_page_rights_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <script language="javascript" type="text/javascript">
+        function chkAll(chkbok) {
+            var chkId = chkbok.id;
+            var check = chkbok.checked;
+            var elem = document.getElementById("ctl00_ContentPlaceHolder1_gvWebPages");
+            var arrElemChk = elem.getElementsByTagName('input');
+            var count = 0;
+
+            for (i = 1; i < arrElemChk.length; i++) {
+                var chkPage = aspnetForm["chkPage" + i];
+                if (chkPage) {
+                    if (chkPage.checked == true) {
+                        count = count + 1;
+                    }
+                }
+            }
+
+            if (count == 0) {
+                for (i = 1; i < arrElemChk.length; i++) {
+                    var chki = eval(i);
+                    if (chki > 99) {
+                        var j = i;
+                    }
+                    else {
+                        var j = Right(eval(100 + i), 2);
+                    }
+                    var chkAdd = aspnetForm["ctl00_ContentPlaceHolder1_gvWebPages_ctl" + j + "_chkAdd"];
+                    var chkEdit = aspnetForm["ctl00_ContentPlaceHolder1_gvWebPages_ctl" + j + "_chkEdit"];
+                    var chkDelete = aspnetForm["ctl00_ContentPlaceHolder1_gvWebPages_ctl" + j + "_chkDelete"];
+                    var chkView = aspnetForm["ctl00_ContentPlaceHolder1_gvWebPages_ctl" + j + "_chkView"];
+                    if (chkId == "chkAllAdd") {
+                        if (chkAdd) {
+                            chkAdd.checked = check;
+                        }
+                    }
+                    if (chkId == "chkAllUpdate") {
+                        if (chkEdit) {
+                            chkEdit.checked = check;
+                        }
+                    }
+                    if (chkId == "chkAllDelete") {
+                        if (chkDelete) {
+                            chkDelete.checked = check;
+                        }
+                    }
+                    if (chkId == "chkAllView") {
+                        if (chkView) {
+                            chkView.checked = check;
+                        }
+                    }
+                }
+            }
+            else {
+                for (i = 1; i < arrElemChk.length; i++) {
+                    var sElem1 = arrElemChk[i];
+                    var j = Right(eval(100 + (i + 1)), 2); // checkbox id is like ctl02
+                    var chkAdd = aspnetForm["ctl00_ContentPlaceHolder1_gvWebPages_ctl" + j + "_chkAdd"];
+                    var chkEdit = aspnetForm["ctl00_ContentPlaceHolder1_gvWebPages_ctl" + j + "_chkEdit"];
+                    var chkDelete = aspnetForm["ctl00_ContentPlaceHolder1_gvWebPages_ctl" + j + "_chkDelete"];
+                    var chkView = aspnetForm["ctl00_ContentPlaceHolder1_gvWebPages_ctl" + j + "_chkView"];
+                    var chkPage = aspnetForm["chkPage" + i];
+                    var sId1 = sElem1.id;
+                    if (chkId == "chkAllAdd") {
+                        if (chkPage) {
+                            if (chkPage.checked == true) {
+                                if (chkAdd) {
+                                    chkAdd.checked = check;
+                                }
+                            }
+                        }
+                    }
+                    if (chkId == "chkAllUpdate") {
+                        if (chkPage) {
+                            if (chkPage.checked == true) {
+                                if (chkEdit) {
+                                    chkEdit.checked = check;
+                                }
+                            }
+                        }
+                    }
+                    if (chkId == "chkAllDelete") {
+                        if (chkPage) {
+                            if (chkPage.checked == true) {
+                                if (chkDelete) {
+                                    chkDelete.checked = check;
+                                }
+                            }
+                        }
+                    }
+                    if (chkId == "chkAllView") {
+                        if (chkPage) {
+                            if (chkPage.checked == true) {
+                                if (chkView) {
+                                    chkView.checked = check;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; text-align: left;" class="table">
+        <tbody><tr>
+            <td colspan="3" class="tableheading">Manage Role Rights</td>
+        </tr>
+        <tr>
+            <td class="tdgap" colspan="3"></td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblRole">Role</td>
+            <td class="colon">:</td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlRole__"><select name="ctl00$ContentPlaceHolder1$D_ddlRole" id="ctl00_ContentPlaceHolder1_D_ddlRole" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlRole&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option selected="selected" value="">-- Select Role Name --</option>
+	<option value="2">SUPER ADMIN</option>
+	<option value="3">MIS Admin</option>
+	<option value="4">MODULE ADMIN</option>
+	<option value="5">MODULE USER</option>
+	<option value="6">Bill clerk</option>
+	<option value="7">MODULE USER(TEACHER)</option>
+	<option value="8">DDC  ,and EP</option>
+	<option value="9">DDC and EP(Teacher)</option>
+	<option value="10">hrms</option>
+	<option value="11">AUDITOR</option>
+	<option value="12">External Examiner</option>
+
+</select></span>*
+            </td>
+        </tr>
+        <tr>
+            <td class="tdgap" colspan="3"></td>
+        </tr>
+        <tr>
+            <td colspan="3" class="tablesubheading">Select module (s) to assign pages</td>
+        </tr>
+        <tr>
+            <td class="tdgap" colspan="3"></td>
+        </tr>
+        <tr>
+            <td colspan="3" valign="top">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_gvUserModules__"><div>
+	<table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_gvUserModules" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+		<tbody><tr class="header-style">
+			<th scope="col">S.No</th><th scope="col">Module(s) Name</th>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                1
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl02$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl02_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl02$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                2
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl03$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl03_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl03$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                3
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl04$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl04_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl04$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                4
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl05$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl05_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl05$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                5
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl06$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl06_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl06$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                6
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl07$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl07_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl07$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                7
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl08$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl08_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl08$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                8
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl09$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl09_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl09$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                9
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl10$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl10_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl10$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                10
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl11$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl11_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl11$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                11
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl12$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl12_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl12$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                12
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl13$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl13_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl13$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                13
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl14$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl14_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl14$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                14
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl15$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl15_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl15$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                15
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl16$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl16_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl16$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                16
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl17$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl17_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl17$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                17
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl18$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl18_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl18$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                18
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl19$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl19_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl19$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                19
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl20$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl20_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl20$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                20
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl21$lnkModule&#39;,&#39;pk_moduleId$13,HRMS&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl21_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl21$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">HRMS</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                21
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl22$lnkModule&#39;,&#39;pk_moduleId$14,Financial Accounts&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl22_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl22$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Financial Accounts</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                22
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl23$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl23_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl23$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                23
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl24$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl24_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl24$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                24
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl25$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl25_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl25$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                25
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl26$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl26_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl26$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                26
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl27$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl27_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl27$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                27
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl28$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl28_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl28$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                28
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl29$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl29_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl29$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                29
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl30$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl30_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl30$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                30
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl31$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl31_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl31$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                31
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl32$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl32_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl32$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                32
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl33$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl33_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl33$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                33
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl34$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl34_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl34$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                34
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl35$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl35_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl35$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                35
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl36$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl36_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl36$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                36
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl37$lnkModule&#39;,&#39;pk_moduleId$30,User Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl37_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl37$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">User Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                37
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl38$lnkModule&#39;,&#39;pk_moduleId$47,Budget Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl38_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl38$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Budget Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                38
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl39$lnkModule&#39;,&#39;pk_moduleId$55,Admission &amp; Academics&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl39_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl39$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Admission &amp; Academics</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                39
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl40$lnkModule&#39;,&#39;pk_moduleId$55,Admission &amp; Academics&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl40_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl40$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Admission &amp; Academics</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                40
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl41$lnkModule&#39;,&#39;pk_moduleId$55,Admission &amp; Academics&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl41_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl41$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Admission &amp; Academics</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                41
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl42$lnkModule&#39;,&#39;pk_moduleId$55,Admission &amp; Academics&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl42_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl42$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Admission &amp; Academics</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                42
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl43$lnkModule&#39;,&#39;pk_moduleId$55,Admission &amp; Academics&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl43_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl43$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Admission &amp; Academics</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                43
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl44$lnkModule&#39;,&#39;pk_moduleId$55,Admission &amp; Academics&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl44_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl44$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Admission &amp; Academics</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                44
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl45$lnkModule&#39;,&#39;pk_moduleId$55,Admission &amp; Academics&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl45_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl45$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Admission &amp; Academics</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                45
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl46$lnkModule&#39;,&#39;pk_moduleId$55,Admission &amp; Academics&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl46_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl46$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Admission &amp; Academics</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                46
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl47$lnkModule&#39;,&#39;pk_moduleId$55,Admission &amp; Academics&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl47_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl47$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Admission &amp; Academics</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                47
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl48$lnkModule&#39;,&#39;pk_moduleId$55,Admission &amp; Academics&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl48_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl48$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Admission &amp; Academics</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                48
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl49$lnkModule&#39;,&#39;pk_moduleId$55,Admission &amp; Academics&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl49_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl49$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Admission &amp; Academics</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                49
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl50$lnkModule&#39;,&#39;pk_moduleId$55,Admission &amp; Academics&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl50_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl50$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Admission &amp; Academics</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                50
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl51$lnkModule&#39;,&#39;pk_moduleId$55,Admission &amp; Academics&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl51_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl51$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Admission &amp; Academics</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                51
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl52$lnkModule&#39;,&#39;pk_moduleId$56,Examination &amp; Results&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl52_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl52$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Examination &amp; Results</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                52
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl53$lnkModule&#39;,&#39;pk_moduleId$56,Examination &amp; Results&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl53_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl53$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Examination &amp; Results</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                53
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl54$lnkModule&#39;,&#39;pk_moduleId$56,Examination &amp; Results&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl54_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl54$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Examination &amp; Results</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                54
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl55$lnkModule&#39;,&#39;pk_moduleId$56,Examination &amp; Results&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl55_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl55$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Examination &amp; Results</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                55
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl56$lnkModule&#39;,&#39;pk_moduleId$56,Examination &amp; Results&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl56_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl56$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Examination &amp; Results</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                56
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl57$lnkModule&#39;,&#39;pk_moduleId$56,Examination &amp; Results&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl57_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl57$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Examination &amp; Results</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                57
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl58$lnkModule&#39;,&#39;pk_moduleId$56,Examination &amp; Results&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl58_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl58$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Examination &amp; Results</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                58
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl59$lnkModule&#39;,&#39;pk_moduleId$56,Examination &amp; Results&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl59_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl59$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Examination &amp; Results</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                59
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl60$lnkModule&#39;,&#39;pk_moduleId$56,Examination &amp; Results&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl60_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl60$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Examination &amp; Results</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                60
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl61$lnkModule&#39;,&#39;pk_moduleId$56,Examination &amp; Results&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl61_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl61$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Examination &amp; Results</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                61
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl62$lnkModule&#39;,&#39;pk_moduleId$56,Examination &amp; Results&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl62_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl62$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Examination &amp; Results</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                62
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl63$lnkModule&#39;,&#39;pk_moduleId$56,Examination &amp; Results&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl63_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl63$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Examination &amp; Results</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                63
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl64$lnkModule&#39;,&#39;pk_moduleId$63,Employee Portal&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl64_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl64$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Employee Portal</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                64
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl65$lnkModule&#39;,&#39;pk_moduleId$63,Employee Portal&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl65_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl65$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Employee Portal</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                65
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl66$lnkModule&#39;,&#39;pk_moduleId$63,Employee Portal&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl66_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl66$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Employee Portal</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                66
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl67$lnkModule&#39;,&#39;pk_moduleId$63,Employee Portal&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl67_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl67$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Employee Portal</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                67
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl68$lnkModule&#39;,&#39;pk_moduleId$63,Employee Portal&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl68_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl68$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Employee Portal</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                68
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl69$lnkModule&#39;,&#39;pk_moduleId$63,Employee Portal&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl69_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl69$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Employee Portal</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                69
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl70$lnkModule&#39;,&#39;pk_moduleId$63,Employee Portal&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl70_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl70$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Employee Portal</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                70
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl71$lnkModule&#39;,&#39;pk_moduleId$63,Employee Portal&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl71_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl71$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Employee Portal</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                71
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl72$lnkModule&#39;,&#39;pk_moduleId$63,Employee Portal&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl72_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl72$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Employee Portal</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                72
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl73$lnkModule&#39;,&#39;pk_moduleId$63,Employee Portal&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl73_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl73$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Employee Portal</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                73
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl74$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl74_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl74$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                74
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl75$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl75_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl75$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                75
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl76$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl76_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl76$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                76
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl77$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl77_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl77$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                77
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl78$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl78_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl78$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                78
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl79$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl79_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl79$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                79
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl80$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl80_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl80$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                80
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl81$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl81_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl81$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                81
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl82$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl82_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl82$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                82
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl83$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl83_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl83$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                83
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl84$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl84_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl84$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                84
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl85$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl85_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl85$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                85
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl86$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl86_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl86$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                86
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl87$lnkModule&#39;,&#39;pk_moduleId$72,Establishment&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl87_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl87$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Establishment</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                87
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl88$lnkModule&#39;,&#39;pk_moduleId$75,Leave Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl88_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl88$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Leave Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                88
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl89$lnkModule&#39;,&#39;pk_moduleId$75,Leave Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl89_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl89$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Leave Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                89
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl90$lnkModule&#39;,&#39;pk_moduleId$76,Pension Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl90_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl90$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pension Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                90
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl91$lnkModule&#39;,&#39;pk_moduleId$76,Pension Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl91_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl91$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pension Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                91
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl92$lnkModule&#39;,&#39;pk_moduleId$76,Pension Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl92_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl92$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pension Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                92
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl93$lnkModule&#39;,&#39;pk_moduleId$76,Pension Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl93_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl93$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pension Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                93
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl94$lnkModule&#39;,&#39;pk_moduleId$76,Pension Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl94_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl94$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pension Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                94
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl95$lnkModule&#39;,&#39;pk_moduleId$76,Pension Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl95_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl95$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pension Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                95
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl96$lnkModule&#39;,&#39;pk_moduleId$76,Pension Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl96_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl96$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pension Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                96
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl97$lnkModule&#39;,&#39;pk_moduleId$76,Pension Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl97_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl97$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pension Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                97
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl98$lnkModule&#39;,&#39;pk_moduleId$76,Pension Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl98_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl98$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pension Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                98
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl99$lnkModule&#39;,&#39;pk_moduleId$76,Pension Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl99_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl99$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pension Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                99
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl100$lnkModule&#39;,&#39;pk_moduleId$76,Pension Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl100_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl100$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pension Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                100
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl101$lnkModule&#39;,&#39;pk_moduleId$76,Pension Management&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl101_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl101$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pension Management</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                101
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl102$lnkModule&#39;,&#39;pk_moduleId$82,Bill Tracking&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl102_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl102$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Bill Tracking</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                102
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl103$lnkModule&#39;,&#39;pk_moduleId$86,Pre-Examination&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl103_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl103$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pre-Examination</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                103
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl104$lnkModule&#39;,&#39;pk_moduleId$86,Pre-Examination&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl104_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl104$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pre-Examination</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                104
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl105$lnkModule&#39;,&#39;pk_moduleId$86,Pre-Examination&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl105_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl105$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pre-Examination</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                105
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl106$lnkModule&#39;,&#39;pk_moduleId$86,Pre-Examination&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl106_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl106$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pre-Examination</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                106
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl107$lnkModule&#39;,&#39;pk_moduleId$86,Pre-Examination&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl107_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl107$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pre-Examination</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                107
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl108$lnkModule&#39;,&#39;pk_moduleId$86,Pre-Examination&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl108_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl108$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pre-Examination</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                108
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl109$lnkModule&#39;,&#39;pk_moduleId$86,Pre-Examination&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl109_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl109$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pre-Examination</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                109
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl110$lnkModule&#39;,&#39;pk_moduleId$86,Pre-Examination&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl110_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl110$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pre-Examination</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                110
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl111$lnkModule&#39;,&#39;pk_moduleId$86,Pre-Examination&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl111_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl111$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pre-Examination</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                111
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl112$lnkModule&#39;,&#39;pk_moduleId$86,Pre-Examination&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl112_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl112$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pre-Examination</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                112
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl113$lnkModule&#39;,&#39;pk_moduleId$86,Pre-Examination&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl113_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl113$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pre-Examination</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                113
+                            </td><td>
+                                <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvUserModules$ctl114$lnkModule&#39;,&#39;pk_moduleId$86,Pre-Examination&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvUserModules_ctl114_lnkModule" class="link" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$gvUserModules$ctl114$lnkModule&quot;, &quot;&quot;, false, &quot;&quot;, &quot;Admin_UserAuthorization.aspx&quot;, false, true))">Pre-Examination</a>
+                                (Click to view webpages of the module)
+                    
+                            </td>
+		</tr>
+	</tbody></table>
+</div></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" align="center" valign="top">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_gvWebPages__"><div>
+
+</div></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_tblSave__"></div>
+            </td>
+        </tr>
+    </tbody></table>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_D_ddlRole');//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./role_page_rights_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./role_page_rights_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

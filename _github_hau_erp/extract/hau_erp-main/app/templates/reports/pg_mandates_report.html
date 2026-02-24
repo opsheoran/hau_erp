@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PG Mandates Submission Report</title>
+    <style>
+        body { font-family: Verdana, sans-serif; font-size: 10px; margin: 20px; }
+        .report-header { text-align: center; margin-bottom: 20px; }
+        .report-title { font-size: 16px; font-weight: bold; text-decoration: underline; }
+        .report-table { width: 100%; border-collapse: collapse; border: 1px solid #000; }
+        .report-table th, .report-table td { border: 1px solid #000; padding: 5px; text-align: left; }
+        .report-table th { background-color: #eee; font-weight: bold; }
+        .inner-table { width: 100%; border-collapse: collapse; }
+        .inner-table td { border: none; padding: 2px; }
+        .footer { margin-top: 30px; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="report-header">
+        <div class="report-title">PG MANDATES SUBMISSION REPORT</div>
+        <div style="margin-top:5px;"><b>CCS HARYANA AGRICULTURAL UNIVERSITY, HISAR</b></div>
+    </div>
+
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th width="5%">S.No.</th>
+                <th width="10%">Adm. No.</th>
+                <th width="15%">Student Name</th>
+                <th>Mandate Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in students %}
+            <tr>
+                <td align="center">{{ loop.index }}</td>
+                <td>{{ s.AdmissionNo }}</td>
+                <td><b>{{ s.fullname }}</b></td>
+                <td>
+                    <table class="inner-table">
+                        <thead>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <th style="background:none;">Mandate</th>
+                                <th style="background:none;">Status</th>
+                                <th style="background:none;">Date</th>
+                                <th style="background:none;">Remarks</th>
+                            </tr>
+                        </thead>
+                        {% for m in s.mandates %}
+                        <tr>
+                            <td width="30%">{{ m.mandate_name }}</td>
+                            <td width="10%">{{ 'YES' if m.is_submitted else 'NO' }}</td>
+                            <td width="15%">{{ m.submission_date }}</td>
+                            <td>{{ m.remarks }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Report Generated On: {{ now.strftime('%d/%m/%Y %I:%M %p') }}
+    </div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h5 class="mainheadingborderbottom">{{ title }}</h5>
+            
+            <form method="GET" class="mb-4 bg-light p-3 border">
+                <div class="row g-3">
+                    <div class="col-md-5">
+                        <label class="form-label small">College *</label>
+                        <select name="college_id" class="form-select form-select-sm" required onchange="this.form.submit()">
+                            <option value="">-- Select College --</option>
+                            {% for c in lookups.colleges %}
+                            <option value="{{ c.pk_collegeid }}" {% if filters.college_id|string == c.pk_collegeid|string %}selected{% endif %}>{{ c.collegename }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small">Session *</label>
+                        <select name="session_id" class="form-select form-select-sm" required onchange="this.form.submit()">
+                            <option value="">-- Select --</option>
+                            {% for s in lookups.sessions %}
+                            <option value="{{ s.pk_sessionid }}" {% if filters.session_id|string == s.pk_sessionid|string %}selected{% endif %}>{{ s.sessionname }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small">Degree *</label>
+                        <select name="degree_id" class="form-select form-select-sm" required onchange="this.form.submit()">
+                            <option value="">-- Select Degree --</option>
+                            {% for d in lookups.degrees %}
+                            <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small">Department / Specialization</label>
+                        <select name="branch_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                            <option value="">-- ALL --</option>
+                            {% for b in lookups.branches %}
+                            <option value="{{ b.Pk_BranchId }}" {% if filters.branch_id|string == b.Pk_BranchId|string %}selected{% endif %}>{{ b.Branchname }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary btn-sm w-100">GENERATE REPORT</button>
+                    </div>
+                </div>
+            </form>
+
+            {% if items %}
+            <div class="mb-2 text-end">
+                <button class="btn btn-outline-danger btn-sm" onclick="window.print()">PRINT PDF</button>
+            </div>
+            <div class="table-responsive border">
+                <table class="table table-bordered table-sm table-striped mb-0 small">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="text-center">S.No</th>
+                            <th>Admission No</th>
+                            <th>Student Name</th>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th class="text-center">Credits (T+P)</th>
+                            <th class="text-center">Semester</th>
+                            <th class="text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td class="text-center">{{ loop.index }}</td>
+                            <td>{{ item.AdmissionNo }}</td>
+                            <td>{{ item.fullname }}</td>
+                            <td><b>{{ item.coursecode }}</b></td>
+                            <td>{{ item.coursename }}</td>
+                            <td class="text-center">{{ item.crhrth }}+{{ item.crhrpr }}</td>
+                            <td class="text-center">{{ item.semester_roman }}</td>
+                            <td class="text-center">
+                                <span class="badge {% if item.status == 'Passed' %}bg-success{% else %}bg-warning text-dark{% endif %}">
+                                    {{ item.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% elif filters.college_id %}
+            <div class="alert alert-info small text-center">No data found for the selected filters.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

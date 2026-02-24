@@ -1,0 +1,529 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .it-table { width: 100%; border-collapse: collapse; font-family: Verdana, sans-serif; font-size: 11px; margin-top: 15px; }
+    .it-table td { border: 1px solid #ccc; padding: 5px; }
+    .it-table .vtext { font-weight: bold; background: #f4f4f4; color: #333; }
+    .it-table input { width: 100%; border: 1px solid #ddd; text-align: right; padding: 2px; font-size: 11px; }
+    .it-table input[readonly] { background: #eee; border: 1px solid #ccc; color: #000; font-weight: bold; }
+    .required-star { color: red; margin-left: 2px; }
+    .dg-header { background-color: #3c8dbc; color: #fff; font-weight: bold; text-align: center; }
+    .sub-grid-table { width: 100%; border-collapse: collapse; margin: 10px 0; border: 1px solid #D4D4D4; }
+    .sub-grid-table td { border: 1px solid #D4D4D4; padding: 4px; }
+</style>
+
+<div style="padding: 10px 20px;">
+    <div class="card card-hau">
+        <div class="tableheading">Form 16 Generation</div>
+        <div class="card-body">
+            
+            <!-- EMPLOYEE INFO HEADER -->
+            <div style="border:1px solid #ccc; padding:15px; background:#f9f9f9; margin-bottom: 20px;">
+                <table width="100%" style="font-size: 11px;">
+                    <tr>
+                        <td class="vtext" width="15%">Employee Name</td>
+                        <td width="2%">:</td>
+                        <td width="30%">{{ e.empname }}</td>
+                        <td width="5%"></td>
+                        <td class="vtext" width="15%">Employee Code</td>
+                        <td width="2%">:</td>
+                        <td width="30%">{{ e.empcode }}</td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Department</td>
+                        <td>:</td>
+                        <td>{{ e.dept_name }}</td>
+                        <td></td>
+                        <td class="vtext">Designation</td>
+                        <td>:</td>
+                        <td>{{ e.designation }}</td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Gender</td>
+                        <td>:</td>
+                        <td>{{ e.gender|default('MALE') }}</td>
+                        <td></td>
+                        <td class="vtext" width="15%">Financial Year</td>
+                        <td width="2%">:</td>
+                        <td width="30%">
+                            <select name="fin_year" class="dropdown" onchange="window.location.href='?emp_id={{ e.pk_empid }}&fin_year='+this.value" style="width: 140px;">
+                                {% for fy in fin_years %}
+                                <option value="{{ fy.id }}" {% if fy.id == selected_fin_id %}selected{% endif %}>{{ fy.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="vtext" style="margin-left:10px;">Regime:</span>
+                            <select name="Regime" id="regime_select" class="dropdown" style="width: 70px;" onchange="calculateIT()">
+                                <option value="NEW" {% if comp.Regime == 'NEW' %}selected{% endif %}>NEW</option>
+                                <option value="OLD" {% if comp.Regime == 'OLD' %}selected{% endif %}>OLD</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="vtext">Dated</td>
+                        <td>:</td>
+                        <td><input type="text" value="{{ comp.dated.strftime('%d/%m/%Y') if comp.dated else now_fmt }}" class="textbox" style="width: 100px;"></td>
+                        <td></td>
+                        <td class="vtext">PAN No.</td>
+                        <td>:</td>
+                        <td>{{ e.panno }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <form method="POST" action="{{ url_for('hrms.form16_generation', emp_id=e.pk_empid) }}">
+                <input type="hidden" name="fin_year" value="{{ selected_fin_id }}">
+                <input type="hidden" name="btn_preview" id="preview_flag" value="">
+                <table class="it-table" border="1">
+                    <tr class="dg-header">
+                        <td width="40%">Income/Deduction</td>
+                        <td width="2%">:</td>
+                        <td width="18%">Amount(Rs.)</td>
+                        <td width="20%">Amount(Rs.)</td>
+                        <td width="20%">Amount(Rs.)</td>
+                    </tr>
+                    <!-- 1. GROSS SALARY -->
+                    <tr>
+                        <td class="vtext">1. Gross salary</td><td align="center">:</td><td></td><td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:20px;">(a) Total salary</td><td align="center">:</td>
+                        <td><input type="number" name="GrossSal" value="{{ comp.GrossSal|default(0)|int }}" class="calc"></td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:20px;">(b) Perquisites</td><td align="center">:</td>
+                        <td><input type="number" name="Perquisites" value="{{ comp.Perquisites|default(0)|int }}" class="calc"></td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:20px;">(c) Profits in lieu of salary/Gross</td><td align="center">:</td>
+                        <td><input type="number" name="Profitlieu" value="{{ comp.Profitlieu|default(0)|int }}" class="calc"></td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext" style="padding-left:20px;">Total</td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="GrossPerkLieu" value="{{ comp.GrossPerkLieu|default(0)|int }}" readonly></td>
+                    </tr>
+
+                    <!-- 2. SECTION 10 -->
+                    <tr>
+                        <td class="vtext">2.(a) Less Allowances U/s 10 (Education)</td><td align="center">:</td>
+                        <td><input type="number" name="Conveyance" value="{{ comp.Conveyance|default(0)|int }}" class="calc"></td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:20px;">(b) Less U/s 10(13 A) H.R.A.</td><td align="center">:</td>
+                        <td><input type="number" name="HRA" value="{{ comp.HRA|default(0)|int }}" class="calc"></td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">3. Total 2(a+b)</td><td align="center">:</td><td></td>
+                        <td><input type="number" name="TotHraConvey" value="{{ comp.TotHraConvey|default(0)|int }}" readonly></td>
+                        <td></td>
+                    </tr>
+
+                    <!-- 4. BALANCE -->
+                    <tr>
+                        <td class="vtext">4. Balance (1-3)</td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="Balance" value="{{ comp.Balance|default(0)|int }}" readonly></td>
+                    </tr>
+
+                    <!-- 5. DEDUCTIONS -->
+                    <tr>
+                        <td class="vtext">5. Deductions</td><td align="center">&nbsp;</td><td></td><td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:20px;">(a) Standard Deduction</td><td align="center">:</td>
+                        <td><input type="number" name="StandardDed" value="{{ comp.StandardDed|default(0)|int }}" class="calc"></td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:20px;">(b) Deductions(if any)</td><td align="center">:</td>
+                        <td><input type="number" name="EntAllowance" value="{{ comp.EntAllowance|default(0)|int }}" class="calc"></td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext" style="padding-left:20px;">Total of (a to b)</td><td align="center">:</td><td></td>
+                        <td><input type="number" name="Aggregate" value="{{ comp.Aggregate|default(0)|int }}" readonly></td>
+                        <td></td>
+                    </tr>
+
+                    <!-- 6. INCOME CHARGEABLE -->
+                    <tr>
+                        <td class="vtext">6. Income chargeable under the "Head Salary"(4-5)</td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="Incomechargeble" value="{{ comp.Incomechargeble|default(0)|int }}" readonly></td>
+                    </tr>
+
+                    <!-- 7. OTHER INCOME -->
+                    <tr>
+                        <td class="vtext">7. Income reported by the Empl.</td><td></td><td></td><td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:20px;">(a) From house property</td><td align="center">:</td>
+                        <td><input type="number" name="Houseproperty" value="{{ comp.Houseproperty|default(0)|int }}" class="calc"></td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:20px;">(i) Less Interest of HBA U/s 24</td><td align="center">:</td>
+                        <td><input type="number" name="IntrestHBA" value="{{ comp.IntrestHBA|default(0)|int }}" class="calc"></td>
+                        <td><input type="number" name="totalHouseproperty" value="0" readonly></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:20px;">(b) Income from other sources</td><td align="center">:</td>
+                        <td><input type="number" name="Othersource" value="{{ comp.Othersource|default(0)|int }}" class="calc"></td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:20px;">(c) Agriculture Income</td><td align="center">:</td>
+                        <td><input type="number" name="AgriIncome" value="{{ comp.AgriIncome|default(0)|int }}" class="calc"></td>
+                        <td></td><td></td>
+                    </tr>
+
+                    <!-- 8. GROSS TOTAL INCOME -->
+                    <tr>
+                        <td class="vtext">8. Gross total income (6+7)</td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="Grosstotincome" value="{{ comp.Grosstotincome|default(0)|int }}" readonly></td>
+                    </tr>
+
+                    <!-- 9. CHAPTER VI-A (80C) -->
+                    <tr><td colspan="5" class="vtext">9. SAVINGS: Under chapter VI-A (i) Under Section 80 C</td></tr>
+                    <tr>
+                        <td colspan="5">
+                            <table class="sub-grid-table" border="1">
+                                <tr class="header-style" style="background:#eee;">
+                                    <td align="center">S. No.</td><td>Name</td><td align="center">Deductable Amount (Rs.)</td>
+                                </tr>
+                                {% if decls %}
+                                    {% for d in decls %}
+                                    <tr>
+                                        <td align="center">{{ loop.index }}</td>
+                                        <td align="center"><input type="text" name="grid_name[]" value="{{ d.sub_section_name }}" class="textbox" style="text-align:center;"></td>
+                                        <td align="center"><input type="number" name="grid_amt[]" value="{{ d.docsub_Amt|int }}" class="calc g-amt"></td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td align="center">1</td>
+                                        <td align="center"><input type="text" name="grid_name[]" value="PF / NPS" class="textbox" style="text-align:center;"></td>
+                                        <td align="center"><input type="number" name="grid_amt[]" value="{{ comp.AggrChapVIDedAmt|default(0)|int }}" class="calc g-amt"></td>
+                                    </tr>
+                                {% endif %}
+                                <tr id="add_row_savings"><td colspan="3" align="center"><a href="javascript:void(0)" onclick="addRow('savings')">+ Add More Savings</a></td></tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Total of (i)</td><td align="center">:</td>
+                        <td class="required">
+                            <input type="number" name="Total80C" id="Total80C" value="{{ comp.AggrChapVIDedAmt|default(0)|int }}" class="calc">
+                        </td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Nett Savings</td><td align="center">:</td><td></td>
+                        <td class="required">
+                            <input type="number" name="NettSaving" id="NettSaving" value="{{ comp.AggrChapVIDedAmt|default(0)|int }}" readonly>
+                        </td>
+                        <td></td>
+                    </tr>
+
+                    <!-- (ii) Under Section 80 CCD(2B) -->
+                    <tr><td colspan="5" class="vtext">(ii) Under Section 80 CCD(2B)</td></tr>
+                    <tr>
+                        <td colspan="5">
+                            <table class="sub-grid-table" border="1">
+                                <tr class="header-style" style="background:#eee;">
+                                    <td align="center">S. No.</td><td>Name</td><td align="center">Deductable Amount (Rs.)</td>
+                                </tr>
+                                <tr>
+                                    <td align="center">1</td>
+                                    <td align="center"><input type="text" name="grid_name_ccd[]" value="Employer NPS Contributition" class="textbox" style="text-align:center;"></td>
+                                    <td align="center"><input type="number" name="grid_amt_ccd[]" value="0" class="calc g-amt-ccd"></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Total:</td><td align="center">:</td><td></td>
+                        <td class="required">
+                            <input type="number" name="TotalCCD" id="TotalCCD" value="0" readonly>
+                        </td>
+                        <td></td>
+                    </tr>
+
+                    <!-- 10. AGGREGATE DEDUCTION -->
+                    <tr>
+                        <td class="vtext">10. Aggregate of Deductible amount under chapter VI-A Total of 9(i,ii & ix)ded. amt.</td><td align="center">:</td><td></td>
+                        <td class="required">
+                            <input type="number" name="AggrChapVIDedAmt" id="AggrChapVIDedAmt" value="{{ comp.AggrChapVIDedAmt|default(0)|int }}" readonly>
+                        </td>
+                        <td></td>
+                    </tr>
+
+                    <!-- 11. TOTAL INCOME -->
+                    <tr>
+                        <td class="vtext">11. Total income (8-10)</td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="TotIncomechapVI" value="{{ comp.TotIncomechapVI|default(0)|int }}" readonly></td>
+                    </tr>
+
+                    <!-- 12. TAXABLE INCOME -->
+                    <tr>
+                        <td class="vtext">12. Total Taxable Income u/s 288A</td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="TotalTaxIncome" value="{{ comp.TotalTaxIncome|default(0)|int }}" readonly></td>
+                    </tr>
+
+                    <!-- 13. TAX ON INCOME -->
+                    <tr>
+                        <td class="vtext">13. Tax on Total Income</td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="TaxOnIncome" value="{{ comp.TaxOnIncome|default(0)|int }}" class="calc"></td>
+                    </tr>
+
+                    <!-- 14. TAX CREDIT -->
+                    <tr>
+                        <td class="vtext">14. Less: Tax Credit (Available only to assessees having total taxable income upto Rs. 3.50 Lacs)</td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="TaxCredit" value="0" class="calc"></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">&nbsp;&nbsp;&nbsp;&nbsp; Less: Income Tax on Agricultural Income included above</td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="IncomeTaxAgri" value="0" class="calc"></td>
+                    </tr>
+
+                    <!-- 15. TAX PAYABLE -->
+                    <tr>
+                        <td class="vtext">15. (a) Tax payable</td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="TotalTax" value="{{ comp.TotalTax|default(0)|int }}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:20px;">Surcharge payable</td><td align="center">:</td>
+                        <td><input type="number" name="Surcharge" value="{{ comp.Surcharge|default(0)|int }}" class="calc"></td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">(b) Add 4% Education Cess(on a+b)</td><td align="center">:</td><td></td>
+                        <td><input type="number" name="AddEdu" value="{{ comp.AddEdu|default(0)|int }}" readonly></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext"><b>Total tax payable including Surcharge</b></td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="TaxIncludindSur" value="{{ comp.TaxIncludindSur|default(0)|int }}" readonly></td>
+                    </tr>
+
+                    <!-- 16. RELIEF 89 -->
+                    <tr>
+                        <td class="vtext">16. Relief under section 89</td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="Relief89" value="{{ comp.Relief89|default(0)|int }}" class="calc"></td>
+                    </tr>
+
+                    <!-- 17. BALANCE TAX -->
+                    <tr>
+                        <td class="vtext">17. Balance tax Payable(14-15)</td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="TaxPayable" value="0" readonly></td>
+                    </tr>
+
+                    <!-- 18. TDS -->
+                    <tr>
+                        <td class="vtext">18. (a) Less Tax deducted at source U/s 192(1)</td><td align="center">:</td>
+                        <td><input type="number" name="Taxdeducted" value="{{ comp.Taxdeducted|default(0)|int }}" class="calc"></td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:20px;">(b) Tax paid by the Employer</td><td align="center">:</td>
+                        <td><input type="number" name="paid" value="{{ comp.paid|default(0)|int }}" class="calc"></td>
+                        <td></td><td></td>
+                    </tr>
+
+                    <!-- 19. FINAL PAYABLE -->
+                    <tr style="background:#fff9c4;">
+                        <td class="vtext">19. (a) Tax Payable/Refundable</td><td align="center">:</td><td></td><td></td>
+                        <td><input type="number" name="PayRefund" value="{{ comp.PayRefund|default(0)|int }}" readonly style="color:red; font-size:14px;"></td>
+                    </tr>
+                </table>
+
+                <!-- QUARTERLY SUMMARY -->
+                <div class="mt-4">
+                    <div class="vtext" style="padding: 5px; border: 1px solid #ccc; border-bottom: none;">Quarterly TDS Summary (Fetched from Challans)</div>
+                    <table class="it-table" style="margin-top:0;">
+                        <tr class="dg-header">
+                            <td>Quarter</td><td>Acknowledgment No.</td><td>Amount (Rs.)</td>
+                        </tr>
+                        {% if q_summary %}
+                            {% for q in q_summary %}
+                            <tr>
+                                <td>Quarter {{ q.quarter }}</td>
+                                <td><input type="text" value="0" readonly style="text-align:center;"></td>
+                                <td><input type="number" value="{{ q.total_tax|int }}" readonly></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="3" align="center">No quarterly data found for this financial year.</td></tr>
+                        {% endif %}
+                    </table>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <button type="submit" name="btn_save" class="btn btn-hau-primary">SAVE AS DRAFT</button>
+                    <button type="submit" onclick="document.getElementById('preview_flag').value='1';" class="btn btn-primary btn-lg ms-2">PREVIEW PDF</button>
+                    <button type="reset" class="btn btn-secondary ms-2">RESET</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function addRow(type) {
+    if (type === 'savings') {
+        const table = document.querySelector('.sub-grid-table');
+        const rows = table.querySelectorAll('tr');
+        const lastIndex = rows.length - 2; // Before the "Add More" row
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td align="center">${lastIndex + 1}</td>
+            <td align="center"><input type="text" name="grid_name[]" class="textbox" style="text-align:center;"></td>
+            <td align="center"><input type="number" name="grid_amt[]" class="calc g-amt"></td>
+        `;
+        table.insertBefore(newRow, document.getElementById('add_row_savings'));
+        newRow.querySelector('.calc').oninput = calculateIT;
+    }
+}
+function calculateIT() {
+    const regime = document.getElementById('regime_select').value;
+    const grossSal = parseFloat(document.querySelector('[name="GrossSal"]').value) || 0;
+    const perks = parseFloat(document.querySelector('[name="Perquisites"]').value) || 0;
+    const profitLieu = parseFloat(document.querySelector('[name="Profitlieu"]').value) || 0;
+    const totalGross = grossSal + perks + profitLieu;
+    document.querySelector('[name="GrossPerkLieu"]').value = totalGross;
+
+    const hra = parseFloat(document.querySelector('[name="HRA"]').value) || 0;
+    const eduAllow = parseFloat(document.querySelector('[name="Conveyance"]').value) || 0;
+    const totExempt = hra + eduAllow;
+    document.querySelector('[name="TotHraConvey"]').value = totExempt;
+
+    const balance = totalGross - totExempt;
+    document.querySelector('[name="Balance"]').value = balance;
+
+    // Standard Deduction auto-update based on regime
+    let stdDed = parseFloat(document.querySelector('[name="StandardDed"]').value);
+    if (regime === 'NEW') {
+        stdDed = 75000;
+    } else {
+        stdDed = 50000;
+    }
+    document.querySelector('[name="StandardDed"]').value = stdDed;
+
+    const otherDed = parseFloat(document.querySelector('[name="EntAllowance"]').value) || 0;
+    const aggDed = stdDed + otherDed;
+    document.querySelector('[name="Aggregate"]').value = aggDed;
+
+    const incChargeable = balance - aggDed;
+    document.querySelector('[name="Incomechargeble"]').value = incChargeable;
+
+    const hp = parseFloat(document.querySelector('[name="Houseproperty"]').value) || 0;
+    const hba = parseFloat(document.querySelector('[name="IntrestHBA"]').value) || 0;
+    document.querySelector('[name="totalHouseproperty"]').value = hp - hba;
+
+    const os = parseFloat(document.querySelector('[name="Othersource"]').value) || 0;
+    const agri = parseFloat(document.querySelector('[name="AgriIncome"]').value) || 0;
+    const GTI = incChargeable + (hp - hba) + os + agri;
+    document.querySelector('[name="Grosstotincome"]').value = GTI;
+
+    // Dynamic Savings Sum
+    let total80C = 0;
+    document.querySelectorAll('.g-amt').forEach(el => {
+        total80C += parseFloat(el.value) || 0;
+    });
+    
+    // In NEW regime, 80C is generally not allowed
+    if (regime === 'NEW') {
+        document.querySelector('[name="Total80C"]').value = 0;
+        document.querySelector('[name="NettSaving"]').value = 0;
+    } else {
+        document.querySelector('[name="Total80C"]').value = total80C;
+        const limited80C = Math.min(150000, total80C);
+        document.querySelector('[name="NettSaving"]').value = limited80C;
+    }
+
+    let totalCCD = 0;
+    document.querySelectorAll('.g-amt-ccd').forEach(el => {
+        totalCCD += parseFloat(el.value) || 0;
+    });
+    document.querySelector('[name="TotalCCD"]').value = totalCCD;
+    
+    const aggregateChapVI = (regime === 'NEW' ? 0 : parseFloat(document.querySelector('[name="NettSaving"]').value)) + totalCCD;
+    document.querySelector('[name="AggrChapVIDedAmt"]').value = aggregateChapVI;
+
+    const totalIncome = GTI - aggregateChapVI;
+    document.querySelector('[name="TotIncomechapVI"]').value = totalIncome;
+    const roundedTotalIncome = Math.round(totalIncome / 10) * 10;
+    document.querySelector('[name="TotalTaxIncome"]').value = roundedTotalIncome;
+
+    // --- TAX CALCULATION LOGIC ---
+    let tax = 0;
+    if (regime === 'NEW') {
+        // FY 2025-26 New Slabs
+        if (roundedTotalIncome <= 1200000) {
+            tax = 0;
+        } else {
+            const slabs = [
+                {l: 0, u: 400000, r: 0},
+                {l: 400000, u: 800000, r: 5},
+                {l: 800000, u: 1200000, r: 10},
+                {l: 1200000, u: 1600000, r: 15},
+                {l: 1600000, u: 2000000, r: 20},
+                {l: 2000000, u: 2400000, r: 25},
+                {l: 2400000, u: 99999999, r: 30}
+            ];
+            slabs.forEach(s => {
+                if (roundedTotalIncome > s.l) {
+                    tax += (Math.min(roundedTotalIncome, s.u) - s.l) * (s.r / 100);
+                }
+            });
+        }
+    } else {
+        // Old Slabs
+        if (roundedTotalIncome <= 500000) {
+            tax = 0;
+        } else {
+            const slabs = [
+                {l: 0, u: 250000, r: 0},
+                {l: 250000, u: 500000, r: 5},
+                {l: 500000, u: 1000000, r: 20},
+                {l: 1000000, u: 99999999, r: 30}
+            ];
+            slabs.forEach(s => {
+                if (roundedTotalIncome > s.l) {
+                    tax += (Math.min(roundedTotalIncome, s.u) - s.l) * (s.r / 100);
+                }
+            });
+        }
+    }
+    
+    document.querySelector('[name="TaxOnIncome"]').value = Math.round(tax);
+
+    const taxCredit = parseFloat(document.querySelector('[name="TaxCredit"]').value) || 0;
+    const agriTax = parseFloat(document.querySelector('[name="IncomeTaxAgri"]').value) || 0;
+    
+    const taxPayableBase = Math.max(0, Math.round(tax) - taxCredit - agriTax);
+    document.querySelector('[name="TotalTax"]').value = taxPayableBase;
+    
+    const surcharge = parseFloat(document.querySelector('[name="Surcharge"]').value) || 0;
+    const cess = Math.round((taxPayableBase + surcharge) * 0.04);
+    document.querySelector('[name="AddEdu"]').value = cess;
+    
+    const totalTaxInclSur = taxPayableBase + surcharge + cess;
+    document.querySelector('[name="TaxIncludindSur"]').value = totalTaxInclSur;
+
+    const relief = parseFloat(document.querySelector('[name="Relief89"]').value) || 0;
+    document.querySelector('[name="TaxPayable"]').value = totalTaxInclSur - relief;
+
+    const tds = parseFloat(document.querySelector('[name="Taxdeducted"]').value) || 0;
+    const paidByEmp = parseFloat(document.querySelector('[name="paid"]').value) || 0;
+    document.querySelector('[name="PayRefund"]').value = totalTaxInclSur - relief - tds - paidByEmp;
+}
+
+document.querySelectorAll('.calc').forEach(el => el.oninput = calculateIT);
+window.onload = calculateIT;
+</script>
+{% endblock %}

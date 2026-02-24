@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="GET" id="filterForm">
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="6" class="tableheading">
+                    <span class="mainheadingborderbottom">User Module Assignment</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="10"></td></tr>
+            <tr>
+                <td class="vtext" width="15%">Employee / User</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <select name="user_id" class="dropdownlong" onchange="this.form.submit()">
+                        <option value="">-- Select User --</option>
+                        {% for u in users %}
+                        <option value="{{ u.id }}" {% if selected_user == u.id|string %}selected{% endif %}>{{ u.loginname }} ~ {{ u.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td class="vtext" width="15%">Select Location</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="loc_id" class="dropdownlong" onchange="this.form.submit()">
+                        <option value="">-- Select Location --</option>
+                        {% for l in locations %}
+                        <option value="{{ l.id }}" {% if selected_loc == l.id|string %}selected{% endif %}>{{ l.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="15"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <a href="{{ url_for('umm.module_rights') }}" class="button-common" style="text-decoration:none; display:inline-block; line-height:24px; padding:0 12px; vertical-align:middle;">RESET</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+{% if selected_user and selected_loc %}
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="target_user_id" value="{{ selected_user }}">
+    <input type="hidden" name="target_loc_id" value="{{ selected_loc }}">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="margin-top:20px;">
+        <tbody>
+            <tr>
+                <td class="tablesubheading">
+                    <span class="subheadingborderbottom">Assign Modules for Selected Context</span>
+                </td>
+            </tr>
+            <tr><td height="10"></td></tr>
+            <tr>
+                <td>
+                    <div style="background-color: #fff; border: 1px solid #ddd; padding: 15px;">
+                        <table width="100%" cellpadding="5">
+                            <tr>
+                                {% for m in all_modules %}
+                                <td width="33%">
+                                    <span class="chkbox">
+                                        <input type="checkbox" name="module_ids" value="{{ m.id }}" id="mod_{{ m.id }}" {% if m.id in assigned_module_ids %}checked{% endif %}>
+                                        <label for="mod_{{ m.id }}" style="font-size: 11px; font-weight: normal;">{{ m.name }}</label>
+                                    </span>
+                                </td>
+                                {% if loop.index % 3 == 0 %}</tr><tr>{% endif %}
+                                {% endfor %}
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr><td height="20"></td></tr>
+            <tr>
+                <td align="center">
+                    <input type="submit" value="UPDATE ASSIGNED MODULES" class="button-common" style="height: 30px; font-weight: bold;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+{% else %}
+<div style="text-align:center; padding: 40px; color: #666; font-style: italic;">
+    Please select a User and Location to manage module assignments.
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CCS HAU - User Login</title>
+    <style>
+        body { font-family: Verdana, sans-serif; background: #3c8dbc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-box { background: #fff; width: 360px; padding: 20px; border-radius: 3px; box-shadow: 0 0 20px rgba(0,0,0,0.2); }
+        .login-header { text-align: center; margin-bottom: 30px; }
+        .login-header img { width: 80px; margin-bottom: 10px; }
+        .login-header h2 { margin: 0; font-size: 18px; color: #3c8dbc; font-weight: bold; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; color: #666; }
+        .form-control { width: 100%; padding: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 13px; }
+        
+        .btn-login { width: 100%; background: #3c8dbc; color: #fff; border: 1px solid #2c729e; padding: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-login:hover { background: #2c729e; }
+        
+        .alert { background: #f8d7da; color: #721c24; padding: 10px; border: 1px solid #f5c6cb; font-size: 11px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="login-header">
+            <img src="{{ url_for('static', filename='images/logo.png') }}">
+            <h2>CCS HAU ERP LOGIN</h2>
+        </div>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            <div class="form-group">
+                <label>LOGIN NAME</label>
+                <input type="text" name="username" class="form-control" required autofocus>
+            </div>
+            <div class="form-group">
+                <label>PASSWORD</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn-login">AUTHENTICATE</button>
+        </form>
+        <div style="text-align: center; margin-top: 20px; font-size: 10px; color: #999;">
+            Managed by ERP Cell, HAU Hisar
+        </div>
+    </div>
+</body>
+</html>

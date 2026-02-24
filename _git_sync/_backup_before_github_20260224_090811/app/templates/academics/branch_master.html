@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- SAVE FORM -->
+<form method="POST" id="branchForm">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="pk_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="6">
+                    <span class="mainheadingborderbottom">Department Master</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Department Name</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="text" name="branchname" id="b_name" class="textbox w-250" maxlength="100" required>
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext" width="15%">Alias Name</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <input type="text" name="alias" id="b_alias" class="textbox w-150" maxlength="100" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Department Name (Hindi)</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="branchname_hindi" id="b_hindi" class="textbox w-250" maxlength="100" required>
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext">Is Active?</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="checkbox" name="active" id="b_active" checked>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Faculty</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="faculty_id" id="b_faculty" class="dropdown w-250">
+                        <option value="">--Select--</option>
+                        {% for f in faculties %}
+                        <option value="{{ f.pk_facultyid }}">{{ f.faculty }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td>
+                    <textarea name="remarks" id="b_remarks" class="textbox w-200" style="height:40px;"></textarea>
+                </td>
+            </tr>
+            
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="submit" value="SAVE" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left:10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<!-- LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="6">
+                <span class="subheadingborderbottom">List of Departments</span>
+            </td>
+        </tr>
+        <tr><td colspan="6" height="10"></td></tr>
+        <tr>
+            <td colspan="6">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th width="40%">Faculty</th>
+                            <th width="15%">Alias</th>
+                            <th width="25%">Active</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for b in branches %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                            <td align="center">{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td>{{ b.Branchname }}</td>
+                            <td>{{ b.alias or '' }}</td>
+                            <td>{{ 'Active' if b.Isactive else 'InActive' }}</td>
+                            <td align="center">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editB({{ b|tojson }})'>
+                            </td>
+                            <td align="center">
+                                <form method="POST" onsubmit="return confirm('Are you sure you want to delete this department?');" style="display:inline;">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ b.Pk_BranchId }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('academics.branch_master', page=pagination.page-1) }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('academics.branch_master', page=p) }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('academics.branch_master', page=pagination.page+1) }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+function editB(b) {
+    document.getElementById('pk_id').value = b.Pk_BranchId;
+    document.getElementById('b_name').value = b.Branchname.trim();
+    document.getElementById('b_alias').value = (b.alias || '').trim();
+    document.getElementById('b_hindi').value = (b.Branchname_hindi || '').trim();
+    document.getElementById('b_active').checked = !!b.Isactive;
+    document.getElementById('b_faculty').value = b.Fk_Faculty_id || '';
+    document.getElementById('b_remarks').value = (b.Remarks || '').trim();
+    window.scrollTo(0,0);
+}
+
+function resetForm() {
+    document.getElementById('pk_id').value = '';
+    document.getElementById('branchForm').reset();
+}
+</script>
+{% endblock %}

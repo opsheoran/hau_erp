@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<span>Transactions</span>&nbsp;&gt;&nbsp;<span>Personal Details</span>&nbsp;&gt;&nbsp;<strong>Employee Family Details</strong>
+{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="target_emp_id" value="{{ employee_info.pk_empid if employee_info else '' }}">
+    <input type="hidden" name="family_id" value="{{ edit_data.id if edit_data else '' }}">
+
+    <!-- SHARED SEARCH MODAL -->
+    {% include 'establishment/_search_modal.html' %}
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">Employee Family Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Employee Code</td>
+                <td class="colon">:</td>
+                <td class="required" width="30%">
+                    <input name="empcode" type="text" class="textbox w-150" value="{{ employee_info.empcode if employee_info else '' }}" readonly>
+                    <a href="javascript:void(0);" onclick="openEmpSearch('emp_id', '')">
+                        <img src="{{ url_for('static', filename='srec.jpg') }}" border="0" style="vertical-align:middle; cursor:pointer;">
+                    </a>
+                    <span class="required">*</span>
+                </td>
+                <td width="2%"></td>
+                <td class="vtext" width="15%">Employee Name</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="text" class="textbox w-250" value="{{ employee_info.empname if employee_info else '' }}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ employee_info.dept_name if employee_info else '' }}" readonly>
+                </td>
+                <td></td>
+                <td class="vtext">Designation</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ employee_info.designation if employee_info else '' }}" readonly>
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td class="vtext">Family Member Name</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="member_name" type="text" class="textbox w-250" value="{{ edit_data.membername if edit_data else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Relation</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="rel_id" class="dropdown w-200" required>
+                        <option value="">-- Select Relation --</option>
+                        {% for r in lookups.relations %}
+                        <option value="{{ r.id }}" {% if edit_data and edit_data.fk_relid|string == r.id|string %}selected{% endif %}>{{ r.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Family member's Date of Birth</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="dob" type="date" class="textbox w-150" value="{{ edit_data.dob_iso if edit_data else '' }}">
+                </td>
+                <td></td>
+                <td class="vtext">Aadhar No.</td>
+                <td class="colon">:</td>
+                <td>
+                    <input name="aadhaar" type="text" class="textbox w-200" maxlength="12" value="{{ edit_data.AadhaarNo if edit_data else '' }}" onkeypress="return isNumberKey(event)">
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td colspan="2">
+                    <textarea name="remarks" class="textbox w-300" rows="2">{{ edit_data.Remarks if edit_data else '' }}</textarea>
+                </td>
+                <td class="vtext">Photo Upload</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="file" name="document_file" class="textbox w-250">
+                    <div style="font-size:11px; font-weight:bold; color:#666;">(Size <= 30KB)</div>
+                    {% if edit_data and edit_data.filename %}
+                    <div style="margin-top:5px;">
+                        Currently: <a href="{{ url_for('static', filename='uploads/employee_family/' + edit_data.filename) }}" target="_blank">{{ edit_data.filename }}</a>
+                    </div>
+                    {% endif %}
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="20"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    {% if (edit_data and perm.AllowUpdate) or (not edit_data and perm.AllowAdd) %}
+                    <input type="submit" name="action" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" class="button-common">
+                    {% endif %}
+                    <input type="submit" name="action" value="RESET" class="button-common" formnovalidate>
+                </td>
+            </tr>
+            
+            {% if employee_info %}
+            <tr><td colspan="7" height="30"></td></tr>
+            <tr>
+                <td colspan="7" class="tablesubheading">
+                    <span class="subheadingborderbottom">List of Employee Family Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td colspan="7">
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="5%">S. No.</th>
+                                <th width="35%">Family Member Name</th>
+                                <th width="20%">Relation</th>
+                                <th width="20%">Family Member's Date of Birth</th>
+                                <th width="10%">EDIT</th>
+                                <th width="10%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for f in family %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                <td align="center">{{ loop.index }}</td>
+                                <td>{{ f.membername }}</td>
+                                <td>{{ f.relation_name }}</td>
+                                <td align="center">{{ f.dob_fmt }}</td>
+                                <td align="center">
+                                    <a href="{{ url_for('establishment.employee_family_details', emp_id=emp_id, edit_id=f.id) }}">
+                                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    {% if perm.AllowDelete %}
+                                    <a href="{{ url_for('establishment.employee_family_details', emp_id=emp_id, delete_id=f.id) }}" onclick="return confirm('Are you sure you want to delete this record?')">
+                                        <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="6" align="center" style="padding:10px;">No family details found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function selectItem(id, name) {
+        window.location.href = "{{ url_for('establishment.employee_family_details') }}?emp_id=" + id;
+    }
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+</script>
+{% endblock %}

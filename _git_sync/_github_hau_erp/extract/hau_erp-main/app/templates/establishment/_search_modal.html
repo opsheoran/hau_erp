@@ -1,0 +1,104 @@
+<!-- Search Modal (Shared) -->
+<div class="modal fade" id="searchModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="tablesubheading" id="searchModalTitle">Search</div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <input type="text" id="search_term" class="form-control form-control-sm" placeholder="Enter name or code..." onkeydown="if(event.keyCode==13){ event.preventDefault(); performSearch(); }">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="performSearch()">Search</button>
+                </div>
+                <div id="search_results" style="max-height: 300px; overflow-y: auto;">
+                    <p class="text-muted small text-center">Enter at least 2 characters to search.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let activeTargetId = '';
+let activeTargetName = '';
+let searchType = 'employee';
+
+function openEmpSearch(targetId, targetName) {
+    searchType = 'employee';
+    activeTargetId = targetId;
+    activeTargetName = targetName;
+    document.getElementById('searchModalTitle').innerText = 'Employee Search';
+    document.getElementById('search_term').value = '';
+    document.getElementById('search_results').innerHTML = '<p class="text-muted small text-center">Enter at least 2 characters to search.</p>';
+    new bootstrap.Modal(document.getElementById('searchModal')).show();
+}
+
+function openSearch(type) {
+    searchType = type;
+    activeTargetId = (type === 'student') ? 'student_id' : activeTargetId;
+    activeTargetName = (type === 'student') ? 'student_name' : activeTargetName;
+    document.getElementById('searchModalTitle').innerText = type.charAt(0).toUpperCase() + type.slice(1) + ' Search';
+    document.getElementById('search_term').value = '';
+    document.getElementById('search_results').innerHTML = '<p class="text-muted small text-center">Enter at least 2 characters to search.</p>';
+    new bootstrap.Modal(document.getElementById('searchModal')).show();
+}
+
+async function performSearch() {
+    const term = document.getElementById('search_term').value;
+    if(term.length < 2) return;
+    try {
+        const endpoint = searchType === 'employee' ? '/establishment/api/employee/search' : '/establishment/api/student/search';
+        const res = await fetch(`${endpoint}?term=${term}`);
+        const data = await res.json();
+        let html = '<table class="table table-sm table-hover small"><thead><tr><th>Code</th><th>Name</th>' + (searchType === 'employee' ? '<th>Desg</th>' : '') + '</tr></thead><tbody>';
+        if (data.length === 0) {
+            html = '<p class="text-center text-danger">No results found.</p>';
+        } else {
+            data.forEach(e => {
+                const code = e.empcode || e.code;
+                const name = e.empname || e.name;
+                const safeName = (name + ' (' + code + ')').replace(/'/g, "\\'");
+                html += `<tr style="cursor:pointer" onclick="selectItem('${e.id}', '${safeName}')">
+                    <td>${code}</td><td>${name}</td>` + (searchType === 'employee' ? `<td>${e.designation || ''}</td>` : '') + `
+                </tr>`;
+            });
+            html += '</tbody></table>';
+        }
+        document.getElementById('search_results').innerHTML = html;
+    } catch (err) {
+        console.error(err);
+        document.getElementById('search_results').innerHTML = '<p class="text-danger text-center">Error fetching data.</p>';
+    }
+}
+
+function selectItem(id, name) {
+    if(document.getElementById(activeTargetId)) document.getElementById(activeTargetId).value = id;
+    if(document.getElementById(activeTargetName)) document.getElementById(activeTargetName).value = name;
+    
+    // Callback for student selection if on Major Advisor page
+    if (searchType === 'student' && typeof onStudentSelect === 'function') {
+        onStudentSelect(id);
+    }
+    
+    // Callback for employee details if needed
+    if (searchType === 'employee') {
+        fetch(`/establishment/api/employee/details/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.fk_deptid && document.getElementById('dept_id')) {
+                    document.getElementById('dept_id').value = data.fk_deptid;
+                }
+            });
+    }
+
+    bootstrap.Modal.getInstance(document.getElementById('searchModal')).hide();
+}
+
+function onStudentSelect(id) {
+    fetch(`/establishment/api/student/details/${id}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.fk_branchid && document.getElementById('branch_id')) {
+                document.getElementById('branch_id').value = data.fk_branchid;
+            }
+        });
+}
+</script>

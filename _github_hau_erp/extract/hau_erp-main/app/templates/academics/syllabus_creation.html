@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .textbox-small { width: 150px !important; }
+    .textbox-medium { width: 250px !important; }
+    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .required-star { color: red; font-weight: bold; }
+</style>
+
+<form method="POST" id="syllabusForm">
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="6">
+                    <span class="mainheadingborderbottom">Syllabus Creation [Master]</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <!-- Row 1: From Session, To Session -->
+            <tr>
+                <td class="vtext" width="15%">From Session</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <select name="from_session" id="ddlFromSession" class="dropdown textbox-medium" required>
+                        <option value="0">-- Select From Session --</option>
+                        {% for s in sessions %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required-star">*</span>
+                </td>
+                <td class="vtext" width="15%">To Session</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <select name="to_session" id="ddlToSession" class="dropdown textbox-medium">
+                        <option value="0">-- Select To Session --</option>
+                        {% for s in sessions %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+
+            <!-- Row 2: Degree, Class -->
+            <tr>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td valign="top">
+                    <select name="degree" id="ddlDegree" class="dropdown textbox-medium" required>
+                        <option value="">--Select Degree--</option>
+                        {% for d in degrees %}
+                        <option value="{{ d.id }}">{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required-star">*</span>
+                </td>
+                <td class="vtext">Class</td>
+                <td class="colon">:</td>
+                <td align="left">
+                    <select name="semester" id="ddlSemester" class="dropdown textbox-medium" disabled required>
+                        <option value=""> -- Select Class -- </option>
+                    </select>
+                    <span class="required-star">*</span>
+                </td>
+            </tr>
+
+            <!-- Row 3: Department, Year -->
+            <tr>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="department" id="ddlBranch" class="dropdown textbox-medium" disabled>
+                        <option value="0">--Select Department--</option>
+                    </select>
+                </td>
+                <td class="vtext">Year</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="year" id="ddlYear" class="dropdown textbox-medium" disabled>
+                        <option value="">-- Select Year --</option>
+                    </select>
+                </td>
+            </tr>
+            
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <!-- Buttons -->
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="3">
+                    <input type="button" value="GET COURSES" id="btnGetCourses" class="button-common">
+                    <input type="button" value="RESET" id="btnReset" class="button-common">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div id="courseContainer" style="margin-top: 20px;">
+        <!-- Placeholder for course list -->
+    </div>
+
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ddlDegree = document.getElementById('ddlDegree');
+    const ddlSemester = document.getElementById('ddlSemester');
+    const ddlBranch = document.getElementById('ddlBranch');
+    const ddlYear = document.getElementById('ddlYear');
+    const btnGetCourses = document.getElementById('btnGetCourses');
+    const btnReset = document.getElementById('btnReset');
+
+    // On Degree Change
+    ddlDegree.addEventListener('change', function() {
+        const degreeId = this.value;
+        if (!degreeId) {
+            resetCascading();
+            return;
+        }
+
+        // Fetch Degree Details (minsem, maxsem, type, isdepartmentreq)
+        fetch(`/academics/api/get_degree_details/${degreeId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Populate Semesters
+                if (data.minsem !== undefined && data.maxsem !== undefined) {
+                    fetch(`/academics/api/get_semesters_range/${data.minsem}/${data.maxsem}`)
+                        .then(res => res.json())
+                        .then(semesters => {
+                            ddlSemester.innerHTML = '<option value=""> -- Select Class -- </option>';
+                            if (semesters && semesters.length > 0) {
+                                semesters.forEach(sem => {
+                                    const option = document.createElement('option');
+                                    option.value = sem.pk_semesterid;
+                                    option.textContent = sem.semester_roman.trim();
+                                    ddlSemester.appendChild(option);
+                                });
+                                ddlSemester.disabled = false;
+                            }
+                        });
+                }
+
+                // Handle Department
+                if (!data.isug || data.isdepartmentreq) { 
+                    fetch(`/academics/api/get_all_departments`)
+                        .then(res => res.json())
+                        .then(depts => {
+                            ddlBranch.innerHTML = '<option value="0">--Select Department--</option>';
+                            depts.forEach(d => {
+                                const option = document.createElement('option');
+                                option.value = d.id; 
+                                option.textContent = d.name; 
+                                ddlBranch.appendChild(option);
+                            });
+                            ddlBranch.disabled = false;
+                        });
+                } else {
+                    ddlBranch.innerHTML = '<option value="0">Select Department</option>';
+                    ddlBranch.disabled = true;
+                }
+            });
+            
+        // Reset Semester and Year when Degree changes
+        ddlSemester.innerHTML = '<option value=""> -- Select Class -- </option>';
+        ddlSemester.disabled = true;
+        ddlYear.innerHTML = '<option value="">-- Select Year --</option>';
+        ddlYear.disabled = true;
+    });
+
+    // On Semester (Class) Change
+    ddlSemester.addEventListener('change', function() {
+        const semesterId = this.value;
+        if (!semesterId) {
+            ddlYear.innerHTML = '<option value="">-- Select Year --</option>';
+            return;
+        }
+
+        fetch(`/academics/api/get_semester_year/${semesterId}`)
+            .then(response => response.json())
+            .then(data => {
+                ddlYear.innerHTML = '';
+                if (data.degreeyear_char) {
+                    const option = document.createElement('option');
+                    option.value = data.pk_degreeyearid;
+                    option.textContent = data.degreeyear_char;
+                    option.selected = true;
+                    ddlYear.appendChild(option);
+                }
+                // Year is "displayed automatically" - user implied it's just shown, possibly disabled or single option
+                ddlYear.disabled = true; 
+            });
+    });
+
+    btnGetCourses.addEventListener('click', function() {
+        const sessionFrom = document.getElementById('ddlFromSession').value;
+        const sessionTo = document.getElementById('ddlToSession').value;
+        const degree = ddlDegree.value;
+        const semester = ddlSemester.value;
+        const dept = ddlBranch.value;
+
+        if (sessionFrom == "0" || !degree || !semester) {
+            alert('Please select mandatory fields (From Session, Degree, Class)');
+            return;
+        }
+
+        const payload = {
+            session_from: sessionFrom,
+            session_to: sessionTo,
+            degree_id: degree,
+            semester_id: semester,
+            dept_id: dept
+        };
+
+        btnGetCourses.value = 'Loading...';
+        btnGetCourses.disabled = true;
+
+        fetch('/academics/api/get_syllabus_courses', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            renderCourses(data);
+            btnGetCourses.value = 'GET COURSES';
+            btnGetCourses.disabled = false;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to fetch courses.');
+            btnGetCourses.value = 'GET COURSES';
+            btnGetCourses.disabled = false;
+        });
+    });
+
+    function renderCourses(courses) {
+        const container = document.getElementById('courseContainer');
+        if (!courses || courses.length === 0) {
+            container.innerHTML = '<div style="padding:10px; color:red; text-align:center;">No Courses Found!</div>';
+            return;
+        }
+
+        let html = `
+            <table class="table-grid-view" width="100%">
+                <thead>
+                    <tr class="header-style">
+                        <th>S.No.</th>
+                        <th>Course Code</th>
+                        <th>Course Name</th>
+                        <th>Credit Hours (Th/Pr)</th>
+                        <th>Department</th>
+                        <th>Compulsory</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        courses.forEach((c, index) => {
+            const rowClass = index % 2 === 0 ? 'item-style-alt' : 'item-style';
+            html += `
+                <tr class="${rowClass}" align="center">
+                    <td>${index + 1}</td>
+                    <td>${c.coursecode}</td>
+                    <td align="left">${c.coursename}</td>
+                    <td>${c.crhr_theory} + ${c.crhr_practical}</td>
+                    <td>${c.dept_name || '-'}</td>
+                    <td>${c.iscompuls ? 'Yes' : 'No'}</td>
+                    <td>${c.isactive ? '<span style="color:green">Active</span>' : '<span style="color:red">Inactive</span>'}</td>
+                </tr>
+            `;
+        });
+
+        html += '</tbody></table>';
+        container.innerHTML = html;
+    }
+
+
+    btnReset.addEventListener('click', function() {
+        document.getElementById('syllabusForm').reset();
+        resetCascading();
+    });
+
+    function resetCascading() {
+        ddlSemester.innerHTML = '<option value=""> -- Select Class -- </option>';
+        ddlSemester.disabled = true;
+        ddlBranch.innerHTML = '<option value="0">--Select Department--</option>';
+        ddlBranch.disabled = true;
+        ddlYear.innerHTML = '<option value="">-- Select Year --</option>';
+        ddlYear.disabled = true;
+    }
+});
+</script>
+{% endblock %}

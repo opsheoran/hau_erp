@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="height: 400px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" style="width: 120px; opacity: 0.1; margin-bottom: 30px;">
+    <h2 style="color: #ccc; font-family: Verdana; letter-spacing: 2px;">{{ current_mod.modulename }}</h2>
+    <p style="color: #999; font-size: 11px;">Please use the top navigation menu to access module features.</p>
+</div>
+{% endblock %}

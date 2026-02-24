@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .decl-table { width: 100%; border-collapse: collapse; font-family: Verdana, sans-serif; font-size: 11px; margin-top: 15px; }
+    .decl-table th { background-color: #3c8dbc; color: #fff; padding: 8px; font-weight: bold; text-align: center; border: 1px solid #2c729e; }
+    .decl-table td { border: 1px solid #ccc; padding: 5px; }
+    .decl-table input { width: 100%; border: 1px solid #ddd; text-align: right; padding: 3px; }
+    .sec-header { background-color: #eee; font-weight: bold; padding: 8px !important; color: #3c8dbc; border-bottom: 2px solid #3c8dbc !important; }
+</style>
+
+<div style="padding: 10px 20px;">
+    <div class="card card-hau">
+        <div class="tableheading">Tax Declaration Form (Section 80C, 80D, etc.)</div>
+        <div class="card-body">
+            <!-- EMPLOYEE INFO HEADER -->
+            <div style="border:1px solid #ccc; padding:15px; background:#f9f9f9; margin-bottom: 20px;">
+                <table width="100%" style="font-size: 11px;">
+                    <tr>
+                        <td width="150" style="font-weight:bold;">Controlling Officer:</td>
+                        <td colspan="3">{{ e.controlling_officer or '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">Employee Code:</td>
+                        <td>{{ e.empname }} | {{ e.empcode }}</td>
+                        <td width="150" style="font-weight:bold;">Employee Name:</td>
+                        <td>{{ e.empname }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">Designation:</td>
+                        <td>{{ e.designation }}</td>
+                        <td style="font-weight:bold;">Department:</td>
+                        <td>{{ e.dept_name }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <form method="POST">
+                <div class="mb-3">
+                    <span class="vtext">Select Financial Year :</span>
+                    <select name="fin_year" id="fin_year_select" class="dropdown" onchange="this.form.submit()" style="width: 200px;">
+                        <option value="">-- Select Year --</option>
+                        {% for fy in fin_years %}
+                        <option value="{{ fy.id }}" {% if fy.id == selected_fin_id %}selected{% endif %}>{{ fy.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {% if selected_fin_id %}
+                <table class="decl-table">
+                    <thead>
+                        <tr>
+                            <th width="50%">Description / Section</th>
+                            <th width="20%">Max Limit</th>
+                            <th width="30%">Amount (Rs.)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sec in sections %}
+                        <tr>
+                            <td colspan="3" class="sec-header">{{ sec.description }} ({{ sec.code }})</td>
+                        </tr>
+                        {% for sub in sec.subsections %}
+                        <tr>
+                            <td style="padding-left: 20px;">{{ sub.description }}</td>
+                            <td align="right">{{ "{:,.0f}".format(sub.maxlimit) if sub.maxlimit else '-' }}</td>
+                            <td>
+                                <input type="hidden" name="subsec_id[]" value="{{ sub.pk_subsecid }}">
+                                <input type="hidden" name="sec_id[]" value="{{ sec.pk_secid }}">
+                                <input type="number" name="amount[]" value="{{ sub.current_val|int }}" step="0.01">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="mt-4 text-center">
+                    <button type="submit" name="save_decl" class="btn btn-primary">SAVE DECLARATION</button>
+                    <button type="reset" class="btn btn-secondary ms-2">RESET</button>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

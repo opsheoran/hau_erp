@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- SAVE FORM -->
+<form method="POST" id="sessionForm">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_sessionid" id="sess_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="7">
+                    <span class="mainheadingborderbottom">Academic Session Master</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">From Date</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="date" name="start" id="sess_start" class="textbox w-150" required onchange="updateSessionName()">
+                    <span class="required">*</span>
+                </td>
+                <td width="5%"></td>
+                <td class="vtext" width="15%">To Date</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <input type="date" name="end" id="sess_to" class="textbox w-150" required onchange="updateSessionName()">
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Session</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="name" id="sess_name" class="textbox w-150" readonly style="background:#f4f4f4">
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Display Order</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" name="order" id="sess_order" class="textbox w-100" value="1">
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td>
+                    <textarea name="remarks" id="sess_remarks" class="textbox w-250" style="height: 40px;"></textarea>
+                </td>
+                <td></td>
+                <td class="vtext">Status</td>
+                <td class="colon">:</td>
+                <td>
+                    <label style="font-weight:normal; font-size:11px;"><input type="checkbox" name="open" id="sess_open" checked> Admission Open</label>
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    <input type="submit" value="SAVE" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left: 10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<!-- LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="7">
+                <span class="subheadingborderbottom">List of Academic Sessions</span>
+            </td>
+        </tr>
+        <tr><td colspan="7" height="10"></td></tr>
+        <tr>
+            <td colspan="7">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th>Session</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th width="10%">Order</th>
+                            <th width="10%">Status</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in sessions %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
+                            <td>{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td><b>{{ s.sessionname }}</b></td>
+                            <td>{{ s.sessionstart_dt.strftime('%d/%m/%Y') if s.sessionstart_dt else '' }}</td>
+                            <td>{{ s.sessionend_dt.strftime('%d/%m/%Y') if s.sessionend_dt else '' }}</td>
+                            <td>{{ s.sessionorder }}</td>
+                            <td>
+                                {% if s.isadmissionopen %}
+                                <span style="color:green; font-weight:bold;">OPEN</span>
+                                {% else %}
+                                <span style="color:red;">CLOSED</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editSess({{ s|tojson }})'>
+                            </td>
+                            <td>
+                                <form method="POST" onsubmit="return confirm('Are you sure you want to delete this session?');" style="display:inline;">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ s.pk_sessionid }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('academics.session_master', page=pagination.page-1) }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('academics.session_master', page=p) }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('academics.session_master', page=pagination.page+1) }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+function updateSessionName() {
+    const f = document.getElementById('sess_start').value;
+    const t = document.getElementById('sess_to').value;
+    if (f && t) {
+        const y1 = f.split('-')[0];
+        const y2 = t.split('-')[0];
+        if (y1 && y2) {
+            document.getElementById('sess_name').value = `${y1}-${y2}`;
+        }
+    }
+}
+
+function editSess(s) {
+    document.getElementById('sess_id').value = s.pk_sessionid;
+    
+    // Helper to format date for input type=date (YYYY-MM-DD)
+    const formatDate = (val) => {
+        if (!val) return '';
+        const d = new Date(val);
+        if (isNaN(d.getTime())) return '';
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    document.getElementById('sess_start').value = formatDate(s.sessionstart_dt);
+    document.getElementById('sess_to').value = formatDate(s.sessionend_dt);
+    
+    document.getElementById('sess_name').value = s.sessionname.trim();
+    document.getElementById('sess_order').value = s.sessionorder;
+    document.getElementById('sess_open').checked = !!s.isadmissionopen;
+    document.getElementById('sess_remarks').value = (s.remarks || '').trim();
+    window.scrollTo(0,0);
+}
+
+function resetForm() {
+    document.getElementById('sess_id').value = '';
+    document.getElementById('sessionForm').reset();
+    setTodayDates();
+}
+
+function setTodayDates() {
+    const today = new Date();
+    const nextYear = new Date();
+    nextYear.setFullYear(today.getFullYear() + 1);
+    
+    if (!document.getElementById('sess_id').value) {
+        document.getElementById('sess_start').value = today.toISOString().split('T')[0];
+        document.getElementById('sess_to').value = nextYear.toISOString().split('T')[0];
+        updateSessionName();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', setTodayDates);
+</script>
+{% endblock %}

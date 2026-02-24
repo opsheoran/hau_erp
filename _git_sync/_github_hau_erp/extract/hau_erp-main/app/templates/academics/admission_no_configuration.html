@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Admission Configuration</span></div>
+    
+    <div style="padding: 10px;">
+        <form method="POST" id="configForm">
+            <input type="hidden" name="action" value="SAVE">
+            <input type="hidden" name="pk_id" id="pk_AdmConid">
+            
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td colspan="4" class="required">
+                            <select name="college_id" id="ddl_college" class="dropdown w-300" required onchange="this.form.submit()">
+                                <option value="">-- Select College--</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string or request.args.get('college_id')|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Session From</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_from" id="D_ddlappfrom" class="dropdown w-200" required>
+                                <option value=""> -- Select Session From -- </option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}">{{ s.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                        <td class="vtext" width="15%">Session To</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_to" id="ddlappupto" class="dropdown w-200" required>
+                                <option value=""> -- Select Session Upto-- </option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}">{{ s.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" id="ddlDegree" class="dropdown w-250" required>
+                                <option value="">-- Select Degree --</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}">{{ d.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                        <td class="vtext">Separator</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <input name="separator" type="text" id="txt_Separator" class="textbox w-150">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Prefix</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <input name="suffix" type="text" id="R_txtsuffix" class="textbox w-150"> *
+                            <small style="color:#999; display:block;">(Saves to 'suffix' column as per live system)</small>
+                        </td>
+                        <td class="vtext">Suffix</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <input name="prefix" type="text" id="R_txtpostfix" class="textbox w-150"> *
+                            <small style="color:#999; display:block;">(Saves to 'Prefix' column as per live system)</small>
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="15"></td></tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="5">
+                            <input type="submit" value="SAVE" class="button-common" style="width:100px;">
+                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:10px;" onclick="resetForm()">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+        <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4;">
+            <table class="table-grid-view" width="100%" id="gvConfigurationDtl">
+                <thead>
+                    <tr class="header-style">
+                        <th scope="col" width="5%">S. No.</th>
+                        <th scope="col">Degree</th>
+                        <th scope="col">College</th>
+                        <th scope="col">Session From</th>
+                        <th scope="col">Separator</th>
+                        <th scope="col">Suffix</th>
+                        <th scope="col">Prefix</th>
+                        <th scope="col" width="5%">EDIT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td>{{ item.degreename }}</td>
+                        <td>{{ item.collegename }}</td>
+                        <td align="center">{{ item.sess_from }}</td>
+                        <td align="center">{{ item.Separator }}</td>
+                        <td align="center">{{ item.suffix }}</td>
+                        <td align="center">{{ item.Prefix }}</td>
+                        <td align="center">
+                            <a href="javascript:void(0)" onclick='editConfig({{ item|tojson }})'>
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" border="0">
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr class="item-style"><td colspan="8" align="center" style="padding:20px; color:#999;">No configurations found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        {% if pagination.total_pages > 1 %}
+        <div class="pager-style">
+            {% if pagination.has_prev %}
+            <a href="{{ url_for('academics.admission_no_configuration', page=pagination.page-1) }}">Prev</a>
+            {% endif %}
+            
+            {% for p in page_range %}
+                {% if p == pagination.page %}
+                <span class="active">{{ p }}</span>
+                {% else %}
+                <a href="{{ url_for('academics.admission_no_configuration', page=p) }}">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if pagination.has_next %}
+            <a href="{{ url_for('academics.admission_no_configuration', page=pagination.page+1) }}">Next</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function editConfig(item) {
+    document.getElementById('pk_AdmConid').value = item.pk_AdmConid;
+    document.getElementById('ddl_college').value = item.Fk_collegeid;
+    document.getElementById('D_ddlappfrom').value = item.SessionFrom;
+    document.getElementById('ddlappupto').value = item.SessionTo || '';
+    document.getElementById('ddlDegree').value = item.Degree;
+    document.getElementById('txt_Separator').value = item.Separator || '';
+    document.getElementById('R_txtsuffix').value = item.suffix || '';
+    document.getElementById('R_txtpostfix').value = item.Prefix || '';
+    window.scrollTo(0,0);
+}
+
+function resetForm() {
+    document.getElementById('pk_AdmConid').value = '';
+    document.getElementById('configForm').reset();
+}
+</script>
+{% endblock %}

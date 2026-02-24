@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .rent-table { width: 100%; border-collapse: collapse; font-family: Verdana, sans-serif; font-size: 11px; margin-top: 15px; }
+    .rent-table th { background-color: #3c8dbc; color: #fff; padding: 8px; font-weight: bold; text-align: center; border: 1px solid #2c729e; }
+    .rent-table td { border: 1px solid #ccc; padding: 5px; }
+    .rent-table input { width: 100%; border: 1px solid #ddd; text-align: right; padding: 3px; }
+</style>
+
+<div style="padding: 10px 20px;">
+    <div class="card card-hau">
+        <div class="tableheading">House Rent Details Submission</div>
+        <div class="card-body">
+            <!-- EMPLOYEE INFO HEADER -->
+            <div style="border:1px solid #ccc; padding:15px; background:#f9f9f9; margin-bottom: 20px;">
+                <table width="100%" style="font-size: 11px;">
+                    <tr>
+                        <td width="150" style="font-weight:bold;">Controlling Officer:</td>
+                        <td colspan="3">{{ e.controlling_officer or '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">*Employee Code:</td>
+                        <td>{{ e.empname }} | {{ e.empcode }}</td>
+                        <td width="150" style="font-weight:bold;">Employee Name:</td>
+                        <td>{{ e.empname }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">Designation:</td>
+                        <td>{{ e.designation }}</td>
+                        <td style="font-weight:bold;">Department:</td>
+                        <td>{{ e.dept_name }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <form method="POST">
+                <div class="mb-3">
+                    <span class="vtext">Select Financial Year :</span>
+                    <select name="fin_year" id="fin_year_select" class="dropdown" onchange="this.form.submit()" style="width: 200px;">
+                        <option value="">-- Select Year --</option>
+                        {% for fy in fin_years %}
+                        <option value="{{ fy.id }}" {% if fy.id == selected_fin_id %}selected{% endif %}>{{ fy.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {% if rent_data %}
+                <table class="rent-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">S.No.</th>
+                            <th width="30%">Month</th>
+                            <th width="20%">Year</th>
+                            <th width="40%">Rent Amount (Rs.)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in rent_data %}
+                        <tr>
+                            <td align="center">{{ loop.index }}</td>
+                            <td>{{ r.MonthName }}</td>
+                            <td align="center">
+                                <input type="hidden" name="month_id[]" value="{{ r.pk_MonthId }}">
+                                {% if r.fk_yearId %}
+                                    {% set display_year = r.fk_yearId %}
+                                {% elif current_fy %}
+                                    <!-- Months 1, 2, 3 are in the second year of the FY range -->
+                                    {% set display_year = current_fy.y2 if r.pk_MonthId|int <= 3 else current_fy.y1 %}
+                                {% else %}
+                                    {% set display_year = 2025 %}
+                                {% endif %}
+                                <input type="number" name="year[]" value="{{ display_year }}" readonly style="background:#eee; text-align:center;">
+                            </td>
+                            <td>
+                                <input type="number" name="amount[]" value="{{ r.amount|default(0, true)|int }}" step="0.01">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="mt-4 text-center">
+                    <button type="submit" name="save_rent" class="btn btn-primary">SAVE RENT DETAILS</button>
+                    <button type="reset" class="btn btn-secondary ms-2">RESET</button>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

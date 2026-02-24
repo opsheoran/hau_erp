@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://hauiums.in/HRMS/SAL_City_Mst.aspx?Mwpid=75 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./City Master_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./City Master_files/default.css" type="text/css" rel="stylesheet"><link href="./City Master_files/font.css" type="text/css" rel="stylesheet"><link href="./City Master_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./City Master_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style><script type="text/javascript" src="./City Master_files/WebResource.axd"></script><script type="text/javascript" src="./City Master_files/WebResource(1).axd"></script><script type="text/javascript" src="./City Master_files/WebResource(2).axd"></script><script type="text/javascript" src="./City Master_files/WebResource(3).axd"></script><script type="text/javascript" src="./City Master_files/CommonJS.js.download"></script><script type="text/javascript" src="./City Master_files/jquery-2.2.0.min.js.download"></script><script type="text/javascript">
+//<![CDATA[
+var Page_Validators = new Array();
+function WebForm_OnSubmit() {
+    return true;
+}
+//]]></script><script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script><script type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script><script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script><script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script><script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script><script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_D_ddlCityCategory');//]]>
+</script><script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/HRMS/SAL_City_Mst.aspx?Mwpid=75" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTMyNDY3MzI4Mg8WBh4GcG9zdGlkBSQzNGNjMTRhMy01ZDIxLTQ0M2EtYjcyMi04NzNlZDdiYWY5NzAeAmlkBQVWQy0yMh4JVGltZXN0YW1wFClYU3lzdGVtLkJ5dGUsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQgDAAMAAwADAAMAA88DggMRFgJmDw8WAh4HUGVuZGluZwUBMGQWAgIBD2QWEAICDw8WAh4EVGV4dAURIFVuaXZlcnNpdHkgQWRtaW5kZAIEDw8WAh8EBRtMTFQuIC0gMi8yMS8yMDI2IDk6MzE6MjQgQU1kZAIFDw8WAh8EBRxDTFQuIC0gMi8yMS8yMDI2IDEwOjI1OjUyIEFNZGQCBg8PFgIfBAURIFVuaXZlcnNpdHkgQWRtaW5kZAIHDw8WAh8EBRJDb21wdHJvbGxlciwgSGlzYXJkZAIJD2QWAmYPFgIfBAVsPHNwYW4+TWFzdGVyczwvc3Bhbj4mbmJzcDs+Jm5ic3A7PHNwYW4+RXN0YWJsaXNobWVudCBNYXN0ZXJzPC9zcGFuPiZuYnNwOz4mbmJzcDs8c3Ryb25nPkNpdHkgTWFzdGVyPC9TdHJvbmc+ZAIKD2QWFAIBDxAPFgYeDURhdGFUZXh0RmllbGQFDGNpdHljYXRlZ29yeR4ORGF0YVZhbHVlRmllbGQFB3BrX2NjaWQeC18hRGF0YUJvdW5kZ2QQFQQaLS0gU2VsZWN0IENpdHkgQ2F0ZWdvcnkgLS0BQQFCAUMVBAAES0ctMQRLRy0zBEtHLTIUKwMEZ2dnZxYBAgFkAgMPDxYCHwQFBkFtYmFsYWRkAgUPDxYCHwRlZGQCBw8PFgIfBGVkZAIJDxAPFgIeB0NoZWNrZWRoZGRkZAILDxAPFgIfCGhkZGRkAg0PDxYIHwQFBlVQREFURR4LQ29tbWFuZE5hbWUFBlVQREFURR4XQXV0b1VwZGF0ZUFmdGVyQ2FsbEJhY2tnHhJUZXh0RHVyaW5nQ2FsbEJhY2sFC1VQREFUSU5HLi4uZGQCDw8PFgIfCmdkZAIRDw8WAh8EZWRkAhMPPCsACwEADxYOHgtfIUl0ZW1Db3VudAIKHghEYXRhS2V5cxYKBQVWQy0yMgUFVkMtNTAFBVZDLTQ3BQVWQy0xMQUFVkMtNTQFBVZDLTQ1BQVWQy0yOQUFVkMtMTcFBVZDLTQxBQVWQy0xNR4QVmlydHVhbEl0ZW1Db3VudAI8HglQYWdlQ291bnQCBh4VXyFEYXRhU291cmNlSXRlbUNvdW50AjweDVNlbGVjdGVkSW5kZXhmHhBDdXJyZW50UGFnZUluZGV4ZmQWAmYPZBYUAgIPZBYOZg8PFgIfBAUBMWRkAgEPDxYCHwQFAUFkZAICDw8WAh8EBQZBbWJhbGFkZAIDDw8WAh8EBQVOTyAgIGRkAgQPDxYCHwQFBU5PICAgZGQCBQ9kFgICAQ8PFgIeD0NvbW1hbmRBcmd1bWVudAUFVkMtMjJkZAIGD2QWAgIBDw8WAh8TBQVWQy0yMmRkAgMPZBYOZg8PFgIfBAUBMmRkAgEPDxYCHwQFAUFkZAICDw8WAh8EBRJCYWJiYXJwdXIsIFBhbmlwYXRkZAIDDw8WAh8EBQVOTyAgIGRkAgQPDxYCHwQFBU5PICAgZGQCBQ9kFgICAQ8PFgIfEwUFVkMtNTBkZAIGD2QWAgIBDw8WAh8TBQVWQy01MGRkAgQPZBYOZg8PFgIfBAUBM2RkAgEPDxYCHwQFAUFkZAICDw8WAh8EBQ1CYWpla2EsIFNpcnNhZGQCAw8PFgIfBAUFTk8gICBkZAIEDw8WAh8EBQVOTyAgIGRkAgUPZBYCAgEPDxYCHxMFBVZDLTQ3ZGQCBg9kFgICAQ8PFgIfEwUFVkMtNDdkZAIFD2QWDmYPDxYCHwQFATRkZAIBDw8WAh8EBQFBZGQCAg8PFgIfBAUFQmF3YWxkZAIDDw8WAh8EBQVOTyAgIGRkAgQPDxYCHwQFBU5PICAgZGQCBQ9kFgICAQ8PFgIfEwUFVkMtMTFkZAIGD2QWAgIBDw8WAh8TBQVWQy0xMWRkAgYPZBYOZg8PFgIfBAUBNWRkAgEPDxYCHwQFAUFkZAICDw8WAh8EBRVCaGFuYSBCYXJhaG1uYW4sIEppbmRkZAIDDw8WAh8EBQVOTyAgIGRkAgQPDxYCHwQFBU5PICAgZGQCBQ9kFgICAQ8PFgIfEwUFVkMtNTRkZAIGD2QWAgIBDw8WAh8TBQVWQy01NGRkAgcPZBYOZg8PFgIfBAUBNmRkAgEPDxYCHwQFAUFkZAICDw8WAh8EBQdCaGl3YW5pZGQCAw8PFgIfBAUFTk8gICBkZAIEDw8WAh8EBQVOTyAgIGRkAgUPZBYCAgEPDxYCHxMFBVZDLTQ1ZGQCBg9kFgICAQ8PFgIfEwUFVkMtNDVkZAIID2QWDmYPDxYCHwQFATdkZAIBDw8WAh8EBQFBZGQCAg8PFgIfBAUNQmliaXB1ciwgSmluZGRkAgMPDxYCHwQFBU5PICAgZGQCBA8PFgIfBAUFTk8gICBkZAIFD2QWAgIBDw8WAh8TBQVWQy0yOWRkAgYPZBYCAgEPDxYCHxMFBVZDLTI5ZGQCCQ9kFg5mDw8WAh8EBQE4ZGQCAQ8PFgIfBAUBQWRkAgIPDxYCHwQFCUNPQSwgS2F1bGRkAgMPDxYCHwQFBU5PICAgZGQCBA8PFgIfBAUFTk8gICBkZAIFD2QWAgIBDw8WAh8TBQVWQy0xN2RkAgYPZBYCAgEPDxYCHxMFBVZDLTE3ZGQCCg9kFg5mDw8WAh8EBQE5ZGQCAQ8PFgIfBAUBQWRkAgIPDxYCHwQFDURhaGltYSwgSGlzYXJkZAIDDw8WAh8EBQVOTyAgIGRkAgQPDxYCHwQFBU5PICAgZGQCBQ9kFgICAQ8PFgIfEwUFVkMtNDFkZAIGD2QWAgIBDw8WAh8TBQVWQy00MWRkAgsPZBYOZg8PFgIfBAUCMTBkZAIBDw8WAh8EBQFBZGQCAg8PFgIfBAUSRGFyeWFwdXIsIEZhdGhhYmFkZGQCAw8PFgIfBAUFTk8gICBkZAIEDw8WAh8EBQVOTyAgIGRkAgUPZBYCAgEPDxYCHxMFBVZDLTE1ZGQCBg9kFgICAQ8PFgIfEwUFVkMtMTVkZAILDw8WAh8EZWRkGAEFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYDBQxjdGwwMCRocGxCdG4FImN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkY2hrTWV0cm8FImN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkY2hrT3RoZXL45155uOuYgDdzqsKLol4+UGYs9/SfDj/7ZE+/w/VaGA==">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./City Master_files/WebResource(4).axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./City Master_files/WebResource(5).axd" type="text/javascript"></script>
+<script src="./City Master_files/WebResource(6).axd" type="text/javascript"></script>
+<script src="./City Master_files/WebResource(7).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="46221431">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdADDbQf3qpUUFIKpxisJb9zUlRyk5P+91hMCfDVCSoqBkp6b+MkJqJf6Em6cT6+MH4kVT3K37pAW7p+Bhw4YiEislh3rGHaoBQj+VUYQGYx5+YCjVBuTbtXGKX/uEUmi5Q+kMZnU8p5i32fMFsbrEC3XFcdcIkBpzLKoV78pC66Mx8fmuKmq7BTDnv7NhG4o+rFjWXarcjHpaPiwLiScNfbsixXXDY76zz3OJT1KLVwVJqsuo1RFu8xwss4OiPHNjbtkY8kQZap3bak3SAhu5m6ym/Gr8Mr/XPWCTtjuuj4kK7Jwt6G2hIKAAB9cDAQGsShZzqCT7+mPzeyxEGFQoWpDP2G/3vOrHsfMAzjVr48ru555i1d8kMja2IS8AKub7t70qQwMFzhinloCuDMazeakXq3WB2VsgzmOSM/eXJyEjOX2wfZ6qRZwxuwKqObRJOXKgfn6nDMtV11tK4aN0MFRUb/i421eR14VRuDsPUjr8BlFijt8GKGVhSzJBosfXj1T6aIY2+AMDYDGIOUW82X8Mhh5cET/corDF1tO7hOgCYaII9OTsGl1Sy9cd/fphbS24gpD6TAqzbWzPo+DNMHiXiQa0y3KoajhPRVhN2R+OGYjIDJzaK2CUL0CK9U3Vfu4RbJNDMBqgLbnelbEK7b9uujJdIT+9YvWYRGFce03v0Q3K9xWjqRvsnTtvezMryu/bsuI9o6y+uurCZMoNWSPwr10sh4Z8o35BF2lORsmcbW/pMMM99Eo/aWzj8F3ryQYfZReuylNLNMzORiV8ygpkyZYQJ2s4hqrZ2zjji1oBr1+iQgD8Z2ZpKKM7Y4AfSyNUP1M6JSIpARUmVZ/QarmEra5L8vQeta3NTvP8s7NITboti32vho6HEwCyn7zXhuVanLOcXPdqTesn4H9nSGXCSB0+/T2uMtU4ER57LH0vJVr0k/p3NzJXcOhqx7kNO43glEuGGR8RGoMopRhFlroQOQ2GPVpVkbKhC3JAVtRU1OZwznjenWq+Izwe/g5hpmudNkoutXsC294Y7LLDo/PbtB+lnUkFWp9YLLy4LfX+uA==">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./City Master_files/Establishment.png">
+                            Establishment
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/HRMS/SAL_City_Mst.aspx?Mwpid=75#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> University Admin</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> University Admin</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">Comptroller, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/HRMS/SAL_City_Mst.aspx?Mwpid=75#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./City Master_files/WebResource(8).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Masters" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3191#" tabindex="-1">Masters</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:3" role="menuitem" style="position: relative;"><a title="Establishment Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5041#" tabindex="-1">Establishment Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:3" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="City Category Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_CityCategory_Mst.aspx?Mwpid=76" tabindex="-1">City-Category Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="City Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_City_Mst.aspx?Mwpid=75" tabindex="-1">City Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Salutation  Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Salutation_Mst.aspx?Mwpid=3717" tabindex="-1">Salutation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Religion Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Religion_Mst.aspx?Mwpid=855" tabindex="-1">Religion Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Relation Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Relation_MST.aspx?Mwpid=3709" tabindex="-1">Relation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Category Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Category_Mst.aspx?Mwpid=74" tabindex="-1">Category Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Gad-Nongad Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_GadNongad_Mst.aspx?Mwpid=89" tabindex="-1">Gad-Nongad Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Class Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Class_Mst.aspx?Mwpid=77" tabindex="-1">Class Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Discipline Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Discipline_Mst.aspx?Mwpid=1892" tabindex="-1">Discipline Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marital Status Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Marital_Status_Mst.aspx?Mwpid=3710" tabindex="-1">Marital Status Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Funds Sponsor Master" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_Fund_Sponsor_Mst.aspx?Mwpid=5080" tabindex="-1">Funds Sponsor Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="ExamType Master" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_ExamType_Master.aspx?Mwpid=5081" tabindex="-1">ExamType Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Category" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_DesignationCategory_Mst.aspx?Mwpid=5085" tabindex="-1">Designation Category</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Check List Master" class="level3 dynamic" href="https://hauiums.in/HRMS/sal_checklist_mst.aspx?Mwpid=5324" tabindex="-1">Check List Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Committee Member" class="level3 dynamic" href="https://hauiums.in/HRMS/Est_CreateCommitteeMember.aspx?Mwpid=5339" tabindex="-1">Create Committee Member</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:20" role="menuitem" style="position: relative;"><a title="Employee Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5042#" tabindex="-1">Employee Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:20" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Department Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Department_Mst.aspx?Mwpid=1948" tabindex="-1">Department Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Section Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Section_Mst.aspx?Mwpid=1947" tabindex="-1">Section Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=80" tabindex="-1">Designation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Employee_Mst.aspx?Mwpid=3194" tabindex="-1">Employee Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Master Scheme Wise" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Employee_Mst_Scheme.aspx?Mwpid=5279" tabindex="-1">Employee Master Scheme Wise</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Recruitment Employee Import" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Employee_Mst_ImportRecruit.aspx?Mwpid=5199" tabindex="-1">Recruitment Employee Import</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:28" role="menuitem" style="position: relative;"><a title="SAR Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5044#" tabindex="-1">SAR Maters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:28" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Category Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Category_mst.aspx?Mwpid=5045" tabindex="-1">SAR Category Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Activity Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Activity_mst.aspx?Mwpid=5046" tabindex="-1">SAR Activity Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Grade Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Grade_mst.aspx?Mwpid=5047" tabindex="-1">SAR Grade Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Employee_mst.aspx?Mwpid=5048" tabindex="-1">SAR Employee Master</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:35" role="menuitem" style="position: relative; float: left;"><a title="Transactions" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3192#" tabindex="-1">Transactions</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:35" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:36" role="menuitem" style="position: relative;"><a title="Personal Details" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5049#" tabindex="-1">Personal Details</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:36" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Demographic Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Employee_Demographic_Details.aspx?Mwpid=1665" tabindex="-1">Employee Demographic Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="SAL_EmployeeDocument_Details.aspx" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeDocument_Details.aspx?Mwpid=4481" tabindex="-1">Employee Document Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Qualification Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeQualification_Details.aspx?Mwpid=1955" tabindex="-1">Education Qualification Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Permission of Qualification Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeEducation_Details.aspx?Mwpid=5253" tabindex="-1">Employee Permission of Qualification Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Family Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeFamily_Details.aspx?Mwpid=1954" tabindex="-1">Employee Family Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Nominee Details" class="level3 dynamic" href="https://hauiums.in/HRMS/GPF_Employee_Details_Mst.aspx?Mwpid=4497" tabindex="-1">Employee Nominee Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Books Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeMemo_Details.aspx?Mwpid=1979" tabindex="-1">Employee Books Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="LTC Detail" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_LTC_Detail.aspx?Mwpid=4832" tabindex="-1">LTC Detail</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Earned Leave Details" class="level3 dynamic" href="https://hauiums.in/Leave/SAL_EarnedLeave_Details.aspx?Mwpid=5190" tabindex="-1">Earned Leave Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Check List Details" class="level3 dynamic" href="https://hauiums.in/HRMS/Sal_Employee_CheckList_Detail.aspx?Mwpid=5325" tabindex="-1">Check List Details</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:48" role="menuitem" style="position: relative;"><a title="Job Details" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5050#" tabindex="-1">Job Details</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:48" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Previous Job Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeePreviousJob_Details.aspx?Mwpid=1667" tabindex="-1">Employee Previous Job Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Foreign Visit Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeForeignVisit_Details.aspx?Mwpid=1961" tabindex="-1">Employee Foreign Visit Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Training Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeTraining_Details.aspx?Mwpid=1957" tabindex="-1">Employee Training Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Departmental Exam Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeDepartmentalExam_Details.aspx?Mwpid=4797" tabindex="-1">Employee Departmental Exam Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Service Verification Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeServiceVerification_Details.aspx?Mwpid=4798" tabindex="-1">Employee Service Verification Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Disciplinary Action/Reward Details" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_Disciplinary_Action_Details.aspx?Mwpid=368" tabindex="-1">Disciplinary Action/Reward Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Loan Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_LoanDetails.aspx?Mwpid=5232" tabindex="-1">Employee Loan Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Book Grant Amount Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_BookGrantAmount.aspx?Mwpid=5233" tabindex="-1">Employee Book Grant Amount Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Bonus Amount Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeBonusAmont_dtl.aspx?Mwpid=5247" tabindex="-1">Employee Bonus Amount Details</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:59" role="menuitem" style="position: relative;"><a title="Increment/Promotion" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5051#" tabindex="-1">Increment/Promotion</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:59" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="SAR/ACR Admin Transaction" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Admin_Transaction.aspx?Mwpid=5054" tabindex="-1">SAR/ACR Admin Transaction</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee First Appointment Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_FirstAppointment_Details.aspx?Mwpid=4823" tabindex="-1">Employee First Appointment Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Emp Increment Payrevision" class="level3 dynamic" href="https://hauiums.in/HRMS/sal_emp_increment_payrevision_detailt.aspx?Mwpid=4802" tabindex="-1">Emp Increment Payrevision</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Promotion/Financial Up-gradation Details" class="level3 dynamic" href="https://hauiums.in/HRMS/sal_emp_promotion_detail.aspx?Mwpid=4820" tabindex="-1">Employee Promotion/Financial Up-gradation</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee No-Dues Detail" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Emp_NoDues_Detail.aspx?Mwpid=5151" tabindex="-1">Employee No-Dues Detail</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Appointing Authority" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Appointing_Authority.aspx?Mwpid=5326" tabindex="-1">Appointing Authority</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Controlling DDO Department Reliving" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Controlling_DDO_Department.aspx?Mwpid=5327" tabindex="-1">Controlling DDO Department Reliving</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Controlling DDO Department Joining" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Controlling_DDO_DepartmentIN.aspx?Mwpid=5328" tabindex="-1">Controlling DDO Department Joining</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Non Teaching Employee Promotion Verification" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_NonTeachingEmpPromotion_Verification.aspx?Mwpid=5329" tabindex="-1">Non Teaching Employee Promotion Verification</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Non Teaching Employee Promotion Approval" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_NonTeachingVerificationList.aspx?Mwpid=5330" tabindex="-1">Non Teaching Employee Promotion Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Non Teaching VC Promotion Approval" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_NonTeachingEmpPromotion_VCApproval.aspx?Mwpid=5331" tabindex="-1">Non Teaching VC Promotion Approval</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:73" role="menuitem" style="position: relative; float: left;"><a title="Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3193#" tabindex="-1">Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:73" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:74" role="menuitem" style="position: relative;"><a title="Reports" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5052#" tabindex="-1">Reports</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:74" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Service Book Report" class="level3 dynamic" href="https://hauiums.in/HRMS/Reports/EST_EmpServiceBookDigitizedView_Rpt.aspx?Mwpid=1653" tabindex="-1">Employee Service Book Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Establishment OfficeWise Report" class="level3 dynamic" href="https://hauiums.in/HRMS/Reports/EST_Establishment_OfficeWise_Rpt.aspx?Mwpid=1875" tabindex="-1">Establishment OfficeWise Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Organisation Data" class="level3 dynamic" href="https://hauiums.in/HRMS/OrganisationStruct.aspx?Mwpid=5114" tabindex="-1">Organisation Data</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Generate Seniority List" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_GenerateProbationPeriod_Completed.aspx?Mwpid=5332" tabindex="-1">Generate Seniority List</a></li>
+			</ul></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Masters</span>&nbsp;&gt;&nbsp;<span>Establishment Masters</span>&nbsp;&gt;&nbsp;<strong>City Master</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./City Master_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+<table border="0" cellpadding="0" cellspacing="0" class="table" style="width:100%;text-align:left;">
+<tbody><tr>
+    <td colspan="6" class="tableheading">
+        <span class="mainheadingborderbottom">City Master</span>
+            </td>
+</tr>
+<tr>
+    <td colspan="6" class="tdgap"></td>
+</tr>
+<tr>
+    <td id="lblCityCategory" class="vtext" style="width: 10%">City Category</td>
+    <td class="colon">:</td>
+    <td class="required">
+        <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlCityCategory__"><select name="ctl00$ContentPlaceHolder1$D_ddlCityCategory" id="ctl00_ContentPlaceHolder1_D_ddlCityCategory" class="dropdownlong">
+	<option value="">-- Select City Category --</option>
+	<option selected="selected" value="KG-1">A</option>
+	<option value="KG-3">B</option>
+	<option value="KG-2">C</option>
+
+</select></span> *
+    </td>
+    <td id="lblCity" class="vtext">City Name</td>
+    <td class="colon">:</td>
+    <td class="required">
+        <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtCity__"><input name="ctl00$ContentPlaceHolder1$R_txtCity" type="text" value="Ambala" maxlength="50" id="ctl00_ContentPlaceHolder1_R_txtCity" class="textboxlong"></span> *
+    </td>
+</tr>
+
+<tr>
+    <td class="vtext">Address1</td>
+    <td class="colon">:</td>
+    <td class="required">
+        <span id="Anthem_ctl00_ContentPlaceHolder1_txtAddress1__"><input name="ctl00$ContentPlaceHolder1$txtAddress1" type="text" maxlength="255" id="ctl00_ContentPlaceHolder1_txtAddress1" class="textboxlong"></span>
+    </td>
+      <td class="vtext">Address2</td>
+    <td class="colon">:</td>
+    <td class="required">
+        <span id="Anthem_ctl00_ContentPlaceHolder1_txtAddress2__"><input name="ctl00$ContentPlaceHolder1$txtAddress2" type="text" maxlength="255" id="ctl00_ContentPlaceHolder1_txtAddress2" class="textboxlong"></span>
+    </td>
+</tr>
+
+<tr>
+    <td class="vtext">Is Metro?</td>
+    <td class="colon">:</td>
+    <td class="required">
+        <span id="Anthem_ctl00_ContentPlaceHolder1_chkMetro__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_chkMetro" type="checkbox" name="ctl00$ContentPlaceHolder1$chkMetro"></span></span>
+    </td>
+     <td class="vtext">Is Other?</td>
+    <td class="colon">:</td>
+    <td class="required">
+        <span id="Anthem_ctl00_ContentPlaceHolder1_chkOther__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_chkOther" type="checkbox" name="ctl00$ContentPlaceHolder1$chkOther"></span></span>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="6" class="tdgap"></td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td colspan="6">
+        <table border="0" cellpadding="0" cellspacing="0">
+        <tbody><tr>
+            <td>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnSave__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="UPDATE" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSave&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;UPDATING...&#39;,true,btnSave_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSave" class="button-common" cellpadding="0" cellspacing="0"></span>
+            </td>
+            <td class="btngap"></td>
+            <td>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+            </td>
+            <td class="btngap"></td>
+            <td>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+            </td>
+        </tr>
+        </tbody></table>
+    </td>
+</tr>                            
+<tr>
+    <td colspan="6" class="tdgap"></td>
+</tr>
+<tr>
+    <td colspan="6" class="tablesubheading">
+        <span class="subheadingborderbottom">List of Cities</span>
+
+    </td>
+</tr>
+<tr>
+    <td colspan="6" class="tdgap"></td>
+</tr>
+<tr>
+    <td colspan="6">
+        <div id="Anthem_ctl00_ContentPlaceHolder1_dgDetails__"><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td>S. No.</td><td>City Category</td><td>City Name</td><td>Is Metro?</td><td>Is Other?</td><td>EDIT</td><td>DELETE</td>
+	</tr><tr class="item-style" style="color:Black;background-color:#E4EAFF;font-weight:normal;">
+		<td align="center" style="width:5%;">1</td><td align="center" style="width:10%;">A</td><td>Ambala</td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./City Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit--></span>
+                </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;)"><img src="./City Master_files/Delete.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete--></span>
+                </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">2</td><td align="center" style="width:10%;">A</td><td>Babbarpur, Panipat</td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./City Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit--></span>
+                </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete&#39;,&#39;&#39;)"><img src="./City Master_files/Delete.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete--></span>
+                </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">3</td><td align="center" style="width:10%;">A</td><td>Bajeka, Sirsa</td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./City Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit--></span>
+                </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete&#39;,&#39;&#39;)"><img src="./City Master_files/Delete.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete--></span>
+                </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">4</td><td align="center" style="width:10%;">A</td><td>Bawal</td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./City Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit--></span>
+                </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete&#39;,&#39;&#39;)"><img src="./City Master_files/Delete.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete--></span>
+                </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">5</td><td align="center" style="width:10%;">A</td><td>Bhana Barahmnan, Jind</td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./City Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit--></span>
+                </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete&#39;,&#39;&#39;)"><img src="./City Master_files/Delete.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete--></span>
+                </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">6</td><td align="center" style="width:10%;">A</td><td>Bhiwani</td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./City Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit--></span>
+                </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete&#39;,&#39;&#39;)"><img src="./City Master_files/Delete.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete--></span>
+                </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">7</td><td align="center" style="width:10%;">A</td><td>Bibipur, Jind</td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./City Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit--></span>
+                </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete&#39;,&#39;&#39;)"><img src="./City Master_files/Delete.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete--></span>
+                </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">8</td><td align="center" style="width:10%;">A</td><td>COA, Kaul</td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./City Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit--></span>
+                </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete&#39;,&#39;&#39;)"><img src="./City Master_files/Delete.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete--></span>
+                </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">9</td><td align="center" style="width:10%;">A</td><td>Dahima, Hisar</td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./City Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit--></span>
+                </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete&#39;,&#39;&#39;)"><img src="./City Master_files/Delete.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete--></span>
+                </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">10</td><td align="center" style="width:10%;">A</td><td>Daryapur, Fathabad</td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">NO   </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./City Master_files/Edit.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit--></span>
+                </td><td align="center" style="width:10%;">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete&#39;,&#39;&#39;)"><img src="./City Master_files/Delete.gif" alt="" border="0"></a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete--></span>
+                </td>
+	</tr><tr class="pager-style" align="center" style="color:#000000;">
+		<td colspan="7"><span>1</span>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;Page$2&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;&#39;)" style="color:#000000;">2</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;Page$3&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;&#39;)" style="color:#000000;">3</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl03&#39;,&#39;Page$4&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl03&#39;,&#39;&#39;)" style="color:#000000;">4</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl04&#39;,&#39;Page$5&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl04&#39;,&#39;&#39;)" style="color:#000000;">5</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl05&#39;,&#39;Page$6&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl05&#39;,&#39;&#39;)" style="color:#000000;">6</a></td>
+	</tr>
+</tbody></table></div>                                    
+    </td>
+</tr>
+</tbody></table>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_D_ddlCityCategory');//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./City Master_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./City Master_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

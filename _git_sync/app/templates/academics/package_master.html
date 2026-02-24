@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .textbox-small { width: 150px !important; }
+    .textbox-medium { width: 250px !important; }
+    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .required-star { color: red; font-weight: bold; }
+</style>
+
+<div class="hau-card">
+    <div class="tablesubheading">Package Master
+        <div class="helpbtn" style="float:right;">
+            <input type="image" src="{{ url_for('static', filename='images/help.png') }}" onclick="document.getElementById('helpModal').style.display='block'" style="height:20px;">
+        </div>
+    </div>
+    <div style="padding: 15px;">
+        <!-- Add/Edit Form -->
+        <form method="POST" id="packageForm">
+            <input type="hidden" name="action" value="SAVE">
+            <input type="hidden" name="pk_id" id="p_id">
+            
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Degree</td><td class="colon">:</td>
+                    <td width="34%">
+                        <select name="degree_id" id="p_degree" class="dropdown textbox-medium" onchange="loadSemesters(this.value)" required>
+                            <option value="">--Select Degree--</option>
+                            {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                    <td class="vtext" width="15%">Semester</td><td class="colon">:</td>
+                    <td>
+                        <select name="sem_id" id="p_sem" class="dropdown textbox-medium" required>
+                            <option value="">--Select Semester--</option>
+                            {# Dynamically filled #}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Session From</td><td class="colon">:</td>
+                    <td>
+                        <select name="session_from" id="p_sess_from" class="dropdown textbox-small" required>
+                            <option value="">--Select Session From--</option>
+                            {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                    <td class="vtext">Session To</td><td class="colon">:</td>
+                    <td>
+                        <select name="session_to" id="p_sess_to" class="dropdown textbox-small">
+                            <option value="">--Select Session To--</option>
+                            {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Package Name</td><td class="colon">:</td>
+                    <td><input type="text" name="name" id="p_name" class="textbox textbox-medium" maxlength="100" required> <span class="required-star">*</span></td>
+                    <td class="vtext">Is Active</td><td class="colon">:</td>
+                    <td>
+                        <span class="chkbox">
+                            <input type="checkbox" name="is_active" id="p_active" checked>
+                            <label>YES</label>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5"></td>
+                    <td align="right">
+                        <input type="button" value="Get Course" class="button-common" onclick="getCoursesForPackage()">
+                    </td>
+                </tr>
+
+                <!-- COURSE LIST MAPPING -->
+                <tr>
+                    <td colspan="6">
+                        <div class="tablesubheading" style="background:#eee; color:#333; margin:10px 0;">Course Under Package</div>
+                        <table class="table-grid-view" id="courseTable">
+                            <thead>
+                                <tr class="header-style">
+                                    <th width="50">S.No.</th><th>Course Name</th><th>Is Active?</th><th>DELETE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="courseBody">
+                                <!-- Dynamic Rows -->
+                            </tbody>
+                        </table>
+                        <div style="text-align:right; margin-top:5px;">
+                            <input type="button" value="ADD NEW DETAIL" class="button-common" onclick="addCourseRow()">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top: 20px;">
+                        <input type="submit" id="btnSave" value="SAVE" class="button-common" style="background:#3c8dbc; color:white; padding: 5px 30px;">
+                        <input type="button" value="RESET" class="button-common" style="margin-left:10px;" onclick="resetForm()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <!-- LIST -->
+        <div style="margin-top: 50px; border-top: 2px solid #3c8dbc; padding-top: 25px;">
+            <div class="tablesubheading">List of Package</div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <th width="50">S.No.</th>
+                        <th>Package Name</th>
+                        <th width="20%">Degree</th>
+                        <th width="10%">Semester</th>
+                        <th width="10%">IsActive</th>
+                        <th width="60">EDIT</th>
+                        <th width="60">DELETE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index + (pagination.page - 1) * pagination.per_page }}</td>
+                        <td style="font-weight:bold;">{{ item.PackageName }}</td>
+                        <td>{{ item.degreename }}</td>
+                        <td align="center">{{ item.semester_roman }}</td>
+                        <td align="center">{{ 'Active' if item.mstcourseactive else 'InActive' }}</td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick="editItem({{ item.pk_packageID }})">
+                        </td>
+                        <td align="center">
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this package?')">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="id" value="{{ item.pk_packageID }}">
+                                <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if pagination.total_pages > 1 %}
+            <div class="pager-style">
+                {% if pagination.has_prev %}
+                    <a href="{{ url_for('academics.package_master', page=pagination.page-1) }}">&lt;</a>
+                {% else %}
+                    <span class="disabled">&lt;</span>
+                {% endif %}
+
+                {% for p in page_range %}
+                    {% if p == '...' %}
+                        <span>{{ p }}</span>
+                    {% elif p == pagination.page %}
+                        <span class="active">{{ p }}</span>
+                    {% else %}
+                        <a href="{{ url_for('academics.package_master', page=p) }}">{{ p }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if pagination.has_next %}
+                    <a href="{{ url_for('academics.package_master', page=pagination.page+1) }}">&gt;</a>
+                {% else %}
+                    <span class="disabled">&gt;</span>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- HELP MODAL -->
+<div id="helpModal" class="grayout" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
+    <div style="background:white; width:400px; margin:100px auto; padding:20px; border-radius:5px; position:relative;">
+        <div onclick="this.parentElement.parentElement.style.display='none'" style="position:absolute; top:5px; right:10px; cursor:pointer; font-weight:bold; color:red;">X</div>
+        <div class="helpheading" style="font-weight:bold; border-bottom:1px solid #ddd; margin-bottom:10px; padding-bottom:5px;">Help</div>
+        <p style="font-family:Verdana; font-size:11px;">The Context sensitive help will be activated after final User Acceptance of respective IUMS Modules.</p>
+    </div>
+</div>
+
+<script>
+const allCourses = {{ lookups.courses|tojson }};
+
+async function loadSemesters(degreeId, selectedSemId = null) {
+    const semSelect = document.getElementById('p_sem');
+    semSelect.innerHTML = '<option value="">--Select Semester--</option>';
+    if (!degreeId) return;
+
+    try {
+        const res = await fetch(`/academics/api/get_degree_semesters/${degreeId}`);
+        const sems = await res.json();
+        sems.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = s.name;
+            if (selectedSemId && String(s.id) === String(selectedSemId)) opt.selected = true;
+            semSelect.appendChild(opt);
+        });
+    } catch (e) { console.error("Error loading semesters", e); }
+}
+
+function addCourseRow(data = null) {
+    const tbody = document.getElementById('courseBody');
+    const rowCount = tbody.rows.length + 1;
+    const tr = document.createElement('tr');
+    tr.className = 'item-style';
+    
+    let courseOpts = '<option value="">-- Select Coursename--</option>';
+    allCourses.forEach(c => {
+        const selected = data && String(data.fk_courseid) === String(c.id) ? 'selected' : '';
+        courseOpts += `<option value="${c.id}" ${selected}>${c.name}</option>`;
+    });
+
+    tr.innerHTML = `
+        <td align="center">${rowCount}</td>
+        <td align="center">
+            <select name="course_ids[]" class="dropdown" style="width:100%;" required>${courseOpts}</select>
+        </td>
+        <td align="center">
+            <span class="chkbox">
+                <input type="checkbox" name="course_active[]" checked>
+                <label>YES</label>
+            </span>
+        </td>
+        <td align="center">
+            <img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer" onclick="this.closest('tr').remove()">
+        </td>
+    `;
+    tbody.appendChild(tr);
+}
+
+async function editItem(id) {
+    const res = await fetch(`/academics/api/get_package_details/${id}`);
+    const p = await res.json();
+    
+    document.getElementById('p_id').value = p.pk_packageID;
+    document.getElementById('p_name').value = p.PackageName;
+    document.getElementById('p_degree').value = p.fk_degreeid;
+    await loadSemesters(p.fk_degreeid, p.fk_semesterid);
+    document.getElementById('p_sess_from').value = p.fromsession || '';
+    document.getElementById('p_sess_to').value = p.tosession || '';
+    document.getElementById('p_active').checked = !!p.mstcourseactive;
+
+    const tbody = document.getElementById('courseBody');
+    tbody.innerHTML = '';
+    if (p.details && p.details.length > 0) {
+        p.details.forEach(d => addCourseRow(d));
+    } else {
+        addCourseRow();
+    }
+    
+    document.getElementById('btnSave').value = 'UPDATE';
+    window.scrollTo(0, 0);
+}
+
+function getCoursesForPackage() {
+    // This button in live system usually filters available courses based on degree/sem
+    // For now we'll just add one empty row if none exists
+    if (document.getElementById('courseBody').rows.length === 0) {
+        addCourseRow();
+    }
+}
+
+function resetForm() {
+    document.getElementById('p_id').value = '';
+    document.getElementById('packageForm').reset();
+    document.getElementById('courseBody').innerHTML = '';
+    document.getElementById('btnSave').value = 'SAVE';
+    addCourseRow();
+}
+
+window.onload = () => { if(!document.getElementById('p_id').value) addCourseRow(); };
+</script>
+{% endblock %}

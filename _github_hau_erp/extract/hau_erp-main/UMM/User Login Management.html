@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)https://hauiums.in/sms/masters/LoginPage_ImageChange.aspx?Mwpid=4853 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./User Login Management_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./User Login Management_files/default.css" type="text/css" rel="stylesheet"><link href="./User Login Management_files/font.css" type="text/css" rel="stylesheet"><link href="./User Login Management_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./User Login Management_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false"><div style="position: absolute; overflow: hidden; z-index: 123452; width: 2px; height: 2px; left: 281px; top: 225px;"><input type="file" accept="image/jpeg,image/gif,image/png" multiple="on" style="z-index: 123454; opacity: 0.01; width: 2px; height: 2px;" width="2" height="2"></div>
+    <form name="aspnetForm" method="post" action="https://hauiums.in/sms/masters/LoginPage_ImageChange.aspx?Mwpid=4853" id="aspnetForm" autocomplete="off"><input type="hidden" name="UploadLib_Uploader_js" id="UploadLib_Uploader_js" value="1">
+<div>
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTMyNjI3MTIzNw9kFgJmDw8WAh4HUGVuZGluZwUBMGQWAgIBD2QWEAICDw8WAh4EVGV4dAURIFVuaXZlcnNpdHkgQWRtaW5kZAIEDw8WAh8BBRtMTFQuIC0gMi8xOS8yMDI2IDM6MzE6MjcgUE1kZAIFDw8WAh8BBRtDTFQuIC0gMi8yMC8yMDI2IDc6MTY6MTMgQU1kZAIGDw8WAh8BBREgVW5pdmVyc2l0eSBBZG1pbmRkAgcPDxYCHwEFEkNvbXB0cm9sbGVyLCBIaXNhcmRkAgkPZBYCZg8WAh8BBUw8c3Bhbj5NYW5hZ2UgVXNlcnM8L3NwYW4+Jm5ic3A7PiZuYnNwOzxzdHJvbmc+VXNlciBMb2dpbiBNYW5hZ2VtZW50PC9TdHJvbmc+ZAIKD2QWBAIBD2QWAgIBDzwrAAQBAA9kZGQCBQ88KwARAwAPFgQeC18hRGF0YUJvdW5kZx4LXyFJdGVtQ291bnQCFGQBEBYAFgAWAAwUKwAAFgJmD2QWFgIBD2QWCGYPZBYCZg8VAQExZAIBD2QWAmYPFQJGaHR0cDovL2hhdWl1bXMuaW4vRlRQc2l0ZS9IQVUvXExvZ2luaW1hZ2VcMjAxNjEwMjgxMTU0MTg4ODQwU01TSW1nLmpwZw5sb2dpbi1sZWZ0LmpwZ2QCAg9kFgYCAQ8WAh4FVmFsdWUFBFRydWVkAgMPEA8WAh4HQ2hlY2tlZGdkZGRkAgUPFgIfBAUBM2QCAw9kFgICAQ8QDxYCHwVoZGRkZAICD2QWCGYPZBYCZg8VAQEyZAIBD2QWAmYPFQJGaHR0cDovL2hhdWl1bXMuaW4vRlRQc2l0ZS9IQVUvXExvZ2luaW1hZ2VcMjAxNjEwMzExNzA4Mjk0NzAwU01TSW1nLkpQRwxfRFNDMTI3My5KUEdkAgIPZBYGAgEPFgIfBAUFRmFsc2VkAgMPEA8WAh8FaGRkZGQCBQ8WAh8EBQE1ZAIDD2QWAgIBDxAPFgIfBWhkZGRkAgMPZBYIZg9kFgJmDxUBATNkAgEPZBYCZg8VAkZodHRwOi8vaGF1aXVtcy5pbi9GVFBzaXRlL0hBVS9cTG9naW5pbWFnZVwyMDE2MTAzMTE3MTYyNTEyMTBTTVNJbWcuSlBHEDI4LUpBTiAtMjM4OS5KUEdkAgIPZBYGAgEPFgIfBAUFRmFsc2VkAgMPEA8WAh8FaGRkZGQCBQ8WAh8EBQE2ZAIDD2QWAgIBDxAPFgIfBWhkZGRkAgQPZBYIZg9kFgJmDxUBATRkAgEPZBYCZg8VAkZodHRwOi8vaGF1aXVtcy5pbi9GVFBzaXRlL0hBVS9cTG9naW5pbWFnZVwyMDE2MTAzMTE3MjU1ODM0MjBTTVNJbWcuSlBHBTUuSlBHZAICD2QWBgIBDxYCHwQFBUZhbHNlZAIDDxAPFgIfBWhkZGRkAgUPFgIfBAUBN2QCAw9kFgICAQ8QDxYCHwVoZGRkZAIFD2QWCGYPZBYCZg8VAQE1ZAIBD2QWAmYPFQJGaHR0cDovL2hhdWl1bXMuaW4vRlRQc2l0ZS9IQVUvXExvZ2luaW1hZ2VcMjAxNjExMDcxMDUzMTIwMjAwU01TSW1nLkpQRwxEU0MwMTgwMi5KUEdkAgIPZBYGAgEPFgIfBAUFRmFsc2VkAgMPEA8WAh8FaGRkZGQCBQ8WAh8EBQE4ZAIDD2QWAgIBDxAPFgIfBWhkZGRkAgYPZBYIZg9kFgJmDxUBATZkAgEPZBYCZg8VAkZodHRwOi8vaGF1aXVtcy5pbi9GVFBzaXRlL0hBVS9cTG9naW5pbWFnZVwyMDE2MTEwNzEwNTMxMjAyMDFTTVNJbWcuSlBHDERTQzAxODEwLkpQR2QCAg9kFgYCAQ8WAh8EBQVGYWxzZWQCAw8QDxYCHwVoZGRkZAIFDxYCHwQFATlkAgMPZBYCAgEPEA8WAh8FaGRkZGQCBw9kFghmD2QWAmYPFQEBN2QCAQ9kFgJmDxUCRmh0dHA6Ly9oYXVpdW1zLmluL0ZUUHNpdGUvSEFVL1xMb2dpbmltYWdlXDIwMTYxMTA3MTA1MzEyMDIwMlNNU0ltZy5KUEcMRFNDMDE4MTIuSlBHZAICD2QWBgIBDxYCHwQFBUZhbHNlZAIDDxAPFgIfBWhkZGRkAgUPFgIfBAUCMTBkAgMPZBYCAgEPEA8WAh8FaGRkZGQCCA9kFghmD2QWAmYPFQEBOGQCAQ9kFgJmDxUCRmh0dHA6Ly9oYXVpdW1zLmluL0ZUUHNpdGUvSEFVL1xMb2dpbmltYWdlXDIwMTYxMTA3MTA1MzEyMDIwM1NNU0ltZy5KUEcMRFNDMDE4MjYuSlBHZAICD2QWBgIBDxYCHwQFBUZhbHNlZAIDDxAPFgIfBWhkZGRkAgUPFgIfBAUCMTFkAgMPZBYCAgEPEA8WAh8FaGRkZGQCCQ9kFghmD2QWAmYPFQEBOWQCAQ9kFgJmDxUCRmh0dHA6Ly9oYXVpdW1zLmluL0ZUUHNpdGUvSEFVL1xMb2dpbmltYWdlXDIwMTYxMTA3MTA1MzEyMDIwNFNNU0ltZy5KUEcMRFNDMDE4MzMuSlBHZAICD2QWBgIBDxYCHwQFBUZhbHNlZAIDDxAPFgIfBWhkZGRkAgUPFgIfBAUCMTJkAgMPZBYCAgEPEA8WAh8FaGRkZGQCCg9kFghmD2QWAmYPFQECMTBkAgEPZBYCZg8VAkZodHRwOi8vaGF1aXVtcy5pbi9GVFBzaXRlL0hBVS9cTG9naW5pbWFnZVwyMDE2MTEwNzE0NDgwNjA5NjBTTVNJbWcuSlBHDkF1ZGl0b3JpdW0uSlBHZAICD2QWBgIBDxYCHwQFBUZhbHNlZAIDDxAPFgIfBWhkZGRkAgUPFgIfBAUCMTNkAgMPZBYCAgEPEA8WAh8FaGRkZGQCCw8PFgIeB1Zpc2libGVoZGQCCw8PFgIfAWVkZBgCBR5fX0NvbnRyb2xzUmVxdWlyZVBvc3RCYWNrS2V5X18WFQUMY3RsMDAkaHBsQnRuBTFjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJEdWSW1hZ2UkY3RsMDIkY2hrQWN0aXZlBThjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJEdWSW1hZ2UkY3RsMDIkY2hrQWN0aXZlU3R1ZGVudAUxY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRHVkltYWdlJGN0bDAzJGNoa0FjdGl2ZQU4Y3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRHVkltYWdlJGN0bDAzJGNoa0FjdGl2ZVN0dWRlbnQFMWN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkR1ZJbWFnZSRjdGwwNCRjaGtBY3RpdmUFOGN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkR1ZJbWFnZSRjdGwwNCRjaGtBY3RpdmVTdHVkZW50BTFjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJEdWSW1hZ2UkY3RsMDUkY2hrQWN0aXZlBThjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJEdWSW1hZ2UkY3RsMDUkY2hrQWN0aXZlU3R1ZGVudAUxY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRHVkltYWdlJGN0bDA2JGNoa0FjdGl2ZQU4Y3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRHVkltYWdlJGN0bDA2JGNoa0FjdGl2ZVN0dWRlbnQFMWN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkR1ZJbWFnZSRjdGwwNyRjaGtBY3RpdmUFOGN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkR1ZJbWFnZSRjdGwwNyRjaGtBY3RpdmVTdHVkZW50BTFjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJEdWSW1hZ2UkY3RsMDgkY2hrQWN0aXZlBThjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJEdWSW1hZ2UkY3RsMDgkY2hrQWN0aXZlU3R1ZGVudAUxY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRHVkltYWdlJGN0bDA5JGNoa0FjdGl2ZQU4Y3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRHVkltYWdlJGN0bDA5JGNoa0FjdGl2ZVN0dWRlbnQFMWN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkR1ZJbWFnZSRjdGwxMCRjaGtBY3RpdmUFOGN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkR1ZJbWFnZSRjdGwxMCRjaGtBY3RpdmVTdHVkZW50BTFjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJEdWSW1hZ2UkY3RsMTEkY2hrQWN0aXZlBThjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJEdWSW1hZ2UkY3RsMTEkY2hrQWN0aXZlU3R1ZGVudAUhY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRHVkltYWdlDzwrAAwBCAICZFXraw7SCsQJV5e5EbF2MJg/XmQV7VtHZKMdWivVH7Ji">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./User Login Management_files/WebResource.axd" type="text/javascript"></script>
+<script src="./User Login Management_files/WebResource(1).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="653938D3">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdADDmbWAMj8OXpuzDwoj5VxJ5Ryk5P+91hMCfDVCSoqBkp/Xh2JOmsquxwhyJpZ51s+8DMH0pE0nmn+JNgFVhByqA+QASuQ13j07fL6YzYCFHdB/7lfg9l80uHu3TaTLwpsBmH86IqQdYJ+2P1d3EOUgmSaNQVHqX7XUOrGF2g/arR5erZ5qBZbKDclbX6y0qvfd/wYmzQ6JkpoG0dMsubQKzOLoDPxpxSGI2cAldUdlVoGloqFrSGZI1oaO0T1kYNyGMs8OF36VrAadOm0Yk9OZs+t4+JCkc8MTvP5OiQJIB9r3YPkpGRKHWeCZkGIO9EyPxPFO/l0i0BrxpuqIspvB8CN1Xvek7nuxV6jq8kNN7rY22YYNWrbVgXKRe509t7dLec0n3ga82xDZR5XQGxfY0XM6tJMlxLGClHzCoUZPBxoUj8qU7WQ3zA/yc8+MD5H9aLBpYGIWUR47FTYgn4V22G1xz6fe/XrHbY8qdvijyyRaVIR0rqxGup1J5FcjGQrhIyalSkf+9860m2jbq63RVAqpFfEhiKhF6wakNeeKoFnokQWQfITKpcSGiq77mrfthBmjy16sl+Pv2rONWM6HvaOdAwvXoAP1Y6yqbreBA3uwX7tRlaucsuoQjy7r3q44eidLpk2BBoEHd13qns+pyDdSEby+Pliur0+AyFErkE6oBXPG1gmsPgYEd/j+MPPpbs+e4HMhAOU4BmMAtxFx2efx+Su+pNHwVGeiTasCmd+Ah5IXqr0G4WCCmtIptkJfR19tb0mhZOmf1GWkqPl066OE/NqLX6SIYXqkQmHlF31HKSHa3tCzYRUtbZ8fESWEz0I+695RoI4gLS7YQgAnJjTjxLD8xpLLXzejjD5VtQ6m8icNBjWJaMGHLC9yjA5STop2Au2fkY7PUnYwDWXvtVqDtbgS0gkaZykpT4l0HChZkNdfQA+PPr30mg3QfZYECuZqC/GB6bryciONkByIQ8k0bBW6n65WOS6Gda02HJ2jvldVk255h9xotDxvor2Ooi7bFR977yXYy5XdHpTtnP4gdtFg6nXAj476aL1FW6w==">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./User Login Management_files/user-management.png">
+                            User Management
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/sms/masters/LoginPage_ImageChange.aspx?Mwpid=4853#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> University Admin</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> University Admin</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">Comptroller, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/sms/masters/LoginPage_ImageChange.aspx?Mwpid=4853#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./User Login Management_files/WebResource(2).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Create Masters" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=1032#" tabindex="-1">Create Masters</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create District Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_District_Mst.aspx?Mwpid=1054" tabindex="-1">District Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create DDO Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Mst.aspx?Mwpid=1034" tabindex="-1">DDO Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Office Type Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_OfficeType_Mst.aspx?Mwpid=1052" tabindex="-1">Office Type Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Location Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_Location_Mst.aspx?Mwpid=1053" tabindex="-1">Location Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Section Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Section_Mst.aspx?Mwpid=1937" tabindex="-1">Section Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Department Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Department_Mst.aspx?Mwpid=1056" tabindex="-1">Department Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Class Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Class_Mst.aspx?Mwpid=1059" tabindex="-1">Class Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Grade Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Grade_Mst.aspx?Mwpid=1060" tabindex="-1">Grade Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Designation Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=1057" tabindex="-1">Designation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Religion Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Religion_Mst.aspx?Mwpid=1058" tabindex="-1">Religion Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Comm_DDO_Location_Mapping" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870" tabindex="-1">DDO Location Mapping</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Country State District City Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_Country_State_City_Mst.aspx?Mwpid=2061" tabindex="-1">Country State District City Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Specialization Master" class="level2 dynamic" href="https://hauiums.in/UMM/UMM_Designation_Specialization.aspx?Mwpid=5068" tabindex="-1">Designation Specialization Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Controlling Office Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_ControllingOfficer_Mst.aspx?Mwpid=5076" tabindex="-1">Controlling Office Master</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:18" role="menuitem" style="position: relative; float: left;"><a title="Manage Users" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=1033#" tabindex="-1">Manage Users</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:18" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create User Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035" tabindex="-1">User Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="ResetPassword" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_ResetPassword.aspx?Mwpid=4839" tabindex="-1">Reset Password</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Manage Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_UserAuthorization.aspx?Mwpid=1044" tabindex="-1">Manage Page Rights</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Page Type Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_PageTypeMaster.aspx?Mwpid=1364" tabindex="-1">Page Type Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Role Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793" tabindex="-1">Role Page Rights</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Role Level Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_RoleLevelsMaster.aspx?Mwpid=1365" tabindex="-1">Role Level Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Role Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_RolesMaster.aspx?Mwpid=1366" tabindex="-1">Role Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="PageType-Role Link" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_AssignRolePageType.aspx?Mwpid=1046" tabindex="-1">PageType-Role Link</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Module Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_ModuleMaster.aspx?Mwpid=1363" tabindex="-1">Module Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Page Master" class="level2 dynamic" href="https://hauiums.in/UMM/WebpageMst.aspx?Mwpid=1040" tabindex="-1">Web Page Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="User Login Management" class="level2 dynamic" href="https://hauiums.in/sms/masters/LoginPage_ImageChange.aspx?Mwpid=4853" tabindex="-1">User Login Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Module Rights Detail" class="level2 dynamic" href="https://hauiums.in/UMM/User_ModulDetails.aspx?Mwpid=4951" tabindex="-1">Module Rights Detail</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Fetch Password" class="level2 dynamic" href="https://hauiums.in/UMM/FetchPass.aspx?Mwpid=5165" tabindex="-1">Fetch Password</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Multiple Users Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/MultipleUsers_PageRights.aspx?Mwpid=5245" tabindex="-1">Multiple Users Page Rights</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:34" role="menuitem" style="position: relative; float: left;"><a title="View User Logs" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=1883#" tabindex="-1">View User Logs</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:34" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="User Wise Log" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_UserLoginDetail_Rpt.aspx?Mwpid=1884" tabindex="-1">User Wise Log</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Send Message" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_CommonMessages.aspx?Mwpid=1885" tabindex="-1">Send Message</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:38" role="menuitem" style="position: relative; float: left;"><a title="Database Backup" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=1968#" tabindex="-1">Backup</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:38" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Database Backup" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DbOperations.aspx?Mwpid=1969" tabindex="-1">Database Backup</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:41" role="menuitem" style="position: relative; float: left;"><a title="Other Configurations" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3286#" tabindex="-1">Other Configurations</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:41" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:42" role="menuitem" style="position: relative;"><a title="Hostel Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=3287#" tabindex="-1">Hostel Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:42" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Hostel Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_Hosteltype.aspx?Mwpid=3252" tabindex="-1">Create &amp; Manage Hostel Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Room Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_Rromtypemst.aspx?Mwpid=3253" tabindex="-1">Create &amp; Manage Room Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Building" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_Building_Mst.aspx?Mwpid=3254" tabindex="-1">Create &amp; Manage Building</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Floor" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_Floor_Mst.aspx?Mwpid=3274" tabindex="-1">Create &amp; Manage Floor</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Map Floor With Building" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_FloorMap.aspx?Mwpid=3275" tabindex="-1">Map Floor With Building</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Facility Name" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_RoomFacility_Mst.aspx?Mwpid=3255" tabindex="-1">Create &amp; Manage Facility Name</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_HostelMaster.aspx?Mwpid=3256" tabindex="-1">Create &amp; Manage Hostel</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Assign Asst. Warden To Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Trns/HST_hostelwardendtl.aspx?Mwpid=3261" tabindex="-1">Assign Asst. Warden To Hostel</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Assign User For Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/Hst_AssignedUser_Mst.aspx?Mwpid=4150" tabindex="-1">Assign User For Hostel</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:53" role="menuitem" style="position: relative;"><a title="Fee Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=3700#" tabindex="-1">Fee Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:53" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeTypeMaster.aspx?Mwpid=3538" tabindex="-1">Create &amp; Manage Fee Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Head" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeHeads.aspx?Mwpid=3539" tabindex="-1">Create &amp; Manage Fee Head</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Structure" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeStructure.aspx?Mwpid=3540" tabindex="-1">Create &amp; Manage Fee Structure</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Exemption" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_Exemption.aspx?Mwpid=3550" tabindex="-1">Create &amp; Manage Fee Exemption</a></li>
+			</ul></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="NULL" class="level2 dynamic" href="https://hauiums.in/UMM/UMM_PasswordPolicyManager.aspx?Mwpid=3811" tabindex="-1">Password Policies</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:61" role="menuitem" style="position: relative; float: left;"><a title="Farms/Plants" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3982#" tabindex="-1">Farms/Plants</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:61" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Scheme Master" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_Scheme_Mst.aspx?Mwpid=2447" tabindex="-1">Scheme Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="User Location Scheme Map" class="level2 dynamic" href="https://hauiums.in/LRS/Location_SchemeMapping_Mst.aspx?Mwpid=2448" tabindex="-1">User Location Scheme Map</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Financial Year Master" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_FinYear_Mst.aspx?Mwpid=2443" tabindex="-1">Financial Year Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Change Financial Year" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_Change_FinancialYear.aspx?Mwpid=2484" tabindex="-1">Change Financial Year</a></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Manage Users</span>&nbsp;&gt;&nbsp;<strong>User Login Management</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./User Login Management_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    
+        <script type="text/javascript" src="./User Login Management_files/jquery-1.8.2.js.download"></script>
+        
+
+        
+        <table class="table" width="100%">
+            <tbody><tr>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td class="tableheading" colspan="3"><span class="mainheadingborderbottom">Login Page Image Management
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" style="width: 15%">Upload</td>
+               
+                <td style="width: 313px">
+                    <div id="Anthem_ctl00_ContentPlaceHolder1_PanelCer__"><div id="ctl00_ContentPlaceHolder1_PanelCer">
+	
+                        <style>
+.uploaderattachments{
+	border-collapse: separate!important;
+}
+.uploadergrid {
+	font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+	background: #fff;
+	border-collapse: separate;
+	text-align: left;
+	border: 1px solid #DDDDDD;
+	border-radius: 5px;
+	margin: 8px 0;
+}
+
+.uploadergrid td, .uploadergrid th {
+	padding:6px 0px 6px 5px;
+	color: #333333;
+	font-size: 14px;
+	border-bottom: 1px solid #EFEFEF;
+	font-weight: normal;
+}
+.uploadergrid td:last-child,.uploadergrid th:last-child{
+	padding-right:5px;
+}
+.uploadergrid td:first-child {
+	border-left: none;
+}
+.uploadergrid tr:last-child td {
+	border-bottom: none;
+}
+.uploadergrid tr:first-child td:first-child, .uploadergrid tr:first-child th:first-child {
+	border-top-left-radius: 5px;
+}
+.uploadergrid tr:last-child td:first-child, .uploadergrid tr:last-child th:first-child {
+	border-bottom-left-radius: 5px;
+}
+
+.uploadergrid tr:first-child td:last-child, .uploadergrid tr:first-child th:last-child {
+	border-top-right-radius: 5px;
+}
+.uploadergrid tr:last-child td:last-child, .uploadergrid tr:last-child th:last-child {
+	border-bottom-right-radius: 5px;
+}
+
+.uploaderprogress {
+}
+.uploaderprogresstext {
+	font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+	font-size:14px;
+	text-align: center;
+    line-height:20px;
+}
+
+.uploaderprogressinfotext {
+	font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+	font-size:13px;
+	padding: 3px 0 3px 0;
+}
+.uploaderprogressclassic {
+	border: 1px solid #bbbbbb;
+	background-color: #e7e7e7;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.uploaderprogressmodern {
+	background-color: #f5f5f5;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1); 
+	border-radius:4px;
+	rem-border: 1px solid #bbbbbb;
+	rem-border-radius:4px;
+}
+
+.uploaderprogressmodern .uploaderprogressleft {
+	background-color: #5cb85c;
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+.uploaderprogressmodern .uploaderprogressright {
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+</style>
+	<input id="ctl00_ContentPlaceHolder1_Uploaditem" name="ctl00$ContentPlaceHolder1$Uploaditem" type="hidden" autocomplete="off" isuploaderfield="1" value=""><img uniqueid="ctl00$ContentPlaceHolder1$Uploaditem" namespace="CuteWebUI" root="/" verticks="636377545160000000" filetoolargemsg="{0} cannot be uploaded!
+
+File size ({1}) is too large. The maximum file size allowed is set to: {2}." maxfileslimitmsg="The maximum number of files allowed to be uploaded is set to {0}." windowsdialoglimitmsg="Unable to select so many files at once. The total file name length cannot exceed 32kb." canceluploadmsg="Cancel upload" cancelallmsg="Cancel all Uploads" uploadingmsg="Uploading.." uploadaddonbuttonmode="Auto" uploadtype="Flash" uploadcursor="Auto" multiplefilesupload="1" showqueuetable="1" showprogressbar="1" showprogressinfo="1" panelwidth="500" barheight="21" infostyle="padding-left:3px;font:normal 13px &#39;Segoe UI&#39;;" barstyle="Modern" borderstyle="" postbackeventreference="__doPostBack(&#39;ctl00$ContentPlaceHolder1$Uploaditem&#39;,&#39;&#39;)" insertbuttonid="ctl00_ContentPlaceHolder1_Uploaditem__Insert" cancelbuttonid="ctl00_ContentPlaceHolder1_Uploaditem__Cancel" progresstextid="ctl00_ContentPlaceHolder1_Uploaditem__ProgressText" progressctrlid="ctl00_ContentPlaceHolder1_Uploaditem__Progress" maxsizekb="1024" extensions="jpg,gif,png" inserttext="Choose File" inputboxcsstext="" contextvalue="L3wK0d9nk3jy4mD07MY2C0rOBPnGj52TsAfQVsuOzuz69VVwmd!1cKDSKj!3iDosw6BjKpoQfNNAd!30pGz0Ola4i!3KvwR5WaxCUI89YgOireg!2" serverlang="AspNet" id="ctl00_ContentPlaceHolder1_UploaditemImage_unique" resourcehandler="/CuteWebUI_Uploader_Resource.axd" onload="this.style.display=&quot;none&quot; ; if(window.CuteWebUI_AjaxUploader_Initialize){window.CuteWebUI_AjaxUploader_Initialize(this.id)}else{var imgid=this.id;var xh=window.XMLHttpRequest?new XMLHttpRequest():new ActiveXObject(&#39;Microsoft.XMLHttp&#39;);xh.open(&#39;GET&#39;,&#39;/CuteWebUI_Uploader_Resource.axd?type=script&amp;_ver=636377545160000000&#39;,true);xh.onreadystatechange=function(){if(xh.readyState==4){eval(xh.responseText);CuteWebUI_AjaxUploader_Initialize(imgid);}};xh.send(&#39;&#39;);}" onerror="this.onload()" src="./User Login Management_files/CuteWebUI_Uploader_Resource.axd" style="display:none;"><input type="submit" name="ctl00$ContentPlaceHolder1$Uploaditem$_Insert" value="Choose File" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$Uploaditem$_Insert&#39;,&#39;&#39;,false,&#39;AjaxUploaderNoValidation&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_Uploaditem__Insert" class="btn-bg"><div id="ctl00_ContentPlaceHolder1_Uploaditem__Progress" style="display:none;">
+		<span id="ctl00_ContentPlaceHolder1_Uploaditem__ProgressText" style="display: none;">Uploading...</span><input type="submit" name="ctl00$ContentPlaceHolder1$Uploaditem$_Cancel" value="Cancel" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$Uploaditem$_Cancel&#39;,&#39;&#39;,false,&#39;AjaxUploaderNoValidation&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_Uploaditem__Cancel" class="uploadercancelbutton" style="display: none;">
+	</div>
+                    
+</div></div>
+                </td>
+                 <td><span id="Anthem_ctl00_ContentPlaceHolder1_BtnUpload__"><input type="submit" name="ctl00$ContentPlaceHolder1$BtnUpload" value="Upload" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$BtnUpload&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_BtnUpload" class="button-common" cellpadding="0" cellspacing="0"></span></td>
+            </tr>
+                     <tr>
+                                <td colspan="3">
+                                    <div id="Anthem_ctl00_ContentPlaceHolder1_GVImage__"><div>
+	<table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_GVImage" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+		<tbody><tr class="header-style">
+			<th scope="col">S.No.</th><th scope="col">View</th><th scope="col">IsActive</th><th scope="col">IsActive in Student Portal</th>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:5%;">
+                                                    1
+                                                </td><td align="center" style="width:70%;">
+                                                    
+                                                    <a target="_blank" id="anchorPath" href="http://hauiums.in/FTPsite/HAU//Loginimage/201610281154188840SMSImg.jpg">
+                                                        login-left.jpg </a>
+                                                </td><td align="center">
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl02_hdnAttachmentid__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl02$hdnAttachmentid" id="ctl00_ContentPlaceHolder1_GVImage_ctl02_hdnAttachmentid" value="True"></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl02_chkActive__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl02_chkActive" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl02$chkActive" checked="checked"></span></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl02_HiddenFieldId__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl02$HiddenFieldId" id="ctl00_ContentPlaceHolder1_GVImage_ctl02_HiddenFieldId" value="3"></span>
+                                                </td><td align="center">
+                                                     <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl02_chkActiveStudent__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl02_chkActiveStudent" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl02$chkActiveStudent"></span></span>
+                                                    </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:5%;">
+                                                    2
+                                                </td><td align="center" style="width:70%;">
+                                                    
+                                                    <a target="_blank" id="anchorPath" href="http://hauiums.in/FTPsite/HAU//Loginimage/201610311708294700SMSImg.JPG">
+                                                        _DSC1273.JPG </a>
+                                                </td><td align="center">
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl03_hdnAttachmentid__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl03$hdnAttachmentid" id="ctl00_ContentPlaceHolder1_GVImage_ctl03_hdnAttachmentid" value="False"></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl03_chkActive__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl03_chkActive" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl03$chkActive"></span></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl03_HiddenFieldId__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl03$HiddenFieldId" id="ctl00_ContentPlaceHolder1_GVImage_ctl03_HiddenFieldId" value="5"></span>
+                                                </td><td align="center">
+                                                     <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl03_chkActiveStudent__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl03_chkActiveStudent" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl03$chkActiveStudent"></span></span>
+                                                    </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:5%;">
+                                                    3
+                                                </td><td align="center" style="width:70%;">
+                                                    
+                                                    <a target="_blank" id="anchorPath" href="http://hauiums.in/FTPsite/HAU//Loginimage/201610311716251210SMSImg.JPG">
+                                                        28-JAN -2389.JPG </a>
+                                                </td><td align="center">
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl04_hdnAttachmentid__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl04$hdnAttachmentid" id="ctl00_ContentPlaceHolder1_GVImage_ctl04_hdnAttachmentid" value="False"></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl04_chkActive__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl04_chkActive" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl04$chkActive"></span></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl04_HiddenFieldId__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl04$HiddenFieldId" id="ctl00_ContentPlaceHolder1_GVImage_ctl04_HiddenFieldId" value="6"></span>
+                                                </td><td align="center">
+                                                     <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl04_chkActiveStudent__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl04_chkActiveStudent" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl04$chkActiveStudent"></span></span>
+                                                    </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:5%;">
+                                                    4
+                                                </td><td align="center" style="width:70%;">
+                                                    
+                                                    <a target="_blank" id="anchorPath" href="http://hauiums.in/FTPsite/HAU//Loginimage/201610311725583420SMSImg.JPG">
+                                                        5.JPG </a>
+                                                </td><td align="center">
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl05_hdnAttachmentid__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl05$hdnAttachmentid" id="ctl00_ContentPlaceHolder1_GVImage_ctl05_hdnAttachmentid" value="False"></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl05_chkActive__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl05_chkActive" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl05$chkActive"></span></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl05_HiddenFieldId__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl05$HiddenFieldId" id="ctl00_ContentPlaceHolder1_GVImage_ctl05_HiddenFieldId" value="7"></span>
+                                                </td><td align="center">
+                                                     <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl05_chkActiveStudent__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl05_chkActiveStudent" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl05$chkActiveStudent"></span></span>
+                                                    </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:5%;">
+                                                    5
+                                                </td><td align="center" style="width:70%;">
+                                                    
+                                                    <a target="_blank" id="anchorPath" href="http://hauiums.in/FTPsite/HAU//Loginimage/201611071053120200SMSImg.JPG">
+                                                        DSC01802.JPG </a>
+                                                </td><td align="center">
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl06_hdnAttachmentid__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl06$hdnAttachmentid" id="ctl00_ContentPlaceHolder1_GVImage_ctl06_hdnAttachmentid" value="False"></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl06_chkActive__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl06_chkActive" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl06$chkActive"></span></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl06_HiddenFieldId__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl06$HiddenFieldId" id="ctl00_ContentPlaceHolder1_GVImage_ctl06_HiddenFieldId" value="8"></span>
+                                                </td><td align="center">
+                                                     <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl06_chkActiveStudent__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl06_chkActiveStudent" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl06$chkActiveStudent"></span></span>
+                                                    </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:5%;">
+                                                    6
+                                                </td><td align="center" style="width:70%;">
+                                                    
+                                                    <a target="_blank" id="anchorPath" href="http://hauiums.in/FTPsite/HAU//Loginimage/201611071053120201SMSImg.JPG">
+                                                        DSC01810.JPG </a>
+                                                </td><td align="center">
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl07_hdnAttachmentid__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl07$hdnAttachmentid" id="ctl00_ContentPlaceHolder1_GVImage_ctl07_hdnAttachmentid" value="False"></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl07_chkActive__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl07_chkActive" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl07$chkActive"></span></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl07_HiddenFieldId__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl07$HiddenFieldId" id="ctl00_ContentPlaceHolder1_GVImage_ctl07_HiddenFieldId" value="9"></span>
+                                                </td><td align="center">
+                                                     <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl07_chkActiveStudent__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl07_chkActiveStudent" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl07$chkActiveStudent"></span></span>
+                                                    </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:5%;">
+                                                    7
+                                                </td><td align="center" style="width:70%;">
+                                                    
+                                                    <a target="_blank" id="anchorPath" href="http://hauiums.in/FTPsite/HAU//Loginimage/201611071053120202SMSImg.JPG">
+                                                        DSC01812.JPG </a>
+                                                </td><td align="center">
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl08_hdnAttachmentid__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl08$hdnAttachmentid" id="ctl00_ContentPlaceHolder1_GVImage_ctl08_hdnAttachmentid" value="False"></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl08_chkActive__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl08_chkActive" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl08$chkActive"></span></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl08_HiddenFieldId__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl08$HiddenFieldId" id="ctl00_ContentPlaceHolder1_GVImage_ctl08_HiddenFieldId" value="10"></span>
+                                                </td><td align="center">
+                                                     <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl08_chkActiveStudent__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl08_chkActiveStudent" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl08$chkActiveStudent"></span></span>
+                                                    </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:5%;">
+                                                    8
+                                                </td><td align="center" style="width:70%;">
+                                                    
+                                                    <a target="_blank" id="anchorPath" href="http://hauiums.in/FTPsite/HAU//Loginimage/201611071053120203SMSImg.JPG">
+                                                        DSC01826.JPG </a>
+                                                </td><td align="center">
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl09_hdnAttachmentid__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl09$hdnAttachmentid" id="ctl00_ContentPlaceHolder1_GVImage_ctl09_hdnAttachmentid" value="False"></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl09_chkActive__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl09_chkActive" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl09$chkActive"></span></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl09_HiddenFieldId__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl09$HiddenFieldId" id="ctl00_ContentPlaceHolder1_GVImage_ctl09_HiddenFieldId" value="11"></span>
+                                                </td><td align="center">
+                                                     <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl09_chkActiveStudent__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl09_chkActiveStudent" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl09$chkActiveStudent"></span></span>
+                                                    </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:5%;">
+                                                    9
+                                                </td><td align="center" style="width:70%;">
+                                                    
+                                                    <a target="_blank" id="anchorPath" href="http://hauiums.in/FTPsite/HAU//Loginimage/201611071053120204SMSImg.JPG">
+                                                        DSC01833.JPG </a>
+                                                </td><td align="center">
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl10_hdnAttachmentid__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl10$hdnAttachmentid" id="ctl00_ContentPlaceHolder1_GVImage_ctl10_hdnAttachmentid" value="False"></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl10_chkActive__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl10_chkActive" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl10$chkActive"></span></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl10_HiddenFieldId__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl10$HiddenFieldId" id="ctl00_ContentPlaceHolder1_GVImage_ctl10_HiddenFieldId" value="12"></span>
+                                                </td><td align="center">
+                                                     <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl10_chkActiveStudent__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl10_chkActiveStudent" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl10$chkActiveStudent"></span></span>
+                                                    </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:5%;">
+                                                    10
+                                                </td><td align="center" style="width:70%;">
+                                                    
+                                                    <a target="_blank" id="anchorPath" href="http://hauiums.in/FTPsite/HAU//Loginimage/201611071448060960SMSImg.JPG">
+                                                        Auditorium.JPG </a>
+                                                </td><td align="center">
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl11_hdnAttachmentid__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl11$hdnAttachmentid" id="ctl00_ContentPlaceHolder1_GVImage_ctl11_hdnAttachmentid" value="False"></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl11_chkActive__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl11_chkActive" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl11$chkActive"></span></span>
+                                                    <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl11_HiddenFieldId__"><input type="hidden" name="ctl00$ContentPlaceHolder1$GVImage$ctl11$HiddenFieldId" id="ctl00_ContentPlaceHolder1_GVImage_ctl11_HiddenFieldId" value="13"></span>
+                                                </td><td align="center">
+                                                     <span id="Anthem_ctl00_ContentPlaceHolder1_GVImage_ctl11_chkActiveStudent__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_GVImage_ctl11_chkActiveStudent" type="checkbox" name="ctl00$ContentPlaceHolder1$GVImage$ctl11$chkActiveStudent"></span></span>
+                                                    </td>
+		</tr><tr class="pager-style" align="center" style="color:#000000;">
+			<td colspan="4"><table border="0">
+				<tbody><tr>
+					<td><span>1</span></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$GVImage$ctl13$ctl02&#39;,&#39;Page$2&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$GVImage&#39;,&#39;Page$2&#39;)" style="color:#000000;">2</a></td>
+				</tr>
+			</tbody></table></td>
+		</tr>
+	</tbody></table>
+</div></div>
+                                </td>
+
+                            </tr>
+            <tr>
+                <td>
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_BtnUpdate__"><input type="submit" name="ctl00$ContentPlaceHolder1$BtnUpdate" value="Update" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$BtnUpdate&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_BtnUpdate" class="button-common" cellpadding="0" cellspacing="0"></span>
+                </td>
+            </tr>
+
+        </tbody></table>
+    
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+
+
+<script language="javascript" src="./User Login Management_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./User Login Management_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</form></body></html>

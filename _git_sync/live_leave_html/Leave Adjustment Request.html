@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<!-- saved from url=(0067)https://hauiums.in/Leave/Emp_LeaveAdjustmentRequest.aspx?Mwpid=3310 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Leave Adjustment Request_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Leave Adjustment Request_files/default.css" type="text/css" rel="stylesheet"><link href="./Leave Adjustment Request_files/font.css" type="text/css" rel="stylesheet"><link href="./Leave Adjustment Request_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Leave Adjustment Request_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/Leave/Emp_LeaveAdjustmentRequest.aspx?Mwpid=3310" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="UF+MtB1jGWXbQL66xosfIqZ8Du8xye0OjtHw4vT09XbO/LaRhs7dhXmZO596VYg2BeflL7A3iGl++2WxsIOkX7F8kp7zYVx1yHsSgrvNSQ54VDz1bags/achqnGcWRkFhQ/7tveV/XBtexrXcQwFHk9iFMtF2mRYaVdl0CcxokZbroLgd+6utaLfekOGIhyoVsw3zh2IhPVp5jbg0V+lAZybnxaXxgBkY6Mui9Ae1lWSO9ATa3dhCAOB7yJzjBvjQ6Y21Bsi72RIiJyfAidLOReph+ZAw6nx7n5P8X9anKHiFZ2YGtxegBCcoSpj3u9bsiT10H7EGFK/7BvZ3OdDcv4Kmwbt/W9jV79KbXlvRStSS6QLb1n9HOQDitWPQtkO3Mp42e+FClJab5cwEnD7IhR+3mHSTRjhwHZ+enSMdiUNgZ9ow6ifoDC09JdVPLVoi1tqY9TUfNBon4H/vNFs0DhbXGMnCjrRahExTenW9YuZJRXXYs8lWgUJ4s4BJ2JwpfNbjtyWk3mNzP5nUgYvu8iKkb1PDd7d0IAZXaHEYpds+5r5YLFYkslAnPrpJhrYjhzZerE19JZif6QDnc+p/1Pn9IOHcjvuS+WLVJ1unMFEU605rOJV6XPJpOXgQhKZa4/ASLpJqsT+YSco/OVxA6T//nLZTvtO+1BYMUW9+f5UnHvdqTbdjLkO07wA3srqi6HULrB9kdsfcppBOQTvkIW6TEa4HteomS4kXxDv7fy0Stup19A1iXFMVH2vSCeuFkEDZ698XKeJEZQH1VD5GH5urh2tSaiyOU4v2dXYHf+b7d1whxiKYMc2UdF082yY4kM0XWTNy4GoXh9XgGAitRy4t9fm+J5DgjWzBDnx9YFqSrgdp6d6PtSJnGJkNOzwfdx0lprJyVtpGbD/PiZ2M5nG+p7GGzK/UIJubimFviKg/5v9ArdTnHKlHRUJCiBH0utLRjxbWdDQhwqJHxqknRb/rqt0tfv5j6MLL0LQ9PQtXqSg+RQLaTgrWLJkHCMCR3O0eUExmI7O6FfgDy8TJ6q9C5tANDgWW+Ue8NP6oCHlSV41klxNdfIspTwIv/eYIbSKomS2Vu/QTHZmIZeABXaJjoJI1qCmNVk8J+GQZRmH6pwHvmDyawz4YMr73TBHx9TOkKNVL1yHTz8i/jEIt4j6Jl14eEBggt17pl4COIVoAPJItfPPImCwBGN4ybwYR/ijznNDW1gKGoFbBlHNqMIXaYpbrqIHa4ESB9p+poSCXNgvhuXGIvDxWHmxJQIOV9ZHTquCkIYM/zkhv4wUfwkaliSbs/cCKvBlEkTWMneI0yIUeQOOADQX08GwgMQLaqscZY+82J9SWKSJPUEAVI0ayPT+vfjs0Hi1U9cSMcM=">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Leave Adjustment Request_files/WebResource.axd" type="text/javascript"></script>
+<script src="./Leave Adjustment Request_files/WebResource(1).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="898C2265">
+	<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="V4O3JXaIw3wu1MBIgHdbdUjLekwZMbtUjedYRB9x6wVufHihgcPZfISwbDEg2rT5+EAByZYUN2hh5Bw99y23XmKrw1rRcpmxOO+EcmT/k3m03E6LJ+7TD9zxXGD2bFrzn9NbrK432sSd/4UQ3Z7MgMFggIqAYlVaptEmmpKi+r97DD+ntAKAonDKEEwO+uxpXZTdiqVGhcf+2CqJS4iAZaqB2ZlyvLt2zdprDb8GvQZ1QbfUgX4UmJexZqMocZR4tJNZmRiNmNu9hD8L0bU5LQp4u44tov85Dljg2ymTytHpKR/fUlY3krOY3QmzO7S9">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Leave Adjustment Request_files/Leave.png">
+                            Leave Management
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/Leave/Emp_LeaveAdjustmentRequest.aspx?Mwpid=3310#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> University Admin</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> University Admin</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">Comptroller, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/Leave/Emp_LeaveAdjustmentRequest.aspx?Mwpid=3310#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Leave Adjustment Request_files/WebResource(2).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Masters" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3209#" tabindex="-1">Masters</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Common Holidays Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_CommonHolidays_Mst.aspx?Mwpid=3211" tabindex="-1">Common Holidays Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Holiday Location Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_HolidayLocation_Mst.aspx?Mwpid=3212" tabindex="-1">Holiday Location Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Location Wise Holidays Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_LocationWiseHolidays_Mst.aspx?Mwpid=3214" tabindex="-1">Location Wise Holidays Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Weekly Off Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_WeeklyOff_Mst.aspx?Mwpid=3215" tabindex="-1">Weekly Off Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Type Master" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Leavetype_Mst.aspx?Mwpid=3216" tabindex="-1">Leave Type Master</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:9" role="menuitem" style="position: relative; float: left;"><a title="Transactions" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3210#" tabindex="-1">Transactions</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:9" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Previous Leave Assign" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_LeaveAssign.aspx?Mwpid=3491" tabindex="-1">Employee Previous Leave Assign</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Request" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_Employee_LeaveRequest.aspx?Mwpid=3309" tabindex="-1">Leave Request</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Departure Details" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceDepartureDtl.aspx?Mwpid=5069" tabindex="-1">Service Departure Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Leave Assignment" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Employee_LeaveAssignment.aspx?Mwpid=3055" tabindex="-1">Employee Leave Assignment</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Departure Status" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceDepartureDtl_Status.aspx?Mwpid=5187" tabindex="-1">Service Departure Status</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Departure from Admin" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceDeparturefromAdmin.aspx?Mwpid=5195" tabindex="-1">Service Departure from Admin</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee CPL Assignment" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Employee_CPLAssignment.aspx?Mwpid=5300" tabindex="-1">Employee CPL Assignment</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Joining Date" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceJoiningDate.aspx?Mwpid=4804" tabindex="-1">Service Joining Date</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Approval" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_Pending_LeaveRequest.aspx?Mwpid=3312" tabindex="-1">Leave Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Joining Status" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_LeaveJoiningStatus.aspx?Mwpid=4805" tabindex="-1">Service Joining Status</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Adjustment Request" class="level2 dynamic" href="https://hauiums.in/Leave/Emp_LeaveAdjustmentRequest.aspx?Mwpid=3310" tabindex="-1">Leave Adjustment Request</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Adjustment Approval" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_Pending_LeaveAdjustmentRequest.aspx?Mwpid=3314" tabindex="-1">Leave Adjustment Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Extend Request" class="level2 dynamic" href="https://hauiums.in/Leave/Emp_LeaveAdjustmentRequest_New.aspx?Mwpid=4874" tabindex="-1">Leave Extend Request</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Cancel Approved Leaves" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_CancelApprovedLeaves.aspx?Mwpid=4803" tabindex="-1">Cancel Approved Leaves</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Encashment" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Leaves_Encashment.aspx?Mwpid=3220" tabindex="-1">Leave Encashment</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Service Joining from Admin" class="level2 dynamic" href="https://hauiums.in/Leave/EMP_ServiceJoiningDateFromAdmin.aspx?Mwpid=5073" tabindex="-1">Service Joining from Admin</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Transaction" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Employee_LeavesTaken_Details.aspx?Mwpid=3218" tabindex="-1">Leave Transaction</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Update Earned Leave Balance" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_Update_EL_Balance.aspx?Mwpid=8440" tabindex="-1">Update Earned Leave Balance</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:29" role="menuitem" style="position: relative; float: left;"><a title="Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3418#" tabindex="-1">Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:29" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Transaction Reports" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_LeavesTaken_SelCriteria.aspx?Mwpid=3419" tabindex="-1">Leave Transaction Reports</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Leave Reconcilliation Report" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_EarnedLeaves_Reconcil_rpt.aspx?Mwpid=4887" tabindex="-1">Leave Reconcilliation Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Leave Details" class="level2 dynamic" href="https://hauiums.in/Leave/SAL_EmpLeaveDetails.aspx?Mwpid=5093" tabindex="-1">Employee Leave Details</a></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Transactions</span>&nbsp;&gt;&nbsp;<strong>Leave Adjustment Request</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Leave Adjustment Request_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <script language="javascript" type="text/javascript">
+        function Check_Before_Cancel() {
+            var x = confirm("Are you sure to cancel this Leave Adjustment Request?");
+            if (x == true)
+                return true;
+            else
+                return false;
+        }
+        //    function checkAllOnGrid() {
+        //        var intRowCount = document.getElementById('ctl00_ContentPlaceHolder1_hdCount').value;
+        //        var chkAll = document.getElementById('ctl00_ContentPlaceHolder1_gvLeaves_ctl01_chkAll')
+        //        var iStartItemIndex = 2;
+        //        if (chkAll.checked == true) {
+        //            for (i = iStartItemIndex; i < parseInt(intRowCount) + parseInt(iStartItemIndex); i++) {
+        //                if (i > 9) {
+        //                    if (document.getElementById("ctl00_ContentPlaceHolder1_gvLeaves_ctl" + i + "_" + "chkAdjust").visible = true) {
+        //                        document.getElementById("ctl00_ContentPlaceHolder1_gvLeaves_ctl" + i + "_" + "chkAdjust").checked = true;
+        //                    }
+        //                }
+        //                else {
+        //                    if (document.getElementById("ctl00_ContentPlaceHolder1_gvLeaves_ctl0" + i + "_" + "chkAdjust").visible = true) {
+        //                        document.getElementById("ctl00_ContentPlaceHolder1_gvLeaves_ctl0" + i + "_" + "chkAdjust").checked = true;
+        //                    } 
+        //                }
+        //            }
+        //        }
+        //        else {
+        //            for (i = iStartItemIndex; i < parseInt(intRowCount) + parseInt(iStartItemIndex); i++) {
+        //                if (i > 9) {
+        //                    if (document.getElementById("ctl00_ContentPlaceHolder1_gvLeaves_ctl" + i + "_" + "chkAdjust").visible = true) {
+        //                        document.getElementById("ctl00_ContentPlaceHolder1_gvLeaves_ctl" + i + "_" + "chkAdjust").checked = false;
+        //                    }
+        //                }
+        //                else {
+        //                    if (document.getElementById("ctl00_ContentPlaceHolder1_gvLeaves_ctl0" + i + "_" + "chkAdjust").visible = true) {
+        //                        document.getElementById("ctl00_ContentPlaceHolder1_gvLeaves_ctl0" + i + "_" + "chkAdjust").checked = false;
+        //                    } 
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    function unCheckHeader() {
+        //        var chkAll = document.getElementById('ctl00_ContentPlaceHolder1_gvLeaves_ctl01_chkAll')
+        //        if (chkAll.checked == true) {
+        //            chkAll.checked = false;
+        //        }
+        //    }
+    </script>
+    <div id="abs5" class="box" style="display: block;">
+        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%" class="table">
+            <tbody><tr>
+                <td colspan="3" class="tableheading">
+                    Leave Adjustment Request
+                </td>
+            </tr>
+            <tr>
+                <td class="tdgap">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>
+                        <span id="Anthem_ctl00_ContentPlaceHolder1_lblEmpDetails__"><span id="ctl00_ContentPlaceHolder1_lblEmpDetails" style="color:Blue;"></span></span></b>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdgap">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="Anthem_ctl00_ContentPlaceHolder1_gvEmpLeaves__"><div>
+
+</div></div>
+                </td>
+            </tr>
+        </tbody></table>
+    </div>
+    <div id="abs1" class="box" style="display: block;">
+        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%" class="table">
+            
+            <tbody><tr>
+                <td colspan="3" class="tdgap">
+                &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td id="lblLeave" class="vtext" style="width: 15%">
+                    Leave Request
+                </td>
+                <td class="colon" style="width: 2%">
+                    :
+                </td>
+                <td class="required">
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlLeave__"><select name="ctl00$ContentPlaceHolder1$D_ddlLeave" id="ctl00_ContentPlaceHolder1_D_ddlLeave" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlLeave&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" style="width:300px;">
+	<option selected="selected" value="">-- Leave Type | From Date | To Date --</option>
+
+</select></span>
+                     *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" style="width: 15%">
+                    Reporting To
+                </td>
+                <td class="colon" style="width: 2%">
+                    :
+                </td>
+                <td>
+                    
+                     <span id="Anthem_ctl00_ContentPlaceHolder1_txtReportingTo__"><input name="ctl00$ContentPlaceHolder1$txtReportingTo" type="text" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtReportingTo" class="textboxlong"></span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">
+                    Remarks
+                </td>
+                <td class="colon" style="width: 2%">
+                    :
+                </td>
+                <td>
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_txtRemarks__"><textarea name="ctl00$ContentPlaceHolder1$txtRemarks" rows="2" cols="20" id="ctl00_ContentPlaceHolder1_txtRemarks" class="textboxmultiline" onkeypress="return CheckMaxLength(this,200);"></textarea></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" class="tdgap">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tbody><tr>
+                            <td>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_btnView__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnView" value="VIEW" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnView&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,btnSave_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnView" class="button-common" cellpadding="0" cellspacing="0"></span>
+                            </td>
+                            <td class="btngap">
+                            </td>
+                            <td>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;WAIT..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+                            </td>
+                            <td class="btngap">
+                            </td>
+                            <td>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" class="tdgap">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div id="Anthem_ctl00_ContentPlaceHolder1_pnlDetails__"></div>
+                </td>
+            </tr>
+        </tbody></table>
+    </div>
+    <div id="abs2" class="box" style="display: block;">
+        <table cellpadding="0" cellspacing="0" border="0" style="width: 100%" class="table">
+            <tbody><tr>
+                <td class="tablesubheading">
+                    List of Leave Adjustment Request
+                </td>
+            </tr>
+            <tr>
+                <td class="tdgap">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="Anthem_ctl00_ContentPlaceHolder1_dgDetails__"><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td align="center" style="font-weight:bold;">S.No.</td><td align="center" style="font-weight:bold;">Reporting To</td><td align="center" style="font-weight:bold;">Leave Type</td><td align="center" style="font-weight:bold;">Adj. Req. Date</td><td align="center" style="font-weight:bold;">From Date</td><td align="center" style="font-weight:bold;">To Date</td><td align="center" style="font-weight:bold;">Total Leave Days</td><td align="center" style="font-weight:bold;">Status</td><td align="center" style="font-weight:bold;">EDIT</td><td align="center" style="font-weight:bold;">DELETE</td>
+	</tr><tr class="pager-style" align="center" style="color:#000000;">
+		<td colspan="12"><span>1</span></td>
+	</tr>
+</tbody></table></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdgap">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="Anthem_ctl00_ContentPlaceHolder1_pnlFollow__"></div>
+                </td>
+            </tr>
+        </tbody></table>
+    </div>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script></form>
+
+
+<script language="javascript" src="./Leave Adjustment Request_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Leave Adjustment Request_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

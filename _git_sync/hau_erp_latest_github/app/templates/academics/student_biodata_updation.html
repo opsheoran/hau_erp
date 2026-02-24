@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Biodata Update Master</span>
+    </div>
+
+    <div style="padding: 15px;">
+        <form method="GET" id="searchForm">
+            <table class="form-table" width="100%">
+                <tr>
+                    <td class="vtext" width="12%">College</td>
+                    <td class="colon">:</td>
+                    <td width="35%">
+                        <select name="college_id" class="dropdown w-300" onchange="this.form.submit()">
+                            <option value="">-- Select College --</option>
+                            {% for c in lookups.colleges %}<option value="{{ c.id }}" {% if filters.college_id == c.id|string %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                    <td class="vtext" width="12%">Session</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="session_id" class="dropdown w-150">
+                            <option value="">--Select Session--</option>
+                            {% for s in lookups.sessions %}<option value="{{ s.id }}" {% if filters.session_id == s.id|string %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Degree</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="degree_id" class="dropdown w-250">
+                            <option value="">--Select Degree--</option>
+                            {% for d in lookups.degrees %}<option value="{{ d.id }}" {% if filters.degree_id == d.id|string %}selected{% endif %}>{{ d.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                    <td class="vtext">Admission No.</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <input type="text" name="admission_no" class="textbox w-150" value="{{ filters.admission_no or '' }}">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top:10px;">
+                        <input type="submit" value="SEARCH" class="button-common" style="width:120px;">
+                        <input type="button" value="RESET" class="button-common" onclick="location.href='{{ url_for('academics.student_biodata_updation') }}'" style="margin-left:10px; width:120px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        {% if students %}
+        <div style="margin-top: 25px;">
+            <table class="table-grid-view" width="100%">
+                <thead>
+                    <tr class="header-style">
+                        <th width="5%">S.No.</th>
+                        <th width="15%">Admission No.</th>
+                        <th width="15%">Enrollment No.</th>
+                        <th>Student Name</th>
+                        <th width="10%">Status</th>
+                        <th width="10%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in students %}
+                    <tr class="{{ loop.cycle('item-style', 'item-style-alt') }}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td align="center">{{ s.AdmissionNo or '-' }}</td>
+                        <td align="center">{{ s.enrollmentno or '-' }}</td>
+                        <td>{{ s.fullname }}</td>
+                        <td align="center"><span style="color:orange; font-weight:bold;">Pending</span></td>
+                        <td align="center">
+                            <a href="{{ url_for('academics.student_biodata', sid=s.pk_sid) }}" title="Update/Approve">
+                                <img src="{{ url_for('static', filename='images/edit.gif') }}">
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div style="text-align:center; margin-top:20px;">
+                <input type="button" value="APPROVE SELECTED" class="button-common" style="width:150px; background:#3c8dbc; color:white;">
+                <input type="button" value="MIGRATE DATA" class="button-common" style="margin-left:10px; width:150px;">
+            </div>
+        </div>
+        {% elif filters.college_id %}
+        <div style="text-align:center; padding:30px; color:#999;">No student records found for selected filters.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Course Approval Status</span>
+    </div>
+
+    <form id="filterForm" method="GET">
+        <input type="hidden" name="view" value="1">
+        <table width="100%" class="filter-table">
+            <tr>
+                <td class="vtext">College</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="ddlCollege" class="dropdownvvlong" style="position: static" onchange="onCollegeChange()">
+                        <option value="">--Select College--</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Academic Session</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="session_id" id="ddlSession" class="dropdownlong" style="position: static" onchange="onSessionOrDegreeChange()">
+                        <option value="">--Select Academic Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="degree_id" id="ddlDegree" class="dropdown" onchange="onDegreeChange()">
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Semester</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="sem_type" id="ddlSemType" class="dropdown" tabindex="3">
+                        <option value="">Select</option>
+                        <option value="1" {% if filters.sem_type|string == '1' %}selected{% endif %}>Odd Semester</option>
+                        <option value="2" {% if filters.sem_type|string == '2' %}selected{% endif %}>Even Semester</option>
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext">Exam Config</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="exconfig_id" id="ddlExConfig" class="dropdown">
+                        <option value="">-- Select Exam Config.--</option>
+                        {% for c in lookups.exam_configs %}
+                        <option value="{{ c.pk_exconfigid }}" {% if filters.exconfig_id|string == c.pk_exconfigid|string %}selected{% endif %}>{{ c.display_name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table width="100%">
+                        <tr>
+                            <td width="16%"></td>
+                            <td style="padding-top: 6px;">
+                                <input type="submit" value="GET STATUS" class="button-common">
+                                <input type="button" value="RESET" class="button-common" onclick="window.location.href='{{ url_for('academics_mgmt.course_approval_status') }}'">
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div style="margin-top: 18px;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">Status Semester And Degreewise</span>
+        </div>
+
+        <table class="table-grid-view" style="width:100%; border:1px solid #D4D4D4; border-collapse:collapse;">
+            <thead>
+                <tr class="header-style">
+                    <th align="center" style="width:2%;">S.No</th>
+                    <th align="center" style="width:8%;">Degree</th>
+                    <th align="center" style="width:4%;">Semester</th>
+                    <th align="center" style="width:6%;">Advisor Approval Status</th>
+                    <th align="center" style="width:6%;">Teacher Approval Status</th>
+                    <th align="center" style="width:6%;">DSW Approval Status</th>
+                    <th align="center" style="width:6%;">Librarian Approval Status</th>
+                    <th align="center" style="width:6%;">Fee Approval Status</th>
+                    <th align="center" style="width:6%;">Dean Approval Status</th>
+                    <th align="center" style="width:6%;">DeanPGS Approval Status(PG)</th>
+                    <th align="center" style="width:6%;">Registrar Approval Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in rows %}
+                <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}" style="background-color: {{ 'White' if loop.index is odd else '#FAFAFA' }};">
+                    <td align="center">{{ loop.index }}</td>
+                    <td align="center">{{ r.degree_name }}</td>
+                    <td align="center">{{ r.semester_roman }}</td>
+                    <td align="center">
+                        {% if r.advisor == 'NO' %}
+                            <a class="link" href="{{ url_for('academics_mgmt.course_approval_status',
+                                college_id=filters.college_id,
+                                session_id=filters.session_id,
+                                degree_id=filters.degree_id,
+                                sem_type=filters.sem_type,
+                                exconfig_id=filters.exconfig_id,
+                                view='1',
+                                detail_semester_id=r.semester_id
+                            ) }}">{{ r.advisor }}</a>
+                        {% else %}
+                            {{ r.advisor }}
+                        {% endif %}
+                    </td>
+                    <td align="center">{{ r.teacher }}</td>
+                    <td align="center">{{ r.dsw }}</td>
+                    <td align="center">{{ r.library }}</td>
+                    <td align="center">{{ r.fee }}</td>
+                    <td align="center">{{ r.dean }}</td>
+                    <td align="center">{{ r.deanpgs }}</td>
+                    <td align="center">{{ r.registrar }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="11" align="center" style="color: red; padding: 14px;">No records found. Please apply filters and click GET STATUS.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 22px;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">Rejected/Pending Student List</span>
+        </div>
+
+        <table width="100%">
+            <tr>
+                <td colspan="6">
+                    <div style="display:flex; gap:16px; align-items:flex-start;">
+                        <div style="flex: 1 1 55%;">
+                            <table class="table-grid-view" style="width:100%;">
+                                <thead>
+                                    <tr class="header-style">
+                                        <th style="width:8%;">S.No.</th>
+                                        <th style="width:52%;">Student</th>
+                                        <th style="width:20%;">Admission No.</th>
+                                        <th style="width:20%;">Pending</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for s in pending_students %}
+                                    <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                                        <td align="center">{{ loop.index }}</td>
+                                        <td>
+                                            <a class="gridlink" href="{{ url_for('academics_mgmt.course_approval_status',
+                                                college_id=filters.college_id,
+                                                session_id=filters.session_id,
+                                                degree_id=filters.degree_id,
+                                                sem_type=filters.sem_type,
+                                                exconfig_id=filters.exconfig_id,
+                                                view='1',
+                                                detail_semester_id=filters.detail_semester_id,
+                                                detail_student_id=s.pk_sid
+                                            ) }}">
+                                                {{ s.fullname }}
+                                            </a>
+                                        </td>
+                                        <td align="center">{{ s.AdmissionNo }}</td>
+                                        <td>{{ s.pending_stages }}</td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="4" align="center" style="color:#666; padding: 14px;">No pending students.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="flex: 1 1 45%;">
+                            <table class="table-grid-view" style="width:100%;">
+                                <thead>
+                                    <tr class="header-style">
+                                        <th style="width:10%;">S.No.</th>
+                                        <th style="width:60%;">Course</th>
+                                        <th style="width:15%;">CR_Th</th>
+                                        <th style="width:15%;">CR_Pr</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for c in student_courses %}
+                                    <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                                        <td align="center">{{ loop.index }}</td>
+                                        <td>{{ c.coursecode }} {{ c.coursename }}</td>
+                                        <td align="center">{{ c.crhrth }}</td>
+                                        <td align="center">{{ c.crhrpr }}</td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="4" align="center" style="color:#666; padding: 14px;">Select a pending student to view course details.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script>
+function onCollegeChange() {
+    const cid = document.getElementById('ddlCollege').value;
+    // reset dependent fields like other pages
+    document.getElementById('ddlDegree').innerHTML = '<option value=\"\">--Select Degree--</option>';
+    document.getElementById('ddlExConfig').innerHTML = '<option value=\"\">-- Select Exam Config.--</option>';
+    if (!cid) return;
+    fetch('/academics/api/college/' + cid + '/degrees')
+        .then(r => r.json())
+        .then(data => {
+            const ddl = document.getElementById('ddlDegree');
+            ddl.innerHTML = '<option value=\"\">--Select Degree--</option>';
+            (data || []).forEach(d => {
+                const o = document.createElement('option');
+                o.value = d.id;
+                o.textContent = d.name;
+                ddl.appendChild(o);
+            });
+        });
+}
+
+function onSessionOrDegreeChange() {
+    // Exam config depends on degree+session, so reload.
+    const degreeId = document.getElementById('ddlDegree').value;
+    const sessionId = document.getElementById('ddlSession').value;
+    const ddl = document.getElementById('ddlExConfig');
+    ddl.innerHTML = '<option value=\"\">-- Select Exam Config.--</option>';
+    if (!degreeId) return;
+    const qs = new URLSearchParams({degree_id: degreeId, session_id: sessionId || 0}).toString();
+    fetch('/academics/api/get_exam_configs?' + qs)
+        .then(r => r.json())
+        .then(rows => {
+            (rows || []).forEach(c => {
+                const o = document.createElement('option');
+                o.value = c.pk_exconfigid;
+                o.textContent = c.display_name || c.period || ('Config ' + c.pk_exconfigid);
+                ddl.appendChild(o);
+            });
+        })
+        .catch(err => console.error('Exam config load failed', err));
+}
+
+function onDegreeChange() {
+    onSessionOrDegreeChange();
+}
+</script>
+{% endblock %}

@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./User Master,html_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./User Master,html_files/default.css" type="text/css" rel="stylesheet"><link href="./User Master,html_files/font.css" type="text/css" rel="stylesheet"><link href="./User Master,html_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./User Master,html_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./User Master,html_files/WebResource.axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./User Master,html_files/WebResource(1).axd" type="text/javascript"></script>
+<script src="./User Master,html_files/WebResource(2).axd" type="text/javascript"></script>
+<script src="./User Master,html_files/WebResource(3).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="6CFF15B5">
+	<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="uIAS/xVsTGGFPBcAbxA0zoPMkP3/LR4KivHfzWoZDN2EAJQG2d2btYkVPxGpMw/oF+LbuY8iZ966SpRCsLu5qf8D2UM50cshCDf8R6w7LiWF4+VGQfloGERc3XFO7hxAsWAvfvydFhbPdhbnPa81NKj15VzKk0svOoubDnEstsF+MYccJj4il3MQWdb/MPxKqPyw963DdsB9L+eXq4CmUrp/rRzg6MlAzTI1KYa022RC9QYC1pfiT6+Af05oK5j/f1C3saT/uVcVtbX8opIN7zYMbcwo592VAjQrlk64ZAQ+OFa/pZRo3+XH0Ra55q4FB5VOBNra0gW8/bfMZ2+2Lxs0XklJpMngT2nBe0IEJnIi66TZbotaxxeVAEKFFZ9pDhPjDRHAb+8NwY/XBtSlqJcb3zBwpt0Em8MKjk6MZ07Eg+cjzZUAtFz62Dq6lA0D8KRDI4MZ99hdRjfSvSAQWHRwGev9g2EHfyhXsog9iFCqaEO4yRBcQpxls7qFH+swmb5INGCL9rXwJSkTqo4VxSgGjq1uiQQcEVHsH959LIFBC7tskjeExVQ4vrzg1llT9f/ExoE+ddu6vHqQ2xEZLJzSLj5HrO6/edeR9hkVxpuV0HzrYltMCk618a7/cN47zvlO5UAb/ZqghrZJK3NuePzDpQBRzgUqWQBPcuslpDEPVuMI6JkoAwLK1719lPqKqRve37BmyX636koozOaKO0xtCI6g0EBJU4ObnoeuCw9922RBfw6/6hqJR2eHlLtm2CN/VVNgyKnO1ai3ESa/vgXrh2eybr27Rp7ZMsbyctdbzUlr3owc9xNkd0bTVmB1rlVv7bZbdMiyEEiGhspZzDzg+uTjrLXYSjZzGYOXRnhqBKomxraOQYYeSdjydOf7SG59hBdM8xSOS/HYK/y2GjikSLooMHdDAPRyLoQfNoKnGq3y8gv+kOpCmz7LCeIKl2Asea/tOh/EqQpHeoOUaP+vNs6bB4FlRzVsW17E7vB4qx2rPFxs9Z9KrIL6PRaebxZswF+kccr3zRNi1vr+dpJlYlFxkW6duiPRcCWyeSizose78LA3I3uTFSQRP4F2rs7YYgMKUn+Fkux+xI7AE2rvJi15ncj1J0T5sDcrCvTTVRDN4/vslN3zVpuRt9CTaE+DOUPVCxSxxAUZzg6EiaNUthKevCO3kftYkKJsci6W+s43S6I16tUQ0hh6s+ErvblGY60vj3KIzBKuPwNKhlcAsp0Gm2w/SUzFjpAICxLz58Ov0lxM6Vrs8KIItrke+3dGFMXaSK/UzKl3/WJU7sFlN1PONXcdxC9hfjNuNZayoI9ZwMC2VO439sRzuGfd6OikGZiHJvN/2IYkYZ9VB6dgyebBrP5uX1ZOnZOybqVjhKJaSC9J0D61Ar0OWPKa001dNIUFzfuhvm6FGhctvqMM6Wn6JKVuCs1Tp8NKasJpBf0mY6DIKZBGKcVqJ++zg4JsKFW1PvmkbkMQ0WqzDIYt9579suhAt9vx5t5te5SQwG5hWz0gEOw7AbZl3eIObVBNPZdXUffu/GmufgbFh5PkEmP17VeSvVkY86JgQkkSqe8orxxUbqHXDlkcJq3Vna7tfe/bLw89XfszlDjwDFl9jfl/ZGyiypn/GEckBeUNK6Cjr1v/S+sooa+Ivqdy4TmO2o8aphL0A+QA0EyVMBnQo/5yh19wVktT7DHQCN8uMbZPcj9VYvIayCmi1omhDx/Wi4VjwA+HsLvBHywaV4TtVxOMQtZMF5MWGk58pDs+23Pkc3z7waiIcVcsMag4tontrwWj9Mnbqfcd2uWy1rCNipXB13e2uFMj5l4bTVPyMkQmLVwr+l9LhN00zyvfsgeEEScGdi/XtUWD6RP68NLF57gp4orZZ+n6QArDUphle108xc0uHepqutaIQv9sIF9jJk5gRn9teYvhojYbztfVgqXDG7mB6jik6MpRX5EX0OUi8hC0xv1v4N7x7dwKBMg4GTwqS/SmEOzxfPDiVQ9ItNEZo/pi/+tm5splqpeH9be95cn4QrBWmX6JqB/sPSVjVzyGfUrGD54CJ2njWmjH+9t+38Ppml8UVAu1HnHZuQokQrLiiehNXqnteCDm80A9OjanLQrFI81VJWs+ImDiVMWkBFASlby7+D4tGnqWzG9WPSemoHkt7eUt0uhIoMTuT8cM+xsZX5nL9IHR281zqoTwF2pv91t7RBgSau9w9/oMITZykT3GydrzwcrydYpRMOO4a9gZHYpA8mRtCJv+qIyenQH4phN+whjUBQt/n6BoN+qiQDZA7yjg+4zvcuNlRmbvN698NjRAozALRNtpL4z3amOXGhUKTAdKF59kgPkImB+DCxSWzGN43WXwMfWSioWrdcQ2rkDJFUj94+Yk5MyAVpXwjUJ5vsvz2ivEfprY6HN01Hul4AX6mfSruKXZEOSSOBUu5YnvnwQFWJbNlSovStCBLmUq377SgbgGqI2irqarqQuHgrX+DRWx33g9q+E2l+Ckb4DTthERiBc5WjOuqtm4o/GyoI14avFeWq0FZxKICtgqZCCLoKqltcUL1XSnehXOLElZgZC4Xq+LWw+1j/YEmmikszkwQArTI+2ycVDaDKOMCmI+nnxoQ30JeThecjPJAGO3DoVAe2ru/PRBfDXbm/aZkCDucxwrOgWMHiqx9l+q5B94bqDNEOyd51qDqUkMRlBp/AAaYAOuDJym7OEMQ8ysSKbXfNPtunKFrp+rqhTdwmpSNInpo8Znoi9+0MnR1KVQ4bxLtqV6oEXwEc0wylm+p1XrP6APZJC6ZNs5Pt7Q0IMn2tCBDOsN0BwH7gwPW/8Wnhwnu6AKurVcsLjyQcOqzXmVR9+xqUKNjWQO1Ie8l9H88zyyIkAfxqi6bD8e2dssX1PxyYVBrNaNenh8hInJasou3EPmHiW8GwSIEJa73eWMH5lSEssOhXYDMiJdh5jnsgaxaTG92PrTvR1jlsYPY0RIzmr8WMJ/CvJXJbu+im3JsVNRTN1mGnP8zjYbK3bwwfHcESGfsIt4AdJODgIe5fzu9x5U2EIRaLkGyd5TRAO6yyHWZF5N8LgD1eenaMeBW9vmHZdSOauk4F7zsAVt1FIvuQbIHlhnWXDSvnIJ+xYzcVPp1ZuIsOsQLvmAOrDdDASahF2BJlkTqsuqzsW1AMQxj/AFZPlODi/GVIN583qxrkvcWzdWEG5ate/R7a6BAd1sXNsr0erQ0IkKCOgN333Uef1xCF7UIEYUz3hVdv2gFhf6gQYOUeNwVrbMhYBR8joAeNPvdOC8gS3dHrvGv1SJNzrBTuAvhioMjSogbvoSKnyuVnTsleFLin66kJbNgV7PZje/emuzcPcIVGspkY7ekx2cd0SIhTnFcKf9AXmSQi2NNMSeUOEX8MdPF5oq38C8JNouPfXhlNYewAySx/w6Ye2rYSdf394R8vkFl8iJRK53Cd8GSSkm3XzWX13n2RP5qoKZs2Envsmxob4nji+8j94nZbaOimZtFv3tTFXCo7rNat2pfuEBcMWWjEm+qS9K4Y8Kp6N7bbs7c9gzbSuNu6UXh0FH7UgKa0gvzK2o7dDHcG0r9g02sf9iPayceRuDLgX/ucbooz4UD3MVSIKP2f/5lH6y52z0VuA7znh6ln/lJJ35c/04NYF0Tj3AuCtwtJ4D8Z16GRMfg5tyw8iWx2qIQbjP53z5F6oJKWspt6wVplDw9o3M3TTM42rwmzdXEb7RbNpoG5/JygdcXRWbMQxbjhbZX2zCW7qTC5vvjgLqUv5ff2rtQHK4JxlhUBnAJwG3pxjgz7TjoH88GruryqYbQPB1dIU/XX/QL44ds6q8lpJaq/G8GbkSlT6jE7Cp9uVFZfkhZEDQoyt72Cohp33LCFld7iuRMBcTyynVrqmozOkLOntdOPu9RfrNe7qhIlfIeIr0ZK3eu7tV8TRwZxIuvPRhMBBYLUYNxKr8nUk8/vL0L1+qLI+waUKvZ1NYqHkj1XfcC+Zxd4ZykINFoPSr/RhabJ3Ozq91auxx7IUK6MtHbx8G84k6nqlTRMeIQcj5idh82v9JJTDlEXz9BbmdLXCWSUl9vUmwKS4Wv2XKy3VNqahULZUC4nsZKUlnIcqqiS5zlpw8eaBhvQPz3tuIUKTJrUPhIub9FeUJYUQ1Sgzecmv4wGU2B0G8Mh6LUcERZezgo59PwpqcgCesG69sscRAgFDQL30kBaqEWLmvOfzIdeHlkmc277RV1rNS24x5MlZuymr+4TgddTJdnJK/0DqrJWJnH1ohOEbWbLZ8ufBGvEf7B9/cfSZ6HPJz5QETT2AZOidcsXv+HRyp1zT1klzhZT9IM7RG8ThOcvDvOH3fyxlO72pmc9ZoKOZyXz0sI/IYHNpxUDecirRPgziQqT7Xnpyul/sXrq59oq65BRpbMQOgfLDuKDAQk6eRHVswtlBkrnQVFhwbrEb+YKMdRbS1O4CQd7zGlOmU+rd5cz32gNeSy2AuStoGhI+IID0TzPCosnkky1WQ89xC1FQiD5AXpHtMuwWZsAqmfcge1mWZjsGb9STwPll8pdrfO0ojrAA1qHqwEpOk2TMDeafBub/CtuRMzldHdgHDb8GAlks0cZMSQDy88Q4nG0sk30qolFiZdZNGDQoKz5JH5yrL8ppVMgFkwBLSHDGOJ6ibgcQPSPNQ+GZKSVzRUjirY5mB/QKYvR8P9VHa9qn+dvZuWRhpg6/T0QSh+tNGGktVkkgUkz97xqhwtbdcFTmRJPSsy8VyebwCW/J46TqYLqhMz0IFobx8ny1sPHzd5odo0rxdIEL67AmuvJtDlLHDb3/YB6MM3TSiLoNdZKVbWZWcf4Ax80Krb8E1t6tFDXWx5fIOui+ciT5w0YjSrdugusuNkyzf1hUPgxwAyo114BPw47PdpmQ/KNgWpNMSYx6Ws8hGV0KQ58hsdIpLlTNqZcDLHrffr+339QP0Y4M/NrCDUCKbQ+T+MTwP4HjqyVupOVI/Bfs+WxxYif+AhvpaBjTcWbmMACJFVOuGAfTsl8WqOQC2GvG5jstme9g4ntWS1TO+En34IcPpKUL6K2/8K8cOhtTmB6zsi1QE1M+tVvNfFpAFPTpazfjnJeBfae6lhAR74h1LWXyBhIxCY/kIh3AyiZl7QJEH09qBTXnnWyg8FsaM8t3KHNdkirR4v3OLZz2vkeKwiiFY56IwlbEZymeenC/JUXQFJ4/Np03iyq9XKYgRMhbbUZ6pM4846AXBxX5Qt59IWn+laQTYFxAluKaks/mIhofECDx4eY7pqnG/BgQkSu/I7fdflA/uD4UF8p1PiAnerbTVacztrksC+DHUqQLDZIdtjXEJX+GcOoKNvXAB6qi3mT0K4LqQA3MhzSYkCCLyyYzmAGmk/H4yzpJi/EISZ6ofXyeW7Jm+gwJc7w9wfGlDqhirIifennyl6Y7Z8xxAuyxEUSAhCRyhe9vNccEvp2AnHIySZu9AWGAweV4Ivk6fmfMU9Cz2Fn6QiouXjBYpTmzDZIAdGr2yYLy1so6ssPVOPvvbJ9Kig1UKaC1N8rAM2cRFZkU6jlqLPECVw4wtehvJyxKxyBq2wLhQCq64c511bB6x9Sh88BdZENGCx+H03XqmXxeUQDZzG6kCdWyDgwYYT2lHVi+QjhMCVbGP55SRf5nD9s+g31upy1PxieaXmhRrx8AflMtyLj/JjJ7W1/1sAXesXdmJI47fBlDkJ/lNTeX6uddXPvpBgW4RNoub/Wg9Hhyho7emeQiPnj4GqPrPsN5PwoxC6mjyt4pHbnHa/rv/ZEXyVeoD83rUlwI0Y7hEV1Dc2rt6K0sHC6NmYOcFMzwkdCF4z7vjxL2bLb0ed6cxejyC9uwEh3IEoS7zbfGTJI/QFrQ0GLmQNLv9bhm/k4idAAKOuaZpe+EaNp7dtmKoVsBaB1ZIdB6H+Me6yuhXP1xC2h0LZZomUqAQAYNShowt9lzSOoPWwnA4pTUF3iY2FIqrdwjMclAq4wWwJfJBOMt7ugw2R8hwNUICO8cSDNW9U5VGRwOCAKd8/NPbC542xs/ePDqrFccFaBjcCmYcTusLN3ubkGZtIIBzQ2DeprMi5a+h6GJLyagI9ULz5UfhA7UoHc/sVfD6+6Iy4x5/EqG4+EqNELYPUMNlylcp6DJKDf3F5eiY7Ycv1flPhxLs7wwtU6avWqOa8wcgqqC/5fLq4Wu3na451pLBIGsFtdesj4gzoaTgv6F58ExTutJrJ6cIY5zLVM35gCnU4CEoOfvDkWZbwvQ4nDc/pMOTeQMlRTy0tw==">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./User Master,html_files/user-management.png">
+                            User Management
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> University Admin</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> University Admin</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">Comptroller, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./User Master,html_files/WebResource(4).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Create Masters" class="level1 static" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035#?Mwpid=1032" tabindex="-1">Create Masters</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create District Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_District_Mst.aspx?Mwpid=1054" tabindex="-1">District Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create DDO Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Mst.aspx?Mwpid=1034" tabindex="-1">DDO Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Office Type Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_OfficeType_Mst.aspx?Mwpid=1052" tabindex="-1">Office Type Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Location Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_Location_Mst.aspx?Mwpid=1053" tabindex="-1">Location Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Section Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Section_Mst.aspx?Mwpid=1937" tabindex="-1">Section Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Department Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Department_Mst.aspx?Mwpid=1056" tabindex="-1">Department Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Class Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Class_Mst.aspx?Mwpid=1059" tabindex="-1">Class Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Grade Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Grade_Mst.aspx?Mwpid=1060" tabindex="-1">Grade Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Designation Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=1057" tabindex="-1">Designation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Religion Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Religion_Mst.aspx?Mwpid=1058" tabindex="-1">Religion Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Comm_DDO_Location_Mapping" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870" tabindex="-1">DDO Location Mapping</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Country State District City Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_Country_State_City_Mst.aspx?Mwpid=2061" tabindex="-1">Country State District City Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Specialization Master" class="level2 dynamic" href="https://hauiums.in/UMM/UMM_Designation_Specialization.aspx?Mwpid=5068" tabindex="-1">Designation Specialization Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Controlling Office Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_ControllingOfficer_Mst.aspx?Mwpid=5076" tabindex="-1">Controlling Office Master</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:18" role="menuitem" style="position: relative; float: left;"><a title="Manage Users" class="level1 static" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035#?Mwpid=1033" tabindex="-1">Manage Users</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:18" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create User Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035" tabindex="-1">User Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="ResetPassword" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_ResetPassword.aspx?Mwpid=4839" tabindex="-1">Reset Password</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Manage Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_UserAuthorization.aspx?Mwpid=1044" tabindex="-1">Manage Page Rights</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Page Type Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_PageTypeMaster.aspx?Mwpid=1364" tabindex="-1">Page Type Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Role Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793" tabindex="-1">Role Page Rights</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Role Level Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_RoleLevelsMaster.aspx?Mwpid=1365" tabindex="-1">Role Level Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Role Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_RolesMaster.aspx?Mwpid=1366" tabindex="-1">Role Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="PageType-Role Link" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_AssignRolePageType.aspx?Mwpid=1046" tabindex="-1">PageType-Role Link</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Module Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_ModuleMaster.aspx?Mwpid=1363" tabindex="-1">Module Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Page Master" class="level2 dynamic" href="https://hauiums.in/UMM/WebpageMst.aspx?Mwpid=1040" tabindex="-1">Web Page Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="User Login Management" class="level2 dynamic" href="https://hauiums.in/sms/masters/LoginPage_ImageChange.aspx?Mwpid=4853" tabindex="-1">User Login Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Module Rights Detail" class="level2 dynamic" href="https://hauiums.in/UMM/User_ModulDetails.aspx?Mwpid=4951" tabindex="-1">Module Rights Detail</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Fetch Password" class="level2 dynamic" href="https://hauiums.in/UMM/FetchPass.aspx?Mwpid=5165" tabindex="-1">Fetch Password</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Multiple Users Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/MultipleUsers_PageRights.aspx?Mwpid=5245" tabindex="-1">Multiple Users Page Rights</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:34" role="menuitem" style="position: relative; float: left;"><a title="View User Logs" class="level1 static" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035#?Mwpid=1883" tabindex="-1">View User Logs</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:34" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="User Wise Log" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_UserLoginDetail_Rpt.aspx?Mwpid=1884" tabindex="-1">User Wise Log</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Send Message" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_CommonMessages.aspx?Mwpid=1885" tabindex="-1">Send Message</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:38" role="menuitem" style="position: relative; float: left;"><a title="Database Backup" class="level1 static" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035#?Mwpid=1968" tabindex="-1">Backup</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:38" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Database Backup" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DbOperations.aspx?Mwpid=1969" tabindex="-1">Database Backup</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:41" role="menuitem" style="position: relative; float: left;"><a title="Other Configurations" class="level1 static" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035#?Mwpid=3286" tabindex="-1">Other Configurations</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:41" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:42" role="menuitem" style="position: relative;"><a title="Hostel Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035#?Mwpid=3287" tabindex="-1">Hostel Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:42" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Hostel Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_Hosteltype.aspx?Mwpid=3252" tabindex="-1">Create &amp; Manage Hostel Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Room Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_Rromtypemst.aspx?Mwpid=3253" tabindex="-1">Create &amp; Manage Room Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Building" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_Building_Mst.aspx?Mwpid=3254" tabindex="-1">Create &amp; Manage Building</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Floor" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_Floor_Mst.aspx?Mwpid=3274" tabindex="-1">Create &amp; Manage Floor</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Map Floor With Building" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_FloorMap.aspx?Mwpid=3275" tabindex="-1">Map Floor With Building</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Facility Name" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_RoomFacility_Mst.aspx?Mwpid=3255" tabindex="-1">Create &amp; Manage Facility Name</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_HostelMaster.aspx?Mwpid=3256" tabindex="-1">Create &amp; Manage Hostel</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Assign Asst. Warden To Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Trns/HST_hostelwardendtl.aspx?Mwpid=3261" tabindex="-1">Assign Asst. Warden To Hostel</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Assign User For Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/Hst_AssignedUser_Mst.aspx?Mwpid=4150" tabindex="-1">Assign User For Hostel</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:53" role="menuitem" style="position: relative;"><a title="Fee Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035#?Mwpid=3700" tabindex="-1">Fee Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:53" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeTypeMaster.aspx?Mwpid=3538" tabindex="-1">Create &amp; Manage Fee Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Head" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeHeads.aspx?Mwpid=3539" tabindex="-1">Create &amp; Manage Fee Head</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Structure" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeStructure.aspx?Mwpid=3540" tabindex="-1">Create &amp; Manage Fee Structure</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Exemption" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_Exemption.aspx?Mwpid=3550" tabindex="-1">Create &amp; Manage Fee Exemption</a></li>
+			</ul></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="NULL" class="level2 dynamic" href="https://hauiums.in/UMM/UMM_PasswordPolicyManager.aspx?Mwpid=3811" tabindex="-1">Password Policies</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:61" role="menuitem" style="position: relative; float: left;"><a title="Farms/Plants" class="level1 static" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035#?Mwpid=3982" tabindex="-1">Farms/Plants</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:61" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Scheme Master" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_Scheme_Mst.aspx?Mwpid=2447" tabindex="-1">Scheme Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="User Location Scheme Map" class="level2 dynamic" href="https://hauiums.in/LRS/Location_SchemeMapping_Mst.aspx?Mwpid=2448" tabindex="-1">User Location Scheme Map</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Financial Year Master" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_FinYear_Mst.aspx?Mwpid=2443" tabindex="-1">Financial Year Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Change Financial Year" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_Change_FinancialYear.aspx?Mwpid=2484" tabindex="-1">Change Financial Year</a></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Manage Users</span>&nbsp;&gt;&nbsp;<strong>User Master</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./User Master,html_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <script src="./User Master,html_files/utf8.js.download" type="text/javascript"></script>
+    <script src="./User Master,html_files/sha1.js.download" type="text/javascript"></script>
+    <script type="text/javascript">
+        function setval() {
+
+            if (document.getElementById('ctl00_ContentPlaceHolder1_txtPassword').value == "") {
+                document.getElementById('ctl00_ContentPlaceHolder1_hash').value = null;
+                document.getElementById('ctl00_ContentPlaceHolder1_txtPassword').focus();
+                return false;
+            }
+            document.getElementById('ctl00_ContentPlaceHolder1_hash').value = Sha1.hash(document.getElementById('ctl00_ContentPlaceHolder1_txtPassword').value);
+            //document.getElementById('ctl00_ContentPlaceHolder1_txtPassword').value = '';
+        }
+    </script>
+    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; text-align: left;">
+        <tbody><tr>
+            <td colspan="7" class="tableheading">New User Creation
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblOffice">Office Type
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlOffice__"><select name="ctl00$ContentPlaceHolder1$D_ddlOffice" id="ctl00_ContentPlaceHolder1_D_ddlOffice" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlOffice&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option selected="selected" value="">--Select Office--</option>
+	<option value="1">CITY</option>
+	<option value="2">COUNTRY</option>
+	<option value="3">DISTRICT</option>
+	<option value="4">HEAD OFFICE</option>
+	<option value="5">UNIT</option>
+
+</select></span>
+            </td>
+            <td></td>
+            <td class="vtext" id="lblDLocation">Default Login Location
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlDLocation__"><select name="ctl00$ContentPlaceHolder1$D_ddlDLocation" id="ctl00_ContentPlaceHolder1_D_ddlDLocation" class="dropdownlong">
+	<option selected="selected" value=""> -- Select Location --</option>
+	<option value="CO-83">ABIC</option>
+	<option value="CO-85">Agri Tourism</option>
+	<option value="CB-78">Campus Hospital</option>
+	<option value="KV-72">Campus School</option>
+	<option value="HA-74">Centre of Excellence</option>
+	<option value="VC-48">CFST, Hisar</option>
+	<option value="VC-49">COA, Hisar</option>
+	<option value="VC-39">COA, Kaul</option>
+	<option value="ES-71">COA,Bawal</option>
+	<option value="VC-50">COAE&amp;T , Hisar</option>
+	<option value="AX-87">COB, Hisar</option>
+	<option value="VC-3">COBS&amp;H, Hisar</option>
+	<option value="AX-80">COFS, Hisar</option>
+	<option value="VC-51">COHS, Hisar</option>
+	<option value="VC-52">Comptroller, Hisar</option>
+	<option value="VC-18">CRS, Sirsa</option>
+	<option value="AX-84">CSSRI KARNAL</option>
+	<option value="VC-53">Dean, PGS, Hisar</option>
+	<option value="VC-11">DEE, Hisar</option>
+	<option value="KV-73">Director, Stores and Purchase Office</option>
+	<option value="VC-54">Directorate of Farm, Hisar</option>
+	<option value="VC-55">Directorate of Research, Hisar</option>
+	<option value="VC-56">DSW, Hisar</option>
+	<option value="VC-42">EEI, NILOKHERI</option>
+	<option value="AG-76">Entomology, COA, Hisar</option>
+	<option value="VC-57">EOSE,Hisar</option>
+	<option value="ES-69">HAU,Bawal</option>
+	<option value="VC-58">HRM, Hisar</option>
+	<option value="AX-86">IBMA, Gurugram</option>
+	<option value="BW-81">IIWBR, Karnal</option>
+	<option value="VC-15">KVK Ambala, Ambala</option>
+	<option value="DH-89">Kvk Chhappera, Nuh</option>
+	<option value="ES-45">KVK Faridabad , Bhopani</option>
+	<option value="ES-47">KVK Fatehabad, Dhani Bikaneri</option>
+	<option value="VC-26">KVK Jind</option>
+	<option value="VC-65">KVK Panipat , Ujha</option>
+	<option value="VC-12">KVK Sonepat, Jagdishpur</option>
+	<option value="VC-66">KVK Yamunanagar, Damla</option>
+	<option value="CB-75">KVK, Bawal</option>
+	<option value="VC-34">KVK, Bhiwani</option>
+	<option value="VC-38">KVK, Jhajjar</option>
+	<option value="VC-28">KVK, Kaithal</option>
+	<option value="VC-25">KVK, Karnal</option>
+	<option value="VC-22">KVK, Kurukshetra</option>
+	<option value="VC-4">KVK, Mahendergarh</option>
+	<option value="VC-2">KVK, Mandkola</option>
+	<option value="VC-14">KVK, Pinjore</option>
+	<option value="VC-23">KVK, Rohtak</option>
+	<option value="VC-31">KVK, Sadalpur</option>
+	<option value="VC-6">KVK, Sirsa</option>
+	<option value="VC-68">Landscape Unit, Hisar</option>
+	<option value="ES-70">MHU,HISAR</option>
+	<option value="CO-88">NCRS, Gokulpura</option>
+	<option value="NC-90">NCRS, Gokulpura</option>
+	<option value="VC-59">Nehru Library, Hisar</option>
+	<option value="VC-67">RDS Seed Farm, Hisar</option>
+	<option value="VC-61">Registrar, Hisar</option>
+	<option value="VC-13">RRS Bawal, Bawal</option>
+	<option value="VC-64">RRS Karnal, Uchani</option>
+	<option value="VC-1">RRS Kaul</option>
+	<option value="VC-40">RRS Rohtak , Rohtak</option>
+	<option value="AX-79">RRS, Kaul</option>
+	<option value="AX-77">Test</option>
+	<option value="CO-82">Transport Office</option>
+	<option value="VC-7">VC Office, Hisar</option>
+
+</select></span>*
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblRole">Role of User
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlRole__"><select name="ctl00$ContentPlaceHolder1$D_ddlRole" id="ctl00_ContentPlaceHolder1_D_ddlRole" class="dropdown">
+	<option selected="selected" value="">- Select Role --</option>
+	<option value="1">SOFTWARE MANAGER</option>
+	<option value="2">SUPER ADMIN</option>
+	<option value="3">MIS Admin</option>
+	<option value="4">MODULE ADMIN</option>
+	<option value="5">MODULE USER</option>
+	<option value="6">Bill clerk</option>
+	<option value="7">MODULE USER(TEACHER)</option>
+	<option value="8">DDC  ,and EP</option>
+	<option value="9">DDC and EP(Teacher)</option>
+	<option value="10">hrms</option>
+	<option value="11">AUDITOR</option>
+	<option value="12">External Examiner</option>
+
+</select></span>*
+            </td>
+            <td></td>
+            <td class="vtext">DDO
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlDDO__"><select name="ctl00$ContentPlaceHolder1$ddlDDO" id="ctl00_ContentPlaceHolder1_ddlDDO" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlDDO&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option selected="selected" value="">-- Select DDO --</option>
+	<option value="VC-23">[ 100 ] DDO, VC Office</option>
+	<option value="VC-30">[ 101 ] Dean, PGS</option>
+	<option value="VC-1">[ 102 ] Director, CFST</option>
+	<option value="VC-37">[ 103 ] Comptroller</option>
+	<option value="VC-51">[ 104 ] Director, Stores and Purchase Office</option>
+	<option value="VC-24">[ 105 ] DDO, Directorate of Research</option>
+	<option value="VC-11">[ 106 ] Regional Director, RRS Karnal</option>
+	<option value="VC-16">[ 107 ] Regional Director, RRS Kaul</option>
+	<option value="VC-5">[ 108 ] Regional Director, RRS Rohtak</option>
+	<option value="VC-28">[ 109 ] Regional Director, RRS, Bawal</option>
+	<option value="VC-22">[ 110 ] Regional Director, CRS Sirsa</option>
+	<option value="VC-35">[ 111 ] A&amp;AO, DEE</option>
+	<option value="VC-12">[ 112 ] Sr. Coorinator, KVK, Jind</option>
+	<option value="VC-2">[ 113 ] Sr. Coordinator, KVK, Sadalpur</option>
+	<option value="VC-14">[ 114 ] Sr. Coordinator, KVK, Kurukshetra</option>
+	<option value="VC-15">[ 115 ] Sr. Coordinator, KVK, Pinjore</option>
+	<option value="VC-25">[ 116 ] Sr. Coordinator, KVK, Panipat</option>
+	<option value="VC-27">[ 117 ] Sr. Coordinator, KVK, Sonipat</option>
+	<option value="VC-33">[ 118 ] Sr. Coordinator, KVK, Mahendergarh</option>
+	<option value="VC-21">[ 119 ] Sr. Coordinator, KVK, Karnal</option>
+	<option value="VC-29">[ 120 ] Sr. Coordinator, KVK, Sirsa</option>
+	<option value="CO-98">[ 120 ] DDO Agri Tourism</option>
+	<option value="VC-36">[ 121 ] Sr. Coordinator, KVK, Jhajjar</option>
+	<option value="VC-43">[ 122 ] Sr. Coordinator, KVK Ambala</option>
+	<option value="VC-42">[ 123 ] Sr. Coordinator, KVK Bhiwani</option>
+	<option value="VC-41">[ 124 ] Sr. Coordinator, KVK Faridabad</option>
+	<option value="VC-40">[ 125 ] Sr. Coordinator, KVK Fatehabad</option>
+	<option value="VC-39">[ 126 ] Sr. Coordinator, KVK, Yamunanagar</option>
+	<option value="VC-38">[ 127 ] Sr. Coordinator, KVK, Mandkola</option>
+	<option value="VC-4">[ 128 ] Regional Director, EEI Nilokheri</option>
+	<option value="VC-9">[ 129 ] Sr. Coordinator, KVK, Kaithal</option>
+	<option value="VC-7">[ 130 ] Sr. Coordinator, KVK, Rohtak</option>
+	<option value="KV-86">[ 131 ] Sr. Coordinator, KVK Bawal</option>
+	<option value="ES-40">[ 132 ] A&amp;AO, Registrar</option>
+	<option value="VC-70">[ 133 ] Principal, Campus School</option>
+	<option value="VC-26">[ 134 ] Director, Directorate of Farms</option>
+	<option value="VC-84">[ 135 ] Director, RDS Farm</option>
+	<option value="VC-82">[ 136 ] University Librarian</option>
+	<option value="VC-34">[ 137 ] Director, DSW</option>
+	<option value="VC-19">[ 142 ] A&amp;AO, COA</option>
+	<option value="VC-48">[ 143 ] HOD, Agronomy</option>
+	<option value="VC-62">[ 144 ] HOD, Extension Education</option>
+	<option value="VC-45">[ 145 ] HOD, Agricultural Meteorology</option>
+	<option value="VC-44">[ 146 ] HOD, Agricultural Economics</option>
+	<option value="VC-47">[ 147 ] HOD, Entomology</option>
+	<option value="VC-60">[ 148 ] HOD, Horticulture</option>
+	<option value="VC-52">[ 149 ] HOD, GPB</option>
+	<option value="VC-57">[ 150 ] HOD, Nematology</option>
+	<option value="VC-80">[ 151 ] Principal, COA Kaul</option>
+	<option value="VC-78">[ 152 ] HOD, Forestry</option>
+	<option value="VC-63">[ 153 ] HOD, Seed Science &amp; Technology</option>
+	<option value="VC-59">[ 154 ] HOD, Vegetable Science</option>
+	<option value="VC-61">[ 155 ] HOD, Soil Science</option>
+	<option value="VC-56">[ 156 ] HOD, Bussiness Management</option>
+	<option value="VC-68">[ 157 ] HOD, Plant Pathology</option>
+	<option value="KZ-93">[ 158 ] Principal, COA, Bawal</option>
+	<option value="VC-53">[ 159 ] HOD, Dry land Agriculture</option>
+	<option value="VC-73">[ 160 ] HOD, Family Resource Management</option>
+	<option value="VC-65">[ 161 ] HOD, EECM</option>
+	<option value="VC-58">[ 162 ] HOD, HDFS</option>
+	<option value="VC-8">[ 163 ] A&amp;AO, COHS</option>
+	<option value="VC-55">[ 164 ] HOD, Foods and Nutrition</option>
+	<option value="VC-54">[ 165 ] HOD, Textile and Apparel Designing</option>
+	<option value="KV-87">[ 166 ] HOD, Instrumentation Cell</option>
+	<option value="VC-67">[ 167 ] HOD, FMPE</option>
+	<option value="VC-3">[ 168 ] A&amp;AO, COAE&amp;T</option>
+	<option value="VC-74">[ 169 ] HOD, Basic Engineering</option>
+	<option value="VC-79">[ 170 ] HOD, Processing and Food Engineering</option>
+	<option value="KV-88">[ 171 ] HOD, Transport Organization</option>
+	<option value="KV-89">[ 172 ] HOD, Renewable &amp; Bio-energy</option>
+	<option value="HA-92">[ 173 ] Deen Dayal Upadhaya Centre of Excellence for Organic Farming</option>
+	<option value="VC-64">[ 174 ] HOD, Soil and Water Engineering</option>
+	<option value="VC-75">[ 175 ] HOD, Mathematics and&nbsp;Statistics</option>
+	<option value="VC-76">[ 176 ] HOD, Botany &amp; Plant Physiology</option>
+	<option value="VC-77">[ 177 ] HOD, Zoology</option>
+	<option value="KZ-90">[ 178 ] HOD, Chemistry</option>
+	<option value="KZ-91">[ 179 ] HOD, Physics</option>
+	<option value="VC-46">[ 180 ] HOD, Languages and Haryanvi Culture</option>
+	<option value="VC-81">[ 181 ] HOD, Biochemistry</option>
+	<option value="VC-72">[ 182 ] HOD, Sociology</option>
+	<option value="VC-49">[ 183 ] HOD, MBBB</option>
+	<option value="VC-50">[ 184 ] Incharge, Computer Section</option>
+	<option value="VC-32">[ 185 ] A&amp;AO, COBS&amp;H</option>
+	<option value="KV-85">[ 186 ] HOD, Microbiology</option>
+	<option value="VC-17">[ 187 ] DDO, EOCE</option>
+	<option value="VC-66">[ 188 ] CO, LSU</option>
+	<option value="VC-83">[ 189 ] DHRM</option>
+	<option value="VC-71">[ 195 ] HOD, Forage</option>
+	<option value="AX-94">[ 199 ] HAU Agri Tourism</option>
+	<option value="CB-95">[ 200 ] Campus Hospital</option>
+	<option value="AZ-96">[ 201 ] COFS, Hisar</option>
+	<option value="AX-99">[ 202 ] College of Biotechnology</option>
+	<option value="CO-100">[ 203 ] Regional Director, NCRS Gokalpura</option>
+	<option value="CO-101">[ 204 ] Sr. Coordinator, KVK, Chhappera, Nuh</option>
+	<option value="CO-97">[ ABIC ] ABIC</option>
+
+</select></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblfinyear">Financial Year
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlfinyear__"><select name="ctl00$ContentPlaceHolder1$D_ddlfinyear" id="ctl00_ContentPlaceHolder1_D_ddlfinyear" class="dropdownlong">
+	<option selected="selected" value="">-- Select Financial Year --</option>
+	<option value="CO-19">2026-2027</option>
+	<option value="CO-18">2025-2026</option>
+	<option value="CO-17">2024-2025</option>
+	<option value="CO-16">2023-2024</option>
+	<option value="CO-15">2022-2023</option>
+	<option value="CO-13">2021-2022</option>
+	<option value="CO-11">2020-2021</option>
+	<option value="ES-10">2019-2020</option>
+	<option value="VC-9">2018-2019</option>
+	<option value="RO-8">2017-2018</option>
+	<option value="VC-7">2016-2017</option>
+	<option value="IF-6">2015-2016</option>
+	<option value="OF-5">2014-2015</option>
+	<option value="KG-1">2013-2014</option>
+	<option value="KG-2">2012-2013</option>
+	<option value="KG-3">2011-2012</option>
+	<option value="KG-4">2010-2011</option>
+	<option value="DH-12">2009-2010</option>
+	<option value="CO-14">2008-2009</option>
+
+</select></span>
+            </td>
+            <td></td>
+            <td class="vtext">Father Name
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtFatherName__"><input name="ctl00$ContentPlaceHolder1$txtFatherName" type="text" maxlength="100" id="ctl00_ContentPlaceHolder1_txtFatherName" class="textboxlong"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblEmpName">Employees Code
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlEmpName__"><select name="ctl00$ContentPlaceHolder1$ddlEmpName" id="ctl00_ContentPlaceHolder1_ddlEmpName" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlEmpName&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option selected="selected" value="">-- Select Employee --</option>
+
+</select></span>*
+            </td>
+            <td></td>
+            <td class="vtext">Employee Name
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtEmpname__"><input name="ctl00$ContentPlaceHolder1$txtEmpname" type="text" maxlength="100" id="ctl00_ContentPlaceHolder1_txtEmpname" class="textboxlong"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Department
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtDepartment__"><input name="ctl00$ContentPlaceHolder1$txtDepartment" type="text" maxlength="100" id="ctl00_ContentPlaceHolder1_txtDepartment" class="textboxlong"></span>
+            </td>
+            <td></td>
+            <td class="vtext">Designation
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtDesignation__"><input name="ctl00$ContentPlaceHolder1$txtDesignation" type="text" maxlength="100" id="ctl00_ContentPlaceHolder1_txtDesignation" class="textboxlong"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Email
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_M_txtEmail__"><input name="ctl00$ContentPlaceHolder1$M_txtEmail" type="text" maxlength="50" id="ctl00_ContentPlaceHolder1_M_txtEmail" class="textboxlong"></span>
+            </td>
+            <td></td>
+            <td class="vtext">Remarks
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtRemarks__"><input name="ctl00$ContentPlaceHolder1$txtRemarks" type="text" maxlength="100" id="ctl00_ContentPlaceHolder1_txtRemarks" class="textboxlong"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Active
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_chkStatus__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_chkStatus" type="checkbox" name="ctl00$ContentPlaceHolder1$chkStatus" checked="checked"></span></span>
+            </td>
+            <td></td>
+            <td class="vtext">IsDoctor
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_chkisdocstatus__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_chkisdocstatus" type="checkbox" name="ctl00$ContentPlaceHolder1$chkisdocstatus"></span></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" style="width: 15%" id="lblUserName">Login ID
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtUserName__"><input name="ctl00$ContentPlaceHolder1$R_txtUserName" type="text" id="ctl00_ContentPlaceHolder1_R_txtUserName" class="textbox"></span>*
+            </td>
+            <td></td>
+            <td class="vtext">Password
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtPassword__"><input name="ctl00$ContentPlaceHolder1$txtPassword" type="password" maxlength="15" id="ctl00_ContentPlaceHolder1_txtPassword" class="textbox"></span>*
+                <input name="ctl00$ContentPlaceHolder1$hash" type="hidden" id="ctl00_ContentPlaceHolder1_hash" readonly="" autocomplete="off">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="5">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tbody><tr>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnSave__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="SAVE" onclick="setval();javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSave&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;SAVING...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSave" class="button-common" cellpadding="0" cellspacing="0" style="height: 26px"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tablesubheading">List Of Users
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_dgDetails__"><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td>S. No.</td><td>LoginID</td><td>Name</td><td>Department</td><td>Designation</td><td>Role</td><td>Active</td><td>EDIT</td><td>DELETE</td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:8%;">1</td><td>AAO_BUDGET</td><td>AAO-Budget</td><td>&nbsp;</td><td>AAO</td><td>MODULE USER</td><td align="center" style="width:8%;">Yes</td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./User Master,html_files/Edit.gif" alt="" border="0"></a></span>
+                            </td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;)"><img src="./User Master,html_files/Delete.gif" alt="" border="0"></a></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:8%;">2</td><td>Acc_approval</td><td>Acc_approval</td><td>Acc_approval</td><td>Acc_approval</td><td>MODULE USER</td><td align="center" style="width:8%;">Yes</td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./User Master,html_files/Edit.gif" alt="" border="0"></a></span>
+                            </td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete&#39;,&#39;&#39;)"><img src="./User Master,html_files/Delete.gif" alt="" border="0"></a></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:8%;">3</td><td>acc_icar</td><td>Account-ICAR</td><td>&nbsp;</td><td>&nbsp;</td><td>MODULE USER</td><td align="center" style="width:8%;">Yes</td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./User Master,html_files/Edit.gif" alt="" border="0"></a></span>
+                            </td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete&#39;,&#39;&#39;)"><img src="./User Master,html_files/Delete.gif" alt="" border="0"></a></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:8%;">4</td><td>acc_inc</td><td>acc_income</td><td>acc_income</td><td>acc_income</td><td>MODULE USER</td><td align="center" style="width:8%;">Yes</td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./User Master,html_files/Edit.gif" alt="" border="0"></a></span>
+                            </td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete&#39;,&#39;&#39;)"><img src="./User Master,html_files/Delete.gif" alt="" border="0"></a></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:8%;">5</td><td>acc_non</td><td>Account-NonPlan</td><td>&nbsp;</td><td>&nbsp;</td><td>MODULE USER</td><td align="center" style="width:8%;">Yes</td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./User Master,html_files/Edit.gif" alt="" border="0"></a></span>
+                            </td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete&#39;,&#39;&#39;)"><img src="./User Master,html_files/Delete.gif" alt="" border="0"></a></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:8%;">6</td><td>acc_plan</td><td>Account-Plan</td><td>&nbsp;</td><td>&nbsp;</td><td>MODULE USER</td><td align="center" style="width:8%;">Yes</td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./User Master,html_files/Edit.gif" alt="" border="0"></a></span>
+                            </td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete&#39;,&#39;&#39;)"><img src="./User Master,html_files/Delete.gif" alt="" border="0"></a></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:8%;">7</td><td>AR_PENSION</td><td>AR_PENSION</td><td>&nbsp;</td><td>&nbsp;</td><td>MODULE USER</td><td align="center" style="width:8%;">Yes</td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./User Master,html_files/Edit.gif" alt="" border="0"></a></span>
+                            </td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete&#39;,&#39;&#39;)"><img src="./User Master,html_files/Delete.gif" alt="" border="0"></a></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:8%;">8</td><td>Auditor- Library</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>MODULE USER</td><td align="center" style="width:8%;">Yes</td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./User Master,html_files/Edit.gif" alt="" border="0"></a></span>
+                            </td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete&#39;,&#39;&#39;)"><img src="./User Master,html_files/Delete.gif" alt="" border="0"></a></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:8%;">9</td><td>Auditor_Bawal</td><td>Auditor_Bawal</td><td>Auditor_Bawal</td><td>Auditor_Bawal</td><td>MODULE USER</td><td align="center" style="width:8%;">Yes</td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./User Master,html_files/Edit.gif" alt="" border="0"></a></span>
+                            </td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete&#39;,&#39;&#39;)"><img src="./User Master,html_files/Delete.gif" alt="" border="0"></a></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:8%;">10</td><td>auditor_cfst</td><td>auditor cfst</td><td>&nbsp;</td><td>&nbsp;</td><td>MODULE USER</td><td align="center" style="width:8%;">Yes</td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;)">
+                    <img src="./User Master,html_files/Edit.gif" alt="" border="0"></a></span>
+                            </td><td align="center" style="width:8%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete&#39;,&#39;&#39;)"><img src="./User Master,html_files/Delete.gif" alt="" border="0"></a></span>
+                            </td>
+	</tr><tr class="pager-style" align="center" style="color:#000000;">
+		<td colspan="9"><span>1</span>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;Page$2&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;&#39;)" style="color:#000000;">2</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;Page$3&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;&#39;)" style="color:#000000;">3</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl03&#39;,&#39;Page$4&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl03&#39;,&#39;&#39;)" style="color:#000000;">4</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl04&#39;,&#39;Page$5&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl04&#39;,&#39;&#39;)" style="color:#000000;">5</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl05&#39;,&#39;Page$6&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl05&#39;,&#39;&#39;)" style="color:#000000;">6</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl06&#39;,&#39;Page$7&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl06&#39;,&#39;&#39;)" style="color:#000000;">7</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl07&#39;,&#39;Page$8&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl07&#39;,&#39;&#39;)" style="color:#000000;">8</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl08&#39;,&#39;Page$9&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl08&#39;,&#39;&#39;)" style="color:#000000;">9</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl09&#39;,&#39;Page$10&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl09&#39;,&#39;&#39;)" style="color:#000000;">10</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl10&#39;,&#39;Page$11&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl10&#39;,&#39;&#39;)" style="color:#000000;">...</a></td>
+	</tr>
+</tbody></table></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+
+        <tr>
+            <td colspan="7">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_pnlSearch1__"><div id="ctl00_ContentPlaceHolder1_pnlSearch1">
+	
+                    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; text-align: left;">
+                        <tbody><tr>
+                            <td colspan="7" class="tablesubheading">User Search
+                            </td>
+
+                            <td class="tablesubheading">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_lnkHide__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$lnkHide&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_lnkHide" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$lnkHide&#39;,&#39;&#39;)">Show / Hide</a></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="7">
+                                <div id="Anthem_ctl00_ContentPlaceHolder1_pnlSearch__"><div id="ctl00_ContentPlaceHolder1_pnlSearch" style="width:100%;">
+		
+                                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                        <tbody><tr>
+                                            <td class="vtext">LoginID
+                                            </td>
+                                            <td class="colon">:
+                                            </td>
+                                            <td class="required">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_txtLoginID__"><input name="ctl00$ContentPlaceHolder1$txtLoginID" type="text" maxlength="25" id="ctl00_ContentPlaceHolder1_txtLoginID" class="textbox"></span>
+                                            </td>
+                                            <td></td>
+                                            <td class="vtext">Name
+                                            </td>
+                                            <td class="colon">:
+                                            </td>
+                                            <td class="required">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_txtNameSearch__"><input name="ctl00$ContentPlaceHolder1$txtNameSearch" type="text" maxlength="50" id="ctl00_ContentPlaceHolder1_txtNameSearch" class="textbox"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="vtext">Department
+                                            </td>
+                                            <td class="colon">:
+                                            </td>
+                                            <td class="required">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_txtDepartmentSearch__"><input name="ctl00$ContentPlaceHolder1$txtDepartmentSearch" type="text" maxlength="255" id="ctl00_ContentPlaceHolder1_txtDepartmentSearch" class="textboxlong"></span>
+                                            </td>
+                                            <td></td>
+                                            <td class="vtext">Designation
+                                            </td>
+                                            <td class="colon">:
+                                            </td>
+                                            <td class="required">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_txtDesignationSearch__"><input name="ctl00$ContentPlaceHolder1$txtDesignationSearch" type="text" maxlength="255" id="ctl00_ContentPlaceHolder1_txtDesignationSearch" class="textboxlong"></span>
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td class="vtext">Role of User
+                                            </td>
+                                            <td class="colon">:
+                                            </td>
+                                            <td class="required">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlRoleSearch__"><select name="ctl00$ContentPlaceHolder1$D_ddlRoleSearch" id="ctl00_ContentPlaceHolder1_D_ddlRoleSearch" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlRoleSearch&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+			<option selected="selected" value="">- Select Role --</option>
+			<option value="1">SOFTWARE MANAGER</option>
+			<option value="2">SUPER ADMIN</option>
+			<option value="3">MIS Admin</option>
+			<option value="4">MODULE ADMIN</option>
+			<option value="5">MODULE USER</option>
+			<option value="6">Bill clerk</option>
+			<option value="7">MODULE USER(TEACHER)</option>
+			<option value="8">DDC  ,and EP</option>
+			<option value="9">DDC and EP(Teacher)</option>
+			<option value="10">hrms</option>
+			<option value="11">AUDITOR</option>
+			<option value="12">External Examiner</option>
+
+		</select></span>
+
+                                            </td>
+                                        </tr>
+
+
+
+                                        <tr>
+                                            <td colspan="7" class="tdgap"></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="7">
+                                                <table border="0" cellpadding="0" cellspacing="0">
+                                                    <tbody><tr>
+
+                                                        <td>
+                                                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnView__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnView" value="VIEW" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnView&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnView" class="button-common" cellpadding="0" cellspacing="0"></span>
+                                                        </td>
+                                                        <td class="btngap"></td>
+                                                        <td>
+                                                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnSReaet__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSReaet" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSReaet&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSReaet" class="button-common" cellpadding="0" cellspacing="0"></span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody></table>
+                                            </td>
+                                        </tr>
+                                    </tbody></table>
+                                
+	</div></div>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                
+</div></div>
+            </td>
+        </tr>
+
+
+
+
+        
+    </tbody></table>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_D_ddlOffice');//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./User Master,html_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./User Master,html_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

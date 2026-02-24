@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- FILTER FORM -->
+<form method="POST" id="reportForm">
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="6">
+                    <span class="mainheadingborderbottom">Course Detail Report</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Applicable From</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <select name="session_from" id="rpt_from" class="dropdown w-200">
+                        <option value="0">-- Select Session From --</option>
+                        {% for s in sessions %}<option value="{{ s.id }}" {{ 'selected' if filters and filters.session_from|string == s.id|string }}>{{ s.name }}</option>{% endfor %}
+                    </select>
+                </td>
+                <td class="vtext" width="15%">Applicable Upto</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <select name="session_upto" id="rpt_upto" class="dropdown w-200">
+                        <option value="0">-- Select Session Upto --</option>
+                        {% for s in sessions %}<option value="{{ s.id }}" {{ 'selected' if filters and filters.session_upto|string == s.id|string }}>{{ s.name }}</option>{% endfor %}
+                    </select>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <select name="degree_id" id="rpt_degree" class="dropdown w-250" onchange="loadDepartments(this.value); loadClasses(this.value);">
+                        <option value="0">-- Select Degree --</option>
+                        {% for d in degrees %}<option value="{{ d.id }}" {{ 'selected' if filters and filters.degree_id|string == d.id|string }}>{{ d.name }}</option>{% endfor %}
+                    </select>
+                </td>
+                <td class="vtext" width="15%">Department</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <select name="dept_id" id="rpt_dept" class="dropdown w-200">
+                        <option value="0">--Select Department--</option>
+                    </select>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Class</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="semester_id" id="rpt_sem" class="dropdown w-150" onchange="autoFillYear(this.value)">
+                        <option value="0">--Select Class--</option>
+                    </select>
+                </td>
+                <td class="vtext">Year</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="year_id" id="rpt_year" class="dropdown w-150" style="background:#f4f4f4;">
+                        <option value="0">--Select Year--</option>
+                        {% for y in years %}<option value="{{ y.pk_degreeyearid }}">{{ y.degreeyear_char }}</option>{% endfor %}
+                    </select>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Report Format</td>
+                <td class="colon">:</td>
+                <td style="font-size: 11px;" colspan="4">
+                    <label><input type="radio" name="rpt_format" value="1" {{ 'checked' if not filters or filters.rpt_format == '1' }}> View</label>
+                    <label style="margin-left:10px;"><input type="radio" name="rpt_format" value="2" {{ 'checked' if filters and filters.rpt_format == '2' }}> Excel</label>
+                    <label style="margin-left:10px;"><input type="radio" name="rpt_format" value="3" {{ 'checked' if filters and filters.rpt_format == '3' }}> PDF</label>
+                </td>
+            </tr>
+            
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="submit" value="VIEW" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="location.href='{{ url_for('academics.course_detail_report') }}'" style="margin-left:10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+{% if data %}
+<br>
+<div style="margin-top: 20px;">
+    <div class="tablesubheading">
+        <span class="subheadingborderbottom">Course Details</span>
+    </div>
+    <table class="table-grid-view" width="100%">
+        <thead>
+            <tr class="header-style">
+                <th width="3%">S.No.</th>
+                <th width="10%">Code</th>
+                <th width="30%">Course Name</th>
+                <th width="15%">Degree</th>
+                <th width="8%">Semester</th>
+                <th width="5%">Th</th>
+                <th width="5%">Pr</th>
+                <th width="5%">Total</th>
+                <th width="10%">Compulsory</th>
+                <th width="9%">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                <td align="center">{{ loop.index }}</td>
+                <td><b>{{ item.coursecode }}</b></td>
+                <td>{{ item.coursename }}</td>
+                <td>{{ item.degreename }}</td>
+                <td align="center">{{ item.semester_roman }}</td>
+                <td align="center">{{ item.crhr_theory }}</td>
+                <td align="center">{{ item.crhr_practical }}</td>
+                <td align="center"><b>{{ item.total_crhr }}</b></td>
+                <td align="center">{{ item.compulsory }}</td>
+                <td align="center">
+                    <span style="color: {{ 'green' if item.status == 'Active' else 'red' }}; font-weight: bold;">{{ item.status }}</span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% elif request.method == 'POST' %}
+<div style="text-align:center; padding:50px; color:#999;">
+    No records found for the selected filters.
+</div>
+{% endif %}
+
+<script>
+async function loadDepartments(degreeId) {
+    const deptSelect = document.getElementById('rpt_dept');
+    deptSelect.innerHTML = '<option value="0">Loading...</option>';
+    if (!degreeId || degreeId == '0') {
+        deptSelect.innerHTML = '<option value="0">--Select Department--</option>';
+        return;
+    }
+    try {
+        const r = await fetch(`/academics/api/degree/${degreeId}/departments`);
+        const depts = await r.json();
+        let html = '<option value="0">--Select Department--</option>';
+        depts.forEach(d => {
+            html += `<option value="${d.id}">${d.name}</option>`;
+        });
+        deptSelect.innerHTML = html;
+    } catch(e) {
+        deptSelect.innerHTML = '<option value="0">Error loading departments</option>';
+    }
+}
+
+async function loadClasses(degreeId) {
+    const semSelect = document.getElementById('rpt_sem');
+    semSelect.innerHTML = '<option value="0">Loading...</option>';
+    if (!degreeId || degreeId == '0') {
+        semSelect.innerHTML = '<option value="0">--Select Class--</option>';
+        return;
+    }
+    try {
+        const r = await fetch(`/academics/api/get_degree_semesters/${degreeId}`);
+        const sems = await r.json();
+        let html = '<option value="0">--Select Class--</option>';
+        sems.forEach(s => {
+            html += `<option value="${s.id}">${s.name}</option>`;
+        });
+        semSelect.innerHTML = html;
+    } catch(e) {
+        semSelect.innerHTML = '<option value="0">Error loading classes</option>';
+    }
+}
+
+async function autoFillYear(semId) {
+    const yearSelect = document.getElementById('rpt_year');
+    if (!semId || semId == '0') return;
+    
+    try {
+        const r = await fetch(`/academics/api/get_semester_year/${semId}`);
+        const year = await r.json();
+        if (year && year.pk_degreeyearid) {
+            yearSelect.value = year.pk_degreeyearid;
+            yearSelect.disabled = true; // Make it gray/non-editable
+            // Add a hidden field to ensure value is POSTed since disabled fields aren't
+            let hiddenYear = document.getElementById('hidden_year');
+            if (!hiddenYear) {
+                hiddenYear = document.createElement('input');
+                hiddenYear.type = 'hidden';
+                hiddenYear.name = 'year_id';
+                hiddenYear.id = 'hidden_year';
+                yearSelect.parentNode.appendChild(hiddenYear);
+            }
+            hiddenYear.value = year.pk_degreeyearid;
+        } else {
+            yearSelect.disabled = false;
+        }
+    } catch(e) {
+        yearSelect.disabled = false;
+    }
+}
+
+// Re-trigger if page was loaded with filters (POST)
+document.addEventListener('DOMContentLoaded', () => {
+    const degreeId = document.getElementById('rpt_degree').value;
+    const semId = document.getElementById('rpt_sem').value;
+    if (degreeId && degreeId != '0') {
+        // We might need to handle pre-selection if needed, but for now simple refresh is fine
+    }
+});
+</script>
+{% endblock %}

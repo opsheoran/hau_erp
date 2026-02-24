@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" id="aspnetForm">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="edit_id" value="{{ edit_data.id if edit_data else '' }}">
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="text-align:left;">
+        <tbody>
+            <tr>
+                <td colspan="3" class="tableheading">
+                    <span class="mainheadingborderbottom">{{ title }}</span>
+                </td>
+            </tr>
+            <tr><td colspan="3" class="tdgap" height="10"></td></tr>
+
+            <tr>
+                <td class="vtext" style="width: 20%">Name</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="name" type="text" maxlength="100" id="txtName" class="textboxlong" value="{{ edit_data.name if edit_data else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+
+            {% if has_order %}
+            <tr>
+                <td class="vtext">Order No</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="order_no" type="number" id="txtOrder" class="textbox" value="{{ edit_data.order_no if edit_data else '0' }}">
+                </td>
+            </tr>
+            {% endif %}
+
+            <tr><td colspan="3" class="tdgap" height="15"></td></tr>
+            
+            <tr>
+                <td></td><td></td>
+                <td>
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {% if perm.AllowAdd or perm.AllowUpdate %}
+                                    <input type="submit" name="action" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" id="btnSave" class="button-common">
+                                    {% endif %}
+                                </td>
+                                <td class="btngap" style="width:10px;"></td>
+                                <td>
+                                    <input type="submit" name="action" value="RESET" id="btnReset" class="button-common">
+                                </td>
+                                <td class="btngap" style="width:10px;"></td>
+                                <td>
+                                    <input type="button" value="Print" class="button-common" onclick="window.print();">
+                                </td>
+                                <td class="btngap" style="width:10px;"></td>
+                                <td>
+                                    <span id="lblMsg" class="lblmessage" style="margin-left:20px; font-weight:bold; color:Green;">
+                                        {% with messages = get_flashed_messages(category_filter=["success"]) %}
+                                            {% if messages %}{{ messages[-1] }}{% endif %}
+                                        {% endwith %}
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="margin-top:30px;">
+        <tbody>
+            <tr>
+                <td class="tablesubheading" colspan="3">
+                    <span class="subheadingborderbottom">List of Details</span>
+                </td>
+            </tr>
+            <tr><td height="10" colspan="3"></td></tr>
+            
+            <tr>
+                <td colspan="3">
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1" style="border-collapse:collapse;" id="dgDetails">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="8%">S. No.</th>
+                                <th>Name</th>
+                                {% if has_order %}<th width="15%">Order No</th>{% endif %}
+                                <th width="8%">EDIT</th>
+                                <th width="8%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for d in data %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                <td align="center">{{ loop.index + pagination.per_page * (pagination.page - 1) }}</td>
+                                <td>{{ d.name }}</td>
+                                {% if has_order %}<td align="center">{{ d.order_no }}</td>{% endif %}
+                                <td align="center">
+                                    <a href="{{ url_for('establishment.' + key + '_master', edit_id=d.id, page=pagination.page) }}">
+                                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    <button type="submit" name="action" value="DELETE" onclick="return confirm('Are you sure?');" style="border:none; background:none; cursor:pointer; padding:0;">
+                                        <input type="hidden" name="delete_id" value="{{ d.id }}">
+                                        <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                                    </button>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="{{ 5 if has_order else 4 }}" align="center">No records found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div style="margin-top:10px;">
+                        {% include 'includes/pagination.html' %}
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+{% endblock %}

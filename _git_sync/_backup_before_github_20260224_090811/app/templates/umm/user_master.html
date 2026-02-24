@@ -1,0 +1,386 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="POST" id="frmUserMaster" onsubmit="return setval();">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    {% if edit_data %}<input type="hidden" name="edit_id" value="{{ edit_data.id }}">{% endif %}
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">New User Creation</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+
+            <tr>
+                <td class="vtext" id="lblOffice">Office Type</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="office_type" id="ctl00_ContentPlaceHolder1_D_ddlOffice" class="dropdownlong">
+                        <option value="">--Select Office--</option>
+                        {% for ot in office_types %}
+                            <option value="{{ ot.id }}">{{ ot.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td></td>
+                <td class="vtext" id="lblDLocation">Default Login Location</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="location" id="ctl00_ContentPlaceHolder1_D_ddlDLocation" class="dropdownlong" required>
+                        <option value=""> -- Select Location --</option>
+                        {% for loc in locations %}
+                            <option value="{{ loc.id }}" {% if edit_data and (edit_data.location|string) == (loc.id|string) %}selected{% endif %}>{{ loc.name }}</option>
+                        {% endfor %}
+                    </select><span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext" id="lblRole">Role of User</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="role" id="ctl00_ContentPlaceHolder1_D_ddlRole" class="dropdown" required>
+                        <option value="">- Select Role --</option>
+                        {% for r in roles %}
+                            <option value="{{ r.id }}" {% if edit_data and (edit_data.role|string) == (r.id|string) %}selected{% endif %}>{{ r.name }}</option>
+                        {% endfor %}
+                    </select><span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">DDO</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="ddo" id="ctl00_ContentPlaceHolder1_ddlDDO" class="dropdownlong">
+                        <option value="">-- Select DDO --</option>
+                        {% for d in ddos %}
+                            <option value="{{ d.id }}" {% if edit_data and (edit_data.ddo|string) == (d.id|string) %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Father Name</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="father_name" type="text" maxlength="100" id="ctl00_ContentPlaceHolder1_txtFatherName" class="textboxlong" value="{{ edit_data.father_name if edit_data else '' }}">
+                </td>
+                <td></td>
+                <td class="vtext" id="lblEmpName">Employees Code</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="emp_id" id="ctl00_ContentPlaceHolder1_ddlEmpName" class="dropdownlong" {% if not edit_data %}required{% endif %}>
+                        <option value="">-- Select Employee --</option>
+                    </select><span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Employee Name</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="emp_name" type="text" maxlength="100" id="ctl00_ContentPlaceHolder1_txtEmpname" class="textboxlong" value="{{ edit_data.emp_name if edit_data else '' }}">
+                </td>
+                <td></td>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="department" type="text" maxlength="100" id="ctl00_ContentPlaceHolder1_txtDepartment" class="textboxlong" value="{{ edit_data.department if edit_data else '' }}">
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Designation</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="designation" type="text" maxlength="100" id="ctl00_ContentPlaceHolder1_txtDesignation" class="textboxlong" value="{{ edit_data.designation if edit_data else '' }}">
+                </td>
+                <td></td>
+                <td class="vtext">Email</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="email" type="text" maxlength="50" id="ctl00_ContentPlaceHolder1_M_txtEmail" class="textboxlong" value="{{ edit_data.email if edit_data else '' }}">
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="remarks" type="text" maxlength="100" id="ctl00_ContentPlaceHolder1_txtRemarks" class="textboxlong" value="{{ edit_data.remarks if edit_data else '' }}">
+                </td>
+                <td></td>
+                <td class="vtext">Active</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <span class="chkbox">
+                        <input id="ctl00_ContentPlaceHolder1_chkStatus" type="checkbox" name="active" {% if not edit_data or edit_data.active %}checked{% endif %}>
+                    </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">IsDoctor</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <span class="chkbox">
+                        <input id="ctl00_ContentPlaceHolder1_chkisdocstatus" type="checkbox" name="is_doctor" {% if edit_data and edit_data.is_doctor %}checked{% endif %}>
+                    </span>
+                </td>
+                <td></td>
+                <td class="vtext" style="width: 15%" id="lblUserName">Login ID</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="login_id" type="text" id="ctl00_ContentPlaceHolder1_R_txtUserName" class="textbox" value="{{ edit_data.login_id if edit_data else '' }}" required {% if edit_data %}readonly style="background:#eee;"{% endif %}><span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Password</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="5">
+                    <input name="password_plain" type="password" maxlength="15" id="ctl00_ContentPlaceHolder1_txtPassword" class="textbox" value="" {% if not edit_data %}required{% endif %}>
+                    <span class="required">*</span>
+                    <input name="password_hash" type="hidden" id="ctl00_ContentPlaceHolder1_hash" readonly autocomplete="off">
+                    {% if edit_data %}
+                        <span style="margin-left:10px; color:#666;">(Leave blank to keep existing)</span>
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr><td colspan="7" height="15"></td></tr>
+            <tr>
+                <td></td><td></td>
+                <td colspan="5">
+                    <input type="submit" name="btnSave" value="SAVE" id="ctl00_ContentPlaceHolder1_btnSave" class="button-common" style="height:26px" onclick="document.getElementById('frmUserMaster').dataset.submitAction='SAVE';">
+                    <input type="hidden" name="action" id="actionField" value="SAVE">
+                    <span style="margin-left:10px;"></span>
+                    <input type="submit" name="btnReset" value="RESET" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" onclick="document.getElementById('frmUserMaster').dataset.submitAction='RESET'; document.getElementById('actionField').value='RESET';">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 20px;">
+    <tbody>
+        <tr>
+            <td colspan="7" class="tablesubheading">
+                <span class="subheadingborderbottom">List Of Users</span>
+            </td>
+        </tr>
+        <tr><td colspan="7" height="10"></td></tr>
+        <tr>
+            <td colspan="7">
+                <table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+                    <tr class="header-style">
+                        <th scope="col">S. No.</th><th scope="col">LoginID</th><th scope="col">Name</th><th scope="col">Department</th><th scope="col">Designation</th><th scope="col">Role</th><th scope="col">Active</th><th scope="col">EDIT</th><th scope="col">DELETE</th>
+                    </tr>
+                    {% for u in users %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center" style="width:8%;">{{ loop.index + (pagination.page - 1) * pagination.per_page }}</td>
+                            <td>{{ u.loginname }}</td>
+                            <td>{{ u.name or '' }}</td>
+                            <td>{{ u.department or '' }}</td>
+                            <td>{{ u.designation or '' }}</td>
+                            <td>{{ u.role or '' }}</td>
+                            <td align="center" style="width:8%;">{{ u.active }}</td>
+                            <td align="center" style="width:8%;">
+                                <a href="{{ url_for('umm.user_master', edit_id=u.id, page=pagination.page, s_login=s_login, s_name=s_name, s_dept=s_dept, s_desig=s_desig, s_role=s_role, s_active=s_active) }}">
+                                    <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="" border="0">
+                                </a>
+                            </td>
+                            <td align="center" style="width:8%;">
+                                <form method="POST" onsubmit="return confirm('Delete this user?');" style="display:inline;">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="delete_id" value="{{ u.id }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete" style="border:none;">
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div style="margin-top:10px;">{% include 'includes/pagination.html' %}</div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<form method="GET">
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 20px;">
+        <tbody>
+            <tr>
+                <td class="tablesubheading">
+                    <span class="subheadingborderbottom">User Search</span>
+                </td>
+                <td class="tablesubheading" align="right">
+                    <a href="javascript:void(0)" id="ctl00_ContentPlaceHolder1_lnkHide" onclick="toggleSearchPanel();" style="color:#000; text-decoration:none;">[ Show / Hide ]</a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div id="ctl00_ContentPlaceHolder1_pnlSearch" style="width:100%; {% if not (s_login or s_name or s_dept or s_desig or s_role or s_active) %}display:none;{% endif %}">
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <tr>
+                                <td class="vtext" width="15%">LoginID</td><td class="colon">:</td>
+                                <td class="required"><input type="text" class="textbox" name="s_login" value="{{ s_login or '' }}"></td>
+                                <td width="5%"></td>
+                                <td class="vtext" width="15%">Name</td><td class="colon">:</td>
+                                <td class="required"><input type="text" class="textboxlong" name="s_name" value="{{ s_name or '' }}"></td>
+                            </tr>
+                            <tr>
+                                <td class="vtext">Department</td><td class="colon">:</td>
+                                <td class="required"><input type="text" class="textboxlong" name="s_dept" value="{{ s_dept or '' }}"></td>
+                                <td></td>
+                                <td class="vtext">Designation</td><td class="colon">:</td>
+                                <td class="required"><input type="text" class="textboxlong" name="s_desig" value="{{ s_desig or '' }}"></td>
+                            </tr>
+                            <tr>
+                                <td class="vtext">Role of User</td><td class="colon">:</td>
+                                <td class="required">
+                                    <select name="s_role" class="dropdownlong">
+                                        <option value="">--All--</option>
+                                        {% for r in roles %}
+                                            <option value="{{ r.id }}" {% if (s_role|string) == (r.id|string) %}selected{% endif %}>{{ r.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td></td>
+                                <td class="vtext">Active</td><td class="colon">:</td>
+                                <td class="required">
+                                    <select name="s_active" class="dropdown">
+                                        <option value="">--All--</option>
+                                        <option value="1" {% if s_active == '1' %}selected{% endif %}>Yes</option>
+                                        <option value="0" {% if s_active == '0' %}selected{% endif %}>No</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr><td colspan="7" height="15"></td></tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td colspan="5">
+                                    <input type="submit" class="button-common" value="SEARCH">
+                                    <span style="margin-left:10px;"></span>
+                                    <a class="button-common" style="text-decoration:none; display:inline-block; line-height:24px; padding:0 12px; vertical-align:middle;" href="{{ url_for('umm.user_master') }}">RESET</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<script>
+async function sha1Hex(str) {
+    const buffer = new TextEncoder().encode(str);
+    const digest = await crypto.subtle.digest('SHA-1', buffer);
+    return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function toggleSearchPanel() {
+    const panel = document.getElementById('ctl00_ContentPlaceHolder1_pnlSearch');
+    panel.style.display = (panel.style.display === 'none' || !panel.style.display) ? 'block' : 'none';
+}
+
+async function setval() {
+    const actionField = document.getElementById('actionField');
+    const submitAction = document.getElementById('frmUserMaster').dataset.submitAction || 'SAVE';
+    actionField.value = submitAction;
+
+    if (submitAction === 'RESET') return true;
+
+    const pwd = document.getElementById('ctl00_ContentPlaceHolder1_txtPassword');
+    const hash = document.getElementById('ctl00_ContentPlaceHolder1_hash');
+    if (!pwd || !hash) return true;
+    if (pwd.value && window.crypto && crypto.subtle) {
+        hash.value = await sha1Hex(pwd.value);
+    } else {
+        hash.value = '';
+    }
+
+    return true;
+}
+
+async function refreshLocationsByDdo() {
+    const ddo = document.getElementById('ctl00_ContentPlaceHolder1_ddlDDO').value;
+    const ddlLoc = document.getElementById('ctl00_ContentPlaceHolder1_D_ddlDLocation');
+    if (!ddlLoc) return;
+
+    const current = ddlLoc.value;
+    const res = await fetch(`{{ url_for('umm.api_umm_available_locations_by_ddo') }}?ddo=${encodeURIComponent(ddo)}`);
+    const data = await res.json();
+
+    ddlLoc.innerHTML = '<option value=\"\"> -- Select Location --</option>';
+    for (const row of data) {
+        const opt = document.createElement('option');
+        opt.value = row.id;
+        opt.textContent = row.name;
+        ddlLoc.appendChild(opt);
+    }
+    if (current) ddlLoc.value = current;
+}
+
+async function refreshEmployeesByLocation() {
+    const ddo = document.getElementById('ctl00_ContentPlaceHolder1_ddlDDO').value;
+    const loc = document.getElementById('ctl00_ContentPlaceHolder1_D_ddlDLocation').value;
+    const ddlEmp = document.getElementById('ctl00_ContentPlaceHolder1_ddlEmpName');
+    if (!ddlEmp) return;
+
+    const current = ddlEmp.value;
+    const res = await fetch(`{{ url_for('umm.api_umm_employees_by_location') }}?loc=${encodeURIComponent(loc)}&ddo=${encodeURIComponent(ddo)}`);
+    const data = await res.json();
+
+    ddlEmp.innerHTML = '<option value=\"\">-- Select Employee --</option>';
+    for (const row of data) {
+        const opt = document.createElement('option');
+        opt.value = row.id;
+        opt.textContent = `${row.code} - ${row.name}`;
+        ddlEmp.appendChild(opt);
+    }
+    if (current) ddlEmp.value = current;
+}
+
+async function fillEmployeeDetails() {
+    const ddlEmp = document.getElementById('ctl00_ContentPlaceHolder1_ddlEmpName');
+    const empId = ddlEmp.value;
+    if (!empId) return;
+    const res = await fetch(`{{ url_for('umm.api_umm_employee_details', emp_id='__EMP__') }}`.replace('__EMP__', encodeURIComponent(empId)));
+    const data = await res.json();
+    if (!data) return;
+
+    const name = document.getElementById('ctl00_ContentPlaceHolder1_txtEmpname');
+    const dept = document.getElementById('ctl00_ContentPlaceHolder1_txtDepartment');
+    const desig = document.getElementById('ctl00_ContentPlaceHolder1_txtDesignation');
+    const email = document.getElementById('ctl00_ContentPlaceHolder1_M_txtEmail');
+    if (name && !name.value) name.value = data.name || '';
+    if (dept && !dept.value) dept.value = data.department || '';
+    if (desig && !desig.value) desig.value = data.designation || '';
+    if (email && !email.value) email.value = data.email || '';
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const ddlDdo = document.getElementById('ctl00_ContentPlaceHolder1_ddlDDO');
+    const ddlLoc = document.getElementById('ctl00_ContentPlaceHolder1_D_ddlDLocation');
+    const ddlEmp = document.getElementById('ctl00_ContentPlaceHolder1_ddlEmpName');
+
+    if (ddlDdo) ddlDdo.addEventListener('change', async () => { await refreshLocationsByDdo(); await refreshEmployeesByLocation(); });
+    if (ddlLoc) ddlLoc.addEventListener('change', refreshEmployeesByLocation);
+    if (ddlEmp) ddlEmp.addEventListener('change', fillEmployeeDetails);
+
+    await refreshEmployeesByLocation();
+
+    {% if edit_data and edit_data.emp_id %}
+    const existingEmp = "{{ edit_data.emp_id }}";
+    if (ddlEmp && existingEmp) {
+        ddlEmp.value = existingEmp;
+        await fillEmployeeDetails();
+    }
+    {% endif %}
+});
+</script>
+{% endblock %}

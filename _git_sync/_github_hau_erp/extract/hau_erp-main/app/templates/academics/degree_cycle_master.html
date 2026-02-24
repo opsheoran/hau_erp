@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- SAVE FORM -->
+<form method="POST" id="cycleForm">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="cycle_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="6">
+                    <span class="mainheadingborderbottom">Degree Cycle Master</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Degree</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <select name="degree_id" id="cycle_degree" class="dropdown w-200" required>
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext" width="15%">Department</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <select name="branch_id" id="cycle_branch" class="dropdown w-200">
+                        <option value="">--Select Department--</option>
+                        {% for b in lookups.branches %}<option value="{{ b.Pk_BranchId }}">{{ b.Branchname }}</option>{% endfor %}
+                    </select>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Degree Year</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="year_id" id="cycle_year" class="dropdown w-200" required>
+                        <option value="">--Select Year--</option>
+                        {% for y in lookups.years %}<option value="{{ y.pk_degreeyearid }}">{{ y.degreeyear_char }}</option>{% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext">Semester</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="sem_id" id="cycle_sem" class="dropdown w-200" required>
+                        <option value="">--Select Semester--</option>
+                        {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Min OGPA</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" step="0.01" name="min_ogpa" id="cycle_ogpa" class="textbox w-100" value="0">
+                </td>
+                <td class="vtext">Auto Course Alloc?</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="checkbox" name="auto_alloc" id="cycle_auto">
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Inc Num</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" name="inc_num" id="cycle_inc_num" class="textbox w-100" value="0">
+                </td>
+                <td class="vtext">Inc By</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" name="inc_by" id="cycle_inc_by" class="textbox w-100" value="0">
+                </td>
+            </tr>
+            
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="submit" value="SAVE" id="btn_save" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left:10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<!-- LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="6">
+                <span class="subheadingborderbottom">List of Degree Cycles</span>
+            </td>
+        </tr>
+        <tr><td colspan="6" height="10"></td></tr>
+        <tr>
+            <td colspan="6">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th width="30%">Degree Cycle</th>
+                            <th width="20%">Degree</th>
+                            <th width="10%">Year</th>
+                            <th width="10%">Semester</th>
+                            <th width="10%">Increment No.</th>
+                            <th width="10%">Increment By</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                            <td align="center">{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td>{{ item.degreename }}</td>
+                            <td>{{ item.Branchname or '' }}</td>
+                            <td align="center">{{ item.degreeyear_char }}</td>
+                            <td align="center">{{ item.semester_roman }}</td>
+                            <td align="center">{{ item.incnum }}</td>
+                            <td align="center">{{ item.incby }}</td>
+                            <td align="center">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editC({{ item|tojson }})'>
+                            </td>
+                            <td align="center">
+                                <form method="POST" onsubmit="return confirm('Are you sure you want to delete this cycle?');" style="display:inline;">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ item.pk_degreecycleid }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('academics.degree_cycle_master', page=pagination.page-1) }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('academics.degree_cycle_master', page=p) }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('academics.degree_cycle_master', page=pagination.page+1) }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+function setSemesterOptions(semesters) {
+    const sem = document.getElementById('cycle_sem');
+    sem.innerHTML = '<option value="">--Select Semester--</option>';
+    semesters.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id || s.pk_semesterid;
+        opt.textContent = s.name || s.semester_roman;
+        sem.appendChild(opt);
+    });
+}
+
+async function loadSemesters() {
+    const degreeId = document.getElementById('cycle_degree').value;
+    if (!degreeId) {
+        setSemesterOptions([]);
+        return;
+    }
+    try {
+        const res = await fetch(`/academics/api/get_degree_semesters/${degreeId}`);
+        const data = await res.json();
+        setSemesterOptions(data);
+    } catch (e) {
+        setSemesterOptions([]);
+    }
+}
+
+function editC(c) {
+    document.getElementById('cycle_id').value = c.pk_degreecycleid;
+    document.getElementById('cycle_degree').value = c.fk_degreeid || '';
+    document.getElementById('cycle_branch').value = c.fk_branchid || '';
+    document.getElementById('cycle_year').value = c.fk_degreeyearid || '';
+    loadSemesters().then(() => {
+        document.getElementById('cycle_sem').value = c.fk_semesterid || '';
+    });
+    document.getElementById('cycle_ogpa').value = c.MinOGPA || '0';
+    document.getElementById('cycle_auto').checked = c.AutoCourseAlloc;
+    document.getElementById('cycle_inc_num').value = c.incnum || '0';
+    document.getElementById('cycle_inc_by').value = c.incby || '0';
+    
+    document.getElementById('btn_save').value = 'UPDATE';
+    window.scrollTo(0,0);
+}
+function resetForm() {
+    document.getElementById('cycle_id').value = '';
+    document.getElementById('cycleForm').reset();
+    document.getElementById('btn_save').value = 'SAVE';
+}
+
+document.getElementById('cycle_degree').addEventListener('change', function() {
+    loadSemesters();
+});
+</script>
+{% endblock %}

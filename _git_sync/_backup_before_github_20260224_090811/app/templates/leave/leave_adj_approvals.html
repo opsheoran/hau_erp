@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tablesubheading">Leave Adjustment Approval</div>
+    <div style="padding: 15px;">
+        <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">Pending Leave Adjustment Requests</div>
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <td>S.No.</td><td>Requested By</td><td>Emp Code</td><td>Leave Type</td><td>Request Date</td><td>Days</td><td>From Date</td><td>To Date</td><td>Action</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in pending %}
+                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ p.empname }}</td>
+                    <td align="center">{{ p.empcode }}</td>
+                    <td>{{ p.leavetype }}</td>
+                    <td align="center">{{ p.RequestDate }}</td>
+                    <td align="right">{{ "{:,.2f}".format(p.Days|float) }}</td>
+                    <td align="center">{{ p.FromDate }}</td>
+                    <td align="center">{{ p.ToDate }}</td>
+                    <td align="center"><a href="?adj_id={{ p.adj_id }}" class="btn-hau">Select</a></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="9" align="center" style="padding:20px;">No Record Found!</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if selected_adj %}
+        <div style="margin-top:30px; border:1px solid #3c8dbc; padding:15px; background:#fcfcfc;">
+            <div class="tablesubheading" style="margin-bottom:15px;">Response Detail</div>
+            <form method="POST">
+                <input type="hidden" name="adj_id" value="{{ selected_adj.adj_id }}">
+                <table class="form-table">
+                    <tr>
+                        <td class="vtext" width="150">Comments</td><td class="colon">:</td>
+                        <td>
+                            <textarea name="comments" class="textbox" style="width:90%; height:50px;"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td style="padding-top:15px;">
+                            <input type="submit" name="action" value="APPROVE" class="button-common" style="background:#3c8dbc; color:white;">
+                            <input type="submit" name="action" value="REJECT" class="button-common" style="margin-left:10px;">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        {% endif %}
+
+        <div style="margin-top:40px;">
+            <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">Approved Leave Adjustment Requests</div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td>S.No.</td><td>Requested By</td><td>Leave Type</td><td>Requested Date</td><td>Days</td><td>Approved Date</td><td>Comments</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in history %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index + (pagination.page - 1) * 10 }}</td>
+                        <td>{{ h.empname }}</td>
+                        <td>{{ h.leavetype }}</td>
+                        <td align="center">{{ h.adjreqdate_fmt }}</td>
+                        <td align="right">{{ "{:,.2f}".format(h.totaladjleave|float) }}</td>
+                        <td align="center">{{ h.responsedate_fmt }}</td>
+                        <td>{{ h.remarks or '' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if pagination.total_pages > 1 %}
+            <div style="margin-top:10px; text-align:right; font-family:Verdana; font-size:11px;">
+                <span>Page {{ pagination.page }} of {{ pagination.total_pages }} </span>
+                {% if pagination.has_prev %}
+                <a href="?page={{ pagination.page - 1 }}" class="btn-hau">Previous</a>
+                {% endif %}
+                {% if pagination.has_next %}
+                <a href="?page={{ pagination.page + 1 }}" class="btn-hau" style="margin-left:5px;">Next</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

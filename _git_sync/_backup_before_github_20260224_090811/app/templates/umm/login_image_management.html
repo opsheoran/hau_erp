@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="action" value="upload">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="3" class="tableheading">
+                    <span class="mainheadingborderbottom">User Login Image Management</span>
+                </td>
+            </tr>
+            <tr><td colspan="3" height="10"></td></tr>
+            <tr>
+                <td class="vtext" width="20%">Upload New Image</td>
+                <td class="colon" width="2%">:</td>
+                <td>
+                    <input type="file" name="image_file" class="textbox" style="height: auto; padding: 2px;" required>
+                    <span style="margin-left:15px;"></span>
+                    <input type="submit" value="UPLOAD" class="button-common">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<form method="POST" style="margin-top:20px;">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="action" value="update">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tablesubheading">
+                    <span class="subheadingborderbottom">Background Gallery</span>
+                </td>
+            </tr>
+            <tr><td height="10"></td></tr>
+            <tr>
+                <td>
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1" style="border-collapse:collapse;">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="50px">S.No.</th>
+                                <th width="100px">Preview</th>
+                                <th align="left">File Name</th>
+                                <th width="100px">Active (Emp)</th>
+                                <th width="100px">Active (Std)</th>
+                                <th width="80px">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for img in images %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                <td align="center">{{ loop.index }}</td>
+                                <td align="center">
+                                    <a href="{{ img.url }}" target="_blank">
+                                        <img src="{{ img.url }}" style="height: 40px; border: 1px solid #ccc; padding: 2px; background: #fff;">
+                                    </a>
+                                </td>
+                                <td>{{ img.filename }}</td>
+                                <td align="center">
+                                    <input type="checkbox" name="active_{{ img.id }}" {% if img.active %}checked{% endif %}>
+                                </td>
+                                <td align="center">
+                                    <input type="checkbox" name="student_{{ img.id }}" {% if img.student_active %}checked{% endif %}>
+                                </td>
+                                <td align="center">
+                                    <button type="submit" name="delete_id" value="{{ img.id }}" style="background:none; border:none; cursor:pointer;" onclick="return confirm('Delete image?')">
+                                        <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% if not images %}
+                            <tr><td colspan="6" align="center" style="padding:20px; color:#999;">No images found.</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr><td height="20"></td></tr>
+            <tr>
+                <td align="center">
+                    <input type="submit" value="UPDATE SETTINGS" class="button-common" style="height: 35px; width: 200px; font-weight: bold;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+{% endblock %}

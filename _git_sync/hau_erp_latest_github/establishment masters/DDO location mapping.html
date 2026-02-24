@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./DDO location mapping_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./DDO location mapping_files/default.css" type="text/css" rel="stylesheet"><link href="./DDO location mapping_files/font.css" type="text/css" rel="stylesheet"><link href="./DDO location mapping_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./DDO location mapping_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTk1ODQwNzIzOQ8WAh4GcG9zdGlkBSRhMzMzMGU0NS03ZjQ0LTQwMjEtODU1Ny05NjYwYjE1MjA0MjMWAmYPDxYCHgdQZW5kaW5nBQEwZBYCAgEPZBYQAgIPDxYCHgRUZXh0BQYgQXl1c2hkZAIEDw8WAh8CBRtMTFQuIC0gMS8yNy8yMDI2IDk6MTI6NDQgUE1kZAIFDw8WAh8CBRtDTFQuIC0gMS8yOC8yMDI2IDY6NDQ6MzAgQU1kZAIGDw8WAh8CBQYgQXl1c2hkZAIHDw8WAh8CBQ1DT0JTJkgsIEhpc2FyZGQCCQ9kFgJmDxYCHwIFTTxzcGFuPkNyZWF0ZSBNYXN0ZXJzPC9zcGFuPiZuYnNwOz4mbmJzcDs8c3Ryb25nPkRETyBMb2NhdGlvbiBNYXBwaW5nPC9TdHJvbmc+ZAIKD2QWDgIBDxAPFgYeDkRhdGFWYWx1ZUZpZWxkBQhwa19kZG9pZB4NRGF0YVRleHRGaWVsZAULRGVzY3JpcHRpb24eC18hRGF0YUJvdW5kZ2QQFWAQLS0gU2VsZWN0IERETyAtLRZbIDEwMCBdIERETywgVkMgT2ZmaWNlEVsgMTAxIF0gRGVhbiwgUEdTFlsgMTAyIF0gRGlyZWN0b3IsIENGU1QTWyAxMDMgXSBDb21wdHJvbGxlcixbIDEwNCBdIERpcmVjdG9yLCBTdG9yZXMgYW5kIFB1cmNoYXNlIE9mZmljZSRbIDEwNSBdIERETywgRGlyZWN0b3JhdGUgb2YgUmVzZWFyY2glWyAxMDYgXSBSZWdpb25hbCBEaXJlY3RvciwgUlJTIEthcm5hbCNbIDEwNyBdIFJlZ2lvbmFsIERpcmVjdG9yLCBSUlMgS2F1bCVbIDEwOCBdIFJlZ2lvbmFsIERpcmVjdG9yLCBSUlMgUm9odGFrJVsgMTA5IF0gUmVnaW9uYWwgRGlyZWN0b3IsIFJSUywgQmF3YWwkWyAxMTAgXSBSZWdpb25hbCBEaXJlY3RvciwgQ1JTIFNpcnNhEVsgMTExIF0gQSZBTywgREVFIVsgMTEyIF0gU3IuIENvb3JpbmF0b3IsIEtWSywgSmluZCZbIDExMyBdIFNyLiBDb29yZGluYXRvciwgS1ZLLCBTYWRhbHB1cilbIDExNCBdIFNyLiBDb29yZGluYXRvciwgS1ZLLCBLdXJ1a3NoZXRyYSVbIDExNSBdIFNyLiBDb29yZGluYXRvciwgS1ZLLCBQaW5qb3JlJVsgMTE2IF0gU3IuIENvb3JkaW5hdG9yLCBLVkssIFBhbmlwYXQlWyAxMTcgXSBTci4gQ29vcmRpbmF0b3IsIEtWSywgU29uaXBhdCpbIDExOCBdIFNyLiBDb29yZGluYXRvciwgS1ZLLCBNYWhlbmRlcmdhcmgkWyAxMTkgXSBTci4gQ29vcmRpbmF0b3IsIEtWSywgS2FybmFsGFsgMTIwIF0gRERPIEFncmkgVG91cmlzbSNbIDEyMCBdIFNyLiBDb29yZGluYXRvciwgS1ZLLCBTaXJzYSVbIDEyMSBdIFNyLiBDb29yZGluYXRvciwgS1ZLLCBKaGFqamFyI1sgMTIyIF0gU3IuIENvb3JkaW5hdG9yLCBLVksgQW1iYWxhJFsgMTIzIF0gU3IuIENvb3JkaW5hdG9yLCBLVksgQmhpd2FuaSZbIDEyNCBdIFNyLiBDb29yZGluYXRvciwgS1ZLIEZhcmlkYWJhZCZbIDEyNSBdIFNyLiBDb29yZGluYXRvciwgS1ZLIEZhdGVoYWJhZClbIDEyNiBdIFNyLiBDb29yZGluYXRvciwgS1ZLLCBZYW11bmFuYWdhciZbIDEyNyBdIFNyLiBDb29yZGluYXRvciwgS1ZLLCBNYW5ka29sYShbIDEyOCBdIFJlZ2lvbmFsIERpcmVjdG9yLCBFRUkgTmlsb2toZXJpJVsgMTI5IF0gU3IuIENvb3JkaW5hdG9yLCBLVkssIEthaXRoYWwkWyAxMzAgXSBTci4gQ29vcmRpbmF0b3IsIEtWSywgUm9odGFrIlsgMTMxIF0gU3IuIENvb3JkaW5hdG9yLCBLVksgQmF3YWwXWyAxMzIgXSBBJkFPLCBSZWdpc3RyYXIgWyAxMzMgXSBQcmluY2lwYWwsIENhbXB1cyBTY2hvb2wmWyAxMzQgXSBEaXJlY3RvciwgRGlyZWN0b3JhdGUgb2YgRmFybXMaWyAxMzUgXSBEaXJlY3RvciwgUkRTIEZhcm0cWyAxMzYgXSBVbml2ZXJzaXR5IExpYnJhcmlhbhVbIDEzNyBdIERpcmVjdG9yLCBEU1cRWyAxNDIgXSBBJkFPLCBDT0EVWyAxNDMgXSBIT0QsIEFncm9ub215IFsgMTQ0IF0gSE9ELCBFeHRlbnNpb24gRWR1Y2F0aW9uJVsgMTQ1IF0gSE9ELCBBZ3JpY3VsdHVyYWwgTWV0ZW9yb2xvZ3kjWyAxNDYgXSBIT0QsIEFncmljdWx0dXJhbCBFY29ub21pY3MXWyAxNDcgXSBIT0QsIEVudG9tb2xvZ3kZWyAxNDggXSBIT0QsIEhvcnRpY3VsdHVyZRBbIDE0OSBdIEhPRCwgR1BCF1sgMTUwIF0gSE9ELCBOZW1hdG9sb2d5G1sgMTUxIF0gUHJpbmNpcGFsLCBDT0EgS2F1bBVbIDE1MiBdIEhPRCwgRm9yZXN0cnkmWyAxNTMgXSBIT0QsIFNlZWQgU2NpZW5jZSAmIFRlY2hub2xvZ3keWyAxNTQgXSBIT0QsIFZlZ2V0YWJsZSBTY2llbmNlGVsgMTU1IF0gSE9ELCBTb2lsIFNjaWVuY2UhWyAxNTYgXSBIT0QsIEJ1c3NpbmVzcyBNYW5hZ2VtZW50HFsgMTU3IF0gSE9ELCBQbGFudCBQYXRob2xvZ3kdWyAxNTggXSBQcmluY2lwYWwsIENPQSwgQmF3YWwhWyAxNTkgXSBIT0QsIERyeSBsYW5kIEFncmljdWx0dXJlJ1sgMTYwIF0gSE9ELCBGYW1pbHkgUmVzb3VyY2UgTWFuYWdlbWVudBFbIDE2MSBdIEhPRCwgRUVDTRFbIDE2MiBdIEhPRCwgSERGUxJbIDE2MyBdIEEmQU8sIENPSFMgWyAxNjQgXSBIT0QsIEZvb2RzIGFuZCBOdXRyaXRpb24qWyAxNjUgXSBIT0QsIFRleHRpbGUgYW5kIEFwcGFyZWwgRGVzaWduaW5nIVsgMTY2IF0gSE9ELCBJbnN0cnVtZW50YXRpb24gQ2VsbBFbIDE2NyBdIEhPRCwgRk1QRRRbIDE2OCBdIEEmQU8sIENPQUUmVB5bIDE2OSBdIEhPRCwgQmFzaWMgRW5naW5lZXJpbmcsWyAxNzAgXSBIT0QsIFByb2Nlc3NpbmcgYW5kIEZvb2QgRW5naW5lZXJpbmcjWyAxNzEgXSBIT0QsIFRyYW5zcG9ydCBPcmdhbml6YXRpb24jWyAxNzIgXSBIT0QsIFJlbmV3YWJsZSAmIEJpby1lbmVyZ3lEWyAxNzMgXSBEZWVuIERheWFsIFVwYWRoYXlhIENlbnRyZSBvZiBFeGNlbGxlbmNlIGZvciBPcmdhbmljIEZhcm1pbmcnWyAxNzQgXSBIT0QsIFNvaWwgYW5kIFdhdGVyIEVuZ2luZWVyaW5nKFsgMTc1IF0gSE9ELCBNYXRoZW1hdGljcyBhbmTCoFN0YXRpc3RpY3MmWyAxNzYgXSBIT0QsIEJvdGFueSAmIFBsYW50IFBoeXNpb2xvZ3kUWyAxNzcgXSBIT0QsIFpvb2xvZ3kWWyAxNzggXSBIT0QsIENoZW1pc3RyeRRbIDE3OSBdIEhPRCwgUGh5c2ljcytbIDE4MCBdIEhPRCwgTGFuZ3VhZ2VzIGFuZCBIYXJ5YW52aSBDdWx0dXJlGVsgMTgxIF0gSE9ELCBCaW9jaGVtaXN0cnkWWyAxODIgXSBIT0QsIFNvY2lvbG9neRFbIDE4MyBdIEhPRCwgTUJCQiJbIDE4NCBdIEluY2hhcmdlLCBDb21wdXRlciBTZWN0aW9uFFsgMTg1IF0gQSZBTywgQ09CUyZIGVsgMTg2IF0gSE9ELCBNaWNyb2Jpb2xvZ3kRWyAxODcgXSBERE8sIEVPQ0UPWyAxODggXSBDTywgTFNVDFsgMTg5IF0gREhSTRNbIDE5NSBdIEhPRCwgRm9yYWdlGFsgMTk5IF0gSEFVIEFncmkgVG91cmlzbRdbIDIwMCBdIENhbXB1cyBIb3NwaXRhbBNbIDIwMSBdIENPRlMsIEhpc2FyIFsgMjAyIF0gQ29sbGVnZSBvZiBCaW90ZWNobm9sb2d5KVsgMjAzIF0gUmVnaW9uYWwgRGlyZWN0b3IsIE5DUlMgR29rYWxwdXJhLFsgMjA0IF0gU3IuIENvb3JkaW5hdG9yLCBLVkssIENoaGFwcGVyYSwgTnVoDVsgQUJJQyBdIEFCSUMVYAAFVkMtMjMFVkMtMzAEVkMtMQVWQy0zNwVWQy01MQVWQy0yNAVWQy0xMQVWQy0xNgRWQy01BVZDLTI4BVZDLTIyBVZDLTM1BVZDLTEyBFZDLTIFVkMtMTQFVkMtMTUFVkMtMjUFVkMtMjcFVkMtMzMFVkMtMjEFQ08tOTgFVkMtMjkFVkMtMzYFVkMtNDMFVkMtNDIFVkMtNDEFVkMtNDAFVkMtMzkFVkMtMzgEVkMtNARWQy05BFZDLTcFS1YtODYFRVMtNDAFVkMtNzAFVkMtMjYFVkMtODQFVkMtODIFVkMtMzQFVkMtMTkFVkMtNDgFVkMtNjIFVkMtNDUFVkMtNDQFVkMtNDcFVkMtNjAFVkMtNTIFVkMtNTcFVkMtODAFVkMtNzgFVkMtNjMFVkMtNTkFVkMtNjEFVkMtNTYFVkMtNjgFS1otOTMFVkMtNTMFVkMtNzMFVkMtNjUFVkMtNTgEVkMtOAVWQy01NQVWQy01NAVLVi04NwVWQy02NwRWQy0zBVZDLTc0BVZDLTc5BUtWLTg4BUtWLTg5BUhBLTkyBVZDLTY0BVZDLTc1BVZDLTc2BVZDLTc3BUtaLTkwBUtaLTkxBVZDLTQ2BVZDLTgxBVZDLTcyBVZDLTQ5BVZDLTUwBVZDLTMyBUtWLTg1BVZDLTE3BVZDLTY2BVZDLTgzBVZDLTcxBUFYLTk0BUNCLTk1BUFaLTk2BUFYLTk5BkNPLTEwMAZDTy0xMDEFQ08tOTcUKwNgZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnFgFmZAIDDxAPFgYfAwUIcGtfbG9jaWQfBAUHbG9jbmFtZR8FZ2QQFQEVLS0gU2VsZWN0IExvY2F0aW9uIC0tFQEAFCsDAWcWAWZkAgUPDxYGHgtDb21tYW5kTmFtZQUEU0FWRR8CBQRTQVZFHhdBdXRvVXBkYXRlQWZ0ZXJDYWxsQmFja2hkZAIHDw8WBB8CBQVSRVNFVB8HaGRkAg0PEGRkFgFmZAIPDw8WAh8CZWRkAhUPPCsACwEADxYQHgtfIUl0ZW1Db3VudAIKHghEYXRhS2V5cxYAHglQYWdlQ291bnQCBx4NU2VsZWN0ZWRJbmRleAL/////Dx4VXyFEYXRhU291cmNlSXRlbUNvdW50Aj0eEUFsbG93Q3VzdG9tUGFnaW5nZx4QVmlydHVhbEl0ZW1Db3VudAI9HhBDdXJyZW50UGFnZUluZGV4ZmQWAmYPZBYUAgIPZBYKZg8PFgIfAgUBMWRkAgEPDxYCHwIFBEFCSUNkZAICDw8WAh8CBQRBQklDZGQCAw9kFgICAQ8PFgIeD0NvbW1hbmRBcmd1bWVudAUEYWItMWRkAgQPZBYCAgEPDxYCHxAFBGFiLTFkZAIDD2QWCmYPDxYCHwIFATJkZAIBDw8WAh8CBRBERE8gQWdyaSBUb3VyaXNtZGQCAg8PFgIfAgUMQWdyaSBUb3VyaXNtZGQCAw9kFgICAQ8PFgIfEAUEQVQtMWRkAgQPZBYCAgEPDxYCHxAFBEFULTFkZAIED2QWCmYPDxYCHwIFATNkZAIBDw8WAh8CBQ9DYW1wdXMgSG9zcGl0YWxkZAICDw8WAh8CBQ9DYW1wdXMgSG9zcGl0YWxkZAIDD2QWAgIBDw8WAh8QBQRDSC0xZGQCBA9kFgICAQ8PFgIfEAUEQ0gtMWRkAgUPZBYKZg8PFgIfAgUBNGRkAgEPDxYCHwIFGFByaW5jaXBhbCwgQ2FtcHVzIFNjaG9vbGRkAgIPDxYCHwIFDUNhbXB1cyBTY2hvb2xkZAIDD2QWAgIBDw8WAh8QBQRDUy0xZGQCBA9kFgICAQ8PFgIfEAUEQ1MtMWRkAgYPZBYKZg8PFgIfAgUBNWRkAgEPDxYCHwIFPERlZW4gRGF5YWwgVXBhZGhheWEgQ2VudHJlIG9mIEV4Y2VsbGVuY2UgZm9yIE9yZ2FuaWMgRmFybWluZ2RkAgIPDxYCHwIFFENlbnRyZSBvZiBFeGNlbGxlbmNlZGQCAw9kFgICAQ8PFgIfEAUEREQtMWRkAgQPZBYCAgEPDxYCHxAFBERELTFkZAIHD2QWCmYPDxYCHwIFATZkZAIBDw8WAh8CBQ5EaXJlY3RvciwgQ0ZTVGRkAgIPDxYCHwIFC0NGU1QsIEhpc2FyZGQCAw9kFgICAQ8PFgIfEAUEQVotMWRkAgQPZBYCAgEPDxYCHxAFBEFaLTFkZAIID2QWCmYPDxYCHwIFATdkZAIBDw8WAh8CBQlBJkFPLCBDT0FkZAICDw8WAh8CBQpDT0EsIEhpc2FyZGQCAw9kFgICAQ8PFgIfEAUEQVgtMWRkAgQPZBYCAgEPDxYCHxAFBEFYLTFkZAIJD2QWCmYPDxYCHwIFAThkZAIBDw8WAh8CBRNQcmluY2lwYWwsIENPQSBLYXVsZGQCAg8PFgIfAgUJQ09BLCBLYXVsZGQCAw9kFgICAQ8PFgIfEAUESEEtMWRkAgQPZBYCAgEPDxYCHxAFBEhBLTFkZAIKD2QWCmYPDxYCHwIFATlkZAIBDw8WAh8CBQlBJkFPLCBDT0FkZAICDw8WAh8CBQlDT0EsQmF3YWxkZAIDD2QWAgIBDw8WAh8QBQRCVy0xZGQCBA9kFgICAQ8PFgIfEAUEQlctMWRkAgsPZBYKZg8PFgIfAgUCMTBkZAIBDw8WAh8CBQxBJkFPLCBDT0FFJlRkZAICDw8WAh8CBQ5DT0FFJlQgLCBIaXNhcmRkAgMPZBYCAgEPDxYCHxAFBEFXLTFkZAIED2QWAgIBDw8WAh8QBQRBVy0xZGQCCw8PFgIfAmVkZBgBBR5fX0NvbnRyb2xzUmVxdWlyZVBvc3RCYWNrS2V5X18WAQUMY3RsMDAkaHBsQnRuucExEJxSM/ePj/b6JL4knY5c30qcjBUx+JNiDa9Akio=">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./DDO location mapping_files/WebResource.axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./DDO location mapping_files/WebResource(1).axd" type="text/javascript"></script>
+<script src="./DDO location mapping_files/WebResource(2).axd" type="text/javascript"></script>
+<script src="./DDO location mapping_files/WebResource(3).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="6CDCC953">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="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">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./DDO location mapping_files/user-management.png">
+                            User Management
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> Ayush</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> Ayush</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COBS&amp;H, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./DDO location mapping_files/WebResource(4).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Create Masters" class="level1 static" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870#?Mwpid=1032" tabindex="-1">Create Masters</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create District Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_District_Mst.aspx?Mwpid=1054" tabindex="-1">District Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create DDO Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Mst.aspx?Mwpid=1034" tabindex="-1">DDO Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Office Type Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_OfficeType_Mst.aspx?Mwpid=1052" tabindex="-1">Office Type Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Location Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_Location_Mst.aspx?Mwpid=1053" tabindex="-1">Location Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Section Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Section_Mst.aspx?Mwpid=1937" tabindex="-1">Section Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Department Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Department_Mst.aspx?Mwpid=1056" tabindex="-1">Department Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Class Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Class_Mst.aspx?Mwpid=1059" tabindex="-1">Class Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Grade Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Grade_Mst.aspx?Mwpid=1060" tabindex="-1">Grade Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Designation Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=1057" tabindex="-1">Designation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Religion Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_Religion_Mst.aspx?Mwpid=1058" tabindex="-1">Religion Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Comm_DDO_Location_Mapping" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870" tabindex="-1">DDO Location Mapping</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Country State District City Master" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_Country_State_City_Mst.aspx?Mwpid=2061" tabindex="-1">Country State District City Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Specialization Master" class="level2 dynamic" href="https://hauiums.in/UMM/UMM_Designation_Specialization.aspx?Mwpid=5068" tabindex="-1">Designation Specialization Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Controlling Office Master" class="level2 dynamic" href="https://hauiums.in/HRMS/SAL_ControllingOfficer_Mst.aspx?Mwpid=5076" tabindex="-1">Controlling Office Master</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:18" role="menuitem" style="position: relative; float: left;"><a title="Manage Users" class="level1 static" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870#?Mwpid=1033" tabindex="-1">Manage Users</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:18" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create User Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_NewUserCreation.aspx?Mwpid=1035" tabindex="-1">User Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="ResetPassword" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_ResetPassword.aspx?Mwpid=4839" tabindex="-1">Reset Password</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Manage Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_UserAuthorization.aspx?Mwpid=1044" tabindex="-1">Manage Page Rights</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Page Type Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_PageTypeMaster.aspx?Mwpid=1364" tabindex="-1">Page Type Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Role Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_AssignRolePageRights.aspx?Mwpid=4793" tabindex="-1">Role Page Rights</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Role Level Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_RoleLevelsMaster.aspx?Mwpid=1365" tabindex="-1">Role Level Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Role Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_RolesMaster.aspx?Mwpid=1366" tabindex="-1">Role Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="PageType-Role Link" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_AssignRolePageType.aspx?Mwpid=1046" tabindex="-1">PageType-Role Link</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Module Master" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_ModuleMaster.aspx?Mwpid=1363" tabindex="-1">Module Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create Page Master" class="level2 dynamic" href="https://hauiums.in/UMM/WebpageMst.aspx?Mwpid=1040" tabindex="-1">Web Page Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="User Login Management" class="level2 dynamic" href="https://hauiums.in/sms/masters/LoginPage_ImageChange.aspx?Mwpid=4853" tabindex="-1">User Login Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Module Rights Detail" class="level2 dynamic" href="https://hauiums.in/UMM/User_ModulDetails.aspx?Mwpid=4951" tabindex="-1">Module Rights Detail</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Fetch Password" class="level2 dynamic" href="https://hauiums.in/UMM/FetchPass.aspx?Mwpid=5165" tabindex="-1">Fetch Password</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Multiple Users Page Rights" class="level2 dynamic" href="https://hauiums.in/UMM/MultipleUsers_PageRights.aspx?Mwpid=5245" tabindex="-1">Multiple Users Page Rights</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:34" role="menuitem" style="position: relative; float: left;"><a title="View User Logs" class="level1 static" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870#?Mwpid=1883" tabindex="-1">View User Logs</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:34" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="User Wise Log" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_UserLoginDetail_Rpt.aspx?Mwpid=1884" tabindex="-1">User Wise Log</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Send Message" class="level2 dynamic" href="https://hauiums.in/UMM/Admin_CommonMessages.aspx?Mwpid=1885" tabindex="-1">Send Message</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:38" role="menuitem" style="position: relative; float: left;"><a title="Database Backup" class="level1 static" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870#?Mwpid=1968" tabindex="-1">Backup</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:38" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Database Backup" class="level2 dynamic" href="https://hauiums.in/UMM/Comm_DbOperations.aspx?Mwpid=1969" tabindex="-1">Database Backup</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:41" role="menuitem" style="position: relative; float: left;"><a title="Other Configurations" class="level1 static" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870#?Mwpid=3286" tabindex="-1">Other Configurations</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:41" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:42" role="menuitem" style="position: relative;"><a title="Hostel Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870#?Mwpid=3287" tabindex="-1">Hostel Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:42" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Hostel Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_Hosteltype.aspx?Mwpid=3252" tabindex="-1">Create &amp; Manage Hostel Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Room Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_Rromtypemst.aspx?Mwpid=3253" tabindex="-1">Create &amp; Manage Room Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Building" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_Building_Mst.aspx?Mwpid=3254" tabindex="-1">Create &amp; Manage Building</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Floor" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_Floor_Mst.aspx?Mwpid=3274" tabindex="-1">Create &amp; Manage Floor</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Map Floor With Building" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_FloorMap.aspx?Mwpid=3275" tabindex="-1">Map Floor With Building</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Facility Name" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/AF_Space_RoomFacility_Mst.aspx?Mwpid=3255" tabindex="-1">Create &amp; Manage Facility Name</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/HST_HostelMaster.aspx?Mwpid=3256" tabindex="-1">Create &amp; Manage Hostel</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Assign Asst. Warden To Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Trns/HST_hostelwardendtl.aspx?Mwpid=3261" tabindex="-1">Assign Asst. Warden To Hostel</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Assign User For Hostel" class="level3 dynamic" href="https://hauiums.in/Hostel/Master/Hst_AssignedUser_Mst.aspx?Mwpid=4150" tabindex="-1">Assign User For Hostel</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:53" role="menuitem" style="position: relative;"><a title="Fee Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870#?Mwpid=3700" tabindex="-1">Fee Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:53" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Type" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeTypeMaster.aspx?Mwpid=3538" tabindex="-1">Create &amp; Manage Fee Type</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Head" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeHeads.aspx?Mwpid=3539" tabindex="-1">Create &amp; Manage Fee Head</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Structure" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_FeeStructure.aspx?Mwpid=3540" tabindex="-1">Create &amp; Manage Fee Structure</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Create &amp; Manage Fee Exemption" class="level3 dynamic" href="https://hauiums.in/Hostel/Mess/HST_Exemption.aspx?Mwpid=3550" tabindex="-1">Create &amp; Manage Fee Exemption</a></li>
+			</ul></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="NULL" class="level2 dynamic" href="https://hauiums.in/UMM/UMM_PasswordPolicyManager.aspx?Mwpid=3811" tabindex="-1">Password Policies</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:61" role="menuitem" style="position: relative; float: left;"><a title="Farms/Plants" class="level1 static" href="https://hauiums.in/UMM/Comm_DDO_Location_Mapping.aspx?Mwpid=1870#?Mwpid=3982" tabindex="-1">Farms/Plants</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:61" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Scheme Master" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_Scheme_Mst.aspx?Mwpid=2447" tabindex="-1">Scheme Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="User Location Scheme Map" class="level2 dynamic" href="https://hauiums.in/LRS/Location_SchemeMapping_Mst.aspx?Mwpid=2448" tabindex="-1">User Location Scheme Map</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Financial Year Master" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_FinYear_Mst.aspx?Mwpid=2443" tabindex="-1">Financial Year Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Change Financial Year" class="level2 dynamic" href="https://hauiums.in/LRS/LRS_Change_FinancialYear.aspx?Mwpid=2484" tabindex="-1">Change Financial Year</a></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Create Masters</span>&nbsp;&gt;&nbsp;<strong>DDO Location Mapping</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./DDO location mapping_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" class="table">
+        <tbody><tr>
+            <td class="tableheading" colspan="3">DDO &amp; Location Mapping</td>
+        </tr>
+        <tr>
+            <td class="tdgap" colspan="3"></td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblDDO" style="width: 15%">DDO</td>
+            <td class="colon">:</td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlDDO__"><select name="ctl00$ContentPlaceHolder1$D_ddlDDO" id="ctl00_ContentPlaceHolder1_D_ddlDDO" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlDDO&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option selected="selected" value="">-- Select DDO --</option>
+	<option value="VC-23">[ 100 ] DDO, VC Office</option>
+	<option value="VC-30">[ 101 ] Dean, PGS</option>
+	<option value="VC-1">[ 102 ] Director, CFST</option>
+	<option value="VC-37">[ 103 ] Comptroller</option>
+	<option value="VC-51">[ 104 ] Director, Stores and Purchase Office</option>
+	<option value="VC-24">[ 105 ] DDO, Directorate of Research</option>
+	<option value="VC-11">[ 106 ] Regional Director, RRS Karnal</option>
+	<option value="VC-16">[ 107 ] Regional Director, RRS Kaul</option>
+	<option value="VC-5">[ 108 ] Regional Director, RRS Rohtak</option>
+	<option value="VC-28">[ 109 ] Regional Director, RRS, Bawal</option>
+	<option value="VC-22">[ 110 ] Regional Director, CRS Sirsa</option>
+	<option value="VC-35">[ 111 ] A&amp;AO, DEE</option>
+	<option value="VC-12">[ 112 ] Sr. Coorinator, KVK, Jind</option>
+	<option value="VC-2">[ 113 ] Sr. Coordinator, KVK, Sadalpur</option>
+	<option value="VC-14">[ 114 ] Sr. Coordinator, KVK, Kurukshetra</option>
+	<option value="VC-15">[ 115 ] Sr. Coordinator, KVK, Pinjore</option>
+	<option value="VC-25">[ 116 ] Sr. Coordinator, KVK, Panipat</option>
+	<option value="VC-27">[ 117 ] Sr. Coordinator, KVK, Sonipat</option>
+	<option value="VC-33">[ 118 ] Sr. Coordinator, KVK, Mahendergarh</option>
+	<option value="VC-21">[ 119 ] Sr. Coordinator, KVK, Karnal</option>
+	<option value="CO-98">[ 120 ] DDO Agri Tourism</option>
+	<option value="VC-29">[ 120 ] Sr. Coordinator, KVK, Sirsa</option>
+	<option value="VC-36">[ 121 ] Sr. Coordinator, KVK, Jhajjar</option>
+	<option value="VC-43">[ 122 ] Sr. Coordinator, KVK Ambala</option>
+	<option value="VC-42">[ 123 ] Sr. Coordinator, KVK Bhiwani</option>
+	<option value="VC-41">[ 124 ] Sr. Coordinator, KVK Faridabad</option>
+	<option value="VC-40">[ 125 ] Sr. Coordinator, KVK Fatehabad</option>
+	<option value="VC-39">[ 126 ] Sr. Coordinator, KVK, Yamunanagar</option>
+	<option value="VC-38">[ 127 ] Sr. Coordinator, KVK, Mandkola</option>
+	<option value="VC-4">[ 128 ] Regional Director, EEI Nilokheri</option>
+	<option value="VC-9">[ 129 ] Sr. Coordinator, KVK, Kaithal</option>
+	<option value="VC-7">[ 130 ] Sr. Coordinator, KVK, Rohtak</option>
+	<option value="KV-86">[ 131 ] Sr. Coordinator, KVK Bawal</option>
+	<option value="ES-40">[ 132 ] A&amp;AO, Registrar</option>
+	<option value="VC-70">[ 133 ] Principal, Campus School</option>
+	<option value="VC-26">[ 134 ] Director, Directorate of Farms</option>
+	<option value="VC-84">[ 135 ] Director, RDS Farm</option>
+	<option value="VC-82">[ 136 ] University Librarian</option>
+	<option value="VC-34">[ 137 ] Director, DSW</option>
+	<option value="VC-19">[ 142 ] A&amp;AO, COA</option>
+	<option value="VC-48">[ 143 ] HOD, Agronomy</option>
+	<option value="VC-62">[ 144 ] HOD, Extension Education</option>
+	<option value="VC-45">[ 145 ] HOD, Agricultural Meteorology</option>
+	<option value="VC-44">[ 146 ] HOD, Agricultural Economics</option>
+	<option value="VC-47">[ 147 ] HOD, Entomology</option>
+	<option value="VC-60">[ 148 ] HOD, Horticulture</option>
+	<option value="VC-52">[ 149 ] HOD, GPB</option>
+	<option value="VC-57">[ 150 ] HOD, Nematology</option>
+	<option value="VC-80">[ 151 ] Principal, COA Kaul</option>
+	<option value="VC-78">[ 152 ] HOD, Forestry</option>
+	<option value="VC-63">[ 153 ] HOD, Seed Science &amp; Technology</option>
+	<option value="VC-59">[ 154 ] HOD, Vegetable Science</option>
+	<option value="VC-61">[ 155 ] HOD, Soil Science</option>
+	<option value="VC-56">[ 156 ] HOD, Bussiness Management</option>
+	<option value="VC-68">[ 157 ] HOD, Plant Pathology</option>
+	<option value="KZ-93">[ 158 ] Principal, COA, Bawal</option>
+	<option value="VC-53">[ 159 ] HOD, Dry land Agriculture</option>
+	<option value="VC-73">[ 160 ] HOD, Family Resource Management</option>
+	<option value="VC-65">[ 161 ] HOD, EECM</option>
+	<option value="VC-58">[ 162 ] HOD, HDFS</option>
+	<option value="VC-8">[ 163 ] A&amp;AO, COHS</option>
+	<option value="VC-55">[ 164 ] HOD, Foods and Nutrition</option>
+	<option value="VC-54">[ 165 ] HOD, Textile and Apparel Designing</option>
+	<option value="KV-87">[ 166 ] HOD, Instrumentation Cell</option>
+	<option value="VC-67">[ 167 ] HOD, FMPE</option>
+	<option value="VC-3">[ 168 ] A&amp;AO, COAE&amp;T</option>
+	<option value="VC-74">[ 169 ] HOD, Basic Engineering</option>
+	<option value="VC-79">[ 170 ] HOD, Processing and Food Engineering</option>
+	<option value="KV-88">[ 171 ] HOD, Transport Organization</option>
+	<option value="KV-89">[ 172 ] HOD, Renewable &amp; Bio-energy</option>
+	<option value="HA-92">[ 173 ] Deen Dayal Upadhaya Centre of Excellence for Organic Farming</option>
+	<option value="VC-64">[ 174 ] HOD, Soil and Water Engineering</option>
+	<option value="VC-75">[ 175 ] HOD, Mathematics and&nbsp;Statistics</option>
+	<option value="VC-76">[ 176 ] HOD, Botany &amp; Plant Physiology</option>
+	<option value="VC-77">[ 177 ] HOD, Zoology</option>
+	<option value="KZ-90">[ 178 ] HOD, Chemistry</option>
+	<option value="KZ-91">[ 179 ] HOD, Physics</option>
+	<option value="VC-46">[ 180 ] HOD, Languages and Haryanvi Culture</option>
+	<option value="VC-81">[ 181 ] HOD, Biochemistry</option>
+	<option value="VC-72">[ 182 ] HOD, Sociology</option>
+	<option value="VC-49">[ 183 ] HOD, MBBB</option>
+	<option value="VC-50">[ 184 ] Incharge, Computer Section</option>
+	<option value="VC-32">[ 185 ] A&amp;AO, COBS&amp;H</option>
+	<option value="KV-85">[ 186 ] HOD, Microbiology</option>
+	<option value="VC-17">[ 187 ] DDO, EOCE</option>
+	<option value="VC-66">[ 188 ] CO, LSU</option>
+	<option value="VC-83">[ 189 ] DHRM</option>
+	<option value="VC-71">[ 195 ] HOD, Forage</option>
+	<option value="AX-94">[ 199 ] HAU Agri Tourism</option>
+	<option value="CB-95">[ 200 ] Campus Hospital</option>
+	<option value="AZ-96">[ 201 ] COFS, Hisar</option>
+	<option value="AX-99">[ 202 ] College of Biotechnology</option>
+	<option value="CO-100">[ 203 ] Regional Director, NCRS Gokalpura</option>
+	<option value="CO-101">[ 204 ] Sr. Coordinator, KVK, Chhappera, Nuh</option>
+	<option value="CO-97">[ ABIC ] ABIC</option>
+
+</select></span>*
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblLocation">Location</td>
+            <td class="colon">:</td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlLocation__"><select name="ctl00$ContentPlaceHolder1$D_ddlLocation" id="ctl00_ContentPlaceHolder1_D_ddlLocation" class="dropdownlong">
+	<option selected="selected" value="">-- Select Location --</option>
+
+</select></span>*
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td>
+                <table cellpadding="0" cellspacing="0" border="0">
+                    <tbody><tr>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnSave__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="SAVE" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSave&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;SAVING...&#39;,true,btnSave_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSave" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnPrint__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnPrint" value="Print" id="ctl00_ContentPlaceHolder1_btnPrint" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdgap" colspan="3"></td>
+        </tr>
+        <tr>
+            <td class="tablesubheading" colspan="2">List of DDO &amp; Location Mapping</td>
+        </tr>
+        <tr>
+            <td class="tdgap" colspan="3"></td>
+        </tr>
+        <tr>
+            <td class="vtext">Search</td>
+            <td class="colon">:</td>
+            <td>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlSearch__"><select name="ctl00$ContentPlaceHolder1$ddlSearch" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$ddlSearch\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_ddlSearch">
+	<option selected="selected" value="--Select--">--Select--</option>
+	<option value="DDOName">DDOName</option>
+	<option value="LocName">LocName</option>
+
+</select></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtSearch__"><input name="ctl00$ContentPlaceHolder1$txtSearch" type="text" id="ctl00_ContentPlaceHolder1_txtSearch" class="textbox"></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnSearch__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSearch" value="Search" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSearch&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSearch" class="button-common" cellpadding="0" cellspacing="0"></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_LabelValidMsg__"><span id="ctl00_ContentPlaceHolder1_LabelValidMsg" class="lblmessage"></span></span>
+            </td>
+            
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_dgDetails__"><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td>S. No.</td><td>DDO</td><td>Location</td><td>EDIT</td><td>DELETE</td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:10%;">1</td><td>ABIC</td><td>ABIC</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Edit.gif" alt="" border="0">
+                                </a></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Delete.gif" alt="" border="0">
+                                </a></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:10%;">2</td><td>DDO Agri Tourism</td><td>Agri Tourism</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Edit.gif" alt="" border="0">
+                                </a></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Delete.gif" alt="" border="0">
+                                </a></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:10%;">3</td><td>Campus Hospital</td><td>Campus Hospital</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Edit.gif" alt="" border="0">
+                                </a></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Delete.gif" alt="" border="0">
+                                </a></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:10%;">4</td><td>Principal, Campus School</td><td>Campus School</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Edit.gif" alt="" border="0">
+                                </a></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Delete.gif" alt="" border="0">
+                                </a></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:10%;">5</td><td>Deen Dayal Upadhaya Centre of Excellence for Organic Farming</td><td>Centre of Excellence</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Edit.gif" alt="" border="0">
+                                </a></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Delete.gif" alt="" border="0">
+                                </a></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:10%;">6</td><td>Director, CFST</td><td>CFST, Hisar</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Edit.gif" alt="" border="0">
+                                </a></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Delete.gif" alt="" border="0">
+                                </a></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:10%;">7</td><td>A&amp;AO, COA</td><td>COA, Hisar</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Edit.gif" alt="" border="0">
+                                </a></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Delete.gif" alt="" border="0">
+                                </a></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:10%;">8</td><td>Principal, COA Kaul</td><td>COA, Kaul</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Edit.gif" alt="" border="0">
+                                </a></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Delete.gif" alt="" border="0">
+                                </a></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:10%;">9</td><td>A&amp;AO, COA</td><td>COA,Bawal</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Edit.gif" alt="" border="0">
+                                </a></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Delete.gif" alt="" border="0">
+                                </a></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:10%;">10</td><td>A&amp;AO, COAE&amp;T</td><td>COAE&amp;T , Hisar</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Edit.gif" alt="" border="0">
+                                </a></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkDelete__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./DDO location mapping_files/Delete.gif" alt="" border="0">
+                                </a></span>
+                            </td>
+	</tr><tr class="pager-style" align="center" style="color:#000000;">
+		<td colspan="5"><span>1</span>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;Page$2&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;&#39;)" style="color:#000000;">2</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;Page$3&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;&#39;)" style="color:#000000;">3</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl03&#39;,&#39;Page$4&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl03&#39;,&#39;&#39;)" style="color:#000000;">4</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl04&#39;,&#39;Page$5&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl04&#39;,&#39;&#39;)" style="color:#000000;">5</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl05&#39;,&#39;Page$6&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl05&#39;,&#39;&#39;)" style="color:#000000;">6</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl06&#39;,&#39;Page$7&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl06&#39;,&#39;&#39;)" style="color:#000000;">7</a></td>
+	</tr>
+</tbody></table></div>
+            </td>
+        </tr>
+    </tbody></table>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_D_ddlDDO');//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./DDO location mapping_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./DDO location mapping_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

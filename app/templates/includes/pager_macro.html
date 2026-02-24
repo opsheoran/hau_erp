@@ -1,0 +1,53 @@
+{% macro render_pager(pagination, param_name='page') %}
+{% if pagination and pagination.total_pages and pagination.total_pages > 1 %}
+{% set args = request.args.to_dict() %}
+{% set _ = args.pop(param_name, None) %}
+{% set pr = [] %}
+{% if pagination.total_pages <= 10 %}
+  {% for i in range(1, pagination.total_pages + 1) %}{% set _ = pr.append(i) %}{% endfor %}
+{% else %}
+  {% if pagination.page <= 5 %}
+    {% for i in range(1, 7) %}{% set _ = pr.append(i) %}{% endfor %}
+    {% set _ = pr.append('...') %}{% set _ = pr.append(pagination.total_pages) %}
+  {% elif pagination.page >= pagination.total_pages - 4 %}
+    {% set _ = pr.append(1) %}{% set _ = pr.append('...') %}
+    {% for i in range(pagination.total_pages - 5, pagination.total_pages + 1) %}{% set _ = pr.append(i) %}{% endfor %}
+  {% else %}
+    {% set _ = pr.append(1) %}{% set _ = pr.append('...') %}
+    {% for i in range(pagination.page - 2, pagination.page + 3) %}{% set _ = pr.append(i) %}{% endfor %}
+    {% set _ = pr.append('...') %}{% set _ = pr.append(pagination.total_pages) %}
+  {% endif %}
+{% endif %}
+
+<div class="pager-style no-print">
+    {% if pagination.has_prev %}
+    {% set _ = args.update({param_name: pagination.page - 1}) %}
+    <a href="{{ url_for(request.endpoint, **args) }}">&laquo; Prev</a>
+    {% else %}
+    <span class="disabled">&laquo; Prev</span>
+    {% endif %}
+
+    {% for p in pr %}
+        {% if p == '...' %}
+        <span class="disabled">...</span>
+        {% elif p == pagination.page %}
+        <span class="active">{{ p }}</span>
+        {% else %}
+        {% set _ = args.update({param_name: p}) %}
+        <a href="{{ url_for(request.endpoint, **args) }}">{{ p }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if pagination.has_next %}
+    {% set _ = args.update({param_name: pagination.page + 1}) %}
+    <a href="{{ url_for(request.endpoint, **args) }}">Next &raquo;</a>
+    {% else %}
+    <span class="disabled">Next &raquo;</span>
+    {% endif %}
+
+    <span class="disabled" style="border: none; margin-left: 8px;">
+        Page {{ pagination.page }} of {{ pagination.total_pages }}
+    </span>
+</div>
+{% endif %}
+{% endmacro %}

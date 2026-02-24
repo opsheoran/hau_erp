@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">GPF / CPF / NPS DETAILS</div>
+    <div style="padding: 20px;">
+        <div style="margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+            <table class="form-table" style="width: auto;">
+                <tr>
+                    <td class="vtext">Account Number</td><td class="colon">:</td>
+                    <td style="font-size: 14px; font-weight: bold; color: #3c8dbc;">{{ gpf.details.gpfno or 'N/A' }}</td>
+                    <td width="50"></td>
+                    <td class="vtext">PF Type</td><td class="colon">:</td>
+                    <td><span class="badge" style="background: #5bc0de; padding: 5px 10px; border-radius: 3px;">{{ gpf.details.PFType or 'N/A' }}</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="tablesubheading" style="background:#f4f4f4; color:#333; border:1px solid #ddd; margin-bottom:10px;">Yearly Balance History</div>
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <th>Financial Year</th>
+                    <th>Opening Balance</th>
+                    <th>Interest Earned</th>
+                    <th>Closing Balance</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in gpf.balances %}
+                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                    <td align="center"><b>{{ b.Lyear }}</b></td>
+                    <td align="right">{{ "{:,.2f}".format(b.OpningBal|float) }}</td>
+                    <td align="right" style="color: green;">+ {{ "{:,.2f}".format(b.IntAmount|float) }}</td>
+                    <td align="right"><b>{{ "{:,.2f}".format(b.ClosingBal|float) }}</b></td>
+                    <td align="center">
+                        {% if b.isretired == 'Y' %}<span style="color:red;">Retired</span>
+                        {% else %}<span style="color:green;">Active</span>{% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" align="center" style="padding: 30px; color: #999;">No balance history found for this employee.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div style="margin-top: 20px; font-size: 10px; color: #888; font-style: italic;">
+            * This statement is generated based on available ERP records. For any discrepancies, please contact the Accounts Department.
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .textbox-small { width: 150px !important; }
+    .textbox-medium { width: 250px !important; }
+    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .required-star { color: red; font-weight: bold; }
+</style>
+
+<div class="hau-card">
+    <div class="tablesubheading">Col-Deg-Specialization Master</div>
+    <div style="padding: 15px;">
+        <form method="POST">
+            <input type="hidden" name="action" value="SAVE">
+            <input type="hidden" name="pk_id" id="m_id">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Select College</td><td class="colon">:</td>
+                    <td width="34%">
+                        <select name="college_id" id="m_college" class="dropdown textbox-medium" required>
+                            <option value="">-- Select College --</option>
+                            {% for c in colleges %}
+                            <option value="{{ c.pk_collegeid }}">{{ c.collegename }}</option>
+                            {% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                    <td class="vtext" width="15%">Select Degree</td><td class="colon">:</td>
+                    <td>
+                        <select name="degree_id" id="m_degree" class="dropdown textbox-medium" required>
+                            <option value="">-- Select Degree --</option>
+                            {% for d in degrees %}
+                            <option value="{{ d.pk_degreeid }}">{{ d.degreename }}</option>
+                            {% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Remarks</td><td class="colon">:</td>
+                    <td colspan="4"><input type="text" name="remarks" id="m_remarks" class="textbox textbox-medium"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top: 15px;">
+                        <input type="submit" value="SAVE MAPPING" class="button-common">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 40px;">
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <th width="60">S.No.</th><th>College Name</th><th>Degree Name</th><th>Remarks</th><th width="100">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in mappings %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td style="font-weight:bold;">{{ m.collegename }}</td>
+                        <td>{{ m.degreename }}</td>
+                        <td>{{ m.Remarks or '' }}</td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick="editM('{{ m.PK_Coldgbrid }}', '{{ m.fk_CollegeId }}', '{{ m.fk_Degreeid }}', '{{ m.Remarks or '' }}')">
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this mapping?')">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="id" value="{{ m.PK_Coldgbrid }}">
+                                <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}" style="margin-left:5px;">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function editM(id, clg, deg, rem) {
+    document.getElementById('m_id').value = id;
+    document.getElementById('m_college').value = clg;
+    document.getElementById('m_degree').value = deg;
+    document.getElementById('m_remarks').value = rem;
+    window.scrollTo(0, 0);
+}
+</script>
+{% endblock %}

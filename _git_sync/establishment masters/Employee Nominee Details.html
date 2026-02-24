@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)https://hauiums.in/HRMS/GPF_Employee_Details_Mst.aspx?Mwpid=4497 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Employee Nominee Details_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Employee Nominee Details_files/default.css" type="text/css" rel="stylesheet"><link href="./Employee Nominee Details_files/font.css" type="text/css" rel="stylesheet"><link href="./Employee Nominee Details_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Employee Nominee Details_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style><script type="text/javascript" src="./Employee Nominee Details_files/WebResource.axd"></script><script type="text/javascript" src="./Employee Nominee Details_files/WebResource(1).axd"></script><script type="text/javascript" src="./Employee Nominee Details_files/WebResource(2).axd"></script><script type="text/javascript" src="./Employee Nominee Details_files/WebResource(3).axd"></script><script type="text/javascript" src="./Employee Nominee Details_files/CommonJS.js.download"></script><script type="text/javascript" src="./Employee Nominee Details_files/jquery-2.2.0.min.js.download"></script><script type="text/javascript">
+//<![CDATA[
+var Page_Validators = new Array();
+function WebForm_OnSubmit() {
+    return true;
+}
+//]]></script><script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script><script type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script><script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script><script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script><script type="text/javascript">
+        function ShowSearch(obj) {
+            document.getElementById('SearchDiv').style.display = 'block';
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 96)
+                return false;
+
+            //return true;
+        }
+    </script><script type="text/javascript">
+//<![CDATA[
+var Page_ValidationSummaries =  new Array(document.getElementById("ctl00_ContentPlaceHolder1_ValidationSummary1"));
+//]]>
+</script><script type="text/javascript">
+//<![CDATA[
+var ctl00_ContentPlaceHolder1_ValidationSummary1 = document.all ? document.all["ctl00_ContentPlaceHolder1_ValidationSummary1"] : document.getElementById("ctl00_ContentPlaceHolder1_ValidationSummary1");
+ctl00_ContentPlaceHolder1_ValidationSummary1.showmessagebox = "True";
+ctl00_ContentPlaceHolder1_ValidationSummary1.showsummary = "False";
+//]]>
+</script><script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script><script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_R_txtEmpCode');//]]>
+</script><script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/HRMS/GPF_Employee_Details_Mst.aspx?Mwpid=4497" id="aspnetForm" autocomplete="off" enctype="multipart/form-data">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTM0NTAzNDUxNA8WCB4GcG9zdGlkBSRkMGQ4OTU2MC1lYzZjLTQ3OTctYWM0MC1kZTE1OTNjOTU3MmYeBUluZGV4ZR4FZW1waWQFBkVTLTI3MR4JVGltZXN0YW1wFClYU3lzdGVtLkJ5dGUsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQgDAAMAAwADAAN0A18DIgNqFgJmDw8WAh4HUGVuZGluZwUBMGQWAgIBDxYCHgdlbmN0eXBlBRNtdWx0aXBhcnQvZm9ybS1kYXRhFhACAg8PFgIeBFRleHQFCE1zLiBSZW51ZGQCBA8PFgIfBgUbTExULiAtIDIvMjEvMjAyNiAzOjE4OjA1IFBNZGQCBQ8PFgIfBgUbQ0xULiAtIDIvMjEvMjAyNiAzOjE4OjE5IFBNZGQCBg8PFgIfBgUITXMuIFJlbnVkZAIHDw8WAh8GBQ1DT0JTJkgsIEhpc2FyZGQCCQ9kFgJmDxYCHwYFeTxzcGFuPlRyYW5zYWN0aW9uczwvc3Bhbj4mbmJzcDs+Jm5ic3A7PHNwYW4+UGVyc29uYWwgRGV0YWlsczwvc3Bhbj4mbmJzcDs+Jm5ic3A7PHN0cm9uZz5FbXBsb3llZSBOb21pbmVlIERldGFpbHM8L1N0cm9uZz5kAgoPZBY6AgEPEA8WBh4NRGF0YVRleHRGaWVsZAULRGVzY3JpcHRpb24eDkRhdGFWYWx1ZUZpZWxkBQhwa19kZG9pZB4LXyFEYXRhQm91bmRnZBAVDhAtLSBTZWxlY3QgRERPIC0tFlsgMTAwIF0gRERPLCBWQyBPZmZpY2UTWyAxMDMgXSBDb21wdHJvbGxlciRbIDEwNSBdIERETywgRGlyZWN0b3JhdGUgb2YgUmVzZWFyY2gRWyAxMTEgXSBBJkFPLCBERUUXWyAxMzIgXSBBJkFPLCBSZWdpc3RyYXIgWyAxMzMgXSBQcmluY2lwYWwsIENhbXB1cyBTY2hvb2waWyAxMzUgXSBEaXJlY3RvciwgUkRTIEZhcm0RWyAxNDIgXSBBJkFPLCBDT0ESWyAxNjMgXSBBJkFPLCBDT0hTFFsgMTY4IF0gQSZBTywgQ09BRSZUFFsgMTg1IF0gQSZBTywgQ09CUyZIDFsgMTg5IF0gREhSTRNbIDIwMSBdIENPRlMsIEhpc2FyFQ4ABVZDLTIzBVZDLTM3BVZDLTI0BVZDLTM1BUVTLTQwBVZDLTcwBVZDLTg0BVZDLTE5BFZDLTgEVkMtMwVWQy0zMgVWQy04MwVBWi05NhQrAw5nZ2dnZ2dnZ2dnZ2dnZxYBAgtkAgMPDxYCHwYFCEhBVTAwMjEyZGQCBw8WAh4FVmFsdWUFBkVTLTI3MWQCCQ8PFgIfBgUST20gUGFya2FzaCBTaGVvcmFuZGQCCw8PFgIfBgUaTWF0aGVtYXRpY3MgYW5kIFN0YXRpc3RpY3NkZAINDw8WAh8GBQlQcm9mZXNzb3JkZAIPDw8WAh8GBQQ1MzA4ZGQCEQ8PFgIfBgUDR1BGZGQCEw8PFgIfBmVkZAIVDw8WAh8GZWRkAhcPEA8WBh8HBQ1SZWxhdGlvbl9uYW1lHwgFCFBrX1JlbGlkHwlnZBAVDxUtLSBTZWxlY3QgUmVsYXRpb24gLS0HQnJvdGhlcg9Ccm90aGVyLWluLWxhdyAIRGF1Z2h0ZXIGRmF0aGVyDkZhdGhlci1pbi1sYXcgB0h1c2JhbmQGTW90aGVyDk1vdGhlci1pbi1sYXcgBk90aGVycwRTZWxmBlNpc3Rlcg1TaXN0ZXItaW4tTGF3A1NvbgRXaWZlFQ8VLS0gU2VsZWN0IFJlbGF0aW9uIC0tATEDMTIwATgBNAMxMTkBOQEyAzExOAE1AzExMwEzAzExNwE3ATYUKwMPZ2dnZ2dnZ2dnZ2dnZ2dnFgFmZAIZDw8WAh8GZRYCHglvbmtleWRvd24FEnJldHVybiBOdW1DaGVjaygpO2QCGw8PFgIfBmUWAh8LBRRyZXR1cm4gTnVtU3BsT25seSgpO2QCHQ8QDxYCHgdDaGVja2VkaGRkZGQCHw8PFgIfBmVkZAIhDw8WAh8GZWRkAiMPEA8WBh8HBQlzaG9ydGRlc2MfCAUJcGtfaGVhZGlkHwlnZBAVCglHUEYgKE9wdCkDTElDBkdTIExJUwdHUEYgQWR2AlVGA0VXRgNOUFMJQ1BGIChPcHQpCUV4LUdyYXRpYQZTYWxhcnkVCgIxMAIxNAIxNQIyNwI5MgI5NAMxMDcDMTI1AzEzNwMxMzgUKwMKZ2dnZ2dnZ2dnZxYBZmQCJQ8QDxYCHwxoZGRkZAIrDw8WAh8GZWRkAi8PDxYCHwZlZGQCNQ8PFgQfBgUDQUREHgtDb21tYW5kTmFtZQUDQUREZGQCOw88KwALAQAPFggeCERhdGFLZXlzFgAeC18hSXRlbUNvdW50Zh4JUGFnZUNvdW50AgEeFV8hRGF0YVNvdXJjZUl0ZW1Db3VudGZkZAI9Dw8WBh8GBQRTQVZFHw0FBlVQREFURR4XQXV0b1VwZGF0ZUFmdGVyQ2FsbEJhY2toZGQCPw8PFgQfBgUFUkVTRVQfEmhkZAJBDw8WAh8GZWRkAkMPPCsACwEADxYQHw8CCh8OFgoFB0FQLTUwOTgFB0NCLTM2NTkFBkVTLTMwNQUHQ08tNjE0OQUHRVMtMTIyNAUHQ08tNDc1MwUHRVMtMTAzMQUGRVMtMjg0BQdDQi01NDU0BQZFUy0zMjEfEAIcHg1TZWxlY3RlZEluZGV4Av////8PHxEClwIeEUFsbG93Q3VzdG9tUGFnaW5nZx4QVmlydHVhbEl0ZW1Db3VudAKXAh4QQ3VycmVudFBhZ2VJbmRleGZkFgJmD2QWFAICD2QWDGYPDxYCHwYFATFkZAIBDw8WAh8GBQhIQVUwNDA2NWRkAgIPDxYCHwYFD0FqYWIgU2luZ2ggQXJ5YWRkAgMPDxYCHwYFGk1hdGhlbWF0aWNzIGFuZCBTdGF0aXN0aWNzZGQCBA8PFgIfBgUJUHJvZmVzc29yZGQCBQ9kFgICAQ8PFgIeD0NvbW1hbmRBcmd1bWVudAUHQVAtNTA5OGRkAgMPZBYMZg8PFgIfBgUBMmRkAgEPDxYCHwYFCEhBVTAyODE1ZGQCAg8PFgIfBgUKQWpheSBLdW1hcmRkAgMPDxYCHwYFDE1pY3JvYmlvbG9neWRkAgQPDxYCHwYFE0Fzc2lzdGFudCBTY2llbnRpc3RkZAIFD2QWAgIBDw8WAh8XBQdDQi0zNjU5ZGQCBA9kFgxmDw8WAh8GBQEzZGQCAQ8PFgIfBgUISEFVMDAyMjZkZAICDw8WAh8GBQhBamF5IFBhbGRkAgMPDxYCHwYFDEJpb2NoZW1pc3RyeWRkAgQPDxYCHwYFE0Fzc2lzdGFudCBQcm9mZXNzb3JkZAIFD2QWAgIBDw8WAh8XBQZFUy0zMDVkZAIFD2QWDGYPDxYCHwYFATRkZAIBDw8WAh8GBQhIQVUwNDk4N2RkAgIPDxYCHwYFDEFtaXQgS2hpcmJhdGRkAgMPDxYCHwYFE0RlYW4gb2ZmaWNlLCBDT0JTJkhkZAIEDw8WAh8GBQ5Kci4gUHJvZ3JhbW1lcmRkAgUPZBYCAgEPDxYCHxcFB0NPLTYxNDlkZAIGD2QWDGYPDxYCHwYFATVkZAIBDw8WAh8GBQhIQVUwMDYyOGRkAgIPDxYCHwYFCkFtaXQgU2FpbmlkZAIDDw8WAh8GBRNEZWFuIG9mZmljZSwgQ09CUyZIZGQCBA8PFgIfBgUOTGFiLiBBc3Npc3RhbnRkZAIFD2QWAgIBDw8WAh8XBQdFUy0xMjI0ZGQCBw9kFgxmDw8WAh8GBQE2ZGQCAQ8PFgIfBgUISEFVMDM3NjBkZAICDw8WAh8GBRFBbmFuZCBLdW1hciBHdXB0YWRkAgMPDxYCHwYFE0RlYW4gb2ZmaWNlLCBDT0JTJkhkZAIEDw8WAh8GBRpBZG1pbi1jdW0tQWNjb3VudHMgT2ZmaWNlcmRkAgUPZBYCAgEPDxYCHxcFB0NPLTQ3NTNkZAIID2QWDGYPDxYCHwYFATdkZAIBDw8WAh8GBQhIQVUwMDAxMGRkAgIPDxYCHwYFCkFuaWwgRHVoYW5kZAIDDw8WAh8GBQlDaGVtaXN0cnlkZAIEDw8WAh8GBRFBc3Npc3RhbnQgQ2hlbWlzdGRkAgUPZBYCAgEPDxYCHxcFB0VTLTEwMzFkZAIJD2QWDGYPDxYCHwYFAThkZAIBDw8WAh8GBQhIQVUwMTU1N2RkAgIPDxYCHwYFCkFuaWwgS3VtYXJkZAIDDw8WAh8GBRNEZWFuIG9mZmljZSwgQ09CUyZIZGQCBA8PFgIfBgUNTGlmdCBPcGVyYXRvcmRkAgUPZBYCAgEPDxYCHxcFBkVTLTI4NGRkAgoPZBYMZg8PFgIfBgUBOWRkAgEPDxYCHwYFCEhBVTA0MzkwZGQCAg8PFgIfBgUKQW5pbCBLdW1hcmRkAgMPDxYCHwYFE0RlYW4gb2ZmaWNlLCBDT0JTJkhkZAIEDw8WAh8GBQ1MaWZ0IE9wZXJhdG9yZGQCBQ9kFgICAQ8PFgIfFwUHQ0ItNTQ1NGRkAgsPZBYMZg8PFgIfBgUCMTBkZAIBDw8WAh8GBQhIQVUwMDIzM2RkAgIPDxYCHwYFDEFuaXRhIEt1bWFyaWRkAgMPDxYCHwYFGUJvdGFueSAmIFBsYW50IFBoeXNpb2xvZ3lkZAIEDw8WAh8GBShBc3Npc3RhbnQgU2NpZW50aXN0IChQbGFudCBQaHlzaW9sb2dpc3QpZGQCBQ9kFgICAQ8PFgIfFwUGRVMtMzIxZGQCRQ9kFhACAQ8PFgIfBmVkZAIDDw8WAh8GZWRkAgUPDxYCHwZlZGQCBw8QDxYGHwcFC0Rlc2NyaXB0aW9uHwgFCHBrX2Rkb2lkHwlnZBAVYB4tLVNlbGVjdCBDb250cm9sbGluZyBPZmZpY2VyLS0WWzE5OV0gSEFVIEFncmkgVG91cmlzbR5bMjAyXSBDb2xsZWdlIG9mIEJpb3RlY2hub2xvZ3kRWzIwMV0gQ09GUywgSGlzYXIVWzIwMF0gQ2FtcHVzIEhvc3BpdGFsJ1syMDNdIFJlZ2lvbmFsIERpcmVjdG9yLCBOQ1JTIEdva2FscHVyYSpbMjA0XSBTci4gQ29vcmRpbmF0b3IsIEtWSywgQ2hoYXBwZXJhLCBOdWgLW0FCSUNdIEFCSUMWWzEyMF0gRERPIEFncmkgVG91cmlzbRVbMTMyXSBBJkFPLCBSZWdpc3RyYXJCWzE3M10gRGVlbiBEYXlhbCBVcGFkaGF5YSBDZW50cmUgb2YgRXhjZWxsZW5jZSBmb3IgT3JnYW5pYyBGYXJtaW5nF1sxODZdIEhPRCwgTWljcm9iaW9sb2d5IFsxMzFdIFNyLiBDb29yZGluYXRvciwgS1ZLIEJhd2FsH1sxNjZdIEhPRCwgSW5zdHJ1bWVudGF0aW9uIENlbGwhWzE3MV0gSE9ELCBUcmFuc3BvcnQgT3JnYW5pemF0aW9uIVsxNzJdIEhPRCwgUmVuZXdhYmxlICYgQmlvLWVuZXJneRRbMTc4XSBIT0QsIENoZW1pc3RyeRJbMTc5XSBIT0QsIFBoeXNpY3MbWzE1OF0gUHJpbmNpcGFsLCBDT0EsIEJhd2FsFFsxMDJdIERpcmVjdG9yLCBDRlNUI1sxMDZdIFJlZ2lvbmFsIERpcmVjdG9yLCBSUlMgS2FybmFsH1sxMTJdIFNyLiBDb29yaW5hdG9yLCBLVkssIEppbmQnWzExNF0gU3IuIENvb3JkaW5hdG9yLCBLVkssIEt1cnVrc2hldHJhI1sxMTVdIFNyLiBDb29yZGluYXRvciwgS1ZLLCBQaW5qb3JlIVsxMDddIFJlZ2lvbmFsIERpcmVjdG9yLCBSUlMgS2F1bA9bMTg3XSBERE8sIEVPQ0UPWzE0Ml0gQSZBTywgQ09BJFsxMTNdIFNyLiBDb29yZGluYXRvciwgS1ZLLCBTYWRhbHB1ciJbMTE5XSBTci4gQ29vcmRpbmF0b3IsIEtWSywgS2FybmFsIlsxMTBdIFJlZ2lvbmFsIERpcmVjdG9yLCBDUlMgU2lyc2EUWzEwMF0gRERPLCBWQyBPZmZpY2UiWzEwNV0gRERPLCBEaXJlY3RvcmF0ZSBvZiBSZXNlYXJjaCNbMTE2XSBTci4gQ29vcmRpbmF0b3IsIEtWSywgUGFuaXBhdCRbMTM0XSBEaXJlY3RvciwgRGlyZWN0b3JhdGUgb2YgRmFybXMjWzExN10gU3IuIENvb3JkaW5hdG9yLCBLVkssIFNvbmlwYXQjWzEwOV0gUmVnaW9uYWwgRGlyZWN0b3IsIFJSUywgQmF3YWwhWzEyMF0gU3IuIENvb3JkaW5hdG9yLCBLVkssIFNpcnNhElsxNjhdIEEmQU8sIENPQUUmVA9bMTAxXSBEZWFuLCBQR1MSWzE4NV0gQSZBTywgQ09CUyZIKFsxMThdIFNyLiBDb29yZGluYXRvciwgS1ZLLCBNYWhlbmRlcmdhcmgTWzEzN10gRGlyZWN0b3IsIERTVw9bMTExXSBBJkFPLCBERUUjWzEyMV0gU3IuIENvb3JkaW5hdG9yLCBLVkssIEpoYWpqYXIRWzEwM10gQ29tcHRyb2xsZXIkWzEyN10gU3IuIENvb3JkaW5hdG9yLCBLVkssIE1hbmRrb2xhJ1sxMjZdIFNyLiBDb29yZGluYXRvciwgS1ZLLCBZYW11bmFuYWdhciZbMTI4XSBSZWdpb25hbCBEaXJlY3RvciwgRUVJIE5pbG9raGVyaSRbMTI1XSBTci4gQ29vcmRpbmF0b3IsIEtWSyBGYXRlaGFiYWQkWzEyNF0gU3IuIENvb3JkaW5hdG9yLCBLVksgRmFyaWRhYmFkIlsxMjNdIFNyLiBDb29yZGluYXRvciwgS1ZLIEJoaXdhbmkhWzEyMl0gU3IuIENvb3JkaW5hdG9yLCBLVksgQW1iYWxhIVsxNDZdIEhPRCwgQWdyaWN1bHR1cmFsIEVjb25vbWljcyNbMTQ1XSBIT0QsIEFncmljdWx0dXJhbCBNZXRlb3JvbG9neSlbMTgwXSBIT0QsIExhbmd1YWdlcyBhbmQgSGFyeWFudmkgQ3VsdHVyZRVbMTQ3XSBIT0QsIEVudG9tb2xvZ3kTWzE0M10gSE9ELCBBZ3Jvbm9teQ9bMTgzXSBIT0QsIE1CQkIjWzEwOF0gUmVnaW9uYWwgRGlyZWN0b3IsIFJSUyBSb2h0YWsgWzE4NF0gSW5jaGFyZ2UsIENvbXB1dGVyIFNlY3Rpb24qWzEwNF0gRGlyZWN0b3IsIFN0b3JlcyBhbmQgUHVyY2hhc2UgT2ZmaWNlDlsxNDldIEhPRCwgR1BCH1sxNTldIEhPRCwgRHJ5IGxhbmQgQWdyaWN1bHR1cmUoWzE2NV0gSE9ELCBUZXh0aWxlIGFuZCBBcHBhcmVsIERlc2lnbmluZx5bMTY0XSBIT0QsIEZvb2RzIGFuZCBOdXRyaXRpb24fWzE1Nl0gSE9ELCBCdXNzaW5lc3MgTWFuYWdlbWVudBVbMTUwXSBIT0QsIE5lbWF0b2xvZ3kPWzE2Ml0gSE9ELCBIREZTHFsxNTRdIEhPRCwgVmVnZXRhYmxlIFNjaWVuY2UXWzE0OF0gSE9ELCBIb3J0aWN1bHR1cmUXWzE1NV0gSE9ELCBTb2lsIFNjaWVuY2UeWzE0NF0gSE9ELCBFeHRlbnNpb24gRWR1Y2F0aW9uJFsxNTNdIEhPRCwgU2VlZCBTY2llbmNlICYgVGVjaG5vbG9neSVbMTc0XSBIT0QsIFNvaWwgYW5kIFdhdGVyIEVuZ2luZWVyaW5nD1sxNjFdIEhPRCwgRUVDTQ1bMTg4XSBDTywgTFNVD1sxNjddIEhPRCwgRk1QRRpbMTU3XSBIT0QsIFBsYW50IFBhdGhvbG9neSJbMTMwXSBTci4gQ29vcmRpbmF0b3IsIEtWSywgUm9odGFrHlsxMzNdIFByaW5jaXBhbCwgQ2FtcHVzIFNjaG9vbBFbMTk1XSBIT0QsIEZvcmFnZRRbMTgyXSBIT0QsIFNvY2lvbG9neSVbMTYwXSBIT0QsIEZhbWlseSBSZXNvdXJjZSBNYW5hZ2VtZW50HFsxNjldIEhPRCwgQmFzaWMgRW5naW5lZXJpbmcmWzE3NV0gSE9ELCBNYXRoZW1hdGljcyBhbmTCoFN0YXRpc3RpY3MkWzE3Nl0gSE9ELCBCb3RhbnkgJiBQbGFudCBQaHlzaW9sb2d5ElsxNzddIEhPRCwgWm9vbG9neRNbMTUyXSBIT0QsIEZvcmVzdHJ5KlsxNzBdIEhPRCwgUHJvY2Vzc2luZyBhbmQgRm9vZCBFbmdpbmVlcmluZxBbMTYzXSBBJkFPLCBDT0hTGVsxNTFdIFByaW5jaXBhbCwgQ09BIEthdWwXWzE4MV0gSE9ELCBCaW9jaGVtaXN0cnkaWzEzNl0gVW5pdmVyc2l0eSBMaWJyYXJpYW4KWzE4OV0gREhSTRhbMTM1XSBEaXJlY3RvciwgUkRTIEZhcm0jWzEyOV0gU3IuIENvb3JkaW5hdG9yLCBLVkssIEthaXRoYWwVYAAFQVgtOTQFQVgtOTkFQVotOTYFQ0ItOTUGQ08tMTAwBkNPLTEwMQVDTy05NwVDTy05OAVFUy00MAVIQS05MgVLVi04NQVLVi04NgVLVi04NwVLVi04OAVLVi04OQVLWi05MAVLWi05MQVLWi05MwRWQy0xBVZDLTExBVZDLTEyBVZDLTE0BVZDLTE1BVZDLTE2BVZDLTE3BVZDLTE5BFZDLTIFVkMtMjEFVkMtMjIFVkMtMjMFVkMtMjQFVkMtMjUFVkMtMjYFVkMtMjcFVkMtMjgFVkMtMjkEVkMtMwVWQy0zMAVWQy0zMgVWQy0zMwVWQy0zNAVWQy0zNQVWQy0zNgVWQy0zNwVWQy0zOAVWQy0zOQRWQy00BVZDLTQwBVZDLTQxBVZDLTQyBVZDLTQzBVZDLTQ0BVZDLTQ1BVZDLTQ2BVZDLTQ3BVZDLTQ4BVZDLTQ5BFZDLTUFVkMtNTAFVkMtNTEFVkMtNTIFVkMtNTMFVkMtNTQFVkMtNTUFVkMtNTYFVkMtNTcFVkMtNTgFVkMtNTkFVkMtNjAFVkMtNjEFVkMtNjIFVkMtNjMFVkMtNjQFVkMtNjUFVkMtNjYFVkMtNjcFVkMtNjgEVkMtNwVWQy03MAVWQy03MQVWQy03MgVWQy03MwVWQy03NAVWQy03NQVWQy03NgVWQy03NwVWQy03OAVWQy03OQRWQy04BVZDLTgwBVZDLTgxBVZDLTgyBVZDLTgzBVZDLTg0BFZDLTkUKwNgZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnFgECJ2QCCQ8QDxYGHwcFB2xvY25hbWUfCAUIcGtfbG9jaWQfCWdkEBUCFS0tIFNlbGVjdCBMb2NhdGlvbiAtLQ1DT0JTJkgsIEhpc2FyFQIABFZDLTMUKwMCZ2cWAWZkAgsPEGRkFgBkAg0PEGRkFgBkAg8PDxYCHwZlZGQCSw8PFgIfBmVkZAJNDzwrAAsBAA8WEB8PAgEfDhYBBQZFUy0yNzEfFQIBHxACAR8UZx8RAgEfE2YfFmZkFgJmD2QWAgICD2QWEmYPDxYCHwYFATFkZAIBD2QWAgIBDw8WAh8XBSZFUy0yNzF+WyBIQVUwMDIxMiBdIE9tIFBhcmthc2ggU2hlb3JhbmRkAgIPDxYCHwYFCEhBVTAwMjEyZGQCAw8PFgIfBgUfWyBIQVUwMDIxMiBdIE9tIFBhcmthc2ggU2hlb3JhbmRkAgQPDxYCHwYFDEEmQU8sIENPQlMmSGRkAgUPDxYCHwYFGk1hdGhlbWF0aWNzIGFuZCBTdGF0aXN0aWNzZGQCBg8PFgIfBgUJUGVybWFuZW50ZGQCBw8PFgIfBgUKMjUvMTAvMTk2OGRkAggPZBYCAgEPDxYCHxcFOUVTLTI3MSxbIEhBVTAwMjEyIF0gT20gUGFya2FzaCBTaGVvcmFuLFByb2Zlc3NvcixIQVUwMDIxMmRkAgsPDxYCHwZlZGQYAQUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgMFDGN0bDAwJGhwbEJ0bgUiY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRjaGtNaW5vcgUmY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRjaGtJc1ByaW1hcnm2vPmpho/mhmSgJddxXjTzyBupGFooWD5OIax1Sfe2ng==">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./Employee Nominee Details_files/WebResource(4).axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Employee Nominee Details_files/WebResource(5).axd" type="text/javascript"></script>
+<script src="./Employee Nominee Details_files/WebResource(6).axd" type="text/javascript"></script>
+<script src="./Employee Nominee Details_files/WebResource(7).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="53CC4603">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="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">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Employee Nominee Details_files/Establishment.png">
+                            Establishment
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/HRMS/GPF_Employee_Details_Mst.aspx?Mwpid=4497#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment">Ms. Renu</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName">Ms. Renu</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COBS&amp;H, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/HRMS/GPF_Employee_Details_Mst.aspx?Mwpid=4497#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Employee Nominee Details_files/WebResource(8).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Masters" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3191#" tabindex="-1">Masters</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:3" role="menuitem" style="position: relative;"><a title="Establishment Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5041#" tabindex="-1">Establishment Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:3" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="City Category Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_CityCategory_Mst.aspx?Mwpid=76" tabindex="-1">City-Category Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="City Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_City_Mst.aspx?Mwpid=75" tabindex="-1">City Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Salutation  Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Salutation_Mst.aspx?Mwpid=3717" tabindex="-1">Salutation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Religion Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Religion_Mst.aspx?Mwpid=855" tabindex="-1">Religion Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Relation Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Relation_MST.aspx?Mwpid=3709" tabindex="-1">Relation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Category Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Category_Mst.aspx?Mwpid=74" tabindex="-1">Category Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Gad-Nongad Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_GadNongad_Mst.aspx?Mwpid=89" tabindex="-1">Gad-Nongad Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Class Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Class_Mst.aspx?Mwpid=77" tabindex="-1">Class Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Discipline Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Discipline_Mst.aspx?Mwpid=1892" tabindex="-1">Discipline Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marital Status Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Marital_Status_Mst.aspx?Mwpid=3710" tabindex="-1">Marital Status Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Funds Sponsor Master" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_Fund_Sponsor_Mst.aspx?Mwpid=5080" tabindex="-1">Funds Sponsor Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="ExamType Master" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_ExamType_Master.aspx?Mwpid=5081" tabindex="-1">ExamType Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Category" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_DesignationCategory_Mst.aspx?Mwpid=5085" tabindex="-1">Designation Category</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:18" role="menuitem" style="position: relative;"><a title="Employee Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5042#" tabindex="-1">Employee Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:18" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Department Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Department_Mst.aspx?Mwpid=1948" tabindex="-1">Department Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Section Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Section_Mst.aspx?Mwpid=1947" tabindex="-1">Section Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Designation Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Designation_Mst.aspx?Mwpid=80" tabindex="-1">Designation Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Employee_Mst.aspx?Mwpid=3194" tabindex="-1">Employee Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Master Scheme Wise" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Employee_Mst_Scheme.aspx?Mwpid=5279" tabindex="-1">Employee Master Scheme Wise</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:25" role="menuitem" style="position: relative;"><a title="SAR Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5044#" tabindex="-1">SAR Maters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:25" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Category Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Category_mst.aspx?Mwpid=5045" tabindex="-1">SAR Category Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Activity Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Activity_mst.aspx?Mwpid=5046" tabindex="-1">SAR Activity Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Grade Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Grade_mst.aspx?Mwpid=5047" tabindex="-1">SAR Grade Master</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Master" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Employee_mst.aspx?Mwpid=5048" tabindex="-1">SAR Employee Master</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:32" role="menuitem" style="position: relative; float: left;"><a title="Transactions" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3192#" tabindex="-1">Transactions</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:32" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:33" role="menuitem" style="position: relative;"><a title="Personal Details" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5049#" tabindex="-1">Personal Details</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:33" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Demographic Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Employee_Demographic_Details.aspx?Mwpid=1665" tabindex="-1">Employee Demographic Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="SAL_EmployeeDocument_Details.aspx" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeDocument_Details.aspx?Mwpid=4481" tabindex="-1">Employee Document Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Qualification Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeQualification_Details.aspx?Mwpid=1955" tabindex="-1">Education Qualification Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Permission of Qualification Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeEducation_Details.aspx?Mwpid=5253" tabindex="-1">Employee Permission of Qualification Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Family Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeFamily_Details.aspx?Mwpid=1954" tabindex="-1">Employee Family Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Nominee Details" class="level3 dynamic" href="https://hauiums.in/HRMS/GPF_Employee_Details_Mst.aspx?Mwpid=4497" tabindex="-1">Employee Nominee Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Books Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeMemo_Details.aspx?Mwpid=1979" tabindex="-1">Employee Books Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="LTC Detail" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_LTC_Detail.aspx?Mwpid=4832" tabindex="-1">LTC Detail</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Earned Leave Details" class="level3 dynamic" href="https://hauiums.in/Leave/SAL_EarnedLeave_Details.aspx?Mwpid=5190" tabindex="-1">Earned Leave Details</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:44" role="menuitem" style="position: relative;"><a title="Job Details" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5050#" tabindex="-1">Job Details</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:44" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Previous Job Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeePreviousJob_Details.aspx?Mwpid=1667" tabindex="-1">Employee Previous Job Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Foreign Visit Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeForeignVisit_Details.aspx?Mwpid=1961" tabindex="-1">Employee Foreign Visit Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Training Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeTraining_Details.aspx?Mwpid=1957" tabindex="-1">Employee Training Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Departmental Exam Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeDepartmentalExam_Details.aspx?Mwpid=4797" tabindex="-1">Employee Departmental Exam Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Service Verification Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeServiceVerification_Details.aspx?Mwpid=4798" tabindex="-1">Employee Service Verification Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Disciplinary Action/Reward Details" class="level3 dynamic" href="https://hauiums.in/HRMS/EST_Disciplinary_Action_Details.aspx?Mwpid=368" tabindex="-1">Disciplinary Action/Reward Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Loan Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_LoanDetails.aspx?Mwpid=5232" tabindex="-1">Employee Loan Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Book Grant Amount Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_BookGrantAmount.aspx?Mwpid=5233" tabindex="-1">Employee Book Grant Amount Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Bonus Amount Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_EmployeeBonusAmont_dtl.aspx?Mwpid=5247" tabindex="-1">Employee Bonus Amount Details</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:55" role="menuitem" style="position: relative;"><a title="Increment/Promotion" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5051#" tabindex="-1">Increment/Promotion</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:55" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="SAR/ACR Admin Transaction" class="level3 dynamic" href="https://hauiums.in/HRMS/SAR/SAR_Admin_Transaction.aspx?Mwpid=5054" tabindex="-1">SAR/ACR Admin Transaction</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee First Appointment Details" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_FirstAppointment_Details.aspx?Mwpid=4823" tabindex="-1">Employee First Appointment Details</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Emp Increment Payrevision" class="level3 dynamic" href="https://hauiums.in/HRMS/sal_emp_increment_payrevision_detailt.aspx?Mwpid=4802" tabindex="-1">Emp Increment Payrevision</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Promotion/Financial Up-gradation Details" class="level3 dynamic" href="https://hauiums.in/HRMS/sal_emp_promotion_detail.aspx?Mwpid=4820" tabindex="-1">Employee Promotion/Financial Up-gradation</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee No-Dues Detail" class="level3 dynamic" href="https://hauiums.in/HRMS/SAL_Emp_NoDues_Detail.aspx?Mwpid=5151" tabindex="-1">Employee No-Dues Detail</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:63" role="menuitem" style="position: relative; float: left;"><a title="Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=3193#" tabindex="-1">Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:63" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:64" role="menuitem" style="position: relative;"><a title="Reports" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=5052#" tabindex="-1">Reports</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:64" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Employee Service Book Report" class="level3 dynamic" href="https://hauiums.in/HRMS/Reports/EST_EmpServiceBookDigitizedView_Rpt.aspx?Mwpid=1653" tabindex="-1">Employee Service Book Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Establishment OfficeWise Report" class="level3 dynamic" href="https://hauiums.in/HRMS/Reports/EST_Establishment_OfficeWise_Rpt.aspx?Mwpid=1875" tabindex="-1">Establishment OfficeWise Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Organisation Data" class="level3 dynamic" href="https://hauiums.in/HRMS/OrganisationStruct.aspx?Mwpid=5114" tabindex="-1">Organisation Data</a></li>
+			</ul></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Transactions</span>&nbsp;&gt;&nbsp;<span>Personal Details</span>&nbsp;&gt;&nbsp;<strong>Employee Nominee Details</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Employee Nominee Details_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <script type="text/javascript" language="javascript">
+        function ShowSearch(obj) {
+            document.getElementById('SearchDiv').style.display = 'block';
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 96)
+                return false;
+
+            //return true;
+        }
+    </script>
+    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%" align="left">
+        <tbody><tr>
+            <td colspan="7" class="tableheading">
+                <span class="mainheadingborderbottom">Employee Details</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblDDO" style="width: 15%;">DDO
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlDDO__"><select name="ctl00$ContentPlaceHolder1$D_ddlDDO" id="ctl00_ContentPlaceHolder1_D_ddlDDO" disabled="disabled" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlDDO&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value="">-- Select DDO --</option>
+	<option value="VC-23">[ 100 ] DDO, VC Office</option>
+	<option value="VC-37">[ 103 ] Comptroller</option>
+	<option value="VC-24">[ 105 ] DDO, Directorate of Research</option>
+	<option value="VC-35">[ 111 ] A&amp;AO, DEE</option>
+	<option value="ES-40">[ 132 ] A&amp;AO, Registrar</option>
+	<option value="VC-70">[ 133 ] Principal, Campus School</option>
+	<option value="VC-84">[ 135 ] Director, RDS Farm</option>
+	<option value="VC-19">[ 142 ] A&amp;AO, COA</option>
+	<option value="VC-8">[ 163 ] A&amp;AO, COHS</option>
+	<option value="VC-3">[ 168 ] A&amp;AO, COAE&amp;T</option>
+	<option selected="selected" value="VC-32">[ 185 ] A&amp;AO, COBS&amp;H</option>
+	<option value="VC-83">[ 189 ] DHRM</option>
+	<option value="AZ-96">[ 201 ] COFS, Hisar</option>
+
+</select></span>
+                *
+            </td>
+            <td></td>
+            <td id="lblEmpCode" class="vtext">Employee Code
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtEmpCode__"><input name="ctl00$ContentPlaceHolder1$R_txtEmpCode" type="text" value="HAU00212" readonly="readonly" id="ctl00_ContentPlaceHolder1_R_txtEmpCode" class="textboxlong" onpaste="event.returnValue=false" ondrop="event.returnValue=false" onkeydown="event.returnValue=false"></span>
+                *
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lnkSearchClient__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$lnkSearchClient&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Searching...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_lnkSearchClient" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$lnkSearchClient&#39;,&#39;&#39;)"><img src="./Employee Nominee Details_files/srec.jpg" id="ctl00_ContentPlaceHolder1_CodeSearchA" border="0" onclick="ShowSearch(this);"></a></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_hfEmpid__"><input type="hidden" name="ctl00$ContentPlaceHolder1$hfEmpid" id="ctl00_ContentPlaceHolder1_hfEmpid"></span>
+            </td>
+        </tr>
+        <tr>
+            <td id="lblEmpName" class="vtext">Employee Name
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtEmpName__"><input name="ctl00$ContentPlaceHolder1$txtEmpName" type="text" value="Om Parkash Sheoran" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtEmpName" class="textboxlong"></span>
+            </td>
+            <td></td>
+            <td id="lblDepartment" class="vtext">Department
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtDepartment__"><input name="ctl00$ContentPlaceHolder1$txtDepartment" type="text" value="Mathematics and Statistics" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtDepartment" class="textboxlong"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Designation
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtDesignation__"><input name="ctl00$ContentPlaceHolder1$txtDesignation" type="text" value="Professor" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtDesignation" class="textboxlong"></span>
+            </td>
+            <td></td>
+            <td class="vtext">PF Number
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtpfnumber__"><input name="ctl00$ContentPlaceHolder1$txtpfnumber" type="text" value="5308" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtpfnumber" class="textboxlong"></span>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td class="vtext">PF Type
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtpftype__"><input name="ctl00$ContentPlaceHolder1$txtpftype" type="text" value="GPF" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtpftype" class="textboxlong"></span>
+
+            </td>
+            <td></td>
+            <td class="vtext">Remarks
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtRemarks__"><input name="ctl00$ContentPlaceHolder1$txtRemarks" type="text" maxlength="255" id="ctl00_ContentPlaceHolder1_txtRemarks" class="textboxlong" ondrag="return false" ondrop="return false" onpaste="return false;"></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tablesubheading">
+                <span class="subheadingborderbottom">Employee Nominee Details</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td class="vtext" style="width: 15%;">Nominee Name
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtNomineename__"><input name="ctl00$ContentPlaceHolder1$txtNomineename" type="text" maxlength="100" id="ctl00_ContentPlaceHolder1_txtNomineename" class="textboxlong" ondrag="return false" ondrop="return false" onpaste="return false;"></span>
+                *
+            </td>
+            <td></td>
+            <td class="vtext" id="lblRelationship">Relation
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlRelationship__"><select name="ctl00$ContentPlaceHolder1$ddlRelationship" id="ctl00_ContentPlaceHolder1_ddlRelationship" class="dropdownlong">
+	<option selected="selected" value="-- Select Relation --">-- Select Relation --</option>
+	<option value="1">Brother</option>
+	<option value="120">Brother-in-law </option>
+	<option value="8">Daughter</option>
+	<option value="4">Father</option>
+	<option value="119">Father-in-law </option>
+	<option value="9">Husband</option>
+	<option value="2">Mother</option>
+	<option value="118">Mother-in-law </option>
+	<option value="5">Others</option>
+	<option value="113">Self</option>
+	<option value="3">Sister</option>
+	<option value="117">Sister-in-Law</option>
+	<option value="7">Son</option>
+	<option value="6">Wife</option>
+
+</select></span>
+                *
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Age
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtAge__"><input name="ctl00$ContentPlaceHolder1$txtAge" type="text" maxlength="2" id="ctl00_ContentPlaceHolder1_txtAge" class="textbox4" ondrag="return false" ondrop="return false" onpaste="return false;" onkeydown="return NumCheck();"></span>
+            </td>
+            <td></td>
+            <td class="vtext">Share
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtShare__"><input name="ctl00$ContentPlaceHolder1$txtShare" type="text" maxlength="3" id="ctl00_ContentPlaceHolder1_txtShare" class="textbox4" ondrag="return false" ondrop="return false" onpaste="return false;" onkeypress="return isNumberKey(event)" onkeydown="return NumSplOnly();"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Is Minor
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_chkMinor__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_chkMinor" type="checkbox" name="ctl00$ContentPlaceHolder1$chkMinor"></span></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtMinor__" style="display: none;"></span>
+            </td>
+            <td></td>
+            <td class="vtext">Second Nominee Details</td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtOtherDetails__"><input name="ctl00$ContentPlaceHolder1$txtOtherDetails" type="text" maxlength="200" id="ctl00_ContentPlaceHolder1_txtOtherDetails" class="textboxlong" ondrag="return false" ondrop="return false" onpaste="return false;"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Nominee Type
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                
+                <span id="Anthem_ctl00_ContentPlaceHolder1_chkPFtype__"><select name="ctl00$ContentPlaceHolder1$chkPFtype" id="ctl00_ContentPlaceHolder1_chkPFtype" style="color: Black;">
+	<option selected="selected" value="10">GPF (Opt)</option>
+	<option value="14">LIC</option>
+	<option value="15">GS LIS</option>
+	<option value="27">GPF Adv</option>
+	<option value="92">UF</option>
+	<option value="94">EWF</option>
+	<option value="107">NPS</option>
+	<option value="125">CPF (Opt)</option>
+	<option value="137">Ex-Gratia</option>
+	<option value="138">Salary</option>
+
+</select></span>
+                
+            </td>
+            <td></td>
+            <td class="vtext">Is Primary
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_chkIsPrimary__"><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_chkIsPrimary" type="checkbox" name="ctl00$ContentPlaceHolder1$chkIsPrimary"></span></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Upload Document
+            </td>
+            <td class="colon">:
+            </td>
+            <td colspan="5">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_flUpload__"><input type="file" name="ctl00$ContentPlaceHolder1$flUpload" id="ctl00_ContentPlaceHolder1_flUpload" class="uploadfiles" style="width:220px;"></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_Label1__"><span id="ctl00_ContentPlaceHolder1_Label1" class="lblmessage">(Size should not be greater than 20MB and supported file types are .jpg, .jpeg, .pjpeg, .bmp, .gif, .png)</span></span><br>
+            </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="4">
+                
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lnkUpload__"><a id="ctl00_ContentPlaceHolder1_lnkUpload" causesvalidation="False" target="_blank"></a></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_hflnkupload__"><input type="hidden" name="ctl00$ContentPlaceHolder1$hflnkupload" id="ctl00_ContentPlaceHolder1_hflnkupload"></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_hdUpload__"><input name="ctl00$ContentPlaceHolder1$hdUpload" type="text" id="ctl00_ContentPlaceHolder1_hdUpload" style="border-width:0px;border-style:None;height:0px;width:0px;"></span>
+                
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnRemove__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnRemove" value="Remove File" id="ctl00_ContentPlaceHolder1_btnRemove" class="button-common" cellpadding="0" cellspacing="0"></span>
+                <input name="ctl00$ContentPlaceHolder1$hidFileNameUpload" type="hidden" id="ctl00_ContentPlaceHolder1_hidFileNameUpload">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <table cellpadding="0" cellspacing="0" border="0">
+                    <tbody><tr>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnAdd__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnAdd" value="ADD" id="ctl00_ContentPlaceHolder1_btnAdd" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnClear__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnClear" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnClear&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnClear" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg1__"><span id="ctl00_ContentPlaceHolder1_lblMsg1" class="lblmessage"></span></span>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <div id="Div2" class="DivStyleWithScroll" style="width: 100%; height: 250px">
+                    <div id="Anthem_ctl00_ContentPlaceHolder1_dgGPFNomineeDetails__"><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgGPFNomineeDetails" style="border-color:Black;width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td>S. No.</td><td>Nominee Name</td><td>Relationship</td><td>Age</td><td>Share</td><td>Is Minor</td><td>Second Nominee Details</td><td>Nominee Type</td><td>Primary</td><td>EDIT</td><td>DELETE</td>
+	</tr>
+</tbody></table></div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td colspan="7" align="left">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tbody><tr>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnSave__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="SAVE" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSave&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;SAVING...&#39;,true,btnSave_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSave" class="button-common" cellpadding="0" cellspacing="0" style="height: 26px"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tablesubheading">
+                <span class="subheadingborderbottom">List of Employees Details</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" class="tdgap"></td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_dgDetails__"><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td>S. No.</td><td>Employee Code</td><td>Employee Name</td><td>Department</td><td>Designation</td><td>EDIT</td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">1</td><td style="width:15%;">HAU04065</td><td>Ajab Singh Arya</td><td>Mathematics and Statistics</td><td>Professor</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl03_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit&#39;,&#39;&#39;)">
+                        <img src="./Employee Nominee Details_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl03$lnkEdit--></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">2</td><td style="width:15%;">HAU02815</td><td>Ajay Kumar</td><td>Microbiology</td><td>Assistant Scientist</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl04_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit&#39;,&#39;&#39;)">
+                        <img src="./Employee Nominee Details_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl04$lnkEdit--></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">3</td><td style="width:15%;">HAU00226</td><td>Ajay Pal</td><td>Biochemistry</td><td>Assistant Professor</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl05_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit&#39;,&#39;&#39;)">
+                        <img src="./Employee Nominee Details_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl05$lnkEdit--></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">4</td><td style="width:15%;">HAU04987</td><td>Amit Khirbat</td><td>Dean office, COBS&amp;H</td><td>Jr. Programmer</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl06_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit&#39;,&#39;&#39;)">
+                        <img src="./Employee Nominee Details_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl06$lnkEdit--></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">5</td><td style="width:15%;">HAU00628</td><td>Amit Saini</td><td>Dean office, COBS&amp;H</td><td>Lab. Assistant</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl07_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit&#39;,&#39;&#39;)">
+                        <img src="./Employee Nominee Details_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl07$lnkEdit--></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">6</td><td style="width:15%;">HAU03760</td><td>Anand Kumar Gupta</td><td>Dean office, COBS&amp;H</td><td>Admin-cum-Accounts Officer</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl08_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit&#39;,&#39;&#39;)">
+                        <img src="./Employee Nominee Details_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl08$lnkEdit--></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">7</td><td style="width:15%;">HAU00010</td><td>Anil Duhan</td><td>Chemistry</td><td>Assistant Chemist</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl09_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit&#39;,&#39;&#39;)">
+                        <img src="./Employee Nominee Details_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl09$lnkEdit--></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">8</td><td style="width:15%;">HAU01557</td><td>Anil Kumar</td><td>Dean office, COBS&amp;H</td><td>Lift Operator</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl10_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit&#39;,&#39;&#39;)">
+                        <img src="./Employee Nominee Details_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl10$lnkEdit--></span>
+                            </td>
+	</tr><tr class="item-style">
+		<td align="center" style="width:5%;">9</td><td style="width:15%;">HAU04390</td><td>Anil Kumar</td><td>Dean office, COBS&amp;H</td><td>Lift Operator</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl11_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit&#39;,&#39;&#39;)">
+                        <img src="./Employee Nominee Details_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl11$lnkEdit--></span>
+                            </td>
+	</tr><tr class="item-style" style="background-color:#FAFAFA;">
+		<td align="center" style="width:5%;">10</td><td style="width:15%;">HAU00233</td><td>Anita Kumari</td><td>Botany &amp; Plant Physiology</td><td>Assistant Scientist (Plant Physiologist)</td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgDetails_ctl12_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit&#39;,&#39;&#39;)">
+                        <img src="./Employee Nominee Details_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$dgDetails$ctl12$lnkEdit--></span>
+                            </td>
+	</tr><tr class="pager-style" align="center" style="color:#000000;">
+		<td colspan="6"><span>1</span>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;Page$2&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl01&#39;,&#39;&#39;)" style="color:#000000;">2</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;Page$3&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl02&#39;,&#39;&#39;)" style="color:#000000;">3</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl03&#39;,&#39;Page$4&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl03&#39;,&#39;&#39;)" style="color:#000000;">4</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl04&#39;,&#39;Page$5&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl04&#39;,&#39;&#39;)" style="color:#000000;">5</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl05&#39;,&#39;Page$6&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl05&#39;,&#39;&#39;)" style="color:#000000;">6</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl06&#39;,&#39;Page$7&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl06&#39;,&#39;&#39;)" style="color:#000000;">7</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl07&#39;,&#39;Page$8&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl07&#39;,&#39;&#39;)" style="color:#000000;">8</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl08&#39;,&#39;Page$9&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl08&#39;,&#39;&#39;)" style="color:#000000;">9</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl09&#39;,&#39;Page$10&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl09&#39;,&#39;&#39;)" style="color:#000000;">10</a>&nbsp;<a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl10&#39;,&#39;Page$11&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgDetails$ctl14$ctl10&#39;,&#39;&#39;)" style="color:#000000;">...</a></td>
+	</tr>
+</tbody></table></div>
+            </td>
+        </tr>
+    </tbody></table>
+    <div id="SearchDiv" class="white_content-new" style="display: none; overflow: scroll;">
+        <div class="popupboxouter">
+            <div class="popupbox">
+                <div onclick="document.getElementById(&#39;SearchDiv&#39;).style.display=&#39;none&#39;;" class="close">
+                    X
+                </div>
+                <table border="0" width="100%" class="table">
+                    <tbody><tr>
+                        <td align="left" class="tableheading" colspan="6">Employee Search
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <div id="Anthem_ctl00_ContentPlaceHolder1_Panel1__"><div id="ctl00_ContentPlaceHolder1_Panel1" style="width:100%;">
+	
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                    <tbody><tr>
+                                        <td class="vtext">Employee Code
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td>
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtSearchEmpCode__"><!--START:ctl00$ContentPlaceHolder1$txtSearchEmpCode--><input name="ctl00$ContentPlaceHolder1$txtSearchEmpCode" type="text" maxlength="25" id="ctl00_ContentPlaceHolder1_txtSearchEmpCode" class="textbox"><!--END:ctl00$ContentPlaceHolder1$txtSearchEmpCode--></span>
+                                        </td>
+                                        <td></td>
+                                        <td class="vtext">Employee Code (M)
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td>
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtSearchManualEmpCode__"><!--START:ctl00$ContentPlaceHolder1$txtSearchManualEmpCode--><input name="ctl00$ContentPlaceHolder1$txtSearchManualEmpCode" type="text" maxlength="50" id="ctl00_ContentPlaceHolder1_txtSearchManualEmpCode" class="textbox"><!--END:ctl00$ContentPlaceHolder1$txtSearchManualEmpCode--></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="vtext">Employee Name
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td>
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtSearchEmpName__"><!--START:ctl00$ContentPlaceHolder1$txtSearchEmpName--><input name="ctl00$ContentPlaceHolder1$txtSearchEmpName" type="text" maxlength="255" id="ctl00_ContentPlaceHolder1_txtSearchEmpName" class="textbox"><!--END:ctl00$ContentPlaceHolder1$txtSearchEmpName--></span>
+                                        </td>
+                                        <td></td>
+                                        <td id="lblDDOSearch" class="vtext">DDO
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td class="required">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlDDOSearch__"><!--START:ctl00$ContentPlaceHolder1$D_ddlDDOSearch--><select name="ctl00$ContentPlaceHolder1$D_ddlDDOSearch" id="ctl00_ContentPlaceHolder1_D_ddlDDOSearch" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlDDOSearch&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+		<option value="">--Select Controlling Officer--</option>
+		<option value="AX-94">[199] HAU Agri Tourism</option>
+		<option value="AX-99">[202] College of Biotechnology</option>
+		<option value="AZ-96">[201] COFS, Hisar</option>
+		<option value="CB-95">[200] Campus Hospital</option>
+		<option value="CO-100">[203] Regional Director, NCRS Gokalpura</option>
+		<option value="CO-101">[204] Sr. Coordinator, KVK, Chhappera, Nuh</option>
+		<option value="CO-97">[ABIC] ABIC</option>
+		<option value="CO-98">[120] DDO Agri Tourism</option>
+		<option value="ES-40">[132] A&amp;AO, Registrar</option>
+		<option value="HA-92">[173] Deen Dayal Upadhaya Centre of Excellence for Organic Farming</option>
+		<option value="KV-85">[186] HOD, Microbiology</option>
+		<option value="KV-86">[131] Sr. Coordinator, KVK Bawal</option>
+		<option value="KV-87">[166] HOD, Instrumentation Cell</option>
+		<option value="KV-88">[171] HOD, Transport Organization</option>
+		<option value="KV-89">[172] HOD, Renewable &amp; Bio-energy</option>
+		<option value="KZ-90">[178] HOD, Chemistry</option>
+		<option value="KZ-91">[179] HOD, Physics</option>
+		<option value="KZ-93">[158] Principal, COA, Bawal</option>
+		<option value="VC-1">[102] Director, CFST</option>
+		<option value="VC-11">[106] Regional Director, RRS Karnal</option>
+		<option value="VC-12">[112] Sr. Coorinator, KVK, Jind</option>
+		<option value="VC-14">[114] Sr. Coordinator, KVK, Kurukshetra</option>
+		<option value="VC-15">[115] Sr. Coordinator, KVK, Pinjore</option>
+		<option value="VC-16">[107] Regional Director, RRS Kaul</option>
+		<option value="VC-17">[187] DDO, EOCE</option>
+		<option value="VC-19">[142] A&amp;AO, COA</option>
+		<option value="VC-2">[113] Sr. Coordinator, KVK, Sadalpur</option>
+		<option value="VC-21">[119] Sr. Coordinator, KVK, Karnal</option>
+		<option value="VC-22">[110] Regional Director, CRS Sirsa</option>
+		<option value="VC-23">[100] DDO, VC Office</option>
+		<option value="VC-24">[105] DDO, Directorate of Research</option>
+		<option value="VC-25">[116] Sr. Coordinator, KVK, Panipat</option>
+		<option value="VC-26">[134] Director, Directorate of Farms</option>
+		<option value="VC-27">[117] Sr. Coordinator, KVK, Sonipat</option>
+		<option value="VC-28">[109] Regional Director, RRS, Bawal</option>
+		<option value="VC-29">[120] Sr. Coordinator, KVK, Sirsa</option>
+		<option value="VC-3">[168] A&amp;AO, COAE&amp;T</option>
+		<option value="VC-30">[101] Dean, PGS</option>
+		<option selected="selected" value="VC-32">[185] A&amp;AO, COBS&amp;H</option>
+		<option value="VC-33">[118] Sr. Coordinator, KVK, Mahendergarh</option>
+		<option value="VC-34">[137] Director, DSW</option>
+		<option value="VC-35">[111] A&amp;AO, DEE</option>
+		<option value="VC-36">[121] Sr. Coordinator, KVK, Jhajjar</option>
+		<option value="VC-37">[103] Comptroller</option>
+		<option value="VC-38">[127] Sr. Coordinator, KVK, Mandkola</option>
+		<option value="VC-39">[126] Sr. Coordinator, KVK, Yamunanagar</option>
+		<option value="VC-4">[128] Regional Director, EEI Nilokheri</option>
+		<option value="VC-40">[125] Sr. Coordinator, KVK Fatehabad</option>
+		<option value="VC-41">[124] Sr. Coordinator, KVK Faridabad</option>
+		<option value="VC-42">[123] Sr. Coordinator, KVK Bhiwani</option>
+		<option value="VC-43">[122] Sr. Coordinator, KVK Ambala</option>
+		<option value="VC-44">[146] HOD, Agricultural Economics</option>
+		<option value="VC-45">[145] HOD, Agricultural Meteorology</option>
+		<option value="VC-46">[180] HOD, Languages and Haryanvi Culture</option>
+		<option value="VC-47">[147] HOD, Entomology</option>
+		<option value="VC-48">[143] HOD, Agronomy</option>
+		<option value="VC-49">[183] HOD, MBBB</option>
+		<option value="VC-5">[108] Regional Director, RRS Rohtak</option>
+		<option value="VC-50">[184] Incharge, Computer Section</option>
+		<option value="VC-51">[104] Director, Stores and Purchase Office</option>
+		<option value="VC-52">[149] HOD, GPB</option>
+		<option value="VC-53">[159] HOD, Dry land Agriculture</option>
+		<option value="VC-54">[165] HOD, Textile and Apparel Designing</option>
+		<option value="VC-55">[164] HOD, Foods and Nutrition</option>
+		<option value="VC-56">[156] HOD, Bussiness Management</option>
+		<option value="VC-57">[150] HOD, Nematology</option>
+		<option value="VC-58">[162] HOD, HDFS</option>
+		<option value="VC-59">[154] HOD, Vegetable Science</option>
+		<option value="VC-60">[148] HOD, Horticulture</option>
+		<option value="VC-61">[155] HOD, Soil Science</option>
+		<option value="VC-62">[144] HOD, Extension Education</option>
+		<option value="VC-63">[153] HOD, Seed Science &amp; Technology</option>
+		<option value="VC-64">[174] HOD, Soil and Water Engineering</option>
+		<option value="VC-65">[161] HOD, EECM</option>
+		<option value="VC-66">[188] CO, LSU</option>
+		<option value="VC-67">[167] HOD, FMPE</option>
+		<option value="VC-68">[157] HOD, Plant Pathology</option>
+		<option value="VC-7">[130] Sr. Coordinator, KVK, Rohtak</option>
+		<option value="VC-70">[133] Principal, Campus School</option>
+		<option value="VC-71">[195] HOD, Forage</option>
+		<option value="VC-72">[182] HOD, Sociology</option>
+		<option value="VC-73">[160] HOD, Family Resource Management</option>
+		<option value="VC-74">[169] HOD, Basic Engineering</option>
+		<option value="VC-75">[175] HOD, Mathematics and&nbsp;Statistics</option>
+		<option value="VC-76">[176] HOD, Botany &amp; Plant Physiology</option>
+		<option value="VC-77">[177] HOD, Zoology</option>
+		<option value="VC-78">[152] HOD, Forestry</option>
+		<option value="VC-79">[170] HOD, Processing and Food Engineering</option>
+		<option value="VC-8">[163] A&amp;AO, COHS</option>
+		<option value="VC-80">[151] Principal, COA Kaul</option>
+		<option value="VC-81">[181] HOD, Biochemistry</option>
+		<option value="VC-82">[136] University Librarian</option>
+		<option value="VC-83">[189] DHRM</option>
+		<option value="VC-84">[135] Director, RDS Farm</option>
+		<option value="VC-9">[129] Sr. Coordinator, KVK, Kaithal</option>
+
+	</select><!--END:ctl00$ContentPlaceHolder1$D_ddlDDOSearch--></span>
+                                            * &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="vtext">Location
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td>
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_ddlSearchLocation__"><!--START:ctl00$ContentPlaceHolder1$ddlSearchLocation--><select name="ctl00$ContentPlaceHolder1$ddlSearchLocation" id="ctl00_ContentPlaceHolder1_ddlSearchLocation" class="dropdownlong">
+		<option selected="selected" value="">-- Select Location --</option>
+		<option value="VC-3">COBS&amp;H, Hisar</option>
+
+	</select><!--END:ctl00$ContentPlaceHolder1$ddlSearchLocation--></span>
+                                        </td>
+                                        <td></td>
+                                        <td class="vtext">Department
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td>
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_ddlSearchDepartment__"><!--START:ctl00$ContentPlaceHolder1$ddlSearchDepartment--><select name="ctl00$ContentPlaceHolder1$ddlSearchDepartment" id="ctl00_ContentPlaceHolder1_ddlSearchDepartment" class="dropdownlong">
+
+	</select><!--END:ctl00$ContentPlaceHolder1$ddlSearchDepartment--></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="vtext">Designation
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td>
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_ddlSearchDesignation__"><!--START:ctl00$ContentPlaceHolder1$ddlSearchDesignation--><select name="ctl00$ContentPlaceHolder1$ddlSearchDesignation" id="ctl00_ContentPlaceHolder1_ddlSearchDesignation" class="dropdownlong">
+
+	</select><!--END:ctl00$ContentPlaceHolder1$ddlSearchDesignation--></span>
+                                        </td>
+                                        <td></td>
+                                        <td class="vtext">PF Number
+                                        </td>
+                                        <td class="colon">:
+                                        </td>
+                                        <td class="required">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_txtGPFNumber__"><!--START:ctl00$ContentPlaceHolder1$txtGPFNumber--><input name="ctl00$ContentPlaceHolder1$txtGPFNumber" type="text" maxlength="20" id="ctl00_ContentPlaceHolder1_txtGPFNumber" class="textbox"><!--END:ctl00$ContentPlaceHolder1$txtGPFNumber--></span>
+                                        </td>
+                                      
+                                    </tr>
+                                  
+                                    <tr>
+                                        
+                                        <td></td>
+                                        <td class="vtext"></td>
+                                        <td class="colon"></td>
+                                        <td class="required"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7" class="tdgap"></td>
+                                    </tr>
+                                </tbody></table>
+                            
+</div></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" colspan="6">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnSearch__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSearch" value="SEARCH" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSearch&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;Searching...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSearch" class="button-common" cellpadding="0" cellspacing="0"></span>
+                            &nbsp; &nbsp;
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_btnResetSearch__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnResetSearch" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnResetSearch&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnResetSearch" class="button-common" cellpadding="0" cellspacing="0" style="width: 63px"></span>
+                            &nbsp; &nbsp;
+                    <input type="button" id="Button3" value="DONE" class="button-common" onclick="document.getElementById(&#39;SearchDiv&#39;).style.display = &#39;none&#39;;">
+                            &nbsp; &nbsp;
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_lblmsgEmpSearchDiv__"><span id="ctl00_ContentPlaceHolder1_lblmsgEmpSearchDiv" class="lblmessage"></span></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" colspan="6" class="tablesubheading">List of Employee Detail
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <div id="Anthem_ctl00_ContentPlaceHolder1_dgEmpSearchDetails__" style=""><table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_dgEmpSearchDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+	<tbody><tr class="header-style">
+		<td align="center">S. No.</td><td align="center">SELECT</td><td align="center">Emp Code</td><td align="center">Employee Name</td><td align="center">DDO</td><td align="center">Department</td>
+	</tr><tr class="item-style" style="color:Black;background-color:#E4EAFF;font-weight:normal;">
+		<td align="center" style="width:7%;">1</td><td align="center" style="width:5%;">
+                                            <span id="Anthem_ctl00_ContentPlaceHolder1_dgEmpSearchDetails_ctl03_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$dgEmpSearchDetails$ctl03$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$dgEmpSearchDetails$ctl03$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_dgEmpSearchDetails_ctl03_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$dgEmpSearchDetails$ctl03$lnkEdit&#39;,&#39;&#39;)">
+                                    <img src="./Employee Nominee Details_files/Edit.gif" alt="" border="0">
+                                            </a><!--END:ctl00$ContentPlaceHolder1$dgEmpSearchDetails$ctl03$lnkEdit--></span>
+                                        </td><td align="center" style="width:12%;">HAU00212</td><td style="width:30%;">[ HAU00212 ] Om Parkash Sheoran</td><td>A&amp;AO, COBS&amp;H</td><td>Mathematics and Statistics</td>
+	</tr><tr class="pager-style" align="center" style="color:#000000;">
+		<td colspan="9"><span>1</span></td>
+	</tr>
+</tbody></table></div>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+    <div id="ctl00_ContentPlaceHolder1_ValidationSummary1" style="color:Red;display:none;">
+
+</div>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">
+//<![CDATA[
+var Page_ValidationSummaries =  new Array(document.getElementById("ctl00_ContentPlaceHolder1_ValidationSummary1"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+var ctl00_ContentPlaceHolder1_ValidationSummary1 = document.all ? document.all["ctl00_ContentPlaceHolder1_ValidationSummary1"] : document.getElementById("ctl00_ContentPlaceHolder1_ValidationSummary1");
+ctl00_ContentPlaceHolder1_ValidationSummary1.showmessagebox = "True";
+ctl00_ContentPlaceHolder1_ValidationSummary1.showsummary = "False";
+//]]>
+</script>
+
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_R_txtEmpCode');//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./Employee Nominee Details_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Employee Nominee Details_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

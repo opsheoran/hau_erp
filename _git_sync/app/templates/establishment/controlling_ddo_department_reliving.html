@@ -1,0 +1,164 @@
+﻿{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<span>Transactions</span>&nbsp;&gt;&nbsp;<span>Increment/Promotion</span>&nbsp;&gt;&nbsp;<strong>Controlling DDO Department Reliving</strong>
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="target_emp_id" value="{{ employee_info.pk_empid if employee_info else '' }}">
+    <input type="hidden" name="emp_code" value="{{ employee_info.empcode if employee_info else '' }}">
+
+    {% include 'establishment/_search_modal.html' %}
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">Controlling DDO Department Reliving</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+
+            <tr>
+                <td class="vtext" width="15%">Employee Code</td>
+                <td class="colon">:</td>
+                <td class="required" width="30%">
+                    <input type="text" class="textbox w-150" value="{{ employee_info.empcode if employee_info else '' }}" readonly>
+                    <a href="javascript:void(0);" onclick="openEmpSearch('emp_id', '')">
+                        <img src="{{ url_for('static', filename='srec.jpg') }}" border="0" style="vertical-align:middle; cursor:pointer;">
+                    </a>
+                    <span class="required">*</span>
+                </td>
+                <td width="2%"></td>
+                <td class="vtext" width="15%">Employee Name</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="text" class="textbox w-250" value="{{ employee_info.empname if employee_info else '' }}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td><input type="text" class="textbox w-250" value="{{ employee_info.dept_name if employee_info else '' }}" readonly></td>
+                <td></td>
+                <td class="vtext">Designation</td>
+                <td class="colon">:</td>
+                <td><input type="text" class="textbox w-250" value="{{ employee_info.desg_name if employee_info else '' }}" readonly></td>
+            </tr>
+
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td class="vtext">Status</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="status" class="dropdown w-200" required>
+                        <option value="">--Select Status--</option>
+                        {% for s in ['Transfer','Promotion','ACP','Suspension','Punishment'] %}
+                        <option value="{{ s }}">{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Relieving Date</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="date" name="relieving_date" class="textbox w-200" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td class="vtext">New Controlling</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="new_controlling" class="dropdown w-250" required>
+                        <option value="">--Select Controlling Office--</option>
+                        {% for r in lookups.controlling_offices %}
+                        <option value="{{ r.id }}">{{ r.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">New DDO</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="new_ddo" class="dropdown w-250" required>
+                        <option value="">--Select DDO--</option>
+                        {% for r in lookups.ddos %}
+                        <option value="{{ r.id }}">{{ r.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">New Department</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="new_dept" class="dropdown w-250" required>
+                        <option value="">--Select Department--</option>
+                        {% for r in lookups.departments %}
+                        <option value="{{ r.id }}">{{ r.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">New Section</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="new_section" class="dropdown w-250">
+                        <option value="">--Select Section--</option>
+                        {% for r in lookups.sections %}
+                        <option value="{{ r.id }}">{{ r.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">New Designation</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="new_desg" class="dropdown w-250" required>
+                        <option value="">--Select Designation--</option>
+                        {% for r in lookups.designations %}
+                        <option value="{{ r.id }}">{{ r.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="remarks" class="textbox w-250">
+                </td>
+            </tr>
+
+            <tr><td colspan="7" height="15"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    {% if perm.AllowAdd or perm.AllowUpdate %}
+                    <input type="submit" name="action" value="SUBMIT" class="button-common">
+                    {% endif %}
+                    <input type="submit" name="action" value="RESET" class="button-common" formnovalidate>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function selectItem(id, name) {
+        window.location.href = "{{ url_for('establishment.controlling_ddo_department_reliving') }}?emp_id=" + id;
+    }
+</script>
+{% endblock %}

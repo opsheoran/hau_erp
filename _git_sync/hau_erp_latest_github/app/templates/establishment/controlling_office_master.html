@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-12">
+    <div class="card card-hau">
+        <div class="tablesubheading">Controlling Office Master</div>
+        <div class="card-body p-3">
+            
+            <form method="POST">
+                <input type="hidden" name="edit_id" value="{{ edit_data.pk_Controllid if edit_data else '' }}">
+                
+                <table width="100%" cellpadding="3" cellspacing="0">
+                    <tr>
+                        <td class="vtext" width="15%">Office Name <span class="text-danger">*</span></td>
+                        <td class="colon">:</td>
+                        <td width="34%">
+                            <input type="text" class="textbox" name="name" value="{{ edit_data.description if edit_data else '' }}" required>
+                        </td>
+                        <td class="vtext" width="15%">Controlling Officer</td>
+                        <td class="colon">:</td>
+                        <td width="34%">
+                            <div class="d-flex">
+                                <input type="hidden" name="officer_id" id="officer_id" value="{{ edit_data.ControllingOfficer_Id if edit_data else '' }}">
+                                <input type="text" id="officer_name" class="textbox" readonly value="{{ edit_data.officer_name if edit_data else '' }}" placeholder="Search Employee...">
+                                <button type="button" class="btn btn-light btn-sm border py-0 px-2" onclick="openEmpSearch('officer_id', 'officer_name')"><i class="bi bi-search" style="font-size: 10px;"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Email Id</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <input type="text" class="textbox" name="email" value="{{ edit_data.Email_Id if edit_data else '' }}">
+                        </td>
+                        <td class="vtext">Alias</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <input type="text" class="textbox" name="alias" value="{{ edit_data.Alias if edit_data else '' }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-center pt-3">
+                            <button type="submit" class="btn-hau btn-hau-primary">SAVE</button>
+                            <a href="{{ url_for('establishment.controlling_office_master') }}" class="btn-hau btn-hau-secondary ms-2 text-decoration-none d-inline-block">RESET</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+
+            <hr class="my-3">
+
+            <!-- Search Filter -->
+            <div class="bg-light p-2 border mb-3">
+                <form method="GET" class="row g-2 align-items-center">
+                    <div class="col-auto">
+                        <span class="vtext">Search By:</span>
+                    </div>
+                    <div class="col-auto">
+                        <select name="search_type" class="dropdown" style="width: auto;">
+                            <option value="Name" {% if search_type == 'Name' %}selected{% endif %}>Office Name</option>
+                            <option value="Officer" {% if search_type == 'Officer' %}selected{% endif %}>Officer Name</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" name="search_query" class="textbox" placeholder="Enter search term..." value="{{ search_query }}" style="width: 200px;">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn-hau btn-hau-primary">SEARCH</button>
+                        <a href="{{ url_for('establishment.controlling_office_master') }}" class="btn btn-outline-secondary btn-xs py-1 px-3 text-decoration-none" style="font-size: 10px;">CLEAR</a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="tablesubheading" style="border-radius: 0;">List of Controlling Office</div>
+            <div class="table-responsive">
+                <table class="hau-table mt-0">
+                    <thead>
+                        <tr>
+                            <th width="80px">S. No.</th>
+                            <th class="text-start">Controlling Office</th>
+                            <th class="text-start">Controlling Officer Name</th>
+                            <th width="120px">Alias</th>
+                            <th width="60px">EDIT</th>
+                            <th width="60px">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for o in offices %}
+                        <tr>
+                            <td class="text-center">{{ loop.index }}</td>
+                            <td class="fw-bold">{{ o.name }}</td>
+                            <td>{{ o.officer_name }}</td>
+                            <td class="text-center">{{ o.Alias or '' }}</td>
+                            <td class="text-center">
+                                <a href="{{ url_for('establishment.controlling_office_master', edit_id=o.id) }}" class="text-decoration-none">
+                                    <i class="bi bi-pencil-square text-primary fs-6"></i>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ url_for('establishment.delete_controlling_office', id=o.id) }}" class="text-decoration-none text-danger" onclick="return confirm('Are you sure?')">
+                                    <i class="bi bi-trash fs-6"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        {% include 'establishment/_pagination.html' %}
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% include 'establishment/_search_modal.html' %}
+{% endblock %}
