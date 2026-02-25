@@ -1141,30 +1141,7 @@ def property_return():
             return redirect(url_for('hrms.property_return'))
             
         try:
-            # Process dynamic rows
-            def get_rows(prefix, fields):
-                rows = []
-                idx = 1
-                while True:
-                    row = {f: request.form.get(f"{prefix}_{f}_{idx}") for f in fields}
-                    if not any(row.values()): break
-                    rows.append(row)
-                    idx += 1
-                return rows
-
-            movable = get_rows("movable", ["item", "value", "benamidar", "acquisition", "remarks"])
-            loans = get_rows("loans", ["amount", "security", "member", "loanee", "date", "remarks"])
-            immovable = get_rows("immovable", ["type", "location", "plot", "building", "mode", "required_from", "held_in", "income"])
-
-            data = {
-                'emp_id': emp_id,
-                'pro_id': request.form.get('pro_id'),
-                'fin_year': request.form.get('fin_year'),
-                'movable': movable,
-                'loans': loans,
-                'immovable': immovable
-            }
-            PropertyReturnModel.save(data, user_id)
+            PropertyReturnModel.save(request.form, emp_id, user_id)
             flash("Annual Property Return saved successfully.", "success")
         except Exception as e:
             flash(f"Error: {str(e)}", "danger")

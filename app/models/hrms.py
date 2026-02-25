@@ -2028,75 +2028,107 @@ class PropertyReturnModel:
     @staticmethod
     def get_property_returns(emp_id):
         return DB.fetch_all("""
-            SELECT pk_proid as id, fk_empid as emp_code, fk_finid as fin_id,
-            (SELECT Lyear FROM SAL_Financial_Year WHERE pk_finid = fk_finid) as fin_year
-            FROM SAL_AnnualProperty_Mst
-            WHERE fk_empid = (SELECT empcode FROM SAL_Employee_Mst WHERE pk_empid = ?)
-            ORDER BY id DESC
+            SELECT r.PkAnnualID as id, r.Fk_empid as emp_id, r.Fk_Finid as fin_id,
+            f.FinancialYear as fin_year, r.Insertdate as return_date
+            FROM Emp_AnnualProperty_return_Mst r
+            LEFT JOIN SAL_Financial_Year f ON r.Fk_Finid = f.pk_finid
+            WHERE r.Fk_empid = (SELECT empcode FROM SAL_Employee_Mst WHERE pk_empid = ?)
+            ORDER BY r.PkAnnualID DESC
         """, [emp_id])
 
     @staticmethod
     def get_return_by_id(pro_id):
-        main = DB.fetch_one("SELECT * FROM SAL_AnnualProperty_Mst WHERE pk_proid = ?", [pro_id])
-        if not main: return None
+        main = DB.fetch_one("SELECT * FROM Emp_AnnualProperty_return_Mst WHERE PkAnnualID = ?", [pro_id])
+        if not main:
+            return None
         
-        movable = DB.fetch_all("SELECT * FROM SAL_AnnualProperty_Movable WHERE fk_proid = ?", [pro_id])
-        loans = DB.fetch_all("SELECT * FROM SAL_AnnualProperty_Loans WHERE fk_proid = ?", [pro_id])
-        immovable = DB.fetch_all("SELECT * FROM SAL_AnnualProperty_Immovable WHERE fk_proid = ?", [pro_id])
+        # Movable = HomeDtl
+        movable = DB.fetch_all("SELECT * FROM Emp_AnnualProperty_return_HomeDtl WHERE FkAnnualID = ?", [pro_id])
+        # Loans = LoanDtl
+        loans = DB.fetch_all("SELECT * FROM Emp_AnnualProperty_return_LoanDtl WHERE FkAnnualID = ?", [pro_id])
+        # Immovable = BenamidarDtl
+        immovable = DB.fetch_all("SELECT * FROM Emp_AnnualProperty_return_BenamidarDtl WHERE FkAnnualID = ?", [pro_id])
         
-        return {'main': main, 'movable': movable, 'loans': loans, 'immovable': immovable}
+        return {
+            'main': main,
+            'movable': movable,
+            'loans': loans,
+            'immovable': immovable
+        }
 
     @staticmethod
-    def save(data, user_id):
+    def save(data, emp_id, emp_code):
         pro_id = data.get('pro_id')
-        emp_code = DB.fetch_scalar("SELECT empcode FROM SAL_Employee_Mst WHERE pk_empid = ?", [data['emp_id']])
+        fin_year = data.get('fin_year')
         
         if pro_id:
             # Update main record
-            DB.execute("UPDATE SAL_AnnualProperty_Mst SET fk_finid = ?, fk_updUserID = ?, fk_updDateID = GETDATE() WHERE pk_proid = ?", 
-                      [data['fin_year'], user_id, pro_id])
-            # Delete child records to re-insert
-            DB.execute("DELETE FROM SAL_AnnualProperty_Movable WHERE fk_proid = ?", [pro_id])
-            DB.execute("DELETE FROM SAL_AnnualProperty_Loans WHERE fk_proid = ?", [pro_id])
-            DB.execute("DELETE FROM SAL_AnnualProperty_Immovable WHERE fk_proid = ?", [pro_id])
+            DB.execute("UPDATE Emp_AnnualProperty_return_Mst SET Fk_Finid = ?, Updateuserid = ?, UpdateDate = GETDATE() WHERE PkAnnualID = ?", 
+                      [fin_year, emp_code, pro_id])
+            # Delete old details to re-insert
+            DB.execute("DELETE FROM Emp_AnnualProperty_return_HomeDtl WHERE FkAnnualID = ?", [pro_id])
+            DB.execute("DELETE FROM Emp_AnnualProperty_return_LoanDtl WHERE FkAnnualID = ?", [pro_id])
+            DB.execute("DELETE FROM Emp_AnnualProperty_return_BenamidarDtl WHERE FkAnnualID = ?", [pro_id])
         else:
-            # Insert main record
-            sql_main = """
-                INSERT INTO SAL_AnnualProperty_Mst (fk_empid, fk_finid, fk_insUserID, fk_insDateID, fk_updUserID, fk_updDateID)
+            # Insert new main record
+            DB.execute("""
+                INSERT INTO Emp_AnnualProperty_return_Mst (Fk_empid, Fk_Finid, InsertUserId, Insertdate, Updateuserid, UpdateDate)
                 VALUES (?, ?, ?, GETDATE(), ?, GETDATE())
-            """
-            DB.execute(sql_main, [emp_code, data['fin_year'], user_id, user_id])
-            pro_id = DB.fetch_scalar("SELECT TOP 1 pk_proid FROM SAL_AnnualProperty_Mst WHERE fk_empid = ? ORDER BY pk_proid DESC", [emp_code])
+            """, [emp_code, fin_year, emp_code, emp_code])
+            
+            pro_id = DB.fetch_scalar("SELECT TOP 1 PkAnnualID FROM Emp_AnnualProperty_return_Mst WHERE Fk_empid = ? ORDER BY PkAnnualID DESC", [emp_code])
 
-        # Insert Movable (a)
-        for m in data.get('movable', []):
-            if m.get('item'):
+        # Insert Section A: Movable (HomeDtl)
+        item_desc = data.getlist('item_desc[]')
+        item_val = data.getlist('item_val[]')
+        item_benamidar = data.getlist('item_benamidar[]')
+        item_manner = data.getlist('item_manner[]')
+        item_remarks = data.getlist('item_remarks[]')
+        
+        for i in range(len(item_desc)):
+            if item_desc[i]:
                 DB.execute("""
-                    INSERT INTO SAL_AnnualProperty_Movable (fk_proid, ItemDescription, ValueLacs, BenamidarName, AcquisitionDetail, Remarks)
+                    INSERT INTO Emp_AnnualProperty_return_HomeDtl (FkAnnualID, Desc_O_Item, Valuesinrs, Benamidar_Name, DateOfManner, Remarks)
                     VALUES (?, ?, ?, ?, ?, ?)
-                """, [pro_id, m['item'], m['value'], m['benamidar'], m['acquisition'], m['remarks']])
+                """, [pro_id, item_desc[i], item_val[i], item_benamidar[i], item_manner[i], item_remarks[i]])
 
-        # Insert Loans (b)
-        for l in data.get('loans', []):
-            if l.get('amount'):
+        # Insert Section B: Loans (LoanDtl)
+        loan_amt = data.getlist('loan_amt[]')
+        loan_security = data.getlist('loan_security[]')
+        loan_member = data.getlist('loan_member[]')
+        loan_loanee = data.getlist('loan_loanee[]')
+        loan_date = data.getlist('loan_date[]')
+        loan_remarks = data.getlist('loan_remarks[]')
+        
+        for i in range(len(loan_amt)):
+            if loan_amt[i]:
                 DB.execute("""
-                    INSERT INTO SAL_AnnualProperty_Loans (fk_proid, LoanAmount, SecurityNature, FamilyMember, LoaneeDetail, LoanDate, Remarks)
+                    INSERT INTO Emp_AnnualProperty_return_LoanDtl (FkAnnualID, AmountOfLoan, LoanInSecure, NameAvailedLoan, NameOfloanee, DateParticularLoan, LoanRemarks)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
-                """, [pro_id, l['amount'], l['security'], l['member'], l['loanee'], l['date'], l['remarks']])
+                """, [pro_id, loan_amt[i], loan_security[i], loan_member[i], loan_loanee[i], loan_date[i], loan_remarks[i]])
 
-        # Insert Immovable (Declaration)
-        for im in data.get('immovable', []):
-            if im.get('type'):
+        # Insert Section C: Immovable (BenamidarDtl)
+        prop_type = data.getlist('prop_type[]')
+        prop_loc = data.getlist('prop_loc[]')
+        prop_plot = data.getlist('prop_plot[]')
+        prop_build = data.getlist('prop_build[]')
+        prop_mode = data.getlist('prop_mode[]')
+        prop_person = data.getlist('prop_person[]')
+        prop_held = data.getlist('prop_held[]')
+        prop_income = data.getlist('prop_income[]')
+        
+        for i in range(len(prop_type)):
+            if prop_type[i]:
                 DB.execute("""
-                    INSERT INTO SAL_AnnualProperty_Immovable (fk_proid, PropertyType, LocationDetail, PlotDetail, BuildingDetail, AcquisitionMode, RequiredFrom, HeldInName, AnnualIncome)
+                    INSERT INTO Emp_AnnualProperty_return_BenamidarDtl (FkAnnualID, TypeofProperty, PropertyLocated, Plot_Agri_Land, BuildingArea, ModeAcquisition, DetailsOfPerson, ownnameemployee, AnnualIncome)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, [pro_id, im['type'], im['location'], im['plot'], im['building'], im['mode'], im['required_from'], im['held_in'], im['income']])
+                """, [pro_id, prop_type[i], prop_loc[i], prop_plot[i], prop_build[i], prop_mode[i], prop_person[i], prop_held[i], prop_income[i]])
 
         return pro_id
 
     @staticmethod
     def delete(pro_id):
-        DB.execute("DELETE FROM SAL_AnnualProperty_Movable WHERE fk_proid = ?", [pro_id])
-        DB.execute("DELETE FROM SAL_AnnualProperty_Loans WHERE fk_proid = ?", [pro_id])
-        DB.execute("DELETE FROM SAL_AnnualProperty_Immovable WHERE fk_proid = ?", [pro_id])
-        return DB.execute("DELETE FROM SAL_AnnualProperty_Mst WHERE pk_proid = ?", [pro_id])
+        DB.execute("DELETE FROM Emp_AnnualProperty_return_HomeDtl WHERE FkAnnualID = ?", [pro_id])
+        DB.execute("DELETE FROM Emp_AnnualProperty_return_LoanDtl WHERE FkAnnualID = ?", [pro_id])
+        DB.execute("DELETE FROM Emp_AnnualProperty_return_BenamidarDtl WHERE FkAnnualID = ?", [pro_id])
+        return DB.execute("DELETE FROM Emp_AnnualProperty_return_Mst WHERE PkAnnualID = ?", [pro_id])

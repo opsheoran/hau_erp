@@ -5,7 +5,7 @@
     
     <div style="padding: 15px;">
         <form method="POST" id="propertyForm">
-            <input type="hidden" name="pro_id" value="{{ edit_data.main.pk_proid if edit_data else '' }}">
+            <input type="hidden" name="pro_id" value="{{ edit_data.main.PkAnnualID if edit_data else '' }}">
             <input type="hidden" name="action" id="hdnAction" value="SAVE">
 
             <table class="form-table" style="width: 100%; margin-bottom: 20px;">
@@ -23,7 +23,7 @@
                         <select name="fin_year" class="dropdown" required>
                             <option value="">-- Select Year --</option>
                             {% for fy in fin_years %}
-                            <option value="{{ fy.id }}" {% if edit_data and edit_data.main.fk_finid == fy.id %}selected{% endif %}>{{ fy.name }}</option>
+                            <option value="{{ fy.id }}" {% if edit_data and edit_data.main.Fk_Finid == fy.id %}selected{% endif %}>{{ fy.name }}</option>
                             {% endfor %}
                         </select> *
                     </td>
@@ -50,17 +50,17 @@
                         {% for item in movable_list %}
                         <tr class="item-style">
                             <td align="center" class="sno">{{ loop.index }}</td>
-                            <td><input type="text" name="movable_item_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.ItemDescription or '' }}"></td>
-                            <td><input type="text" name="movable_value_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.ValueLacs or '' }}"></td>
-                            <td><input type="text" name="movable_benamidar_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.BenamidarName or '' }}"></td>
-                            <td><input type="text" name="movable_acquisition_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.AcquisitionDetail or '' }}"></td>
-                            <td><input type="text" name="movable_remarks_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.Remarks or '' }}"></td>
+                            <td><input type="text" name="item_desc[]" class="textbox" style="width:100%" value="{{ item.Desc_O_Item or '' }}"></td>
+                            <td><input type="text" name="item_val[]" class="textbox" style="width:100%" value="{{ item.Valuesinrs or '' }}"></td>
+                            <td><input type="text" name="item_benamidar[]" class="textbox" style="width:100%" value="{{ item.Benamidar_Name or '' }}"></td>
+                            <td><input type="text" name="item_manner[]" class="textbox" style="width:100%" value="{{ item.DateOfManner or '' }}"></td>
+                            <td><input type="text" name="item_remarks[]" class="textbox" style="width:100%" value="{{ item.Remarks or '' }}"></td>
                             <td align="center"><button type="button" class="btn btn-xs btn-danger" onclick="removeRow(this)">×</button></td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-                <button type="button" class="button-common1" onclick="addRow('tblMovable', 'movable', 6)">ADD ROW</button>
+                <button type="button" class="button-common1" onclick="addRow('tblMovable', 'movable')">ADD ROW</button>
             </div>
 
             <!-- SECTION B: LOANS -->
@@ -84,18 +84,18 @@
                         {% for item in loans_list %}
                         <tr class="item-style">
                             <td align="center" class="sno">{{ loop.index }}</td>
-                            <td><input type="text" name="loans_amount_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.LoanAmount or '' }}"></td>
-                            <td><input type="text" name="loans_security_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.SecurityNature or '' }}"></td>
-                            <td><input type="text" name="loans_member_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.FamilyMember or '' }}"></td>
-                            <td><input type="text" name="loans_loanee_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.LoaneeDetail or '' }}"></td>
-                            <td><input type="text" name="loans_date_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.LoanDate or '' }}"></td>
-                            <td><input type="text" name="loans_remarks_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.Remarks or '' }}"></td>
+                            <td><input type="text" name="loan_amt[]" class="textbox" style="width:100%" value="{{ item.AmountOfLoan or '' }}"></td>
+                            <td><input type="text" name="loan_security[]" class="textbox" style="width:100%" value="{{ item.LoanInSecure or '' }}"></td>
+                            <td><input type="text" name="loan_member[]" class="textbox" style="width:100%" value="{{ item.NameAvailedLoan or '' }}"></td>
+                            <td><input type="text" name="loan_loanee[]" class="textbox" style="width:100%" value="{{ item.NameOfloanee or '' }}"></td>
+                            <td><input type="text" name="loan_date[]" class="textbox" style="width:100%" value="{{ item.DateParticularLoan or '' }}"></td>
+                            <td><input type="text" name="loan_remarks[]" class="textbox" style="width:100%" value="{{ item.LoanRemarks or '' }}"></td>
                             <td align="center"><button type="button" class="btn btn-xs btn-danger" onclick="removeRow(this)">×</button></td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-                <button type="button" class="button-common1" onclick="addRow('tblLoans', 'loans', 7)">ADD ROW</button>
+                <button type="button" class="button-common1" onclick="addRow('tblLoans', 'loans')">ADD ROW</button>
             </div>
 
             <!-- SECTION C: IMMOVABLE PROPERTY -->
@@ -121,20 +121,20 @@
                         {% for item in imm_list %}
                         <tr class="item-style">
                             <td align="center" class="sno">{{ loop.index }}</td>
-                            <td><input type="text" name="immovable_type_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.PropertyType or '' }}"></td>
-                            <td><input type="text" name="immovable_location_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.LocationDetail or '' }}"></td>
-                            <td><input type="text" name="immovable_plot_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.PlotDetail or '' }}"></td>
-                            <td><input type="text" name="immovable_building_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.BuildingDetail or '' }}"></td>
-                            <td><input type="text" name="immovable_mode_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.AcquisitionMode or '' }}"></td>
-                            <td><input type="text" name="immovable_required_from_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.RequiredFrom or '' }}"></td>
-                            <td><input type="text" name="immovable_held_in_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.HeldInName or '' }}"></td>
-                            <td><input type="text" name="immovable_income_{{ loop.index }}" class="textbox" style="width:100%" value="{{ item.AnnualIncome or '' }}"></td>
+                            <td><input type="text" name="prop_type[]" class="textbox" style="width:100%" value="{{ item.TypeofProperty or '' }}"></td>
+                            <td><input type="text" name="prop_loc[]" class="textbox" style="width:100%" value="{{ item.PropertyLocated or '' }}"></td>
+                            <td><input type="text" name="prop_plot[]" class="textbox" style="width:100%" value="{{ item.Plot_Agri_Land or '' }}"></td>
+                            <td><input type="text" name="prop_build[]" class="textbox" style="width:100%" value="{{ item.BuildingArea or '' }}"></td>
+                            <td><input type="text" name="prop_mode[]" class="textbox" style="width:100%" value="{{ item.ModeAcquisition or '' }}"></td>
+                            <td><input type="text" name="prop_person[]" class="textbox" style="width:100%" value="{{ item.DetailsOfPerson or '' }}"></td>
+                            <td><input type="text" name="prop_held[]" class="textbox" style="width:100%" value="{{ item.ownnameemployee or '' }}"></td>
+                            <td><input type="text" name="prop_income[]" class="textbox" style="width:100%" value="{{ item.AnnualIncome or '' }}"></td>
                             <td align="center"><button type="button" class="btn btn-xs btn-danger" onclick="removeRow(this)">×</button></td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-                <button type="button" class="button-common1" onclick="addRow('tblImmovable', 'immovable', 9)">ADD ROW</button>
+                <button type="button" class="button-common1" onclick="addRow('tblImmovable', 'immovable')">ADD ROW</button>
             </div>
 
             <div style="margin-top: 20px;">
@@ -161,7 +161,7 @@
                     {% for r in returns %}
                     <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
                         <td align="center">{{ loop.index }}</td>
-                        <td>{{ r.emp_code }}</td>
+                        <td>{{ r.emp_id }}</td>
                         <td>{{ r.fin_year }}</td>
                         <td align="center">
                             <a href="{{ url_for('hrms.property_return', edit_id=r.id) }}"><img src="{{ url_for('static', filename='images/Edit.gif') }}" border="0"></a>
@@ -189,29 +189,27 @@
 </div>
 
 <script>
-function addRow(tableId, prefix, fieldCount) {
+function addRow(tableId, prefix) {
     var tbody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
     var rowCount = tbody.rows.length;
-    var newIdx = rowCount + 1;
     var row = tbody.insertRow(rowCount);
     row.className = 'item-style';
     
     var cell0 = row.insertCell(0);
     cell0.align = 'center';
     cell0.className = 'sno';
-    cell0.innerHTML = newIdx;
+    cell0.innerHTML = rowCount + 1;
     
-    // Map fields for each section
-    var fieldMap = {
-        'movable': ['item', 'value', 'benamidar', 'acquisition', 'remarks'],
-        'loans': ['amount', 'security', 'member', 'loanee', 'date', 'remarks'],
-        'immovable': ['type', 'location', 'plot', 'building', 'mode', 'required_from', 'held_in', 'income']
+    var names = {
+        'movable': ['item_desc[]', 'item_val[]', 'item_benamidar[]', 'item_manner[]', 'item_remarks[]'],
+        'loans': ['loan_amt[]', 'loan_security[]', 'loan_member[]', 'loan_loanee[]', 'loan_date[]', 'loan_remarks[]'],
+        'immovable': ['prop_type[]', 'prop_loc[]', 'prop_plot[]', 'prop_build[]', 'prop_mode[]', 'prop_person[]', 'prop_held[]', 'prop_income[]']
     };
     
-    var fields = fieldMap[prefix];
+    var fields = names[prefix];
     for (var i = 0; i < fields.length; i++) {
         var cell = row.insertCell(i + 1);
-        cell.innerHTML = '<input type="text" name="' + prefix + '_' + fields[i] + '_' + newIdx + '" class="textbox" style="width:100%">';
+        cell.innerHTML = '<input type="text" name="' + fields[i] + '" class="textbox" style="width:100%">';
     }
     
     var cellLast = row.insertCell(fields.length + 1);
@@ -224,10 +222,8 @@ function removeRow(btn) {
     var tbody = row.parentNode;
     if (tbody.rows.length > 1) {
         tbody.deleteRow(row.rowIndex - 1);
-        // Re-index SNO and input names
         reIndex(tbody);
     } else {
-        // Just clear inputs if only 1 row left
         var inputs = row.getElementsByTagName('input');
         for (var i = 0; i < inputs.length; i++) inputs[i].value = '';
     }
@@ -235,22 +231,8 @@ function removeRow(btn) {
 
 function reIndex(tbody) {
     var rows = tbody.rows;
-    var prefix = tbody.id.replace('body', '').toLowerCase();
-    
-    var fieldMap = {
-        'movable': ['item', 'value', 'benamidar', 'acquisition', 'remarks'],
-        'loans': ['amount', 'security', 'member', 'loanee', 'date', 'remarks'],
-        'immovable': ['type', 'location', 'plot', 'building', 'mode', 'required_from', 'held_in', 'income']
-    };
-    var fields = fieldMap[prefix];
-
     for (var i = 0; i < rows.length; i++) {
-        var newIdx = i + 1;
-        rows[i].getElementsByClassName('sno')[0].innerHTML = newIdx;
-        var inputs = rows[i].getElementsByTagName('input');
-        for (var j = 0; j < inputs.length; j++) {
-            inputs[j].name = prefix + '_' + fields[j] + '_' + newIdx;
-        }
+        rows[i].getElementsByClassName('sno')[0].innerHTML = i + 1;
     }
 }
 </script>
