@@ -2007,3 +2007,96 @@ class BonusModel:
     @staticmethod
     def delete(bonus_id):
         return DB.execute("DELETE FROM SAL_EmployeeBonusAmount_dtl WHERE Pk_BonusId = ?", [bonus_id])
+
+class PropertyReturnModel:
+    @staticmethod
+    def get_fin_years():
+        return DB.fetch_all("SELECT pk_finid as id, Lyear as name FROM SAL_Financial_Year ORDER BY Lyear DESC")
+
+    @staticmethod
+    def get_employee_details(emp_id):
+        return DB.fetch_one("""
+            SELECT E.empname, E.empcode, D.Description as ddo_name, DP.description as dept_name,
+            DS.designation
+            FROM SAL_Employee_Mst E
+            LEFT JOIN DDO_Mst D ON E.fk_ddoid = D.pk_ddoid
+            LEFT JOIN Department_Mst DP ON E.fk_deptid = DP.pk_deptid
+            LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid
+            WHERE E.pk_empid = ?
+        """, [emp_id])
+
+    @staticmethod
+    def get_property_returns(emp_id):
+        return DB.fetch_all("""
+            SELECT pk_proid as id, fk_empid as emp_code, fk_finid as fin_id,
+            (SELECT Lyear FROM SAL_Financial_Year WHERE pk_finid = fk_finid) as fin_year
+            FROM SAL_AnnualProperty_Mst
+            WHERE fk_empid = (SELECT empcode FROM SAL_Employee_Mst WHERE pk_empid = ?)
+            ORDER BY id DESC
+        """, [emp_id])
+
+    @staticmethod
+    def get_return_by_id(pro_id):
+        main = DB.fetch_one("SELECT * FROM SAL_AnnualProperty_Mst WHERE pk_proid = ?", [pro_id])
+        if not main: return None
+        
+        movable = DB.fetch_all("SELECT * FROM SAL_AnnualProperty_Movable WHERE fk_proid = ?", [pro_id])
+        loans = DB.fetch_all("SELECT * FROM SAL_AnnualProperty_Loans WHERE fk_proid = ?", [pro_id])
+        immovable = DB.fetch_all("SELECT * FROM SAL_AnnualProperty_Immovable WHERE fk_proid = ?", [pro_id])
+        
+        return {'main': main, 'movable': movable, 'loans': loans, 'immovable': immovable}
+
+    @staticmethod
+    def save(data, user_id):
+        pro_id = data.get('pro_id')
+        emp_code = DB.fetch_scalar("SELECT empcode FROM SAL_Employee_Mst WHERE pk_empid = ?", [data['emp_id']])
+        
+        if pro_id:
+            # Update main record
+            DB.execute("UPDATE SAL_AnnualProperty_Mst SET fk_finid = ?, fk_updUserID = ?, fk_updDateID = GETDATE() WHERE pk_proid = ?", 
+                      [data['fin_year'], user_id, pro_id])
+            # Delete child records to re-insert
+            DB.execute("DELETE FROM SAL_AnnualProperty_Movable WHERE fk_proid = ?", [pro_id])
+            DB.execute("DELETE FROM SAL_AnnualProperty_Loans WHERE fk_proid = ?", [pro_id])
+            DB.execute("DELETE FROM SAL_AnnualProperty_Immovable WHERE fk_proid = ?", [pro_id])
+        else:
+            # Insert main record
+            sql_main = """
+                INSERT INTO SAL_AnnualProperty_Mst (fk_empid, fk_finid, fk_insUserID, fk_insDateID, fk_updUserID, fk_updDateID)
+                VALUES (?, ?, ?, GETDATE(), ?, GETDATE())
+            """
+            DB.execute(sql_main, [emp_code, data['fin_year'], user_id, user_id])
+            pro_id = DB.fetch_scalar("SELECT TOP 1 pk_proid FROM SAL_AnnualProperty_Mst WHERE fk_empid = ? ORDER BY pk_proid DESC", [emp_code])
+
+        # Insert Movable (a)
+        for m in data.get('movable', []):
+            if m.get('item'):
+                DB.execute("""
+                    INSERT INTO SAL_AnnualProperty_Movable (fk_proid, ItemDescription, ValueLacs, BenamidarName, AcquisitionDetail, Remarks)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, [pro_id, m['item'], m['value'], m['benamidar'], m['acquisition'], m['remarks']])
+
+        # Insert Loans (b)
+        for l in data.get('loans', []):
+            if l.get('amount'):
+                DB.execute("""
+                    INSERT INTO SAL_AnnualProperty_Loans (fk_proid, LoanAmount, SecurityNature, FamilyMember, LoaneeDetail, LoanDate, Remarks)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, [pro_id, l['amount'], l['security'], l['member'], l['loanee'], l['date'], l['remarks']])
+
+        # Insert Immovable (Declaration)
+        for im in data.get('immovable', []):
+            if im.get('type'):
+                DB.execute("""
+                    INSERT INTO SAL_AnnualProperty_Immovable (fk_proid, PropertyType, LocationDetail, PlotDetail, BuildingDetail, AcquisitionMode, RequiredFrom, HeldInName, AnnualIncome)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, [pro_id, im['type'], im['location'], im['plot'], im['building'], im['mode'], im['required_from'], im['held_in'], im['income']])
+
+        return pro_id
+
+    @staticmethod
+    def delete(pro_id):
+        DB.execute("DELETE FROM SAL_AnnualProperty_Movable WHERE fk_proid = ?", [pro_id])
+        DB.execute("DELETE FROM SAL_AnnualProperty_Loans WHERE fk_proid = ?", [pro_id])
+        DB.execute("DELETE FROM SAL_AnnualProperty_Immovable WHERE fk_proid = ?", [pro_id])
+        return DB.execute("DELETE FROM SAL_AnnualProperty_Mst WHERE pk_proid = ?", [pro_id])

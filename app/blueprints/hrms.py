@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash, make_response
 from app.db import DB
-from app.models import NavModel, EmployeeModel, EmployeePortalModel, LoanModel, PayrollModel, IncomeTaxModel
+from app.models import NavModel, EmployeeModel, EmployeePortalModel, LoanModel, PayrollModel, IncomeTaxModel, PropertyReturnModel
 from app.utils import get_pagination, clean_json_data
 import math
 import io
@@ -1124,6 +1124,64 @@ def download_form16(emp_id, fin_id):
 def tax_deduction_form():
     return render_template('hrms/tax_deduction_form.html')
 
-@hrms_bp.route('/property_return')
+@hrms_bp.route('/property_return', methods=['GET', 'POST'])
 def property_return():
-    return render_template('hrms/property_return.html')
+    if 'user_id' not in session: return redirect(url_for('auth.login'))
+    emp_id = session.get('emp_id')
+    user_id = session['user_id']
+    
+    if request.method == 'POST':
+        action = request.form.get('action')
+        if action == 'DELETE':
+            pro_id = request.form.get('pro_id')
+            if PropertyReturnModel.delete(pro_id):
+                flash("Property return record deleted.", "success")
+            else:
+                flash("Failed to delete record.", "danger")
+            return redirect(url_for('hrms.property_return'))
+            
+        try:
+            # Process dynamic rows
+            def get_rows(prefix, fields):
+                rows = []
+                idx = 1
+                while True:
+                    row = {f: request.form.get(f"{prefix}_{f}_{idx}") for f in fields}
+                    if not any(row.values()): break
+                    rows.append(row)
+                    idx += 1
+                return rows
+
+            movable = get_rows("movable", ["item", "value", "benamidar", "acquisition", "remarks"])
+            loans = get_rows("loans", ["amount", "security", "member", "loanee", "date", "remarks"])
+            immovable = get_rows("immovable", ["type", "location", "plot", "building", "mode", "required_from", "held_in", "income"])
+
+            data = {
+                'emp_id': emp_id,
+                'pro_id': request.form.get('pro_id'),
+                'fin_year': request.form.get('fin_year'),
+                'movable': movable,
+                'loans': loans,
+                'immovable': immovable
+            }
+            PropertyReturnModel.save(data, user_id)
+            flash("Annual Property Return saved successfully.", "success")
+        except Exception as e:
+            flash(f"Error: {str(e)}", "danger")
+        return redirect(url_for('hrms.property_return'))
+
+    # GET logic
+    edit_id = request.args.get('edit_id')
+    edit_data = None
+    if edit_id:
+        edit_data = PropertyReturnModel.get_return_by_id(edit_id)
+    
+    returns = PropertyReturnModel.get_property_returns(emp_id)
+    fin_years = PropertyReturnModel.get_fin_years()
+    emp = PropertyReturnModel.get_employee_details(emp_id)
+    
+    return render_template('hrms/property_return.html', 
+                           returns=returns, 
+                           fin_years=fin_years, 
+                           emp=emp,
+                           edit_data=edit_data)
