@@ -2028,12 +2028,13 @@ class PropertyReturnModel:
     @staticmethod
     def get_property_returns(emp_id):
         return DB.fetch_all("""
-            SELECT r.PkAnnualID as id, r.Fk_empid as emp_id, r.Fk_Finid as fin_id,
+            SELECT r.PkAnnualID as id, E.empcode as emp_id, r.Fk_Finid as fin_id,
             CAST(YEAR(f.date1) AS varchar) + '-' + CAST(YEAR(f.date2) AS varchar) as fin_year, 
             r.Insertdate as return_date, r.IsFinalApp
             FROM Emp_AnnualProperty_return_Mst r
             LEFT JOIN SAL_Financial_Year f ON r.Fk_Finid = f.pk_finid
-            WHERE r.Fk_empid = (SELECT empcode FROM SAL_Employee_Mst WHERE pk_empid = ?)
+            LEFT JOIN SAL_Employee_Mst E ON r.Fk_empid = E.pk_empid
+            WHERE r.Fk_empid = ?
             ORDER BY r.PkAnnualID DESC
         """, [emp_id])
 
@@ -2042,7 +2043,7 @@ class PropertyReturnModel:
         latest = DB.fetch_one("""
             SELECT TOP 1 PkAnnualID 
             FROM Emp_AnnualProperty_return_Mst 
-            WHERE Fk_empid = (SELECT empcode FROM SAL_Employee_Mst WHERE pk_empid = ?)
+            WHERE Fk_empid = ?
             ORDER BY PkAnnualID DESC
         """, [emp_id])
         if latest:
@@ -2075,9 +2076,9 @@ class PropertyReturnModel:
             DB.execute("""
                 INSERT INTO Emp_AnnualProperty_return_Mst (Fk_empid, Fk_Finid, InsertUserId, Insertdate, Updateuserid, UpdateDate, IsFinalApp)
                 VALUES (?, ?, ?, GETDATE(), ?, GETDATE(), 'N')
-            """, [emp_code, fin_year, emp_code, emp_code])
+            """, [emp_id, fin_year, emp_code, emp_code])
             
-            pro_id = DB.fetch_scalar("SELECT TOP 1 PkAnnualID FROM Emp_AnnualProperty_return_Mst WHERE Fk_empid = ? ORDER BY PkAnnualID DESC", [emp_code])
+            pro_id = DB.fetch_scalar("SELECT TOP 1 PkAnnualID FROM Emp_AnnualProperty_return_Mst WHERE Fk_empid = ? ORDER BY PkAnnualID DESC", [emp_id])
 
         # Insert Section A: Movable (HomeDtl)
         item_desc = data.getlist('item_desc[]')
