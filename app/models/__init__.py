@@ -20,7 +20,8 @@ from .hrms import (
     EmployeeFamilyModel, EmployeeNomineeModel, EmployeeBookModel, LTCModel,
     PreviousJobModel, ForeignVisitModel, TrainingModel, DeptExamModel,
     ServiceVerificationModel, SARModel, FirstAppointmentModel, IncrementModel,
-    NoDuesModel, EarnedLeaveModel, DisciplinaryModel, BookGrantModel, BonusModel
+    NoDuesModel, EarnedLeaveModel, DisciplinaryModel, BookGrantModel, BonusModel,
+    PropertyReturnModel
 )
 from .establishment_promotion import AppointingAuthorityModel, NonTeachingPromotionModel
 from .payroll import PayrollModel
