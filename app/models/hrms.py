@@ -2030,7 +2030,7 @@ class PropertyReturnModel:
         return DB.fetch_all("""
             SELECT r.PkAnnualID as id, r.Fk_empid as emp_id, r.Fk_Finid as fin_id,
             CAST(YEAR(f.date1) AS varchar) + '-' + CAST(YEAR(f.date2) AS varchar) as fin_year, 
-            r.Insertdate as return_date
+            r.Insertdate as return_date, r.IsFinalApp
             FROM Emp_AnnualProperty_return_Mst r
             LEFT JOIN SAL_Financial_Year f ON r.Fk_Finid = f.pk_finid
             WHERE r.Fk_empid = (SELECT empcode FROM SAL_Employee_Mst WHERE pk_empid = ?)
@@ -2038,24 +2038,24 @@ class PropertyReturnModel:
         """, [emp_id])
 
     @staticmethod
-    def get_return_by_id(pro_id):
-        main = DB.fetch_one("SELECT * FROM Emp_AnnualProperty_return_Mst WHERE PkAnnualID = ?", [pro_id])
-        if not main:
-            return None
-        
-        # Movable = HomeDtl
-        movable = DB.fetch_all("SELECT * FROM Emp_AnnualProperty_return_HomeDtl WHERE FkAnnualID = ?", [pro_id])
-        # Loans = LoanDtl
-        loans = DB.fetch_all("SELECT * FROM Emp_AnnualProperty_return_LoanDtl WHERE FkAnnualID = ?", [pro_id])
-        # Immovable = BenamidarDtl
-        immovable = DB.fetch_all("SELECT * FROM Emp_AnnualProperty_return_BenamidarDtl WHERE FkAnnualID = ?", [pro_id])
-        
-        return {
-            'main': main,
-            'movable': movable,
-            'loans': loans,
-            'immovable': immovable
-        }
+    def get_latest_return(emp_id):
+        latest = DB.fetch_one("""
+            SELECT TOP 1 PkAnnualID 
+            FROM Emp_AnnualProperty_return_Mst 
+            WHERE Fk_empid = (SELECT empcode FROM SAL_Employee_Mst WHERE pk_empid = ?)
+            ORDER BY PkAnnualID DESC
+        """, [emp_id])
+        if latest:
+            return PropertyReturnModel.get_return_by_id(latest['PkAnnualID'])
+        return None
+
+    @staticmethod
+    def submit_for_approval(pro_id, emp_id):
+        return DB.execute("""
+            UPDATE Emp_AnnualProperty_return_Mst 
+            SET IsFinalApp = 'Y', fk_EmpIDSendTo = 'DEAN_OFFICE', UpdateDate = GETDATE()
+            WHERE PkAnnualID = ?
+        """, [pro_id])
 
     @staticmethod
     def save(data, emp_id, emp_code):
@@ -2073,8 +2073,8 @@ class PropertyReturnModel:
         else:
             # Insert new main record
             DB.execute("""
-                INSERT INTO Emp_AnnualProperty_return_Mst (Fk_empid, Fk_Finid, InsertUserId, Insertdate, Updateuserid, UpdateDate)
-                VALUES (?, ?, ?, GETDATE(), ?, GETDATE())
+                INSERT INTO Emp_AnnualProperty_return_Mst (Fk_empid, Fk_Finid, InsertUserId, Insertdate, Updateuserid, UpdateDate, IsFinalApp)
+                VALUES (?, ?, ?, GETDATE(), ?, GETDATE(), 'N')
             """, [emp_code, fin_year, emp_code, emp_code])
             
             pro_id = DB.fetch_scalar("SELECT TOP 1 PkAnnualID FROM Emp_AnnualProperty_return_Mst WHERE Fk_empid = ? ORDER BY PkAnnualID DESC", [emp_code])

@@ -1130,6 +1130,7 @@ def property_return():
     emp_id = session.get('emp_id')
     user_id = session['user_id']
     
+    edit_data = None
     if request.method == 'POST':
         action = request.form.get('action')
         if action == 'DELETE':
@@ -1139,19 +1140,42 @@ def property_return():
             else:
                 flash("Failed to delete record.", "danger")
             return redirect(url_for('hrms.property_return'))
+        
+        if action == 'FETCH_LATEST':
+            edit_data = PropertyReturnModel.get_latest_return(emp_id)
+            if not edit_data:
+                flash("No previous returns found to fetch from.", "info")
+            else:
+                flash("Latest return data fetched. Please review and save.", "success")
+                # Clear pro_id from fetched data to force a new entry if saved without selecting a year
+                if 'main' in edit_data:
+                    edit_data['main']['PkAnnualID'] = None 
+            # We don't redirect here, we let it fall through to GET render with edit_data
+        
+        elif action == 'SUBMIT':
+            pro_id = request.form.get('pro_id')
+            if not pro_id:
+                flash("Please save the return before submitting for approval.", "warning")
+            else:
+                if PropertyReturnModel.submit_for_approval(pro_id, emp_id):
+                    flash("Annual Property Return submitted for approval.", "success")
+                else:
+                    flash("Failed to submit return.", "danger")
+            return redirect(url_for('hrms.property_return'))
             
-        try:
-            PropertyReturnModel.save(request.form, emp_id, user_id)
-            flash("Annual Property Return saved successfully.", "success")
-        except Exception as e:
-            flash(f"Error: {str(e)}", "danger")
-        return redirect(url_for('hrms.property_return'))
+        elif action == 'SAVE':
+            try:
+                PropertyReturnModel.save(request.form, emp_id, user_id)
+                flash("Annual Property Return saved successfully.", "success")
+            except Exception as e:
+                flash(f"Error: {str(e)}", "danger")
+            return redirect(url_for('hrms.property_return'))
 
     # GET logic
-    edit_id = request.args.get('edit_id')
-    edit_data = None
-    if edit_id:
-        edit_data = PropertyReturnModel.get_return_by_id(edit_id)
+    if not edit_data:
+        edit_id = request.args.get('edit_id')
+        if edit_id:
+            edit_data = PropertyReturnModel.get_return_by_id(edit_id)
     
     returns = PropertyReturnModel.get_property_returns(emp_id)
     fin_years = PropertyReturnModel.get_fin_years()

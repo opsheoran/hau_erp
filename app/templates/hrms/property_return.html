@@ -5,7 +5,7 @@
     
     <div style="padding: 15px;">
         <form method="POST" id="propertyForm">
-            <input type="hidden" name="pro_id" value="{{ edit_data.main.PkAnnualID if edit_data else '' }}">
+            <input type="hidden" name="pro_id" id="pro_id" value="{{ edit_data.main.PkAnnualID if (edit_data and edit_data.main and edit_data.main.PkAnnualID) else '' }}">
             <input type="hidden" name="action" id="hdnAction" value="SAVE">
 
             <table class="form-table" style="width: 100%; margin-bottom: 20px;">
@@ -23,15 +23,59 @@
                         <select name="fin_year" class="dropdown" required>
                             <option value="">-- Select Year --</option>
                             {% for fy in fin_years %}
-                            <option value="{{ fy.id }}" {% if edit_data and edit_data.main.Fk_Finid == fy.id %}selected{% endif %}>{{ fy.name }}</option>
+                            <option value="{{ fy.id }}" {% if edit_data and edit_data.main and edit_data.main.Fk_Finid == fy.id %}selected{% endif %}>{{ fy.name }}</option>
                             {% endfor %}
                         </select> *
                     </td>
                 </tr>
             </table>
 
+            <div style="text-align: right; margin-bottom: 10px;">
+                <button type="button" class="button-common1" onclick="submitAction('FETCH_LATEST')">Fetch Latest Filled Data</button>
+            </div>
+
+            <!-- STATEMENT HEADER -->
+            <table cellspacing="0" cellpadding="0" width="100%" style="margin-bottom: 15px;">
+                <tbody><tr>
+                    <td class="tablesubheading"><b>Statement</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">(1) Cash,Jewellery,Deposits,Insurance Policies,Share,Securities and Debentures
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">(2) Loans & Advances by such Government employee whether secured or not
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">(3) Motor-cars, Motor-cycle, Horses, or any other means of conveyance; and 
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">(4) Refrigrators, Radiograms and other electronic goods.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="tablesubheading"><b>Description: a)</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">(i)  Cash, Jewellery, Deposits, Insurance Policies, Share, Securities and Debentures
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">(ii) Motor-cars, Motor-cycle, Horses, or any other means of conveyance; and 
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">(iii)Refrigrators, Radiograms and other electronic goods.
+                    </td>
+                </tr>
+            </tbody></table>
+
             <!-- SECTION A: MOVABLE ASSETS -->
-            <div class="tablesubheading">Statement (a): Cash, Jewellery, Deposits, Insurance, Shares, Securities, etc.</div>
             <div style="overflow-x: auto; margin-bottom: 20px;">
                 <table class="table-grid-view" id="tblMovable">
                     <thead>
@@ -39,8 +83,8 @@
                             <th>S.No.</th>
                             <th>Description of Item</th>
                             <th>Value (Rs in lacs)</th>
-                            <th>Benamidar Name (if any)</th>
-                            <th>Date & Manner of Acquisition</th>
+                            <th>Name of member of the Govt. Servants family and Benamidar (if any in whose name the assets is held)</th>
+                            <th>Date and manner of fresh acquisition during the year</th>
                             <th>Remarks</th>
                             <th>Action</th>
                         </tr>
@@ -60,21 +104,21 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <button type="button" class="button-common1" onclick="addRow('tblMovable', 'movable')">ADD ROW</button>
+                <button type="button" class="button-common1" onclick="addRow('tblMovable', 'movable')">ADD</button>
             </div>
 
             <!-- SECTION B: LOANS -->
-            <div class="tablesubheading">Statement (b): Details of Loans & Advances</div>
+            <div class="tablesubheading"><b>b)</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>(iv) Details of Loans</b></div>
             <div style="overflow-x: auto; margin-bottom: 20px;">
                 <table class="table-grid-view" id="tblLoans">
                     <thead>
                         <tr class="header-style">
                             <th>S.No.</th>
-                            <th>Amount</th>
-                            <th>Security Nature/Value</th>
-                            <th>Family Member Name</th>
-                            <th>Loanee Name & Desc</th>
-                            <th>Loan Date & Particulars</th>
+                            <th>Amount of Loan</th>
+                            <th>If loan is a secured one, nature of the security with appropriate value</th>
+                            <th>Name of the member of the Govt. servants family who has availed loan</th>
+                            <th>Name with description of the loanee</th>
+                            <th>Date with other particulars of the loan</th>
                             <th>Remarks</th>
                             <th>Action</th>
                         </tr>
@@ -95,24 +139,32 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <button type="button" class="button-common1" onclick="addRow('tblLoans', 'loans')">ADD ROW</button>
+                <button type="button" class="button-common1" onclick="addRow('tblLoans', 'loans')">ADD</button>
+            </div>
+
+            <div class="vtext" style="margin-bottom: 10px;">
+                <b>Note: Member of a Government Servants family are those mentioned in Rule 2(c) of the Government Employees (Conduct) Rules, 1966.</b><br>
+                (1)(Husband (2)(son) (3)(Father-in-law) (4)(Mother-in-law)<br><br>
+                DECLARATION BY: <b>{{ emp.empname }}</b> THE IMMOVABLE PROPERTY HELD BY HER AND MEMBERS OF HER FAMILY UNDER RULE 18 OF THE GOVERNMENT EMPLOYEES (CONDUCT) RULES, 1966.<br><br>
+                <b>Note:-</b><br>
+                1. All interest in land of a permanent nature whether ownership, mortgage or hereditary occupancy, should be entered also dwelling houses in State, District, Village or City.<br>
+                2. Members of a Government Servants family are those mentioned in rule 2(c) of the Government Employees (Conduct) Rules, 1966 and in showing the holding of each, if a holding is Benami, the name of the Benamidar should also be mentioned.
             </div>
 
             <!-- SECTION C: IMMOVABLE PROPERTY -->
-            <div class="tablesubheading">Declaration of Immovable Property (Under Rule 18)</div>
             <div style="overflow-x: auto; margin-bottom: 20px;">
                 <table class="table-grid-view" id="tblImmovable">
                     <thead>
                         <tr class="header-style">
                             <th>S.No.</th>
-                            <th>Type of Property</th>
-                            <th>Location (State/Dist/Village)</th>
-                            <th>Plot/Agri Land Detail</th>
-                            <th>Building Detail</th>
-                            <th>Acquisition Mode</th>
-                            <th>Acquired From</th>
-                            <th>Held In Name</th>
-                            <th>Annual Income</th>
+                            <th width="150px">Type of Property<br>A. Type of Land area/plot size (Residential/Institutional/Commercial/ Agricultural etc.)<br>B. Building with plot size (Residential/Institutional/Commercial/ Agricultural etc.)</th>
+                            <th>Name of State, District, Sub Division & Village or city in which property is located</th>
+                            <th>Plot/ Agriculture Land<br>(i) Cost of Land<br>(ii) Year of acquisition</th>
+                            <th>Building<br>(i) Constructed area<br>(ii) No. of floors<br>(iii) Cost of construction/Building</th>
+                            <th>Mode of acquisition<br>(Whether by purchase / lease/ Mortgage/ inheritance/gift etc.)</th>
+                            <th>Details of person/ authority from whom property required</th>
+                            <th>Whether held in own name of employee or dependent (name & relation) and name of Benamidar (if any)</th>
+                            <th>Annual Income from each property in A & B category</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -134,17 +186,18 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <button type="button" class="button-common1" onclick="addRow('tblImmovable', 'immovable')">ADD ROW</button>
+                <button type="button" class="button-common1" onclick="addRow('tblImmovable', 'immovable')">ADD</button>
             </div>
 
             <div style="margin-top: 20px;">
-                <button type="submit" class="button-common1">SAVE RETURN</button>
+                <button type="button" class="button-common1" onclick="submitAction('SAVE')">SAVE</button>
+                <button type="button" class="button-common1" onclick="submitAction('SUBMIT')">SUBMIT FOR APPROVAL</button>
                 <button type="reset" class="button-common1" onclick="window.location.href='{{ url_for('hrms.property_return') }}'">RESET</button>
             </div>
         </form>
 
         <!-- HISTORY GRID -->
-        <div class="tablesubheading" style="margin-top: 40px;">Employee Annual Property Return Form Details</div>
+        <div class="tablesubheading" style="margin-top: 40px;"><b>Employee Annual Property Return Form Details</b></div>
         <div style="overflow-x: auto;">
             <table class="table-grid-view">
                 <thead>
@@ -152,6 +205,7 @@
                         <th width="5%">S.No.</th>
                         <th>Employee ID</th>
                         <th>Financial Year</th>
+                        <th>Status</th>
                         <th width="10%">Edit</th>
                         <th width="10%">Delete</th>
                         <th width="10%">Print</th>
@@ -164,9 +218,21 @@
                         <td>{{ r.emp_id }}</td>
                         <td>{{ r.fin_year }}</td>
                         <td align="center">
-                            <a href="{{ url_for('hrms.property_return', edit_id=r.id) }}"><img src="{{ url_for('static', filename='images/Edit.gif') }}" border="0"></a>
+                            {% if r.IsFinalApp == 'Y' %}
+                            <span style="color: green; font-weight: bold;">Submitted</span>
+                            {% else %}
+                            <span style="color: orange;">Draft</span>
+                            {% endif %}
                         </td>
                         <td align="center">
+                            {% if r.IsFinalApp != 'Y' %}
+                            <a href="{{ url_for('hrms.property_return', edit_id=r.id) }}"><img src="{{ url_for('static', filename='images/Edit.gif') }}" border="0"></a>
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td align="center">
+                            {% if r.IsFinalApp != 'Y' %}
                             <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this record?');">
                                 <input type="hidden" name="action" value="DELETE">
                                 <input type="hidden" name="pro_id" value="{{ r.id }}">
@@ -174,13 +240,16 @@
                                     <img src="{{ url_for('static', filename='images/Delete.gif') }}" border="0">
                                 </button>
                             </form>
+                            {% else %}
+                            -
+                            {% endif %}
                         </td>
                         <td align="center">
                             <a href="#" onclick="alert('Print functionality will be enabled soon.')"><img src="{{ url_for('static', filename='images/print.gif') }}" border="0"></a>
                         </td>
                     </tr>
                     {% else %}
-                    <tr><td colspan="6" align="center" style="padding: 20px;">No property return records found.</td></tr>
+                    <tr><td colspan="7" align="center" style="padding: 20px;">No property return records found.</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -189,6 +258,21 @@
 </div>
 
 <script>
+function submitAction(action) {
+    if (action === 'SUBMIT') {
+        var proId = document.getElementById('pro_id').value;
+        if (!proId) {
+            alert('Please SAVE the form first before submitting for approval.');
+            return;
+        }
+        if (!confirm('Are you sure you want to submit this return for approval? You will not be able to edit it afterwards.')) {
+            return;
+        }
+    }
+    document.getElementById('hdnAction').value = action;
+    document.getElementById('propertyForm').submit();
+}
+
 function addRow(tableId, prefix) {
     var tbody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
     var rowCount = tbody.rows.length;
