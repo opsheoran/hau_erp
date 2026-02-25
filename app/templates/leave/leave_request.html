@@ -394,6 +394,8 @@ function resetForm() {
 
 function _el(id) { return document.getElementById(id); }
 function _val(id) { var el = _el(id); return el ? el.value : ''; }
+function _setVal(id, val) { var el = _el(id); if (el) el.value = val; }
+function _on(el, evt, fn) { if (el) el.addEventListener(evt, fn); }
 
 function onShortChange() {
     var chk = _el('chkShort');
