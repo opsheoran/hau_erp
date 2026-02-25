@@ -298,7 +298,7 @@ class NavModel:
         res = DB.fetch_one(query)
         if not res:
             curr_yr = datetime.now().year
-            return {'pk_finid': 'CO-18', 'Lyear': curr_yr, 'date1': datetime(curr_yr, 4, 1), 'date2': datetime(curr_yr+1, 3, 31)}
+            return {'pk_finid': None, 'Lyear': curr_yr, 'date1': datetime(curr_yr, 4, 1), 'date2': datetime(curr_yr+1, 3, 31)}
         return res
 
     @staticmethod

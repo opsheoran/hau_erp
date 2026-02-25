@@ -73,7 +73,7 @@
                     <td>
                         <input type="text" id="rec_name" class="textbox" style="width:180px;" readonly>
                         <input type="hidden" name="rec_id" id="rec_id">
-                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="openEmpSearch('rec_id', 'rec_name')" style="cursor:pointer; vertical-align:middle;">
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="ShowSearch('rec')" style="cursor:pointer; vertical-align:middle;">
                     </td>
                     <td class="vtext">Reason</td><td class="colon">:</td>
                     <td><textarea name="reason" class="textbox" style="width:250px; height:40px;" required></textarea></td>
@@ -121,8 +121,6 @@
         </div>
     </div>
 </div>
-
-{% include 'establishment/_search_modal.html' %}
 
 <script>
 function onLeaveTypeChange() {

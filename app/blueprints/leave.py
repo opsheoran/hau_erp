@@ -69,13 +69,30 @@ def api_request_details(req_id):
     res = LeaveModel.get_request_details(req_id)
     return jsonify(res)
 
+@leave_bp.route('/api/lookups')
+def api_lookups():
+    depts = DB.fetch_all("SELECT pk_deptid as id, description as name FROM Department_Mst ORDER BY description")
+    return jsonify({'depts': depts})
+
 @leave_bp.route('/api/employee/search')
 def api_employee_search():
     term = request.args.get('term', '')
     if len(term) < 2:
         return jsonify([])
-    results = EmployeeModel.search_employees(term)
-    return jsonify(results)
+    query = """
+        SELECT TOP 100
+            E.pk_empid as id,
+            E.empname as name,
+            E.empcode as code,
+            ISNULL(DS.designation, '') as designation,
+            ISNULL(DP.description, '') as department
+        FROM SAL_Employee_Mst E
+        LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid
+        LEFT JOIN Department_Mst DP ON E.fk_deptid = DP.pk_deptid
+        WHERE (E.empname LIKE ? OR E.empcode LIKE ?) AND E.employeeleftstatus = 'N'
+        ORDER BY E.empname
+    """
+    return jsonify(DB.fetch_all(query, [f'%{term}%', f'%{term}%']))
 
 @leave_bp.route('/api/employee/search_advanced')
 def api_employee_search_advanced():
@@ -115,13 +132,13 @@ def api_employee_search_advanced():
     query = f"""
         SELECT TOP 100
             E.pk_empid as id,
-            E.empcode,
-            E.manualempcode,
-            E.empname,
+            E.empname as name,
+            E.empcode as code,
             ISNULL(DS.designation, '') as designation,
-            (E.empname + ' | ' + E.empcode + ' | ' + ISNULL(DS.designation, '')) as display
+            ISNULL(DP.description, '') as department
         FROM SAL_Employee_Mst E
         LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid
+        LEFT JOIN Department_Mst DP ON E.fk_deptid = DP.pk_deptid
         WHERE {' AND '.join(where)}
         ORDER BY E.empname
     """
@@ -1054,7 +1071,15 @@ def leave_assignment():
     dept_query += " ORDER BY D.description"
     depts = DB.fetch_all(dept_query, dept_params)
 
-    fin_years = NavModel.get_all_fin_years()
+    fin_years = NavModel.get_years()
+    curr_fin = NavModel.get_current_fin_year()
+    
+    # Strictly ensure selected_fin is a numeric year (Lyear)
+    if selected_fin and not str(selected_fin).isdigit():
+        selected_fin = None
+        
+    if not selected_fin:
+        selected_fin = curr_fin.get('Lyear')
     
     if request.method == 'POST':
         action = request.form.get('action')
@@ -1089,6 +1114,7 @@ def leave_assignment():
                            selected_ddo=selected_ddo, selected_loc=selected_loc,
                            selected_dept=selected_dept, selected_emp=selected_emp,
                            selected_emp_name=selected_emp_name)
+
 
 @leave_bp.route('/api/leave_type/<lt_id>')
 def api_leave_type_master_details(lt_id):
@@ -1233,8 +1259,9 @@ def leave_report_transactions():
 @permission_required('Leave Reconcilliation Report')
 def leave_report_el_reconciliation():
     emp_id = request.args.get('emp_id')
+    emp_name = request.args.get('emp_name', '')
     results = LeaveReportModel.get_el_reconciliation(emp_id)
-    return render_template('leave/report_el_reconciliation.html', results=results, selected_emp=emp_id)
+    return render_template('leave/report_el_reconciliation.html', results=results, selected_emp=emp_id, selected_emp_name=emp_name)
 
 @leave_bp.route('/report/emp_details')
 @permission_required('Employee Leave Details')

@@ -96,7 +96,7 @@
                     <td>
                         <input type="hidden" name="recommend_id" id="recommend_id">
                         <input type="text" id="recommend_name" class="textbox" readonly style="width:180px;">
-                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" style="cursor:pointer; vertical-align:middle;" onclick="openSearch('recommend')">
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" style="cursor:pointer; vertical-align:middle;" onclick="ShowSearch('recommend')">
                     </td>
                 </tr>
                 <tr>
@@ -256,41 +256,15 @@
     </table>
 </div>
 
-<!-- Search Popup Overlay -->
-<div id="SearchDiv" class="white_content-new">
-    <div onclick="hideSearch()" style="float:right; cursor:pointer; color:red; font-weight:bold; font-family:Verdana;">X</div>
-    <div class="tablesubheading" style="margin-top:-5px;">Employee Search</div>
-    <div style="padding:15px;">
-        <input type="text" id="search_term" class="textbox" style="width:70%;" placeholder="Enter name or code...">
-        <button class="button-common1" onclick="performSearch()">SEARCH</button>
-        <div id="search_results" style="margin-top:15px; max-height:200px; overflow-y:auto;"></div>
-    </div>
-</div>
-
 <script>
-let activeTarget = '';
-function openSearch(target) { activeTarget = target; document.getElementById('SearchDiv').style.display = 'block'; }
-function hideSearch() { document.getElementById('SearchDiv').style.display = 'none'; }
-
-async function performSearch() {
-    const term = document.getElementById('search_term').value;
-    if(term.length < 2) return;
-    const res = await fetch(`/leave/api/employee/search?term=${term}`);
-    const data = await res.json();
-    let html = '<table width="100%" border="1" class="table"><thead><tr class="header-style"><td>Code</td><td>Name</td></tr></thead><tbody>';
-    data.forEach(e => {
-        html += `<tr class="item-style" style="cursor:pointer" onclick="selectEmp('${e.id}', '${e.empname} | ${e.empcode}')">
-            <td>${e.empcode}</td><td>${e.empname}</td>
-        </tr>`;
-    });
-    html += '</tbody></table>';
-    document.getElementById('search_results').innerHTML = html;
-}
-
-function selectEmp(id, name) {
-    document.getElementById(activeTarget + '_id').value = id;
-    document.getElementById(activeTarget + '_name').value = name;
-    hideSearch();
+function selectEmployee(id, name) {
+    // Bridges the unified modal callback to the fields expected by this page
+    if (document.getElementById('recommend_id')) {
+        document.getElementById('recommend_id').value = id;
+    }
+    if (document.getElementById('recommend_name')) {
+        document.getElementById('recommend_name').value = name;
+    }
 }
 </script>
 {% endblock %}

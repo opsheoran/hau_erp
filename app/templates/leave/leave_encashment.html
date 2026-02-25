@@ -113,47 +113,15 @@
                 </table>
             </div>
         </div>
-        {% endif %}
-    </div>
-</div>
-
-<!-- Search Modal -->
-<div id="SearchDiv" class="white_content-new">
-    <div style="text-align:right;"><span onclick="HideSearch()" style="cursor:pointer; color:red; font-weight:bold;">X</span></div>
-    <div class="tableheading" style="margin-top:-15px;">Employee Search</div>
-    <div style="padding:15px;">
-        <table class="form-table">
-            <tr>
-                <td class="vtext">Search Employee</td><td class="colon">:</td>
-                <td><input type="text" id="simple_search_term" class="textbox" style="width:250px;"></td>
-                <td><input type="button" value="SEARCH" class="button-common" onclick="doSimpleSearch()"></td>
-            </tr>
-        </table>
-        <div id="search_results" style="margin-top:20px; max-height:250px; overflow-y:auto;"></div>
-    </div>
-</div>
-
-<script>
-function ShowSearch() { document.getElementById('SearchDiv').style.display = 'block'; }
-function HideSearch() { document.getElementById('SearchDiv').style.display = 'none'; }
-
-async function doSimpleSearch() {
-    const term = document.getElementById('simple_search_term').value;
-    if(term.length < 2) return;
-    const res = await fetch(`/leave/api/employee/search?term=${term}`);
-    const data = await res.json();
-    let html = '<table class="table-grid-view"><tr class="header-style"><td>Code</td><td>Name</td><td>Action</td></tr>';
-    data.forEach(e => {
-        html += `<tr class="item-style"><td>${e.id}</td><td>${e.name}</td><td><a href="javascript:void(0)" onclick="selectEmployee('${e.id}', '${e.name}')">Select</a></td></tr>`;
-    });
-    html += '</table>';
-    document.getElementById('search_results').innerHTML = html;
-}
-
-function selectEmployee(id, name) {
-    document.getElementById('emp_id').value = id;
-    document.getElementById('emp_name').value = name;
-    HideSearch();
-}
-</script>
-{% endblock %}
+                {% endif %}
+            </div>
+        </div>
+        
+        <script>
+        function selectEmployee(id, name) {
+            document.getElementById('emp_id').value = id;
+            document.getElementById('emp_name').value = name;
+        }
+        </script>
+        {% endblock %}
+        

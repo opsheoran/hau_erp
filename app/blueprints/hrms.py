@@ -62,7 +62,7 @@ def loan_apply():
 
     # Pagination for history
     page = int(request.args.get('page', 1))
-    pagination, sql_limit = get_pagination('SAL_LoanApply_Mst', page) # Note: This counts ALL loans, might need filtering by emp_id for accurate count
+    pagination, sql_limit = get_pagination('SAL_LoanApply_Mst A', page, order_by="ORDER BY A.dated DESC")
     
     # Accurate count for this employee
     total_emp_loans = DB.fetch_scalar("SELECT COUNT(*) FROM SAL_LoanApply_Mst WHERE fk_empid = ?", [emp_id])

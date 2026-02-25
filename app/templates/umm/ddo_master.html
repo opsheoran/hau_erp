@@ -102,25 +102,6 @@
     </div>
 </div>
 
-<script>
-    function openEmpSearch(idField, nameField) {
-        // Simple prompt for now, can be replaced with a real modal if needed
-        let code = prompt("Enter Employee Code:");
-        if (code) {
-            fetch(`/api/employee/details_by_code?code=${code}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.id) {
-                        document.getElementById(idField).value = data.id;
-                        document.getElementById(nameField).value = data.name;
-                    } else {
-                        alert("Employee not found.");
-                    }
-                });
-        }
-    }
-</script>
-
 {% if get_flashed_messages() %}
 <script>
     document.getElementById('lblMsg').innerText = "{{ get_flashed_messages()[0] }}";

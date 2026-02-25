@@ -178,7 +178,17 @@ class LeaveEncashmentModel:
 class LeaveAssignmentModel:
     @staticmethod
     def get_unassigned_employees(lid, fid, ddoid, locid, deptid, emp_code):
-        query = "SELECT E.pk_empid, E.empcode, E.empname, DS.designation FROM SAL_Employee_Mst E LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid WHERE E.pk_empid NOT IN (SELECT fk_empid FROM SAL_LeaveAssignment_Details WHERE fk_leaveid = ? AND fk_yearid = ?) AND E.employeeleftstatus = 'N'"
+        fid = int(fid) if fid and str(fid).isdigit() else 0
+        query = """
+            SELECT E.pk_empid, E.empcode, E.manualempcode, E.empname, DS.designation, 
+                   DDO.Description, N.nature
+            FROM SAL_Employee_Mst E 
+            LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid 
+            LEFT JOIN DDO_Mst DDO ON E.fk_ddoid = DDO.pk_ddoid
+            LEFT JOIN SAL_Nature_Mst N ON E.fk_natureid = N.pk_natureid
+            WHERE E.pk_empid NOT IN (SELECT fk_empid FROM SAL_LeaveAssignment_Details WHERE fk_leaveid = ? AND fk_yearid = ?) 
+            AND E.employeeleftstatus = 'N'
+        """
         params = [lid, fid]
         if ddoid: query += " AND E.fk_ddoid = ?"; params.append(ddoid)
         if locid: query += " AND E.fk_locid = ?"; params.append(locid)
@@ -188,7 +198,19 @@ class LeaveAssignmentModel:
 
     @staticmethod
     def get_assigned_employees(lid, fid, ddoid, locid, deptid, emp_code):
-        query = "SELECT E.pk_empid, E.empcode, E.empname, DS.designation, A.leaveassigned FROM SAL_Employee_Mst E INNER JOIN SAL_LeaveAssignment_Details A ON E.pk_empid = A.fk_empid LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid WHERE A.fk_leaveid = ? AND A.fk_yearid = ?"
+        fid = int(fid) if fid and str(fid).isdigit() else 0
+        query = """
+            SELECT E.pk_empid, E.empcode, E.manualempcode, E.empname, DS.designation, 
+                   DDO.Description, N.nature, A.leaveassigned,
+                   CASE WHEN B.pk_assignid IS NOT NULL AND B.currentyearleaves = A.leaveassigned THEN 1 ELSE 0 END as is_processed
+            FROM SAL_Employee_Mst E 
+            INNER JOIN SAL_LeaveAssignment_Details A ON E.pk_empid = A.fk_empid 
+            LEFT JOIN SAL_Designation_Mst DS ON E.fk_desgid = DS.pk_desgid 
+            LEFT JOIN DDO_Mst DDO ON E.fk_ddoid = DDO.pk_ddoid
+            LEFT JOIN SAL_Nature_Mst N ON E.fk_natureid = N.pk_natureid
+            LEFT JOIN SAL_EmployeeLeave_Details B ON E.pk_empid = B.fk_empid AND A.fk_leaveid = B.fk_leaveid
+            WHERE A.fk_leaveid = ? AND A.fk_yearid = ?
+        """
         params = [lid, fid]
         if ddoid: query += " AND E.fk_ddoid = ?"; params.append(ddoid)
         if locid: query += " AND E.fk_locid = ?"; params.append(locid)
@@ -198,6 +220,7 @@ class LeaveAssignmentModel:
 
     @staticmethod
     def save_assignments(emp_ids, lid, fid, days, user_id):
+        fid = int(fid) if fid and str(fid).isdigit() else 0
         for eid in emp_ids:
             exists = DB.fetch_one("SELECT pk_leaveassignid FROM SAL_LeaveAssignment_Details WHERE fk_empid=? AND fk_leaveid=? AND fk_yearid=?", [eid, lid, fid])
             if exists:
@@ -206,10 +229,35 @@ class LeaveAssignmentModel:
                 DB.execute("INSERT INTO SAL_LeaveAssignment_Details (fk_empid, fk_leaveid, fk_yearid, leaveassigned, leaveavailed, fk_insUserID, fk_insDateID) VALUES (?, ?, ?, ?, 0, ?, GETDATE())", [eid, lid, fid, days, user_id])
         return True
 
+    @staticmethod
+    def process_assignments(emp_ids, lid, fid, user_id):
+        fid = int(fid) if fid and str(fid).isdigit() else 0
+        for eid in emp_ids:
+            # Get assigned days
+            assign = DB.fetch_one("SELECT leaveassigned FROM SAL_LeaveAssignment_Details WHERE fk_empid=? AND fk_leaveid=? AND fk_yearid=?", [eid, lid, fid])
+            if not assign: continue
+            
+            days = assign['leaveassigned']
+            
+            # Update/Insert into SAL_EmployeeLeave_Details
+            exists = DB.fetch_one("SELECT pk_assignid FROM SAL_EmployeeLeave_Details WHERE fk_empid=? AND fk_leaveid=?", [eid, lid])
+            if exists:
+                DB.execute("UPDATE SAL_EmployeeLeave_Details SET currentyearleaves=?, fk_updUserID=?, fk_updDateID=GETDATE() WHERE pk_assignid=?", [days, user_id, exists['pk_assignid']])
+            else:
+                DB.execute("INSERT INTO SAL_EmployeeLeave_Details (fk_empid, fk_leaveid, currentyearleaves, leaveavailed, totalleavesearned, fk_insUserID, fk_insDateID) VALUES (?, ?, ?, 0, 0, ?, GETDATE())", [eid, lid, days, user_id])
+        return True
+
+    @staticmethod
+    def unprocess_assignments(emp_ids, lid, fid):
+        for eid in emp_ids:
+            # To unprocess, we typically reset currentyearleaves in SAL_EmployeeLeave_Details
+            DB.execute("UPDATE SAL_EmployeeLeave_Details SET currentyearleaves=0 WHERE fk_empid=? AND fk_leaveid=?", [eid, lid])
+        return True
+
 class LeaveReportModel:
     @staticmethod
     def get_leave_transactions(filters, sql_limit=""):
-        query = "SELECT T.*, E.empname, E.empcode, L.leavetype, DDO.Description as DDO FROM SAL_Leave_Tran_Mst T INNER JOIN SAL_Employee_Mst E ON T.fk_empid = E.pk_empid INNER JOIN SAL_Leavetype_Mst L ON T.fk_leaveid = L.pk_leaveid LEFT JOIN DDO_Mst DDO ON E.fk_ddoid = DDO.pk_ddoid WHERE 1=1"
+        query = "SELECT T.*, E.empname, E.empcode, L.leavetype, DDO.Description as DDO FROM SAL_LeavesTaken_Mst T INNER JOIN SAL_Employee_Mst E ON T.fk_empid = E.pk_empid INNER JOIN SAL_Leavetype_Mst L ON T.fk_leaveid = L.pk_leaveid LEFT JOIN DDO_Mst DDO ON E.fk_ddoid = DDO.pk_ddoid WHERE 1=1"
         params = []
         if filters.get('from_date'): query += " AND T.fromdate >= ?"; params.append(filters['from_date'])
         if filters.get('to_date'): query += " AND T.todate <= ?"; params.append(filters['to_date'])
@@ -220,7 +268,7 @@ class LeaveReportModel:
 
     @staticmethod
     def get_leave_transactions_count(filters):
-        query = "SELECT COUNT(*) FROM SAL_Leave_Tran_Mst T INNER JOIN SAL_Employee_Mst E ON T.fk_empid = E.pk_empid WHERE 1=1"
+        query = "SELECT COUNT(*) FROM SAL_LeavesTaken_Mst T INNER JOIN SAL_Employee_Mst E ON T.fk_empid = E.pk_empid WHERE 1=1"
         params = []
         if filters.get('from_date'): query += " AND T.fromdate >= ?"; params.append(filters['from_date'])
         if filters.get('to_date'): query += " AND T.todate <= ?"; params.append(filters['to_date'])
@@ -231,11 +279,74 @@ class LeaveReportModel:
 
     @staticmethod
     def get_el_reconciliation(emp_id):
-        return DB.fetch_all("SELECT * FROM SAL_EL_Reconciliation WHERE fk_empid = ? ORDER BY dated DESC", [emp_id])
+        # SAL_EarnedLeave_Details doesn't have a 'dated' column, using sno_for_emp for ordering
+        query = """
+            SELECT E.empcode, E.empname, EL.* 
+            FROM SAL_EarnedLeave_Details EL
+            INNER JOIN SAL_Employee_Mst E ON EL.fk_empid = E.pk_empid
+            WHERE EL.fk_empid = ? 
+            ORDER BY EL.sno_for_emp DESC
+        """
+        return DB.fetch_all(query, [emp_id])
 
     @staticmethod
-    def update_el_balance(emp_id, days, user_id):
-        return DB.execute("UPDATE SAL_EmployeeLeave_Details SET totalleavesearned = ISNULL(totalleavesearned, 0) + ?, fk_updUserID = ?, fk_updDateID = GETDATE() WHERE fk_empid = ? AND fk_leaveid = 2", [days, user_id, emp_id])
+    def update_el_balance(emp_id, user_id):
+        # 1. Get last entry
+        last = DB.fetch_one("SELECT TOP 1 * FROM SAL_EarnedLeave_Details WHERE fk_empid = ? ORDER BY sno_for_emp DESC", [emp_id])
+        if not last:
+            # If no history, we might need a starting point. 
+            # For this project, we assume history exists or starting balance is 0.
+            last_to = datetime(datetime.now().year, 1, 1)
+            last_bal = 0.0
+            sno = 1
+        else:
+            # dytyto_date might be None if last entry was a manual adjustment or just starting
+            last_to = last['dytyto_date'] or last['leaveto_date'] or datetime(datetime.now().year, 1, 1)
+            last_bal = float(last['el_balance'] or 0)
+            sno = int(last['sno_for_emp'] or 0) + 1
+
+        curr_date = datetime.now()
+        if last_to >= curr_date:
+            return False # Already updated up to now or future
+
+        # 2. Calculate Duty Days
+        # Duty days = total days - (leaves taken excluding CL)
+        total_days = (curr_date - last_to).days
+        if total_days <= 0: return False
+
+        # Subtract non-CL leaves (CL id is 9)
+        # We look for approved leaves in SAL_LeavesTaken_Mst
+        other_leaves = DB.fetch_scalar("""
+            SELECT ISNULL(SUM(totalleavedays), 0) 
+            FROM SAL_LeavesTaken_Mst 
+            WHERE fk_empid = ? AND fromdate > ? AND todate <= ? AND fk_leaveid != 9
+        """, [emp_id, last_to, curr_date])
+        
+        duty_days = total_days - float(other_leaves)
+        if duty_days < 0: duty_days = 0
+        
+        el_earned = round(duty_days / 11.0, 3)
+        if el_earned <= 0: return False
+        
+        new_total = last_bal + el_earned
+        
+        # 3. Insert into Reconciliation table
+        sql_ins = """
+            INSERT INTO SAL_EarnedLeave_Details 
+            (fk_empid, sno_for_emp, dutyfrom_date, dytyto_date, dutydays, el_earned, el_total, el_balance, leave_days)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)
+        """
+        DB.execute(sql_ins, [emp_id, sno, last_to + timedelta(days=1), curr_date, duty_days, el_earned, new_total, new_total])
+        
+        # 4. Update Master Balance
+        # SAL_EmployeeLeave_Details fk_leaveid for EL is 2
+        exists = DB.fetch_one("SELECT pk_assignid FROM SAL_EmployeeLeave_Details WHERE fk_empid=? AND fk_leaveid=2", [emp_id])
+        if exists:
+            DB.execute("UPDATE SAL_EmployeeLeave_Details SET totalleavesearned = ?, fk_updUserID = ?, fk_updDateID = GETDATE() WHERE pk_assignid = ?", [new_total, user_id, exists['pk_assignid']])
+        else:
+            DB.execute("INSERT INTO SAL_EmployeeLeave_Details (fk_empid, fk_leaveid, currentyearleaves, leaveavailed, totalleavesearned, fk_insUserID, fk_insDateID) VALUES (?, 2, 0, 0, ?, ?, GETDATE())", [emp_id, new_total, user_id])
+            
+        return True
 
 class LeaveConfigModel:
     @staticmethod

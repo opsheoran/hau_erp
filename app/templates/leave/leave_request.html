@@ -367,77 +367,6 @@
     </div>
 </div>
 
-<!-- EMPLOYEE SEARCH MODAL (LIVE-TEMPLATE STYLE) -->
-<div id="SearchDiv" class="white_content-new">
-    <div style="text-align:right;">
-        <span onclick="HideSearch()" style="cursor:pointer; color:red; font-weight:bold; font-family:Verdana;">X</span>
-    </div>
-    <div class="tableheading" style="margin-top:-15px;">Employee Search</div>
-    <div style="padding:15px;">
-        <table class="form-table" style="width:100%;">
-            <tr>
-                <td class="vtext">Employee Code</td><td class="colon">:</td>
-                <td><input type="text" id="srch_emp_code" class="textbox" style="width:160px;"></td>
-                <td style="width:20px;"></td>
-                <td class="vtext">Employee Code (M)</td><td class="colon">:</td>
-                <td><input type="text" id="srch_manual_code" class="textbox" style="width:160px;"></td>
-            </tr>
-            <tr>
-                <td class="vtext">Employee Name</td><td class="colon">:</td>
-                <td><input type="text" id="srch_emp_name" class="textbox" style="width:160px;"></td>
-                <td></td>
-                <td class="vtext">DDO</td><td class="colon">:</td>
-                <td>
-                    <select id="srch_ddo" class="dropdown" style="width:170px;">
-                        <option value="">-- Select DDO --</option>
-                        {% for d in lookups.ddos %}
-                        <option value="{{ d.id }}">{{ d.name }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="vtext">Location</td><td class="colon">:</td>
-                <td>
-                    <select id="srch_loc" class="dropdown" style="width:170px;">
-                        <option value="">-- Select Location --</option>
-                        {% for l in lookups.locs %}
-                        <option value="{{ l.id }}">{{ l.name }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-                <td></td>
-                <td class="vtext">Department</td><td class="colon">:</td>
-                <td>
-                    <select id="srch_dept" class="dropdown" style="width:170px;">
-                        <option value="">-- Select Department --</option>
-                        {% for d in lookups.depts %}
-                        <option value="{{ d.id }}">{{ d.name }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="vtext">Designation</td><td class="colon">:</td>
-                <td>
-                    <select id="srch_desg" class="dropdown" style="width:170px;">
-                        <option value="">-- Select Designation --</option>
-                        {% for d in lookups.desgs %}
-                        <option value="{{ d.id }}">{{ d.name }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-                <td></td>
-                <td colspan="3" style="text-align:left;">
-                    <button type="button" class="button-common" onclick="doAdvancedSearch()">SEARCH</button>
-                    <button type="button" class="button-common" style="margin-left:10px; background:#eee; color:#333; border-color:#ccc;" onclick="HideSearch()">DONE</button>
-                </td>
-            </tr>
-        </table>
-        <div id="search_results" style="margin-top:20px; max-height:280px; overflow-y:auto;"></div>
-    </div>
-</div>
-
 <script>
 function fetchELBalance() {
     fetch('/leave/api/el_balance')
@@ -463,61 +392,8 @@ function resetForm() {
     resetCalculation();
 }
 
-var activeSearchTarget = '';
-
 function _el(id) { return document.getElementById(id); }
 function _val(id) { var el = _el(id); return el ? el.value : ''; }
-function _setVal(id, v) { var el = _el(id); if (el) el.value = v; }
-function _show(id) { var el = _el(id); if (el) el.style.display = 'block'; }
-function _hide(id) { var el = _el(id); if (el) el.style.display = 'none'; }
-function _on(el, evt, fn) {
-    if (!el) return;
-    if (el.addEventListener) el.addEventListener(evt, fn);
-    else if (el.attachEvent) el.attachEvent('on' + evt, fn);
-}
-
-function ShowSearch(target) {
-    activeSearchTarget = target;
-    _show('SearchDiv');
-}
-function HideSearch() { _hide('SearchDiv'); }
-
-function doAdvancedSearch() {
-    var qs =
-        'emp_code=' + encodeURIComponent(_val('srch_emp_code')) +
-        '&manual_code=' + encodeURIComponent(_val('srch_manual_code')) +
-        '&emp_name=' + encodeURIComponent(_val('srch_emp_name')) +
-        '&ddo_id=' + encodeURIComponent(_val('srch_ddo')) +
-        '&loc_id=' + encodeURIComponent(_val('srch_loc')) +
-        '&dept_id=' + encodeURIComponent(_val('srch_dept')) +
-        '&desg_id=' + encodeURIComponent(_val('srch_desg'));
-
-    fetch('/leave/api/employee/search_advanced?' + qs)
-        .then(res => res.json())
-        .then(data => {
-            var html = '<table class="table-grid-view"><tr class="header-style"><th>S.No.</th><th>Emp Code</th><th>Employee</th><th>Action</th></tr>';
-            data.forEach((e, i) => {
-                var disp = e.display || ((e.empname || '') + ' | ' + (e.empcode || '') + ' | ' + (e.designation || ''));
-                var rowClass = ((i + 1) % 2 === 0) ? 'item-style-alt' : 'item-style';
-                html += `<tr class="${rowClass}">`;
-                html += `<td align="center">${i + 1}</td>`;
-                html += `<td align="center">${e.empcode || ''}</td>`;
-                html += `<td>${disp}</td>`;
-                html += `<td align="center"><a href="javascript:void(0)" onclick="selectEmployee('${e.id}', '${disp.replace(/'/g, "\\'")}')">Select</a></td>`;
-                html += `</tr>`;
-            });
-            html += '</table>';
-            document.getElementById('search_results').innerHTML = html;
-        });
-}
-
-function selectEmployee(id, name) {
-    var sel = document.getElementById(activeSearchTarget + '_id');
-    if (sel) {
-        sel.innerHTML = `<option value="${id}" selected>${name}</option>`;
-    }
-    HideSearch();
-}
 
 function onShortChange() {
     var chk = _el('chkShort');

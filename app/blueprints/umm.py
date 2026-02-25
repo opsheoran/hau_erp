@@ -111,14 +111,14 @@ def ddo_master():
         except Exception as e: flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('umm.ddo_master'))
     
-    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("DDO_Mst", page)
+    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("DDO_Mst D", page, order_by="ORDER BY D.Description")
     ddos = DB.fetch_all(f"""
         SELECT D.pk_ddoid as id, D.Code, D.Description, DIST.Description as District, 
                CO.description as ContOffice, D.ddoAlias
         FROM DDO_Mst D
         LEFT JOIN distric_mst DIST ON D.fk_districid = DIST.pk_districid
         LEFT JOIN Sal_ControllingOffice_Mst CO ON D.fk_Controllid = CO.pk_Controllid
-        ORDER BY D.Description {sql_limit}
+        {sql_limit}
     """)
     districts = DB.fetch_all("SELECT pk_districid as id, Description as name FROM distric_mst ORDER BY Description")
     cont_offices = DB.fetch_all("SELECT pk_Controllid as id, description as name FROM Sal_ControllingOffice_Mst ORDER BY description")
@@ -160,8 +160,8 @@ def office_type_master():
         except Exception as e: flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('umm.office_type_master'))
     
-    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("OfficeTypeMaster", page)
-    types = DB.fetch_all(f"SELECT OfficeTypeID as id, OfficeName as name, code FROM OfficeTypeMaster ORDER BY OfficeName {sql_limit}")
+    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("OfficeTypeMaster", page, order_by="ORDER BY OfficeName")
+    types = DB.fetch_all(f"SELECT OfficeTypeID as id, OfficeName as name, code FROM OfficeTypeMaster {sql_limit}")
     edit_data = None; edit_id = request.args.get('edit_id')
     if edit_id: edit_data = DB.fetch_one("SELECT OfficeTypeID as id, OfficeName as name, code FROM OfficeTypeMaster WHERE OfficeTypeID = ?", [edit_id])
     return render_template('umm/office_type_master.html', types=types, edit_data=edit_data, perm=perm, pagination=pagination)
@@ -206,14 +206,14 @@ def section_master():
         except Exception as e: flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('umm.section_master'))
     
-    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("SAL_Section_Mst", page)
+    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("SAL_Section_Mst S", page, order_by="ORDER BY S.description")
     sections = DB.fetch_all(f"""
         SELECT S.pk_sectionid as id, S.description, D.description as dept_name, 
                E.empcode + ' ~ ' + E.empname as officer_name, S.SectionAlias as alias
         FROM SAL_Section_Mst S
         LEFT JOIN Department_Mst D ON S.fk_deptid = D.pk_deptid
         LEFT JOIN SAL_Employee_Mst E ON S.SOD_Id = E.pk_empid
-        ORDER BY S.description {sql_limit}
+        {sql_limit}
     """)
     departments = DB.fetch_all("SELECT pk_deptid as id, description as name FROM Department_Mst ORDER BY description")
     
@@ -312,8 +312,8 @@ def grade_master():
         except Exception as e: flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('umm.grade_master', edit_id=edit_id))
     
-    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("SAL_Grade_Mst", page)
-    grades = DB.fetch_all(f"SELECT pk_gradeid as id, gradename, gradedetails, gradepay, inctype FROM SAL_Grade_Mst ORDER BY gradename {sql_limit}")
+    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("SAL_Grade_Mst", page, order_by="ORDER BY gradename")
+    grades = DB.fetch_all(f"SELECT pk_gradeid as id, gradename, gradedetails, gradepay, inctype FROM SAL_Grade_Mst {sql_limit}")
     
     edit_data = None; details = []; edit_id = request.args.get('edit_id')
     if edit_id:
@@ -375,7 +375,7 @@ def designation_master():
         except Exception as e: flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('umm.designation_master'))
     
-    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("SAL_Designation_Mst", page)
+    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("SAL_Designation_Mst D", page, order_by="ORDER BY D.designation")
     designations = DB.fetch_all(f"""
         SELECT D.pk_desgid as id, D.designation as name, C.description as cat_name, 
                CL.classname as class_name, G.gradedetails as grade_name, 
@@ -384,7 +384,7 @@ def designation_master():
         LEFT JOIN SAL_DesignationCat_Mst C ON D.fk_desgcat = C.pk_desgcat
         LEFT JOIN SAL_Class_Mst CL ON D.fk_classId = CL.pk_classid
         LEFT JOIN SAL_Grade_Mst G ON D.fk_gradeid = G.pk_gradeid
-        ORDER BY D.designation {sql_limit}
+        {sql_limit}
     """)
     
     grades = DB.fetch_all("SELECT pk_gradeid as id, gradedetails as name, gradepay FROM SAL_Grade_Mst ORDER BY gradedetails")
@@ -470,13 +470,13 @@ def controlling_office_master():
             except Exception as e: flash(f"Error: {str(e)}", "danger")
             return redirect(url_for('umm.controlling_office_master'))
     
-    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("Sal_ControllingOffice_Mst", page)
+    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("Sal_ControllingOffice_Mst C", page, order_by="ORDER BY C.description")
     offices = DB.fetch_all(f"""
         SELECT C.pk_Controllid as id, C.description as name, 
                E.empcode + ' ~ ' + E.empname as officer_name, C.Alias
         FROM Sal_ControllingOffice_Mst C
         LEFT JOIN SAL_Employee_Mst E ON C.ControllingOfficer_Id = E.pk_empid
-        ORDER BY C.description {sql_limit}
+        {sql_limit}
     """)
     
     edit_data = None; edit_id = request.args.get('edit_id')
@@ -548,7 +548,7 @@ def ddo_location_mapping():
 
     page = to_int(request.args.get('page', 1)); 
     pagination, sql_limit = get_pagination("DDO_Loc_Mapping M LEFT JOIN DDO_Mst D ON M.fk_ddoid = D.pk_ddoid LEFT JOIN Location_Mst L ON M.fk_locid = L.pk_locid", 
-                                           page, where=" WHERE "+" AND ".join(where), params=params)
+                                           page, where=" WHERE "+" AND ".join(where), params=params, order_by="ORDER BY D.Description, L.locname")
     
     mappings = DB.fetch_all(f"""
         SELECT M.pk_mapid as id, D.Description as ddo, L.locname as location
@@ -556,7 +556,7 @@ def ddo_location_mapping():
         LEFT JOIN DDO_Mst D ON M.fk_ddoid = D.pk_ddoid
         LEFT JOIN Location_Mst L ON M.fk_locid = L.pk_locid
         WHERE {" AND ".join(where)}
-        ORDER BY D.Description, L.locname {sql_limit}
+        {sql_limit}
     """, params)
     
     ddos = DB.fetch_all("SELECT pk_ddoid as id, '[ ' + Code + ' ] ' + Description as name FROM DDO_Mst ORDER BY Code ASC")
@@ -618,14 +618,14 @@ def country_state_dist_city_master():
         except Exception as e: flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('umm.country_state_dist_city_master'))
     
-    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("Comm_Country_State_City_Mst", page)
+    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("Comm_Country_State_City_Mst C", page, order_by="ORDER BY C.Description")
     entries = DB.fetch_all(f"""
         SELECT C.Pk_Id as id, C.Description as name, C.Nationality, C.IsDefault as is_default,
                P.Description as parent_name, T.OfficeName as type_name
         FROM Comm_Country_State_City_Mst C
         LEFT JOIN Comm_Country_State_City_Mst P ON C.ParentId = P.Pk_Id
         LEFT JOIN OfficeTypeMaster T ON C.Fk_OfficeTypeId = T.OfficeTypeID
-        ORDER BY C.Description {sql_limit}
+        {sql_limit}
     """)
     types = DB.fetch_all("SELECT OfficeTypeID as id, OfficeName as name FROM OfficeTypeMaster ORDER BY OfficeName")
     parents = DB.fetch_all("SELECT Pk_Id as id, Description as name FROM Comm_Country_State_City_Mst ORDER BY Description")
@@ -670,8 +670,8 @@ def district_master():
         where = " WHERE District_Code LIKE ?"; params.append(f'%{search_val}%')
     elif search_type == 'Description' and search_val:
         where = " WHERE Description LIKE ?"; params.append(f'%{search_val}%')
-    pagination, sql_limit = get_pagination("distric_mst", page, where=where, params=params)
-    districts = DB.fetch_all(f"SELECT pk_districid as id, District_Code as code, Description as name FROM distric_mst {where} ORDER BY Description {sql_limit}", params)
+    pagination, sql_limit = get_pagination("distric_mst", page, where=where, params=params, order_by="ORDER BY Description")
+    districts = DB.fetch_all(f"SELECT pk_districid as id, District_Code as code, Description as name FROM distric_mst {where} {sql_limit}", params)
     edit_data = None
     if request.args.get('edit_id'):
         edit_data = DB.fetch_one("SELECT pk_districid as id, District_Code as code, Description as name FROM distric_mst WHERE pk_districid = ?", [request.args.get('edit_id')])
@@ -707,8 +707,8 @@ def location_master():
         except Exception as e: flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('umm.location_master'))
     page = to_int(request.args.get('page', 1))
-    pagination, sql_limit = get_pagination("Location_Mst", page)
-    locations = DB.fetch_all(f"SELECT L.pk_locid as id, L.locname as name, L.locationAlias as alias, P.locname as parent_name FROM Location_Mst L LEFT JOIN Location_Mst P ON L.fk_locid = P.pk_locid ORDER BY L.locname {sql_limit}")
+    pagination, sql_limit = get_pagination("Location_Mst L", page, order_by="ORDER BY L.locname")
+    locations = DB.fetch_all(f"SELECT L.pk_locid as id, L.locname as name, L.locationAlias as alias, P.locname as parent_name FROM Location_Mst L LEFT JOIN Location_Mst P ON L.fk_locid = P.pk_locid {sql_limit}")
     offices = DB.fetch_all("SELECT OfficeTypeID as id, OfficeName as name FROM OfficeTypeMaster ORDER BY OfficeName")
     districts = DB.fetch_all("SELECT pk_districid as id, Description as name FROM distric_mst ORDER BY Description")
     parent_locations = DB.fetch_all("SELECT pk_locid as id, locname as name FROM Location_Mst ORDER BY locname")
@@ -833,8 +833,8 @@ def designation_specialization_master():
         where += " AND Branchname LIKE ?"
         params.append(f"%{s_val}%")
 
-    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("SMS_BranchMst", page, where=where, params=params)
-    specs = DB.fetch_all(f"SELECT Pk_BranchId as id, Branchname as name FROM SMS_BranchMst {where} ORDER BY Branchname {sql_limit}", params)
+    page = to_int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("SMS_BranchMst", page, where=where, params=params, order_by="ORDER BY Branchname")
+    specs = DB.fetch_all(f"SELECT Pk_BranchId as id, Branchname as name FROM SMS_BranchMst {where} {sql_limit}", params)
     
     edit_data = None; edit_id = request.args.get('edit_id')
     if edit_id:
@@ -867,8 +867,8 @@ def page_type_master():
                 flash("Page Type created successfully.", "success")
         except Exception as e: flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('umm.page_type_master'))
-    page = int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("UM_PageType_Mst", page)
-    page_types = DB.fetch_all(f"SELECT pk_pagetypeId as id, pagetypename, remarks FROM UM_PageType_Mst ORDER BY pagetypename {sql_limit}")
+    page = int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("UM_PageType_Mst", page, order_by="ORDER BY pagetypename")
+    page_types = DB.fetch_all(f"SELECT pk_pagetypeId as id, pagetypename, remarks FROM UM_PageType_Mst {sql_limit}")
     edit_data = None
     if request.args.get('edit_id'):
         edit_data = DB.fetch_one("SELECT pk_pagetypeId as id, pagetypename as pagetypename, remarks FROM UM_PageType_Mst WHERE pk_pagetypeId = ?", [request.args.get('edit_id')])
@@ -898,8 +898,8 @@ def role_master():
                 flash("Role created successfully.", "success")
         except Exception as e: flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('umm.role_master'))
-    page = int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("UM_Role_Mst", page)
-    roles = DB.fetch_all(f"SELECT R.pk_roleId as id, R.rolename, R.mappedalias as alias, L.rolelevelname as role_level, R.remarks FROM UM_Role_Mst R LEFT JOIN UM_RoleLevel_Mst L ON R.fk_rolelevelId = L.pk_rolelevelId ORDER BY R.rolename {sql_limit}")
+    page = int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("UM_Role_Mst R", page, order_by="ORDER BY R.rolename")
+    roles = DB.fetch_all(f"SELECT R.pk_roleId as id, R.rolename, R.mappedalias as alias, L.rolelevelname as role_level, R.remarks FROM UM_Role_Mst R LEFT JOIN UM_RoleLevel_Mst L ON R.fk_rolelevelId = L.pk_rolelevelId {sql_limit}")
     role_levels = DB.fetch_all("SELECT pk_rolelevelId as id, rolelevelname as name FROM UM_RoleLevel_Mst ORDER BY pk_rolelevelId")
     edit_data = None
     if request.args.get('edit_id'):
@@ -958,8 +958,8 @@ def user_master():
     if s_role and s_role.isdigit(): where.append("U.fk_roleId = ?"); params.append(s_role)
     if s_active in {'0', '1'}: where.append("U.active = ?"); params.append(int(s_active))
     page = to_int(request.args.get('page') or 1) or 1; per_page = 10; total = DB.fetch_scalar(f"SELECT COUNT(*) FROM UM_Users_Mst U WHERE {' AND '.join(where)}", params)
-    pagination, sql_limit = get_pagination("UM_Users_Mst U", page, where=" WHERE "+" AND ".join(where), params=params)
-    users = DB.fetch_all(f"SELECT U.pk_userId as id, U.loginname, U.name, U.dept as department, U.desig as designation, R.rolename as role, CASE WHEN U.active = 1 THEN 'Yes' ELSE 'No' END as active FROM UM_Users_Mst U LEFT JOIN UM_Role_Mst R ON R.pk_roleId = U.fk_roleId WHERE {' AND '.join(where)} ORDER BY U.loginname {sql_limit}", params)
+    pagination, sql_limit = get_pagination("UM_Users_Mst U", page, where=" WHERE "+" AND ".join(where), params=params, order_by="ORDER BY U.loginname")
+    users = DB.fetch_all(f"SELECT U.pk_userId as id, U.loginname, U.name, U.dept as department, U.desig as designation, R.rolename as role, CASE WHEN U.active = 1 THEN 'Yes' ELSE 'No' END as active FROM UM_Users_Mst U LEFT JOIN UM_Role_Mst R ON R.pk_roleId = U.fk_roleId WHERE {' AND '.join(where)} {sql_limit}", params)
     edit_data = None; edit_id = request.args.get('edit_id')
     if edit_id:
         try: edit_data = DB.fetch_one("SELECT pk_userId as id, loginname as login_id, Plain_text as password, fk_roleId as role, fk_defaultlocation as location, active, name as emp_name, fathername as father_name, dept as department, desig as designation, email, remarks, Isdocstatus as is_doctor, fk_empId as emp_id, fk_ddoid as ddo FROM UM_Users_Mst WHERE pk_userId = ?", [edit_id])
@@ -990,8 +990,8 @@ def role_level_master():
                 flash("Role Level created successfully.", "success")
         except Exception as e: flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('umm.role_level_master'))
-    page = int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("UM_RoleLevel_Mst", page)
-    levels = DB.fetch_all(f"SELECT pk_rolelevelId as id, rolelevelname as name, prioritylevel as priority, remarks FROM UM_RoleLevel_Mst ORDER BY prioritylevel {sql_limit}")
+    page = int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("UM_RoleLevel_Mst", page, order_by="ORDER BY prioritylevel")
+    levels = DB.fetch_all(f"SELECT pk_rolelevelId as id, rolelevelname as name, prioritylevel as priority, remarks FROM UM_RoleLevel_Mst {sql_limit}")
     edit_data = None; edit_id = request.args.get('edit_id')
     if edit_id: edit_data = DB.fetch_one("SELECT pk_rolelevelId as id, rolelevelname as name, prioritylevel as priority, remarks FROM UM_RoleLevel_Mst WHERE pk_rolelevelId = ?", [edit_id])
     return render_template('umm/role_level_master.html', levels=levels, edit_data=edit_data, perm=perm, pagination=pagination)
@@ -1021,8 +1021,8 @@ def module_master():
                 flash("Record Saved Successfully !", "success")
         except Exception as e: flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('umm.module_master'))
-    page = int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("UM_Module_Mst", page)
-    modules = DB.fetch_all(f"SELECT pk_moduleId as id, modulename as name, CASE WHEN moduletype = 1 THEN 'Web' ELSE 'Window' END as type, mappedalias as alias, CASE WHEN active = 1 THEN 'Yes' ELSE 'No' END as active, remarks FROM UM_Module_Mst ORDER BY pk_moduleId {sql_limit}")
+    page = int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("UM_Module_Mst", page, order_by="ORDER BY pk_moduleId")
+    modules = DB.fetch_all(f"SELECT pk_moduleId as id, modulename as name, CASE WHEN moduletype = 1 THEN 'Web' ELSE 'Window' END as type, mappedalias as alias, CASE WHEN active = 1 THEN 'Yes' ELSE 'No' END as active, remarks FROM UM_Module_Mst {sql_limit}")
     edit_data = None; edit_id = request.args.get('edit_id')
     if edit_id: edit_data = DB.fetch_one("SELECT pk_moduleId as id, modulename as name, remarks, active, CASE WHEN moduletype = 1 THEN 'rdoWeb' ELSE 'rdoWin' END as type, mappedalias as alias FROM UM_Module_Mst WHERE pk_moduleId = ?", [edit_id])
     return render_template('umm/module_master.html', modules=modules, edit_data=edit_data, perm=perm, pagination=pagination)
@@ -1067,8 +1067,8 @@ def department_master():
                 flash("Department created successfully.", "success")
         except Exception as e: flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('umm.department_master'))
-    page = int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("Department_Mst", page)
-    departments = DB.fetch_all(f"SELECT D.pk_deptid as id, D.description as dept_name, E.empname as hod_name, E.empcode as hod_code, D.DeptAlias as alias FROM Department_Mst D LEFT JOIN SAL_Employee_Mst E ON D.Hod_Id = E.pk_empid ORDER BY D.description {sql_limit}")
+    page = int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("Department_Mst D", page, order_by="ORDER BY D.description")
+    departments = DB.fetch_all(f"SELECT D.pk_deptid as id, D.description as dept_name, E.empname as hod_name, E.empcode as hod_code, D.DeptAlias as alias FROM Department_Mst D LEFT JOIN SAL_Employee_Mst E ON D.Hod_Id = E.pk_empid {sql_limit}")
     edit_data = None; edit_id = request.args.get('edit_id')
     if edit_id: edit_data = DB.fetch_one("SELECT D.pk_deptid as id, D.description as department, D.Hod_Id as hod_id, E.empcode + ' ~ ' + E.empname as hod_text, D.Email_Id as email, D.DeptAlias as alias FROM Department_Mst D LEFT JOIN SAL_Employee_Mst E ON D.Hod_Id = E.pk_empid WHERE D.pk_deptid = ?", [edit_id])
     return render_template('umm/department_master.html', departments=departments, edit_data=edit_data, perm=perm, pagination=pagination)
@@ -1248,7 +1248,14 @@ def web_page_master():
             else: DB.execute("INSERT INTO UM_WebPage_Mst (menucaption, webpagename, pagepath, tooltip, parentId, displayorder, activestatus, fk_moduleId, fk_pagetypeId, pagedescription, selectable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", params); flash("Web page created successfully.", "success")
         except Exception as e: flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('umm.web_page_master'))
-    page = int(request.args.get('page', 1)); pagination, sql_limit = get_pagination("UM_WebPage_Mst", page); modules = DB.fetch_all("SELECT pk_moduleId as id, modulename as name FROM UM_Module_Mst ORDER BY modulename"); page_types = DB.fetch_all("SELECT pk_pagetypeId as id, pagetypename as name FROM UM_PageType_Mst ORDER BY pagetypename"); parent_pages = DB.fetch_all("SELECT pk_webpageId as id, menucaption as name FROM UM_WebPage_Mst WHERE parentId = 0 OR parentId IS NULL ORDER BY menucaption"); pages = DB.fetch_all(f"SELECT W.pk_webpageId as id, W.menucaption, M.modulename as modulename, W.displayorder, W.activestatus FROM UM_WebPage_Mst W LEFT JOIN UM_Module_Mst M ON W.fk_moduleId = M.pk_moduleId ORDER BY M.modulename, W.displayorder {sql_limit}")
+    page = int(request.args.get('page', 1))
+    pagination, sql_limit = get_pagination("UM_WebPage_Mst W LEFT JOIN UM_Module_Mst M ON W.fk_moduleId = M.pk_moduleId", 
+                                           page, order_by="ORDER BY M.modulename, W.displayorder")
+    
+    modules = DB.fetch_all("SELECT pk_moduleId as id, modulename as name FROM UM_Module_Mst ORDER BY modulename")
+    page_types = DB.fetch_all("SELECT pk_pagetypeId as id, pagetypename as name FROM UM_PageType_Mst ORDER BY pagetypename")
+    parent_pages = DB.fetch_all("SELECT pk_webpageId as id, menucaption as name FROM UM_WebPage_Mst WHERE parentId = 0 OR parentId IS NULL ORDER BY menucaption")
+    pages = DB.fetch_all(f"SELECT W.pk_webpageId as id, W.menucaption, M.modulename as modulename, W.displayorder, W.activestatus FROM UM_WebPage_Mst W LEFT JOIN UM_Module_Mst M ON W.fk_moduleId = M.pk_moduleId {sql_limit}")
     edit_data = None; edit_id = request.args.get('edit_id')
     if edit_id: edit_data = DB.fetch_one("SELECT * FROM UM_WebPage_Mst WHERE pk_webpageId = ?", [edit_id])
     return render_template('umm/web_page_master.html', pages=pages, modules=modules, page_types=page_types, parent_pages=parent_pages, edit_data=edit_data, perm=perm, pagination=pagination)
