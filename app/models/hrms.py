@@ -2029,7 +2029,8 @@ class PropertyReturnModel:
     def get_property_returns(emp_id):
         return DB.fetch_all("""
             SELECT r.PkAnnualID as id, r.Fk_empid as emp_id, r.Fk_Finid as fin_id,
-            f.FinancialYear as fin_year, r.Insertdate as return_date
+            CAST(YEAR(f.date1) AS varchar) + '-' + CAST(YEAR(f.date2) AS varchar) as fin_year, 
+            r.Insertdate as return_date
             FROM Emp_AnnualProperty_return_Mst r
             LEFT JOIN SAL_Financial_Year f ON r.Fk_Finid = f.pk_finid
             WHERE r.Fk_empid = (SELECT empcode FROM SAL_Employee_Mst WHERE pk_empid = ?)
