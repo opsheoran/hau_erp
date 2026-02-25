@@ -2039,6 +2039,26 @@ class PropertyReturnModel:
         """, [emp_id])
 
     @staticmethod
+    def get_return_by_id(pro_id):
+        main = DB.fetch_one("SELECT * FROM Emp_AnnualProperty_return_Mst WHERE PkAnnualID = ?", [pro_id])
+        if not main:
+            return None
+        
+        # Movable = HomeDtl
+        movable = DB.fetch_all("SELECT * FROM Emp_AnnualProperty_return_HomeDtl WHERE FkAnnualID = ?", [pro_id])
+        # Loans = LoanDtl
+        loans = DB.fetch_all("SELECT * FROM Emp_AnnualProperty_return_LoanDtl WHERE FkAnnualID = ?", [pro_id])
+        # Immovable = BenamidarDtl
+        immovable = DB.fetch_all("SELECT * FROM Emp_AnnualProperty_return_BenamidarDtl WHERE FkAnnualID = ?", [pro_id])
+        
+        return {
+            'main': main,
+            'movable': movable,
+            'loans': loans,
+            'immovable': immovable
+        }
+
+    @staticmethod
     def get_latest_return(emp_id):
         latest = DB.fetch_one("""
             SELECT TOP 1 PkAnnualID 

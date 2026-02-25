@@ -1,6 +1,50 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="hau-card">
+
+<style>
+    .form-table, .form-table td, .form-table tr, .form-table th { 
+        border: none !important; 
+        border-collapse: collapse !important;
+        padding: 4px 8px !important;
+    }
+    .table-grid-view { border-collapse: collapse !important; width: 100%; border: 1px solid #D4D4D4 !important; margin-bottom: 20px; }
+    .table-grid-view td, .table-grid-view th { border: 1px solid #D4D4D4 !important; padding: 5px; font-family: Verdana; font-size: 11px; }
+    
+    .vtext { font-family: Verdana; font-size: 11px; font-weight: bold; color: #333333; }
+    .colon { font-family: Verdana; font-size: 11px; font-weight: bold; color: #333333; text-align: center; width: 10px; }
+    .required { font-family: Verdana; font-size: 11px; color: Red; font-weight: bold; }
+    .textbox { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; height: 18px; }
+    .dropdown { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; height: 22px; }
+    .textboxmultiline { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; width: 100%; }
+    
+    .tablesubheading { 
+        background-color: #2d5a27 !important; 
+        color: #ffffff !important; 
+        font-weight: bold; 
+        padding: 5px 10px; 
+        font-size: 12px; 
+        border: 1px solid #1e3d1a; 
+        display: block; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .button-common1 { 
+        background: #3c8dbc; 
+        color: white; 
+        border: 1px solid #2c729e; 
+        padding: 3px 15px; 
+        font-family: Verdana; 
+        font-size: 11px; 
+        font-weight: bold; 
+        cursor: pointer; 
+        border-radius: 2px;
+        height: 24px;
+        text-transform: uppercase;
+    }
+    .button-common1:hover { background: #367fa9; }
+</style>
+
+<div class="hau-card" style="padding: 10px;">
     <div class="tableheading">ANNUAL PROPERTY RETURN FORM</div>
     
     <div style="padding: 15px;">
@@ -23,14 +67,14 @@
                         <select name="fin_year" class="dropdown" required>
                             <option value="">-- Select Year --</option>
                             {% for fy in fin_years %}
-                            <option value="{{ fy.id }}" {% if edit_data and edit_data.main and edit_data.main.Fk_Finid == fy.id %}selected{% endif %}>{{ fy.name }}</option>
+                            <option value="{{ fy.id }}" {% if edit_data and edit_data.main.Fk_Finid == fy.id %}selected{% endif %}>{{ fy.name }}</option>
                             {% endfor %}
                         </select> *
                     </td>
                 </tr>
             </table>
 
-            <div style="text-align: right; margin-bottom: 10px;">
+            <div style="text-align: left; margin-bottom: 10px;">
                 <button type="button" class="button-common1" onclick="submitAction('FETCH_LATEST')">Fetch Latest Filled Data</button>
             </div>
 
@@ -86,20 +130,20 @@
                             <th>Name of member of the Govt. Servants family and Benamidar (if any in whose name the assets is held)</th>
                             <th>Date and manner of fresh acquisition during the year</th>
                             <th>Remarks</th>
-                            <th>Action</th>
+                            <th>DELETE</th>
                         </tr>
                     </thead>
                     <tbody id="bodyMovable">
                         {% set movable_list = edit_data.movable if edit_data and edit_data.movable else [{}] %}
                         {% for item in movable_list %}
                         <tr class="item-style">
-                            <td align="center" class="sno">{{ loop.index }}</td>
+                            <td align="center" class="sno" style="width:5%">{{ loop.index }}</td>
                             <td><input type="text" name="item_desc[]" class="textbox" style="width:100%" value="{{ item.Desc_O_Item or '' }}"></td>
                             <td><input type="text" name="item_val[]" class="textbox" style="width:100%" value="{{ item.Valuesinrs or '' }}"></td>
-                            <td><input type="text" name="item_benamidar[]" class="textbox" style="width:100%" value="{{ item.Benamidar_Name or '' }}"></td>
+                            <td><textarea name="item_benamidar[]" class="textboxmultiline" rows="2" style="height:30px;">{{ item.Benamidar_Name or '' }}</textarea></td>
                             <td><input type="text" name="item_manner[]" class="textbox" style="width:100%" value="{{ item.DateOfManner or '' }}"></td>
-                            <td><input type="text" name="item_remarks[]" class="textbox" style="width:100%" value="{{ item.Remarks or '' }}"></td>
-                            <td align="center"><button type="button" class="btn btn-xs btn-danger" onclick="removeRow(this)">×</button></td>
+                            <td><textarea name="item_remarks[]" class="textboxmultiline" rows="2" style="height:30px;">{{ item.Remarks or '' }}</textarea></td>
+                            <td align="center" style="width:4%"><img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer" onclick="removeRow(this)"></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -120,21 +164,21 @@
                             <th>Name with description of the loanee</th>
                             <th>Date with other particulars of the loan</th>
                             <th>Remarks</th>
-                            <th>Action</th>
+                            <th>DELETE</th>
                         </tr>
                     </thead>
                     <tbody id="bodyLoans">
                         {% set loans_list = edit_data.loans if edit_data and edit_data.loans else [{}] %}
                         {% for item in loans_list %}
                         <tr class="item-style">
-                            <td align="center" class="sno">{{ loop.index }}</td>
+                            <td align="center" class="sno" style="width:5%">{{ loop.index }}</td>
                             <td><input type="text" name="loan_amt[]" class="textbox" style="width:100%" value="{{ item.AmountOfLoan or '' }}"></td>
-                            <td><input type="text" name="loan_security[]" class="textbox" style="width:100%" value="{{ item.LoanInSecure or '' }}"></td>
-                            <td><input type="text" name="loan_member[]" class="textbox" style="width:100%" value="{{ item.NameAvailedLoan or '' }}"></td>
+                            <td><textarea name="loan_security[]" class="textboxmultiline" rows="2" style="height:30px;">{{ item.LoanInSecure or '' }}</textarea></td>
+                            <td><textarea name="loan_member[]" class="textboxmultiline" rows="2" style="height:30px;">{{ item.NameAvailedLoan or '' }}</textarea></td>
                             <td><input type="text" name="loan_loanee[]" class="textbox" style="width:100%" value="{{ item.NameOfloanee or '' }}"></td>
                             <td><input type="text" name="loan_date[]" class="textbox" style="width:100%" value="{{ item.DateParticularLoan or '' }}"></td>
-                            <td><input type="text" name="loan_remarks[]" class="textbox" style="width:100%" value="{{ item.LoanRemarks or '' }}"></td>
-                            <td align="center"><button type="button" class="btn btn-xs btn-danger" onclick="removeRow(this)">×</button></td>
+                            <td><textarea name="loan_remarks[]" class="textboxmultiline" rows="2" style="height:30px;">{{ item.LoanRemarks or '' }}</textarea></td>
+                            <td align="center" style="width:4%"><img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer" onclick="removeRow(this)"></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -165,14 +209,14 @@
                             <th>Details of person/ authority from whom property required</th>
                             <th>Whether held in own name of employee or dependent (name & relation) and name of Benamidar (if any)</th>
                             <th>Annual Income from each property in A & B category</th>
-                            <th>Action</th>
+                            <th>DELETE</th>
                         </tr>
                     </thead>
                     <tbody id="bodyImmovable">
                         {% set imm_list = edit_data.immovable if edit_data and edit_data.immovable else [{}] %}
                         {% for item in imm_list %}
                         <tr class="item-style">
-                            <td align="center" class="sno">{{ loop.index }}</td>
+                            <td align="center" class="sno" style="width:5%">{{ loop.index }}</td>
                             <td><input type="text" name="prop_type[]" class="textbox" style="width:100%" value="{{ item.TypeofProperty or '' }}"></td>
                             <td><input type="text" name="prop_loc[]" class="textbox" style="width:100%" value="{{ item.PropertyLocated or '' }}"></td>
                             <td><input type="text" name="prop_plot[]" class="textbox" style="width:100%" value="{{ item.Plot_Agri_Land or '' }}"></td>
@@ -181,7 +225,7 @@
                             <td><input type="text" name="prop_person[]" class="textbox" style="width:100%" value="{{ item.DetailsOfPerson or '' }}"></td>
                             <td><input type="text" name="prop_held[]" class="textbox" style="width:100%" value="{{ item.ownnameemployee or '' }}"></td>
                             <td><input type="text" name="prop_income[]" class="textbox" style="width:100%" value="{{ item.AnnualIncome or '' }}"></td>
-                            <td align="center"><button type="button" class="btn btn-xs btn-danger" onclick="removeRow(this)">×</button></td>
+                            <td align="center" style="width:4%"><img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer" onclick="removeRow(this)"></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -202,13 +246,13 @@
             <table class="table-grid-view">
                 <thead>
                     <tr class="header-style">
-                        <th width="5%">S.No.</th>
+                        <th width="50" align="center">S.No.</th>
                         <th>Employee ID</th>
                         <th>Financial Year</th>
                         <th>Status</th>
-                        <th width="10%">Edit</th>
-                        <th width="10%">Delete</th>
-                        <th width="10%">Print</th>
+                        <th width="60" align="center">EDIT</th>
+                        <th width="60" align="center">DELETE</th>
+                        <th width="60" align="center">PRINT</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -293,22 +337,26 @@ function addRow(tableId, prefix) {
     var fields = names[prefix];
     for (var i = 0; i < fields.length; i++) {
         var cell = row.insertCell(i + 1);
-        cell.innerHTML = '<input type="text" name="' + fields[i] + '" class="textbox" style="width:100%">';
+        if (fields[i].includes('benamidar') || fields[i].includes('remarks') || fields[i].includes('security') || fields[i].includes('member')) {
+            cell.innerHTML = '<textarea name="' + fields[i] + '" class="textboxmultiline" rows="2" style="height:30px;"></textarea>';
+        } else {
+            cell.innerHTML = '<input type="text" name="' + fields[i] + '" class="textbox" style="width:100%">';
+        }
     }
     
     var cellLast = row.insertCell(fields.length + 1);
     cellLast.align = 'center';
-    cellLast.innerHTML = '<button type="button" class="btn btn-xs btn-danger" onclick="removeRow(this)">×</button>';
+    cellLast.innerHTML = '<img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer" onclick="removeRow(this)">';
 }
 
-function removeRow(btn) {
-    var row = btn.parentNode.parentNode;
+function removeRow(img) {
+    var row = img.parentNode.parentNode;
     var tbody = row.parentNode;
     if (tbody.rows.length > 1) {
         tbody.deleteRow(row.rowIndex - 1);
         reIndex(tbody);
     } else {
-        var inputs = row.getElementsByTagName('input');
+        var inputs = row.querySelectorAll('input, textarea');
         for (var i = 0; i < inputs.length; i++) inputs[i].value = '';
     }
 }
