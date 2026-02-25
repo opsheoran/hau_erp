@@ -1,8 +1,16 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash, make_response
 from app.db import DB
 from app.models import NavModel, EmployeeModel, EmployeePortalModel, LoanModel, PayrollModel, IncomeTaxModel
-from app.utils import get_pagination
+from app.utils import get_pagination, clean_json_data
 import math
+import io
+import os
+from datetime import datetime
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image, PageBreak
 
 hrms_bp = Blueprint('hrms', __name__)
 
@@ -36,6 +44,147 @@ def gpf_details():
     fin_years = NavModel.get_all_fin_years()
     
     return render_template('hrms/gpf_details.html', gpf=gpf_data, fin_years=fin_years, selected_fin_id=fin_id)
+
+@hrms_bp.route('/print_gpf_statement')
+def print_gpf_statement():
+    if 'user_id' not in session: return redirect(url_for('auth.login'))
+    emp_id = session.get('emp_id')
+    if not emp_id: return "Employee not found", 404
+    
+    fin_id = request.args.get('fin_year')
+    gpf_data = EmployeePortalModel.get_gpf_details(emp_id, fin_id)
+    if not gpf_data: return "No GPF records found", 404
+
+    # Generate PDF
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=landscape(A4), rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
+    elements = []
+    styles = getSampleStyleSheet()
+    
+    # Title Styles
+    title_style = ParagraphStyle('TitleStyle', parent=styles['Heading1'], alignment=1, fontSize=16, spaceAfter=10)
+    sub_title_style = ParagraphStyle('SubTitleStyle', parent=styles['Heading2'], alignment=1, fontSize=12, spaceAfter=20)
+    normal_style = styles['Normal']
+    bold_style = ParagraphStyle('BoldStyle', parent=styles['Normal'], fontName='Helvetica-Bold')
+
+    # Header with Logo
+    logo_path = os.path.join('app', 'static', 'images', 'logo.png')
+    if os.path.exists(logo_path):
+        img = Image(logo_path, 0.8*inch, 0.8*inch)
+        # Table for Logo and Title
+        header_table_data = [[img, Paragraph("CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY, HISAR", title_style)]]
+        header_table = Table(header_table_data, colWidths=[1*inch, 8*inch])
+        header_table.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'MIDDLE'), ('ALIGN', (0,0), (0,0), 'LEFT')]))
+        elements.append(header_table)
+    else:
+        elements.append(Paragraph("CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY, HISAR", title_style))
+    
+    elements.append(Paragraph("STATEMENT OF GPF/CPF", sub_title_style))
+
+    # Employee Info Table
+    h = gpf_data['header']
+    year_str = f"{(h['Lyear']-1)}-{h['Lyear']}" if h.get('Lyear') else ""
+    
+    info_data = [
+        [Paragraph(f"<b>NAME OF THE SUBSCRIBER :</b> [ {h['empcode']} ] {h['empname']}", normal_style), 
+         Paragraph(f"<b>Date:</b> {datetime.now().strftime('%d/%m/%Y')}", normal_style)],
+        [Paragraph(f"<b>DESIGNATION :</b> {h['designation']}", normal_style), 
+         Paragraph(f"<b>Time:</b> {datetime.now().strftime('%I:%M:%S%p')}", normal_style)],
+        [Paragraph(f"<b>DEPARTMENT :</b> {h['department']}", normal_style), 
+         Paragraph(f"<b>YEAR :</b> {year_str}", normal_style)],
+        [Paragraph(f"<b>PFNO :</b> {h['gpfno']}", normal_style), ""]
+    ]
+    info_table = Table(info_data, colWidths=[7*inch, 2*inch])
+    info_table.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'LEFT'), ('VALIGN', (0,0), (-1,-1), 'TOP')]))
+    elements.append(info_table)
+    elements.append(Spacer(1, 0.2*inch))
+
+    # Grid Table
+    data = [['S. No.', 'Months', 'Opening Balane', 'Contribution', '', '', '', '', 'Refundable / Non\nRefundable Employee', 'Interest', 'Closing Balance'],
+            ['', '', '', 'Employee', '', '', '', '', '', '', ''],
+            ['', '', 'Employee', 'Subscription(SUB)', 'Optional', 'Recovery', 'Arrear', 'Total', '', 'Employee', 'Employee']]
+    
+    # Grid Content
+    totals = {'sub': 0, 'opt': 0, 'rec': 0, 'arr': 0, 'tot': 0, 'int': 0}
+    last_closing = 0
+
+    for i, r in enumerate(gpf_data['grid']):
+        sub = float(r['sub'] or 0)
+        opt = float(r['opt'] or 0)
+        rec = float(r['recovery'] or 0)
+        arr = float(r['arrear'] or 0)
+        tot = float(r['total'] or 0)
+        wit = float(r['withdrawal'] or 0)
+        int_amt = float(r['interest'] or 0)
+        op_bal = float(r['op_bal'] or 0)
+        closing = op_bal + tot - wit + int_amt
+        
+        data.append([
+            str(i+1), 
+            r['month'], 
+            f"{op_bal:.2f}",
+            f"{sub:.2f}",
+            f"{opt:.2f}",
+            f"{rec:.2f}",
+            f"{arr:.2f}",
+            f"{tot:.2f}",
+            f"{wit:.2f}",
+            f"{int_amt:.2f}",
+            f"{closing:.2f}"
+        ])
+        
+        totals['sub'] += sub
+        totals['opt'] += opt
+        totals['rec'] += rec
+        totals['arr'] += arr
+        totals['tot'] += tot
+        totals['int'] += int_amt
+        last_closing = closing
+
+    # Footer/Total Row
+    data.append([
+        '', 'Total', '', 
+        f"{totals['sub']:.2f}",
+        f"{totals['opt']:.2f}",
+        f"{totals['rec']:.2f}",
+        f"{totals['arr']:.2f}",
+        f"{totals['tot']:.2f}",
+        '',
+        f"{totals['int']:.2f}",
+        f"{last_closing:.2f}"
+    ])
+
+    grid_table = Table(data, repeatRows=3, colWidths=[0.5*inch, 1.2*inch, 1.2*inch, 1*inch, 0.8*inch, 0.8*inch, 0.8*inch, 0.8*inch, 1.2*inch, 0.8*inch, 1.2*inch])
+    
+    # Styles for Grid
+    grid_style = TableStyle([
+        ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+        ('FONTSIZE', (0,0), (-1,-1), 8),
+        ('ALIGN', (2,3), (-1,-1), 'RIGHT'),
+        ('ALIGN', (0,0), (1,-1), 'CENTER'),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('BACKGROUND', (0,0), (-1,2), colors.lightgrey),
+        ('SPAN', (3,0), (7,0)), # Contribution Span
+        ('SPAN', (0,0), (0,2)), # S.No
+        ('SPAN', (1,0), (1,2)), # Months
+        ('SPAN', (2,0), (2,1)), # Opening Balance Top
+        ('SPAN', (3,1), (7,1)), # Employee Header Span
+        ('SPAN', (8,0), (8,2)), # Refundable
+        ('SPAN', (9,0), (9,1)), # Interest Top
+        ('SPAN', (10,0), (10,1)), # Closing Balance Top
+        ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+    ])
+    grid_table.setStyle(grid_style)
+    elements.append(grid_table)
+
+    doc.build(elements)
+    pdf_out = buffer.getvalue()
+    buffer.close()
+
+    response = make_response(pdf_out)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'inline; filename=GPF_Statement_{h["empcode"]}.pdf'
+    return response
 
 @hrms_bp.route('/loan_apply', methods=['GET', 'POST'])
 def loan_apply():
