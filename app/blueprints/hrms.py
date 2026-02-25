@@ -160,8 +160,9 @@ def print_gpf_statement():
     grid_style = TableStyle([
         ('GRID', (0,0), (-1,-1), 0.5, colors.black),
         ('FONTSIZE', (0,0), (-1,-1), 8),
-        ('ALIGN', (2,3), (-1,-1), 'RIGHT'),
-        ('ALIGN', (0,0), (1,-1), 'CENTER'),
+        ('ALIGN', (0,0), (-1,2), 'CENTER'), # Center all headers (rows 0, 1, 2)
+        ('ALIGN', (2,3), (-1,-1), 'RIGHT'), # Data rows right aligned from column 2 onwards
+        ('ALIGN', (0,3), (1,-1), 'CENTER'), # Center S.No and Month for data rows
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ('BACKGROUND', (0,0), (-1,2), colors.lightgrey),
         ('SPAN', (3,0), (7,0)), # Contribution Span
@@ -172,7 +173,8 @@ def print_gpf_statement():
         ('SPAN', (8,0), (8,2)), # Refundable
         ('SPAN', (9,0), (9,1)), # Interest Top
         ('SPAN', (10,0), (10,1)), # Closing Balance Top
-        ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+        ('FONTNAME', (0, 0), (-1, 2), 'Helvetica-Bold'), # Bold headers
+        ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'), # Bold footer row
     ])
     grid_table.setStyle(grid_style)
     elements.append(grid_table)
