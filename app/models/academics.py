@@ -5919,64 +5919,93 @@ class DswApprovalModel:
 
         def _get_status_expr(col):
             if col:
-                return DswApprovalModel._approved_expr('APP2.' + col)
+                return DswApprovalModel._approved_expr('APP.' + col)
             return "1=1"
 
+        # The user wants to see EXACTLY what is pending at what level.
+        # The live system shows multiple rows per student if multiple levels are pending.
+        
         sql = f"""
-            SELECT
-                S.pk_sid,
-                COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
-                S.fullname,
-                'Pending' as approval_status,
-                CASE
-                    WHEN EXISTS (
-                        SELECT 1 FROM SMS_StuCourseAllocation A2
-                        INNER JOIN SMS_Course_Mst C2 ON A2.fk_courseid = C2.pk_courseid
-                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
-                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
-                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = ?
-                          AND C2.coursecode LIKE 'PGS%'
-                          AND NOT ({_get_status_expr(adv_status_col)})
-                    ) THEN 'On Advisor Level'
-                    WHEN EXISTS (
-                        SELECT 1 FROM SMS_StuCourseAllocation A2
-                        INNER JOIN SMS_Course_Mst C2 ON A2.fk_courseid = C2.pk_courseid
-                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
-                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
-                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = ?
-                          AND C2.coursecode LIKE 'PGS%'
-                          AND NOT ({_get_status_expr(teacher_status_col)})
-                    ) THEN 'On Teacher Level'
-                    ELSE 'On DSW Level'
-                END as remarks
-            FROM SMS_Student_Mst S
-            WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
-              AND EXISTS (
-                  SELECT 1 FROM SMS_StuCourseAllocation SCA
-                  INNER JOIN SMS_Course_Mst CM ON SCA.fk_courseid = CM.pk_courseid
-                  LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
-                    ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
-                  LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
-                  WHERE SCA.fk_sturegid = S.pk_sid 
-                    AND SCA.fk_dgacasessionid = ?
-                    AND SCA.fk_exconfigid = ?
-                    AND CM.coursecode LIKE 'PGS%'
-                    AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
-                    AND NOT ({DswApprovalModel._approved_expr('APP.' + status_col)})
-              )
-            ORDER BY S.fullname
-        """
-        params = [
-            filters.get('exconfig_id'),
-            filters.get('exconfig_id'),
-            filters.get('college_id'),
-            filters.get('degree_id'),
-            filters.get('session_id'),
-            filters.get('exconfig_id'),
-        ]
-        if filters.get('semester_id') and str(filters['semester_id']) != '0':
-            params.append(filters['semester_id'])
+            SELECT * FROM (
+                SELECT
+                    COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
+                    S.fullname,
+                    'Pending' as approval_status,
+                    'On Advisor Level' as remarks,
+                    1 as sort_order
+                FROM SMS_Student_Mst S
+                WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
+                  AND EXISTS (
+                      SELECT 1 FROM SMS_StuCourseAllocation SCA
+                      INNER JOIN SMS_Course_Mst CM ON SCA.fk_courseid = CM.pk_courseid
+                      LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
+                        ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
+                      LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+                      WHERE SCA.fk_sturegid = S.pk_sid 
+                        AND SCA.fk_dgacasessionid = ?
+                        AND SCA.fk_exconfigid = ?
+                        AND CM.coursecode LIKE 'PGS%'
+                        AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
+                        AND NOT ({_get_status_expr(adv_status_col)})
+                  )
+                
+                UNION ALL
 
+                SELECT
+                    COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
+                    S.fullname,
+                    'Pending' as approval_status,
+                    'On Teacher Level' as remarks,
+                    2 as sort_order
+                FROM SMS_Student_Mst S
+                WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
+                  AND EXISTS (
+                      SELECT 1 FROM SMS_StuCourseAllocation SCA
+                      INNER JOIN SMS_Course_Mst CM ON SCA.fk_courseid = CM.pk_courseid
+                      LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
+                        ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
+                      LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+                      WHERE SCA.fk_sturegid = S.pk_sid 
+                        AND SCA.fk_dgacasessionid = ?
+                        AND SCA.fk_exconfigid = ?
+                        AND CM.coursecode LIKE 'PGS%'
+                        AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
+                        AND ({_get_status_expr(adv_status_col)})
+                        AND NOT ({_get_status_expr(teacher_status_col)})
+                  )
+
+                UNION ALL
+
+                SELECT
+                    COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
+                    S.fullname,
+                    'Pending' as approval_status,
+                    'On DSW Level' as remarks,
+                    3 as sort_order
+                FROM SMS_Student_Mst S
+                WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
+                  AND EXISTS (
+                      SELECT 1 FROM SMS_StuCourseAllocation SCA
+                      INNER JOIN SMS_Course_Mst CM ON SCA.fk_courseid = CM.pk_courseid
+                      LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
+                        ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
+                      LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+                      WHERE SCA.fk_sturegid = S.pk_sid 
+                        AND SCA.fk_dgacasessionid = ?
+                        AND SCA.fk_exconfigid = ?
+                        AND CM.coursecode LIKE 'PGS%'
+                        AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
+                        AND ({_get_status_expr(adv_status_col)})
+                        AND ({_get_status_expr(teacher_status_col)})
+                        AND NOT ({DswApprovalModel._approved_expr('APP.' + status_col)})
+                  )
+            ) t
+            ORDER BY AdmissionNo, sort_order
+        """
+        p = [filters.get('college_id'), filters.get('degree_id'), filters.get('session_id'), filters.get('exconfig_id')]
+        if filters.get('semester_id') and str(filters['semester_id']) != '0': p.append(filters['semester_id'])
+        
+        params = p + p + p # 3 unions
         return DB.fetch_all(sql, params)
 
     @staticmethod
@@ -6296,70 +6325,113 @@ class LibraryApprovalModel:
             return "1=1"
 
         sql = f"""
-            SELECT
-                S.pk_sid,
-                COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
-                S.fullname,
-                'Pending' as approval_status,
-                CASE
-                    WHEN EXISTS (
-                        SELECT 1 FROM SMS_StuCourseAllocation A2
-                        INNER JOIN SMS_Course_Mst C2 ON A2.fk_courseid = C2.pk_courseid
-                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
-                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
-                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = ?
-                          AND C2.coursecode LIKE 'PGS%'
-                          AND NOT ({_get_status_expr(adv_status_col)})
-                    ) THEN 'On Advisor Level'
-                    WHEN EXISTS (
-                        SELECT 1 FROM SMS_StuCourseAllocation A2
-                        INNER JOIN SMS_Course_Mst C2 ON A2.fk_courseid = C2.pk_courseid
-                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
-                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
-                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = ?
-                          AND C2.coursecode LIKE 'PGS%'
-                          AND NOT ({_get_status_expr(teacher_status_col)})
-                    ) THEN 'On Teacher Level'
-                    WHEN EXISTS (
-                        SELECT 1 FROM SMS_StuCourseAllocation A2
-                        INNER JOIN SMS_Course_Mst C2 ON A2.fk_courseid = C2.pk_courseid
-                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
-                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
-                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = ?
-                          AND C2.coursecode LIKE 'PGS%'
-                          AND NOT ({_get_status_expr(dsw_status_col)})
-                    ) THEN 'On DSW Level'
-                    ELSE 'On Library Level'
-                END as remarks
-            FROM SMS_Student_Mst S
-            WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
-              AND EXISTS (
-                  SELECT 1 FROM SMS_StuCourseAllocation SCA
-                  INNER JOIN SMS_Course_Mst CM ON SCA.fk_courseid = CM.pk_courseid
-                  LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
-                    ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
-                  LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
-                  WHERE SCA.fk_sturegid = S.pk_sid 
-                    AND SCA.fk_dgacasessionid = ?
-                    AND SCA.fk_exconfigid = ?
-                    AND CM.coursecode LIKE 'PGS%'
-                    AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
-                    AND NOT ({LibraryApprovalModel._approved_expr('APP.' + status_col)})
-              )
-            ORDER BY S.fullname
-        """
-        params = [
-            filters.get('exconfig_id'),
-            filters.get('exconfig_id'),
-            filters.get('exconfig_id'),
-            filters.get('college_id'),
-            filters.get('degree_id'),
-            filters.get('session_id'),
-            filters.get('exconfig_id'),
-        ]
-        if filters.get('semester_id') and str(filters['semester_id']) != '0':
-            params.append(filters['semester_id'])
+            SELECT * FROM (
+                SELECT
+                    COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
+                    S.fullname,
+                    'Pending' as approval_status,
+                    'On Advisor Level' as remarks,
+                    1 as sort_order
+                FROM SMS_Student_Mst S
+                WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
+                  AND EXISTS (
+                      SELECT 1 FROM SMS_StuCourseAllocation SCA
+                      INNER JOIN SMS_Course_Mst CM ON SCA.fk_courseid = CM.pk_courseid
+                      LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
+                        ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
+                      LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+                      WHERE SCA.fk_sturegid = S.pk_sid 
+                        AND SCA.fk_dgacasessionid = ?
+                        AND SCA.fk_exconfigid = ?
+                        AND CM.coursecode LIKE 'PGS%'
+                        AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
+                        AND NOT ({_get_status_expr(adv_status_col)})
+                  )
+                
+                UNION ALL
 
+                SELECT
+                    COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
+                    S.fullname,
+                    'Pending' as approval_status,
+                    'On Teacher Level' as remarks,
+                    2 as sort_order
+                FROM SMS_Student_Mst S
+                WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
+                  AND EXISTS (
+                      SELECT 1 FROM SMS_StuCourseAllocation SCA
+                      INNER JOIN SMS_Course_Mst CM ON SCA.fk_courseid = CM.pk_courseid
+                      LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
+                        ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
+                      LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+                      WHERE SCA.fk_sturegid = S.pk_sid 
+                        AND SCA.fk_dgacasessionid = ?
+                        AND SCA.fk_exconfigid = ?
+                        AND CM.coursecode LIKE 'PGS%'
+                        AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
+                        AND ({_get_status_expr(adv_status_col)})
+                        AND NOT ({_get_status_expr(teacher_status_col)})
+                  )
+
+                UNION ALL
+
+                SELECT
+                    COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
+                    S.fullname,
+                    'Pending' as approval_status,
+                    'On DSW Level' as remarks,
+                    3 as sort_order
+                FROM SMS_Student_Mst S
+                WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
+                  AND EXISTS (
+                      SELECT 1 FROM SMS_StuCourseAllocation SCA
+                      INNER JOIN SMS_Course_Mst CM ON SCA.fk_courseid = CM.pk_courseid
+                      LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
+                        ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
+                      LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+                      WHERE SCA.fk_sturegid = S.pk_sid 
+                        AND SCA.fk_dgacasessionid = ?
+                        AND SCA.fk_exconfigid = ?
+                        AND CM.coursecode LIKE 'PGS%'
+                        AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
+                        AND ({_get_status_expr(adv_status_col)})
+                        AND ({_get_status_expr(teacher_status_col)})
+                        AND NOT ({_get_status_expr(dsw_status_col)})
+                  )
+
+                UNION ALL
+
+                SELECT
+                    COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
+                    S.fullname,
+                    'Pending' as approval_status,
+                    'On Library Level' as remarks,
+                    4 as sort_order
+                FROM SMS_Student_Mst S
+                WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
+                  AND EXISTS (
+                      SELECT 1 FROM SMS_StuCourseAllocation SCA
+                      INNER JOIN SMS_Course_Mst CM ON SCA.fk_courseid = CM.pk_courseid
+                      LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
+                        ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
+                      LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+                      WHERE SCA.fk_sturegid = S.pk_sid 
+                        AND SCA.fk_dgacasessionid = ?
+                        AND SCA.fk_exconfigid = ?
+                        AND CM.coursecode LIKE 'PGS%'
+                        AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
+                        AND ({_get_status_expr(adv_status_col)})
+                        AND ({_get_status_expr(teacher_status_col)})
+                        AND ({_get_status_expr(dsw_status_col)})
+                        AND NOT ({LibraryApprovalModel._approved_expr('APP.' + status_col)})
+                  )
+            ) t
+            ORDER BY AdmissionNo, sort_order
+        """
+        p = [filters.get('college_id'), filters.get('degree_id'), filters.get('session_id'), filters.get('exconfig_id')]
+        if filters.get('semester_id') and str(filters['semester_id']) != '0': p.append(filters['semester_id'])
+        
+        params = p + p + p + p # 4 unions
         return DB.fetch_all(sql, params)
 
 class FeeApprovalModel:
@@ -6585,70 +6657,131 @@ class FeeApprovalModel:
             return "1=1"
 
         sql = f"""
-            SELECT
-                S.pk_sid,
-                COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
-                S.fullname,
-                'Pending' as approval_status,
-                CASE
-                    WHEN EXISTS (
-                        SELECT 1 FROM SMS_StuCourseAllocation A2
-                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
-                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
-                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = ?
-                          AND NOT ({_get_status_expr(adv_status_col)})
-                    ) THEN 'On Advisor Level'
-                    WHEN EXISTS (
-                        SELECT 1 FROM SMS_StuCourseAllocation A2
-                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
-                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
-                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = ?
-                          AND NOT ({_get_status_expr(teacher_status_col)})
-                    ) THEN 'On Teacher Level'
-                    WHEN EXISTS (
-                        SELECT 1 FROM SMS_StuCourseAllocation A2
-                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
-                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
-                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = ?
-                          AND NOT ({_get_status_expr(dsw_status_col)})
-                    ) THEN 'On DSW Level'
-                    WHEN EXISTS (
-                        SELECT 1 FROM SMS_StuCourseAllocation A2
-                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
-                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
-                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = ?
-                          AND NOT ({_get_status_expr(lib_status_col)})
-                    ) THEN 'On Library Level'
-                    ELSE 'On Fee Level'
-                END as remarks
-            FROM SMS_Student_Mst S
-            WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
-              AND EXISTS (
-                  SELECT 1 FROM SMS_StuCourseAllocation SCA
-                  LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
-                    ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
-                  LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
-                  WHERE SCA.fk_sturegid = S.pk_sid 
-                    AND SCA.fk_dgacasessionid = ?
-                    AND SCA.fk_exconfigid = ?
-                    AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
-                    AND NOT ({FeeApprovalModel._approved_expr('APP.' + status_col)})
-              )
-            ORDER BY S.fullname
-        """
-        params = [
-            filters.get('exconfig_id'),
-            filters.get('exconfig_id'),
-            filters.get('exconfig_id'),
-            filters.get('exconfig_id'),
-            filters.get('college_id'),
-            filters.get('degree_id'),
-            filters.get('session_id'),
-            filters.get('exconfig_id'),
-        ]
-        if filters.get('semester_id') and str(filters['semester_id']) != '0':
-            params.append(filters['semester_id'])
+            SELECT * FROM (
+                SELECT
+                    COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
+                    S.fullname,
+                    'Pending' as approval_status,
+                    'On Advisor Level' as remarks,
+                    1 as sort_order
+                FROM SMS_Student_Mst S
+                WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
+                  AND EXISTS (
+                      SELECT 1 FROM SMS_StuCourseAllocation SCA
+                      LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
+                        ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
+                      LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+                      WHERE SCA.fk_sturegid = S.pk_sid 
+                        AND SCA.fk_dgacasessionid = ?
+                        AND SCA.fk_exconfigid = ?
+                        AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
+                        AND NOT ({_get_status_expr(adv_status_col)})
+                  )
+                
+                UNION ALL
 
+                SELECT
+                    COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
+                    S.fullname,
+                    'Pending' as approval_status,
+                    'On Teacher Level' as remarks,
+                    2 as sort_order
+                FROM SMS_Student_Mst S
+                WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
+                  AND EXISTS (
+                      SELECT 1 FROM SMS_StuCourseAllocation SCA
+                      LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
+                        ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
+                      LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+                      WHERE SCA.fk_sturegid = S.pk_sid 
+                        AND SCA.fk_dgacasessionid = ?
+                        AND SCA.fk_exconfigid = ?
+                        AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
+                        AND ({_get_status_expr(adv_status_col)})
+                        AND NOT ({_get_status_expr(teacher_status_col)})
+                  )
+
+                UNION ALL
+
+                SELECT
+                    COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
+                    S.fullname,
+                    'Pending' as approval_status,
+                    'On DSW Level' as remarks,
+                    3 as sort_order
+                FROM SMS_Student_Mst S
+                WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
+                  AND EXISTS (
+                      SELECT 1 FROM SMS_StuCourseAllocation SCA
+                      LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
+                        ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
+                      LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+                      WHERE SCA.fk_sturegid = S.pk_sid 
+                        AND SCA.fk_dgacasessionid = ?
+                        AND SCA.fk_exconfigid = ?
+                        AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
+                        AND ({_get_status_expr(adv_status_col)})
+                        AND ({_get_status_expr(teacher_status_col)})
+                        AND NOT ({_get_status_expr(dsw_status_col)})
+                  )
+
+                UNION ALL
+
+                SELECT
+                    COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
+                    S.fullname,
+                    'Pending' as approval_status,
+                    'On Library Level' as remarks,
+                    4 as sort_order
+                FROM SMS_Student_Mst S
+                WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
+                  AND EXISTS (
+                      SELECT 1 FROM SMS_StuCourseAllocation SCA
+                      LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
+                        ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
+                      LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+                      WHERE SCA.fk_sturegid = S.pk_sid 
+                        AND SCA.fk_dgacasessionid = ?
+                        AND SCA.fk_exconfigid = ?
+                        AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
+                        AND ({_get_status_expr(adv_status_col)})
+                        AND ({_get_status_expr(teacher_status_col)})
+                        AND ({_get_status_expr(dsw_status_col)})
+                        AND NOT ({_get_status_expr(lib_status_col)})
+                  )
+
+                UNION ALL
+
+                SELECT
+                    COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
+                    S.fullname,
+                    'Pending' as approval_status,
+                    'On Fee Level' as remarks,
+                    5 as sort_order
+                FROM SMS_Student_Mst S
+                WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
+                  AND EXISTS (
+                      SELECT 1 FROM SMS_StuCourseAllocation SCA
+                      LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
+                        ON SCA.fk_sturegid = APP.fk_sturegid AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
+                      LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+                      WHERE SCA.fk_sturegid = S.pk_sid 
+                        AND SCA.fk_dgacasessionid = ?
+                        AND SCA.fk_exconfigid = ?
+                        AND ({'1=1' if not filters.get('semester_id') or str(filters['semester_id']) == '0' else 'DC.fk_semesterid = ?'})
+                        AND ({_get_status_expr(adv_status_col)})
+                        AND ({_get_status_expr(teacher_status_col)})
+                        AND ({_get_status_expr(dsw_status_col)})
+                        AND ({_get_status_expr(lib_status_col)})
+                        AND NOT ({FeeApprovalModel._approved_expr('APP.' + status_col)})
+                  )
+            ) t
+            ORDER BY AdmissionNo, sort_order
+        """
+        p = [filters.get('college_id'), filters.get('degree_id'), filters.get('session_id'), filters.get('exconfig_id')]
+        if filters.get('semester_id') and str(filters['semester_id']) != '0': p.append(filters['semester_id'])
+        
+        params = p + p + p + p + p # 5 unions
         return DB.fetch_all(sql, params)
 
 class DeanApprovalModel:
