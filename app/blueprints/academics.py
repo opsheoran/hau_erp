@@ -875,9 +875,6 @@ def certificate_master():
     page_range = get_pagination_range(page, pagination['total_pages'])
     return render_template('academics/certificate_master.html', items=items, pagination=pagination, page_range=page_range)
 
-@academics_bp.route('/student_biodata', methods=['GET', 'POST'])
-@academics_bp.route('/student_biodata/<int:sid>', methods=['GET', 'POST'])
-@permission_required('Student BioData')
 @academics_bp.route('/api/student/profile_basic/<int:sid>')
 def api_get_student_profile_basic(sid):
     data = StudentModel.get_student_profile_basic(sid)
@@ -885,6 +882,9 @@ def api_get_student_profile_basic(sid):
         return jsonify(clean_json_data(data))
     return jsonify({'error': 'Student not found'}), 404
 
+@academics_bp.route('/student_biodata', methods=['GET', 'POST'])
+@academics_bp.route('/student_biodata/<int:sid>', methods=['GET', 'POST'])
+@permission_required('Student BioData')
 def student_biodata(sid=None):
     if request.method == 'POST':
         if StudentModel.save_student_biodata(request.form, session['user_id']):
