@@ -3810,7 +3810,6 @@ def student_course_approval_library_pending():
 @academics_bp.route('/student_course_approval_fee', methods=['GET', 'POST'])
 @permission_required('Course Allocation Fee Approval For UG/PG')
 def student_course_approval_fee():
-    from app.models import FeeApprovalModel
     user_id = session.get('user_id')
     emp_id = session.get('emp_id')
 
@@ -3829,15 +3828,11 @@ def student_course_approval_fee():
         'branch_id': request.args.get('branch_id', type=int),
         'exconfig_id': request.args.get('exconfig_id', type=int),
         'view': request.args.get('view'),
-        'pending': request.args.get('pending'),
     }
 
     students = []
-    pending_students = []
     if filters['view'] == '1' and all([filters['college_id'], filters['session_id'], filters['degree_id'], filters['semester_id'], filters['exconfig_id']]):
         students = FeeApprovalModel.get_students_for_approval(filters, emp_id)
-        if filters.get('pending') == '1':
-            pending_students = FeeApprovalModel.get_pending_students(filters, emp_id)
 
     loc_id = session.get('selected_loc')
     if loc_id:
@@ -3863,8 +3858,26 @@ def student_course_approval_fee():
         lookups=lookups,
         filters=filters,
         students=clean_json_data(students),
-        pending_students=clean_json_data(pending_students),
     )
+
+@academics_bp.route('/api/student_course_approval_fee_pending')
+@permission_required('Course Allocation Fee Approval For UG/PG')
+def student_course_approval_fee_pending():
+    emp_id = session.get('emp_id')
+    filters = {
+        'college_id': request.args.get('college_id', type=int),
+        'session_id': request.args.get('session_id', type=int),
+        'degree_id': request.args.get('degree_id', type=int),
+        'semester_id': request.args.get('semester_id', type=int),
+        'branch_id': request.args.get('branch_id', type=int),
+        'exconfig_id': request.args.get('exconfig_id', type=int),
+    }
+    
+    if not all([filters['college_id'], filters['session_id'], filters['degree_id'], filters['semester_id'], filters['exconfig_id']]):
+        return jsonify([])
+        
+    students = FeeApprovalModel.get_pending_students(filters, emp_id)
+    return jsonify(clean_json_data(students))
 
 @academics_bp.route('/student_course_approval_dean', methods=['GET', 'POST'])
 @permission_required('Course Allocation Approval For UG/PG [By Dean]')

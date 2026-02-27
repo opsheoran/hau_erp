@@ -6504,6 +6504,12 @@ class FeeApprovalModel:
                 S.pk_sid,
                 COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
                 S.fullname,
+                (SELECT STUFF((SELECT '|' + C.coursename + ' / ' + C.coursecode + ' [' + SES.sessionname + ' ](' + CAST(A.crhrth as varchar) + '+' + CAST(A.crhrpr as varchar) + ')'
+                              FROM SMS_StuCourseAllocation A
+                              INNER JOIN SMS_Course_Mst C ON A.fk_courseid = C.pk_courseid
+                              INNER JOIN SMS_AcademicSession_Mst SES ON A.fk_dgacasessionid = SES.pk_sessionid
+                              WHERE A.fk_sturegid = S.pk_sid AND A.fk_exconfigid = SCA.fk_exconfigid
+                              FOR XML PATH('')), 1, 1, '')) AS courses_info,
                 {approved_case} AS approved,
                 {remarks_select_sql} AS remarks
             FROM SMS_Student_Mst S
@@ -6513,7 +6519,7 @@ class FeeApprovalModel:
              AND SCA.fk_courseid = APP.fk_courseid
              AND SCA.fk_exconfigid = APP.fk_exconfigid
             LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
-            WHERE S.fk_collegeid = ? AND SCA.fk_dgacasessionid = ? AND S.fk_degreeid = ?
+            WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ?
               AND SCA.fk_exconfigid = ?
         """
         params = [
@@ -6541,43 +6547,13 @@ class FeeApprovalModel:
                       ON A2.fk_sturegid = APP2.fk_sturegid
                      AND A2.fk_courseid = APP2.fk_courseid
                      AND A2.fk_exconfigid = APP2.fk_exconfigid
-                    WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = ?
+                    WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
                       AND (APP2.{lib_status_col} IS NULL OR NOT ({FeeApprovalModel._approved_expr('APP2.' + lib_status_col)}))
               )
             """
-            params.append(filters.get('exconfig_id'))
 
-        sql += " GROUP BY S.pk_sid, S.enrollmentno, S.AdmissionNo, S.fullname ORDER BY S.fullname"
-        students = DB.fetch_all(sql, params)
-
-        for stu in students:
-            courses = DB.fetch_all(
-                """
-                SELECT
-                    C.pk_courseid as course_id,
-                    C.coursename,
-                    C.coursecode,
-                    SES.sessionname,
-                    A.crhrth,
-                    A.crhrpr
-                FROM SMS_StuCourseAllocation A
-                INNER JOIN SMS_Course_Mst C ON A.fk_courseid = C.pk_courseid
-                INNER JOIN SMS_AcademicSession_Mst SES ON A.fk_dgacasessionid = SES.pk_sessionid
-                LEFT JOIN SMS_DegreeCycle_Mst DC ON A.fk_degreecycleid = DC.pk_degreecycleid
-                WHERE A.fk_sturegid = ? AND A.fk_exconfigid = ?
-                  AND (? IS NULL OR DC.fk_semesterid = ?)
-                ORDER BY C.coursename
-                """,
-                [stu['pk_sid'], filters.get('exconfig_id'), filters.get('semester_id') or None, filters.get('semester_id') or None],
-            )
-            stu['courses'] = [
-                {
-                    'label': f"{c.get('coursename','')} / {c.get('coursecode','')} [{(c.get('sessionname') or '').strip()} ]({c.get('crhrth',0)}+{c.get('crhrpr',0)})",
-                }
-                for c in courses
-            ]
-
-        return students
+        sql += " GROUP BY S.pk_sid, S.enrollmentno, S.AdmissionNo, S.fullname, SCA.fk_exconfigid ORDER BY S.fullname"
+        return DB.fetch_all(sql, params)
 
     @staticmethod
     def save_approvals(data, fee_emp_id, user_id):
@@ -6638,7 +6614,7 @@ class FeeApprovalModel:
 
                     sql = f"""
                         UPDATE SMS_StuCourseAllocation_Approval_staffwise
-                        SET {', '.join(sets)}
+                        SET {", ".join(sets)}
                         WHERE Pk_stucoursealloc_staffid = ?
                     """
                     DB.execute(sql, params + [exists['Pk_stucoursealloc_staffid']])
@@ -6679,19 +6655,73 @@ class FeeApprovalModel:
         if not status_col:
             return []
 
+        # Previous level status columns
+        adv_status_col = next((c for c in ('adv_aprrovalstatus', 'adv_approvalstatus', 'advisor_approvalstatus') if c in cols), None)
+        teacher_status_col = next((c for c in ('teach_aprrovalstatus', 'teach_approvalstatus', 'teacher_approvalstatus', 'teacherstatus') if c in cols), None)
+        dsw_status_col = next((c for c in ('dsw_aprrovalstatus', 'dsw_approvalstatus', 'dsw_approval_status') if c in cols), None)
+
+        def _get_status_expr(col):
+            if col:
+                return FeeApprovalModel._approved_expr('APP2.' + col)
+            return "1=1"
+
         sql = f"""
             SELECT
                 S.pk_sid,
                 COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
-                S.fullname
+                S.fullname,
+                CASE 
+                    WHEN EXISTS (
+                        SELECT 1 FROM SMS_StuCourseAllocation A2
+                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
+                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
+                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
+                          AND ({FeeApprovalModel._approved_expr('APP2.' + status_col)})
+                    ) THEN 'Approved'
+                    ELSE 'Pending'
+                END as approval_status,
+                CASE
+                    WHEN EXISTS (
+                        SELECT 1 FROM SMS_StuCourseAllocation A2
+                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
+                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
+                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
+                          AND NOT ({_get_status_expr(adv_status_col)})
+                    ) THEN 'On Advisor Level'
+                    WHEN EXISTS (
+                        SELECT 1 FROM SMS_StuCourseAllocation A2
+                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
+                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
+                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
+                          AND NOT ({_get_status_expr(teacher_status_col)})
+                    ) THEN 'On Teacher Level'
+                    WHEN EXISTS (
+                        SELECT 1 FROM SMS_StuCourseAllocation A2
+                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
+                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
+                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
+                          AND NOT ({_get_status_expr(dsw_status_col)})
+                    ) THEN 'On DSW Level'
+                    WHEN EXISTS (
+                        SELECT 1 FROM SMS_StuCourseAllocation A2
+                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
+                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
+                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
+                          AND NOT ({_get_status_expr(lib_status_col)})
+                    ) THEN 'On Library Level'
+                    WHEN NOT EXISTS (
+                        SELECT 1 FROM SMS_StuCourseAllocation A2
+                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
+                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
+                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
+                          AND ({FeeApprovalModel._approved_expr('APP2.' + status_col)})
+                    ) THEN 'On Fee Level'
+                    ELSE ''
+                END as remarks
             FROM SMS_Student_Mst S
             INNER JOIN SMS_StuCourseAllocation SCA ON S.pk_sid = SCA.fk_sturegid
-            LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
-              ON SCA.fk_sturegid = APP.fk_sturegid
-             AND SCA.fk_courseid = APP.fk_courseid
-             AND SCA.fk_exconfigid = APP.fk_exconfigid
             LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
-            WHERE S.fk_collegeid = ? AND SCA.fk_dgacasessionid = ? AND S.fk_degreeid = ?
+            WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ?
               AND SCA.fk_exconfigid = ?
         """
         params = [
@@ -6705,31 +6735,7 @@ class FeeApprovalModel:
             sql += " AND DC.fk_semesterid = ?"
             params.append(filters['semester_id'])
 
-        if filters.get('branch_id') and str(filters['branch_id']) != '0':
-            sql += " AND S.fk_branchid = ?"
-            params.append(filters['branch_id'])
-
-        if lib_status_col:
-            sql += f"""
-              AND NOT EXISTS (
-                    SELECT 1
-                    FROM SMS_StuCourseAllocation A2
-                    LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
-                      ON A2.fk_sturegid = APP2.fk_sturegid
-                     AND A2.fk_courseid = APP2.fk_courseid
-                     AND A2.fk_exconfigid = APP2.fk_exconfigid
-                    WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = ?
-                      AND (APP2.{lib_status_col} IS NULL OR NOT ({FeeApprovalModel._approved_expr('APP2.' + lib_status_col)}))
-              )
-            """
-            params.append(filters.get('exconfig_id'))
-
-        # Pending/Rejected at Fee stage => any course row not approved.
-        sql += f"""
-            GROUP BY S.pk_sid, S.enrollmentno, S.AdmissionNo, S.fullname
-            HAVING SUM(CASE WHEN {FeeApprovalModel._approved_expr('APP.' + status_col)} THEN 0 ELSE 1 END) > 0
-            ORDER BY S.fullname
-        """
+        sql += " GROUP BY S.pk_sid, S.enrollmentno, S.AdmissionNo, S.fullname, SCA.fk_exconfigid ORDER BY S.fullname"
         return DB.fetch_all(sql, params)
 
 class DeanApprovalModel:
