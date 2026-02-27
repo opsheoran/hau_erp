@@ -5916,6 +5916,11 @@ class DswApprovalModel:
         # Advisor status column
         adv_status_col = next((c for c in ('adv_aprrovalstatus', 'adv_approvalstatus', 'advisor_approvalstatus') if c in cols), None)
 
+        def _get_status_expr(col):
+            if col:
+                return DswApprovalModel._approved_expr('APP2.' + col)
+            return "1=1" # Always approved if level doesn't exist
+
         sql = f"""
             SELECT
                 S.pk_sid,
@@ -5941,7 +5946,7 @@ class DswApprovalModel:
                           ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
                         WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
                           AND C2.coursecode LIKE 'PGS%'
-                          AND NOT ({DswApprovalModel._approved_expr('APP2.' + (adv_status_col if adv_status_col else '1'))})
+                          AND NOT ({_get_status_expr(adv_status_col)})
                     ) THEN 'On Advisor Level'
                     WHEN EXISTS (
                         SELECT 1 FROM SMS_StuCourseAllocation A2
@@ -5950,7 +5955,7 @@ class DswApprovalModel:
                           ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
                         WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
                           AND C2.coursecode LIKE 'PGS%'
-                          AND NOT ({DswApprovalModel._approved_expr('APP2.' + (teacher_status_col if teacher_status_col else '1'))})
+                          AND NOT ({_get_status_expr(teacher_status_col)})
                     ) THEN 'On Teacher Level'
                     WHEN NOT EXISTS (
                         SELECT 1 FROM SMS_StuCourseAllocation A2
@@ -5967,6 +5972,10 @@ class DswApprovalModel:
             INNER JOIN SMS_StuCourseAllocation SCA ON S.pk_sid = SCA.fk_sturegid
             INNER JOIN SMS_Course_Mst CM ON SCA.fk_courseid = CM.pk_courseid
             LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+            LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
+              ON SCA.fk_sturegid = APP.fk_sturegid
+             AND SCA.fk_courseid = APP.fk_courseid
+             AND SCA.fk_exconfigid = APP.fk_exconfigid
             WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ?
               AND SCA.fk_exconfigid = ?
               AND CM.coursecode LIKE 'PGS%'
@@ -6314,6 +6323,11 @@ class LibraryApprovalModel:
         # Teacher status column
         teacher_status_col = next((c for c in ('teach_aprrovalstatus', 'teach_approvalstatus', 'teacher_approvalstatus', 'teacherstatus') if c in cols), None)
 
+        def _get_status_expr(col):
+            if col:
+                return LibraryApprovalModel._approved_expr('APP2.' + col)
+            return "1=1"
+
         sql = f"""
             SELECT
                 S.pk_sid,
@@ -6339,7 +6353,7 @@ class LibraryApprovalModel:
                           ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
                         WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
                           AND C2.coursecode LIKE 'PGS%'
-                          AND NOT ({LibraryApprovalModel._approved_expr('APP2.' + (adv_status_col if adv_status_col else '1'))})
+                          AND NOT ({_get_status_expr(adv_status_col)})
                     ) THEN 'On Advisor Level'
                     WHEN EXISTS (
                         SELECT 1 FROM SMS_StuCourseAllocation A2
@@ -6348,7 +6362,7 @@ class LibraryApprovalModel:
                           ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
                         WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
                           AND C2.coursecode LIKE 'PGS%'
-                          AND NOT ({LibraryApprovalModel._approved_expr('APP2.' + (teacher_status_col if teacher_status_col else '1'))})
+                          AND NOT ({_get_status_expr(teacher_status_col)})
                     ) THEN 'On Teacher Level'
                     WHEN EXISTS (
                         SELECT 1 FROM SMS_StuCourseAllocation A2
@@ -6357,7 +6371,7 @@ class LibraryApprovalModel:
                           ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
                         WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
                           AND C2.coursecode LIKE 'PGS%'
-                          AND NOT ({LibraryApprovalModel._approved_expr('APP2.' + (dsw_status_col if dsw_status_col else '1'))})
+                          AND NOT ({_get_status_expr(dsw_status_col)})
                     ) THEN 'On DSW Level'
                     WHEN NOT EXISTS (
                         SELECT 1 FROM SMS_StuCourseAllocation A2
