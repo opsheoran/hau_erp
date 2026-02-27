@@ -6204,7 +6204,6 @@ class LibraryApprovalModel:
                       AND NOT ({LibraryApprovalModel._approved_expr('APP2.' + dsw_status_col)})
               )
             """
-            params.append(filters.get('exconfig_id'))
 
         sql += " GROUP BY S.pk_sid, S.enrollmentno, S.AdmissionNo, S.fullname, SCA.fk_exconfigid ORDER BY S.fullname"
         return DB.fetch_all(sql, params)
