@@ -12,7 +12,7 @@ from app.models import (
     CourseActivityModel, PackageMasterModel, BoardMasterModel, 
     CertificateMasterModel, PgsCourseLimitModel, SeatDetailModel, 
     AdmissionModel, AdvisoryModel, StudentModel, CourseAllocationModel, ResearchModel, ThesisModel,
-    AdvisoryStatusModel, IGradeModel, BatchModel, EmployeeModel, AdvisorApprovalModel, TeacherApprovalModel, DswApprovalModel, LibraryApprovalModel
+    AdvisoryStatusModel, IGradeModel, BatchModel, EmployeeModel, AdvisorApprovalModel, TeacherApprovalModel, DswApprovalModel, LibraryApprovalModel, FeeApprovalModel, DeanApprovalModel
 )
 from functools import wraps
 from app.utils import get_page_url, get_pagination, get_pagination_range, clean_json_data
