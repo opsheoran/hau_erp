@@ -4528,13 +4528,14 @@ class StudentModel:
     def get_student_profile_basic(sid):
         sql = """
             SELECT 
-                S.pk_sid, S.fullname, S.enrollmentno, S.AdmissionNo, S.FatherName, S.MotherName, 
-                S.gender, S.dob, S.MobileNo, S.Emailid, S.student_image,
+                S.pk_sid, S.fullname, S.enrollmentno, S.AdmissionNo, S.fname as FatherName, S.mname as MotherName, 
+                S.gender, S.dob, S.phoneno as MobileNo, S.s_emailid as Emailid, S.StuImage as student_image,
                 C.collegename, D.degreename, SM.semester_roman, B.branchname, SES.sessionname as adm_session
             FROM SMS_Student_Mst S
             LEFT JOIN SMS_College_Mst C ON S.fk_collegeid = C.pk_collegeid
             LEFT JOIN SMS_Degree_Mst D ON S.fk_degreeid = D.pk_degreeid
-            LEFT JOIN SMS_Semester_Mst SM ON S.fk_semid = SM.pk_semesterid
+            LEFT JOIN SMS_DegreeCycle_Mst DC ON S.fk_degreecycleidcurrent = DC.pk_degreecycleid
+            LEFT JOIN SMS_Semester_Mst SM ON DC.fk_semesterid = SM.pk_semesterid
             LEFT JOIN SMS_Branch_Mst B ON S.fk_branchid = B.pk_branchid
             LEFT JOIN SMS_AcademicSession_Mst SES ON S.fk_adm_session = SES.pk_sessionid
             WHERE S.pk_sid = ?
