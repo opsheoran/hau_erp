@@ -5680,7 +5680,7 @@ class TeacherApprovalModel:
               ON SCA.fk_sturegid = APP.fk_sturegid
              AND SCA.fk_courseid = APP.fk_courseid
              AND SCA.fk_exconfigid = APP.fk_exconfigid
-            WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ?
+            WHERE S.fk_collegeid = ? AND SCA.fk_dgacasessionid = ? AND S.fk_degreeid = ?
               AND SCA.fk_exconfigid = ?
               AND EXISTS (
                   SELECT 1 FROM SMS_TCourseAlloc_Mst TM
@@ -5890,7 +5890,7 @@ class DswApprovalModel:
               ON SCA.fk_sturegid = APP.fk_sturegid
              AND SCA.fk_courseid = APP.fk_courseid
              AND SCA.fk_exconfigid = APP.fk_exconfigid
-            WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ?
+            WHERE S.fk_collegeid = ? AND SCA.fk_dgacasessionid = ? AND S.fk_degreeid = ?
               AND SCA.fk_exconfigid = ?
               AND CM.coursecode LIKE 'PGS%'
         """
@@ -5904,23 +5904,6 @@ class DswApprovalModel:
         if filters.get('semester_id') and str(filters['semester_id']) != '0':
             sql += " AND DC.fk_semesterid = ?"
             params.append(filters['semester_id'])
-
-        # Typically DSW comes after teacher. If teacher status column exists, show only where all course rows are teacher-approved.
-        if teacher_status_col:
-            sql += f"""
-              AND NOT EXISTS (
-                    SELECT 1
-                    FROM SMS_StuCourseAllocation A2
-                    INNER JOIN SMS_Course_Mst C2 ON A2.fk_courseid = C2.pk_courseid
-                    LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
-                      ON A2.fk_sturegid = APP2.fk_sturegid
-                     AND A2.fk_courseid = APP2.fk_courseid
-                     AND A2.fk_exconfigid = APP2.fk_exconfigid
-                    WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
-                      AND C2.coursecode LIKE 'PGS%'
-                      AND NOT ({DswApprovalModel._approved_expr('APP2.' + teacher_status_col)})
-              )
-            """
 
         sql += " GROUP BY S.pk_sid, S.enrollmentno, S.AdmissionNo, S.fullname, SCA.fk_exconfigid ORDER BY S.fullname"
         return DB.fetch_all(sql, params)
@@ -5994,7 +5977,7 @@ class DswApprovalModel:
               ON SCA.fk_sturegid = APP.fk_sturegid
              AND SCA.fk_courseid = APP.fk_courseid
              AND SCA.fk_exconfigid = APP.fk_exconfigid
-            WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ?
+            WHERE S.fk_collegeid = ? AND SCA.fk_dgacasessionid = ? AND S.fk_degreeid = ?
               AND SCA.fk_exconfigid = ?
               AND CM.coursecode LIKE 'PGS%'
         """
@@ -6196,7 +6179,7 @@ class LibraryApprovalModel:
               ON SCA.fk_sturegid = APP.fk_sturegid
              AND SCA.fk_courseid = APP.fk_courseid
              AND SCA.fk_exconfigid = APP.fk_exconfigid
-            WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ?
+            WHERE S.fk_collegeid = ? AND SCA.fk_dgacasessionid = ? AND S.fk_degreeid = ?
               AND SCA.fk_exconfigid = ?
               AND CM.coursecode LIKE 'PGS%'
         """
@@ -6214,23 +6197,6 @@ class LibraryApprovalModel:
         if filters.get('branch_id') and str(filters['branch_id']) != '0':
             sql += " AND S.fk_branchid = ?"
             params.append(filters['branch_id'])
-
-        # Library typically comes after DSW. If DSW status column exists, show only where all course rows are DSW-approved.
-        if dsw_status_col:
-            sql += f"""
-              AND NOT EXISTS (
-                    SELECT 1
-                    FROM SMS_StuCourseAllocation A2
-                    INNER JOIN SMS_Course_Mst C2 ON A2.fk_courseid = C2.pk_courseid
-                    LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
-                      ON A2.fk_sturegid = APP2.fk_sturegid
-                     AND A2.fk_courseid = APP2.fk_courseid
-                     AND A2.fk_exconfigid = APP2.fk_exconfigid
-                    WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
-                      AND C2.coursecode LIKE 'PGS%'
-                      AND NOT ({LibraryApprovalModel._approved_expr('APP2.' + dsw_status_col)})
-              )
-            """
 
         sql += " GROUP BY S.pk_sid, S.enrollmentno, S.AdmissionNo, S.fullname, SCA.fk_exconfigid ORDER BY S.fullname"
         return DB.fetch_all(sql, params)
@@ -6410,7 +6376,7 @@ class LibraryApprovalModel:
               ON SCA.fk_sturegid = APP.fk_sturegid
              AND SCA.fk_courseid = APP.fk_courseid
              AND SCA.fk_exconfigid = APP.fk_exconfigid
-            WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ?
+            WHERE S.fk_collegeid = ? AND SCA.fk_dgacasessionid = ? AND S.fk_degreeid = ?
               AND SCA.fk_exconfigid = ?
               AND CM.coursecode LIKE 'PGS%'
         """
@@ -6519,7 +6485,7 @@ class FeeApprovalModel:
              AND SCA.fk_courseid = APP.fk_courseid
              AND SCA.fk_exconfigid = APP.fk_exconfigid
             LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
-            WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ?
+            WHERE S.fk_collegeid = ? AND SCA.fk_dgacasessionid = ? AND S.fk_degreeid = ?
               AND SCA.fk_exconfigid = ?
         """
         params = [
@@ -6536,21 +6502,6 @@ class FeeApprovalModel:
         if filters.get('branch_id') and str(filters['branch_id']) != '0':
             sql += " AND S.fk_branchid = ?"
             params.append(filters['branch_id'])
-
-        # Fee stage typically comes after Library. If Library status column exists, show only where all course rows are Library-approved.
-        if lib_status_col:
-            sql += f"""
-              AND NOT EXISTS (
-                    SELECT 1
-                    FROM SMS_StuCourseAllocation A2
-                    LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
-                      ON A2.fk_sturegid = APP2.fk_sturegid
-                     AND A2.fk_courseid = APP2.fk_courseid
-                     AND A2.fk_exconfigid = APP2.fk_exconfigid
-                    WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
-                      AND (APP2.{lib_status_col} IS NULL OR NOT ({FeeApprovalModel._approved_expr('APP2.' + lib_status_col)}))
-              )
-            """
 
         sql += " GROUP BY S.pk_sid, S.enrollmentno, S.AdmissionNo, S.fullname, SCA.fk_exconfigid ORDER BY S.fullname"
         return DB.fetch_all(sql, params)
@@ -6721,7 +6672,7 @@ class FeeApprovalModel:
             FROM SMS_Student_Mst S
             INNER JOIN SMS_StuCourseAllocation SCA ON S.pk_sid = SCA.fk_sturegid
             LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
-            WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ?
+            WHERE S.fk_collegeid = ? AND SCA.fk_dgacasessionid = ? AND S.fk_degreeid = ?
               AND SCA.fk_exconfigid = ?
         """
         params = [
