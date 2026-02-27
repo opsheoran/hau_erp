@@ -4534,7 +4534,7 @@ class StudentModel:
             FROM SMS_Student_Mst S
             LEFT JOIN SMS_College_Mst C ON S.fk_collegeid = C.pk_collegeid
             LEFT JOIN SMS_Degree_Mst D ON S.fk_degreeid = D.pk_degreeid
-            LEFT JOIN SMS_Semester_Mst SM ON S.fk_curr_sem = SM.pk_semesterid
+            LEFT JOIN SMS_Semester_Mst SM ON S.fk_semid = SM.pk_semesterid
             LEFT JOIN SMS_Branch_Mst B ON S.fk_branchid = B.pk_branchid
             LEFT JOIN SMS_AcademicSession_Mst SES ON S.fk_adm_session = SES.pk_sessionid
             WHERE S.pk_sid = ?
