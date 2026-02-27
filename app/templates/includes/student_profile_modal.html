@@ -1,0 +1,143 @@
+<!-- Student Profile Popup Modal -->
+<div class="modal fade" id="studentProfileModal" tabindex="-1" aria-labelledby="studentProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border-radius: 0; border: 3px solid #3c8dbc;">
+            <div class="modal-header" style="background: #3c8dbc; color: #fff; padding: 10px 15px; border-radius: 0;">
+                <h5 class="modal-title" id="studentProfileModalLabel" style="font-size: 14px; font-weight: bold; font-family: Verdana;">
+                    <i class="fas fa-user-grad me-2"></i>Student Quick Profile
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="studentProfileContent" style="font-family: Verdana; font-size: 11px; min-height: 200px; padding: 20px;">
+                <!-- Content will be loaded via AJAX -->
+                <div class="text-center p-5 loading-spinner">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="mt-2">Fetching student details...</div>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 5px 15px; background: #f4f4f4;">
+                <button type="button" class="button-common" style="background: #666; border-color: #555;" data-bs-dismiss="modal">Close</button>
+                <a href="#" id="viewFullBiodataBtn" class="button-common" style="text-decoration: none; line-height: 18px;">View Full Bio-Data</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Global listener for student profile triggers
+        document.body.addEventListener('click', function(e) {
+            const trigger = e.target.closest('.student-profile-trigger');
+            if (trigger) {
+                e.preventDefault();
+                const sid = trigger.dataset.sid;
+                if (!sid) return;
+
+                const modalEl = document.getElementById('studentProfileModal');
+                const modal = new bootstrap.Modal(modalEl);
+                const contentArea = document.getElementById('studentProfileContent');
+                const fullBioBtn = document.getElementById('viewFullBiodataBtn');
+
+                // Set initial loading state
+                contentArea.innerHTML = `
+                    <div class="text-center p-5">
+                        <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                        <div class="mt-2">Fetching student details...</div>
+                    </div>`;
+                
+                fullBioBtn.href = `/academics/student_biodata?sid=${sid}`;
+                modal.show();
+
+                // Fetch data
+                fetch(`/academics/api/student/profile_basic/${sid}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Student not found');
+                        return response.json();
+                    })
+                    .then(data => {
+                        renderStudentProfile(data, contentArea);
+                    })
+                    .catch(error => {
+                        contentArea.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+                    });
+            }
+        });
+
+        function renderStudentProfile(s, container) {
+            const imgPath = s.student_image ? `/static/uploads/students/${s.student_image}` : '/static/images/no-image.png';
+            
+            let html = `
+                <div class="row">
+                    <div class="col-md-3 text-center mb-3">
+                        <div style="border: 1px solid #ddd; padding: 3px; background: #fff; display: inline-block;">
+                            <img src="${imgPath}" onerror="this.src='/static/images/no-image.png'" style="width: 120px; height: 140px; object-fit: cover;">
+                        </div>
+                        <div class="mt-2" style="font-weight: bold; color: #3c8dbc;">${s.AdmissionNo || 'N/A'}</div>
+                    </div>
+                    <div class="col-md-9">
+                        <h4 style="font-weight: bold; color: #3c8dbc; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px;">${s.fullname}</h4>
+                        <table class="form-table" style="width: 100%;">
+                            <tr>
+                                <td class="vtext" style="width: 30%;">Enrollment No.</td>
+                                <td class="colon">:</td>
+                                <td>${s.enrollmentno || 'N/A'}</td>
+                            </tr>
+                            <tr>
+                                <td class="vtext">Father's Name</td>
+                                <td class="colon">:</td>
+                                <td>${s.FatherName || 'N/A'}</td>
+                            </tr>
+                            <tr>
+                                <td class="vtext">Mother's Name</td>
+                                <td class="colon">:</td>
+                                <td>${s.MotherName || 'N/A'}</td>
+                            </tr>
+                            <tr>
+                                <td class="vtext">Gender / DOB</td>
+                                <td class="colon">:</td>
+                                <td>${s.gender || 'N/A'} / ${s.dob || 'N/A'}</td>
+                            </tr>
+                            <tr>
+                                <td class="vtext">Contact</td>
+                                <td class="colon">:</td>
+                                <td><i class="fas fa-phone-alt me-1"></i> ${s.MobileNo || 'N/A'} <br> <i class="fas fa-envelope me-1"></i> ${s.Emailid || 'N/A'}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <div class="tablesubheading" style="background: #3c8dbc; color: #fff; padding: 4px 10px;">
+                            <i class="fas fa-university me-2"></i>Academic Details
+                        </div>
+                        <table class="table-grid-view" style="width: 100%; margin-top: 5px;">
+                            <tr class="item-style">
+                                <td class="vtext" style="width: 25%; background: #f9f9f9;">College</td>
+                                <td>${s.collegename || 'N/A'}</td>
+                            </tr>
+                            <tr class="item-style-alt">
+                                <td class="vtext" style="background: #f9f9f9;">Degree</td>
+                                <td>${s.degreename || 'N/A'}</td>
+                            </tr>
+                            <tr class="item-style">
+                                <td class="vtext" style="background: #f9f9f9;">Discipline</td>
+                                <td>${s.branchname || 'N/A'}</td>
+                            </tr>
+                            <tr class="item-style-alt">
+                                <td class="vtext" style="background: #f9f9f9;">Current Semester</td>
+                                <td>${s.semester_roman || 'N/A'}</td>
+                            </tr>
+                            <tr class="item-style">
+                                <td class="vtext" style="background: #f9f9f9;">Admitted Session</td>
+                                <td>${s.adm_session || 'N/A'}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            `;
+            container.innerHTML = html;
+        }
+    });
+</script>

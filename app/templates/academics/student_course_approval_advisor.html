@@ -24,11 +24,11 @@
             <tr>
                 <td class="vtext">Academic Session</td>
                 <td class="colon">:</td>
-                <td class="required">
-                    <select name="session_id" id="ddlSession" class="dropdown w-200">
+                <td class="required" colspan="4">
+                    <select name="session_id" id="ddlSession" class="dropdown w-200" onchange="onSemesterChange()">
                         <option value="">-- Select Session --</option>
                         {% for s in lookups.sessions %}
-                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        <option value="{{ s.id }}" data-name="{{ s.name }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
                         {% endfor %}
                     </select> *
                 </td>
@@ -47,10 +47,10 @@
                 <td class="vtext">Semester</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="semester_id" id="ddlSemester" class="dropdown w-150" onchange="onSemesterChange()">
+                    <select name="semester_id" id="ddlSemester" class="dropdown w-150" onchange="onSemesterChange();">
                         <option value=""> -- Select Semester -- </option>
                         {% for s in lookups.semesters %}
-                        <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        <option value="{{ s.id }}" data-order="{{ s.semesterorder }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
                         {% endfor %}
                     </select> *
                 </td>
@@ -113,11 +113,13 @@
                     <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
                         <td align="center">{{ loop.index }}</td>
                         <td align="center">{{ s.AdmissionNo }}</td>
-                        <td>{{ s.fullname }}</td>
+                        <td>
+                            <a href="{{ url_for('academics.student_biodata', sid=s.pk_sid) }}" class="student-profile-trigger" data-sid="{{ s.pk_sid }}" style="color: blue; text-decoration: underline;">{{ s.fullname }}</a>
+                        </td>
                         <td align="left">
                             <div style="font-size: 11px; color: #333;">
                                 {% if s.courses_info %}
-                                    {% set courses = s.courses_info.split(', ') %}
+                                    {% set courses = s.courses_info.split('|') %}
                                     <table class="chkboxlist" border="0" style="width: 100%;">
                                     {% for c in courses %}
                                         <tr>
@@ -170,6 +172,7 @@ function setOptions(dropdown, data, defaultText) {
         var opt = document.createElement('option');
         opt.value = item.id || item.pk_exconfigid || item.pk_semesterid || item.pk_degreeyearid;
         opt.textContent = item.name || item.display_name || item.semester_roman || item.degreeyear_char;
+        if (item.semesterorder) opt.setAttribute('data-order', item.semesterorder);
         dropdown.appendChild(opt);
     });
 }

@@ -131,7 +131,7 @@
                         <td align="center">{{ loop.index }}</td>
                         <td align="center">{{ s.AdmissionNo }}</td>
                         <td>
-                            <a href="{{ url_for('academics.student_biodata', sid=s.pk_sid) }}" style="color: blue; text-decoration: underline;">{{ s.fullname }}</a>
+                            <a href="{{ url_for('academics.student_biodata', sid=s.pk_sid) }}" class="student-profile-trigger" data-sid="{{ s.pk_sid }}" style="color: blue; text-decoration: underline;">{{ s.fullname }}</a>
                         </td>
                         <td align="left" valign="top">
                             <div style="font-size: 11px; color: #333;">

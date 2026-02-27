@@ -878,6 +878,13 @@ def certificate_master():
 @academics_bp.route('/student_biodata', methods=['GET', 'POST'])
 @academics_bp.route('/student_biodata/<int:sid>', methods=['GET', 'POST'])
 @permission_required('Student BioData')
+@academics_bp.route('/api/student/profile_basic/<int:sid>')
+def api_get_student_profile_basic(sid):
+    data = StudentModel.get_student_profile_basic(sid)
+    if data:
+        return jsonify(clean_json_data(data))
+    return jsonify({'error': 'Student not found'}), 404
+
 def student_biodata(sid=None):
     if request.method == 'POST':
         if StudentModel.save_student_biodata(request.form, session['user_id']):

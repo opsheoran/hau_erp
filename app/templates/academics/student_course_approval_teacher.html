@@ -112,11 +112,13 @@
                     <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
                         <td align="center">{{ loop.index }}</td>
                         <td align="center">{{ s.AdmissionNo }}</td>
-                        <td>{{ s.fullname }}</td>
+                        <td>
+                            <a href="{{ url_for('academics.student_biodata', sid=s.pk_sid) }}" class="student-profile-trigger" data-sid="{{ s.pk_sid }}" style="color: blue; text-decoration: underline;">{{ s.fullname }}</a>
+                        </td>
                         <td align="left" valign="top">
                             <div style="font-size: 11px; color: #333;">
                                 {% if s.courses_info %}
-                                    {% set courses = s.courses_info.split(', ') %}
+                                    {% set courses = s.courses_info.split('|') %}
                                     <table class="chkboxlist" border="0" style="width: 100%;">
                                     {% for c in courses %}
                                         <tr>
