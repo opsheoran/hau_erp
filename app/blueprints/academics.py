@@ -2307,9 +2307,9 @@ def course_offer_hod():
                 if year_row:
                     filters['year_id'] = year_row['fk_degreeyearid']
             
-            lookups['exam_configs'] = CourseAllocationModel.get_exam_configs(
-                filters['degree_id'], filters['session_id'], filters['semester_id']
-            )
+        lookups['exam_configs'] = CourseAllocationModel.get_exam_configs(
+            filters['degree_id'], filters['session_id'], filters['semester_id']
+        )
 
     courses = []
     selected_ids = set()
@@ -2448,10 +2448,9 @@ def teacher_course_assignment():
         lookups['degrees'] = AcademicsModel.get_college_degrees(filters['college_id'])
     if filters['degree_id']:
         lookups['semesters'] = AcademicsModel.get_degree_semesters_for_degree(filters['degree_id'])
-        if filters['semester_id']:
-            lookups['exam_configs'] = CourseAllocationModel.get_exam_configs(
-                filters['degree_id'], filters['session_id'], filters['semester_id']
-            )
+        lookups['exam_configs'] = CourseAllocationModel.get_exam_configs(
+            filters['degree_id'], filters['session_id'], filters['semester_id']
+        )
     if filters['college_id'] and filters['degree_id'] and filters['semester_id'] and filters.get('coursetype'):
         lookups['batches'] = BatchModel.get_batches(
             filters['college_id'], filters['degree_id'], filters['semester_id'], filters['coursetype']
@@ -3680,7 +3679,7 @@ def student_course_approval_dsw():
     }
 
     students = []
-    if filters['view'] == '1' and all([filters['college_id'], filters['session_id'], filters['degree_id'], filters['exconfig_id']]):
+    if filters['view'] == '1' and all([filters['college_id'], filters['session_id'], filters['degree_id'], filters['semester_id'], filters['exconfig_id']]):
         students = DswApprovalModel.get_students_for_approval(filters, emp_id)
 
     loc_id = session.get('selected_loc')
@@ -3708,6 +3707,25 @@ def student_course_approval_dsw():
         filters=filters,
         students=clean_json_data(students),
     )
+
+@academics_bp.route('/api/student_course_approval_dsw_pending')
+@permission_required('Course Allocation Approval For UG/PG[By DSW]')
+def student_course_approval_dsw_pending():
+    emp_id = session.get('emp_id')
+    filters = {
+        'college_id': request.args.get('college_id', type=int),
+        'session_id': request.args.get('session_id', type=int),
+        'degree_id': request.args.get('degree_id', type=int),
+        'semester_id': request.args.get('semester_id', type=int),
+        'branch_id': request.args.get('branch_id', type=int),
+        'exconfig_id': request.args.get('exconfig_id', type=int),
+    }
+    
+    if not all([filters['college_id'], filters['session_id'], filters['degree_id'], filters['semester_id'], filters['exconfig_id']]):
+        return jsonify([])
+        
+    students = DswApprovalModel.get_pending_students(filters, emp_id)
+    return jsonify(clean_json_data(students))
 
 @academics_bp.route('/student_course_approval_library', methods=['GET', 'POST'])
 @permission_required('Course Allocation Approval For UG/PG[By Library]')
@@ -4002,3 +4020,32 @@ def degree_complete_detail():
     return render_template('academics/degree_complete_detail.html', 
                            lookups=lookups, filters=filters, students=students, 
                            enroll_year_prefix=enroll_year_prefix, now=datetime.now())
+
+@academics_bp.route('/api/get_college_degrees')
+def get_college_degrees_query_api():
+    college_id = request.args.get('college_id')
+    type_tp = request.args.get('type_tp')
+    if not college_id:
+        return jsonify([])
+    if type_tp == 'U':
+        degrees = AcademicsModel.get_college_ug_degrees(college_id)
+    else:
+        degrees = AcademicsModel.get_college_degrees(college_id)
+    return jsonify(clean_json_data(degrees))
+
+@academics_bp.route('/api/get_degree_branches')
+def get_degree_branches_query_api():
+    college_id = request.args.get('college_id')
+    degree_id = request.args.get('degree_id')
+    if not degree_id:
+        return jsonify([])
+    branches = AcademicsModel.get_degree_branches(degree_id)
+    return jsonify(clean_json_data(branches))
+
+@academics_bp.route('/api/get_teachers')
+def get_teachers_api():
+    college_id = request.args.get('college_id')
+    if not college_id:
+        return jsonify([])
+    teachers = AdvisorAllocationModel.get_teachers_for_dropdown(college_id)
+    return jsonify(clean_json_data(teachers))

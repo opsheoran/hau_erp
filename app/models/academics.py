@@ -3739,6 +3739,7 @@ class AcademicsModel:
         )
 
     @staticmethod
+    @staticmethod
     def get_hod_department_context(emp_id):
         dept_rows = DB.fetch_all("SELECT pk_deptid, description FROM Department_Mst WHERE Hod_Id = ?", [emp_id])
         emp_row = DB.fetch_one("SELECT fk_deptid FROM SAL_Employee_Mst WHERE pk_empid = ?", [emp_id])
@@ -5492,19 +5493,19 @@ class AdvisorApprovalModel:
         # Base SQL for student info and their allocated courses
         sql = """
             SELECT DISTINCT S.pk_sid, S.enrollmentno as AdmissionNo, S.fullname,
-                   (SELECT STUFF((SELECT ', ' + C.coursename + ' / ' + C.coursecode + ' [' + SES.sessionname + ' ](' + CAST(A.crhrth as varchar) + '+' + CAST(A.crhrpr as varchar) + ')'
+                   (SELECT STUFF((SELECT '|' + C.coursename + ' / ' + C.coursecode + ' [' + SES.sessionname + ' ](' + CAST(A.crhrth as varchar) + '+' + CAST(A.crhrpr as varchar) + ')'
                                   FROM SMS_StuCourseAllocation A
                                   INNER JOIN SMS_Course_Mst C ON A.fk_courseid = C.pk_courseid
                                   INNER JOIN SMS_AcademicSession_Mst SES ON A.fk_dgacasessionid = SES.pk_sessionid
                                   WHERE A.fk_sturegid = S.pk_sid AND A.fk_exconfigid = ?
-                                  FOR XML PATH('')), 1, 2, '')) as courses_info,
+                                  FOR XML PATH('')), 1, 1, '')) as courses_info,
                    CAST(ISNULL(APP.Adv_AprrovalStatus, 0) AS BIT) as approved,
                    APP.Remarks_by_Adv as remarks
             FROM SMS_Student_Mst S
             INNER JOIN SMS_StuCourseAllocation SCA ON S.pk_sid = SCA.fk_sturegid
             LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP ON SCA.fk_sturegid = APP.fk_sturegid 
                  AND SCA.fk_courseid = APP.fk_courseid AND SCA.fk_exconfigid = APP.fk_exconfigid
-            WHERE S.fk_collegeid = ? AND SCA.fk_dgacasessionid = ? AND S.fk_degreeid = ? 
+            WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ? 
               AND SCA.fk_exconfigid = ?
         """
         params = [filters.get('exconfig_id'), filters.get('college_id'), filters.get('session_id'), filters.get('degree_id'), filters.get('exconfig_id')]
@@ -5642,12 +5643,17 @@ class TeacherApprovalModel:
                 S.pk_sid,
                 COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
                 S.fullname,
-                (SELECT STUFF((SELECT ', ' + C.coursename + ' / ' + C.coursecode + ' [' + SES.sessionname + ' ](' + CAST(A.crhrth as varchar) + '+' + CAST(A.crhrpr as varchar) + ')'
+                (SELECT STUFF((SELECT '|' + C.coursename + ' / ' + C.coursecode + ' [' + SES.sessionname + ' ](' + CAST(A.crhrth as varchar) + '+' + CAST(A.crhrpr as varchar) + ')'
                               FROM SMS_StuCourseAllocation A
                               INNER JOIN SMS_Course_Mst C ON A.fk_courseid = C.pk_courseid
                               INNER JOIN SMS_AcademicSession_Mst SES ON A.fk_dgacasessionid = SES.pk_sessionid
                               WHERE A.fk_sturegid = S.pk_sid AND A.fk_exconfigid = ?
-                              FOR XML PATH('')), 1, 2, '')) AS courses_info,
+                              AND EXISTS (
+                                  SELECT 1 FROM SMS_TCourseAlloc_Mst TM
+                                  INNER JOIN SMS_TCourseAlloc_Dtl TD ON TM.pk_tcourseallocid = TD.fk_tcourseallocid
+                                  WHERE TM.fk_employeeid = ? AND TM.fk_exconfigid = A.fk_exconfigid AND TD.fk_courseid = A.fk_courseid
+                              )
+                              FOR XML PATH('')), 1, 1, '')) AS courses_info,
                 {approved_case} AS approved,
                 {remarks_select_sql} AS remarks
             FROM SMS_Student_Mst S
@@ -5656,15 +5662,22 @@ class TeacherApprovalModel:
               ON SCA.fk_sturegid = APP.fk_sturegid
              AND SCA.fk_courseid = APP.fk_courseid
              AND SCA.fk_exconfigid = APP.fk_exconfigid
-            WHERE S.fk_collegeid = ? AND SCA.fk_dgacasessionid = ? AND S.fk_degreeid = ?
+            WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ?
               AND SCA.fk_exconfigid = ?
+              AND EXISTS (
+                  SELECT 1 FROM SMS_TCourseAlloc_Mst TM
+                  INNER JOIN SMS_TCourseAlloc_Dtl TD ON TM.pk_tcourseallocid = TD.fk_tcourseallocid
+                  WHERE TM.fk_employeeid = ? AND TM.fk_exconfigid = SCA.fk_exconfigid AND TD.fk_courseid = SCA.fk_courseid
+              )
         """
         params = [
             filters.get('exconfig_id'),
+            teacher_id, # for subquery courses_info
             filters.get('college_id'),
             filters.get('session_id'),
             filters.get('degree_id'),
             filters.get('exconfig_id'),
+            teacher_id, # for main WHERE clause
         ]
 
         if filters.get('branch_id') and str(filters['branch_id']) != '0':
@@ -5842,34 +5855,37 @@ class DswApprovalModel:
                 S.pk_sid,
                 COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
                 S.fullname,
-                (SELECT STUFF((SELECT ', ' + C.coursename + ' / ' + C.coursecode + ' [' + SES.sessionname + ' ](' + CAST(A.crhrth as varchar) + '+' + CAST(A.crhrpr as varchar) + ')'
+                (SELECT STUFF((SELECT '|' + C.coursename + ' / ' + C.coursecode + ' [' + SES.sessionname + ' ](' + CAST(A.crhrth as varchar) + '+' + CAST(A.crhrpr as varchar) + ')'
                               FROM SMS_StuCourseAllocation A
                               INNER JOIN SMS_Course_Mst C ON A.fk_courseid = C.pk_courseid
                               INNER JOIN SMS_AcademicSession_Mst SES ON A.fk_dgacasessionid = SES.pk_sessionid
-                              WHERE A.fk_sturegid = S.pk_sid AND A.fk_exconfigid = ?
-                              FOR XML PATH('')), 1, 2, '')) AS courses_info,
+                              WHERE A.fk_sturegid = S.pk_sid AND A.fk_exconfigid = SCA.fk_exconfigid
+                                AND C.coursecode LIKE 'PGS%'
+                              FOR XML PATH('')), 1, 1, '')) AS courses_info,
                 {approved_case} AS approved,
                 {remarks_select_sql} AS remarks
             FROM SMS_Student_Mst S
             INNER JOIN SMS_StuCourseAllocation SCA ON S.pk_sid = SCA.fk_sturegid
+            INNER JOIN SMS_Course_Mst CM ON SCA.fk_courseid = CM.pk_courseid
+            LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
             LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP
               ON SCA.fk_sturegid = APP.fk_sturegid
              AND SCA.fk_courseid = APP.fk_courseid
              AND SCA.fk_exconfigid = APP.fk_exconfigid
-            WHERE S.fk_collegeid = ? AND SCA.fk_dgacasessionid = ? AND S.fk_degreeid = ?
+            WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ?
               AND SCA.fk_exconfigid = ?
+              AND CM.coursecode LIKE 'PGS%'
         """
         params = [
-            filters.get('exconfig_id'),
             filters.get('college_id'),
             filters.get('session_id'),
             filters.get('degree_id'),
             filters.get('exconfig_id'),
         ]
 
-        if filters.get('branch_id') and str(filters['branch_id']) != '0':
-            sql += " AND S.fk_branchid = ?"
-            params.append(filters['branch_id'])
+        if filters.get('semester_id') and str(filters['semester_id']) != '0':
+            sql += " AND DC.fk_semesterid = ?"
+            params.append(filters['semester_id'])
 
         # Typically DSW comes after teacher. If teacher status column exists, show only where all course rows are teacher-approved.
         if teacher_status_col:
@@ -5877,17 +5893,96 @@ class DswApprovalModel:
               AND NOT EXISTS (
                     SELECT 1
                     FROM SMS_StuCourseAllocation A2
+                    INNER JOIN SMS_Course_Mst C2 ON A2.fk_courseid = C2.pk_courseid
                     LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
                       ON A2.fk_sturegid = APP2.fk_sturegid
                      AND A2.fk_courseid = APP2.fk_courseid
                      AND A2.fk_exconfigid = APP2.fk_exconfigid
-                    WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = ?
+                    WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
+                      AND C2.coursecode LIKE 'PGS%'
                       AND NOT ({DswApprovalModel._approved_expr('APP2.' + teacher_status_col)})
               )
             """
-            params.append(filters.get('exconfig_id'))
 
-        sql += " GROUP BY S.pk_sid, S.enrollmentno, S.AdmissionNo, S.fullname ORDER BY S.fullname"
+        sql += " GROUP BY S.pk_sid, S.enrollmentno, S.AdmissionNo, S.fullname, SCA.fk_exconfigid ORDER BY S.fullname"
+        return DB.fetch_all(sql, params)
+
+    @staticmethod
+    def get_pending_students(filters, dsw_emp_id):
+        cols, status_col, _remarks_col, _dsw_id_col, teacher_status_col = DswApprovalModel._resolve_staffwise_columns()
+        if not status_col:
+            return []
+
+        # Advisor status column
+        adv_status_col = next((c for c in ('adv_aprrovalstatus', 'adv_approvalstatus', 'advisor_approvalstatus') if c in cols), None)
+
+        sql = f"""
+            SELECT
+                S.pk_sid,
+                COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS AdmissionNo,
+                S.fullname,
+                CASE 
+                    WHEN EXISTS (
+                        SELECT 1 FROM SMS_StuCourseAllocation A2
+                        INNER JOIN SMS_Course_Mst C2 ON A2.fk_courseid = C2.pk_courseid
+                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
+                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
+                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
+                          AND C2.coursecode LIKE 'PGS%'
+                          AND ({DswApprovalModel._approved_expr('APP2.' + status_col)})
+                    ) THEN 'Approved'
+                    ELSE 'Pending'
+                END as approval_status,
+                CASE
+                    WHEN EXISTS (
+                        SELECT 1 FROM SMS_StuCourseAllocation A2
+                        INNER JOIN SMS_Course_Mst C2 ON A2.fk_courseid = C2.pk_courseid
+                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
+                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
+                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
+                          AND C2.coursecode LIKE 'PGS%'
+                          AND NOT ({DswApprovalModel._approved_expr('APP2.' + (adv_status_col if adv_status_col else '1'))})
+                    ) THEN 'On Advisor Level'
+                    WHEN EXISTS (
+                        SELECT 1 FROM SMS_StuCourseAllocation A2
+                        INNER JOIN SMS_Course_Mst C2 ON A2.fk_courseid = C2.pk_courseid
+                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
+                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
+                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
+                          AND C2.coursecode LIKE 'PGS%'
+                          AND NOT ({DswApprovalModel._approved_expr('APP2.' + (teacher_status_col if teacher_status_col else '1'))})
+                    ) THEN 'On Teacher Level'
+                    WHEN NOT EXISTS (
+                        SELECT 1 FROM SMS_StuCourseAllocation A2
+                        INNER JOIN SMS_Course_Mst C2 ON A2.fk_courseid = C2.pk_courseid
+                        LEFT JOIN SMS_StuCourseAllocation_Approval_staffwise APP2
+                          ON A2.fk_sturegid = APP2.fk_sturegid AND A2.fk_courseid = APP2.fk_courseid AND A2.fk_exconfigid = APP2.fk_exconfigid
+                        WHERE A2.fk_sturegid = S.pk_sid AND A2.fk_exconfigid = SCA.fk_exconfigid
+                          AND C2.coursecode LIKE 'PGS%'
+                          AND ({DswApprovalModel._approved_expr('APP2.' + status_col)})
+                    ) THEN 'On DSW Level'
+                    ELSE ''
+                END as remarks
+            FROM SMS_Student_Mst S
+            INNER JOIN SMS_StuCourseAllocation SCA ON S.pk_sid = SCA.fk_sturegid
+            INNER JOIN SMS_Course_Mst CM ON SCA.fk_courseid = CM.pk_courseid
+            LEFT JOIN SMS_DegreeCycle_Mst DC ON SCA.fk_degreecycleid = DC.pk_degreecycleid
+            WHERE S.fk_collegeid = ? AND S.fk_curr_session = ? AND S.fk_degreeid = ?
+              AND SCA.fk_exconfigid = ?
+              AND CM.coursecode LIKE 'PGS%'
+        """
+        params = [
+            filters.get('college_id'),
+            filters.get('session_id'),
+            filters.get('degree_id'),
+            filters.get('exconfig_id'),
+        ]
+
+        if filters.get('semester_id') and str(filters['semester_id']) != '0':
+            sql += " AND DC.fk_semesterid = ?"
+            params.append(filters['semester_id'])
+
+        sql += " GROUP BY S.pk_sid, S.enrollmentno, S.AdmissionNo, S.fullname, SCA.fk_exconfigid ORDER BY S.fullname"
         return DB.fetch_all(sql, params)
 
     @staticmethod
@@ -5923,7 +6018,9 @@ class DswApprovalModel:
             rem = (remarks[i] if i < len(remarks) else '') if remarks_col else None
 
             allocations = DB.fetch_all(
-                "SELECT * FROM SMS_StuCourseAllocation WHERE fk_sturegid = ? AND fk_exconfigid = ?",
+                """SELECT A.* FROM SMS_StuCourseAllocation A
+                   INNER JOIN SMS_Course_Mst C ON A.fk_courseid = C.pk_courseid
+                   WHERE A.fk_sturegid = ? AND A.fk_exconfigid = ? AND C.coursecode LIKE 'PGS%'""",
                 [sid, exconfig_id]
             )
 
@@ -7208,40 +7305,35 @@ class CourseAllocationModel:
     @staticmethod
     def get_exam_configs(degree_id, session_id=None, semester_id=None):
         sql = """
-            SELECT DISTINCT M.pk_exconfigid as id, 
+            SELECT M.pk_exconfigid as id, 
                    ISNULL(UPPER(MF.descriptiion), '') + ' ' + ISNULL(YF.description, '') + ' - ' + ISNULL(UPPER(MT.descriptiion), '') + ' ' + ISNULL(YT.description, '') as period,
-                   (SELECT STUFF((SELECT ', ' + RTRIM(S.semester_roman) + ' - ' + D.ExamType 
+                   (SELECT STUFF((SELECT ', ' + ISNULL(RTRIM(S.semester_roman), 'Sem ' + CAST(D.fk_semesterid AS VARCHAR)) + '  - ' + D.ExamType 
                                   FROM SMS_ExamConfig_Dtl D
-                                  INNER JOIN SMS_Semester_Mst S ON D.fk_semesterid = S.pk_semesterid
+                                  LEFT JOIN SMS_Semester_Mst S ON D.fk_semesterid = S.pk_semesterid
                                   WHERE D.fk_exconfigid = M.pk_exconfigid
-                                  ORDER BY S.pk_semesterid
+                                  ORDER BY D.fk_semesterid
                                   FOR XML PATH('')), 1, 2, '')) as sem_config
             FROM SMS_ExamConfig_Mst M
             LEFT JOIN Month_Mst MF ON M.fk_monthid_from = MF.pk_MonthId
             LEFT JOIN Year_Mst YF ON M.fk_yearid_From = YF.pk_yearID
             LEFT JOIN Month_Mst MT ON M.fk_monthid_to = MT.pk_MonthId
             LEFT JOIN Year_Mst YT ON M.fk_yearid_To = YT.pk_yearID
-            LEFT JOIN SMS_ExamConfig_Dtl DTL ON M.pk_exconfigid = DTL.fk_exconfigid
-            WHERE M.fk_degreeid = ? AND M.isactive = 1
+            WHERE M.fk_degreeid = ?
         """
         params = [degree_id]
-        if session_id and str(session_id) != '0':
-            sql += " AND M.fk_sessionid = ?"
+        if session_id and str(session_id) not in ['0', 'None', '']:
+            sql += " AND (M.fk_sessionid = ? OR M.fk_sessionid IS NULL OR M.fk_sessionid = 0)"
             params.append(session_id)
-        if semester_id and str(semester_id) != '0':
-            sql += " AND DTL.fk_semesterid = ?"
-            params.append(semester_id)
             
-        sql += " ORDER BY M.pk_exconfigid DESC"
+        sql += " ORDER BY M.isactive DESC, M.pk_exconfigid DESC"
         rows = DB.fetch_all(sql, params)
         for r in rows:
-            # Abbreviate months in period (e.g. AUGUST -> AUG)
             period = r['period'] or ''
             for m in ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER']:
                 if m in period:
                     period = period.replace(m, m[:3])
             sem_config = r['sem_config'] or ''
-            r['display_name'] = f"{period} --> {sem_config}"
+            r['display_name'] = f"{period} -->{sem_config}"
         return rows
 
     @staticmethod
@@ -7966,19 +8058,28 @@ class ThesisModel:
 
 class AdvisorAllocationModel:
     @staticmethod
+    @staticmethod
     def get_teachers_for_dropdown(college_id):
-        # Format: Name ||Code [Dept-Department][Specialization]
-        # NOTE: use teaching filter to keep this dropdown "teachers only"
+        # Format: Name || Code || Department || Specialization
+        if not college_id:
+            return []
+            
+        # Get loc_id of the college
+        loc_id = DB.fetch_scalar("SELECT fk_locid FROM SMS_College_Mst WHERE pk_collegeid = ?", [college_id])
+        if not loc_id:
+            return []
+
         sql = """
             SELECT E.pk_empid as id,
-                   E.empname + ' ||' + E.empcode
-                   + ' [ Dept-' + ISNULL(DP.description, '') + ']'
-                   + ' [' + ISNULL(B.Branchname, '') + ']' as display_name
+                   E.empname + ' || ' + E.empcode
+                   + ' || ' + ISNULL(DP.description, '')
+                   + ' || ' + ISNULL(B.Branchname, '') as display_name
             FROM SAL_Employee_Mst E
             INNER JOIN SAL_Designation_Mst DSG ON E.fk_desgid = DSG.pk_desgid
-            LEFT JOIN Department_Mst DP ON TRY_CAST(E.fk_deptid AS INT) = TRY_CAST(DP.pk_deptid AS INT)
-            LEFT JOIN SMS_BranchMst B ON TRY_CAST(E.fk_disid AS INT) = TRY_CAST(B.Pk_BranchId AS INT)
+            LEFT JOIN Department_Mst DP ON E.fk_deptid = DP.pk_deptid
+            LEFT JOIN SMS_BranchMst B ON TRY_CAST(E.fK_PDesignspecId AS INT) = B.Pk_BranchId
             WHERE (E.employeeleftstatus IS NULL OR E.employeeleftstatus = 'N')
+              AND E.fk_locid = ?
               AND DSG.isteaching = 1
               AND DSG.designation NOT LIKE '%School%'
               AND DSG.designation NOT LIKE '%Campus School%'
@@ -7986,17 +8087,20 @@ class AdvisorAllocationModel:
               AND DSG.designation NOT LIKE '%Primary Teacher%'
             ORDER BY E.empname
         """
-        return DB.fetch_all(sql)
+        return DB.fetch_all(sql, [loc_id])
 
     @staticmethod
     def get_students_for_advisor_allocation(filters):
         # Filters: college_id, session_id, degree_id, branch_id
         sql = """
-            SELECT S.pk_sid as id, S.fullname as name, S.enrollmentno as admission_no,
+            SELECT S.pk_sid as id, S.fullname as name, 
+                   COALESCE(NULLIF(LTRIM(RTRIM(S.enrollmentno)), ''), NULLIF(LTRIM(RTRIM(S.AdmissionNo)), '')) AS admission_no,
                    ISNULL(EM.empname + ' || ' + EM.empcode, 'No Advisor Assigned') as advisor_name
             FROM SMS_Student_Mst S
             LEFT JOIN SMS_StuGuideAlloc_Dtl AD ON S.pk_sid = AD.fk_sturegid
-            LEFT JOIN SMS_StuGuideAlloc_Mst AM ON AD.fk_stuguide_alloc = AM.pk_stuguide_alloc
+            LEFT JOIN SMS_StuGuideAlloc_Mst AM ON AD.fk_stuguide_alloc = AM.pk_stuguide_alloc 
+                 AND AM.fk_sessionid = S.fk_adm_session 
+                 AND AM.fk_degreeid = S.fk_degreeid
             LEFT JOIN SAL_Employee_Mst EM ON AM.fk_empid = EM.pk_empid
             WHERE S.fk_collegeid = ? 
               AND S.fk_adm_session = ? 
@@ -8018,36 +8122,52 @@ class AdvisorAllocationModel:
         if not student_ids or not teacher_id:
             return False, "Please select students and a teacher."
             
+        conn = DB.get_connection()
+        cursor = conn.cursor()
         try:
-            # 1. Check if Master record exists for this teacher/degree/session context
-            # In live site, branch can be 0 for UG if common
+            # 1. Get or Create Master record for this teacher/degree/session context
+            college_id = filters.get('college_id')
+            session_id = filters.get('session_id')
+            degree_id = filters.get('degree_id')
             branch_id = filters.get('branch_id') or 0
             
-            mst_id = DB.fetch_scalar("""
+            cursor.execute("""
                 SELECT pk_stuguide_alloc FROM SMS_StuGuideAlloc_Mst 
                 WHERE fk_empid = ? AND fk_collegeid = ? AND fk_degreeid = ? AND fk_sessionid = ?
-            """, [teacher_id, filters['college_id'], filters['degree_id'], filters['session_id']])
+            """, [teacher_id, college_id, degree_id, session_id])
+            mst_row = cursor.fetchone()
             
-            if not mst_id:
-                DB.execute("""
+            if mst_row:
+                mst_id = mst_row[0]
+            else:
+                cursor.execute("""
                     INSERT INTO SMS_StuGuideAlloc_Mst (fk_empid, fk_collegeid, fk_degreeid, fk_branchid, fk_sessionid)
                     VALUES (?, ?, ?, ?, ?)
-                """, [teacher_id, filters['college_id'], filters['degree_id'], branch_id, filters['session_id']])
-                mst_id = DB.fetch_scalar("SELECT @@IDENTITY")
+                """, [teacher_id, college_id, degree_id, branch_id, session_id])
+                cursor.execute("SELECT SCOPE_IDENTITY()")
+                mst_id = cursor.fetchone()[0]
 
             # 2. Assign students to this master record
             for sid in student_ids:
-                # Remove existing assignment first? usually ERPs update or delete old ones
-                DB.execute("DELETE FROM SMS_StuGuideAlloc_Dtl WHERE fk_sturegid = ?", [sid])
+                # Targeted delete: Remove student from any advisor allocation for THIS degree and session
+                cursor.execute("""
+                    DELETE D FROM SMS_StuGuideAlloc_Dtl D
+                    INNER JOIN SMS_StuGuideAlloc_Mst M ON D.fk_stuguide_alloc = M.pk_stuguide_alloc
+                    WHERE D.fk_sturegid = ? AND M.fk_degreeid = ? AND M.fk_sessionid = ?
+                """, [sid, degree_id, session_id])
                 
-                DB.execute("""
+                cursor.execute("""
                     INSERT INTO SMS_StuGuideAlloc_Dtl (fk_stuguide_alloc, fk_sturegid, Updated_by)
                     VALUES (?, ?, ?)
                 """, [mst_id, sid, str(user_id)])
-                
+            
+            conn.commit()
             return True, f"Advisor successfully allocated to {len(student_ids)} students."
         except Exception as e:
-            return False, str(e)
+            conn.rollback()
+            return False, f"Error saving allocation: {str(e)}"
+        finally:
+            conn.close()
 
 class IGradeModel:
     @staticmethod

@@ -80,20 +80,26 @@
             <tr>
                 <td class="vtext">Exam Config</td>
                 <td class="colon">:</td>
-                <td class="required" colspan="4">
-                    <select name="exconfig_id" id="ddlExamConfig" class="dropdown" style="width: 500px;">
+                <td class="required">
+                    <select name="exconfig_id" id="ddlExamConfig" class="dropdown w-300">
                         <option value="">-- Select Exam Config.--</option>
                         {% for ec in lookups.exam_configs %}
                         <option value="{{ ec.pk_exconfigid }}" {% if filters.exconfig_id|string == ec.pk_exconfigid|string %}selected{% endif %}>{{ ec.display_name }}</option>
                         {% endfor %}
                     </select> *
                 </td>
+                <td class="vtext" style="display:none;">Year</td>
+                <td class="colon" style="display:none;">:</td>
+                <td style="display:none;"></td>
             </tr>
             <tr>
                 <td></td>
                 <td colspan="5" style="padding-top: 10px;">
                     <input type="button" value="GET STUDENTS" class="button-common" onclick="validateAndSubmit()">
                     <input type="button" value="RESET" class="button-common" onclick="window.location.href='{{ url_for('academics.student_course_approval_dsw') }}'">
+                    <span style="margin-left: 20px;">
+                        <a href="javascript:void(0)" onclick="openPendingPopup()" style="color: blue; text-decoration: underline; font-size: 11px;">Get Pending/Rejected Student list</a>
+                    </span>
                 </td>
             </tr>
         </table>
@@ -124,11 +130,13 @@
                     <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
                         <td align="center">{{ loop.index }}</td>
                         <td align="center">{{ s.AdmissionNo }}</td>
-                        <td>{{ s.fullname }}</td>
+                        <td>
+                            <a href="{{ url_for('academics.student_biodata', sid=s.pk_sid) }}" style="color: blue; text-decoration: underline;">{{ s.fullname }}</a>
+                        </td>
                         <td align="left" valign="top">
                             <div style="font-size: 11px; color: #333;">
                                 {% if s.courses_info %}
-                                    {% set courses = s.courses_info.split(', ') %}
+                                    {% set courses = s.courses_info.split('|') %}
                                     <table class="chkboxlist" border="0" style="width: 100%;">
                                     {% for c in courses %}
                                         <tr>
@@ -172,8 +180,82 @@
     {% endif %}
 </div>
 
+<!-- Pending List Modal -->
+<div id="pendingModal" class="modal" style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+    <div class="modal-content" style="background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 60%; max-height: 70%; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #2d5a27; padding-bottom: 10px; margin-bottom: 15px;">
+            <h3 style="margin: 0; color: #2d5a27;">Pending/Rejected Student List</h3>
+            <span class="close" onclick="closePendingPopup()" style="color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+        </div>
+        <div id="pendingListContent">
+            <table class="table-grid-view" style="width: 100%;">
+                <thead>
+                    <tr class="header-style">
+                        <th>S.No.</th>
+                        <th>Enrollment No.</th>
+                        <th>Approval Status</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="pendingListBody">
+                    <tr>
+                        <td colspan="4" align="center">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <script>
 var initialExconfigId = {{ (filters.exconfig_id or '')|tojson }};
+
+function openPendingPopup() {
+    var college = document.getElementById('ddlCollege').value;
+    var session = document.getElementById('ddlSession').value;
+    var degree = document.getElementById('ddlDegree').value;
+    var semester = document.getElementById('ddlSemester').value;
+    var exconfig = document.getElementById('ddlExamConfig').value;
+
+    if (!college || !session || !degree || !semester || !exconfig) {
+        alert('Please select all filters first.');
+        return;
+    }
+
+    document.getElementById('pendingModal').style.display = 'block';
+    var body = document.getElementById('pendingListBody');
+    body.innerHTML = '<tr><td colspan="4" align="center">Loading...</td></tr>';
+
+    var url = '/academics/api/student_course_approval_dsw_pending?' + 
+              'college_id=' + college + 
+              '&session_id=' + session + 
+              '&degree_id=' + degree + 
+              '&semester_id=' + semester + 
+              '&exconfig_id=' + exconfig;
+
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            body.innerHTML = '';
+            if (data.length === 0) {
+                body.innerHTML = '<tr><td colspan="4" align="center">No pending students found.</td></tr>';
+            } else {
+                data.forEach((s, i) => {
+                    var tr = document.createElement('tr');
+                    tr.className = (i % 2 === 0) ? 'item-style' : 'item-style-alt';
+                    tr.innerHTML = '<td align="center">' + (i + 1) + '</td>' +
+                                   '<td align="center">' + s.AdmissionNo + '</td>' +
+                                   '<td align="center">' + s.approval_status + '</td>' +
+                                   '<td>' + s.remarks + '</td>';
+                    body.appendChild(tr);
+                });
+            }
+        });
+}
+
+function closePendingPopup() {
+    document.getElementById('pendingModal').style.display = 'none';
+}
 
 function setOptions(dropdown, data, defaultText) {
     dropdown.innerHTML = '<option value=\"\">' + defaultText + '</option>';
@@ -290,6 +372,7 @@ window.addEventListener('load', function() {
 </script>
 
 <style>
+    .hau { display: none !important; }
     .filter-table td { padding: 5px; }
     .vtext { font-weight: bold; width: 150px; font-size: 11px; }
     .colon { width: 10px; }
