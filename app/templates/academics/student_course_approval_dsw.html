@@ -8,7 +8,6 @@
 
     <form id="filterForm" method="GET">
         <input type="hidden" name="view" value="1">
-        <input type="hidden" name="pending" id="pendingField" value="{{ filters.pending or '0' }}">
         <table width="100%" class="filter-table">
             <tr>
                 <td class="vtext">College</td>
@@ -96,10 +95,10 @@
             <tr>
                 <td></td>
                 <td colspan="5" style="padding-top: 10px;">
-                    <input type="button" value="GET STUDENTS" class="button-common" onclick="getStudents()">
+                    <input type="button" value="GET STUDENTS" class="button-common" onclick="validateAndSubmit()">
                     <input type="button" value="RESET" class="button-common" onclick="window.location.href='{{ url_for('academics.student_course_approval_dsw') }}'">
                     <span style="margin-left: 20px;">
-                        <a href="javascript:void(0)" onclick="getPendingList()" style="color: blue; text-decoration: underline; font-size: 11px;">Get Pending/Rejected Student list</a>
+                        <a href="javascript:void(0)" onclick="openPendingPopup()" style="color: blue; text-decoration: underline; font-size: 11px;">Get Pending/Rejected Student list</a>
                     </span>
                 </td>
             </tr>
@@ -178,50 +177,88 @@
             {% endif %}
         </form>
 
-        {% if filters.pending == '1' %}
-        <div style="margin-top: 15px;">
-            <div class="tablesubheading"><span class="subheadingborderbottom">Pending/Rejected Student List</span></div>
-            <div class="DivStyleWithScroll" style="width:100%; max-height:200px; overflow-y: auto;">
-                <table class="table-grid-view" style="width:100%;">
+        <div id="pendingSection" style="display:none; margin-top: 15px;">
+             <!-- Standard inline pending logic removed -->
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Pending List Modal -->
+<div id="pendingModal" class="modal" style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+    <div class="modal-content" style="background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 60%; max-height: 70%; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #2d5a27; padding-bottom: 10px; margin-bottom: 15px;">
+            <h3 style="margin: 0; color: #2d5a27;">Pending/Rejected Student List</h3>
+            <span class="close" onclick="closePendingPopup()" style="color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+        </div>
+        <div id="pendingListContent">
+            <table class="table-grid-view" style="width: 100%;">
+                <thead>
                     <tr class="header-style">
-                        <th style="width:5%;">S.No.</th>
-                        <th style="width:15%;">Admission No.</th>
-                        <th>Student</th>
+                        <th>S.No.</th>
+                        <th>Enrollment No.</th>
                         <th>Approval Status</th>
                         <th>Remarks</th>
                     </tr>
-                    {% if pending_students %}
-                        {% for p in pending_students %}
-                        <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
-                            <td align="center">{{ loop.index }}</td>
-                            <td align="center">{{ p.AdmissionNo }}</td>
-                            <td>{{ p.fullname }}</td>
-                            <td align="center">{{ p.approval_status }}</td>
-                            <td>{{ p.remarks }}</td>
-                        </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr><td colspan="5" align="center" style="padding:10px; color:#999;">No pending/rejected students found.</td></tr>
-                    {% endif %}
-                </table>
-            </div>
+                </thead>
+                <tbody id="pendingListBody">
+                    <tr>
+                        <td colspan="4" align="center">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        {% endif %}
     </div>
-    {% endif %}
 </div>
 
 <script>
 var initialExconfigId = {{ (filters.exconfig_id or '')|tojson }};
 
-function getStudents() {
-    document.getElementById('pendingField').value = '0';
-    validateAndSubmit();
+function openPendingPopup() {
+    var college = document.getElementById('ddlCollege').value;
+    var session = document.getElementById('ddlSession').value;
+    var degree = document.getElementById('ddlDegree').value;
+    var semester = document.getElementById('ddlSemester').value;
+    var exconfig = document.getElementById('ddlExamConfig').value;
+
+    if (!college || !session || !degree || !semester || !exconfig) {
+        alert('Please select all filters first.');
+        return;
+    }
+
+    document.getElementById('pendingModal').style.display = 'block';
+    var body = document.getElementById('pendingListBody');
+    body.innerHTML = '<tr><td colspan="4" align="center">Loading...</td></tr>';
+
+    var url = '/academics/api/student_course_approval_dsw_pending?' + 
+              'college_id=' + college + 
+              '&session_id=' + session + 
+              '&degree_id=' + degree + 
+              '&semester_id=' + semester + 
+              '&exconfig_id=' + exconfig;
+
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            body.innerHTML = '';
+            if (data.length === 0) {
+                body.innerHTML = '<tr><td colspan="4" align="center">No pending students found.</td></tr>';
+            } else {
+                data.forEach((s, i) => {
+                    var tr = document.createElement('tr');
+                    tr.className = (i % 2 === 0) ? 'item-style' : 'item-style-alt';
+                    tr.innerHTML = '<td align="center">' + (i + 1) + '</td>' +
+                                   '<td align="center">' + s.AdmissionNo + '</td>' +
+                                   '<td align="center">' + s.approval_status + '</td>' +
+                                   '<td>' + s.remarks + '</td>';
+                    body.appendChild(tr);
+                });
+            }
+        });
 }
 
-function getPendingList() {
-    document.getElementById('pendingField').value = '1';
-    validateAndSubmit();
+function closePendingPopup() {
+    document.getElementById('pendingModal').style.display = 'none';
 }
 
 function setOptions(dropdown, data, defaultText) {
