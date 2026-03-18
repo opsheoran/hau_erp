@@ -352,4 +352,4 @@ def generate_marks_report_pg_phd():
     }
     
     from .marks_report import generate_internal_marks_report_pdf
-    return generate_internal_marks_report_pdf(course_info, students, exam_columns, is_submitted)
+    return generate_internal_marks_report_pdf(course_info, students, exam_columns, is_submitted, is_pg_phd=True)
