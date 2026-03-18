@@ -387,7 +387,6 @@ function fetchCourses(prefillCourseId = null) {
                 document.getElementById('ddlExamType').style.pointerEvents = 'none';
                 document.getElementById('ddlExamType').style.background = '#f4f4f4';
                 onCourseSelect();
-                fetchStudents();
             }
         });
 }
@@ -512,7 +511,7 @@ function fetchStudents() {
             toggleRows('marksGridSection', 'table-row');
             
             if(isAnyLocked) {
-                document.getElementById('actionButtons').innerHTML = '<span style="color:red; font-weight:bold;">Marks have been submitted and locked.</span>';
+                document.getElementById('actionButtons').innerHTML = '<span style="color:red; font-weight:bold;">marks has already submitted you can view the report only</span>';
             } else {
                 document.getElementById('actionButtons').innerHTML = `
                     <input type="button" value="SAVE" class="button-common" onclick="submitMarks('SAVE')">
