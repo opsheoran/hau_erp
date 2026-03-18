@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Ensure examination_tabs context or tab injection happens via standard route, here manually provided if missing -->
+<table id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_Table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tbody><tr>
+        <td align="left" class="tabbing">
+            <div id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_div1" style="display:inline; width:100%">
+                <a title="Student Marks Entry(PG/PHD) By Teacher" class="tabg" href="{{ url_for('examination.student_marks_entry_pg_phd') }}" style="display:inline-block;width:110px;">Student Marks Entry(PG/PHD) By Teacher</a>
+                <a title="Teacher Assigned Courses for Student Marks Entry(PG/PHD)" class="tabgs" href="{{ url_for('examination.teacher_assigned_courses_pgphd') }}" style="display:inline-block;width:110px;">Teacher Assigned Courses for Student Marks Entry(PG/PHD)</a>
+                <a title="Student Marks Entry(Igrade)" class="tabg" href="{{ url_for('examination.student_marks_entry_igrade') }}" style="display:inline-block;width:110px;">Student Marks Entry(Igrade)</a>
+            </div>
+        </td>
+    </tr>
+</tbody></table>
+
+<form method="POST" id="mainForm">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+
+    <table border="0" cellpadding="0" cellspacing="0" class="form-table" width="100%">
+        <tbody>
+            <tr>
+                <td colspan="6" class="gap"></td>
+            </tr>
+            <tr>
+                <td class="tableheading" colspan="6">Teacher Assigned Courses for Students Marks Entry(PG/PHD)</td>
+            </tr>
+            <tr>
+                <td class="tdgap" colspan="6"></td>
+            </tr>
+            
+            <!-- FORM FIELDS -->
+            <tr>
+                <td class="vtext" id="lblAcdSession" width="15%">Academic Session</td>      
+                <td class="colon" width="2%">:</td>
+                <td class="required" width="30%">
+                    <select name="session_id" id="session_id" class="dropdownlong" required>
+                        <option value="">--Select Academic Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                
+                <td id="lblsemester" class="vtext" width="15%">Semester</td>
+                <td class="colon" width="2%">:</td>
+                <td valign="top" class="required">
+                    <select name="semester_id" id="semester_id" tabindex="3" class="dropdown" required>
+                        <option value="0">--Select Semester--</option>
+                        <option value="1" {% if filters.semester_id == '1' %}selected{% endif %}>Odd Semester</option>
+                        <option value="2" {% if filters.semester_id == '2' %}selected{% endif %}>Even Semester</option>
+                    </select> *
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td class="required" colspan="3">
+                    <input type="button" value="VIEW" class="button-common" onclick="fetchAssignedCourses()">
+                    <input type="button" value="RESET" class="button-common" onclick="window.location.href='{{ url_for('examination.teacher_assigned_courses_pgphd') }}'">
+                </td>
+            </tr>
+
+            <!-- RESULTS GRID -->
+            <tr id="gridRow" style="display:none;">
+                <td colspan="6">
+                    <div class="tablesubheading">List of Assigned Courses</div>
+                    <div class="DivStyleWithScroll" style="width: 100%; height:550px">
+                        <table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;" id="coursesGrid">
+                            <thead>
+                                <tr class="header-style">
+                                    <th scope="col" style="width:4%;">S.No.</th>
+                                    <th scope="col">Course</th>
+                                    <th scope="col">College</th>
+                                    <th scope="col">Degree</th>
+                                    <th scope="col">Semester</th>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Regular/Back</th>
+                                    <th scope="col">View/Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="coursesGridBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</form>
+
+<script>
+function fetchAssignedCourses() {
+    const session_id = document.getElementById('session_id').value;
+    const semester_id = document.getElementById('semester_id').value;
+    
+    if(!session_id || semester_id === "0") {
+        alert("Please select Academic Session and Semester.");
+        return;
+    }
+    
+    fetch(`{{ url_for('examination.get_assigned_courses_pgphd') }}?session_id=${session_id}&semester_id=${semester_id}`)
+        .then(res => res.json())
+        .then(data => {
+            if(data.error) {
+                alert(data.error);
+                return;
+            }
+            
+            const tbody = document.getElementById('coursesGridBody');
+            let html = '';
+            
+            if(!data.courses || data.courses.length === 0) {
+                html = `<tr><td colspan="8" align="center" style="color:red; font-weight:bold;">No Data Found</td></tr>`;
+            } else {
+                data.courses.forEach((c, idx) => {
+                    const bgColor = (idx % 2 === 0) ? 'White' : '#FAFAFA';
+                    
+                    const redirectUrl = `{{ url_for('examination.student_marks_entry_pg_phd') }}?college_id=${c.college_id}&session_id=${c.session_id}&degree_id=${c.degree_id}&class_id=${c.class_id}&year_id=${c.year_id}&exam_config_id=${c.exam_config_id}&course_id=${c.course_id}`;
+                    
+                    html += `
+                    <tr class="item-style" style="background-color:${bgColor};">
+                        <td align="center" style="width:4%;">${idx + 1}</td>
+                        <td align="left" style="width:4%;">
+                            <span>${c.coursecode || ''}</span>
+                            <input type="hidden" value="${c.course_id}">
+                        </td>
+                        <td align="left" style="width:4%;">
+                            <span>${c.collegename || ''}</span>
+                            <input type="hidden" value="${c.college_id}">
+                        </td>
+                        <td align="left" style="width:4%;">
+                            <span>${c.degreename || ''}</span>
+                            <input type="hidden" value="${c.degree_id}">
+                        </td>
+                        <td align="left" style="width:4%;">
+                            <span>${c.semester_name || ''}</span>
+                            <input type="hidden" value="${c.class_id}">
+                        </td>
+                        <td align="left" style="width:4%;">
+                            <span>${c.year_char || ''}</span>
+                            <input type="hidden" value="${c.year_id}">
+                        </td>
+                        <td align="left" style="width:4%;">
+                            <span>${c.regular_back || 'R'}</span>
+                            <input type="hidden" value="${c.exam_config_id}">
+                        </td>
+                        <td align="center" style="width:4%;">
+                            <a href="${redirectUrl}">View</a>
+                        </td>
+                    </tr>`;
+                });
+            }
+            
+            tbody.innerHTML = html;
+            document.getElementById('gridRow').style.display = 'table-row';
+            
+            // Update URL to preserve state
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.set('session_id', session_id);
+            newUrl.searchParams.set('semester_id', semester_id);
+            window.history.pushState({}, '', newUrl);
+        })
+        .catch(error => {
+            console.error('Error fetching courses:', error);
+            alert("An error occurred while fetching courses.");
+        });
+}
+
+// Auto-fetch if filters exist
+document.addEventListener('DOMContentLoaded', () => {
+    const session_id = document.getElementById('session_id').value;
+    const semester_id = document.getElementById('semester_id').value;
+    if(session_id && semester_id !== "0") {
+        fetchAssignedCourses();
+    }
+});
+</script>
+
+{% endblock %}
