@@ -169,11 +169,10 @@ def get_students_for_marks_entry_pg_phd():
     exams = DB.fetch_all(exams_query, [course_id, session_id, degree_id])
     
     students_query = '''
-        SELECT A.Pk_stucourseallocid, S.enrollmentno, S.AdmissionNo, S.fullname, RND.originalRollNo
+        SELECT DISTINCT A.Pk_stucourseallocid, S.enrollmentno, S.AdmissionNo, S.fullname
         FROM SMS_StuCourseAllocation A
         INNER JOIN SMS_Student_Mst S ON A.fk_sturegid = S.pk_sid
         INNER JOIN SMS_DegreeCycle_Mst DC ON A.fk_degreecycleid = DC.pk_degreecycleid
-        LEFT JOIN SMS_RollNumber_Dtl RND ON S.pk_sid = RND.fk_sturegid
         WHERE A.fk_courseid = ? AND A.fk_dgacasessionid = ? AND DC.fk_degreeid = ? 
         AND S.fk_collegeid = ? AND DC.fk_semesterid = ? AND DC.fk_degreeyearid = ?
     '''
@@ -272,11 +271,10 @@ def generate_marks_report_pg_phd():
     exams = DB.fetch_all(exams_query, [course_id, session_id, degree_id])
     
     students_query = '''
-        SELECT A.Pk_stucourseallocid, S.enrollmentno, S.AdmissionNo, S.fullname, RND.originalRollNo
+        SELECT DISTINCT A.Pk_stucourseallocid, S.enrollmentno, S.AdmissionNo, S.fullname
         FROM SMS_StuCourseAllocation A
         INNER JOIN SMS_Student_Mst S ON A.fk_sturegid = S.pk_sid
         INNER JOIN SMS_DegreeCycle_Mst DC ON A.fk_degreecycleid = DC.pk_degreecycleid
-        LEFT JOIN SMS_RollNumber_Dtl RND ON S.pk_sid = RND.fk_sturegid
         WHERE A.fk_courseid = ? AND A.fk_dgacasessionid = ? AND DC.fk_degreeid = ? 
         AND S.fk_collegeid = ? AND DC.fk_semesterid = ? AND DC.fk_degreeyearid = ?
     '''
@@ -330,20 +328,19 @@ def generate_marks_report_pg_phd():
     sess_name = sess_row['sessionname'] if sess_row else ''
     
     c_row = DB.fetch_one('''
-        SELECT C.coursecode, C.coursename, C.crhr_theory, C.crhr_practical, E.empname as instructor_name
+        SELECT C.coursecode, C.coursename, C.crhr_theory, C.crhr_practical
         FROM SMS_Course_Mst C
-        LEFT JOIN SMS_TCourseAlloc_Dtl TD ON C.pk_courseid = TD.fk_courseid
-        LEFT JOIN SMS_TCourseAlloc_Mst TM ON TD.fk_tcourseallocid = TM.pk_tcourseallocid AND TM.fk_sessionid = ? AND TM.fk_degreeid = ?
-        LEFT JOIN SAL_Employee_Mst E ON TM.fk_employeeid = E.pk_empid
         WHERE C.pk_courseid = ?
-    ''', [session_id, degree_id, course_id])
+    ''', [course_id])
+    
+    instructor_row = DB.fetch_one("SELECT name FROM UM_Users_Mst WHERE pk_userId = ?", [session.get('user_id')])
     
     course_info = {
         'session_name': sess_name,
         'semester_name': sem_name,
         'degree_name': deg_name,
         'dept_name': 'Dean Office',  
-        'instructor_name': c_row['instructor_name'] if c_row and c_row['instructor_name'] else '',
+        'instructor_name': instructor_row['name'] if instructor_row else '',
         'course_code': c_row['coursecode'] if c_row else '',
         'course_name': c_row['coursename'] if c_row else '',
         'crhr_theory': c_row['crhr_theory'] if c_row else 0,

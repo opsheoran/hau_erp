@@ -72,12 +72,13 @@ def generate_internal_marks_report_pdf(course_info, students, exam_columns, is_s
             t2.drawOn(self, 30, current_y - h2)
             current_y = current_y - h2 - 10
 
+            meta_style = ParagraphStyle(name='MetaStyle', parent=styles['Normal'], fontSize=9, fontName='Helvetica-Bold')
             crhr = f"{course_info.get('crhr_theory', 0)}+{course_info.get('crhr_practical', 0)}"
             meta_data = [
-                ["Name of the Deptt.", course_info.get('dept_name', 'Dean Office'), "Name of Instructor(s)", course_info.get('instructor_name', '')],
-                ["Course No.", f"{course_info.get('course_code', '')}( {crhr} )", "Course Title", course_info.get('course_name', '')],
-                ["Degree", course_info.get('degree_name', ''), "Semester", course_info.get('semester_name', '')],
-                ["Exam", course_info.get('session_name', ''), "Max. Marks", str(course_info.get('total_max_marks', ''))]
+                [Paragraph("Name of the Deptt.", meta_style), Paragraph(str(course_info.get('dept_name', 'Dean Office')), meta_style), Paragraph("Name of Instructor(s)", meta_style), Paragraph(str(course_info.get('instructor_name', '')), meta_style)],
+                [Paragraph("Course No.", meta_style), Paragraph(f"{course_info.get('course_code', '')}( {crhr} )", meta_style), Paragraph("Course Title", meta_style), Paragraph(str(course_info.get('course_name', '')), meta_style)],
+                [Paragraph("Degree", meta_style), Paragraph(str(course_info.get('degree_name', '')), meta_style), Paragraph("Semester", meta_style), Paragraph(str(course_info.get('semester_name', '')), meta_style)],
+                [Paragraph("Exam", meta_style), Paragraph(str(course_info.get('session_name', '')), meta_style), Paragraph("Max. Marks", meta_style), Paragraph(str(course_info.get('total_max_marks', '')), meta_style)]
             ]
             meta_table = Table(meta_data, colWidths=[1.3*inch, 2.5*inch, 1.5*inch, 2.1*inch])
             meta_table.setStyle(TableStyle([
@@ -145,9 +146,9 @@ def generate_internal_marks_report_pdf(course_info, students, exam_columns, is_s
             enrollment_no = ''
 
         if is_pg_phd:
-            row = [str(idx + 1), str(enrollment_no), str(student.get('fullname', ''))]
+            row = [str(idx + 1), str(enrollment_no), Paragraph(str(student.get('fullname', '')), styles['Normal'])]
         else:
-            row = [str(idx + 1), str(admission_no), str(enrollment_no), str(student.get('fullname', ''))]
+            row = [str(idx + 1), str(admission_no), str(enrollment_no), Paragraph(str(student.get('fullname', '')), styles['Normal'])]
 
         total = 0
         for col in exam_columns:
