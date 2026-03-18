@@ -8,12 +8,13 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
 
-def generate_internal_marks_report_pdf(course_info, students, exam_columns, is_submitted):
+def generate_internal_marks_report_pdf(course_info, students, exam_columns, is_submitted, is_pg_phd=False):
     buffer = io.BytesPath() if hasattr(io, 'BytesPath') else io.BytesIO()
     
     degree_name = course_info.get('degree_name', '')
     # Determine if this is a PG/PHD degree to swap "Head of Department" with "Dean PGS"
-    is_pg_phd = any(x in degree_name for x in ['M.Sc', 'Ph.D', 'M.Tech', 'MBA', 'PG Diploma'])
+    if not is_pg_phd:
+        is_pg_phd = any(x in degree_name for x in ['M.Sc', 'Ph.D', 'M.Tech', 'MBA', 'PG Diploma'])
     
     styles = getSampleStyleSheet()
     title_style = ParagraphStyle(name='TitleStyle', parent=styles['Heading1'], alignment=1, fontSize=16, fontName='Helvetica-Bold')
