@@ -47,10 +47,13 @@ def get_assigned_courses_pgphd():
         FROM SMS_TCourseAlloc_Dtl ad
         JOIN SMS_TCourseAlloc_Mst a ON a.pk_tcourseallocid = ad.fk_tcourseallocid
         JOIN SMS_Course_Mst c ON c.pk_courseid = ad.fk_courseid
-        JOIN SMS_Degree_Mst d ON d.pk_degreeid = a.fk_degreeid
-        JOIN SMS_Semester_Mst class ON class.pk_semesterid = a.fk_semesterid
-        LEFT JOIN SMS_DegreeYear_Mst dy ON dy.pk_degreeyearid = class.fk_degreeyearid
-        LEFT JOIN SMS_College_Mst col ON col.pk_collegeid = a.fk_collegeid
+        JOIN SMS_StuCourseAllocation sca ON sca.fk_courseid = ad.fk_courseid AND sca.fk_dgacasessionid = a.fk_sessionid
+        JOIN SMS_DegreeCycle_Mst dc ON sca.fk_degreecycleid = dc.pk_degreecycleid AND dc.fk_degreeid = a.fk_degreeid
+        JOIN SMS_Degree_Mst d ON d.pk_degreeid = dc.fk_degreeid
+        JOIN SMS_Semester_Mst class ON class.pk_semesterid = dc.fk_semesterid
+        JOIN SMS_Student_Mst s ON sca.fk_sturegid = s.pk_sid AND s.fk_collegeid = a.fk_collegeid
+        JOIN SMS_College_Mst col ON col.pk_collegeid = s.fk_collegeid
+        LEFT JOIN SMS_DegreeYear_Mst dy ON class.fk_degreeyearid = dy.pk_degreeyearid
         WHERE a.fk_sessionid = ? 
           AND class.semesterorder % 2 = ?
           AND a.fk_employeeid = (SELECT top 1 fk_empId FROM UM_Users_Mst WHERE pk_userId = ?)

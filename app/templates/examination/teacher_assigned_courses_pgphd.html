@@ -1,19 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!-- Ensure examination_tabs context or tab injection happens via standard route, here manually provided if missing -->
-<table id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_Table1" width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tbody><tr>
-        <td align="left" class="tabbing">
-            <div id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_div1" style="display:inline; width:100%">
-                <a title="Student Marks Entry(PG/PHD) By Teacher" class="tabg" href="{{ url_for('examination.student_marks_entry_pg_phd') }}" style="display:inline-block;width:110px;">Student Marks Entry(PG/PHD) By Teacher</a>
-                <a title="Teacher Assigned Courses for Student Marks Entry(PG/PHD)" class="tabgs" href="{{ url_for('examination.teacher_assigned_courses_pgphd') }}" style="display:inline-block;width:110px;">Teacher Assigned Courses for Student Marks Entry(PG/PHD)</a>
-                <a title="Student Marks Entry(Igrade)" class="tabg" href="{{ url_for('examination.student_marks_entry_igrade') }}" style="display:inline-block;width:110px;">Student Marks Entry(Igrade)</a>
-            </div>
-        </td>
-    </tr>
-</tbody></table>
-
 <form method="POST" id="mainForm">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
 
