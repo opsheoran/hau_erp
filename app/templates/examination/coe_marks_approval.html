@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="body-form">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="get" action="{{ url_for('examination.coe_marks_approval') }}" id="searchForm">
+        <table border="0" cellpadding="0" cellspacing="0" class="form-table" width="100%">
+            <tbody>
+                <tr>
+                    <td colspan="6" class="gap"></td>
+                </tr>
+                <tr>
+                    <td class="tableheading" colspan="6">COE Marks Approval Form</td>
+                </tr>
+                <tr>
+                    <td class="tdgap" colspan="6"></td>
+                </tr>
+            <tr>
+                <td class="vtext" width="15%">College</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="ddlCollege" class="textbox w-300" onchange="this.form.submit()">
+                        <option value="">-- Select College --</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" width="15%">Academic Session</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" colspan="4">
+                    <select name="session_id" id="ddlSession" class="textbox w-250" onchange="this.form.submit()">
+                        <option value="">-- Select Academic Session --</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" width="15%">Degree</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" colspan="4">
+                    <select name="degree_id" id="ddlDegree" class="textbox w-300" onchange="this.form.submit()">
+                        <option value="">-- Select Degree --</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" width="15%">Semester</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" width="30%">
+                    <select name="class_id" id="ddlSemester" class="textbox w-150">
+                        <option value="">-- Select Semester --</option>
+                        {% for c in lookups.classes %}
+                        <option value="{{ c.id }}" {% if filters.class_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                <td class="vtext" width="15%">Exam Type</td>
+                <td class="colon" width="2%">:</td>
+                <td width="36%">
+                    <select name="exam_type" id="ddlExamType" class="textbox w-150">
+                        <option value="1" {% if filters.exam_type == '1' %}selected{% endif %}>Internal</option>
+                        <option value="2" {% if filters.exam_type == '2' %}selected{% endif %}>External</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td><td></td>
+                <td colspan="4">
+                    <table class="radio" border="0">
+                        <tr>
+                            <td><input type="radio" name="exam_category" value="1" id="cat1" {% if filters.exam_category == '1' %}checked{% endif %}><label for="cat1">Regular/Back Exam</label></td>
+                            <td><input type="radio" name="exam_category" value="2" id="cat2" {% if filters.exam_category == '2' %}checked{% endif %}><label for="cat2">Supple/Summer Exam</label></td>
+                            <td><input type="radio" name="exam_category" value="3" id="cat3" {% if filters.exam_category == '3' %}checked{% endif %}><label for="cat3">Revised Exam</label></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td></td><td></td>
+                <td colspan="4" class="required">
+                    <input type="button" value="VIEW" class="button-common" onclick="loadCourses()">
+                    <a href="{{ url_for('examination.coe_marks_approval') }}" class="button-common" style="text-decoration:none; padding: 4px 12px; display:inline-block;">RESET</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <form method="post" action="{{ url_for('examination.coe_marks_approval', **filters) }}" id="approveForm">
+        <input type="hidden" name="action" value="APPROVE">
+        
+        <table class="form-table" width="100%" style="margin-top:20px;">
+            <tr>
+                <td class="tablesubheading" colspan="6">List of Pending Sheet</td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div style="width: 100%; height:275px; overflow:auto;">
+                        <table class="table-grid-view" id="pendingGrid" style="width:100%;">
+                            <tr class="header-style">
+                                <th>S.No.</th>
+                                <th>Course</th>
+                                <th>Current Session</th>
+                                <th>Semester</th>
+                                <th>Year</th>
+                                <th>Category</th>
+                                <th>Student Count</th>
+                                <th>View/Edit</th>
+                                <th>Select <input type="checkbox" id="checkAllPending" onclick="toggleAll(this)"></th>
+                            </tr>
+                            <tbody id="pendingBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td><td></td>
+                <td colspan="4">
+                    <input type="submit" value="Approve" class="button-common" onclick="return confirm('Do you really want to Approve the Sheet?');">
+                </td>
+            </tr>
+            <tr>
+                <td class="tablesubheading" colspan="6" style="margin-top:20px;">List of Approved Sheet</td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div style="width: 100%; height:275px; overflow:auto;">
+                        <table class="table-grid-view" id="approvedGrid" style="width:100%;">
+                            <tr class="header-style">
+                                <th>S.No.</th>
+                                <th>Course</th>
+                                <th>Current Session</th>
+                                <th>Semester</th>
+                                <th>Year</th>
+                                <th>Category</th>
+                                <th>Student Count</th>
+                                <th>View/Edit</th>
+                            </tr>
+                            <tbody id="approvedBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<script>
+function loadCourses() {
+    var coll = document.getElementById('ddlCollege').value;
+    var sess = document.getElementById('ddlSession').value;
+    var deg = document.getElementById('ddlDegree').value;
+    var cls = document.getElementById('ddlSemester').value;
+    var exType = document.getElementById('ddlExamType').value;
+    var cat = document.querySelector('input[name="exam_category"]:checked').value;
+    
+    if(!coll || !sess || !deg || !cls) {
+        alert("Please select College, Session, Degree, and Semester.");
+        return;
+    }
+
+    var url = `{{ url_for('examination.get_coe_approval_courses') }}?college_id=${coll}&session_id=${sess}&degree_id=${deg}&class_id=${cls}&exam_type=${exType}&exam_category=${cat}`;
+    
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            if(data.error) {
+                alert(data.error);
+                return;
+            }
+            renderTable('pendingBody', data.pending, true);
+            renderTable('approvedBody', data.approved, false);
+        });
+}
+
+function renderTable(tbodyId, data, isPending) {
+    var tbody = document.getElementById(tbodyId);
+    tbody.innerHTML = '';
+    
+    if(data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="' + (isPending ? 9 : 8) + '" align="center" style="color:red;">No Records Found</td></tr>';
+        return;
+    }
+
+    var coll = document.getElementById('ddlCollege').value;
+    var sess = document.getElementById('ddlSession').value;
+    var deg = document.getElementById('ddlDegree').value;
+    var exType = document.getElementById('ddlExamType').value;
+    var cat = document.querySelector('input[name="exam_category"]:checked').value;
+
+    data.forEach((c, idx) => {
+        var tr = document.createElement('tr');
+        tr.className = idx % 2 === 0 ? 'item-style' : 'item-style-alt';
+        
+        var viewUrl = `{{ url_for('examination.coe_approval_form') }}?college_id=${coll}&session_id=${sess}&degree_id=${deg}&class_id=${c.semester_id}&year_id=${c.degreeyear_id}&course_id=${c.id}&exam_config_id={{ filters.exam_config_id }}&exam_type=${exType}&exam_category=${cat}`;
+
+        var html = `
+            <td align="center">${idx + 1}</td>
+            <td>${c.name}</td>
+            <td align="center">${c.session_name}</td>
+            <td align="center">${c.semester_name}</td>
+            <td align="center">${c.year_name}</td>
+            <td align="center">${c.category}</td>
+            <td align="center">${c.student_count}</td>
+            <td align="center"><a href="${viewUrl}" target="_blank">View</a></td>
+        `;
+        
+        if (isPending) {
+            html += `<td align="center"><input type="checkbox" name="chkselectCourse" value="${c.id}|${c.semester_id}|${c.degreeyear_id}" class="chk-pending"></td>`;
+        }
+        
+        tr.innerHTML = html;
+        tbody.appendChild(tr);
+    });
+}
+
+function toggleAll(source) {
+    var checkboxes = document.querySelectorAll('.chk-pending');
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}
+</script>
+{% endblock %}

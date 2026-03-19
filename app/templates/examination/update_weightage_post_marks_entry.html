@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.hidden { display: none; }
+</style>
+
+<!-- SAVE FORM -->
+<form method="POST" id="updateWeightForm">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="dgexammapid" id="dgexammapid">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="7">
+                    <span class="mainheadingborderbottom">Update Weightage Post Marks Entry</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Degree</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <select name="degree_id" id="degree_id" class="textbox w-200" required onchange="loadLookups()">
+                        <option value="">[Select]</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}">{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td width="5%"></td>
+                <td class="vtext" width="15%">Academic Session</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <select name="session_id" id="session_id" class="textbox w-200" required onchange="loadLookups()">
+                        <option value="">[Select]</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Course</td>
+                <td class="colon">:</td>
+                <td colspan="5">
+                    <select name="course_id" id="course_id" class="textbox" style="width: 350px;" required onchange="resetGrid()">
+                        <option value="">--Select Course--</option>
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Exam Config</td>
+                <td class="colon">:</td>
+                <td colspan="5">
+                    <select name="exam_config_id" id="exam_config_id" class="textbox" style="width: 500px;" required onchange="resetGrid()">
+                        <option value="">--Select Exam Config--</option>
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Degree Exam</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="exam_id" id="exam_id" class="textbox w-200" required onchange="resetGrid()">
+                        <option value="">--Select Degree Exam--</option>
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td colspan="4"></td>
+            </tr>
+            
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    <input type="button" value="GET STUDENTS" class="button-common" onclick="fetchStudents()">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left: 10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id="data_container" class="hidden" style="margin-top:20px; border-top:1px solid #ccc; padding-top:15px;">
+        <table border="0" class="form-table" width="100%" style="margin-bottom: 10px;">
+            <tr>
+                <td class="tablesubheading">
+                    <span class="subheadingborderbottom">Students Available</span>
+                </td>
+            </tr>
+        </table>
+
+        <table class="table-grid-view" width="80%" style="margin: 0 auto;">
+            <thead>
+                <tr class="header-style">
+                    <th width="5%">S.No.</th>
+                    <th>Student Name</th>
+                    <th>Marks Obtained</th>
+                    <th>Max. Marks</th>
+                </tr>
+            </thead>
+            <tbody id="studentGridBody">
+            </tbody>
+        </table>
+
+        <br>
+        <table border="0" class="form-table" width="100%">
+            <tr>
+                <td class="vtext" width="15%" style="color:red; font-weight:bold;">Maximum Marks</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" step="0.01" name="txtMaxMarks" id="txtMaxMarks" class="textbox w-100" required>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="padding-top:10px;">
+                    <input type="submit" value="UPDATE MARKS & WEIGHTAGE" class="button-common" onclick="return confirm('Are you sure you want to update the maximum marks? This modifies existing students records.');">
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>
+
+<script>
+function loadLookups() {
+    const degree_id = document.getElementById('degree_id').value;
+    const session_id = document.getElementById('session_id').value;
+    resetGrid();
+
+    if(!degree_id || !session_id) return;
+
+    fetch(`{{ url_for('examination.get_post_marks_lookups') }}?degree_id=${degree_id}&session_id=${session_id}`)
+        .then(res => res.json())
+        .then(data => {
+            // Courses
+            const courseSel = document.getElementById('course_id');
+            courseSel.innerHTML = '<option value="">--Select Course--</option>';
+            data.courses.forEach(c => {
+                courseSel.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+            });
+
+            // Configs
+            const configSel = document.getElementById('exam_config_id');
+            configSel.innerHTML = '<option value="">--Select Exam Config--</option>';
+            data.configs.forEach(c => {
+                configSel.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+            });
+
+            // Exams
+            const examSel = document.getElementById('exam_id');
+            examSel.innerHTML = '<option value="">--Select Degree Exam--</option>';
+            data.exams.forEach(e => {
+                examSel.innerHTML += `<option value="${e.id}">${e.name}</option>`;
+            });
+        });
+}
+
+function resetGrid() {
+    document.getElementById('data_container').classList.add('hidden');
+    document.getElementById('studentGridBody').innerHTML = '';
+}
+
+function resetForm() {
+    document.getElementById('updateWeightForm').reset();
+    resetGrid();
+    document.getElementById('course_id').innerHTML = '<option value="">--Select Course--</option>';
+    document.getElementById('exam_config_id').innerHTML = '<option value="">--Select Exam Config--</option>';
+    document.getElementById('exam_id').innerHTML = '<option value="">--Select Degree Exam--</option>';
+}
+
+function fetchStudents() {
+    const degree_id = document.getElementById('degree_id').value;
+    const session_id = document.getElementById('session_id').value;
+    const exam_id = document.getElementById('exam_id').value;
+    const course_id = document.getElementById('course_id').value;
+    const config_id = document.getElementById('exam_config_id').value;
+    
+    if(!degree_id || !session_id || !exam_id || !course_id) {
+        alert("Please fill Degree, Session, Exam, and Course.");
+        return;
+    }
+    
+    fetch(`{{ url_for('examination.get_students_for_weightage_update') }}?degree_id=${degree_id}&exam_id=${exam_id}&session_id=${session_id}&course_id=${course_id}&config_id=${config_id}`)
+        .then(res => res.json())
+        .then(data => {
+            if(data.error) {
+                alert(data.error);
+                return;
+            }
+            if(data.students.length === 0) {
+                alert("No students have marks entered for this combination yet.");
+                return;
+            }
+            
+            document.getElementById('dgexammapid').value = data.dgexammapid;
+            document.getElementById('txtMaxMarks').value = data.current_max;
+            
+            const tbody = document.getElementById('studentGridBody');
+            tbody.innerHTML = '';
+            data.students.forEach((s, idx) => {
+                // Formatting: NAME || ENROLLMENT
+                const student_display = `${s.fullname} || ${s.enrollmentno}`;
+                
+                // Format Marks to 2 decimals safely
+                const marksObt = (s.marks_obt && !isNaN(s.marks_obt)) ? parseFloat(s.marks_obt).toFixed(2) : (s.marks_obt || '');
+                const marksMax = (s.maxmarks && !isNaN(s.maxmarks)) ? parseFloat(s.maxmarks).toFixed(2) : (s.maxmarks || '');
+                
+                const tr = document.createElement('tr');
+                tr.className = (idx % 2 === 0) ? 'item-style-alt' : 'item-style';
+                tr.align = 'center';
+                tr.innerHTML = `
+                    <td>${idx + 1}</td>
+                    <td align="left">${student_display}</td>
+                    <td><b>${marksObt}</b></td>
+                    <td>${marksMax}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            document.getElementById('data_container').classList.remove('hidden');
+        });
+}
+</script>
+{% endblock %}

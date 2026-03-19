@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="body-form">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="get" action="{{ url_for('examination.deanpgs_marks_approval') }}" id="searchForm">
+        <table border="0" cellpadding="0" cellspacing="0" class="form-table" width="100%">
+            <tbody>
+                <tr>
+                    <td colspan="6" class="gap"></td>
+                </tr>
+                <tr>
+                    <td class="tableheading" colspan="6">DeanPGS Marks Approval Form</td>
+                </tr>
+                <tr>
+                    <td class="tdgap" colspan="6"></td>
+                </tr>
+            <tr>
+                <td class="vtext" width="15%">College</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="ddlCollege" class="textbox w-300" onchange="this.form.submit()">
+                        <option value="">-- Select College --</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" width="15%">Academic Session</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" colspan="4">
+                    <select name="session_id" id="ddlSession" class="textbox w-250" onchange="this.form.submit()">
+                        <option value="">-- Select Academic Session --</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" width="15%">Degree</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" colspan="4">
+                    <select name="degree_id" id="ddlDegree" class="textbox w-300" onchange="this.form.submit()">
+                        <option value="">-- Select Degree --</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" width="15%">Semester</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" width="30%">
+                    <select name="class_id" id="ddlSemester" class="textbox w-150">
+                        <option value="">-- Select Semester --</option>
+                        {% for c in lookups.semesters %}
+                        <option value="{{ c.id }}" {% if filters.class_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                <td class="vtext" width="15%">Exam Type</td>
+                <td class="colon" width="2%">:</td>
+                <td width="36%">
+                    <select name="exam_type" id="ddlExamType" class="textbox w-150">
+                        <option value="1" {% if filters.exam_type == '1' %}selected{% endif %}>Internal</option>
+                        <option value="2" {% if filters.exam_type == '2' %}selected{% endif %}>External</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td><td></td>
+                <td colspan="4">
+                    <table class="radio" border="0">
+                        <tr>
+                            <td><input type="radio" name="exam_category" value="1" id="cat1" {% if filters.exam_category == '1' or not filters.exam_category %}checked{% endif %}><label for="cat1">Regular/Back Exam</label></td>
+                            <td><input type="radio" name="exam_category" value="5" id="cat5" {% if filters.exam_category == '5' %}checked{% endif %}><label for="cat5">Summer Exam</label></td>
+                            <td><input type="radio" name="exam_category" value="3" id="cat3" {% if filters.exam_category == '3' %}checked{% endif %}><label for="cat3">Igrade Exam</label></td>
+                            <td><input type="radio" name="exam_category" value="4" id="cat4" {% if filters.exam_category == '4' %}checked{% endif %}><label for="cat4">Revised Exam</label></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="button" value="VIEW" class="button-common" onclick="loadCourses()">
+                    <input type="button" value="RESET" class="button-common" onclick="window.location.href='{{ url_for('examination.deanpgs_marks_approval') }}'" style="font-weight:normal;">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <div style="margin-top:20px; display:none;" id="gridsContainer">
+        <div id="divPending" style="display:block;">
+            <table class="table" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td class="tablesubheading" colspan="6">List of Pending Sheet</td>
+                </tr>
+            </table>
+            <div style="overflow-x:auto;">
+                <table class="table-grid-view" id="pendingGrid" style="width:100%;">
+                    <thead>
+                        <tr class="header-style">
+                            <th>S.No.</th>
+                            <th>Course</th>
+                            <th>Current Session</th>
+                            <th>Semester</th>
+                            <th>Year</th>
+                            <th>Regular/Back</th>
+                            <th>Student Count</th>
+                            <th>View/Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="divApproved" style="display:block; margin-top:20px;">
+            <table class="table" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td class="tablesubheading" colspan="6">List of Approved Sheet</td>
+                </tr>
+            </table>
+            <div style="overflow-x:auto;">
+                <table class="table-grid-view" id="approvedGrid" style="width:100%;">
+                    <thead>
+                        <tr class="header-style">
+                            <th>S.No.</th>
+                            <th>Course</th>
+                            <th>Current Session</th>
+                            <th>Semester</th>
+                            <th>Year</th>
+                            <th>Regular/Back</th>
+                            <th>Student Count</th>
+                            <th>View/Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="approvedBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentData = { pending: [], approved: [] };
+
+function loadCourses() {
+    var coll = document.getElementById('ddlCollege').value;
+    var sess = document.getElementById('ddlSession').value;
+    var deg = document.getElementById('ddlDegree').value;
+    var cls = document.getElementById('ddlSemester').value;
+    var etype = document.getElementById('ddlExamType').value;
+    
+    var catRadios = document.getElementsByName('exam_category');
+    var cat = '1';
+    for (var i = 0; i < catRadios.length; i++) {
+        if (catRadios[i].checked) cat = catRadios[i].value;
+    }
+
+    if(!coll || !sess || !cls) {
+        alert("Please select all required fields (College, Session, Class).");
+        return;
+    }
+
+    var url = `{{ url_for('examination.get_deanpgs_courses') }}?college_id=${coll}&session_id=${sess}&degree_id=${deg}&class_id=${cls}&exam_type=${etype}&exam_category=${cat}`;
+    
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            currentData = data;
+            renderGrids();
+            document.getElementById('gridsContainer').style.display = 'block';
+        });
+}
+
+function renderGrids() {
+    renderGrid('pendingBody', currentData.pending, false);
+    renderGrid('approvedBody', currentData.approved, true);
+}
+
+function renderGrid(bodyId, data, isApproved) {
+    var tbody = document.getElementById(bodyId);
+    tbody.innerHTML = '';
+    if(data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" align="center" style="color:red;">No records found.</td></tr>';
+        return;
+    }
+
+    data.forEach((c, idx) => {
+        var tr = document.createElement('tr');
+        tr.className = 'item-style';
+        
+        let viewBtnHtml = '';
+        if (c.total_marks_entries > 0) {
+            let viewUrl = `{{ url_for('examination.deanpgs_approval_form') }}?college_id=${document.getElementById('ddlCollege').value}&session_id=${document.getElementById('ddlSession').value}&degree_id=${c.degree_id}&class_id=${c.semester_id}&year_id=${c.year_id}&course_id=${c.pk_courseid}`;
+            viewBtnHtml = `<input type="button" value="View" class="button-common" onclick="window.location.href='${viewUrl}'">`;
+        } else {
+            viewBtnHtml = '<span style="color:red;">No Marks</span>';
+        }
+
+        let examCatText = "R";
+        var catRadios = document.getElementsByName('exam_category');
+        for (var i = 0; i < catRadios.length; i++) {
+            if (catRadios[i].checked) {
+                if (catRadios[i].value == '1') examCatText = "R";
+                if (catRadios[i].value == '5') examCatText = "S";
+                if (catRadios[i].value == '3') examCatText = "I";
+                if (catRadios[i].value == '4') examCatText = "RE";
+            }
+        }
+
+        tr.innerHTML = `
+            <td align="center">${idx + 1}</td>
+            <td align="left">${c.coursecode} || ${c.coursename}</td>
+            <td align="center">${c.sessionname}</td>
+            <td align="center">${c.semester_name}</td>
+            <td align="center">${c.year_name}</td>
+            <td align="center">${examCatText}</td>
+            <td align="center">${c.total_marks_entries}</td>
+            <td align="center">${viewBtnHtml}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function switchTab(tabName) {
+    if(tabName === 'Pending') {
+        document.getElementById('tabPending').className = 'tabgs';
+        document.getElementById('tabApproved').className = 'tabg';
+        document.getElementById('divPending').style.display = 'block';
+        document.getElementById('divApproved').style.display = 'none';
+    } else {
+        document.getElementById('tabPending').className = 'tabg';
+        document.getElementById('tabApproved').className = 'tabgs';
+        document.getElementById('divPending').style.display = 'none';
+        document.getElementById('divApproved').style.display = 'block';
+    }
+}
+</script>
+{% endblock %}

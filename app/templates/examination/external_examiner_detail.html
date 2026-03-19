@@ -1,0 +1,473 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- SAVE FORM -->
+<form method="POST" id="examinerForm">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="pk_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="7">
+                    <span class="mainheadingborderbottom">External Examinar Detail</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Examinar Name</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="text" name="ExaminarName" id="ExaminarName" class="textbox w-200" required maxlength="100">
+                    <span class="required">*</span>
+                </td>
+                <td width="5%"></td>
+                <td class="vtext" width="15%">University</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <input type="text" name="University" id="University" class="textbox w-200" required maxlength="255">
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">User ID</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="UserId" id="UserId" class="textbox w-150" maxlength="50" required placeholder="Auto-generated if empty">
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Password</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="Password" id="Password" class="textbox w-150" required maxlength="50">
+                    <span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Contact Number</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="ContactNumber" id="ContactNumber" class="textbox w-200" maxlength="50">
+                </td>
+                <td></td>
+                <td class="vtext">Email</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="email" name="Email" id="Email" class="textbox w-200" maxlength="100">
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Valid From Date</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="date" name="FromDate" id="FromDate" class="textbox w-150">
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Valid To Date</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="date" name="ToDate" id="ToDate" class="textbox w-150">
+                    <span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Designation</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="Designation" id="Designation" class="textbox w-200" maxlength="100">
+                </td>
+                <td></td>
+                <td class="vtext">Is Active</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="checkbox" name="IsActive" id="IsActive" checked>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Address</td>
+                <td class="colon">:</td>
+                <td colspan="5">
+                    <textarea name="Adddress" id="Adddress" class="textbox" style="width:200px; height:40px;"></textarea>
+                </td>
+            </tr>
+
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    <input type="button" value="GENERATE CREDENTIALS" class="button-common" onclick="generateCreds()">
+                    <input type="submit" value="SAVE PROFILE" class="button-common" style="margin-left: 10px;">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left: 10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<!-- COURSE LIST FORM & GRID (Hidden until an examiner is edited/saved) -->
+<div id="courseListWrapper" style="display: none;">
+    <form method="POST" id="courseForm">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="action" value="SAVE_COURSE">
+        <input type="hidden" name="Fk_Exmid" id="course_exm_id">
+        
+        <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="tablesubheading" colspan="7">
+                        <span class="subheadingborderbottom">Course List</span>
+                    </td>
+                </tr>
+                <tr><td colspan="7" height="10"></td></tr>
+                
+                <tr>
+                    <td class="vtext" width="15%">Course Code</td>
+                    <td class="colon">:</td>
+                    <td width="30%">
+                        <input type="text" id="CourseCodeSearch" class="textbox w-150" placeholder="Search Code..." onkeyup="filterCourses()">
+                    </td>
+                    <td width="5%"></td>
+                    <td class="vtext" width="15%">Course</td>
+                    <td class="colon">:</td>
+                    <td width="35%">
+                        <select name="course_id" id="course_id" class="textbox w-200" required>
+                            <option value="">--Select Course--</option>
+                            {% for c in lookups.courses %}
+                            <option value="{{ c.pk_courseid }}" data-code="{{ c.coursecode|lower }}">{{ c.coursename }} ({{ c.coursecode }})</option>
+                            {% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="vtext">Academic Session</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="session_id" id="course_session_id" class="textbox w-150" required>
+                            <option value="">--Select Academic Session--</option>
+                            {% for s in lookups.sessions %}
+                            <option value="{{ s.id }}">{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                    <td></td>
+                    <td class="vtext">Course Paper Code</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <input type="text" name="CoursePaperCode" id="CoursePaperCode" class="textbox w-150">
+                        <input type="hidden" name="Pk_ExmDtlid" id="Pk_ExmDtlid">
+                    </td>
+                </tr>
+
+                <tr><td colspan="7" height="15"></td></tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="5">
+                        <input type="submit" value="SAVE COURSE" class="button-common">
+                        <input type="button" value="RESET" class="button-common" onclick="resetCourseForm()" style="margin-left: 10px;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <br>
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7">
+                    <table class="table-grid-view" width="100%" id="assignedCourseGrid">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="5%">S.No.</th>
+                                <th width="8%">Is Active</th>
+                                <th>Course Paper Code</th>
+                                <th>CourseCode</th>
+                                <th>Course</th>
+                                <th>Academic Session</th>
+                                <th width="5%">EDIT</th>
+                                <th width="5%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assignedCourseBody">
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+</div>
+
+<!-- EXTERNAL EXAMINARS SEARCH -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:10px;">
+    <tr>
+        <td class="tablesubheading" colspan="7">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <span class="subheadingborderbottom">External Examinars Search</span>
+                <a href="javascript:void(0);" onclick="var el=document.getElementById('searchFilters1'); el.style.display=(el.style.display==='none'?'':'none');" style="color: #66afe9; text-decoration: none; font-weight: bold; font-size: 11px;">Show / Hide</a>
+            </div>
+        </td>
+    </tr>
+    <tr id="searchFilters1" style="display: none;">
+        <td colspan="7" style="padding: 10px 0;">
+            <form method="GET" style="display:inline-flex; align-items:center;">
+                <strong class="vtext">Examinar Name:</strong>&nbsp;
+                <input type="text" name="search_name" value="{{ filters.search_name }}" class="textbox w-150" style="margin: 0 10px;">
+                <strong class="vtext">Contact Number:</strong>&nbsp;
+                <input type="text" name="search_contact" value="{{ filters.search_contact }}" class="textbox w-150" style="margin: 0 10px;">
+                <input type="submit" value="SEARCH" class="button-common">
+            </form>
+        </td>
+    </tr>
+</table>
+
+<!-- EXTERNAL EXAMINARS REPORT -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:10px;">
+    <tr>
+        <td class="tablesubheading" colspan="7">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <span class="subheadingborderbottom">External Examinars Report</span>
+                <a href="javascript:void(0);" onclick="var el=document.getElementById('searchFilters2'); el.style.display=(el.style.display==='none'?'':'none');" style="color: #66afe9; text-decoration: none; font-weight: bold; font-size: 11px;">Show / Hide</a>
+            </div>
+        </td>
+    </tr>
+    <tr id="searchFilters2" style="display: none;">
+        <td colspan="7" style="padding: 10px 0;">
+            <form method="GET" style="display:inline-flex; align-items:center;">
+                <strong class="vtext">Examinar Name:</strong>&nbsp;
+                <input type="text" name="rpt_name" class="textbox w-100" style="margin: 0 10px;">
+                <strong class="vtext">Course Code:</strong>&nbsp;
+                <input type="text" name="rpt_course" class="textbox w-100" style="margin: 0 10px;">
+                <strong class="vtext">Degree:</strong>&nbsp;
+                <select name="rpt_degree" class="textbox w-150" style="margin: 0 10px;">
+                    <option value="">--Select Degree--</option>
+                    {% for d in lookups.degrees %}
+                    <option value="{{ d.id }}">{{ d.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="button" value="VIEW REPORT" class="button-common" onclick="alert('Report rendering module not linked in detail view.');">
+            </form>
+        </td>
+    </tr>
+</table>
+
+
+<!-- LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="7">
+                <span class="subheadingborderbottom">List of External Examinars</span>
+            </td>
+        </tr>
+        <tr><td colspan="7" height="10"></td></tr>
+        <tr>
+            <td colspan="7">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th>User ID</th>
+                            <th>Examinar Name</th>
+                            <th>University</th>
+                            <th width="8%">Is Active</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ex in examiners %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
+                            <td>{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td>{{ ex.UserId }}</td>
+                            <td align="left">{{ ex.ExaminarName }}</td>
+                            <td align="left">{{ ex.University }}</td>
+                            <td>{{ 'True' if ex.IsActive else 'False' }}</td>
+                            <td>
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editExaminer({{ ex|tojson|safe }})'>
+                            </td>
+                            <td>
+                                <form method="POST" onsubmit="return confirm('Are you sure you want to delete this examiner?');" style="display:inline;">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ ex.Pk_Exmid }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('examination.external_examiner_detail', page=pagination.page-1, search_name=filters.search_name, search_contact=filters.search_contact) }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('examination.external_examiner_detail', page=p, search_name=filters.search_name, search_contact=filters.search_contact) }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('examination.external_examiner_detail', page=pagination.page+1, search_name=filters.search_name, search_contact=filters.search_contact) }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+function filterCourses() {
+    const input = document.getElementById('CourseCodeSearch');
+    const filter = input.value.toLowerCase();
+    const select = document.getElementById('course_id');
+    const options = select.getElementsByTagName('option');
+    
+    for (let i = 1; i < options.length; i++) {
+        const code = options[i].getAttribute('data-code');
+        if (code && code.indexOf(filter) > -1) {
+            options[i].style.display = "";
+        } else {
+            options[i].style.display = "none";
+        }
+    }
+}
+
+function editCourseMap(c) {
+    document.getElementById('Pk_ExmDtlid').value = c.Pk_ExmDtlid;
+    document.getElementById('course_id').value = c.fk_courseid || '';
+    document.getElementById('course_session_id').value = c.fk_Sessionid || '';
+    document.getElementById('CoursePaperCode').value = c.CoursePaperCode || '';
+    window.scrollTo(0, document.getElementById('courseListWrapper').offsetTop);
+}
+
+function resetCourseForm() {
+    document.getElementById('Pk_ExmDtlid').value = '';
+    document.getElementById('course_id').value = '';
+    document.getElementById('course_session_id').value = '';
+    document.getElementById('CoursePaperCode').value = '';
+    document.getElementById('CourseCodeSearch').value = '';
+    filterCourses();
+}
+
+function generateCreds() {
+    const name = document.getElementById('ExaminarName').value;
+    const phone = document.getElementById('ContactNumber').value;
+    if(!name) {
+        alert("Please enter Examiner Name first.");
+        return;
+    }
+    const cleanName = name.replace(/\s+/g, '').toLowerCase().substring(0, 6);
+    const ran = Math.floor(1000 + Math.random() * 9000);
+    document.getElementById('UserId').value = `COE${ran}`;
+    
+    if(phone && phone.length >= 4) {
+        document.getElementById('Password').value = `coe@${phone.substring(phone.length-4)}`;
+    } else {
+        document.getElementById('Password').value = `coe@hau`;
+    }
+}
+
+function renderCourseGrid(courses) {
+    const tbody = document.getElementById('assignedCourseBody');
+    tbody.innerHTML = '';
+    
+    if(courses && courses.length > 0) {
+        courses.forEach((c, idx) => {
+            const isActive = c.CourseActive ? 'checked="checked"' : '';
+            const tr = document.createElement('tr');
+            tr.className = (idx % 2 === 0) ? 'item-style-alt' : 'item-style';
+            tr.innerHTML = `
+                <td align="center">${idx + 1}</td>
+                <td align="center"><span class="chkbox"><input type="checkbox" disabled="disabled" ${isActive}/></span></td>
+                <td align="center">${c.CoursePaperCode || ''}</td>
+                <td align="center">${c.coursecode || c.fk_courseid}</td>
+                <td align="left">${c.coursename || ''}</td>
+                <td align="center">${c.sessionname || ''}</td>
+                <td align="center">
+                    <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" alt="Edit" onclick='editCourseMap(${JSON.stringify(c)})'>
+                </td>
+                <td align="center">
+                    <form method="POST" style="display:inline;" onsubmit="return confirm('Remove mapped course?');">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                        <input type="hidden" name="action" value="DELETE_COURSE">
+                        <input type="hidden" name="dtl_id" value="${c.Pk_ExmDtlid}">
+                        <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                    </form>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } else {
+        tbody.innerHTML = '<tr><td colspan="8" align="center" style="padding: 10px;">No courses assigned.</td></tr>';
+    }
+}
+
+function editExaminer(ex) {
+    document.getElementById('pk_id').value = ex.Pk_Exmid;
+    document.getElementById('ExaminarName').value = ex.ExaminarName || '';
+    document.getElementById('University').value = ex.University || '';
+    document.getElementById('Designation').value = ex.Designation || '';
+    document.getElementById('Adddress').value = ex.Adddress || '';
+    document.getElementById('ContactNumber').value = ex.ContactNumber || '';
+    document.getElementById('Email').value = ex.Email || '';
+    document.getElementById('UserId').value = ex.UserId || '';
+    document.getElementById('Password').value = ex.Password || '';
+    
+    // Dates need 'YYYY-MM-DD' format if supported by <input type="date">, assuming backend gave string
+    if(ex.FromDate) {
+        try { document.getElementById('FromDate').value = new Date(ex.FromDate).toISOString().split('T')[0]; } catch(e){}
+    }
+    if(ex.ToDate) {
+        try { document.getElementById('ToDate').value = new Date(ex.ToDate).toISOString().split('T')[0]; } catch(e){}
+    }
+    
+    document.getElementById('IsActive').checked = !!ex.IsActive;
+    
+    // Show Course Form
+    document.getElementById('courseListWrapper').style.display = 'block';
+    document.getElementById('course_exm_id').value = ex.Pk_Exmid;
+    
+    // Render Grid
+    renderCourseGrid(ex.courses);
+    
+    window.scrollTo(0,0);
+}
+
+function resetForm() {
+    document.getElementById('pk_id').value = '';
+    document.getElementById('examinerForm').reset();
+    document.getElementById('courseListWrapper').style.display = 'none';
+    document.getElementById('assignedCourseBody').innerHTML = '';
+}
+</script>
+{% endblock %}

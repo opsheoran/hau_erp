@@ -756,17 +756,24 @@ class EmployeeModel:
         """
         return DB.fetch_all(query, params)
     @staticmethod
-    def search_employees(term):
+    @staticmethod
+    def search_employees(term, only_teachers=False):
         query = """
             SELECT E.pk_empid as id, 
-                   E.empname + ' | ' + E.empcode + ' | ' + ISNULL(D.designation, '') as name
+                   E.empname + ' | ' + E.empcode + ' | ' + ISNULL(D.designation, '') as name,
+                   E.fk_deptid, E.empname, E.empcode
             FROM SAL_Employee_Mst E
             LEFT JOIN SAL_Designation_Mst D ON E.fk_desgid = D.pk_desgid
             WHERE E.employeeleftstatus = 'N' 
             AND (E.empname LIKE ? OR E.empcode LIKE ?)
-            ORDER BY E.empname
         """
-        return DB.fetch_all(query, [f'%{term}%', f'%{term}%'])
+        params = [f'%{term}%', f'%{term}%']
+        
+        if only_teachers:
+            query += " AND (D.isteaching = 1 OR D.fk_desgcat = 9)"
+            
+        query += " ORDER BY E.empname"
+        return DB.fetch_all(query, params)
 
 class DesignationCategoryModel:
     @staticmethod

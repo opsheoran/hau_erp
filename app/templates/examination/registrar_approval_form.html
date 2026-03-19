@@ -1,0 +1,414 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="body-form">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="get" action="{{ url_for('examination.registrar_approval') }}" id="searchForm">
+        <table border="0" cellpadding="0" cellspacing="0" class="form-table" width="100%">
+            <tbody>
+                <tr>
+                    <td colspan="6" class="gap"></td>
+                </tr>
+                <tr>
+                    <td class="tableheading" colspan="6">Registrar Marks Approval Form</td>
+                </tr>
+                <tr>
+                    <td class="tdgap" colspan="6"></td>
+                </tr>
+            <tr>
+                <td class="vtext" width="15%">College</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="ddlCollege" class="textbox w-300" onchange="this.form.submit()">
+                        <option value="">-- Select College --</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" width="15%">Academic Session</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required">
+                    <select name="session_id" id="ddlSession" class="textbox w-250">
+                        <option value="">-- Select Academic Session --</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                <td class="vtext" width="15%">Degree</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required">
+                    <select name="degree_id" id="ddlDegree" class="textbox w-300">
+                        <option value="">-- Select Degree --</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" width="15%">Class</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" width="30%">
+                    <select name="class_id" id="ddlSemester" class="textbox w-150" onchange="onClassSelect()">
+                        <option value="">-- Select Class --</option>
+                        {% for c in lookups.classes %}
+                        <option value="{{ c.id }}" data-order="{{ c.order }}" {% if filters.class_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                <td class="vtext" width="15%">Department</td>
+                <td class="colon" width="2%">:</td>
+                <td width="36%">
+                    <select name="department_id" id="ddlDepartment" class="textbox w-300">
+                        <option value="">-- Select Department --</option>
+                        {% for d in lookups.departments %}
+                        <option value="{{ d.id }}" {% if filters.department_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" width="15%">Year</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" width="30%">
+                    <select name="year_id" id="ddlYear" class="textbox w-150" style="background:#f4f4f4; pointer-events:none;" readonly>
+                        <option value="">-- Select Year --</option>
+                        {% for y in lookups.years %}
+                        <option value="{{ y.id }}" {% if filters.year_id|string == y.id|string %}selected{% endif %}>{{ y.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                <td class="vtext" width="15%">Exam Config.</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" width="36%">
+                    <select name="exam_config_id" id="ddlExamConfig" class="textbox w-150">
+                        <option value="">-- Select Exam Config --</option>
+                        {% for c in lookups.exam_configs %}
+                        <option value="{{ c.id }}" {% if filters.exam_config_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td></td><td></td>
+                <td colspan="4">
+                    <table class="radio" border="0">
+                        <tr>
+                            <td><input type="radio" name="exam_category" value="1" id="cat1" {% if filters.exam_category == '1' %}checked{% endif %}><label for="cat1">Regular/Back Exam</label></td>
+                            <td><input type="radio" name="exam_category" value="2" id="cat2" {% if filters.exam_category == '2' %}checked{% endif %}><label for="cat2">Supple/Summer Exam</label></td>
+                            <td><input type="radio" name="exam_category" value="3" id="cat3" {% if filters.exam_category == '3' %}checked{% endif %}><label for="cat3">Revised Exam</label></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="button" value="GET COURSES" class="button-common" onclick="loadCourses()">
+                </td>
+            </tr>
+            <tr>
+                <td class="tablesubheading" colspan="6">Course Selection</td>
+            </tr>
+            <tr>
+                <td class="vtext" width="15%">Course</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" colspan="4">
+                    <select name="course_id" id="ddlCourse" class="textbox w-400" onchange="loadStudents()">
+                        <option value="">-- Select Course --</option>
+                        {% if filters.course_id %}
+                        <option value="{{ filters.course_id }}" selected>{{ course_name or 'Course Selected (Loading...)' }}</option>
+                        {% endif %}
+                    </select> *
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <form method="post" action="{{ url_for('examination.registrar_approval') }}" id="approvalForm" style="display:none; margin-top:20px;">
+        <input type="hidden" name="action" value="APPROVE">
+        <input type="hidden" name="college_id" id="hdnCollege">
+        <input type="hidden" name="session_id" id="hdnSession">
+        <input type="hidden" name="degree_id" id="hdnDegree">
+        <input type="hidden" name="class_id" id="hdnClass">
+        <input type="hidden" name="department_id" id="hdnDepartment">
+        <input type="hidden" name="year_id" id="hdnYear">
+        <input type="hidden" name="exam_config_id" id="hdnConfig">
+        <input type="hidden" name="course_id" id="hdnCourse">
+        <input type="hidden" name="exam_category" id="hdnCategory">
+        <input type="hidden" name="alloc_ids" id="hdnAllocIds">
+        <input type="hidden" name="exam_map_ids" id="hdnExamMapIds">
+
+        <div style="overflow-x:auto;">
+            <table class="table-grid-view" id="studentsGrid" style="width:100%;">
+                <thead>
+                    <tr class="header-style" id="studentsHeader">
+                        <th>S.No.</th>
+                        <th>Student Name</th>
+                        <!-- Dynamic Exams injected here -->
+                    </tr>
+                </thead>
+                <tbody id="studentsBody"></tbody>
+            </table>
+        </div>
+        
+        <div style="margin-top: 20px; text-align:left; padding-left: 20px;" id="btnContainer">
+            <input type="submit" name="btnAction" value="Approve & Submit" class="button-common" onclick="return confirm('Do you really want to Approve the Sheet?');">
+            <input type="submit" name="btnAction" value="UNLOCK" class="button-common" style="font-weight:normal; margin-left: 10px;">
+            <span class="lblmessage" style="color: red; margin-left: 10px; font-weight: bold;">* * After Unlock ,Please Submit the marks again at Teacher,HOD and COE level</span>
+        </div>
+    </form>
+</div>
+
+<script>
+window.onload = function() {
+    if ("{{ filters.course_id }}") {
+        loadStudents();
+    }
+};
+
+function onClassSelect() {
+    const classSelect = document.getElementById('ddlSemester');
+    const yearSelect = document.getElementById('ddlYear');
+
+    if (classSelect.selectedIndex <= 0) {
+        yearSelect.value = '';
+        return;
+    }
+
+    const selectedOption = classSelect.options[classSelect.selectedIndex];
+    const order = parseInt(selectedOption.getAttribute('data-order')) || 1;
+    const yearValue = Math.ceil(order / 2).toString();
+
+    for(let i = 0; i < yearSelect.options.length; i++) {
+        if(yearSelect.options[i].value === yearValue) {
+            yearSelect.selectedIndex = i;
+            break;
+        }
+    }
+}
+
+function loadCourses(autoLoadStudents = false) {
+    var coll = document.getElementById('ddlCollege').value;
+    var sess = document.getElementById('ddlSession').value;
+    var deg = document.getElementById('ddlDegree').value;
+    var cls = document.getElementById('ddlSemester').value;
+    var dept = document.getElementById('ddlDepartment').value;
+    var yr = document.getElementById('ddlYear').value;
+    var conf = document.getElementById('ddlExamConfig').value;
+    
+    var catRadios = document.getElementsByName('exam_category');
+    var cat = '1';
+    for (var i = 0; i < catRadios.length; i++) {
+        if (catRadios[i].checked) cat = catRadios[i].value;
+    }
+
+    if(!coll || !sess || !deg || !cls || !yr || !conf) {
+        if(!autoLoadStudents) alert("Please select all required fields before fetching courses.");
+        return;
+    }
+
+    var url = `{{ url_for('examination.get_registrar_courses') }}?college_id=${coll}&session_id=${sess}&degree_id=${deg}&class_id=${cls}&department_id=${dept}&year_id=${yr}&exam_config_id=${conf}&exam_category=${cat}`;
+    
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            var ddl = document.getElementById('ddlCourse');
+            ddl.innerHTML = '<option value="">-- Select Course --</option>';
+            if(data && data.length > 0) {
+                data.forEach(c => {
+                    var opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = c.name;
+                    if (c.id == "{{ filters.course_id }}") opt.selected = true;
+                    ddl.appendChild(opt);
+                });
+                if (autoLoadStudents) loadStudents();
+            } else {
+                if(!autoLoadStudents) alert("No COE approved courses found for the selected criteria.");
+            }
+        });
+}
+
+function loadStudents() {
+    var coll = document.getElementById('ddlCollege').value;
+    var sess = document.getElementById('ddlSession').value;
+    var deg = document.getElementById('ddlDegree').value;
+    var cls = document.getElementById('ddlSemester').value;
+    var dept = document.getElementById('ddlDepartment').value;
+    var yr = document.getElementById('ddlYear').value;
+    var conf = document.getElementById('ddlExamConfig').value;
+    var crs = document.getElementById('ddlCourse').value;
+    
+    var catRadios = document.getElementsByName('exam_category');
+    var cat = '1';
+    for (var i = 0; i < catRadios.length; i++) {
+        if (catRadios[i].checked) cat = catRadios[i].value;
+    }
+
+    if(!crs) {
+        document.getElementById('approvalForm').style.display = 'none';
+        return;
+    }
+
+    // Populate hidden inputs for form submission
+    document.getElementById('hdnCollege').value = coll;
+    document.getElementById('hdnSession').value = sess;
+    document.getElementById('hdnDegree').value = deg;
+    document.getElementById('hdnClass').value = cls;
+    document.getElementById('hdnDepartment').value = dept;
+    document.getElementById('hdnYear').value = yr;
+    document.getElementById('hdnConfig').value = conf;
+    document.getElementById('hdnCourse').value = crs;
+    document.getElementById('hdnCategory').value = cat;
+
+    var url = `{{ url_for('examination.get_students_for_registrar_approval') }}?college_id=${coll}&session_id=${sess}&degree_id=${deg}&class_id=${cls}&department_id=${dept}&year_id=${yr}&course_id=${crs}`;
+
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            if(data.error) {
+                alert(data.error);
+                return;
+            }
+            
+            document.getElementById('hdnAllocIds').value = JSON.stringify(data.alloc_ids);
+            document.getElementById('hdnExamMapIds').value = JSON.stringify(data.exam_map_ids);
+
+            var head = document.getElementById('studentsHeader');
+            let headerHtml = `
+                <th scope="col" style="width: 50px;">S.No.</th>
+                <th scope="col">Student Name</th>
+            `;
+            data.columns.forEach(col => {
+                headerHtml += `<th scope="col">${col.name}</th>`;
+            });
+            head.innerHTML = headerHtml;
+
+            var tbody = document.getElementById('studentsBody');
+            tbody.innerHTML = '';
+
+            if (data.students.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="${2 + data.columns.length}" align="center" style="color:red;">No pending COE-approved marks found for Registrar approval.</td></tr>`;
+                document.getElementById('approvalForm').style.display = 'block';
+                document.getElementById('btnContainer').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('btnContainer').style.display = 'block';
+
+            data.students.forEach((s, idx) => {
+                const bgColor = (idx % 2 === 0) ? 'White' : '#FAFAFA';
+                var tr = document.createElement('tr');
+                tr.className = 'item-style';
+                tr.style.backgroundColor = bgColor;
+                
+                var h = `
+                    <td align="center" style="width:4%;">${idx + 1}</td>
+                    <td align="left" style="width:20%;">
+                        <span>${s.fullname.toUpperCase()} || ${s.enrollmentno} || ${s.roll_no} ||<b> ${s.encryptuniv || ''}</b></span>
+                    </td>
+                `;
+                
+                data.columns.forEach((col, c_idx) => {
+                    var m = s.marks[col.id];
+                    var val = m ? m.val : '';
+                    if(val !== null && val !== undefined && val !== '') {
+                        val = parseFloat(val).toString();
+                    } else {
+                        val = '';
+                    }
+                    var isAbs = m && m.absent;
+                    
+                    var ro = (s.is_approved_by_registrar || isAbs) ? 'readonly style="background:#f4f4f4;"' : '';
+                    var dis = s.is_approved_by_registrar ? 'disabled' : '';
+                    const tabindex = (c_idx * 2) + 1;
+
+                    h += `
+                        <td>
+                            <input type="hidden" name="max_${s.alloc_id}_${col.id}" value="${col.max_val}">
+                            <div class="marks-entry-container">
+                                <input type="text" name="marks_${s.alloc_id}_${col.id}" value="${isAbs ? '' : val}" 
+                                       class="textbox marks-entry-input" ${ro}
+                                       id="txt_${s.alloc_id}_${col.id}" tabindex="${tabindex}" onkeyup="checkMax(this, ${col.max_val})">
+                                <input type="text" value="${col.max_val}" readonly="readonly" class="textbox marks-entry-max" tabindex="${tabindex + 1}">
+                                <select name="absent_${s.alloc_id}_${col.id}" class="textbox marks-entry-dropdown" ${dis} 
+                                        id="ddl_${s.alloc_id}_${col.id}" onchange="toggleAbs(this, 'txt_${s.alloc_id}_${col.id}')">
+                                    <option value="0" ${!isAbs ? 'selected' : ''}>P</option>
+                                    <option value="1" ${isAbs ? 'selected' : ''}>A</option>
+                                </select>
+                            </div>
+                        </td>
+                    `;
+                });
+                
+                tr.innerHTML = h;
+                tbody.appendChild(tr);
+            });
+            
+            document.getElementById('approvalForm').style.display = 'block';
+        });
+}
+
+function checkMax(input, maxVal) {
+    if(input.value !== '') {
+        var val = parseFloat(input.value);
+        if(val > parseFloat(maxVal)) {
+            alert("Marks cannot exceed " + maxVal);
+            input.value = '';
+            input.focus();
+        }
+    }
+}
+
+function toggleAbs(selectObj, txtId) {
+    const txtBox = document.getElementById(txtId);
+    if(selectObj.value === '1') {
+        txtBox.value = '';
+        txtBox.readOnly = true;
+        txtBox.style.background = '#f4f4f4';
+    } else {
+        txtBox.readOnly = false;
+        txtBox.style.background = '#fff';
+    }
+}
+
+// Update exam config dropdown when Degree/Session changes
+document.getElementById('ddlDegree').addEventListener('change', updateConfigs);
+document.getElementById('ddlSession').addEventListener('change', updateConfigs);
+
+function updateConfigs() {
+    var deg = document.getElementById('ddlDegree').value;
+    var sess = document.getElementById('ddlSession').value;
+    var ddlConfig = document.getElementById('ddlExamConfig');
+    
+    if (deg && sess) {
+        fetch(`{{ url_for('examination.get_exam_configs_for_marks') }}?degree_id=${deg}&session_id=${sess}`)
+            .then(response => response.json())
+            .then(data => {
+                ddlConfig.innerHTML = '<option value="">-- Select Exam Config --</option>';
+                data.forEach(config => {
+                    let option = document.createElement('option');
+                    option.value = config.id;
+                    option.textContent = config.name;
+                    ddlConfig.appendChild(option);
+                });
+            });
+    } else {
+        ddlConfig.innerHTML = '<option value="">-- Select Exam Config --</option>';
+    }
+}
+</script>
+{% endblock %}

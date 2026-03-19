@@ -6,9 +6,9 @@ from app.db import DB
 from app.utils import get_pagination
 import json
 
-@examination_bp.route('/student_marks_entry_pg_phd', methods=['GET', 'POST'])
-@permission_required('Student Marks Entry(PG/PHD) By Teacher')
-def student_marks_entry_pg_phd():
+@examination_bp.route('/student_marks_entry_igrade', methods=['GET', 'POST'])
+@permission_required('Student Marks Entry(Igrade)')
+def student_marks_entry_igrade():
     if request.method == 'POST':
         action = request.form.get('action', '').strip().upper()
         
@@ -53,13 +53,13 @@ def student_marks_entry_pg_phd():
                                     DB.execute("""
                                         UPDATE SMS_StuExamMarks_Dtl 
                                         SET marks_obt = ?, maxmarks = ?, isabsentt = ?, 
-                                            isStudentMarksLocked = ?, islocked = ?, IsmarksfeedforPG_PHD = 1, fk_userid = ?, feeddate = GETDATE()
+                                            isStudentMarksLocked = ?, islocked = ?, Is_IgradeMarksFeed = 1, fk_userid = ?, feeddate = GETDATE()
                                         WHERE Pk_Stumarksdtlid = ?
                                     """, [mark_val, max_val, 1 if is_absent else 0, 1 if is_submit else 0, 1 if is_submit else 0, user_id, existing['Pk_Stumarksdtlid']])
                                 else:
                                     DB.execute("""
                                         INSERT INTO SMS_StuExamMarks_Dtl
-                                        (fk_stucourseallocid, fk_dgexammapid, marks_obt, maxmarks, isabsentt, isStudentMarksLocked, islocked, IsmarksfeedforPG_PHD, fk_userid, feeddate)
+                                        (fk_stucourseallocid, fk_dgexammapid, marks_obt, maxmarks, isabsentt, isStudentMarksLocked, islocked, Is_IgradeMarksFeed, fk_userid, feeddate)
                                         VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, GETDATE())
                                     """, [alloc_id, emap_id, mark_val, max_val, 1 if is_absent else 0, 1 if is_submit else 0, 1 if is_submit else 0, user_id])
                     
@@ -68,7 +68,7 @@ def student_marks_entry_pg_phd():
                 flash(f"Error saving marks: {str(e)}", 'danger')
                 
         # Preserve filters on reload
-        return redirect(url_for('examination.student_marks_entry_pg_phd',
+        return redirect(url_for('examination.student_marks_entry_igrade',
                                 college_id=request.form.get('college_id'),
                                 session_id=request.form.get('session_id'),
                                 degree_id=request.form.get('degree_id'),
@@ -97,26 +97,20 @@ def student_marks_entry_pg_phd():
     lookups = {
         'colleges': AcademicsModel.get_colleges_simple(),
         'sessions': InfrastructureModel.get_sessions(),
-        'degrees': AcademicsModel.get_pg_phd_degrees(),
+        'degrees': AcademicsModel.get_all_degrees(),
         'classes': DB.fetch_all("SELECT pk_semesterid as id, semester_roman as name FROM SMS_Semester_Mst ORDER BY semesterorder"),
         'departments': AcademicsModel.get_departments(),
         'years': DB.fetch_all("SELECT pk_degreeyearid as id, degreeyear_char as name FROM SMS_DegreeYear_Mst ORDER BY dgyearorder"),
         'exam_configs': exam_configs
     }
 
-    return render_template('examination/student_marks_entry_pg_phd.html', 
+    return render_template('examination/student_marks_entry_igrade.html', 
                            lookups=lookups, filters=filters)
 
 
 
-@examination_bp.route('/api/get_semesters_for_pg_phd')
-def get_semesters_for_pg_phd():
-    # Returns I to VIII semesters for PG/PhD
-    sems = DB.fetch_all("SELECT pk_semesterid as id, semester_roman as name, semesterorder FROM SMS_Semester_Mst WHERE semesterorder <= 8 ORDER BY semesterorder")
-    return jsonify(sems)
-
-@examination_bp.route('/api/get_courses_for_marks_entry_pg_phd')
-def get_courses_for_marks_entry_pg_phd():
+@examination_bp.route('/api/get_courses_for_marks_entry_igrade')
+def get_courses_for_marks_entry_igrade():
     college_id = request.args.get('college_id')
     session_id = request.args.get('session_id')
     degree_id = request.args.get('degree_id')
@@ -141,6 +135,7 @@ def get_courses_for_marks_entry_pg_phd():
         INNER JOIN SMS_Student_Mst S ON A.fk_sturegid = S.pk_sid
         WHERE A.fk_dgacasessionid = ? AND DC.fk_degreeid = ? AND S.fk_collegeid = ?
         AND DC.fk_semesterid = ? AND DC.fk_degreeyearid = ?
+        AND ISNULL(A.Is_Igrade, 0) = 1
         AND EXISTS (
             SELECT 1 FROM SMS_TCourseAlloc_Mst tcam
             INNER JOIN SMS_TCourseAlloc_Dtl tcad ON tcam.pk_tcourseallocid = tcad.fk_tcourseallocid
@@ -163,8 +158,8 @@ def get_courses_for_marks_entry_pg_phd():
     
     return jsonify({'courses': courses})
 
-@examination_bp.route('/api/get_students_for_marks_entry_pg_phd')
-def get_students_for_marks_entry_pg_phd():
+@examination_bp.route('/api/get_students_for_marks_entry_igrade')
+def get_students_for_marks_entry_igrade():
     college_id = request.args.get('college_id')
     session_id = request.args.get('session_id')
     degree_id = request.args.get('degree_id')
@@ -187,11 +182,12 @@ def get_students_for_marks_entry_pg_phd():
     exams = DB.fetch_all(exams_query, [course_id, session_id, degree_id])
     
     students_query = '''
-        SELECT DISTINCT A.Pk_stucourseallocid, S.enrollmentno, S.AdmissionNo, S.fullname
+        SELECT A.Pk_stucourseallocid, S.enrollmentno, S.AdmissionNo, S.fullname, RND.originalRollNo
         FROM SMS_StuCourseAllocation A
         INNER JOIN SMS_Student_Mst S ON A.fk_sturegid = S.pk_sid
         INNER JOIN SMS_DegreeCycle_Mst DC ON A.fk_degreecycleid = DC.pk_degreecycleid
-        WHERE A.fk_courseid = ? AND A.fk_dgacasessionid = ? AND DC.fk_degreeid = ? 
+        LEFT JOIN SMS_RollNumber_Dtl RND ON S.pk_sid = RND.fk_sturegid
+        WHERE A.fk_courseid = ? AND A.fk_dgacasessionid = ? AND DC.fk_degreeid = ? AND ISNULL(A.Is_Igrade, 0) = 1 
         AND S.fk_collegeid = ? AND DC.fk_semesterid = ? AND DC.fk_degreeyearid = ?
     '''
     params = [course_id, session_id, degree_id, college_id, class_id, year_id]
@@ -246,7 +242,7 @@ def get_students_for_marks_entry_pg_phd():
                     'val': m['marks_obt'],
                     'absent': m['isabsentt'] == 1
                 }
-                if m['isStudentMarksLocked'] == 1 or m['islocked'] == 1:
+                if m['isStudentMarksLocked'] == 1 or m.get('islocked') == 1:
                     s_data['is_locked'] = True
         formatted_students.append(s_data)
 
@@ -265,8 +261,8 @@ def get_students_for_marks_entry_pg_phd():
         'student_count': len(students)
     })
 
-@examination_bp.route('/api/generate_marks_report_pg_phd')
-def generate_marks_report_pg_phd():
+@examination_bp.route('/api/generate_marks_report_igrade')
+def generate_marks_report_igrade():
     college_id = request.args.get('college_id')
     session_id = request.args.get('session_id')
     degree_id = request.args.get('degree_id')
@@ -289,11 +285,12 @@ def generate_marks_report_pg_phd():
     exams = DB.fetch_all(exams_query, [course_id, session_id, degree_id])
     
     students_query = '''
-        SELECT DISTINCT A.Pk_stucourseallocid, S.enrollmentno, S.AdmissionNo, S.fullname
+        SELECT A.Pk_stucourseallocid, S.enrollmentno, S.AdmissionNo, S.fullname, RND.originalRollNo
         FROM SMS_StuCourseAllocation A
         INNER JOIN SMS_Student_Mst S ON A.fk_sturegid = S.pk_sid
         INNER JOIN SMS_DegreeCycle_Mst DC ON A.fk_degreecycleid = DC.pk_degreecycleid
-        WHERE A.fk_courseid = ? AND A.fk_dgacasessionid = ? AND DC.fk_degreeid = ? 
+        LEFT JOIN SMS_RollNumber_Dtl RND ON S.pk_sid = RND.fk_sturegid
+        WHERE A.fk_courseid = ? AND A.fk_dgacasessionid = ? AND DC.fk_degreeid = ? AND ISNULL(A.Is_Igrade, 0) = 1 
         AND S.fk_collegeid = ? AND DC.fk_semesterid = ? AND DC.fk_degreeyearid = ?
     '''
     params = [course_id, session_id, degree_id, college_id, class_id, year_id]
@@ -309,7 +306,7 @@ def generate_marks_report_pg_phd():
     if alloc_ids:
         placeholders = ','.join(['?'] * len(alloc_ids))
         marks = DB.fetch_all(f'''
-            SELECT fk_stucourseallocid, fk_dgexammapid, marks_obt, isabsentt, isStudentMarksLocked, islocked
+            SELECT fk_stucourseallocid, fk_dgexammapid, marks_obt, isabsentt, isStudentMarksLocked
             FROM SMS_StuExamMarks_Dtl
             WHERE fk_stucourseallocid IN ({placeholders})
         ''', alloc_ids)
@@ -335,7 +332,7 @@ def generate_marks_report_pg_phd():
                     'val': m['marks_obt'],
                     'absent': m['isabsentt'] == 1
                 }
-                if m['isStudentMarksLocked'] == 1 or m.get('islocked') == 1:
+                if m['isStudentMarksLocked'] == 1:
                     is_submitted = True
 
     deg_row = DB.fetch_one("SELECT degreename FROM SMS_Degree_Mst WHERE pk_degreeid = ?", [degree_id])
@@ -346,19 +343,20 @@ def generate_marks_report_pg_phd():
     sess_name = sess_row['sessionname'] if sess_row else ''
     
     c_row = DB.fetch_one('''
-        SELECT C.coursecode, C.coursename, C.crhr_theory, C.crhr_practical
+        SELECT C.coursecode, C.coursename, C.crhr_theory, C.crhr_practical, E.empname as instructor_name
         FROM SMS_Course_Mst C
+        LEFT JOIN SMS_TCourseAlloc_Dtl TD ON C.pk_courseid = TD.fk_courseid
+        LEFT JOIN SMS_TCourseAlloc_Mst TM ON TD.fk_tcourseallocid = TM.pk_tcourseallocid AND TM.fk_sessionid = ? AND TM.fk_degreeid = ?
+        LEFT JOIN SAL_Employee_Mst E ON TM.fk_employeeid = E.pk_empid
         WHERE C.pk_courseid = ?
-    ''', [course_id])
-    
-    instructor_row = DB.fetch_one("SELECT name FROM UM_Users_Mst WHERE pk_userId = ?", [session.get('user_id')])
+    ''', [session_id, degree_id, course_id])
     
     course_info = {
         'session_name': sess_name,
         'semester_name': sem_name,
         'degree_name': deg_name,
         'dept_name': 'Dean Office',  
-        'instructor_name': instructor_row['name'] if instructor_row else '',
+        'instructor_name': c_row['instructor_name'] if c_row and c_row['instructor_name'] else '',
         'course_code': c_row['coursecode'] if c_row else '',
         'course_name': c_row['coursename'] if c_row else '',
         'crhr_theory': c_row['crhr_theory'] if c_row else 0,
@@ -367,4 +365,4 @@ def generate_marks_report_pg_phd():
     }
     
     from .marks_report import generate_internal_marks_report_pdf
-    return generate_internal_marks_report_pdf(course_info, students, exam_columns, is_submitted, is_pg_phd=True)
+    return generate_internal_marks_report_pdf(course_info, students, exam_columns, is_submitted)

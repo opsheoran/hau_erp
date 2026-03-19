@@ -96,7 +96,7 @@
                             <select name="exconfig_id" id="ddlExamConfig" class="dropdown" style="width: 500px;">
                                 <option value=""> -- Select ExamConfig. -- </option>
                                 {% for ec in lookups.exam_configs %}
-                                <option value="{{ ec.pk_exconfigid }}" {% if filters.exconfig_id|string == ec.pk_exconfigid|string %}selected{% endif %}>{{ ec.display_name }}</option>
+                                <option value="{{ ec.id }}" {% if filters.exconfig_id|string == ec.id|string %}selected{% endif %}>{{ ec.display_name }}</option>
                                 {% endfor %}
                             </select>
                             *
@@ -226,7 +226,7 @@ function setOptions(select, items, placeholder) {
     select.appendChild(opt);
     for (var i = 0; i < items.length; i++) {
         var o = document.createElement('option');
-        o.value = items[i].id || items[i].pk_degreeid || items[i].pk_semesterid || items[i].pk_exconfigid;
+        o.value = items[i].id || items[i].pk_degreeid || items[i].pk_semesterid;
         o.textContent = items[i].name || items[i].degreename || items[i].semester_roman || items[i].display_name || '';
         select.appendChild(o);
     }

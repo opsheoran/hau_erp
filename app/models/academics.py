@@ -663,6 +663,17 @@ class ClassificationModel:
 
 class InfrastructureModel:
     @staticmethod
+    def get_months():
+        months = DB.fetch_all("SELECT pk_MonthId as id, descriptiion as name FROM Month_Mst ORDER BY pk_MonthId")
+        for m in months:
+            m['name'] = m['name'].capitalize()
+        return months
+
+    @staticmethod
+    def get_years():
+        return DB.fetch_all("SELECT pk_yearID as id, description as name FROM Year_Mst ORDER BY description DESC")
+
+    @staticmethod
     def get_current_session_id():
         # Returns the session ID where admission is open, or the latest one
         res = DB.fetch_scalar("SELECT pk_sessionid FROM SMS_AcademicSession_Mst WHERE isadmissionopen = 1")
@@ -2573,6 +2584,16 @@ class AcademicsModel:
             FROM SMS_Degree_Mst D
             LEFT JOIN SMS_DegreeType_Mst T ON D.fk_degreetypeid = T.pk_degreetypeid
             WHERE D.degreename NOT LIKE '%---%'
+            ORDER BY D.degreename
+        """)
+
+    @staticmethod
+    def get_pg_phd_degrees():
+        return DB.fetch_all("""
+            SELECT D.pk_degreeid as id, D.degreename as name, T.isug, D.isphd
+            FROM SMS_Degree_Mst D
+            LEFT JOIN SMS_DegreeType_Mst T ON D.fk_degreetypeid = T.pk_degreetypeid
+            WHERE D.degreename NOT LIKE '%---%' AND D.fk_degreetypeid IN (1, 2, 4)
             ORDER BY D.degreename
         """)
 

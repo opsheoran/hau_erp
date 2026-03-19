@@ -825,10 +825,10 @@ def advisor_allocation_ug():
             return redirect(url_for('academics_mgmt.advisor_allocation_ug', **filters))
 
     filters = {
-        'college_id': request.values.get('college_id'),
-        'session_id': request.values.get('session_id'),
-        'degree_id': request.values.get('degree_id'),
-        'branch_id': request.values.get('branch_id'),
+        'college_id': request.values.get('college_id', type=int),
+        'session_id': request.values.get('session_id', type=int),
+        'degree_id': request.values.get('degree_id', type=int),
+        'branch_id': request.values.get('branch_id', type=int),
         'teacher_id': request.values.get('teacher_id'),
         'fetch': request.values.get('fetch')
     }
@@ -850,7 +850,8 @@ def advisor_allocation_ug():
         'colleges': colleges,
         'sessions': InfrastructureModel.get_sessions(),
         'degrees': AcademicsModel.get_college_ug_degrees(filters['college_id']) if filters['college_id'] else [],
-        'teachers': AdvisorAllocationModel.get_teachers_for_dropdown(filters['college_id'])
+        'branches': AcademicsModel.get_degree_branches(filters['degree_id']) if filters['degree_id'] else [],
+        'teachers': AdvisorAllocationModel.get_teachers_for_dropdown(filters['college_id']) if filters['college_id'] else []
     }
 
     return render_template('academics/advisor_allocation_ug.html', 

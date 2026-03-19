@@ -102,7 +102,7 @@
                         <select id="ddlConfig" class="dropdown" style="width: 600px;" onchange="updateExConfig(this.value)">
                             <option value="">-- Select Exam Config --</option>
                             {% for ec in exam_configs %}
-                            <option value="{{ ec.pk_exconfigid }}" {% if filters.exconfig_id|string == ec.pk_exconfigid|string %}selected{% endif %}>{{ ec.display_name }}</option>
+                            <option value="{{ ec.id }}" {% if filters.exconfig_id|string == ec.id|string %}selected{% endif %}>{{ ec.display_name }}</option>
                             {% endfor %}
                         </select>
                         <span class="required">*</span>

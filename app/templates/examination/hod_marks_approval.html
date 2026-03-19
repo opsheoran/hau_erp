@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" id="mainForm">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="action" id="formAction" value="VIEW">
+
+    <table border="0" cellpadding="0" cellspacing="0" class="form-table" width="100%">
+        <tbody>
+            <tr>
+                <td colspan="6" class="gap"></td>
+            </tr>
+            <tr>
+                <td class="tableheading" colspan="6">HOD Marks Approval Form</td>
+            </tr>
+            <tr>
+                <td class="tdgap" colspan="6"></td>
+            </tr>
+            
+            <tr>
+                <td class="vtext" id="lblCollege" width="15%">College</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="college_id" class="textbox w-300" required onchange="fetchDegrees()">
+                        <option value="">-- Select College--</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext" id="lblAcdSession" width="15%">Academic Session</td>      
+                <td class="colon" width="2%">:</td>
+                <td class="required" colspan="4">
+                    <select name="session_id" id="session_id" class="textbox w-250" required>
+                        <option value="">--Select Academic Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext" id="lblDegree" width="15%">Degree</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" colspan="4">
+                    <select name="degree_id" id="degree_id" class="textbox w-300" required onchange="fetchSemesters()">
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext" id="lblSemester" width="15%">Semester</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" width="30%">
+                    <select name="class_id" id="class_id" class="textbox w-150" required>
+                        <option value="">--Select Semester--</option>
+                        {% for s in lookups.classes %}
+                        <option value="{{ s.id }}" data-order="{{ s.semesterorder | default(loop.index) }}" {% if filters.class_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                <td class="vtext" id="lblExamType" width="15%">Exam Type</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" width="36%">
+                    <select name="exam_type" id="exam_type" class="textbox w-150">
+                        <option value="1" {% if filters.exam_type == '1' %}selected{% endif %}>Internal</option>
+                        <option value="2" {% if filters.exam_type == '2' %}selected{% endif %}>External</option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="6">
+                    <table border="0" class="radio">
+                        <tbody>
+                            <tr>
+                                <td><label><input type="radio" name="exam_category" value="1" {% if filters.exam_category == '1' %}checked{% endif %}> Regular/Back Exam</label></td>
+                                <td><label><input type="radio" name="exam_category" value="2" {% if filters.exam_category == '2' %}checked{% endif %}> Supplementary Exam</label></td>
+                                <td><label><input type="radio" name="exam_category" value="3" {% if filters.exam_category == '3' %}checked{% endif %}> Summer Exam</label></td>
+                                <td><label><input type="radio" name="exam_category" value="4" {% if filters.exam_category == '4' %}checked{% endif %}> Igrade Exam</label></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="button" value="VIEW" class="button-common" onclick="fetchApprovalData()">
+                    <input type="button" value="RESET" class="button-common" onclick="window.location.href='{{ url_for('examination.hod_marks_approval') }}'">
+                </td>
+            </tr>
+
+            <!-- PENDING SHEET -->
+            <tr class="gridSection" style="display: none;">
+                <td class="tablesubheading" colspan="6">List of Pending Sheet</td>
+            </tr>
+            <tr class="gridSection" style="display: none;">
+                <td colspan="6">
+                    <div class="DivStyleWithScroll" style="width: 100%; max-height: 400px; overflow:auto;">
+                        <table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" style="width:100%;">
+                            <thead>
+                                <tr class="header-style">
+                                    <th scope="col" style="width:50px;">S.No.</th>
+                                    <th scope="col">Course</th>
+                                    <th scope="col">Current Session</th>
+                                    <th scope="col">Semester</th>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Regular/Back</th>
+                                    <th scope="col">Student Count</th>
+                                    <th scope="col">View/Edit</th>
+                                    <th scope="col">Select</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingGridBody">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            
+            <tr id="approveBtnRow" style="display: none;">
+                <td colspan="2"></td>
+                <td colspan="4" style="padding-top:10px; padding-bottom:10px;">
+                    <input type="button" value="APPROVE" class="button-common" onclick="submitApproval()">
+                </td>
+            </tr>
+
+            <!-- APPROVED SHEET -->
+            <tr class="gridSection" style="display: none;">
+                <td class="tablesubheading" colspan="6">List of Approved Sheet</td>
+            </tr>
+            <tr class="gridSection" style="display: none;">
+                <td colspan="6">
+                    <div class="DivStyleWithScroll" style="width: 100%; max-height: 400px; overflow:auto;">
+                        <table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" style="width:100%;">
+                            <thead>
+                                <tr class="header-style">
+                                    <th scope="col" style="width:50px;">S.No.</th>
+                                    <th scope="col">Course</th>
+                                    <th scope="col">Current Session</th>
+                                    <th scope="col">Semester</th>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Regular/Back</th>
+                                    <th scope="col">Student Count</th>
+                                    <th scope="col">View/Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="approvedGridBody">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</form>
+
+<script>
+function fetchDegrees() {
+    const college_id = document.getElementById('college_id').value;
+    const degreeSelect = document.getElementById('degree_id');
+    const classSelect = document.getElementById('class_id');
+    
+    degreeSelect.innerHTML = '<option value="">--Select Degree--</option>';
+    classSelect.innerHTML = '<option value="">--Select Semester--</option>';
+    
+    if (!college_id) return;
+    
+    fetch(`{{ url_for('academics.get_college_degrees_api', college_id=0) }}`.replace('0', college_id))
+        .then(res => res.json())
+        .then(data => {
+            let html = '<option value="">--Select Degree--</option>';
+            data.forEach(d => {
+                html += `<option value="${d.id}">${d.name}</option>`;
+            });
+            degreeSelect.innerHTML = html;
+        });
+}
+
+function fetchSemesters() {
+    const classSelect = document.getElementById('class_id');
+    
+    let html = '<option value="">--Select Semester--</option>';
+    html += '<option value="odd">Odd</option>';
+    html += '<option value="even">Even</option>';
+    
+    classSelect.innerHTML = html;
+}
+
+function fetchApprovalData() {
+    const college_id = document.getElementById('college_id').value;
+    const session_id = document.getElementById('session_id').value;
+    const degree_id = document.getElementById('degree_id').value;
+    const class_id = document.getElementById('class_id').value;
+    const exam_type = document.getElementById('exam_type').value;
+    const exam_category = document.querySelector('input[name="exam_category"]:checked').value;
+    
+    if(!college_id || !session_id || !degree_id || !class_id) {
+        alert("Please fill all mandatory fields.");
+        return;
+    }
+    
+    let url = `{{ url_for('examination.get_hod_approval_courses') }}?college_id=${college_id}&session_id=${session_id}&degree_id=${degree_id}&class_id=${class_id}&exam_type=${exam_type}&exam_category=${exam_category}`;
+    
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            if(data.error) {
+                alert(data.error);
+                return;
+            }
+            
+            const pendingTbody = document.getElementById('pendingGridBody');
+            let pendingHtml = '';
+            if(data.pending.length === 0) {
+                pendingHtml = '<tr><td colspan="9" align="center">No pending courses found.</td></tr>';
+            } else {
+                data.pending.forEach((c, idx) => {
+                    const bgColor = (idx % 2 === 0) ? 'White' : '#FAFAFA';
+                    pendingHtml += `
+                    <tr class="item-style" style="background-color:${bgColor};">
+                        <td align="center">${idx + 1}</td>
+                        <td align="left">${c.name}</td>
+                        <td align="center">${c.session_name}</td>
+                        <td align="center">${c.semester_name}</td>
+                        <td align="center">${c.year_name || ''}</td>
+                        <td align="center">${c.category}</td>
+                        <td align="center">${c.student_count}</td>
+                        <td align="center"><a href="#" onclick="alert('View details functionality not implemented yet.'); return false;">View</a></td>
+                        <td align="center">
+                            <input type="checkbox" name="chkselectCourse" value="${c.id}|${c.semester_id}|${c.degreeyear_id}">
+                        </td>
+                    </tr>`;
+                });
+                document.getElementById('approveBtnRow').style.display = 'table-row';
+            }
+            pendingTbody.innerHTML = pendingHtml;
+            if(data.pending.length === 0) {
+                document.getElementById('approveBtnRow').style.display = 'none';
+            }
+
+            const approvedTbody = document.getElementById('approvedGridBody');
+            let approvedHtml = '';
+            if(data.approved.length === 0) {
+                approvedHtml = '<tr><td colspan="8" align="center">No approved courses found.</td></tr>';
+            } else {
+                data.approved.forEach((c, idx) => {
+                    const bgColor = (idx % 2 === 0) ? 'White' : '#FAFAFA';
+                    approvedHtml += `
+                    <tr class="item-style" style="background-color:${bgColor};">
+                        <td align="center">${idx + 1}</td>
+                        <td align="left">${c.name}</td>
+                        <td align="center">${c.session_name}</td>
+                        <td align="center">${c.semester_name}</td>
+                        <td align="center">${c.year_name || ''}</td>
+                        <td align="center">${c.category}</td>
+                        <td align="center">${c.student_count}</td>
+                        <td align="center"><a href="#" onclick="alert('View details functionality not implemented yet.'); return false;">View</a></td>
+                    </tr>`;
+                });
+            }
+            approvedTbody.innerHTML = approvedHtml;
+            
+            document.querySelectorAll('.gridSection').forEach(el => {
+                el.style.display = 'table-row';
+            });
+        });
+}
+
+function submitApproval() {
+    const checkboxes = document.querySelectorAll('input[name="chkselectCourse"]:checked');
+    if(checkboxes.length === 0) {
+        alert("Please select at least one course to approve.");
+        return;
+    }
+    
+    if(confirm("Are you sure you want to Approve the marks for the selected course(s)?")) {
+        document.getElementById('formAction').value = 'APPROVE';
+        document.getElementById('mainForm').submit();
+    }
+}
+</script>
+
+{% endblock %}

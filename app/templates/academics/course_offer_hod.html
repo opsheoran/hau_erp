@@ -74,7 +74,7 @@
                             <select name="exconfig_id" id="ddlExamConfig" class="dropdown w-300">
                                 <option value="">-- Select Exam Config.--</option>
                                 {% for ex in lookups.exam_configs %}
-                                <option value="{{ ex.pk_exconfigid }}" {% if filters.exconfig_id|string == ex.pk_exconfigid|string %}selected{% endif %}>{{ ex.display_name }}</option>
+                                <option value="{{ ex.id }}" {% if filters.exconfig_id|string == ex.id|string %}selected{% endif %}>{{ ex.display_name }}</option>
                                 {% endfor %}
                             </select>
                             *
@@ -160,7 +160,7 @@ function setOptions(select, items, placeholder) {
     select.appendChild(opt);
     for (var i = 0; i < items.length; i++) {
         var o = document.createElement('option');
-        o.value = items[i].id || items[i].pk_degreeid || items[i].pk_semesterid || items[i].pk_exconfigid;
+        o.value = items[i].id || items[i].pk_degreeid || items[i].pk_semesterid;
         o.textContent = items[i].name || items[i].degreename || items[i].semester_roman || items[i].display_name || '';
         select.appendChild(o);
     }
@@ -213,12 +213,15 @@ function loadExamConfigs() {
     var semesterId = document.getElementById('ddlSemester').value;
     var ddlExamConfig = document.getElementById('ddlExamConfig');
 
-    if (!degreeId || !sessionId || !semesterId) {
+    if (!degreeId || !sessionId) {
         setOptions(ddlExamConfig, [], '-- Select Exam Config.--');
         return Promise.resolve();
     }
 
-    var url = '/academics/api/get_exam_configs?degree_id=' + degreeId + '&session_id=' + sessionId + '&semester_id=' + semesterId;
+    var url = '/academics/api/get_exam_configs?degree_id=' + degreeId + '&session_id=' + sessionId;
+    if (semesterId) {
+        url += '&semester_id=' + semesterId;
+    }
     return fetch(url)
         .then(function(r){ return r.json(); })
         .then(function(data){

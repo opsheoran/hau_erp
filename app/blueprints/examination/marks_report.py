@@ -22,7 +22,7 @@ def generate_internal_marks_report_pdf(course_info, students, exam_columns, is_s
     normal_bold = ParagraphStyle(name='NormalBold', parent=styles['Normal'], alignment=1, fontSize=10, fontName='Helvetica-Bold')
     right_align = ParagraphStyle(name='RightAlign', parent=styles['Normal'], alignment=2, fontSize=10)
 
-    now = datetime.datetime.now().strftime("%d/%m/%Y\n%I:%M:%S %p")
+    now = datetime.datetime.now().strftime("%d/%m/%Y %I:%M:%S %p")
     status_str = "Submitted" if is_submitted else "Not Submitted"
 
     class MarksReportCanvas(canvas.Canvas):
@@ -52,13 +52,13 @@ def generate_internal_marks_report_pdf(course_info, students, exam_columns, is_s
                     ["", Paragraph("Dean Post Graduate Studies", title_style), Paragraph(now, right_align)],
                     ["", Paragraph("CCS Haryana Agricultural University,Hisar", subtitle_style), ""],
                     ["", Paragraph(f"Final Examination : {course_info.get('session_name', '')} Semester : {course_info.get('semester_name', '')}", normal_bold), ""],
-                ], colWidths=[1.5*inch, 4*inch, 1.5*inch])
+                ], colWidths=[1.0*inch, 4.0*inch, 2.0*inch])
             else:
                 t1 = Table([
                     ["", Paragraph("Controller of Examination", title_style), Paragraph(now, right_align)],
                     ["", Paragraph("CCS Haryana Agricultural University, Hisar", subtitle_style), ""],
                     ["", Paragraph(f"Final Examination : {course_info.get('session_name', '')} Semester : {course_info.get('semester_name', '')}", normal_bold), ""],
-                ], colWidths=[1.5*inch, 4*inch, 1.5*inch])
+                ], colWidths=[1.0*inch, 4.0*inch, 2.0*inch])
 
             t1.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'TOP'), ('ALIGN', (2,0), (2,0), 'RIGHT')]))
             w, h = t1.wrap(A4[0]-60, 200)
@@ -111,8 +111,49 @@ def generate_internal_marks_report_pdf(course_info, students, exam_columns, is_s
 
             self.restoreState()
 
-    # The topMargin needs to account for the custom drawn header (approx 200 points).
-    doc = SimpleDocTemplate(buffer, pagesize=portrait(A4), rightMargin=30, leftMargin=30, topMargin=210, bottomMargin=80)
+    # Calculate dynamic topMargin based on headers
+    if is_pg_phd:
+        t1_temp = Table([
+            ["", Paragraph("Dean Post Graduate Studies", title_style), Paragraph(now, right_align)],
+            ["", Paragraph("CCS Haryana Agricultural University,Hisar", subtitle_style), ""],
+            ["", Paragraph(f"Final Examination : {course_info.get('session_name', '')} Semester : {course_info.get('semester_name', '')}", normal_bold), ""],
+        ], colWidths=[1.5*inch, 4*inch, 1.5*inch])
+    else:
+        t1_temp = Table([
+            ["", Paragraph("Controller of Examination", title_style), Paragraph(now, right_align)],
+            ["", Paragraph("CCS Haryana Agricultural University, Hisar", subtitle_style), ""],
+            ["", Paragraph(f"Final Examination : {course_info.get('session_name', '')} Semester : {course_info.get('semester_name', '')}", normal_bold), ""],
+        ], colWidths=[1.5*inch, 4*inch, 1.5*inch])
+    t1_temp.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'TOP'), ('ALIGN', (2,0), (2,0), 'RIGHT')]))
+    _, h1_temp = t1_temp.wrap(A4[0]-60, 200)
+
+    t2_temp = Table([
+        [Paragraph("Internal Awards", ParagraphStyle(name='IA', parent=title_style, fontSize=14)), Paragraph(status_str, right_align)]
+    ], colWidths=[5.5*inch, 1.5*inch])
+    _, h2_temp = t2_temp.wrap(A4[0]-60, 50)
+
+    meta_style_temp = ParagraphStyle(name='MetaStyleTemp', parent=styles['Normal'], fontSize=9, fontName='Helvetica-Bold')
+    crhr_temp = f"{course_info.get('crhr_theory', 0)}+{course_info.get('crhr_practical', 0)}"
+    meta_table_temp = Table([
+        [Paragraph("Name of the Deptt.", meta_style_temp), Paragraph(str(course_info.get('dept_name', 'Dean Office')), meta_style_temp), Paragraph("Name of Instructor(s)", meta_style_temp), Paragraph(str(course_info.get('instructor_name', '')), meta_style_temp)],
+        [Paragraph("Course No.", meta_style_temp), Paragraph(f"{course_info.get('course_code', '')}( {crhr_temp} )", meta_style_temp), Paragraph("Course Title", meta_style_temp), Paragraph(str(course_info.get('course_name', '')), meta_style_temp)],
+        [Paragraph("Degree", meta_style_temp), Paragraph(str(course_info.get('degree_name', '')), meta_style_temp), Paragraph("Semester", meta_style_temp), Paragraph(str(course_info.get('semester_name', '')), meta_style_temp)],
+        [Paragraph("Exam", meta_style_temp), Paragraph(str(course_info.get('session_name', '')), meta_style_temp), Paragraph("Max. Marks", meta_style_temp), Paragraph(str(course_info.get('total_max_marks', '')), meta_style_temp)]
+    ], colWidths=[1.3*inch, 2.5*inch, 1.5*inch, 2.1*inch])
+    meta_table_temp.setStyle(TableStyle([
+        ('GRID', (0,0), (-1,-1), 1, colors.black),
+        ('FONTNAME', (0,0), (0,-1), 'Helvetica-Bold'),
+        ('FONTNAME', (2,0), (2,-1), 'Helvetica-Bold'),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 3),
+        ('TOPPADDING', (0,0), (-1,-1), 3),
+        ('FONTSIZE', (0,0), (-1,-1), 9),
+    ]))
+    _, h3_temp = meta_table_temp.wrap(A4[0]-60, 100)
+    
+    dynamic_top_margin = 30 + h1_temp + 10 + h2_temp + 10 + h3_temp + 15
+
+    doc = SimpleDocTemplate(buffer, pagesize=portrait(A4), rightMargin=30, leftMargin=30, topMargin=dynamic_top_margin, bottomMargin=80)
     elements = []
 
     # Marks Table Header
@@ -122,12 +163,14 @@ def generate_internal_marks_report_pdf(course_info, students, exam_columns, is_s
         marks_header = ["S.No.", "Roll No.", "Admn.No.", "Name Of Student"]
 
     for col in exam_columns:
+        # Strip PG/UG from exam names
+        clean_name = col['name'].replace(' PG', '').replace(' UG', '').replace(' PG ', ' ').replace(' UG ', ' ').strip()
         # Split on the first space to create "Internal\nTheory(40)"
-        name_parts = col['name'].split(' ', 1)
+        name_parts = clean_name.split(' ', 1)
         if len(name_parts) == 2:
             formatted_name = f"{name_parts[0]}\n{name_parts[1]}\n({col['max_val']})"
         else:
-            formatted_name = f"{col['name']}\n({col['max_val']})"
+            formatted_name = f"{clean_name}\n({col['max_val']})"
         marks_header.append(formatted_name)
     marks_header.append("Total")
 
@@ -192,8 +235,8 @@ def generate_internal_marks_report_pdf(course_info, students, exam_columns, is_s
             ('ALIGN', (0,0), (-1,-1), 'CENTER'),
             ('ALIGN', (2,1), (2,-1), 'LEFT'), # Student Name left align
             ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 1),
-            ('TOPPADDING', (0,0), (-1,-1), 1),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+            ('TOPPADDING', (0,0), (-1,-1), 4),
             ('LEFTPADDING', (0,0), (-1,-1), 2),
             ('RIGHTPADDING', (0,0), (-1,-1), 2),
             ('FONTSIZE', (0,0), (-1,-1), 9),
@@ -206,8 +249,8 @@ def generate_internal_marks_report_pdf(course_info, students, exam_columns, is_s
             ('ALIGN', (0,0), (-1,-1), 'CENTER'),
             ('ALIGN', (3,1), (3,-1), 'LEFT'), # Student Name left align
             ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 1),
-            ('TOPPADDING', (0,0), (-1,-1), 1),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+            ('TOPPADDING', (0,0), (-1,-1), 4),
             ('LEFTPADDING', (0,0), (-1,-1), 2),
             ('RIGHTPADDING', (0,0), (-1,-1), 2),
             ('FONTSIZE', (0,0), (-1,-1), 9),

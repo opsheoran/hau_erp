@@ -428,7 +428,19 @@ def rank_master():
 @academics_bp.route('/api/college/<college_id>/degrees')
 def get_college_degrees_api(college_id):
     from app.utils import clean_json_data
-    degrees = AcademicsModel.get_college_degrees(college_id)
+    from app.db import DB
+    
+    is_pg_phd = request.args.get('is_pg_phd') == '1'
+    if is_pg_phd:
+        degrees = DB.fetch_all("""
+            SELECT DISTINCT D.pk_degreeid as id, D.degreename as name
+            FROM SMS_CollegeDegreeBranchMap_Mst M
+            INNER JOIN SMS_Degree_Mst D ON M.fk_degreeid = D.pk_degreeid
+            WHERE M.fk_collegeid = ? AND D.degreename NOT LIKE '%---%' AND D.fk_degreetypeid IN (1, 2, 4)
+            ORDER BY D.degreename
+        """, [college_id])
+    else:
+        degrees = AcademicsModel.get_college_degrees(college_id)
     return jsonify(clean_json_data(degrees))
 
 @academics_bp.route('/api/search_teachers')

@@ -1,10 +1,9 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash
-from app.db import DB
-from functools import wraps
 from app.utils import get_page_url
-from app.models import ExaminationModel, NavModel
+from app.models import NavModel
+from functools import wraps
 
-examination_bp = Blueprint('examination', __name__)
+examination_bp = Blueprint('examination', __name__, template_folder='../../templates/examination')
 
 @examination_bp.before_request
 def ensure_module():
@@ -16,7 +15,7 @@ def permission_required(page_caption):
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            perm = NavModel.check_permission(session['user_id'], session.get('selected_loc'), page_caption)
+            perm = NavModel.check_permission(session.get('user_id'), session.get('selected_loc'), page_caption)
             if not perm or not perm.get('AllowView'):
                 return redirect(url_for('main.index'))
             return f(*args, **kwargs)
@@ -24,7 +23,6 @@ def permission_required(page_caption):
     return decorator
 
 # --- EXAMINATION MODULE MENU CONFIGURATION ---
-# Structure: Main Menu -> Sub Group -> Sub-Menu Name -> [Pages]
 EXAMINATION_MENU_CONFIG = {
     'Examination Masters & Config': {
         'Config': {
@@ -51,7 +49,7 @@ EXAMINATION_MENU_CONFIG = {
         'Activities': {
             'Marks Entry Approval': [
                 'HOD Marks Approval', 'COE Marks Approval', 'Registrar Approval',
-                'DeanPGS Marks Approval', 'DeanPGS Approval'
+                'DeanPGS Marks Approval'
             ],
             'Marks Process': [
                 'Marks Process for UG and MBA', 'Marks Process for PG',
@@ -88,14 +86,14 @@ EXAMINATION_MENU_CONFIG = {
 @examination_bp.app_context_processor
 def inject_examination_navigation():
     if 'user_id' not in session or str(session.get('current_module_id')) != '56':
-        return dict(exam_tabs=[], exam_breadcrumb=[])
+        return dict(examination_tabs=[], examination_breadcrumb=[])
 
     rights = session.get('current_user_rights', [])
     allowed_pages = {r['PageName'] for r in rights if r['AllowView']}
     curr_path = request.path.rstrip('/').lower()
     
-    exam_tabs = []
-    exam_breadcrumb = []
+    examination_tabs = []
+    examination_breadcrumb = []
 
     # Detect position in 4-tier structure
     for main_cat, subs in EXAMINATION_MENU_CONFIG.items():
@@ -108,80 +106,53 @@ def inject_examination_navigation():
                 for p_name in pages:
                     # if p_name not in allowed_pages: continue 
                     p_url = get_page_url(p_name).rstrip('/')
-                    active = (curr_path == p_url.lower())
+                    
+                    # Custom alias logic for background pages
+                    is_current = (curr_path == p_url.lower())
+                    if not is_current and p_name == 'COE Marks Approval' and 'coe_approval_form' in curr_path:
+                        is_current = True
+                    if not is_current and p_name == 'DeanPGS Marks Approval' and 'deanpgs_approval_form' in curr_path:
+                        is_current = True
+                        
+                    active = is_current
                     tab_list.append({'name': p_name, 'url': p_url, 'active': active})
                     if active:
                         is_active_group = True
-                        exam_breadcrumb = [main_cat, folder_name, p_name]
+                        examination_breadcrumb = [main_cat, folder_name, p_name]
                 
                 if is_active_group:
-                    exam_tabs = tab_list
+                    examination_tabs = tab_list
                     break
-            if exam_tabs: break
-        if exam_tabs: break
+            if examination_tabs: break
+        if examination_tabs: break
 
-    return dict(exam_tabs=exam_tabs, exam_breadcrumb=exam_breadcrumb)
+    return dict(examination_tabs=examination_tabs, examination_breadcrumb=examination_breadcrumb)
 
-
-@examination_bp.route('/exam_generic/<page_name>')
+@examination_bp.route('/exam_generic/<path:page_name>')
 def generic_page_handler(page_name):
     return render_template('examination/generic_page.html', title=page_name)
 
-@examination_bp.route('/exam_master', methods=['GET', 'POST'])
-@permission_required('Exam Master')
-def exam_master():
-    if request.method == 'POST':
-        action = request.form.get('action')
-        if action == 'DELETE':
-            if ExaminationModel.delete_exam(request.form.get('id')):
-                flash('Exam deleted successfully!', 'success')
-            else:
-                flash('Error deleting exam.', 'danger')
-        else:
-            if ExaminationModel.save_exam(request.form):
-                flash('Exam saved successfully!', 'success')
-            else:
-                flash('Error saving exam.', 'danger')
-        return redirect(url_for('examination.exam_master'))
-    
-    exams = ExaminationModel.get_exams()
-    return render_template('examination/exam_master.html', exams=exams)
-
-@examination_bp.route('/marks_entry_ug', methods=['GET', 'POST'])
-@permission_required('Student Marks Entry(UG and MBA)')
-def marks_entry_ug():
-    from app.models import AcademicsModel, InfrastructureModel, CourseModel
-    if request.method == 'POST' and 'alloc_id[]' in request.form:
-        if ExaminationModel.save_marks(request.form, session['user_id']):
-            flash('Marks saved successfully!', 'success')
-        else:
-            flash('Error saving marks.', 'danger')
-        return redirect(url_for('examination.marks_entry_ug', **request.args))
-
-    # Filters from URL
-    filters = {
-        'session_id': request.args.get('session_id'),
-        'degree_id': request.args.get('degree_id'),
-        'semester_id': request.args.get('semester_id'),
-        'branch_id': request.args.get('branch_id'),
-        'course_id': request.args.get('course_id'),
-        'exam_id': request.args.get('exam_id')
-    }
-
-    data = None
-    if all([filters['session_id'], filters['degree_id'], filters['semester_id'], filters['course_id'], filters['exam_id']]):
-        data = ExaminationModel.get_students_for_marks_entry(filters)
-        if not data:
-            flash('No exam configuration found for this degree and exam type.', 'warning')
-
-    lookups = {
-        'sessions': InfrastructureModel.get_sessions(),
-        'degrees': AcademicsModel.get_all_degrees(),
-        'semesters': InfrastructureModel.get_all_semesters(),
-        'branches': AcademicsModel.get_branches(),
-        'courses': CourseModel.get_all_courses(),
-        'exams': ExaminationModel.get_exams()
-    }
-
-    return render_template('examination/marks_entry_ug.html', 
-                           lookups=lookups, filters=filters, data=data)
+# Import routes down here to avoid circular dependencies
+from app.blueprints.examination import exam_master
+from app.blueprints.examination import degree_exam_master
+from app.blueprints.examination import exam_config_master
+from app.blueprints.examination import degree_exam_wise_weightage
+from app.blueprints.examination import external_examiner_detail
+from app.blueprints.examination import update_weightage_post_marks_entry
+from app.blueprints.examination import external_examiner_communication
+from app.blueprints.examination import student_marks_entry_coe
+from app.blueprints.examination import student_marks_entry_ug
+from app.blueprints.examination import student_marks_entry_pg_phd
+from app.blueprints.examination import student_marks_entry_re_evaluation
+from app.blueprints.examination import student_marks_entry_supplementary
+from app.blueprints.examination import student_marks_entry_external_user
+from app.blueprints.examination import teacher_assigned_courses_pgphd
+from app.blueprints.examination import student_marks_entry_revised
+from app.blueprints.examination import student_marks_entry_igrade
+from app.blueprints.examination import student_marks_entry_revised_pg_phd
+from app.blueprints.examination import student_marks_entry_pg_phd_summer
+from app.blueprints.examination import student_marks_entry_ncc_nss
+from app.blueprints.examination import hod_marks_approval
+from app.blueprints.examination import coe_marks_approval
+from app.blueprints.examination import registrar_marks_approval
+from app.blueprints.examination import deanpgs_marks_approval

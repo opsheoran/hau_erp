@@ -1,116 +1,176 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="hau-card">
-    <div class="tableheading">
-        <span class="mainheadingborderbottom">Exam Master</span>
-    </div>
 
-    <div style="padding: 15px;">
-        <form method="POST" id="examForm">
-            <input type="hidden" name="pk_id" id="c_pk_id">
-            <table class="form-table">
-                <tr>
-                    <td class="vtext" width="15%">Exam Name</td>
-                    <td class="colon">:</td>
-                    <td width="35%">
-                        <input type="text" name="exam" id="c_exam" class="textbox w-200" required>
-                        <span class="required">*</span>
-                    </td>
-                    <td class="vtext" width="15%">Short Name</td>
-                    <td class="colon">:</td>
-                    <td>
-                        <input type="text" name="short" id="c_short" class="textbox w-100">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="vtext">Order No.</td>
-                    <td class="colon">:</td>
-                    <td>
-                        <input type="number" name="order" id="c_order" class="textbox w-75">
-                    </td>
-                    <td class="vtext">Config</td>
-                    <td class="colon">:</td>
-                    <td>
-                        <label><input type="checkbox" name="is_th" id="c_is_th"> Theory</label>
-                        <label style="margin-left:10px;"><input type="checkbox" name="is_pr" id="c_is_pr"> Practical</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="vtext">Internal/Main</td>
-                    <td class="colon">:</td>
-                    <td colspan="4">
-                        <label><input type="checkbox" name="is_int" id="c_is_int"> Is Internal</label>
-                        <label style="margin-left:10px;"><input type="checkbox" name="is_main" id="c_is_main"> Is Main Exam</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2"></td>
-                    <td colspan="4" style="padding-top:10px;">
-                        <input type="submit" value="SAVE" class="button-common">
-                        <input type="button" value="CANCEL" class="button-common" onclick="resetForm()" style="margin-left:10px;">
-                    </td>
-                </tr>
-            </table>
-        </form>
+<!-- SAVE FORM -->
+<form method="POST" id="examForm">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="pk_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="7">
+                    <span class="mainheadingborderbottom">Exam Master</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Exam Name</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="text" name="exam" id="exam" class="textbox w-150" required maxlength="100">
+                    <span class="required">*</span>
+                </td>
+                <td width="5%"></td>
+                <td class="vtext" width="15%">Short Name</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <input type="text" name="short" id="short" class="textbox w-150" maxlength="50">
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Order</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" name="order" id="order" class="textbox w-100" value="1" required min="1">
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td colspan="3">
+                    <label style="font-weight:normal; font-size:11px; margin-right: 15px;">
+                        <input type="checkbox" name="is_th" id="is_th"> Is Theory
+                    </label>
+                    <label style="font-weight:normal; font-size:11px; margin-right: 15px;">
+                        <input type="checkbox" name="is_pr" id="is_pr"> Is Practical
+                    </label>
+                    <label style="font-weight:normal; font-size:11px; margin-right: 15px;">
+                        <input type="checkbox" name="is_int" id="is_int"> Is Internal
+                    </label>
+                    <label style="font-weight:normal; font-size:11px;">
+                        <input type="checkbox" name="is_main" id="is_main"> Is Main Exam
+                    </label>
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    <input type="submit" value="SAVE" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left: 10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
 
-        <div style="margin-top: 25px;">
-            <table class="table-grid-view" width="100%">
-                <thead>
-                    <tr class="header-style">
-                        <th width="5%">S.No.</th>
-                        <th>Exam Name</th>
-                        <th width="10%">Short</th>
-                        <th width="10%">Order</th>
-                        <th width="8%">Theory</th>
-                        <th width="8%">Practical</th>
-                        <th width="8%">Internal</th>
-                        <th width="8%">Main</th>
-                        <th width="10%">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in exams %}
-                    <tr class="{{ loop.cycle('item-style', 'item-style-alt') }}">
-                        <td align="center">{{ loop.index }}</td>
-                        <td>{{ item.exam }}</td>
-                        <td align="center">{{ item.examshort or '-' }}</td>
-                        <td align="center">{{ item.examorder }}</td>
-                        <td align="center">{{ 'Yes' if item.istheory else 'No' }}</td>
-                        <td align="center">{{ 'Yes' if item.ispractical else 'No' }}</td>
-                        <td align="center">{{ 'Yes' if item.isinternal else 'No' }}</td>
-                        <td align="center">{{ 'Yes' if item.isMainExam else 'No' }}</td>
-                        <td align="center">
-                            <img src="{{ url_for('static', filename='images/edit.gif') }}" onclick='editExam({{ item|tojson }})' style="cursor:pointer" title="Edit">
-                            <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
-                                <input type="hidden" name="action" value="DELETE">
-                                <input type="hidden" name="id" value="{{ item.pk_examid }}">
-                                <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" title="Delete">
-                            </form>
-                        </td>
-                    </tr>
+<br>
+
+<!-- LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="7">
+                <span class="subheadingborderbottom">List of Exams</span>
+            </td>
+        </tr>
+        <tr><td colspan="7" height="10"></td></tr>
+        <tr>
+            <td colspan="7">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th>Exam Name</th>
+                            <th>Short Name</th>
+                            <th width="10%">Order</th>
+                            <th width="8%">Is Theory</th>
+                            <th width="8%">Is Practical</th>
+                            <th width="8%">Is Internal</th>
+                            <th width="8%">Is Main</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in exams %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
+                            <td>{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td align="left"><b>{{ e.exam }}</b></td>
+                            <td align="left">{{ e.examshort or '' }}</td>
+                            <td>{{ e.examorder }}</td>
+                            <td><span class="chkbox"><input type="checkbox" disabled="disabled" {% if e.istheory %}checked="checked"{% endif %}/></span></td>
+                            <td><span class="chkbox"><input type="checkbox" disabled="disabled" {% if e.ispractical %}checked="checked"{% endif %}/></span></td>
+                            <td><span class="chkbox"><input type="checkbox" disabled="disabled" {% if e.isinternal %}checked="checked"{% endif %}/></span></td>
+                            <td><span class="chkbox"><input type="checkbox" disabled="disabled" {% if e.isMainExam %}checked="checked"{% endif %}/></span></td>
+                            <td>
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editExam({{ e|tojson|safe }})'>
+                            </td>
+                            <td>
+                                <form method="POST" onsubmit="return confirm('Are you sure you want to delete this exam?');" style="display:inline;">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ e.pk_examid }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('examination.exam_master', page=pagination.page-1) }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('examination.exam_master', page=p) }}">{{ p }}</a>
+                        {% endif %}
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('examination.exam_master', page=pagination.page+1) }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 <script>
-function editExam(item) {
-    document.getElementById('c_pk_id').value = item.pk_examid;
-    document.getElementById('c_exam').value = item.exam;
-    document.getElementById('c_short').value = item.examshort || '';
-    document.getElementById('c_order').value = item.examorder || 0;
-    document.getElementById('c_is_th').checked = !!item.istheory;
-    document.getElementById('c_is_pr').checked = !!item.ispractical;
-    document.getElementById('c_is_int').checked = !!item.isinternal;
-    document.getElementById('c_is_main').checked = !!item.isMainExam;
-    window.scrollTo(0, 0);
+function editExam(e) {
+    document.getElementById('pk_id').value = e.pk_examid;
+    document.getElementById('exam').value = (e.exam || '').trim();
+    document.getElementById('short').value = (e.examshort || '').trim();
+    document.getElementById('order').value = e.examorder || 1;
+    
+    document.getElementById('is_th').checked = !!e.istheory;
+    document.getElementById('is_pr').checked = !!e.ispractical;
+    document.getElementById('is_int').checked = !!e.isinternal;
+    document.getElementById('is_main').checked = !!e.isMainExam;
+    
+    window.scrollTo(0,0);
 }
 
 function resetForm() {
+    document.getElementById('pk_id').value = '';
     document.getElementById('examForm').reset();
-    document.getElementById('c_pk_id').value = '';
 }
 </script>
 {% endblock %}
