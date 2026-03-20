@@ -576,35 +576,69 @@
     
     <script>
         window.showToast = function(message, category = 'success') {
-            const container = document.getElementById('toast-container');
-            if (!container) return;
-            const toast = document.createElement('div');
-            toast.className = `toast-message ${category}`;
-            const colors = { 'success': '#28a745', 'danger': '#dc3545', 'error': '#dc3545', 'warning': '#ffc107', 'info': '#17a2b8' };
-            toast.style.cssText = 'padding: 6px 18px; min-height: 26px; display: flex; align-items: center; background: ' + (colors[category] || '#3c8dbc') + '; color: #fff; font-weight: bold; border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); min-width: 200px; cursor: pointer; opacity: 0; transform: translateX(50px); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: auto; font-family: Verdana, sans-serif; font-size: 11px;';
-            toast.innerHTML = `<span style="flex-grow: 1;">${message}</span><span style="margin-left: 15px; font-weight: bold; opacity: 0.7;">&times;</span>`;
-            container.appendChild(toast);
-            
-            // Animate in
-            setTimeout(() => { toast.style.opacity = '1'; toast.style.transform = 'translateX(0)'; }, 10);
-            
-            // Click to dismiss
-            toast.onclick = function() { 
-                this.style.opacity = '0'; 
-                this.style.transform = 'translateX(50px)';
-                setTimeout(() => this.remove(), 400); 
-            };
-            
-            // Auto disappear after 3 seconds
-            setTimeout(() => { 
-                if (toast && toast.parentNode) { 
-                    toast.style.opacity = '0'; 
-                    toast.style.transform = 'translateX(50px)'; 
-                    setTimeout(() => { if (toast.parentNode) toast.remove(); }, 400); 
-                } 
-            }, 3000);
-        };
+            let targetElement = null;
 
+            // Try to recover the exact button clicked
+            const lastBtnId = sessionStorage.getItem('last_btn_id');
+            const lastBtnName = sessionStorage.getItem('last_btn_name');
+            const lastBtnValue = sessionStorage.getItem('last_btn_value');
+
+            if (lastBtnId) targetElement = document.getElementById(lastBtnId);
+            else if (lastBtnName && lastBtnValue) targetElement = document.querySelector(`input[name="${lastBtnName}"][value="${lastBtnValue}"]`);
+
+            // Fallback to the first primary submit button on the page if exact not found
+            if (!targetElement) {
+                targetElement = document.querySelector('.form-table input[type="submit"].button-common, .form-table button[type="submit"].button-common');
+            }
+
+            const colors = { 'success': '#28a745', 'danger': '#dc3545', 'error': '#dc3545', 'warning': '#ffc107', 'info': '#17a2b8' };
+
+            if (targetElement && targetElement.parentElement) {
+                let parent = targetElement.parentElement;
+
+                let inlineContainer = parent.querySelector('.inline-toast-container');
+                if (!inlineContainer) {
+                    inlineContainer = document.createElement('span');
+                    inlineContainer.className = 'inline-toast-container';
+                    inlineContainer.style.cssText = 'display: inline-flex; align-items: center; margin-left: 15px; vertical-align: middle; gap: 10px;';
+
+                    // Insert after the last button in the parent cell
+                    const buttons = Array.from(parent.querySelectorAll('.button-common, input[type="submit"], input[type="button"]'));
+                    const lastButton = buttons.length > 0 ? buttons[buttons.length - 1] : targetElement;
+                    if (lastButton.nextSibling) {
+                        parent.insertBefore(inlineContainer, lastButton.nextSibling);
+                    } else {
+                        parent.appendChild(inlineContainer);
+                    }
+                }
+
+                const toast = document.createElement('div');
+                toast.className = `toast-message ${category}`;
+                toast.style.cssText = 'padding: 4px 12px; min-height: 26px; display: inline-flex; align-items: center; background: ' + (colors[category] || '#3c8dbc') + '; color: #fff; font-weight: bold; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer; opacity: 0; transform: translateX(-10px); transition: all 0.3s ease; font-family: Verdana, sans-serif; font-size: 11px; white-space: nowrap;';
+                toast.innerHTML = `<span>${message}</span><span style="margin-left: 10px; opacity: 0.7;">&times;</span>`;
+
+                inlineContainer.appendChild(toast);
+
+                setTimeout(() => { toast.style.opacity = '1'; toast.style.transform = 'translateX(0)'; }, 10);
+                toast.onclick = function() { this.style.opacity = '0'; setTimeout(() => this.remove(), 300); };
+                setTimeout(() => { if (toast && toast.parentNode) { toast.style.opacity = '0'; setTimeout(() => { if (toast.parentNode) toast.remove(); }, 300); } }, 4000);
+
+            } else {
+                // Absolute fallback just in case there are NO buttons on the page at all (e.g. general error)
+                const fallbackContainer = document.getElementById('toast-container');
+                if (!fallbackContainer) return;
+
+                const toast = document.createElement('div');
+                toast.className = `toast-message ${category}`;
+                toast.style.cssText = 'padding: 6px 18px; min-height: 26px; display: flex; align-items: center; background: ' + (colors[category] || '#3c8dbc') + '; color: #fff; font-weight: bold; border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); min-width: 200px; cursor: pointer; opacity: 0; transform: translateX(50px); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); font-family: Verdana, sans-serif; font-size: 11px;';
+                toast.innerHTML = `<span style="flex-grow: 1;">${message}</span><span style="margin-left: 15px; font-weight: bold; opacity: 0.7;">&times;</span>`;
+                fallbackContainer.appendChild(toast);
+
+                setTimeout(() => { toast.style.opacity = '1'; toast.style.transform = 'translateX(0)'; }, 10);
+                toast.onclick = function() { this.style.opacity = '0'; this.style.transform = 'translateX(50px)'; setTimeout(() => this.remove(), 400); };
+                setTimeout(() => { if (toast && toast.parentNode) { toast.style.opacity = '0'; toast.style.transform = 'translateX(50px)'; setTimeout(() => { if (toast.parentNode) toast.remove(); }, 400); } }, 4000);
+            }
+        };
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -670,6 +704,25 @@
 
         document.addEventListener('submit', function(e) {
             sessionStorage.setItem('global_scrollpos', window.scrollY || document.documentElement.scrollTop);
+            if (e.submitter) {
+                if (e.submitter.id) {
+                    sessionStorage.setItem('last_btn_id', e.submitter.id);
+                } else {
+                    sessionStorage.removeItem('last_btn_id');
+                }
+                
+                if (e.submitter.name && e.submitter.value) {
+                    sessionStorage.setItem('last_btn_name', e.submitter.name);
+                    sessionStorage.setItem('last_btn_value', e.submitter.value);
+                } else {
+                    sessionStorage.removeItem('last_btn_name');
+                    sessionStorage.removeItem('last_btn_value');
+                }
+            } else {
+                sessionStorage.removeItem('last_btn_id');
+                sessionStorage.removeItem('last_btn_name');
+                sessionStorage.removeItem('last_btn_value');
+            }
         });
     </script>
     {% block extra_js %}{% endblock %}
