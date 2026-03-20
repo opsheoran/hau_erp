@@ -8,18 +8,41 @@
 </style>
 
 <!-- SEARCH FILTERS -->
-<div class="tableheading" style="margin-bottom:10px;">
-    <form method="GET" style="display:flex; gap:20px; align-items:center;">
-        <span>Department:</span>
-        <select name="dept_id" class="textbox w-200 w-250">
-            <option value="">All Departments</option>
-            {% for d in lookups.depts %}<option value="{{ d.id }}" {{ 'selected' if filters.dept_id|string == d.id|string }}>{{ d.name }}</option>{% endfor %}
-        </select>
-        <span>Search:</span>
-        <input type="text" name="term" value="{{ filters.term or '' }}" class="textbox w-250" placeholder="Code/Name...">
-        <input type="submit" value="SEARCH" class="button-common">
-    </form>
-</div>
+<form method="GET">
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 20px;">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="7">
+                    <span class="mainheadingborderbottom">Search Course</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td class="vtext" width="15%">Department</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <select name="dept_id" class="textbox w-250">
+                        <option value="">-- All Departments --</option>
+                        {% for d in lookups.depts %}<option value="{{ d.id }}" {{ 'selected' if filters.dept_id|string == d.id|string }}>{{ d.name }}</option>{% endfor %}
+                    </select>
+                </td>
+                <td width="5%"></td>
+                <td class="vtext" width="10%">Search</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="term" value="{{ filters.term or '' }}" class="textbox w-250" placeholder="Code / Name...">
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    <input type="submit" value="SEARCH" class="button-common">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
 
 <!-- SAVE FORM -->
 <form method="POST" id="courseForm">
