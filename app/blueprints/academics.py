@@ -1443,9 +1443,41 @@ def college_dean_approval():
                            current_adcid=current_adcid,
                            sid=sid)
 
-@academics_bp.context_processor
+@academics_bp.app_context_processor
 def inject_academic_menu():
-    return {'ACADEMIC_MENU_CONFIG': ACADEMIC_MENU_CONFIG}
+    if 'user_id' not in session or str(session.get('current_module_id')) not in ['32', '33']:
+        return dict(ACADEMIC_MENU_CONFIG=ACADEMIC_MENU_CONFIG, academics_tabs=[], academics_breadcrumb=[])
+
+    curr_path = request.path.rstrip('/').lower()
+    
+    academics_tabs = []
+    academics_breadcrumb = []
+
+    for main_cat, subs in ACADEMIC_MENU_CONFIG.items():
+        for sub_cat, sub_subs in subs.items():
+            for folder_name, pages in sub_subs.items():
+                if not pages: continue
+                
+                is_active_group = False
+                tab_list = []
+                for p_name in pages:
+                    p_url = get_page_url(p_name).rstrip('/')
+                    
+                    is_current = (curr_path == p_url.lower())
+                        
+                    active = is_current
+                    tab_list.append({'name': p_name, 'url': p_url, 'active': active})
+                    if active:
+                        is_active_group = True
+                        academics_breadcrumb = [main_cat, folder_name, p_name]
+                
+                if is_active_group:
+                    academics_tabs = tab_list
+                    break
+            if academics_tabs: break
+        if academics_tabs: break
+
+    return dict(ACADEMIC_MENU_CONFIG=ACADEMIC_MENU_CONFIG, academics_tabs=academics_tabs, academics_breadcrumb=academics_breadcrumb)
 
 @academics_bp.route('/api/courses')
 def get_all_courses_api():
@@ -2721,8 +2753,52 @@ def degree_crhr():
         'degrees': AcademicsModel.get_all_degrees(),
         'semesters': InfrastructureModel.get_all_semesters()
     }
-    
+
     return render_template('academics/degree_crhr.html', items=items, lookups=lookups, pagination=pagination, page_range=page_range)
+
+@academics_bp.route('/degree_crhr_courseplan', methods=['GET', 'POST'])
+@permission_required('Degree Wise Credit Hours(Course Plan)')
+def degree_crhr_courseplan():
+    if request.method == 'POST':
+        action = request.form.get('action')
+        if action == 'DELETE':
+            if AcademicsModel.delete_degree_crhr_courseplan(request.form.get('id')):
+                flash('Course Plan record deleted successfully!', 'success')
+            else:
+                flash('Error deleting record.', 'danger')
+        else:
+            if AcademicsModel.save_degree_crhr_courseplan(request.form):
+                flash('Course Plan record saved successfully!', 'success')
+            else:
+                flash('Error saving record.', 'danger')
+        return redirect(url_for('academics.degree_crhr_courseplan'))
+
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    items, total = AcademicsModel.get_degree_crhr_courseplan_paginated(page=page, per_page=per_page)
+
+    pagination = {
+        'page': page,
+        'per_page': per_page,
+        'total': total,
+        'total_pages': math.ceil(total / per_page) if total else 1,
+        'has_prev': page > 1,
+        'has_next': page < (math.ceil(total / per_page) if total else 1)
+    }
+
+    page_range = get_pagination_range(page, pagination['total_pages'])
+
+    lookups = {
+        'degrees': AcademicsModel.get_all_degrees(),
+        'course_types': ClassificationModel.get_course_types()
+    }
+
+    return render_template('academics/degree_crhr_courseplan.html', items=items, lookups=lookups, pagination=pagination, page_range=page_range)
+
+@academics_bp.route('/api/degree_crhr_courseplan/<int:plan_id>')
+def get_degree_crhr_courseplan_details_api(plan_id):
+    master, details = AcademicsModel.get_degree_crhr_courseplan_details(plan_id)
+    return jsonify({'master': master, 'details': details})
 
 @academics_bp.route('/api/mapping/<map_id>/details')
 def get_mapping_details_api(map_id):

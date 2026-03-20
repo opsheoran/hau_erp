@@ -1,6 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
 
+{% if academics_tabs %}
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 15px;">
+    <tr>
+        <td align="left" class="tabbing-td">
+            <div style="display:inline; width:100%">
+                {% for tab in academics_tabs %}
+                <a title="{{ tab.name }}" class="{% if tab.active %}tabgs{% else %}tabg{% endif %}" href="{{ tab.url }}" style="display:inline-block;width:110px;">{{ tab.name }}</a>
+                {% endfor %}
+            </div>
+        </td>
+    </tr>
+</table>
+{% endif %}
+
 <form method="POST" id="crhrCoursePlanForm">
     <input type="hidden" name="action" value="SAVE">
     <input type="hidden" name="pk_id" id="cp_id">
