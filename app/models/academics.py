@@ -3001,7 +3001,8 @@ class AcademicsModel:
         offset = (page - 1) * per_page
         total = DB.fetch_scalar("SELECT COUNT(*) FROM SMS_Degreewise_crhr")
         query = f"""
-            SELECT C.pk_degreewise_crhr as id, C.totalmincrhr as total_crhr, 
+            SELECT C.pk_degreewise_crhr as id, 
+            ISNULL(C.totalmincrhr, (SELECT SUM(crhrmin) FROM SMS_Degreewise_crhr_Trn WHERE fk_degreewise_crhr = C.pk_degreewise_crhr)) as total_crhr,
             D.degreename, S.semester_roman, C.fk_degreeid, C.fk_semesterid
             FROM SMS_Degreewise_crhr C
             INNER JOIN SMS_Degree_Mst D ON C.fk_degreeid = D.pk_degreeid
@@ -3010,7 +3011,6 @@ class AcademicsModel:
             OFFSET {offset} ROWS FETCH NEXT {per_page} ROWS ONLY
         """
         return DB.fetch_all(query), total
-
     @staticmethod
     def _get_table_columns(table_name):
         cols = DB.fetch_all(f"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table_name}'")
