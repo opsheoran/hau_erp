@@ -128,20 +128,27 @@
             background: #3c8dbc; 
             color: white; 
             border: 1px solid #2c729e; 
-            padding: 3px 15px; 
+            padding: 4px 18px; 
             font-family: Verdana; 
             font-size: 11px; 
             font-weight: bold; 
             cursor: pointer; 
-            border-radius: 2px;
-            height: 24px;
+            border-radius: 20px;
+            height: auto;
+            min-height: 26px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
-        .button-common:hover { background: #2c729e; }
+        .button-common:hover { 
+            background: #2c729e; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+        }
         .required { color: red; font-weight: bold; }
 
         .content-wrapper { flex-grow: 1; padding: 20px; width: 100%; }
 
-        .tableheading { background: #f4f4f4; padding: 10px; font-weight: bold; color: #3c8dbc; font-size: 11px; margin-bottom: 15px; border-bottom: 1px solid #ddd; }
+        .tableheading { background: #f4f4f4; padding: 10px; font-weight: bold; color: #3c8dbc; font-size: 11px; margin-bottom: 15px; border-bottom: 1px solid #ddd; border-radius: 6px 6px 0 0; }
         .tablesubheading { background: #f9f9f9; padding: 6px 10px; font-weight: bold; color: #333; font-size: 11px; margin-bottom: 10px; border-bottom: 1px solid #eee; }
         .mainheadingborderbottom { border-bottom: 2px solid #3c8dbc; padding-bottom: 2px; }
         .subheadingborderbottom { border-bottom: 1px solid #666; padding-bottom: 1px; }
@@ -151,8 +158,27 @@
         .item-style td, .item-style-alt td { border: 1px solid #D4D4D4 !important; padding: 5px 8px; }
         .item-style-alt { background: #FAFAFA; }
 
-        .form-table { width: 100%; border-collapse: collapse; }
-        .form-table td { padding: 4px 6px; vertical-align: middle; }
+        .form-table { 
+            width: 100%; 
+            border-collapse: separate; 
+            border-spacing: 0;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .form-table td { padding: 8px 12px; vertical-align: middle; }
+        
+        .hau-card {
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
 
         .filter-table { width: 100%; border-collapse: collapse; }
         .filter-table td { padding: 8px 5px; vertical-align: middle; }
