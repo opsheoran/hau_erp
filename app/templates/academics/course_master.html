@@ -183,14 +183,14 @@
                     <thead>
                         <tr class="header-style">
                             <th width="5%">S.No.</th>
-                            <th width="35%">Course Name</th>
+                            <th width="30%">Course Name</th>
                             <th width="15%">Course Code</th>
                             <th width="15%">Course Type</th>
                             <th width="10%">CrHr Th</th>
                             <th width="10%">CrHr Pr</th>
-                            <th width="10%">Order</th>
-                            <th width="7.5%">EDIT</th>
-                            <th width="7.5%">DELETE</th>
+                            <th width="5%">Order</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -242,19 +242,19 @@ function addMapRow(data = null) {
     row.innerHTML = `
         <td align="center">${rowCount + 1}</td>
         <td>
-            <select name="map_sess_from[]" class="textbox w-200" style="width:100%">
+            <select name="map_sess_from[]" class="textbox" style="width:100%">
                 <option value="0">Sess From</option>
                 ${lookups.sessions.map(s => `<option value="${s.id}" ${data && data.fk_sessionid_from == s.id ? 'selected' : ''}>${s.name}</option>`).join('')}
             </select>
         </td>
         <td>
-            <select name="map_sess_upto[]" class="textbox w-200" style="width:100%">
+            <select name="map_sess_upto[]" class="textbox" style="width:100%">
                 <option value="0">Sess To</option>
                 ${lookups.sessions.map(s => `<option value="${s.id}" ${data && data.fk_sessionid_upto == s.id ? 'selected' : ''}>${s.name}</option>`).join('')}
             </select>
         </td>
         <td>
-            <select name="map_degree[]" class="textbox w-200" style="width:100%" required>
+            <select name="map_degree[]" class="textbox" style="width:100%" required>
                 <option value="">--Select Degree--</option>
                 ${lookups.degrees.map(d => `<option value="${d.id}" ${data && data.fk_degreeid == d.id ? 'selected' : ''}>${d.name}</option>`).join('')}
             </select>
@@ -264,7 +264,7 @@ function addMapRow(data = null) {
             </select>
         </td>
         <td>
-            <select name="map_sem[]" class="textbox w-200" style="width:100%">
+            <select name="map_sem[]" class="textbox" style="width:100%">
                 <option value="0">--Sem--</option>
                 ${lookups.semesters.map(s => `<option value="${s.id}" ${data && data.fk_semesterid == s.id ? 'selected' : ''}>${s.name}</option>`).join('')}
             </select>
