@@ -324,12 +324,13 @@ function editCourse(id) {
     fetch(`/academics/api/get_course_details/${id}`)
         .then(r => r.json())
         .then(data => {
+            console.log("Course Details:", data);
             document.getElementById('pk_id').value = id;
-            document.getElementById('c_code').value = data.coursecode.trim();
-            document.getElementById('c_name').value = data.coursename.trim();
-            document.getElementById('c_dept').value = data.fk_Deptid || '';
-            document.getElementById('c_title').value = data.fk_papertitleid || '';
-            document.getElementById('c_type').value = data.fk_coursetypeid || '';
+            document.getElementById('c_code').value = (data.coursecode || '').trim();
+            document.getElementById('c_name').value = (data.coursename || '').trim();
+            document.getElementById('c_dept').value = data.fk_Deptid || data.fk_deptid || '';
+            document.getElementById('c_title').value = data.fk_papertitleid || data.fk_PaperTitleId || '';
+            document.getElementById('c_type').value = data.fk_coursetypeid || data.fk_CourseTypeId || '';
             document.getElementById('c_order').value = data.reportorder || 1;
             document.getElementById('c_theory').value = data.crhr_theory || 0;
             document.getElementById('c_practical').value = data.crhr_practical || 0;
