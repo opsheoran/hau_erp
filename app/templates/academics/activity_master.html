@@ -7,41 +7,63 @@
     .required-star { color: red; font-weight: bold; }
 </style>
 
-<div class="hau-card" style="max-width: 700px;">
-    <div class="tablesubheading">Activity Master
-        <div class="helpbtn" style="float:right;">
-            <input type="image" src="{{ url_for('static', filename='images/help.png') }}" onclick="document.getElementById('helpModal').style.display='block'" style="height:20px;">
-        </div>
+<div class="tableheading" style="position:relative;">
+    Activity Master
+    <div class="helpbtn" style="position:absolute; right:10px; top:8px;">
+        <input type="image" src="{{ url_for('static', filename='images/help.png') }}" onclick="document.getElementById('helpModal').style.display='block'" style="height:20px;">
     </div>
-    <div style="padding: 15px;">
-        <form method="POST">
-            <input type="hidden" name="action" value="SAVE">
-            <input type="hidden" name="pk_id" id="act_id">
-            <table class="form-table">
-                <tr>
-                    <td class="vtext" width="25%">Activity Name</td><td class="colon">:</td>
-                    <td>
-                        <input type="text" name="name" id="act_name" class="textbox w-250" required>
-                        <span class="required-star">*</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="vtext">Remarks</td><td class="colon">:</td>
-                    <td><textarea name="remarks" id="act_remarks" class="textbox w-350"></textarea></td>
-                </tr>
-                <tr>
-                    <td colspan="2"></td>
-                    <td style="padding-top: 15px;">
-                        <input type="submit" id="btn_save" value="SAVE" class="button-common" style="background:#3c8dbc; color:white; padding: 5px 20px;">
-                        <input type="button" value="RESET" class="button-common" style="margin-left:10px;" onclick="resetForm()">
-                    </td>
-                </tr>
-            </table>
-        </form>
+</div>
 
-        <div style="margin-top: 40px;">
-            <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">List of Activities</div>
-            <table class="table-grid-view">
+<form method="POST" id="activityForm">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="act_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tablesubheading" colspan="3">
+                    <span class="subheadingborderbottom">Add / Edit Activity</span>
+                </td>
+            </tr>
+            <tr><td colspan="3" height="15"></td></tr>
+            <tr>
+                <td class="vtext" width="20%">Activity Name</td>
+                <td class="colon" width="2%">:</td>
+                <td>
+                    <input type="text" name="name" id="act_name" class="textbox w-250" required>
+                    <span class="required-star">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" style="vertical-align: top; padding-top: 10px;">Remarks</td>
+                <td class="colon" style="vertical-align: top; padding-top: 10px;">:</td>
+                <td><textarea name="remarks" id="act_remarks" class="textbox w-350"></textarea></td>
+            </tr>
+            <tr><td colspan="3" height="15"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <input type="submit" id="btn_save" value="SAVE" class="button-common">
+                    <input type="button" value="RESET" class="button-common" style="margin-left:10px;" onclick="resetForm()">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading">
+                <span class="subheadingborderbottom">List of Activities</span>
+            </td>
+        </tr>
+        <tr><td height="10"></td></tr>
+        <tr>
+            <td>
+                <table class="table-grid-view" width="100%">
                 <thead>
                     <tr class="header-style">
                         <th width="50">S.No.</th>
@@ -75,9 +97,10 @@
             {% if pagination.total_pages > 1 %}
             {% include "includes/pagination.html" %}
             {% endif %}
-        </div>
-    </div>
-</div>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 <!-- HELP MODAL -->
 <div id="helpModal" class="grayout" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
