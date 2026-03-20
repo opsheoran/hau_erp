@@ -2512,6 +2512,136 @@ def teacher_course_assignment():
                            include_all=include_all,
                            hod_departments=dept_ctx.get('hr_departments', []))
 
+@academics_bp.route('/teacher_course_assignment_report')
+@permission_required('Teacher Course Assignment')
+def teacher_course_assignment_report():
+    filters = {
+        'college_id': request.args.get('college_id', type=int),
+        'session_id': request.args.get('session_id', type=int),
+        'degree_id': request.args.get('degree_id', type=int),
+        'semester_id': request.args.get('semester_id', type=int),
+        'exconfig_id': request.args.get('exconfig_id', type=int),
+        'branch_id': request.args.get('branch_id', type=int)
+    }
+
+    if not all([filters['college_id'], filters['session_id'], filters['degree_id'], filters['semester_id']]):
+        flash('Please select all mandatory filters to print report.', 'warning')
+        return redirect(url_for('academics.teacher_course_assignment', **{k: v for k, v in filters.items() if v}))
+
+    report_data = AcademicsModel.get_teacher_course_assignment_report_data(filters)
+
+    if not report_data:
+        flash('No data found for the selected filters.', 'info')
+        return redirect(url_for('academics.teacher_course_assignment', **{k: v for k, v in filters.items() if v}))
+
+    from app.utils import generate_teacher_course_assignment_pdf
+    pdf_out = generate_teacher_course_assignment_pdf(report_data)
+
+    response = make_response(pdf_out.getvalue())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'inline; filename=Teacher_Course_Assignment_{datetime.now().strftime("%Y%m%d%H%M")}.pdf'
+    return response
+
+@academics_bp.route('/course_teacher_assignment_report_page', methods=['GET', 'POST'])
+@permission_required('Course Offer And Teacher Course Assignment Report(For HOD)')
+def course_teacher_assignment_report_page():
+    user_id = session.get('user_id')
+    emp_id = session.get('emp_id')
+
+    if request.method == 'POST':
+        filters = {
+            'college_id': request.form.get('college_id', type=int),
+            'session_id': request.form.get('session_id', type=int),
+            'degree_id': request.form.get('degree_id', type=int),
+            'semester_id': request.form.get('semester_id', type=int),
+            'branch_id': request.form.get('branch_id', type=int),
+            'coursetype': request.form.get('coursetype'),
+            'action': request.form.get('action'),
+            'rpt_format': request.form.get('rpt_format', 'pdf')
+        }
+    else:
+        filters = {
+            'college_id': request.args.get('college_id', type=int),
+            'session_id': request.args.get('session_id', type=int),
+            'degree_id': request.args.get('degree_id', type=int),
+            'semester_id': request.args.get('semester_id', type=int),
+            'branch_id': request.args.get('branch_id', type=int),
+            'coursetype': request.args.get('coursetype')
+        }
+
+    # Auto-select college based on selected location if not set
+    if not filters['college_id']:
+        loc_id = session.get('selected_loc')
+        if loc_id:
+            colleges = DB.fetch_all("SELECT pk_collegeid as id FROM SMS_College_Mst WHERE fk_locid = ?", [loc_id])
+            if len(colleges) == 1:
+                filters['college_id'] = colleges[0]['id']
+
+    # Auto-select current session by sessionorder if not set
+    if not filters['session_id']:
+        sess = DB.fetch_one("SELECT TOP 1 pk_sessionid FROM SMS_AcademicSession_Mst ORDER BY sessionorder DESC, pk_sessionid DESC")
+        if sess:
+            filters['session_id'] = sess['pk_sessionid']
+
+    lookups = {
+        'colleges': AcademicsModel.get_colleges_simple(),
+        'sessions': InfrastructureModel.get_sessions(),
+        'degrees': [],
+        'semesters': [],
+        'branches': []
+    }
+
+    if filters['college_id']:
+        lookups['degrees'] = AcademicsModel.get_college_degrees(filters['college_id'])
+    if filters['degree_id']:
+        lookups['semesters'] = AcademicsModel.get_degree_semesters_for_degree(filters['degree_id'])
+        lookups['branches'] = AcademicsModel.get_degree_branches(filters['degree_id'])
+
+    report_data = []
+    grouped_data = {}
+
+    # Process View or Export
+    if all([filters['college_id'], filters['session_id'], filters['degree_id'], filters['semester_id']]):
+        if request.method == 'POST' and filters.get('action') == 'VIEW':
+            report_data = AcademicsModel.get_teacher_course_assignment_report_data(filters)
+
+            if filters.get('coursetype') and filters['coursetype'] != '0':
+                report_data = [r for r in report_data if (r.get('coursetype') or '').strip() == filters['coursetype']]
+
+            if filters['rpt_format'] == 'pdf':
+                from app.utils import generate_teacher_course_assignment_pdf
+                pdf_out = generate_teacher_course_assignment_pdf(report_data)
+                response = make_response(pdf_out.getvalue())
+                response.headers['Content-Type'] = 'application/pdf'
+                response.headers['Content-Disposition'] = f'inline; filename=Teacher_Course_Assignment_{datetime.now().strftime("%Y%m%d%H%M")}.pdf'
+                return response
+            elif filters['rpt_format'] == 'excel':
+                from app.utils import generate_teacher_course_assignment_excel
+                excel_out = generate_teacher_course_assignment_excel(report_data)
+                response = make_response(excel_out.getvalue())
+                response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                response.headers['Content-Disposition'] = f'attachment; filename=Teacher_Course_Assignment_{datetime.now().strftime("%Y%m%d%H%M")}.xlsx'
+                return response
+            elif filters['rpt_format'] == 'word':
+                from app.utils import generate_teacher_course_assignment_word
+                word_out = generate_teacher_course_assignment_word(report_data)
+                response = make_response(word_out.getvalue())
+                response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                response.headers['Content-Disposition'] = f'attachment; filename=Teacher_Course_Assignment_{datetime.now().strftime("%Y%m%d%H%M")}.docx'
+                return response
+
+            # Re-group for grid display
+            for row in report_data:
+                t_key = (row['teacher_code'], row['teacher_name'])
+                if t_key not in grouped_data:
+                    grouped_data[t_key] = []
+                grouped_data[t_key].append(row)
+
+    return render_template('academics/reports/course_teacher_assignment_report_page.html',
+                           lookups=lookups,
+                           filters=filters,
+                           grouped_data=grouped_data)
+
 @academics_bp.route('/batch_master', methods=['GET', 'POST'])
 @permission_required('Class - Batch Master')
 def batch_master():
@@ -2634,7 +2764,8 @@ def col_deg_spec_master():
     lookups = {
         'colleges': AcademicsModel.get_colleges_simple(),
         'degrees': AcademicsModel.get_all_degrees(),
-        'branches': AcademicsModel.get_branches()
+        'branches': AcademicsModel.get_branches(),
+        'spec_types': [{'id': 'Major', 'name': 'Major'}, {'id': 'Minor', 'name': 'Minor'}, {'id': 'Supporting', 'name': 'Supporting'}, {'id': 'Optional', 'name': 'Optional'}]
     }
     
     return render_template('academics/col_deg_spec_master.html', items=items, lookups=lookups, pagination=pagination, page_range=page_range)
