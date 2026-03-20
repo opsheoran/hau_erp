@@ -2679,7 +2679,8 @@ def batch_master():
         'sessions': InfrastructureModel.get_sessions(),
         'degrees': AcademicsModel.get_all_degrees(),
         'semesters': InfrastructureModel.get_all_semesters(),
-        'branches': AcademicsModel.get_branches()
+        'branches': AcademicsModel.get_branches(),
+        'batch_types': AcademicsModel.get_batch_type_lookup()
     }
     
     return render_template('academics/batch_master.html', items=items, lookups=lookups, pagination=pagination, page_range=page_range)
