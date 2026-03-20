@@ -47,23 +47,58 @@
 </div>
 
 <script>
-    if (!window.paginationScrollScriptLoaded) {
-        window.paginationScrollScriptLoaded = true;
-        document.addEventListener("DOMContentLoaded", function() {
-            var scrollpos = sessionStorage.getItem('scrollpos');
-            var scroll_path = sessionStorage.getItem('scroll_path');
-            if (scrollpos && scroll_path === window.location.pathname) {
-                window.scrollTo(0, parseInt(scrollpos));
-            }
-            sessionStorage.removeItem('scrollpos');
-            sessionStorage.removeItem('scroll_path');
+    if (!window.ajaxPaginationLoaded) {
+        window.ajaxPaginationLoaded = true;
 
-            document.body.addEventListener('click', function(e) {
-                if (e.target.closest('.pager-style a')) {
-                    sessionStorage.setItem('scrollpos', window.scrollY || document.documentElement.scrollTop);
-                    sessionStorage.setItem('scroll_path', window.location.pathname);
+        document.addEventListener('click', function(e) {
+            let link = e.target.closest('.pager-style a');
+            if (link) {
+                e.preventDefault();
+                let url = link.href;
+                
+                let pagerContainer = link.closest('.pager-style');
+                if (pagerContainer) {
+                    pagerContainer.style.opacity = '0.5';
+                    pagerContainer.style.pointerEvents = 'none';
                 }
-            });
+
+                fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.text();
+                })
+                .then(html => {
+                    let parser = new DOMParser();
+                    let doc = parser.parseFromString(html, 'text/html');
+                    
+                    let newContent = doc.querySelector('.content-wrapper') || doc.querySelector('.content-area');
+                    let currentContent = document.querySelector('.content-wrapper') || document.querySelector('.content-area');
+                    
+                    if (newContent && currentContent) {
+                        currentContent.innerHTML = newContent.innerHTML;
+                        
+                        window.history.pushState({path: url}, '', url);
+                        
+                        if (typeof window.reinitDatePickers === 'function') {
+                            window.reinitDatePickers();
+                        }
+                    } else {
+                        window.location.href = url;
+                    }
+                })
+                .catch(err => {
+                    console.error('Pagination fetch error:', err);
+                    window.location.href = url;
+                });
+            }
+        });
+
+        window.addEventListener('popstate', function(e) {
+            window.location.reload();
         });
     }
 </script>
