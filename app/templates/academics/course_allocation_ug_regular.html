@@ -46,7 +46,7 @@
                                 <td class="vtext" id="lblCollege">College</td>
                                 <td class="colon">:</td>
                                 <td class="required" colspan="4">
-                                    <select name="college_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlCollege" class="dropdownvvlong" onchange="this.form.submit()">
+                                    <select name="college_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlCollege" class="textbox w-350" onchange="this.form.submit()">
                                         <option value="">-- Select College --</option>
                                         {% for c in lookups.colleges %}
                                         <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -58,7 +58,7 @@
                                 <td class="vtext" id="lblSession">Academic Session</td>
                                 <td class="colon">:</td>
                                 <td class="required">
-                                    <select name="session_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlSession" class="dropdown" onchange="this.form.submit()">
+                                    <select name="session_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlSession" class="textbox w-200" onchange="this.form.submit()">
                                         <option value="">-- Select Session --</option>
                                         {% for s in lookups.sessions %}
                                         <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
@@ -70,7 +70,7 @@
                                 <td class="vtext" id="lblDegree">Degree</td>
                                 <td class="colon">:</td>
                                 <td class="required">
-                                    <select name="degree_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlDegree" class="dropdown" onchange="this.form.submit()">
+                                    <select name="degree_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlDegree" class="textbox w-200" onchange="this.form.submit()">
                                         <option value="">-- Select Degree --</option>
                                         {% for d in lookups.degrees %}
                                         <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -80,7 +80,7 @@
                                 <td class="vtext" id="lblSemester">Class</td>
                                 <td class="colon">:</td>
                                 <td class="required">
-                                    <select name="semester_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlSemester" class="dropdown" onchange="this.form.submit()">
+                                    <select name="semester_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlSemester" class="textbox w-200" onchange="this.form.submit()">
                                         <option value="">-- Select Class --</option>
                                         {% for s in lookups.semesters %}
                                         <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
@@ -92,7 +92,7 @@
                                 <td class="vtext">Specialization</td>
                                 <td class="colon">:</td>
                                 <td class="required">
-                                    <select name="branch_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_ddlBranch" class="dropdownlong" onchange="this.form.submit()">
+                                    <select name="branch_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_ddlBranch" class="textbox w-250" onchange="this.form.submit()">
                                         <option value="">-- Select Specialization --</option>
                                         {% for b in lookups.branches %}
                                         <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
@@ -103,7 +103,7 @@
                                 <td class="colon">:</td>
                                 <td>
                                     <input type="hidden" name="year" value="{{ filters.year or '' }}">
-                                    <select id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_ddlYear" class="dropdown" disabled="disabled">
+                                    <select id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_ddlYear" class="textbox w-200" disabled="disabled">
                                         {% if lookups.years %}
                                             {% for y in lookups.years %}
                                             <option value="{{ y.pk_degreeyearid }}" {% if filters.year|string == y.pk_degreeyearid|string %}selected{% endif %}>{{ y.degreeyear_char }}</option>
@@ -118,7 +118,7 @@
                                 <td class="vtext">Certificate Batch</td>
                                 <td class="colon">:</td>
                                 <td>
-                                    <select id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_ddlcertbatch" class="dropdown">
+                                    <select id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_ddlcertbatch" class="textbox w-200">
                                         <option value="">-- Select Certificate Batch --</option>
                                     </select>
                                 </td>
@@ -145,7 +145,7 @@
                                         <tr>
                                             <td class="vtext" width="16%">Exam Config&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td>
                                             <td>
-                                                <select name="exconfig_id" id="ctl00_ContentPlaceHolder1_ddlconfig" class="dropdownverylong" onchange="this.form.submit()" 
+                                                <select name="exconfig_id" id="ctl00_ContentPlaceHolder1_ddlconfig" class="dropdownverylong textbox" onchange="this.form.submit()" 
                                                     {% if not filters.fetch == '1' and not filters.exconfig_id %}disabled="disabled" style="background-color: #e1e1e1;"{% endif %}>
                                                     <option value="">-- Select Exam Config.--</option>
                                                     {% for ec in lookups.exam_configs %}

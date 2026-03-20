@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
-    .textbox-small { width: 150px !important; }
-    .textbox-medium { width: 250px !important; }
+    .w-150 { width: 150px !important; }
+    .w-250 { width: 250px !important; }
 </style>
 
 <!-- SAVE FORM -->
@@ -23,7 +23,7 @@
                 <td class="vtext" width="15%">Degree Type</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input type="text" name="name" id="t_name" class="textbox textbox-medium" maxlength="49" required>
+                    <input type="text" name="name" id="t_name" class="textbox w-250" maxlength="49" required>
                     *
                 </td>
             </tr>
@@ -32,7 +32,7 @@
                 <td class="vtext">Degree Type Symbol</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="symbol" id="t_symbol" class="dropdown textbox-medium" required>
+                    <select name="symbol" id="t_symbol" class="textbox w-200 w-250" required>
                         <option value="">-- Select Degree Type Symbol--</option>
                         <option value="B">B</option>
                         <option value="M">M</option>
@@ -52,7 +52,7 @@
                 <td class="vtext">Prefix</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input type="text" name="prefix" id="t_prefix" class="textbox textbox-small" maxlength="10">
+                    <input type="text" name="prefix" id="t_prefix" class="textbox w-150" maxlength="10">
                 </td>
             </tr>
             
@@ -116,29 +116,7 @@
                 </table>
                 
                 {% if pagination.total_pages > 1 %}
-                <div class="pager-style">
-                    {% if pagination.has_prev %}
-                        <a href="{{ url_for('academics.degree_type_master', page=pagination.page-1) }}">&lt;</a>
-                    {% else %}
-                        <span class="disabled">&lt;</span>
-                    {% endif %}
-
-                    {% for p in page_range %}
-                        {% if p == '...' %}
-                            <span>{{ p }}</span>
-                        {% elif p == pagination.page %}
-                            <span class="active">{{ p }}</span>
-                        {% else %}
-                            <a href="{{ url_for('academics.degree_type_master', page=p) }}">{{ p }}</a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if pagination.has_next %}
-                        <a href="{{ url_for('academics.degree_type_master', page=pagination.page+1) }}">&gt;</a>
-                    {% else %}
-                        <span class="disabled">&gt;</span>
-                    {% endif %}
-                </div>
+                {% include "includes/pagination.html" %}
                 {% endif %}
             </td>
         </tr>

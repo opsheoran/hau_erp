@@ -46,7 +46,7 @@
                 <td class="vtext">Degree Year</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="year_id" id="s_year" class="dropdown w-250" required>
+                    <select name="year_id" id="s_year" class="textbox w-200 w-250" required>
                         <option value="">-- Select Degree Year --</option>
                         {% for y in years %}
                         <option value="{{ y.pk_degreeyearid }}">{{ y.degreeyear_char }}</option>
@@ -118,29 +118,7 @@
                 </table>
                 
                 {% if pagination.total_pages > 1 %}
-                <div class="pager-style">
-                    {% if pagination.has_prev %}
-                        <a href="{{ url_for('academics.semester_master', page=pagination.page-1) }}">&lt;</a>
-                    {% else %}
-                        <span class="disabled">&lt;</span>
-                    {% endif %}
-
-                    {% for p in page_range %}
-                        {% if p == '...' %}
-                            <span>{{ p }}</span>
-                        {% elif p == pagination.page %}
-                            <span class="active">{{ p }}</span>
-                        {% else %}
-                            <a href="{{ url_for('academics.semester_master', page=p) }}">{{ p }}</a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if pagination.has_next %}
-                        <a href="{{ url_for('academics.semester_master', page=pagination.page+1) }}">&gt;</a>
-                    {% else %}
-                        <span class="disabled">&gt;</span>
-                    {% endif %}
-                </div>
+                {% include "includes/pagination.html" %}
                 {% endif %}
             </td>
         </tr>

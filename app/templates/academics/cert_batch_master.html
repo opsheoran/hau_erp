@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
-    .textbox-small { width: 150px !important; }
-    .textbox-medium { width: 250px !important; }
-    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .w-150 { width: 150px !important; }
+    .w-250 { width: 250px !important; }
+    .w-350 { width: 363px !important; height: 60px !important; }
     .required-star { color: red; font-weight: bold; }
 </style>
 
@@ -16,13 +16,13 @@
                 <tr>
                     <td class="vtext" width="15%">College</td><td class="colon">:</td>
                     <td width="34%">
-                        <select name="college_id" id="b_college" class="dropdown textbox-medium" required>
+                        <select name="college_id" id="b_college" class="textbox w-200 w-250" required>
                             {% for c in colleges %}<option value="{{ c.pk_collegeid }}">{{ c.collegename }}</option>{% endfor %}
                         </select>
                     </td>
                     <td class="vtext" width="15%">Degree</td><td class="colon">:</td>
                     <td>
-                        <select name="degree_id" id="b_degree" class="dropdown textbox-medium" required>
+                        <select name="degree_id" id="b_degree" class="textbox w-200 w-250" required>
                             {% for d in degrees %}<option value="{{ d.pk_degreeid }}">{{ d.degreename }}</option>{% endfor %}
                         </select>
                     </td>
@@ -30,12 +30,12 @@
                 <tr>
                     <td class="vtext">Academic Session</td><td class="colon">:</td>
                     <td>
-                        <select name="session_id" id="b_sess" class="dropdown textbox-small" required>
+                        <select name="session_id" id="b_sess" class="textbox w-200 w-150" required>
                             {% for s in sessions %}<option value="{{ s.pk_sessionid }}">{{ s.sessionname }}</option>{% endfor %}
                         </select>
                     </td>
                     <td class="vtext">Batch Name</td><td class="colon">:</td>
-                    <td><input type="text" name="name" id="b_name" class="textbox textbox-small" required> <span class="required-star">*</span></td>
+                    <td><input type="text" name="name" id="b_name" class="textbox w-150" required> <span class="required-star">*</span></td>
                 </tr>
                 <tr>
                     <td class="vtext">Status</td><td class="colon">:</td>

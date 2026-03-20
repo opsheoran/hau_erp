@@ -11,7 +11,7 @@
                         <td class="vtext" width="15%">Academic Session</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="session_id" class="dropdownlong" onchange="this.form.submit()">
+                            <select name="session_id" class="textbox w-250" onchange="this.form.submit()">
                                 <option value="0">--Select Academic Session--</option>
                                 {% for s in lookups.sessions %}
                                 <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
@@ -25,7 +25,7 @@
         </form>
 
         <div class="tablesubheading" style="margin-top: 20px;">Pending Course Add/Withdrawal Request (After Teacher Approval)</div>
-        <table class="grid-table" width="100%">
+        <table class="table-grid-view" width="100%">
             <thead>
                 <tr>
                     <th>S.No.</th>
@@ -57,7 +57,7 @@
         </table>
 
         <div class="tablesubheading" style="margin-top: 30px;">Processed Course Add/Withdrawal Request</div>
-        <table class="grid-table" width="100%">
+        <table class="table-grid-view" width="100%">
             <thead>
                 <tr>
                     <th>S.No.</th>

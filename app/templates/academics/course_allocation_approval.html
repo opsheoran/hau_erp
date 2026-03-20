@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
-    .textbox-small { width: 150px !important; }
-    .textbox-medium { width: 250px !important; }
-    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .w-150 { width: 150px !important; }
+    .w-250 { width: 250px !important; }
+    .w-350 { width: 363px !important; height: 60px !important; }
     .required-star { color: red; font-weight: bold; }
 </style>
 
@@ -15,14 +15,14 @@
                 <tr>
                     <td class="vtext" width="15%">College</td><td class="colon">:</td>
                     <td width="34%">
-                        <select name="college_id" class="dropdown textbox-medium" required>
+                        <select name="college_id" class="textbox w-200 w-250" required>
                             <option value="">-- Select --</option>
                             {% for c in colleges %}<option value="{{ c.pk_collegeid }}" {% if filters.college_id|string == c.pk_collegeid|string %}selected{% endif %}>{{ c.collegename }}</option>{% endfor %}
                         </select> <span class="required-star">*</span>
                     </td>
                     <td class="vtext" width="15%">Session</td><td class="colon">:</td>
                     <td>
-                        <select name="session_id" class="dropdown textbox-small" required>
+                        <select name="session_id" class="textbox w-200 w-150" required>
                             <option value="">-- Select --</option>
                             {% for s in sessions %}<option value="{{ s.pk_sessionid }}" {% if filters.session_id|string == s.pk_sessionid|string %}selected{% endif %}>{{ s.sessionname }}</option>{% endfor %}
                         </select> <span class="required-star">*</span>
@@ -31,7 +31,7 @@
                 <tr>
                     <td class="vtext">Degree</td><td class="colon">:</td>
                     <td>
-                        <select name="degree_id" class="dropdown textbox-medium">
+                        <select name="degree_id" class="textbox w-200 w-250">
                             <option value="">-- All Degrees --</option>
                             {% for d in degrees %}<option value="{{ d.pk_degreeid }}" {% if filters.degree_id|string == d.pk_degreeid|string %}selected{% endif %}>{{ d.degreename }}</option>{% endfor %}
                         </select>
@@ -49,7 +49,7 @@
                 <tr>
                     <td class="vtext" width="25%">Select Student to View Courses</td><td class="colon">:</td>
                     <td>
-                        <select id="sel_student" class="dropdown" style="width: 350px !important;" onchange="loadStudentCourses(this.value)">
+                        <select id="sel_student" class="textbox w-200" style="width: 350px !important;" onchange="loadStudentCourses(this.value)">
                             <option value="">-- Select Student --</option>
                             {% for s in students %}<option value="{{ s.pk_sid }}">{{ s.fullname }} ({{ s.AdmissionNo }})</option>{% endfor %}
                         </select>

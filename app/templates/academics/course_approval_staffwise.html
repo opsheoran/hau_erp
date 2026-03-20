@@ -9,7 +9,7 @@
                 <div class="row g-3">
                     <div class="col-md-5">
                         <label class="form-label small">College *</label>
-                        <select name="college_id" class="form-select form-select-sm" required onchange="this.form.submit()">
+                        <select name="college_id" class="form-select form-select-sm textbox" required onchange="this.form.submit()">
                             <option value="">-- Select College --</option>
                             {% for c in lookups.colleges %}
                             <option value="{{ c.id or c.pk_collegeid }}" {% if filters.college_id|string == (c.id or c.pk_collegeid)|string %}selected{% endif %}>{{ c.name or c.collegename }}</option>
@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-md-2">
                         <label class="form-label small">Academic Session *</label>
-                        <select name="session_id" class="form-select form-select-sm" required onchange="this.form.submit()">
+                        <select name="session_id" class="form-select form-select-sm textbox" required onchange="this.form.submit()">
                             <option value="">-- Select --</option>
                             {% for s in lookups.sessions %}
                             <option value="{{ s.pk_sessionid }}" {% if filters.session_id|string == s.pk_sessionid|string %}selected{% endif %}>{{ s.sessionname }}</option>
@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-md-3">
                         <label class="form-label small">Degree *</label>
-                        <select name="degree_id" class="form-select form-select-sm" required onchange="this.form.submit()">
+                        <select name="degree_id" class="form-select form-select-sm textbox" required onchange="this.form.submit()">
                             <option value="">-- Select Degree --</option>
                             {% for d in lookups.degrees %}
                             <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="col-md-2">
                         <label class="form-label small">Exam Config *</label>
-                        <select name="exconfig_id" class="form-select form-select-sm" required onchange="this.form.submit()">
+                        <select name="exconfig_id" class="form-select form-select-sm textbox" required onchange="this.form.submit()">
                             <option value="">-- Select --</option>
                             {% for ex in lookups.exconfigs %}
                             <option value="{{ ex.pk_exconfigid }}" {% if filters.exconfig_id|string == ex.pk_exconfigid|string %}selected{% endif %}>{{ ex.display_name }}</option>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label small">Department / Specialization</label>
-                        <select name="branch_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <select name="branch_id" class="form-select form-select-sm textbox" onchange="this.form.submit()">
                             <option value="">-- ALL --</option>
                             {% for b in lookups.branches %}
                             <option value="{{ b.Pk_BranchId }}" {% if filters.branch_id|string == b.Pk_BranchId|string %}selected{% endif %}>{{ b.Branchname }}</option>
@@ -53,7 +53,7 @@
                         </select>
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary btn-sm w-100">VIEW STUDENTS</button>
+                        <button type="submit" class="button-common">VIEW STUDENTS</button>
                     </div>
                 </div>
             </form>
@@ -87,7 +87,7 @@
                                 <td class="align-middle">{{ s.fullname }}</td>
                                 <td class="small">{{ s.courses_info }}</td>
                                 <td>
-                                    <input type="text" name="remarks[]" value="{{ s.remarks or '' }}" class="form-control form-control-sm">
+                                    <input type="text" name="remarks[]" value="{{ s.remarks or '' }}" class="form-control form-control-sm textbox">
                                 </td>
                             </tr>
                             {% endfor %}
@@ -96,8 +96,8 @@
                 </div>
 
                 <div class="mt-3 text-center bg-light p-3 border">
-                    <button type="submit" name="action" value="Approve" class="btn btn-success px-4">SAVE APPROVALS</button>
-                    <button type="submit" name="action" value="Hold" class="btn btn-warning px-4 ms-2">HOLD ALL SELECTED</button>
+                    <button type="submit" name="action" value="Approve" class="button-common">SAVE APPROVALS</button>
+                    <button type="submit" name="action" value="Hold" class="button-common">HOLD ALL SELECTED</button>
                 </div>
             </form>
             {% elif filters.exconfig_id %}

@@ -7,12 +7,12 @@
     </div>
 
     <form id="filterForm" method="GET">
-        <table width="100%" class="filter-table">
+        <table width="100%" class="form-table">
             <tr>
                 <td class="vtext">College</td>
                 <td class="colon">:</td>
                 <td colspan="4">
-                    <select name="college_id" id="ddlCollege" class="dropdown w-300" onchange="loadDegrees()">
+                    <select name="college_id" id="ddlCollege" class="textbox w-200 w-300" onchange="loadDegrees()">
                         <option value="">--Select College--</option>
                         {% for c in lookups.colleges %}
                         <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -24,7 +24,7 @@
                 <td class="vtext">Session</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="session_id" id="ddlSession" class="dropdown w-200">
+                    <select name="session_id" id="ddlSession" class="textbox w-200 w-200">
                         <option value="">--Select Session--</option>
                         {% for s in lookups.sessions %}
                         <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
@@ -34,7 +34,7 @@
                 <td class="vtext">Degree</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="degree_id" id="ddlDegree" class="dropdown w-300">
+                    <select name="degree_id" id="ddlDegree" class="textbox w-200 w-300">
                         <option value="">--Select Degree--</option>
                         {% for d in lookups.degrees %}
                         <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>

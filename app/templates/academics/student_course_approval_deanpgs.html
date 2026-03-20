@@ -9,12 +9,12 @@
     <form id="filterForm" method="GET">
         <input type="hidden" name="view" value="1">
         <input type="hidden" name="pending" id="pendingField" value="{{ filters.pending or '0' }}">
-        <table width="100%" class="filter-table">
+        <table width="100%" class="form-table">
             <tr>
                 <td class="vtext" id="lblCollege">College</td>
                 <td class="colon">:</td>
                 <td class="required" colspan="4">
-                    <select name="college_id" id="ddlCollege" class="dropdownvvlong" onchange="loadDegrees()">
+                    <select name="college_id" id="ddlCollege" class="textbox w-350" onchange="loadDegrees()">
                         <option value="">-- Select College --</option>
                         {% for c in lookups.colleges %}
                         <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -26,7 +26,7 @@
                 <td class="vtext" id="lblSession">Academic Session</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="session_id" id="ddlSession" class="dropdown" onchange="onSemesterChange()">
+                    <select name="session_id" id="ddlSession" class="textbox w-200" onchange="onSemesterChange()">
                         <option value="">-- Select Session --</option>
                         {% for s in lookups.sessions %}
                         <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
@@ -38,7 +38,7 @@
                 <td class="vtext" id="lblDegree">Degree</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="degree_id" id="ddlDegree" class="dropdown" onchange="onDegreeChange()">
+                    <select name="degree_id" id="ddlDegree" class="textbox w-200" onchange="onDegreeChange()">
                         <option value="">--Select Degree--</option>
                         {% for d in lookups.degrees %}
                         <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -48,7 +48,7 @@
                 <td class="vtext" id="lblSemester">Semester</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="semester_id" id="ddlSemester" class="dropdown" onchange="onSemesterChange()">
+                    <select name="semester_id" id="ddlSemester" class="textbox w-200" onchange="onSemesterChange()">
                         <option value=""> -- Select Semester -- </option>
                         {% for s in lookups.semesters %}
                         <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
@@ -60,7 +60,7 @@
                 <td class="vtext">Specialization</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="branch_id" id="ddlBranch" class="dropdownlong">
+                    <select name="branch_id" id="ddlBranch" class="textbox w-250">
                         <option value="">-- Select Specialization --</option>
                         {% for b in lookups.branches %}
                         <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
@@ -70,7 +70,7 @@
                 <td class="vtext">Year</td>
                 <td class="colon">:</td>
                 <td>
-                    <select id="ddlYear" class="dropdown" disabled="disabled">
+                    <select id="ddlYear" class="textbox w-200" disabled="disabled">
                         <option value="">--Year--</option>
                         {% for y in lookups.years %}
                         <option value="{{ y.pk_degreeyearid }}">{{ y.degreeyear_char }}</option>
@@ -82,7 +82,7 @@
                 <td class="vtext">Exam Config</td>
                 <td class="colon">:</td>
                 <td class="required" colspan="4">
-                    <select name="exconfig_id" id="ddlExamConfig" class="dropdownverylong">
+                    <select name="exconfig_id" id="ddlExamConfig" class="dropdownverylong textbox">
                         <option value="">-- Select Exam Config.--</option>
                         {% for ec in lookups.exam_configs %}
                         <option value="{{ ec.pk_exconfigid }}" {% if filters.exconfig_id|string == ec.pk_exconfigid|string %}selected{% endif %}>{{ ec.display_name }}</option>
@@ -94,7 +94,7 @@
                 <td class="vtext">Certificate Batch</td>
                 <td class="colon">:</td>
                 <td>
-                    <select id="ddlCertBatch" class="dropdown" disabled="disabled"></select>
+                    <select id="ddlCertBatch" class="textbox w-200" disabled="disabled"></select>
                 </td>
             </tr>
             <tr>

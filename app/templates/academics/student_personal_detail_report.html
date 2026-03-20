@@ -12,7 +12,7 @@
                     <td class="vtext" width="15%">College</td>
                     <td class="colon">:</td>
                     <td width="30%">
-                        <select name="college_id" class="dropdown w-250">
+                        <select name="college_id" class="textbox w-200 w-250">
                             <option value="0">--Select College--</option>
                             {% for c in lookups.colleges %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
                         </select>
@@ -20,7 +20,7 @@
                     <td class="vtext" width="15%">Academic Session</td>
                     <td class="colon">:</td>
                     <td>
-                        <select name="session_id" class="dropdown w-200">
+                        <select name="session_id" class="textbox w-200 w-200">
                             <option value="0">--Select Session--</option>
                             {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
                         </select>
@@ -30,7 +30,7 @@
                     <td class="vtext">Degree</td>
                     <td class="colon">:</td>
                     <td>
-                        <select name="degree_id" class="dropdown w-250">
+                        <select name="degree_id" class="textbox w-200 w-250">
                             <option value="0">--Select Degree--</option>
                             {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
                         </select>
@@ -38,7 +38,7 @@
                     <td class="vtext">Class</td>
                     <td class="colon">:</td>
                     <td>
-                        <select name="semester_id" class="dropdown w-150">
+                        <select name="semester_id" class="textbox w-200 w-150">
                             <option value="0">--Select Class--</option>
                             {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.semester_roman }}</option>{% endfor %}
                         </select>

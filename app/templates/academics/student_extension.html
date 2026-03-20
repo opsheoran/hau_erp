@@ -7,12 +7,12 @@
     </div>
 
     <form id="filterForm" method="GET">
-        <table width="100%" class="filter-table">
+        <table width="100%" class="form-table">
             <tr>
                 <td class="vtext">College</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="college_id" id="ddlCollege" class="dropdown w-300" onchange="loadDegrees()">
+                    <select name="college_id" id="ddlCollege" class="textbox w-200 w-300" onchange="loadDegrees()">
                         <option value="">--Select College--</option>
                         {% for c in lookups.colleges %}
                         <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -22,7 +22,7 @@
                 <td class="vtext">Session</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="session_id" id="ddlSession" class="dropdown w-200">
+                    <select name="session_id" id="ddlSession" class="textbox w-200 w-200">
                         <option value="">--Select Session--</option>
                         {% for s in lookups.sessions %}
                         <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
@@ -34,7 +34,7 @@
                 <td class="vtext">Degree</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="degree_id" id="ddlDegree" class="dropdown w-300" onchange="onDegreeChange()">
+                    <select name="degree_id" id="ddlDegree" class="textbox w-200 w-300" onchange="onDegreeChange()">
                         <option value="">--Select Degree--</option>
                         {% for d in lookups.degrees %}
                         <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -44,7 +44,7 @@
                 <td class="vtext">Semester</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="semester_id" id="ddlSemester" class="dropdown w-150" onchange="loadYear()">
+                    <select name="semester_id" id="ddlSemester" class="textbox w-200 w-150" onchange="loadYear()">
                         <option value="">--Select Semester--</option>
                         {% for s in lookups.semesters %}
                         <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.semester_roman }}</option>
@@ -56,7 +56,7 @@
                 <td class="vtext">Department</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="branch_id" id="ddlBranch" class="dropdown w-250">
+                    <select name="branch_id" id="ddlBranch" class="textbox w-200 w-250">
                         <option value="0">--Select Department--</option>
                         {% for b in lookups.branches %}
                         <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
@@ -118,14 +118,14 @@
                             </label>
                         </td>
                         <td align="center">
-                            <select name="to_session_{{ s.pk_sid }}" class="dropdown" style="width: 120px;">
+                            <select name="to_session_{{ s.pk_sid }}" class="textbox w-200" style="width: 120px;">
                                 {% for ses in lookups.sessions %}
                                 <option value="{{ ses.id }}" {% if filters.session_id|string == ses.id|string %}selected{% endif %}>{{ ses.name }}</option>
                                 {% endfor %}
                             </select>
                         </td>
                         <td align="center">
-                            <select name="to_semester_{{ s.pk_sid }}" class="dropdown" style="width: 140px;">
+                            <select name="to_semester_{{ s.pk_sid }}" class="textbox w-200" style="width: 140px;">
                                 <option value="0"> -- Select Semester -- </option>
                                 {% for sem in lookups.ext_semesters %}
                                 <option value="{{ sem.id }}">{{ sem.name }}</option>

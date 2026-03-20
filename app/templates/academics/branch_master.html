@@ -48,7 +48,7 @@
                 <td class="vtext">Faculty</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="faculty_id" id="b_faculty" class="dropdown w-250">
+                    <select name="faculty_id" id="b_faculty" class="textbox w-200 w-250">
                         <option value="">--Select--</option>
                         {% for f in faculties %}
                         <option value="{{ f.pk_facultyid }}">{{ f.faculty }}</option>
@@ -122,29 +122,7 @@
                 </table>
                 
                 {% if pagination.total_pages > 1 %}
-                <div class="pager-style">
-                    {% if pagination.has_prev %}
-                        <a href="{{ url_for('academics.branch_master', page=pagination.page-1) }}">&lt;</a>
-                    {% else %}
-                        <span class="disabled">&lt;</span>
-                    {% endif %}
-
-                    {% for p in page_range %}
-                        {% if p == '...' %}
-                            <span>{{ p }}</span>
-                        {% elif p == pagination.page %}
-                            <span class="active">{{ p }}</span>
-                        {% else %}
-                            <a href="{{ url_for('academics.branch_master', page=p) }}">{{ p }}</a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if pagination.has_next %}
-                        <a href="{{ url_for('academics.branch_master', page=pagination.page+1) }}">&gt;</a>
-                    {% else %}
-                        <span class="disabled">&gt;</span>
-                    {% endif %}
-                </div>
+                {% include "includes/pagination.html" %}
                 {% endif %}
             </td>
         </tr>

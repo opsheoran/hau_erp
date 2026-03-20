@@ -44,7 +44,7 @@
                 <td class="vtext">Degree Type</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="type_id" id="d_type" class="dropdown w-200" required>
+                    <select name="type_id" id="d_type" class="textbox w-200 w-200" required>
                         <option value="">-- Select Degree Type --</option>
                         {% for t in lookups.types %}<option value="{{ t.pk_degreetypeid }}">{{ t.degreetype }}</option>{% endfor %}
                     </select> <span class="required">*</span>
@@ -149,29 +149,7 @@
                 </table>
                 
                 {% if pagination.total_pages > 1 %}
-                <div class="pager-style">
-                    {% if pagination.has_prev %}
-                        <a href="{{ url_for('academics.degree_master', page=pagination.page-1) }}">&lt;</a>
-                    {% else %}
-                        <span class="disabled">&lt;</span>
-                    {% endif %}
-
-                    {% for p in page_range %}
-                        {% if p == '...' %}
-                            <span>{{ p }}</span>
-                        {% elif p == pagination.page %}
-                            <span class="active">{{ p }}</span>
-                        {% else %}
-                            <a href="{{ url_for('academics.degree_master', page=p) }}">{{ p }}</a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if pagination.has_next %}
-                        <a href="{{ url_for('academics.degree_master', page=pagination.page+1) }}">&gt;</a>
-                    {% else %}
-                        <span class="disabled">&gt;</span>
-                    {% endif %}
-                </div>
+                {% include "includes/pagination.html" %}
                 {% endif %}
             </td>
         </tr>

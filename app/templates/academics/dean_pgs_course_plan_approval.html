@@ -13,7 +13,7 @@
                         <td class="vtext" width="15%">College</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="college_id" class="dropdown w-300" required onchange="handleFilterChange()">
+                            <select name="college_id" class="textbox w-200 w-300" required onchange="handleFilterChange()">
                                 <option value="0">--Select College--</option>
                                 {% for c in lookups.colleges %}
                                 <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -24,7 +24,7 @@
                         <td class="vtext" width="15%">Admitted Session</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="session_id" class="dropdown w-200" required>
+                            <select name="session_id" class="textbox w-200 w-200" required>
                                 <option value="0">--Select Academic Session--</option>
                                 {% for s in lookups.sessions %}
                                 <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
@@ -37,7 +37,7 @@
                         <td class="vtext">Degree</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="degree_id" class="dropdown w-300" required onchange="handleFilterChange()">
+                            <select name="degree_id" class="textbox w-200 w-300" required onchange="handleFilterChange()">
                                 <option value="0">--Select Degree--</option>
                                 {% for d in lookups.degrees %}
                                 <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -48,7 +48,7 @@
                         <td class="vtext">Specialization</td>
                         <td class="colon">:</td>
                         <td>
-                            <select name="branch_id" class="dropdown w-200">
+                            <select name="branch_id" class="textbox w-200 w-200">
                                 <option value="0">--Select Specialization--</option>
                                 {% for b in lookups.branches %}
                                 <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
@@ -77,7 +77,7 @@
                     <td class="vtext" width="15%">Student Name</td>
                     <td class="colon">:</td>
                     <td class="required">
-                        <select id="ddlStudent" name="sid" class="dropdown w-300" onchange="loadStudent(this.value)">
+                        <select id="ddlStudent" name="sid" class="textbox w-200 w-300" onchange="loadStudent(this.value)">
                             <option value="">--Select Student Name--</option>
                             {% for s in students %}
                             <option value="{{ s.pk_sid }}" {% if sid|string == s.pk_sid|string %}selected{% endif %}>{{ s.fullname }} [ {{ s.enrollmentno }} ]</option>

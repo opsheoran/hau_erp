@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
-    .textbox-small { width: 150px !important; }
-    .textbox-medium { width: 250px !important; }
-    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .w-150 { width: 150px !important; }
+    .w-250 { width: 250px !important; }
+    .w-350 { width: 363px !important; height: 60px !important; }
     .required-star { color: red; font-weight: bold; }
 </style>
 
@@ -17,13 +17,13 @@
                 <tr>
                     <td class="vtext" width="25%">Entitlement Name</td><td class="colon">:</td>
                     <td>
-                        <input type="text" name="name" id="e_name" class="textbox textbox-medium" required>
+                        <input type="text" name="name" id="e_name" class="textbox w-250" required>
                         <span class="required-star">*</span>
                     </td>
                 </tr>
                 <tr>
                     <td class="vtext">Order No</td><td class="colon">:</td>
-                    <td><input type="number" name="order" id="e_order" class="textbox textbox-small" value="1" required> <span class="required-star">*</span></td>
+                    <td><input type="number" name="order" id="e_order" class="textbox w-150" value="1" required> <span class="required-star">*</span></td>
                 </tr>
                 <tr>
                     <td colspan="2"></td>
@@ -69,29 +69,7 @@
             </table>
 
             {% if pagination.total_pages > 1 %}
-            <div class="pager-style">
-                {% if pagination.has_prev %}
-                    <a href="{{ url_for('academics.entitlement_master', page=pagination.page-1) }}">&lt;</a>
-                {% else %}
-                    <span class="disabled">&lt;</span>
-                {% endif %}
-
-                {% for p in page_range %}
-                    {% if p == '...' %}
-                        <span>{{ p }}</span>
-                    {% elif p == pagination.page %}
-                        <span class="active">{{ p }}</span>
-                    {% else %}
-                        <a href="{{ url_for('academics.entitlement_master', page=p) }}">{{ p }}</a>
-                    {% endif %}
-                {% endfor %}
-
-                {% if pagination.has_next %}
-                    <a href="{{ url_for('academics.entitlement_master', page=pagination.page+1) }}">&gt;</a>
-                {% else %}
-                    <span class="disabled">&gt;</span>
-                {% endif %}
-            </div>
+            {% include "includes/pagination.html" %}
             {% endif %}
         </div>
     </div>

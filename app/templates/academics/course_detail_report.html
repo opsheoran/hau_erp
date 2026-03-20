@@ -16,7 +16,7 @@
                 <td class="vtext" width="15%">Applicable From</td>
                 <td class="colon">:</td>
                 <td width="30%">
-                    <select name="session_from" id="rpt_from" class="dropdown w-200">
+                    <select name="session_from" id="rpt_from" class="textbox w-200 w-200">
                         <option value="0">-- Select Session From --</option>
                         {% for s in sessions %}<option value="{{ s.id }}" {{ 'selected' if filters and filters.session_from|string == s.id|string }}>{{ s.name }}</option>{% endfor %}
                     </select>
@@ -24,7 +24,7 @@
                 <td class="vtext" width="15%">Applicable Upto</td>
                 <td class="colon">:</td>
                 <td width="35%">
-                    <select name="session_upto" id="rpt_upto" class="dropdown w-200">
+                    <select name="session_upto" id="rpt_upto" class="textbox w-200 w-200">
                         <option value="0">-- Select Session Upto --</option>
                         {% for s in sessions %}<option value="{{ s.id }}" {{ 'selected' if filters and filters.session_upto|string == s.id|string }}>{{ s.name }}</option>{% endfor %}
                     </select>
@@ -35,7 +35,7 @@
                 <td class="vtext">Degree</td>
                 <td class="colon">:</td>
                 <td width="30%">
-                    <select name="degree_id" id="rpt_degree" class="dropdown w-250" onchange="loadDepartments(this.value); loadClasses(this.value);">
+                    <select name="degree_id" id="rpt_degree" class="textbox w-200 w-250" onchange="loadDepartments(this.value); loadClasses(this.value);">
                         <option value="0">-- Select Degree --</option>
                         {% for d in degrees %}<option value="{{ d.id }}" {{ 'selected' if filters and filters.degree_id|string == d.id|string }}>{{ d.name }}</option>{% endfor %}
                     </select>
@@ -43,7 +43,7 @@
                 <td class="vtext" width="15%">Department</td>
                 <td class="colon">:</td>
                 <td width="35%">
-                    <select name="dept_id" id="rpt_dept" class="dropdown w-200">
+                    <select name="dept_id" id="rpt_dept" class="textbox w-200 w-200">
                         <option value="0">--Select Department--</option>
                     </select>
                 </td>
@@ -53,14 +53,14 @@
                 <td class="vtext">Class</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="semester_id" id="rpt_sem" class="dropdown w-150" onchange="autoFillYear(this.value)">
+                    <select name="semester_id" id="rpt_sem" class="textbox w-200 w-150" onchange="autoFillYear(this.value)">
                         <option value="0">--Select Class--</option>
                     </select>
                 </td>
                 <td class="vtext">Year</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="year_id" id="rpt_year" class="dropdown w-150" style="background:#f4f4f4;">
+                    <select name="year_id" id="rpt_year" class="textbox w-200 w-150" style="background:#f4f4f4;">
                         <option value="0">--Select Year--</option>
                         {% for y in years %}<option value="{{ y.pk_degreeyearid }}">{{ y.degreeyear_char }}</option>{% endfor %}
                     </select>

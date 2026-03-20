@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
-    .textbox-small { width: 150px !important; }
-    .textbox-medium { width: 250px !important; }
+    .w-150 { width: 150px !important; }
+    .w-250 { width: 250px !important; }
 </style>
 
 <!-- SAVE FORM -->
@@ -23,7 +23,7 @@
                 <td class="vtext" width="15%">Course Type</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input type="text" name="name" id="t_name" class="textbox textbox-medium" maxlength="49" required>
+                    <input type="text" name="name" id="t_name" class="textbox w-250" maxlength="49" required>
                     *
                 </td>
             </tr>
@@ -32,7 +32,7 @@
                 <td class="vtext">Order ID</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input type="number" name="order" id="t_order" class="textbox textbox-small" value="1" required>
+                    <input type="number" name="order" id="t_order" class="textbox w-150" value="1" required>
                     *
                 </td>
             </tr>
@@ -95,29 +95,7 @@
                 </table>
                 
                 {% if pagination and pagination.total_pages > 1 %}
-                <div class="pager-style">
-                    {% if pagination.has_prev %}
-                        <a href="?page={{ pagination.page-1 }}">&lt;</a>
-                    {% else %}
-                        <span class="disabled">&lt;</span>
-                    {% endif %}
-
-                    {% for p in page_range %}
-                        {% if p == '...' %}
-                            <span>{{ p }}</span>
-                        {% elif p == pagination.page %}
-                            <span class="active">{{ p }}</span>
-                        {% else %}
-                            <a href="?page={{ p }}">{{ p }}</a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if pagination.has_next %}
-                        <a href="?page={{ pagination.page+1 }}">&gt;</a>
-                    {% else %}
-                        <span class="disabled">&gt;</span>
-                    {% endif %}
-                </div>
+                {% include "includes/pagination.html" %}
                 {% endif %}
             </td>
         </tr>

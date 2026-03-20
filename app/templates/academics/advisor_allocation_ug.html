@@ -33,7 +33,7 @@
                     <td class="vtext">College</td>
                     <td class="colon">:</td>
                     <td class="required" colspan="4">
-                        <select name="college_id" id="ddlColleges" class="dropdownvvlong" onchange="loadDegrees(); loadTeachers();">
+                        <select name="college_id" id="ddlColleges" class="textbox w-350" onchange="loadDegrees(); loadTeachers();">
                             <option value="">--Select College--</option>
                             {% for c in lookups.colleges %}
                             <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -46,7 +46,7 @@
                     <td class="vtext">Admitted Session</td>
                     <td class="colon">:</td>
                     <td class="required">
-                        <select name="session_id" id="ddlSession" class="dropdownlong">
+                        <select name="session_id" id="ddlSession" class="textbox w-250">
                             <option value="">--Select Session--</option>
                             {% for s in lookups.sessions %}
                             <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
@@ -57,7 +57,7 @@
                     <td class="vtext">Degree</td>
                     <td class="colon">:</td>
                     <td class="required">
-                        <select name="degree_id" id="ddlDegrees" class="dropdown" onchange="loadBranches()">
+                        <select name="degree_id" id="ddlDegrees" class="textbox w-200" onchange="loadBranches()">
                             <option value="">--Select Degree--</option>
                             {% for d in lookups.degrees %}
                             <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -70,7 +70,7 @@
                     <td class="vtext">Discipline</td>
                     <td class="colon">:</td>
                     <td>
-                        <select name="branch_id" id="ddlBranches" class="dropdownlong">
+                        <select name="branch_id" id="ddlBranches" class="textbox w-250">
                             <option value="0">--Select Discipline--</option>
                             {% for b in lookups.branches %}
                             <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
@@ -101,7 +101,7 @@
                         <td class="vtext" style="width:150px;">Teacher</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="teacher_id" id="ddlEmployees" class="dropdownvvlong" style="width:600px !important;">
+                            <select name="teacher_id" id="ddlEmployees" class="textbox w-350" style="width:600px !important;">
                                 <option value="">--Select Advisor--</option>
                                 {% for t in lookups.teachers %}
                                 <option value="{{ t.id }}" {% if filters.teacher_id|string == t.id|string %}selected{% endif %}>{{ t.display_name }}</option>

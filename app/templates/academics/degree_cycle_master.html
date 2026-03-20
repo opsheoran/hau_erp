@@ -19,7 +19,7 @@
                 <td class="vtext" width="15%">Degree</td>
                 <td class="colon">:</td>
                 <td width="30%">
-                    <select name="degree_id" id="cycle_degree" class="dropdown w-200" required>
+                    <select name="degree_id" id="cycle_degree" class="textbox w-200 w-200" required>
                         <option value="">--Select Degree--</option>
                         {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
                     </select> <span class="required">*</span>
@@ -27,7 +27,7 @@
                 <td class="vtext" width="15%">Department</td>
                 <td class="colon">:</td>
                 <td width="35%">
-                    <select name="branch_id" id="cycle_branch" class="dropdown w-200">
+                    <select name="branch_id" id="cycle_branch" class="textbox w-200 w-200">
                         <option value="">--Select Department--</option>
                         {% for b in lookups.branches %}<option value="{{ b.Pk_BranchId }}">{{ b.Branchname }}</option>{% endfor %}
                     </select>
@@ -38,7 +38,7 @@
                 <td class="vtext">Degree Year</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="year_id" id="cycle_year" class="dropdown w-200" required>
+                    <select name="year_id" id="cycle_year" class="textbox w-200 w-200" required>
                         <option value="">--Select Year--</option>
                         {% for y in lookups.years %}<option value="{{ y.pk_degreeyearid }}">{{ y.degreeyear_char }}</option>{% endfor %}
                     </select> <span class="required">*</span>
@@ -46,7 +46,7 @@
                 <td class="vtext">Semester</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="sem_id" id="cycle_sem" class="dropdown w-200" required>
+                    <select name="sem_id" id="cycle_sem" class="textbox w-200 w-200" required>
                         <option value="">--Select Semester--</option>
                         {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
                     </select> <span class="required">*</span>
@@ -145,29 +145,7 @@
                 </table>
                 
                 {% if pagination.total_pages > 1 %}
-                <div class="pager-style">
-                    {% if pagination.has_prev %}
-                        <a href="{{ url_for('academics.degree_cycle_master', page=pagination.page-1) }}">&lt;</a>
-                    {% else %}
-                        <span class="disabled">&lt;</span>
-                    {% endif %}
-
-                    {% for p in page_range %}
-                        {% if p == '...' %}
-                            <span>{{ p }}</span>
-                        {% elif p == pagination.page %}
-                            <span class="active">{{ p }}</span>
-                        {% else %}
-                            <a href="{{ url_for('academics.degree_cycle_master', page=p) }}">{{ p }}</a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if pagination.has_next %}
-                        <a href="{{ url_for('academics.degree_cycle_master', page=pagination.page+1) }}">&gt;</a>
-                    {% else %}
-                        <span class="disabled">&gt;</span>
-                    {% endif %}
-                </div>
+                {% include "includes/pagination.html" %}
                 {% endif %}
             </td>
         </tr>

@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Course Offer And Teacher Course Assignment Report(For HOD)</span></div>
+    <div style="padding:10px;">
+        <form method="POST" id="filterForm">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="tablesubheading" colspan="6">
+                            <span class="mainheadingborderbottom">Course Assignment Report (For Teacher)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td class="required" colspan="4">
+                            <select name="college_id" id="ddlCollege" class="textbox w-350" onchange="this.form.submit()">
+                                <option value="">-- Select College --</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Academic Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" id="ddlSession" class="textbox w-250">
+                                <option value="0">Select Academic Session</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" id="ddlDegree" class="textbox w-200" onchange="this.form.submit()">
+                                <option value="">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                        <td class="vtext">Class</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="semester_id" id="ddlSemester" class="textbox w-200">
+                                <option value=""> -- Select Class -- </option>
+                                {% for s in lookups.semesters %}
+                                <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Department</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="branch_id" id="ddlBranch" class="textbox w-200">
+                                <option value="">-- Select Department --</option>
+                                {% for b in lookups.branches %}
+                                <option value="{{ b.pk_branchid }}" {% if filters.branch_id|string == b.pk_branchid|string %}selected{% endif %}>{{ b.branchname }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td class="vtext">Year</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="degree_year_id" id="ddlYear" class="textbox w-200" disabled style="background-color: #f0f0f0;">
+                                <option value="1">First</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Theory/Practical</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="coursetype" id="ddlCourseType" class="textbox w-200">
+                                <option value="0">---Select---</option>
+                                <option value="T" {% if filters.coursetype == 'T' %}selected{% endif %}>Theory</option>
+                                <option value="P" {% if filters.coursetype == 'P' %}selected{% endif %}>Practical</option>
+                            </select> *
+                        </td>
+                        <td class="vtext">Batch</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="batch_id" id="ddlBatch" class="textbox w-200">
+                                <option value="">--Select Batch--</option>
+                                {# Dynamic load or static placeholder #}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Report Format</td>
+                        <td class="colon">:</td>
+                        <td class="vtext" colspan="4">
+                            <input type="radio" name="rpt_format" id="fmt_word" value="word"><label for="fmt_word" style="margin-right:15px; margin-left:5px;">Word Format</label>
+                            <input type="radio" name="rpt_format" id="fmt_excel" value="excel"><label for="fmt_excel" style="margin-right:15px; margin-left:5px;">Excel Format</label>
+                            <input type="radio" name="rpt_format" id="fmt_pdf" value="pdf" checked><label for="fmt_pdf" style="margin-left:5px;">PDF Format</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="4" style="padding-top:10px;">
+                            <input type="submit" name="action" value="VIEW" class="button-common" style="width:100px;">
+                            <input type="button" value="RESET" class="button-common" style="width:100px;" onclick="window.location.href=window.location.pathname">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        {% if grouped_data %}
+        <div style="margin-top:20px; border:1px solid #D4D4D4; max-height: 500px; overflow: auto;">
+            <table class="table-grid-view" width="100%">
+                <thead>
+                    <tr class="header-style">
+                        <th width="50" align="center">S.No.</th>
+                        <th align="left">Course Code</th>
+                        <th align="left">Course Name</th>
+                        <th width="100" align="center">Credits (T+P)</th>
+                        <th width="120" align="center">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set ns = namespace(count=0) %}
+                    {% for teacher, courses in grouped_data.items() %}
+                    <tr style="background-color: #2d5a27; color: white; font-weight: bold;">
+                        <td colspan="5" style="padding: 5px;">Teacher: {{ teacher[0] }} - {{ teacher[1] }}</td>
+                    </tr>
+                    {% for c in courses %}
+                    {% set ns.count = ns.count + 1 %}
+                    <tr class="{% if ns.count % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ ns.count }}</td>
+                        <td align="left">{{ c.coursecode }}</td>
+                        <td align="left">{{ c.coursename }}</td>
+                        <td align="center">{{ c.crhr_theory }}+{{ c.crhr_practical }}</td>
+                        <td align="center">
+                            {% if c.IsMainTeacher %}
+                                <b>Main</b>
+                            {% else %}
+                                Co-Teacher
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% elif request.method == 'POST' and filters.college_id and filters.degree_id %}
+        <div class="item-style" style="padding:20px; text-align:center; color:red; border:1px solid #ddd; margin-top: 20px;">
+            No records found for the selected criteria.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

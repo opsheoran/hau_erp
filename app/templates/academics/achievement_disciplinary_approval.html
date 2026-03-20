@@ -12,7 +12,7 @@
                     <td class="vtext" width="12%">College</td>
                     <td class="colon">:</td>
                     <td width="35%">
-                        <select name="college_id" class="dropdown w-300">
+                        <select name="college_id" class="textbox w-200 w-300">
                             <option value="">-- Select College --</option>
                             {% for c in lookups.colleges %}<option value="{{ c.id }}" {% if filters.college_id == c.id|string %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
                         </select>
@@ -20,7 +20,7 @@
                     <td class="vtext" width="12%">Session</td>
                     <td class="colon">:</td>
                     <td>
-                        <select name="session_id" class="dropdown w-150">
+                        <select name="session_id" class="textbox w-200 w-150">
                             <option value="">--Select Session--</option>
                             {% for s in lookups.sessions %}<option value="{{ s.id }}" {% if filters.session_id == s.id|string %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
                         </select>

@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
-    .textbox-small { width: 150px !important; }
-    .textbox-medium { width: 250px !important; }
-    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .w-150 { width: 150px !important; }
+    .w-250 { width: 250px !important; }
+    .w-350 { width: 363px !important; height: 60px !important; }
     .required-star { color: red; font-weight: bold; }
 </style>
 
@@ -22,7 +22,7 @@
                 <td class="vtext" width="15%">From Session</td>
                 <td class="colon">:</td>
                 <td width="30%">
-                    <select name="from_session" id="ddlFromSession" class="dropdown textbox-medium" required>
+                    <select name="from_session" id="ddlFromSession" class="textbox w-200 w-250" required>
                         <option value="0">-- Select From Session --</option>
                         {% for s in sessions %}
                         <option value="{{ s.id }}">{{ s.name }}</option>
@@ -33,7 +33,7 @@
                 <td class="vtext" width="15%">To Session</td>
                 <td class="colon">:</td>
                 <td width="35%">
-                    <select name="to_session" id="ddlToSession" class="dropdown textbox-medium">
+                    <select name="to_session" id="ddlToSession" class="textbox w-200 w-250">
                         <option value="0">-- Select To Session --</option>
                         {% for s in sessions %}
                         <option value="{{ s.id }}">{{ s.name }}</option>
@@ -47,7 +47,7 @@
                 <td class="vtext">Degree</td>
                 <td class="colon">:</td>
                 <td valign="top">
-                    <select name="degree" id="ddlDegree" class="dropdown textbox-medium" required>
+                    <select name="degree" id="ddlDegree" class="textbox w-200 w-250" required>
                         <option value="">--Select Degree--</option>
                         {% for d in degrees %}
                         <option value="{{ d.id }}">{{ d.name }}</option>
@@ -58,7 +58,7 @@
                 <td class="vtext">Class</td>
                 <td class="colon">:</td>
                 <td align="left">
-                    <select name="semester" id="ddlSemester" class="dropdown textbox-medium" disabled required>
+                    <select name="semester" id="ddlSemester" class="textbox w-200 w-250" disabled required>
                         <option value=""> -- Select Class -- </option>
                     </select>
                     <span class="required-star">*</span>
@@ -70,14 +70,14 @@
                 <td class="vtext">Department</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="department" id="ddlBranch" class="dropdown textbox-medium" disabled>
+                    <select name="department" id="ddlBranch" class="textbox w-200 w-250" disabled>
                         <option value="0">--Select Department--</option>
                     </select>
                 </td>
                 <td class="vtext">Year</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="year" id="ddlYear" class="dropdown textbox-medium" disabled>
+                    <select name="year" id="ddlYear" class="textbox w-200 w-250" disabled>
                         <option value="">-- Select Year --</option>
                     </select>
                 </td>

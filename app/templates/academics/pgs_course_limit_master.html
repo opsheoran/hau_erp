@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
-    .textbox-small { width: 150px !important; }
-    .textbox-medium { width: 250px !important; }
-    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .w-150 { width: 150px !important; }
+    .w-250 { width: 250px !important; }
+    .w-350 { width: 363px !important; height: 60px !important; }
     .required-star { color: red; font-weight: bold; }
 </style>
 
@@ -25,7 +25,7 @@
                 <td class="vtext" width="15%">College</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="college_id" id="ddlColleges" class="dropdown textbox-medium">
+                    <select name="college_id" id="ddlColleges" class="textbox w-200 w-250">
                         <option value="0">--Select College--</option>
                         {% for c in colleges %}
                         <option value="{{ c.id }}">{{ c.name }}</option>
@@ -40,7 +40,7 @@
                 <td class="vtext">Course Name</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="course_id" id="ddlCourseName" class="dropdown textbox-medium" required>
+                    <select name="course_id" id="ddlCourseName" class="textbox w-200 w-250" required>
                         <option value="">--Select Course--</option>
                         {% for c in courses %}
                         <option value="{{ c.id }}">{{ c.name }}</option>
@@ -55,7 +55,7 @@
                 <td class="vtext">Session</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="session_id" id="ddlSessionFrom" class="dropdown textbox-small" required>
+                    <select name="session_id" id="ddlSessionFrom" class="textbox w-200 w-150" required>
                         <option value="">Select Session</option>
                         {% for s in sessions %}
                         <option value="{{ s.id }}">{{ s.name }}</option>
@@ -70,7 +70,7 @@
                 <td class="vtext">Class</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="class_id" id="ddlSemester" class="dropdown textbox-small" required>
+                    <select name="class_id" id="ddlSemester" class="textbox w-200 w-150" required>
                         <option value="">--Select Class--</option>
                         <option value="1">Odd Semester</option>
                         <option value="2">Even Semester</option>
@@ -84,7 +84,7 @@
                 <td class="vtext">Capacity</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input name="capacity" type="number" id="txtCapacity" class="textbox textbox-small" required>
+                    <input name="capacity" type="number" id="txtCapacity" class="textbox w-150" required>
                     <span class="required-star">*</span>
                 </td>
                 <td colspan="3"></td>
@@ -151,29 +151,7 @@
                 </table>
                 
                 {% if pagination.total_pages > 1 %}
-                <div class="pager-style">
-                    {% if pagination.has_prev %}
-                        <a href="{{ url_for('academics.pgs_course_limit_master', page=pagination.page-1) }}">&lt;</a>
-                    {% else %}
-                        <span class="disabled">&lt;</span>
-                    {% endif %}
-
-                    {% for p in page_range %}
-                        {% if p == '...' %}
-                            <span>{{ p }}</span>
-                        {% elif p == pagination.page %}
-                            <span class="active">{{ p }}</span>
-                        {% else %}
-                            <a href="{{ url_for('academics.pgs_course_limit_master', page=p) }}">{{ p }}</a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if pagination.has_next %}
-                        <a href="{{ url_for('academics.pgs_course_limit_master', page=pagination.page+1) }}">&gt;</a>
-                    {% else %}
-                        <span class="disabled">&gt;</span>
-                    {% endif %}
-                </div>
+                {% include "includes/pagination.html" %}
                 {% endif %}
             </td>
         </tr>

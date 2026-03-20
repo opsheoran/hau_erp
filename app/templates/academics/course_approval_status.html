@@ -8,12 +8,12 @@
 
     <form id="filterForm" method="GET">
         <input type="hidden" name="view" value="1">
-        <table width="100%" class="filter-table">
+        <table width="100%" class="form-table">
             <tr>
                 <td class="vtext">College</td>
                 <td class="colon">:</td>
                 <td class="required" colspan="4">
-                    <select name="college_id" id="ddlCollege" class="dropdownvvlong" style="position: static" onchange="onCollegeChange()">
+                    <select name="college_id" id="ddlCollege" class="textbox w-350" style="position: static" onchange="onCollegeChange()">
                         <option value="">--Select College--</option>
                         {% for c in lookups.colleges %}
                         <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -26,7 +26,7 @@
                 <td class="vtext">Academic Session</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="session_id" id="ddlSession" class="dropdownlong" style="position: static" onchange="onSessionOrDegreeChange()">
+                    <select name="session_id" id="ddlSession" class="textbox w-250" style="position: static" onchange="onSessionOrDegreeChange()">
                         <option value="">--Select Academic Session--</option>
                         {% for s in lookups.sessions %}
                         <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
@@ -37,7 +37,7 @@
                 <td class="vtext">Degree</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="degree_id" id="ddlDegree" class="dropdown" onchange="onDegreeChange()">
+                    <select name="degree_id" id="ddlDegree" class="textbox w-200" onchange="onDegreeChange()">
                         <option value="">--Select Degree--</option>
                         {% for d in lookups.degrees %}
                         <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -50,7 +50,7 @@
                 <td class="vtext">Semester</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="sem_type" id="ddlSemType" class="dropdown" tabindex="3">
+                    <select name="sem_type" id="ddlSemType" class="textbox w-200" tabindex="3">
                         <option value="">Select</option>
                         <option value="1" {% if filters.sem_type|string == '1' %}selected{% endif %}>Odd Semester</option>
                         <option value="2" {% if filters.sem_type|string == '2' %}selected{% endif %}>Even Semester</option>
@@ -60,7 +60,7 @@
                 <td class="vtext">Exam Config</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <select name="exconfig_id" id="ddlExConfig" class="dropdown">
+                    <select name="exconfig_id" id="ddlExConfig" class="textbox w-200">
                         <option value="">-- Select Exam Config.--</option>
                         {% for c in lookups.exam_configs %}
                         <option value="{{ c.pk_exconfigid }}" {% if filters.exconfig_id|string == c.pk_exconfigid|string %}selected{% endif %}>{{ c.display_name }}</option>

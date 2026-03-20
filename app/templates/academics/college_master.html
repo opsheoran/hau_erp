@@ -25,7 +25,7 @@
                 <td class="vtext" width="15%">Location</td>
                 <td class="colon">:</td>
                 <td width="35%">
-                    <select name="loc_id" id="c_loc" class="dropdown w-200" required>
+                    <select name="loc_id" id="c_loc" class="textbox w-200 w-200" required>
                         <option value="">--Select Location --</option>
                         {% for l in lookups.locations %}
                         <option value="{{ l.id }}">{{ l.locname }}</option>
@@ -80,7 +80,7 @@
                 <td class="vtext">College Type</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="type_id" id="c_type" class="dropdown w-200" required>
+                    <select name="type_id" id="c_type" class="textbox w-200 w-200" required>
                         <option value="">-- Select College Type --</option>
                         {% for t in lookups.types %}
                         <option value="{{ t.pk_collegetypeid }}">{{ t.collegypedesc }}</option>
@@ -91,7 +91,7 @@
                 <td class="vtext">City</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="city_id" id="c_city" class="dropdown w-150" required>
+                    <select name="city_id" id="c_city" class="textbox w-200 w-150" required>
                         <option value="">--Select City --</option>
                         {% for ci in lookups.cities %}
                         <option value="{{ ci.id }}">{{ ci.name }}</option>
@@ -208,29 +208,7 @@
                 </table>
                 
                 {% if pagination.total_pages > 1 %}
-                <div class="pager-style">
-                    {% if pagination.has_prev %}
-                        <a href="{{ url_for('academics.college_master', page=pagination.page-1) }}">&lt;</a>
-                    {% else %}
-                        <span class="disabled">&lt;</span>
-                    {% endif %}
-
-                    {% for p in page_range %}
-                        {% if p == '...' %}
-                            <span>{{ p }}</span>
-                        {% elif p == pagination.page %}
-                            <span class="active">{{ p }}</span>
-                        {% else %}
-                            <a href="{{ url_for('academics.college_master', page=p) }}">{{ p }}</a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if pagination.has_next %}
-                        <a href="{{ url_for('academics.college_master', page=pagination.page+1) }}">&gt;</a>
-                    {% else %}
-                        <span class="disabled">&gt;</span>
-                    {% endif %}
-                </div>
+                {% include "includes/pagination.html" %}
                 {% endif %}
             </td>
         </tr>
@@ -270,7 +248,7 @@ function addRow(data = null) {
             </datalist>
         </td>
         <td>
-            <select name="dean_id[]" class="dropdown dean-id-select" style="width:100%">
+            <select name="dean_id[]" class="textbox w-200 dean-id-select" style="width:100%">
                 <option value=""> -- Select dean-- </option>
                 ${employees.map(e => `<option value="${e.id}" ${data && data.fk_deanid == e.id ? 'selected' : ''}>${e.name}</option>`).join('')}
             </select>

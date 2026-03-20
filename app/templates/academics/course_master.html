@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
-    .textbox-small { width: 100px !important; }
-    .textbox-medium { width: 200px !important; }
+    .w-150 { width: 100px !important; }
+    .w-250 { width: 200px !important; }
     .pager-style span, .pager-style a { border: 1px solid #ddd; padding: 2px 8px; margin: 0 2px; text-decoration: none; color: #333; }
     .pager-style span { color: red; font-weight: bold; background: #eee; }
 </style>
@@ -11,12 +11,12 @@
 <div class="tableheading" style="margin-bottom:10px;">
     <form method="GET" style="display:flex; gap:20px; align-items:center;">
         <span>Department:</span>
-        <select name="dept_id" class="dropdown textbox-medium">
+        <select name="dept_id" class="textbox w-200 w-250">
             <option value="">All Departments</option>
             {% for d in lookups.depts %}<option value="{{ d.id }}" {{ 'selected' if filters.dept_id|string == d.id|string }}>{{ d.name }}</option>{% endfor %}
         </select>
         <span>Search:</span>
-        <input type="text" name="term" value="{{ filters.term or '' }}" class="textbox textbox-medium" placeholder="Code/Name...">
+        <input type="text" name="term" value="{{ filters.term or '' }}" class="textbox w-250" placeholder="Code/Name...">
         <input type="submit" value="SEARCH" class="button-common">
     </form>
 </div>
@@ -39,12 +39,12 @@
                 <td class="vtext">Course Code</td>
                 <td class="colon">:</td>
                 <td class="required" width="30%">
-                    <input type="text" name="coursecode" id="c_code" class="textbox textbox-medium" maxlength="20" required> *
+                    <input type="text" name="coursecode" id="c_code" class="textbox w-250" maxlength="20" required> *
                 </td>
                 <td class="vtext">Course Name</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input type="text" name="coursename" id="c_name" class="textbox textbox-medium" style="width:90%" required> *
+                    <input type="text" name="coursename" id="c_name" class="textbox w-250" style="width:90%" required> *
                 </td>
             </tr>
             
@@ -52,7 +52,7 @@
                 <td class="vtext">Department</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="dept_id" id="c_dept" class="dropdown textbox-medium" required>
+                    <select name="dept_id" id="c_dept" class="textbox w-200 w-250" required>
                         <option value="">--Select Course Department--</option>
                         {% for d in lookups.depts %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
                     </select> *
@@ -60,7 +60,7 @@
                 <td class="vtext">Paper Title</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="paper_title_id" id="c_title" class="dropdown textbox-medium">
+                    <select name="paper_title_id" id="c_title" class="textbox w-200 w-250">
                         <option value="">--Select Paper Title--</option>
                         {% for t in lookups.titles %}<option value="{{ t.pk_papertitleid }}">{{ t.papertitle }}</option>{% endfor %}
                     </select>
@@ -71,7 +71,7 @@
                 <td class="vtext">Course Type</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="course_type_id" id="c_type" class="dropdown textbox-medium" required>
+                    <select name="course_type_id" id="c_type" class="textbox w-200 w-250" required>
                         <option value="">--Select Course Type--</option>
                         {% for t in lookups.types %}<option value="{{ t.pk_coursetypeid }}">{{ t.coursetype }}</option>{% endfor %}
                     </select> *
@@ -79,7 +79,7 @@
                 <td class="vtext">Report Order</td>
                 <td class="colon">:</td>
                 <td>
-                    <input type="number" name="report_order" id="c_order" class="textbox textbox-small" value="1"> *
+                    <input type="number" name="report_order" id="c_order" class="textbox w-150" value="1"> *
                 </td>
             </tr>
             
@@ -87,12 +87,12 @@
                 <td class="vtext">Cr Hr Theory</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input type="number" step="0.5" name="crhr_theory" id="c_theory" class="textbox textbox-small" value="0" required> *
+                    <input type="number" step="0.5" name="crhr_theory" id="c_theory" class="textbox w-150" value="0" required> *
                 </td>
                 <td class="vtext">Cr Hr Practical</td>
                 <td class="colon">:</td>
                 <td class="required">
-                    <input type="number" step="0.5" name="crhr_practical" id="c_practical" class="textbox textbox-small" value="0" required> *
+                    <input type="number" step="0.5" name="crhr_practical" id="c_practical" class="textbox w-150" value="0" required> *
                 </td>
             </tr>
             
@@ -219,29 +219,7 @@
                 </table>
                 
                 {% if pagination.total_pages > 1 %}
-                <div class="pager-style">
-                    {% if pagination.has_prev %}
-                        <a href="?page={{ pagination.page - 1 }}&dept_id={{ filters.dept_id }}&term={{ filters.term }}">&lt;</a>
-                    {% else %}
-                        <span class="disabled">&lt;</span>
-                    {% endif %}
-
-                    {% for p in page_range %}
-                        {% if p == '...' %}
-                            <span>{{ p }}</span>
-                        {% elif p == pagination.page %}
-                            <span class="active">{{ p }}</span>
-                        {% else %}
-                            <a href="?page={{ p }}&dept_id={{ filters.dept_id }}&term={{ filters.term }}">{{ p }}</a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if pagination.has_next %}
-                        <a href="?page={{ pagination.page + 1 }}&dept_id={{ filters.dept_id }}&term={{ filters.term }}">&gt;</a>
-                    {% else %}
-                        <span class="disabled">&gt;</span>
-                    {% endif %}
-                </div>
+                {% include "includes/pagination.html" %}
                 {% endif %}
             </td>
         </tr>
@@ -264,29 +242,29 @@ function addMapRow(data = null) {
     row.innerHTML = `
         <td align="center">${rowCount + 1}</td>
         <td>
-            <select name="map_sess_from[]" class="dropdown" style="width:100%">
+            <select name="map_sess_from[]" class="textbox w-200" style="width:100%">
                 <option value="0">Sess From</option>
                 ${lookups.sessions.map(s => `<option value="${s.id}" ${data && data.fk_sessionid_from == s.id ? 'selected' : ''}>${s.name}</option>`).join('')}
             </select>
         </td>
         <td>
-            <select name="map_sess_upto[]" class="dropdown" style="width:100%">
+            <select name="map_sess_upto[]" class="textbox w-200" style="width:100%">
                 <option value="0">Sess To</option>
                 ${lookups.sessions.map(s => `<option value="${s.id}" ${data && data.fk_sessionid_upto == s.id ? 'selected' : ''}>${s.name}</option>`).join('')}
             </select>
         </td>
         <td>
-            <select name="map_degree[]" class="dropdown" style="width:100%" required>
+            <select name="map_degree[]" class="textbox w-200" style="width:100%" required>
                 <option value="">--Select Degree--</option>
                 ${lookups.degrees.map(d => `<option value="${d.id}" ${data && data.fk_degreeid == d.id ? 'selected' : ''}>${d.name}</option>`).join('')}
             </select>
-            <select name="map_branch[]" class="dropdown" style="width:100%; margin-top:5px;">
+            <select name="map_branch[]" class="textbox w-200" style="width:100%; margin-top:5px;">
                 <option value="0">--Select Specialization--</option>
                 ${lookups.branches.map(b => `<option value="${b.Pk_BranchId}" ${data && data.fk_branchid == b.Pk_BranchId ? 'selected' : ''}>${b.Branchname}</option>`).join('')}
             </select>
         </td>
         <td>
-            <select name="map_sem[]" class="dropdown" style="width:100%">
+            <select name="map_sem[]" class="textbox w-200" style="width:100%">
                 <option value="0">--Sem--</option>
                 ${lookups.semesters.map(s => `<option value="${s.id}" ${data && data.fk_semesterid == s.id ? 'selected' : ''}>${s.name}</option>`).join('')}
             </select>
@@ -295,13 +273,13 @@ function addMapRow(data = null) {
             <input type="text" name="map_ogpa[]" class="textbox" style="width:50px" value="${data ? (data.OGPA || 0) : 0}">
         </td>
         <td align="center">
-            <select name="map_active[]" class="dropdown" style="width:70px">
+            <select name="map_active[]" class="textbox w-200" style="width:70px">
                 <option value="1" ${data && data.isactive ? 'selected' : ''}>YES</option>
                 <option value="0" ${data && !data.isactive ? 'selected' : ''}>NO</option>
             </select>
         </td>
         <td align="center">
-            <select name="map_compuls[]" class="dropdown" style="width:70px">
+            <select name="map_compuls[]" class="textbox w-200" style="width:70px">
                 <option value="1" ${data && data.iscompuls ? 'selected' : ''}>YES</option>
                 <option value="0" ${data && !data.iscompuls ? 'selected' : ''}>NO</option>
             </select>

@@ -26,7 +26,7 @@
                     </td>
                     <td class="vtext" width="15%">Course</td><td class="colon">:</td>
                     <td>
-                        <select name="course_id" id="course_id" class="dropdown w-250">
+                        <select name="course_id" id="course_id" class="textbox w-200 w-250">
                             <option value="">--Select Course--</option>
                         </select>
                     </td>
@@ -34,7 +34,7 @@
                 <tr>
                     <td class="vtext">Semester</td><td class="colon">:</td>
                     <td>
-                        <select name="semester_id" class="dropdown w-150">
+                        <select name="semester_id" class="textbox w-200 w-150">
                             <option value="">--Select Semester--</option>
                             {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
                         </select>

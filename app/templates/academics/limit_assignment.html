@@ -18,7 +18,7 @@
                     <td class="vtext" width="15%">College</td>
                     <td class="colon">:</td>
                     <td width="30%">
-                        <select name="college_id" id="fk_collegeid" class="dropdown w-250" required>
+                        <select name="college_id" id="fk_collegeid" class="textbox w-200 w-250" required>
                             <option value="">--Select College--</option>
                             {% for c in lookups.colleges %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
                         </select>
@@ -28,7 +28,7 @@
                     <td class="vtext" width="15%">Admitted Session</td>
                     <td class="colon">:</td>
                     <td width="35%">
-                        <select name="session_id" id="fk_sessionid" class="dropdown w-200" required>
+                        <select name="session_id" id="fk_sessionid" class="textbox w-200 w-200" required>
                             <option value="">--Select Session--</option>
                             {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
                         </select>
@@ -40,7 +40,7 @@
                     <td class="vtext">Degree</td>
                     <td class="colon">:</td>
                     <td>
-                        <select name="degree_id" id="fk_degreeid" class="dropdown w-250" required>
+                        <select name="degree_id" id="fk_degreeid" class="textbox w-200 w-250" required>
                             <option value="">--Select Degree--</option>
                             {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
                         </select>
@@ -118,15 +118,7 @@
                     </table>
                     
                     {% if pagination.total_pages > 1 %}
-                    <div class="pager-style">
-                        {% if pagination.has_prev %}<a href="{{ url_for('academics.limit_assignment', page=pagination.page-1, **filters) }}">&lt;</a>{% endif %}
-                        {% for p in page_range %}
-                            {% if p == '...' %}<span>{{ p }}</span>
-                            {% elif p == pagination.page %}<span class="active">{{ p }}</span>
-                            {% else %}<a href="{{ url_for('academics.limit_assignment', page=p, **filters) }}">{{ p }}</a>{% endif %}
-                        {% endfor %}
-                        {% if pagination.has_next %}<a href="{{ url_for('academics.limit_assignment', page=pagination.page+1, **filters) }}">&gt;</a>{% endif %}
-                    </div>
+                    {% include "includes/pagination.html" %}
                     {% endif %}
                 </td>
             </tr>

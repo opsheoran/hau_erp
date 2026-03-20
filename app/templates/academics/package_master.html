@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
-    .textbox-small { width: 150px !important; }
-    .textbox-medium { width: 250px !important; }
-    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .w-150 { width: 150px !important; }
+    .w-250 { width: 250px !important; }
+    .w-350 { width: 363px !important; height: 60px !important; }
     .required-star { color: red; font-weight: bold; }
 </style>
 
@@ -23,14 +23,14 @@
                 <tr>
                     <td class="vtext" width="15%">Degree</td><td class="colon">:</td>
                     <td width="34%">
-                        <select name="degree_id" id="p_degree" class="dropdown textbox-medium" onchange="loadSemesters(this.value)" required>
+                        <select name="degree_id" id="p_degree" class="textbox w-200 w-250" onchange="loadSemesters(this.value)" required>
                             <option value="">--Select Degree--</option>
                             {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
                         </select> <span class="required-star">*</span>
                     </td>
                     <td class="vtext" width="15%">Semester</td><td class="colon">:</td>
                     <td>
-                        <select name="sem_id" id="p_sem" class="dropdown textbox-medium" required>
+                        <select name="sem_id" id="p_sem" class="textbox w-200 w-250" required>
                             <option value="">--Select Semester--</option>
                             {# Dynamically filled #}
                         </select> <span class="required-star">*</span>
@@ -39,14 +39,14 @@
                 <tr>
                     <td class="vtext">Session From</td><td class="colon">:</td>
                     <td>
-                        <select name="session_from" id="p_sess_from" class="dropdown textbox-small" required>
+                        <select name="session_from" id="p_sess_from" class="textbox w-200 w-150" required>
                             <option value="">--Select Session From--</option>
                             {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
                         </select> <span class="required-star">*</span>
                     </td>
                     <td class="vtext">Session To</td><td class="colon">:</td>
                     <td>
-                        <select name="session_to" id="p_sess_to" class="dropdown textbox-small">
+                        <select name="session_to" id="p_sess_to" class="textbox w-200 w-150">
                             <option value="">--Select Session To--</option>
                             {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
                         </select>
@@ -54,7 +54,7 @@
                 </tr>
                 <tr>
                     <td class="vtext">Package Name</td><td class="colon">:</td>
-                    <td><input type="text" name="name" id="p_name" class="textbox textbox-medium" maxlength="100" required> <span class="required-star">*</span></td>
+                    <td><input type="text" name="name" id="p_name" class="textbox w-250" maxlength="100" required> <span class="required-star">*</span></td>
                     <td class="vtext">Is Active</td><td class="colon">:</td>
                     <td>
                         <span class="chkbox">
@@ -139,29 +139,7 @@
             </table>
 
             {% if pagination.total_pages > 1 %}
-            <div class="pager-style">
-                {% if pagination.has_prev %}
-                    <a href="{{ url_for('academics.package_master', page=pagination.page-1) }}">&lt;</a>
-                {% else %}
-                    <span class="disabled">&lt;</span>
-                {% endif %}
-
-                {% for p in page_range %}
-                    {% if p == '...' %}
-                        <span>{{ p }}</span>
-                    {% elif p == pagination.page %}
-                        <span class="active">{{ p }}</span>
-                    {% else %}
-                        <a href="{{ url_for('academics.package_master', page=p) }}">{{ p }}</a>
-                    {% endif %}
-                {% endfor %}
-
-                {% if pagination.has_next %}
-                    <a href="{{ url_for('academics.package_master', page=pagination.page+1) }}">&gt;</a>
-                {% else %}
-                    <span class="disabled">&gt;</span>
-                {% endif %}
-            </div>
+            {% include "includes/pagination.html" %}
             {% endif %}
         </div>
     </div>
@@ -212,7 +190,7 @@ function addCourseRow(data = null) {
     tr.innerHTML = `
         <td align="center">${rowCount}</td>
         <td align="center">
-            <select name="course_ids[]" class="dropdown" style="width:100%;" required>${courseOpts}</select>
+            <select name="course_ids[]" class="textbox w-200" style="width:100%;" required>${courseOpts}</select>
         </td>
         <td align="center">
             <span class="chkbox">

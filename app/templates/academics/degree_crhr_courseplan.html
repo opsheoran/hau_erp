@@ -18,7 +18,7 @@
                 <td class="vtext" width="15%">Degree</td>
                 <td class="colon">:</td>
                 <td width="35%">
-                    <select name="degree_id" id="cp_degree" class="dropdown w-300" required>
+                    <select name="degree_id" id="cp_degree" class="textbox w-200 w-300" required>
                         <option value="">--Select Degree--</option>
                         {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
                     </select> <span class="required">*</span>
@@ -105,29 +105,7 @@
                 </table>
                 
                 {% if pagination.total_pages > 1 %}
-                <div class="pager-style">
-                    {% if pagination.has_prev %}
-                        <a href="{{ url_for('academics.degree_crhr_courseplan', page=pagination.page-1) }}">&lt;</a>
-                    {% else %}
-                        <span class="disabled">&lt;</span>
-                    {% endif %}
-
-                    {% for p in page_range %}
-                        {% if p == '...' %}
-                            <span>{{ p }}</span>
-                        {% elif p == pagination.page %}
-                            <span class="active">{{ p }}</span>
-                        {% else %}
-                            <a href="{{ url_for('academics.degree_crhr_courseplan', page=p) }}">{{ p }}</a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if pagination.has_next %}
-                        <a href="{{ url_for('academics.degree_crhr_courseplan', page=pagination.page+1) }}">&gt;</a>
-                    {% else %}
-                        <span class="disabled">&gt;</span>
-                    {% endif %}
-                </div>
+                {% include "includes/pagination.html" %}
                 {% endif %}
             </td>
         </tr>
@@ -150,7 +128,7 @@ function addCPRow(data = null) {
     row.innerHTML = `
         <td align="center">${sNo}</td>
         <td align="center">
-            <select name="course_type_id[]" class="dropdown" style="width:100%">
+            <select name="course_type_id[]" class="textbox w-200" style="width:100%">
                 ${ctOptions}
             </select>
         </td>

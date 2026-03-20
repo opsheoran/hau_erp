@@ -9,7 +9,7 @@
                 <div class="row g-3">
                     <div class="col-md-5">
                         <label class="form-label small">College *</label>
-                        <select name="college_id" class="form-select form-select-sm" required onchange="this.form.submit()">
+                        <select name="college_id" class="form-select form-select-sm textbox" required onchange="this.form.submit()">
                             <option value="">-- Select College --</option>
                             {% for c in lookups.colleges %}
                             <option value="{{ c.pk_collegeid }}" {% if filters.college_id|string == c.pk_collegeid|string %}selected{% endif %}>{{ c.collegename }}</option>
@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-md-3">
                         <label class="form-label small">Session *</label>
-                        <select name="session_id" class="form-select form-select-sm" required onchange="this.form.submit()">
+                        <select name="session_id" class="form-select form-select-sm textbox" required onchange="this.form.submit()">
                             <option value="">-- Select --</option>
                             {% for s in lookups.sessions %}
                             <option value="{{ s.pk_sessionid }}" {% if filters.session_id|string == s.pk_sessionid|string %}selected{% endif %}>{{ s.sessionname }}</option>
@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label small">Degree *</label>
-                        <select name="degree_id" class="form-select form-select-sm" required onchange="this.form.submit()">
+                        <select name="degree_id" class="form-select form-select-sm textbox" required onchange="this.form.submit()">
                             <option value="">-- Select Degree --</option>
                             {% for d in lookups.degrees %}
                             <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label small">Department / Specialization</label>
-                        <select name="branch_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <select name="branch_id" class="form-select form-select-sm textbox" onchange="this.form.submit()">
                             <option value="">-- ALL --</option>
                             {% for b in lookups.branches %}
                             <option value="{{ b.Pk_BranchId }}" {% if filters.branch_id|string == b.Pk_BranchId|string %}selected{% endif %}>{{ b.Branchname }}</option>
@@ -44,7 +44,7 @@
                         </select>
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary btn-sm w-100">VIEW STUDENTS</button>
+                        <button type="submit" class="button-common">VIEW STUDENTS</button>
                     </div>
                 </div>
             </form>
@@ -57,7 +57,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             <label class="form-label small fw-bold">Select Activity to Allocate *</label>
-                            <select name="activity_dtl_id" class="form-select form-select-sm" required>
+                            <select name="activity_dtl_id" class="form-select form-select-sm textbox" required>
                                 <option value="">-- Select Activity --</option>
                                 {% for a in lookups.activities %}
                                 <option value="{{ a.id }}">{{ a.group_name }} - {{ a.name }}</option>
@@ -65,7 +65,7 @@
                             </select>
                         </div>
                         <div class="col-md-6 pt-4 text-end">
-                            <button type="submit" name="action" value="ALLOCATE" class="btn btn-success btn-sm">ALLOCATE TO SELECTED</button>
+                            <button type="submit" name="action" value="ALLOCATE" class="button-common">ALLOCATE TO SELECTED</button>
                         </div>
                     </div>
                 </div>

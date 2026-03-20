@@ -14,7 +14,7 @@
                         <td class="vtext" width="15%">College</td>
                         <td class="colon">:</td>
                         <td colspan="4" class="required">
-                            <select name="college_id" id="ddl_college" class="dropdown w-300" required onchange="this.form.submit()">
+                            <select name="college_id" id="ddl_college" class="textbox w-200 w-300" required onchange="this.form.submit()">
                                 <option value="">-- Select College--</option>
                                 {% for c in lookups.colleges %}
                                 <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string or request.args.get('college_id')|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -26,7 +26,7 @@
                         <td class="vtext">Session From</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="session_from" id="D_ddlappfrom" class="dropdown w-200" required>
+                            <select name="session_from" id="D_ddlappfrom" class="textbox w-200 w-200" required>
                                 <option value=""> -- Select Session From -- </option>
                                 {% for s in lookups.sessions %}
                                 <option value="{{ s.id }}">{{ s.name }}</option>
@@ -36,7 +36,7 @@
                         <td class="vtext" width="15%">Session To</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="session_to" id="ddlappupto" class="dropdown w-200" required>
+                            <select name="session_to" id="ddlappupto" class="textbox w-200 w-200" required>
                                 <option value=""> -- Select Session Upto-- </option>
                                 {% for s in lookups.sessions %}
                                 <option value="{{ s.id }}">{{ s.name }}</option>
@@ -48,7 +48,7 @@
                         <td class="vtext">Degree</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="degree_id" id="ddlDegree" class="dropdown w-250" required>
+                            <select name="degree_id" id="ddlDegree" class="textbox w-200 w-250" required>
                                 <option value="">-- Select Degree --</option>
                                 {% for d in lookups.degrees %}
                                 <option value="{{ d.id }}">{{ d.name }}</option>
@@ -127,23 +127,7 @@
         
         <!-- Pagination -->
         {% if pagination.total_pages > 1 %}
-        <div class="pager-style">
-            {% if pagination.has_prev %}
-            <a href="{{ url_for('academics.admission_no_configuration', page=pagination.page-1) }}">Prev</a>
-            {% endif %}
-            
-            {% for p in page_range %}
-                {% if p == pagination.page %}
-                <span class="active">{{ p }}</span>
-                {% else %}
-                <a href="{{ url_for('academics.admission_no_configuration', page=p) }}">{{ p }}</a>
-                {% endif %}
-            {% endfor %}
-            
-            {% if pagination.has_next %}
-            <a href="{{ url_for('academics.admission_no_configuration', page=pagination.page+1) }}">Next</a>
-            {% endif %}
-        </div>
+        {% include "includes/pagination.html" %}
         {% endif %}
     </div>
 </div>

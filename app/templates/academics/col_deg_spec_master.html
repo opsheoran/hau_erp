@@ -19,7 +19,7 @@
                 <td class="vtext" width="15%">College</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="college_id" id="m_college" class="dropdown w-250" required>
+                    <select name="college_id" id="m_college" class="textbox w-200 w-250" required>
                         <option value="">--Select College--</option>
                         {% for c in lookups.colleges %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
                     </select> <span class="required">*</span>
@@ -27,7 +27,7 @@
                 <td class="vtext" width="15%">Degree</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="degree_id" id="m_degree" class="dropdown w-250" required>
+                    <select name="degree_id" id="m_degree" class="textbox w-200 w-250" required>
                         <option value="">--Select Degree--</option>
                         {% for d in lookups.degrees %}<option value="{{ d.id }}" data-isug="{{ d.isug }}" data-isphd="{{ d.isphd }}">{{ d.name }}</option>{% endfor %}
                     </select> <span class="required">*</span>
@@ -137,29 +137,7 @@
                 </table>
                 
                 {% if pagination.total_pages > 1 %}
-                <div class="pager-style">
-                    {% if pagination.has_prev %}
-                        <a href="{{ url_for('academics.col_deg_spec_master', page=pagination.page-1) }}">&lt;</a>
-                    {% else %}
-                        <span class="disabled">&lt;</span>
-                    {% endif %}
-
-                    {% for p in page_range %}
-                        {% if p == '...' %}
-                            <span>{{ p }}</span>
-                        {% elif p == pagination.page %}
-                            <span class="active">{{ p }}</span>
-                        {% else %}
-                            <a href="{{ url_for('academics.col_deg_spec_master', page=p) }}">{{ p }}</a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if pagination.has_next %}
-                        <a href="{{ url_for('academics.col_deg_spec_master', page=pagination.page+1) }}">&gt;</a>
-                    {% else %}
-                        <span class="disabled">&gt;</span>
-                    {% endif %}
-                </div>
+                {% include "includes/pagination.html" %}
                 {% endif %}
             </td>
         </tr>
@@ -193,13 +171,13 @@ function addSpecRow(data = null) {
     row.innerHTML = `
         <td align="center">${rowCount + 1}</td>
         <td>
-            <select name="spec_ids[]" class="dropdown" style="width:100%" required>
+            <select name="spec_ids[]" class="textbox w-200" style="width:100%" required>
                 <option value="">--Select Specialization--</option>
                 ${branches.map(b => `<option value="${b.Pk_BranchId}" ${(data && (data.fk_BranchId == b.Pk_BranchId || data.fk_branchid == b.Pk_BranchId || data.branchid == b.Pk_BranchId)) ? 'selected' : ''}>${b.Branchname}</option>`).join('')}
             </select>
         </td>
         <td>
-            <select name="spec_types[]" class="dropdown" style="width:100%">
+            <select name="spec_types[]" class="textbox w-200" style="width:100%">
                 <option value="">--Select Type--</option>
                 ${typeOptions.join('')}
             </select>

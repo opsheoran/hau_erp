@@ -10,7 +10,7 @@
                         <td class="vtext" width="15%">College</td>
                         <td class="colon">:</td>
                         <td class="required" colspan="4">
-                            <select name="college_id" id="ddlCollege" class="dropdown w-300">
+                            <select name="college_id" id="ddlCollege" class="textbox w-200 w-300">
                                 <option value="">-- Select College --</option>
                                 {% for c in lookups.colleges %}
                                 <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -23,7 +23,7 @@
                         <td class="vtext">Academic Session</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="session_id" id="ddlSession" class="dropdown w-200">
+                            <select name="session_id" id="ddlSession" class="textbox w-200 w-200">
                                 <option value="">-- Select Session --</option>
                                 {% for s in lookups.sessions %}
                                 <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
@@ -36,7 +36,7 @@
                         <td class="vtext">Degree</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="degree_id" id="ddlDegree" class="dropdown w-300">
+                            <select name="degree_id" id="ddlDegree" class="textbox w-200 w-300">
                                 <option value="">--Select Degree--</option>
                                 {% for d in lookups.degrees %}
                                 <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -47,7 +47,7 @@
                         <td class="vtext">Semester</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="semester_id" id="ddlSemester" class="dropdown w-150">
+                            <select name="semester_id" id="ddlSemester" class="textbox w-200 w-150">
                                 <option value=""> -- Select Semester -- </option>
                                 {% for s in lookups.semesters %}
                                 <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
@@ -60,7 +60,7 @@
                         <td class="vtext">Year</td>
                         <td class="colon">:</td>
                         <td>
-                            <select id="ddlYear" class="dropdown w-100" style="background-color: #f0f0f0; cursor: not-allowed;" disabled>
+                            <select id="ddlYear" class="textbox w-200 w-100" style="background-color: #f0f0f0; cursor: not-allowed;" disabled>
                                 <option value="">--Year--</option>
                                 {% for y in lookups.years %}
                                 <option value="{{ y.pk_degreeyearid }}" {% if filters.year_id|string == y.pk_degreeyearid|string %}selected{% endif %}>{{ y.degreeyear_char }}</option>
@@ -71,7 +71,7 @@
                         <td class="vtext">Exam Config</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="exconfig_id" id="ddlExamConfig" class="dropdown w-300">
+                            <select name="exconfig_id" id="ddlExamConfig" class="textbox w-200 w-300">
                                 <option value="">-- Select Exam Config.--</option>
                                 {% for ex in lookups.exam_configs %}
                                 <option value="{{ ex.id }}" {% if filters.exconfig_id|string == ex.id|string %}selected{% endif %}>{{ ex.display_name }}</option>

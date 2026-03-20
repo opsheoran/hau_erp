@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
-    .textbox-small { width: 150px !important; }
-    .textbox-medium { width: 250px !important; }
-    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .w-150 { width: 150px !important; }
+    .w-250 { width: 250px !important; }
+    .w-350 { width: 363px !important; height: 60px !important; }
     .required-star { color: red; font-weight: bold; }
 </style>
 
@@ -17,7 +17,7 @@
                 <tr>
                     <td class="vtext" width="15%">Select College</td><td class="colon">:</td>
                     <td width="34%">
-                        <select name="college_id" id="m_college" class="dropdown textbox-medium" required>
+                        <select name="college_id" id="m_college" class="textbox w-200 w-250" required>
                             <option value="">-- Select College --</option>
                             {% for c in colleges %}
                             <option value="{{ c.pk_collegeid }}">{{ c.collegename }}</option>
@@ -26,7 +26,7 @@
                     </td>
                     <td class="vtext" width="15%">Select Degree</td><td class="colon">:</td>
                     <td>
-                        <select name="degree_id" id="m_degree" class="dropdown textbox-medium" required>
+                        <select name="degree_id" id="m_degree" class="textbox w-200 w-250" required>
                             <option value="">-- Select Degree --</option>
                             {% for d in degrees %}
                             <option value="{{ d.pk_degreeid }}">{{ d.degreename }}</option>
@@ -36,7 +36,7 @@
                 </tr>
                 <tr>
                     <td class="vtext">Remarks</td><td class="colon">:</td>
-                    <td colspan="4"><input type="text" name="remarks" id="m_remarks" class="textbox textbox-medium"></td>
+                    <td colspan="4"><input type="text" name="remarks" id="m_remarks" class="textbox w-250"></td>
                 </tr>
                 <tr>
                     <td colspan="2"></td>

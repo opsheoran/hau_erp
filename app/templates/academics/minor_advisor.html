@@ -31,7 +31,7 @@
                         <td width="21%" class="vtext">College</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="college_id" class="dropdown w-300" required onchange="this.form.submit()">
+                            <select name="college_id" class="textbox w-200 w-300" required onchange="this.form.submit()">
                                 <option value="0">--Select College--</option>
                                 {% for c in lookups.colleges %}<option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
                             </select>
@@ -40,7 +40,7 @@
                         <td class="vtext" width="15%">Admitted Session</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="session_id" class="dropdown w-200" required>
+                            <select name="session_id" class="textbox w-200 w-200" required>
                                 <option value="0">--Select Academic Session--</option>
                                 {% for s in lookups.sessions %}<option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
                             </select>
@@ -51,7 +51,7 @@
                         <td class="vtext">Degree</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="degree_id" class="dropdown w-300" required onchange="this.form.submit()">
+                            <select name="degree_id" class="textbox w-200 w-300" required onchange="this.form.submit()">
                                 <option value="0">--Select Degree--</option>
                                 {% for d in lookups.degrees %}<option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>{% endfor %}
                             </select>
@@ -60,7 +60,7 @@
                         <td class="vtext">Specialization</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="branch_id" class="dropdown w-200" required>
+                            <select name="branch_id" class="textbox w-200 w-200" required>
                                 <option value="0">--Select Specialization--</option>
                                 {% for b in lookups.branches %}<option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>{% endfor %}
                             </select>
@@ -90,7 +90,7 @@
                             <td class="vtext" width="21%">Student Name</td>
                             <td class="colon">:</td>
                             <td colspan="5">
-                                <select name="sid" class="dropdown w-300" required onchange="loadCommittee(this.value)">
+                                <select name="sid" class="textbox w-200 w-300" required onchange="loadCommittee(this.value)">
                                     <option value="">--Select Student Name--</option>
                                     {% for s in students %}
                                     <option value="{{ s.pk_sid }}" {% if sid|string == s.pk_sid|string %}selected{% endif %}>{{ s.fullname }} [ {{ s.enrollmentno }} ]</option>
@@ -111,7 +111,7 @@
                             <td class="vtext">Status/Advisory Type</td>
                             <td class="colon">:</td>
                             <td class="required">
-                                <select name="role_id" id="ddlRole" class="dropdown w-250" required onchange="fillAdvisorByRole(this.value)">
+                                <select name="role_id" id="ddlRole" class="textbox w-200 w-250" required onchange="fillAdvisorByRole(this.value)">
                                     <option value="">--Select--</option>
                                     <option value="3">Member From Minor Subject</option>
                                     <option value="4">Member From Supporting Subject</option>
@@ -125,7 +125,7 @@
                         <td class="vtext">Advisor Name</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="advisor_id" id="ddlAdvisor" class="dropdown w-300" required>
+                            <select name="advisor_id" id="ddlAdvisor" class="textbox w-200 w-300" required>
                                 <option value="">--Select Advisor Name--</option>
                                 {% for e in lookups.employees %}<option value="{{ e.id }}">{{ e.name }}</option>{% endfor %}
                             </select>
