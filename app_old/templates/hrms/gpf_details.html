@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="hau-card">
+        <div class="tablesubheading">Employee GPF/CPF/NPS Detail</div>
+        <div style="padding: 15px;">
+            <!-- Header Info - Redesigned with Textboxes like Live Template -->
+                    <table class="form-table" style="width: 100%; border-bottom: 2px solid #2d5a27; padding-bottom: 15px; margin-bottom: 20px;">
+                        <tr>
+                            <td class="vtext" width="20%">Employee Name</td><td class="colon">:</td>
+                            <td width="30%">
+                                <input type="text" value="{{ gpf.header.empname if gpf else '' }}" readonly class="textboxlong" style="width: 250px;">
+                            </td>
+                            <td class="vtext" width="20%">Department</td><td class="colon">:</td>
+                            <td width="25%">
+                                <input type="text" value="{{ gpf.header.department if gpf else '' }}" readonly class="textboxlong" style="width: 250px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vtext">Designation</td><td class="colon">:</td>
+                            <td>
+                                <input type="text" value="{{ gpf.header.designation if gpf else '' }}" readonly class="textboxlong" style="width: 250px;">
+                            </td>
+                            <td class="vtext">Account Number</td><td class="colon">:</td>
+                            <td>
+                                <input type="text" value="{{ gpf.header.gpfno if gpf else '' }}" readonly class="textboxlong" style="width: 250px; font-weight: bold;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vtext">Employee Opening Balance</td><td class="colon">:</td>
+                            <td>
+                                <input type="text" value="{{ "{:,.2f}".format(gpf.header.OpeningBalance|float) if gpf and gpf.header.OpeningBalance else '0.00' }}" readonly class="textboxlong" style="width: 250px; font-weight: bold; color: #2d5a27;">
+                            </td>
+                            <td class="vtext">Finance Year</td><td class="colon">:</td>
+                            <td>
+                                <input type="text" value="{{ (gpf.header.Lyear|int - 1)|string + '-' + gpf.header.Lyear|string if gpf and gpf.header.Lyear else '' }}" readonly class="textboxlong" style="width: 250px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button type="button" class="btn-portal" onclick="printStatement()" style="background-color: #2d5a27; color: white; padding: 5px 15px; border: none; border-radius: 4px; cursor: pointer;">
+                                    <i class="fa fa-print"></i> Print
+                                </button>
+                            </td>
+                            <td class="vtext">Select Year</td><td class="colon">:</td>
+                            <td>
+                                <select id="ddlFinYear" class="dropdown" style="width: 260px;" onchange="changeYear(this.value)">
+                                    <option value="">-- Select Financial Year --</option>
+                                    {% for f in fin_years %}
+                                    <option value="{{ f.id }}" {% if (selected_fin_id == f.id) or (not selected_fin_id and gpf and gpf.header.pk_finid == f.id) %}selected{% endif %}>{{ f.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+            
+    
+            <!-- Monthly Grid -->
+    
+            <div class="tablesubheading" style="margin-bottom:10px;">Employee Month Wise PF Details</div>
+            <div style="overflow-x: auto;">
+                <table class="table-grid-view">
+                    <thead>
+                        <tr class="header-style">
+                            <td>S.No</td>
+                            <td>Month</td>
+                            <td>Op Bal Employee</td>
+                            <td>Employee Sub. PF</td>
+                            <td>Employee Opt. PF</td>
+                            <td>Employee Recovery</td>
+                            <td>Employee Arrear</td>
+                            <td>Employee Total</td>
+                            <td>Employee Withdrawal</td>
+                            <td>Employee Interest</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in gpf.grid %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center">{{ loop.index }}</td>
+                            <td><b>{{ r.month }}</b></td>
+                            <td align="right">{{ "{:,.2f}".format(r.op_bal|float) }}</td>
+                            <td align="right">{{ "{:,.2f}".format(r.sub|float) }}</td>
+                            <td align="right">{{ "{:,.2f}".format(r.opt|float) }}</td>
+                            <td align="right">{{ "{:,.2f}".format(r.recovery|float) }}</td>
+                            <td align="right">{{ "{:,.2f}".format(r.arrear|float) }}</td>
+                            <td align="right" style="color: #2d5a27; font-weight: bold;">{{ "{:,.2f}".format(r.total|float) }}</td>
+                            <td align="right" style="color: red;">{{ "{:,.2f}".format(r.withdrawal|float) }}</td>
+                            <td align="right">{{ "{:,.2f}".format(r.interest|float) }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="10" align="center" style="padding: 30px;">No monthly records found for the current active year.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    
+                    <div style="margin-top: 20px; font-size: 10px; color: #888; font-style: italic;">
+                        * This statement is generated based on current ERP transaction logs. For official purposes, please consult the Accounts branch.
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+            function changeYear(finId) {
+                if (finId) {
+                    window.location.href = "{{ url_for('hrms.gpf_details') }}?fin_year=" + finId;
+                }
+            }
+            function printStatement() {
+                var finId = document.getElementById('ddlFinYear').value;
+                var url = "{{ url_for('hrms.print_gpf_statement') }}";
+                if (finId) {
+                    url += "?fin_year=" + finId;
+                }
+                window.open(url, '_blank');
+            }
+            </script>
+            {% endblock %}
+            

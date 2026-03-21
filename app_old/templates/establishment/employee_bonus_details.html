@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<span>Transactions</span>&nbsp;&gt;&nbsp;<span>Job Details</span>&nbsp;&gt;&nbsp;<strong>Employee Bonus Amount Details</strong>
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="target_emp_id" value="{{ emp.pk_empid if emp else '' }}">
+    <input type="hidden" name="bonus_id" value="{{ edit_data.id if edit_data else '' }}">
+
+    <!-- SHARED SEARCH MODAL -->
+    {% include 'establishment/_search_modal.html' %}
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">Employee Bonus Amount Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Employee Code</td>
+                <td class="colon">:</td>
+                <td class="required" width="30%">
+                    <input name="empcode" type="text" class="textbox w-150" value="{{ emp.empcode if emp else '' }}" readonly>
+                    <a href="javascript:void(0);" onclick="openEmpSearch('emp_id', '')">
+                        <img src="{{ url_for('static', filename='srec.jpg') }}" border="0" style="vertical-align:middle; cursor:pointer;">
+                    </a>
+                    <span class="required">*</span>
+                </td>
+                <td width="2%"></td>
+                <td class="vtext" width="15%">Employee Name</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="text" class="textbox w-250" value="{{ emp.empname if emp else '' }}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ emp.dept_name if emp else '' }}" readonly>
+                </td>
+                <td></td>
+                <td class="vtext">Designation</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ emp.designation if emp else '' }}" readonly>
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td class="vtext">Year</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="year_id" class="dropdown w-150" required>
+                        <option value="">-- Select Year --</option>
+                        {% for y in range(2026, 1984, -1) %}
+                        <option value="{{ y }}" {% if edit_data and edit_data.YearId|string == y|string %}selected{% endif %}>{{ y }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Bonus Amount</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="amount" type="text" class="textbox w-150" value="{{ edit_data.BonusAmount if edit_data else '' }}" required onkeypress="return isNumberKey(event)">
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="20"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    {% if (edit_data and perm.AllowUpdate) or (not edit_data and perm.AllowAdd) %}
+                    <input type="submit" name="action" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" class="button-common">
+                    {% endif %}
+                    <input type="submit" name="action" value="RESET" class="button-common" formnovalidate>
+                </td>
+            </tr>
+            
+            {% if emp %}
+            <tr><td colspan="7" height="30"></td></tr>
+            <tr>
+                <td colspan="7" class="tablesubheading">
+                    <span class="subheadingborderbottom">List of Employee Bonus Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td colspan="7">
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="10%">S. No.</th>
+                                <th width="40%">Year</th>
+                                <th width="30%">Amount</th>
+                                <th width="10%">EDIT</th>
+                                <th width="10%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for b in bonuses %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                <td align="center">{{ loop.index }}</td>
+                                <td align="center">{{ b.year_id }}</td>
+                                <td align="right" style="padding-right:10px;">{{ b.amount }}</td>
+                                <td align="center">
+                                    <a href="{{ url_for('establishment.employee_bonus_details', emp_id=emp_id, edit_id=b.id) }}">
+                                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    {% if perm.AllowDelete %}
+                                    <a href="{{ url_for('establishment.employee_bonus_details', emp_id=emp_id, delete_id=b.id) }}" onclick="return confirm('Are you sure?')">
+                                        <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="5" align="center" style="padding:10px;">No bonus details found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function selectItem(id, name) {
+        window.location.href = "{{ url_for('establishment.employee_bonus_details') }}?emp_id=" + id;
+    }
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
+            return false;
+        return true;
+    }
+</script>
+{% endblock %}

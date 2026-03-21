@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% from "includes/pager_macro.html" import render_pager %}
+{% block content %}
+{% block extra_head %}
+<style>
+    .tablesubheading { 
+        background-color: #2d5a27 !important; 
+        color: #ffffff !important; 
+        font-weight: bold; 
+        padding: 5px 10px; 
+        font-size: 12px; 
+        border: 1px solid #1e3d1a; 
+        display: block; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+<div class="hau-card">
+    <div class="tablesubheading">Leave Adjustment Approval</div>
+    <div style="padding: 15px;">
+        <div class="tablesubheading" style="margin-bottom:10px;">Pending Leave Adjustment Requests</div>
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <td>S.No.</td><td>Requested By</td><td>Emp Code</td><td>Leave Type</td><td>Request Date</td><td>Days</td><td>From Date</td><td>To Date</td><td>Action</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in pending %}
+                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ p.empname }}</td>
+                    <td align="center">{{ p.empcode }}</td>
+                    <td>{{ p.leavetype }}</td>
+                    <td align="center">{{ p.RequestDate }}</td>
+                    <td align="right">{{ "{:,.2f}".format(p.Days|float) }}</td>
+                    <td align="center">{{ p.FromDate }}</td>
+                    <td align="center">{{ p.ToDate }}</td>
+                    <td align="center">
+                        <a href="?adj_id={{ p.adj_id }}#response_panel">
+                            <img src="{{ url_for('static', filename='images/srec.jpg') }}" border="0" title="Take Action">
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="9" align="center" style="padding:20px;">No Record Found!</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if selected_adj %}
+        <div style="margin-top:30px; border:1px solid #2d5a27; padding:15px; background:#f9f9f9;" id="response_panel">
+            <div class="tablesubheading" style="margin-bottom:15px;">Response Detail</div>
+            <div style="margin-bottom:10px; font-weight:bold; color: #2d5a27;">
+                Action for: {{ selected_adj.empname }} ({{ selected_adj.empcode }}) | Leave: {{ selected_adj.leavetype }}
+            </div>
+            <form method="POST">
+                <input type="hidden" name="adj_id" value="{{ selected_adj.adj_id }}">
+                <table class="form-table" width="100%">
+                    <tr>
+                        <td class="vtext" width="150">Comments</td><td class="colon">:</td>
+                        <td>
+                            <textarea name="comments" class="textboxmultiline" style="width:95%; height:50px;" required></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td style="padding-top:15px;">
+                            <input type="submit" name="action" value="APPROVE" class="button-common" style="background:#2d5a27; color:white; width:100px; height:26px;">
+                            <input type="submit" name="action" value="REJECT" class="button-common" style="margin-left:10px; width:100px; height:26px;">
+                            <a href="{{ url_for('leave.adj_approvals') }}" class="button-common" style="margin-left:10px; text-decoration:none; display:inline-block; padding:4px 15px; background:#eee; color:#333; border:1px solid #ccc; font-size:11px;">CANCEL</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        {% endif %}
+
+        <div style="margin-top:40px;">
+            <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">Approved Leave Adjustment Requests</div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td>S.No.</td><td>Requested By</td><td>Leave Type</td><td>Requested Date</td><td>Days</td><td>Approved Date</td><td>Comments</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in history %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index + (pagination.page - 1) * 10 }}</td>
+                        <td>{{ h.empname }}</td>
+                        <td>{{ h.leavetype }}</td>
+                        <td align="center">{{ h.adjreqdate_fmt }}</td>
+                        <td align="right">{{ "{:,.2f}".format(h.totaladjleave|float) }}</td>
+                        <td align="center">{{ h.responsedate_fmt }}</td>
+                        <td>{{ h.remarks or '' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {{ render_pager(pagination) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

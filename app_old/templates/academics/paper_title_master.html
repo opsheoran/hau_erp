@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- SAVE FORM -->
+<form method="POST" id="paperForm">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="pk_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="3">
+                    <span class="mainheadingborderbottom">Paper/Course Title Master</span>
+                </td>
+            </tr>
+            <tr><td colspan="3" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Paper Title</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="name" id="p_name" class="textbox w-250" maxlength="200" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Title Code</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="code" id="p_code" class="textbox w-150" maxlength="50" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Report Order</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" name="order" id="p_order" class="textbox w-100" value="1" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr><td colspan="3" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <input type="submit" value="SAVE" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left:10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<!-- LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="3">
+                <span class="subheadingborderbottom">List of Paper Titles</span>
+            </td>
+        </tr>
+        <tr><td colspan="3" height="10"></td></tr>
+        <tr>
+            <td colspan="3">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th width="45%">Paper Title</th>
+                            <th width="20%">Title Code</th>
+                            <th width="20%">Order</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in titles %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                            <td align="center">{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td>{{ item.papertitle }}</td>
+                            <td>{{ item.TitleCode }}</td>
+                            <td align="center">{{ item.rptorder }}</td>
+                            <td align="center">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editP({{ item|tojson }})'>
+                            </td>
+                            <td align="center">
+                                <form method="POST" onsubmit="return confirm('Delete this record?');" style="display:inline;">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ item.pk_papertitleid }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('academics.paper_title_master', page=pagination.page-1) }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('academics.paper_title_master', page=p) }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('academics.paper_title_master', page=pagination.page+1) }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+function editP(item) {
+    document.getElementById('pk_id').value = item.pk_papertitleid;
+    document.getElementById('p_name').value = item.papertitle.trim();
+    document.getElementById('p_code').value = item.TitleCode.trim();
+    document.getElementById('p_order').value = item.rptorder;
+    window.scrollTo(0,0);
+}
+
+function resetForm() {
+    document.getElementById('pk_id').value = '';
+    document.getElementById('paperForm').reset();
+}
+</script>
+{% endblock %}

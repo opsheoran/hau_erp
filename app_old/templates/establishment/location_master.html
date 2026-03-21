@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tablesubheading">Location Master</div>
+    <div style="padding: 15px;">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="edit_id" value="{{ edit_data.pk_locid if edit_data else '' }}">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Location</td><td class="colon">:</td>
+                    <td width="34%"><input type="text" name="location" class="textbox" style="width: 250px;" value="{{ edit_data.locname if edit_data else '' }}" required></td>
+                    <td class="vtext" width="15%">Office Type</td><td class="colon">:</td>
+                    <td>
+                        <select name="office_id" class="dropdown" style="width: 200px;" required>
+                            <option value="">--Select Office--</option>
+                            <option value="1" {% if edit_data and edit_data.fk_officeid==1 %}selected{% endif %}>CITY</option>
+                            <option value="2" {% if edit_data and edit_data.fk_officeid==2 %}selected{% endif %}>COUNTRY</option>
+                            <option value="3" {% if edit_data and edit_data.fk_officeid==3 %}selected{% endif %}>DISTRICT</option>
+                            <option value="4" {% if edit_data and edit_data.fk_officeid==4 %}selected{% endif %}>HEAD OFFICE</option>
+                            <option value="5" {% if edit_data and edit_data.fk_officeid==5 %}selected{% endif %}>UNIT</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">District</td><td class="colon">:</td>
+                    <td>
+                        <select name="district_id" class="dropdown" style="width: 200px;" required>
+                            <option value="">--Select District--</option>
+                            {% for d in districts %}<option value="{{ d.id }}" {% if edit_data and edit_data.fk_districid==d.id %}selected{% endif %}>{{ d.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext">Alias</td><td class="colon">:</td>
+                    <td><input type="text" name="alias" class="textbox" style="width: 80px;" value="{{ edit_data.locationAlias if edit_data else '' }}" required maxlength="2"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Parent Location</td><td class="colon">:</td>
+                    <td>
+                        <select name="parent_id" class="dropdown" style="width: 250px;">
+                            <option value="">--Select Parent Location--</option>
+                            {% for p in parents %}<option value="{{ p.id }}" {% if edit_data and edit_data.fk_locid==p.id %}selected{% endif %}>{{ p.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext">Holiday Loc.</td><td class="colon">:</td>
+                    <td>
+                        <select name="holiday_loc_id" class="dropdown" style="width: 200px;" required>
+                            <option value="">--Select--</option>
+                            <option value="1" {% if edit_data and edit_data.fk_holidaylocid==1 %}selected{% endif %}>Hisar</option>
+                            <option value="51" {% if edit_data and edit_data.fk_holidaylocid==51 %}selected{% endif %}>Campus School</option>
+                            <option value="53" {% if edit_data and edit_data.fk_holidaylocid==53 %}selected{% endif %}>HAU</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top: 15px;">
+                        <input type="submit" value="SAVE" class="button-common" style="background:#3c8dbc; color:white; padding: 5px 20px;">
+                        <a href="{{ url_for('establishment.location_master') }}" class="button-common" style="text-decoration:none; display:inline-block; line-height:22px; margin-left:10px;">RESET</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 40px;">
+            <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">List of Location(s)</div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td>S. No.</td><td>Location</td><td>Parent Location</td><td>Alias</td><td>EDIT</td><td>DELETE</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in locations %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td style="font-weight: bold;">{{ l.locname }}</td>
+                        <td>{{ l.parent_loc or '' }}</td>
+                        <td align="center">{{ l.alias }}</td>
+                        <td align="center">
+                            <a href="{{ url_for('establishment.location_master', edit_id=l.id) }}">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}">
+                            </a>
+                        </td>
+                        <td align="center">
+                            <a href="{{ url_for('establishment.delete_location', id=l.id) }}" onclick="return confirm('Are you sure?')">
+                                <img src="{{ url_for('static', filename='images/Delete.gif') }}">
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

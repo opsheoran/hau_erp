@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<!-- saved from url=(0085)https://hauiums.in/SMS/ExRes/SMS_MarksFeed_ForRevised.aspx?wpid=-827553937&Mwpid=4794 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Student Marks Entry For Revised_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Student Marks Entry For Revised_files/default.css" type="text/css" rel="stylesheet"><link href="./Student Marks Entry For Revised_files/font.css" type="text/css" rel="stylesheet"><link href="./Student Marks Entry For Revised_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Student Marks Entry For Revised_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/SMS/ExRes/SMS_MarksFeed_ForRevised.aspx?wpid=-827553937&amp;Mwpid=4794" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTQ0NTA5Mzg1Nw8WAh4GcG9zdGlkBSRlMGEzYjY1ZS04ZjVhLTQ0MTYtYjljYi1lMzhjYzEwMDBjZTIWAmYPDxYCHgdQZW5kaW5nBQEwZBYCAgEPZBYQAgIPDxYCHgRUZXh0BQ4gUmFqYmVlciBTaW5naGRkAgQPDxYCHwIFG0xMVC4gLSAzLzE1LzIwMjYgODoxMzoyMCBQTWRkAgUPDxYCHwIFG0NMVC4gLSAzLzE1LzIwMjYgODoyMjowMyBQTWRkAgYPDxYCHwIFDiBSYWpiZWVyIFNpbmdoZGQCBw8PFgIfAgUNQ09CUyZILCBIaXNhcmRkAgkPZBYCZg8WAh8CBXk8c3Bhbj5NYXJrcyBFbnRyaWVzPC9zcGFuPiZuYnNwOz4mbmJzcDs8c3Bhbj5NYXJrcyBFbnRyeTwvc3Bhbj4mbmJzcDs+Jm5ic3A7PHN0cm9uZz5TdHVkZW50IE1hcmtzIEVudHJ5KFJldmlzZWQpPC9TdHJvbmc+ZAIKD2QWGgIFD2QWDgIBDxAPFgYeDURhdGFUZXh0RmllbGQFC2NvbGxlZ2VuYW1lHg5EYXRhVmFsdWVGaWVsZAUMcGtfY29sbGVnZWlkHgtfIURhdGFCb3VuZGdkEBUCEy0tIFNlbGVjdCBDb2xsZWdlLS0wQ29sbGVnZSBvZiBCYXNpYyBTY2llbmNlcyBBbmQgSHVtYW5pdGllcyAoIDA1ICkgFQITLS0gU2VsZWN0IENvbGxlZ2UtLQE3FCsDAmdnFgECAWQCAw8QDxYGHwMFC3Nlc3Npb25uYW1lHwQFDHBrX3Nlc3Npb25pZB8FZ2QQFRIbLS1TZWxlY3QgQWNhZGVtaWMgU2Vzc2lvbi0tCjIwMjUtMjAyNiAKMjAyNC0yMDI1IAoyMDIzLTIwMjQgCjIwMjItMjAyMyAKMjAyMS0yMDIyIAoyMDIwLTIwMjEgCjIwMTktMjAyMCAKMjAxOC0yMDE5IAoyMDE3LTIwMTggCjIwMTYtMjAxNyAKMjAxNS0yMDE2IAoyMDE0LTIwMTUgCjIwMTMtMjAxNCAKMjAxMi0yMDEzIAoyMDExLTIwMTIgCjIwMTAtMjAxMSAKMjAwOS0yMDEwIBUSGy0tU2VsZWN0IEFjYWRlbWljIFNlc3Npb24tLQI3NwI3MgI3MAI0NgI0MgIyMQIyMAIxOQIxOAIxNwIxNgIxNQIxNAIxMwI3OAI4MAI3ORQrAxJnZ2dnZ2dnZ2dnZ2dnZ2dnZ2cWAQIBZAIFDxAPFgYfAwUKZGVncmVlbmFtZR8EBQtma19kZWdyZWVpZB8FZ2QQFQYRLS1TZWxlY3QgRGVncmVlLS0hQi5TYy4oSG9ucy4pIEFncmljdWx0dXJlKDQgWWVhcikgIUIuU2MuKEhvbnMpIEFncmljdWx0dXJlIDIrNCBZZWFyIB9CLlNjLihIb25zLikgQ29tbXVuaXR5IFNjaWVuY2UgJUIuU2MuKEhvbnMuKSBQaHlzaWNhbCBTY2llbmNlIDQgWWVhciAhQi5TYy4oSG9ucy4pIExpZmUgU2NpZW5jZSA0IHllYXIgFQYRLS1TZWxlY3QgRGVncmVlLS0BMQIyMAIyOQI1NwI1OBQrAwZnZ2dnZ2cWAQIEZAIHDxAPFgYfAwUOc2VtZXN0ZXJfcm9tYW4fBAUNcGtfc2VtZXN0ZXJpZB8FZ2QQFQkTIC0tIFNlbGVjdCBDbGFzcy0tIAJJIANJSSAESUlJIANJViACViADVkkgBFZJSSAFVklJSSAVCRMgLS0gU2VsZWN0IENsYXNzLS0gATEBMgEzATQBNQE2ATcBOBQrAwlnZ2dnZ2dnZ2cWAQIBZAIJDxAPFgYfAwUKYnJhbmNobmFtZR8EBQtwa19icmFuY2hpZB8FZ2QQFQEXLS0gU2VsZWN0IERlcGFydG1lbnQgLS0VARctLSBTZWxlY3QgRGVwYXJ0bWVudCAtLRQrAwFnFgFmZAILDxAPFggeB0VuYWJsZWRoHwMFD2RlZ3JlZXllYXJfY2hhch8EBQ9wa19kZWdyZWV5ZWFyaWQfBWdkEBUBBUZpcnN0FQEBMRQrAwFnFgFmZAINDxAPFgYfAwUKZXhhbUNvbmZpZx8EBQ1wa19leGNvbmZpZ2lkHwVnZBAVAxkgLS0gU2VsZWN0IEV4YW0gQ29uZmlnLS0ggwFBVUcgMjAyNSAtIEpBTiAyMDI2IC0tPkkgIC0gUiwgSUkgIC0gQywgSUlJICAtIFIsIElWICAtIEMsIElYICAtIFIsIFYgIC0gUiwgVkkgIC0gQywgVklJICAtIFIsIFZJSUkgIC0gQywgWCAgLSBDLCBYSSAgLSBSLCBYSUkgIC0gQ4MBRkVCIDIwMjYgLSBKVUwgMjAyNiAtLT5JICAtIEMsIElJICAtIFIsIElJSSAgLSBDLCBJViAgLSBSLCBJWCAgLSBDLCBWICAtIEMsIFZJICAtIFIsIFZJSSAgLSBDLCBWSUlJICAtIFIsIFggIC0gUiwgWEkgIC0gQywgWElJICAtIFIVAxkgLS0gU2VsZWN0IEV4YW0gQ29uZmlnLS0gAzg2MgM4NjUUKwMDZ2dnFgECAWQCCQ8QZBAVAREtLVNlbGVjdCBDb3Vyc2UtLRUBES0tU2VsZWN0IENvdXJzZS0tFCsDAWcWAWZkAgsPDxYCHwJlZGQCDQ8PFgIfAmVkZAIPDxAPFgIeB0NoZWNrZWRoZGRkZAIRDxBkZBYBZmQCEw8PFgQeC0NvbW1hbmROYW1lBQRTQVZFHwIFGkdFVCBNQVJLUyBGSUxMSU5HIFNIRUVUID4+ZGQCGQ8PFgIeDUFudGhlbVZpc2libGVoZBYCAgEPDxYCHwJlZGQCGw88KwARAwAPFgYfCWgfBWceC18hSXRlbUNvdW50ZmQBEBYAFgAWAAwUKwAAZAIdDw8WAh8JaGRkAh8PDxYCHwloZGQCIw8PFgQfCWgfBmhkZAIpDxQrAAUPFgIeDlJlbmRlcmluZ1N0YXRlCymWAU1pY3Jvc29mdC5SZXBvcnRpbmcuV2ViRm9ybXMuUmVwb3J0UmVuZGVyaW5nU3RhdGUsIE1pY3Jvc29mdC5SZXBvcnRWaWV3ZXIuV2ViRm9ybXMsIFZlcnNpb249MTAuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49YjAzZjVmN2YxMWQ1MGEzYQBkKClYU3lzdGVtLkd1aWQsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OSRiN2NmMWY5YS04ODNlLTQzNTItOTEzOS0zNmVlNDFkZDNkYmICARQrAAE8KwAEAQBmZBYCAgEPZBYCZg9kFgJmD2QWDAIBDw8WAh4HVmlzaWJsZWhkZAICD2QWAgICDxYCHgVWYWx1ZQUFZmFsc2VkAgMPDxYCHwxoZGQCBQ9kFgICAg8WAh8NBQVmYWxzZWQCBg9kFgJmD2QWAmYPZBYEZg8PZBYCHgVzdHlsZQUQdmlzaWJpbGl0eTpub25lO2QCAw9kFgQCAQ8WAh8GaGQCBA8WAh8NBQMxMDBkAgoPZBYCAgEPFgIfDQUFRmFsc2VkAgsPDxYCHwJlZGQYAgUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgMFDGN0bDAwJGhwbEJ0bgU3Y3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRyZWNpZXB0dmlld2VyJFRvZ2dsZVBhcmFtJGltZwUxY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRyZWNpZXB0dmlld2VyJGN0bDA3JGltZwUgY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRHVl9TdHUPPCsADAIGFQEGcGtfc2lkCGZkq2xmzs6CdAv75OXLMBndCyKQH1qno7loHjilyDmta0I=">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./Student Marks Entry For Revised_files/WebResource.axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Student Marks Entry For Revised_files/WebResource(1).axd" type="text/javascript"></script>
+<script src="./Student Marks Entry For Revised_files/ScriptResource.axd" type="text/javascript"></script>
+<script src="./Student Marks Entry For Revised_files/ScriptResource(1).axd" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+if (typeof(Sys) === 'undefined') throw new Error('ASP.NET Ajax client-side framework failed to load.');
+//]]>
+</script>
+
+<script src="./Student Marks Entry For Revised_files/ScriptResource(2).axd" type="text/javascript"></script>
+<script src="./Student Marks Entry For Revised_files/Reserved.ReportViewerWebControl.axd" type="text/javascript"></script>
+<script src="./Student Marks Entry For Revised_files/ScriptResource(3).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="B20C6DB8">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAEuarpKa4tNUKdZYkMTJ52dxRyk5P+91hMCfDVCSoqBkp3QpAGlVgH4HZI+90cgsvy5rL9CsxGjmTVtxYWGSO0V/r4pXraOTwMzVBXBgqS0rFw3m2zbISa/x6WqwVDARvp9cYERQ82vRs68zfuQj5MfWYDIztkLy9jimUkMbnHI4J5MxdzwEsBdXVUCj2x/gRK0hsX//k+UH1e1ft+BlSzwbChfKIExN4JJFKKBdmCxfRhVaxEXs4MVkM+GGy8CsePAxu13ulj8ibdY/pI7D/aNAUwgBR0LrSAfw5AVoXIik78ucwcHbPbCtGTY2CBxMRm44Dmq6miv78F0gsJZ9QFrtNqX3G+Ais+JHBlIU2BsVCMMEL+Daqqv2XWqlNwnQRnVJT9DhJpHqZW9GIw2apKDh3qMwYNVPiG939BgsopnmyLXG/lN6KAJwgO2ByLwToB552Mz41YNN+L3CtNw+QIxCPo6mQP79MSC0DOo2OLqZmNao3m/7j0ariwB/IFkpiGj/ds+dT4LTFX+mAVzzfC+qvc8sNZRBE0GoAMLc8yFrYKJbMfnuRfETuIOwn4dgLbNowAGB+S0w1+t9fsfbg+xhao/VaRMu3Tiqi5mUscBjECyvA3WoTpQkfi6zL8l8w24Qz7K1/7AeyGgyiVZjCoRoaNEaTAiczlUoiuQA0yIT953lXRZ2J4A/fv5RJ3vmdPP7m1izRz3AUy496X1dblqlvndBVu7C3bjRbRQ04M6hYun9FPRic6F+/0aZHXWWxNnc1MNBzi9MvvKwOfvuoH0gTVzQUJ27W9tn8egqzrFTlYVfI9achiGR9eQ/csRAST+SOhNGjczQ1I3CC8AViFIgj6pmw2RnWEVGeQDDnvKUPozfo2PQx1o6JDKBxHlwjjUB0QE3Iqa4AQ3juCy7BWTOrZFwJ2km/hCey7RORrmhZeaKmFkz5r2YqvaH1T15/sdxobZ+3bA0R4zFcQto7CfzSMb3yONQoITcgMqh6ClNzWjkVG4AjmwhdvqMLK/74FV7NrfKcPUzgJVGcBGn5zPXXapVeFbdn6MPmcDu2RKDgPFMeRfMci/fu4UgdAzmwU10ZMNcUydU+2xKjlV/dTwdKhGVcyrz8dVYVTRnImo9Lk5/XccPlXSSO87mLsd7lNxzdapkJ6ALHuDUXjcaam5sYtnPX6Lok4McwyFyuTFzUo5MW6XMaFjzT9nUdsIknosY8kQZap3bak3SAhu5m6ymy7c6LBNEO1MFNnqmh9YV/mWv8k86RnFvRcC1Yu+FUSX4gcO8hclAqdruCjwH6huaY4hwx9rpOdEKHSV+GXCwTtUHYofVKWCN6fLPG5yxegV/XSICFeYXtPJ1bXtfJhOrHEe3nqW1Ws8FNMgOWTxvaMJNU1wnc1fiLtaNiDjzFKE6MErUhhhNZIsriFvJSND7PRssDwTdgp62fvT+m0verlfs6zcnx4PAcdLhrGUr8W7zUIfdTymJFIQpOOqaCWgRv/qIUl7jWuj2TSBxpHojSJKx4kONQT43vdWsXTLKUAu/Xa0a0udrCUaffbdBaIZhK0kXjBNDFTCjIKGBWp45BwPdp0effxS7GgFbmLN8D04BaMZygSUZfiV6doNqWG48lJxxE74Cr27886kyeRDSnQ==">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Student Marks Entry For Revised_files/Examination.png">
+                            Examination &amp; Results
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/SMS/ExRes/SMS_MarksFeed_ForRevised.aspx?wpid=-827553937&amp;Mwpid=4794#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> Rajbeer Singh</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> Rajbeer Singh</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COBS&amp;H, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/SMS/ExRes/SMS_MarksFeed_ForRevised.aspx?wpid=-827553937&amp;Mwpid=4794#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Student Marks Entry For Revised_files/WebResource(2).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Examination Masters &amp; Config." class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2414#" tabindex="-1">Examination Masters &amp; Config.</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Master and Configuration Management" class="level2 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4713" tabindex="-1">Master and Configuration Management</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:5" role="menuitem" style="position: relative; float: left;"><a title="Marks Entries" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2415#" tabindex="-1">Marks Entries</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:5" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Master and Configuration Management" class="level2 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4794" tabindex="-1">Marks Entry</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:8" role="menuitem" style="position: relative; float: left;"><a title="Post-Examination Activities" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2405#" tabindex="-1">Post-Examination Activities</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:8" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:9" role="menuitem" style="position: relative;"><a title="Marks Entry Approval" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8451#" tabindex="-1">Marks Entry Approval</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:9" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="HOD Marks Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_HOD_ApprovalWithChanges.aspx?Mwpid=5346" tabindex="-1">HOD Marks Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="COE Marks Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_COE_ApprovalWithChanges.aspx?Mwpid=5299" tabindex="-1">COE Marks Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Registrar Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_Registrar_ApprovalForm.aspx?Mwpid=5056" tabindex="-1">Registrar Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="DeanPGS Marks Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_DeanPGS_ApprovalWithChanges.aspx?Mwpid=5369" tabindex="-1">DeanPGS Marks Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="DeanPGS Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_DeanPGS_ApprovalForm.aspx?Mwpid=5349" tabindex="-1">DeanPGS Approval</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:16" role="menuitem" style="position: relative;"><a title="Marks Process" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8455#" tabindex="-1">Marks Process</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:16" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for UG and MBA" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_Lock.aspx?Mwpid=4750" tabindex="-1">Marks Process for UG and MBA</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for PG" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_ForPGPHD.aspx?Mwpid=5356" tabindex="-1">Marks Process for PG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for Summer" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_ForSummer.aspx?Mwpid=8432" tabindex="-1">Marks Process for Summer</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for Supplementary" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_SupplySummer.aspx?Mwpid=5347" tabindex="-1">Marks Process for Supplementary</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:22" role="menuitem" style="position: relative;"><a title="Others" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8456#" tabindex="-1">Others</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:22" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Grace Marks" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_GraceByCOE.aspx?Mwpid=5124" tabindex="-1">Grace Marks</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="RollNumber Encryption" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_CodingGeneration.aspx?Mwpid=5189" tabindex="-1">RollNumber Encryption</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Print Result Report" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksGrace.aspx?Mwpid=5203" tabindex="-1">Print Result Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Encrypted Roll Number Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_Course_Allocation_ReportSummaryResult_Rpt.aspx?Mwpid=5191" tabindex="-1">Encrypted Roll Number Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Grace Marks(Supplementary/Summer)" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_GraceByCOE_ForSupplySummer.aspx?Mwpid=5348" tabindex="-1">Grace Marks(Supplementary/Summer)</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Rechecking Status" class="level3 dynamic" href="https://hauiums.in/SMS/AdmAcd/SMS_Recheckingstatus.aspx?Mwpid=7376" tabindex="-1">Rechecking Status</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:31" role="menuitem" style="position: relative; float: left;"><a title="Results &amp; Grade Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2419#" tabindex="-1">Results &amp; Grade Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:31" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:32" role="menuitem" style="position: relative;"><a title="Marks Entry Status" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8446#" tabindex="-1">Marks Entry Status</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:32" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Entry Status for UG and MBA" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_MarksEntryStatus_dtl.aspx?Mwpid=5206" tabindex="-1">Marks Entry Status for UG and MBA</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Entry Status For PG/PHD" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_MarksEntryStatusPGPHD_dtl.aspx?Mwpid=6373" tabindex="-1">Marks Entry Status For PG/PHD</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Entry Status for Supplementary/Summer" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_MarksEntryStatus_dtl_For_SuppliSummer.aspx?Mwpid=8383" tabindex="-1">Marks Entry Status for Supplementary/Summer</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:37" role="menuitem" style="position: relative;"><a title="results" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8447#" tabindex="-1">Results</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:37" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for UG" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheetUG_YearBased.aspx?Mwpid=2420" tabindex="-1">Student Result for UG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for Supplementary" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheet_ForSupplySummer.aspx?Mwpid=5350" tabindex="-1">Student Result for Supplementary</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for PG and MBA" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheetPG_YearBased.aspx?Mwpid=5351" tabindex="-1">Student Result for PG and MBA</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for Summer" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheetSummer_YearBased.aspx?Mwpid=8434" tabindex="-1">Student Result for Summer</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:43" role="menuitem" style="position: relative;"><a title="Others" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8448#" tabindex="-1">Others</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:43" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Consolidate Results  " class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_ConsolidateResult.aspx?Mwpid=5172" tabindex="-1">Consolidate Results   </a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="DMC &amp; Notification Report" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_DMCNotification.aspx?Mwpid=5352" tabindex="-1">DMC &amp; Notification Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Print Degree Certificates" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_DegreeCertificatesForUG.aspx?Mwpid=8439" tabindex="-1">Print Degree Certificates for UG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Print Degree Certificates for PG" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_DegreeCertificatesForPG.aspx?Mwpid=8462" tabindex="-1">Print Degree Certificates for PG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Weightage Consolidate Report" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_Student_Weightage_Consolidate.aspx?Mwpid=5353" tabindex="-1">Weightage Consolidate Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="College/Subject Wise Topper List" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_CollegeSubjectWiseTopperList.aspx?Mwpid=8437" tabindex="-1">College/Subject Wise Topper List</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Certificate Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_TranscriptReportForUG.aspx?Mwpid=7377" tabindex="-1">Student Certificate Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Revised &amp; ReChecking Old_New Marks Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_Revised_ReEvaluation_Old_NewMarks.aspx?Mwpid=8387" tabindex="-1">Revised &amp; ReChecking Old_New Marks Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="UMC Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_UMCReport.aspx?Mwpid=8412" tabindex="-1">UMC Report</a></li>
+			</ul></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Marks Entries</span>&nbsp;&gt;&nbsp;<span>Marks Entry</span>&nbsp;&gt;&nbsp;<strong>Student Marks Entry(Revised)</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Student Marks Entry For Revised_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <table id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_Table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tbody><tr>
+		<td align="left" class="tabbing">
+                <div id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_div1" style="display:inline; width:100%">
+                <a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb1" title="Student Marks Entry(@COE)" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_MarksFeedSelectionWithExamConfig_ADHP_ForInternal.aspx?wpid=23514051&amp;Mwpid=4794" style="display:inline-block;width:110px;">Student Marks Entry(@COE)</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb2" title="Student Marks Entry(UG and MBA)" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_MarksFeedSelectionWithExamConfig_ForExternal.aspx?wpid=-1990353362&amp;Mwpid=4794" style="display:inline-block;width:110px;">Student Marks Entry(UG and MBA)</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb3" title="Student Marks Entry(ExternalUser)" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_MarksFeedSelectionWithExamConfig_ADHP_ForExternalUser.aspx?wpid=32194652&amp;Mwpid=4794" style="display:inline-block;width:110px;">Student Marks Entry(ExternalUser)</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb4" title="Teacher Assigned Courses for Student Marks Entry(PG/PHD)" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_MarksFeedForPGDegreeForTeacherWithChanges.aspx?wpid=-1906563339&amp;Mwpid=4794" style="display:inline-block;width:110px;">Teacher Assigned Courses for Student Marks Entry(PG/PHD)</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb5" title="Student Marks Entry(PG/PHD) By Teacher" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_MarksFeedForPGDegreeForTeacher.aspx?wpid=1555728226&amp;Mwpid=4794" style="display:inline-block;width:110px;">Student Marks Entry(PG/PHD) By Teacher</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb6" title="Student Marks Entry(Re-Evaluation)" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_MarksFeed_ForReEvaluation.aspx?wpid=1207392037&amp;Mwpid=4794" style="display:inline-block;width:110px;">Student Marks Entry(Re-Evaluation)</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb7" title="Student Marks Entry (Supplementary)" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_MarksFeed_ForSupplySummer.aspx?wpid=-761976431&amp;Mwpid=4794" style="display:inline-block;width:110px;">Student Marks Entry (Supplementary)</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb8" title="Student Marks Entry(Revised)" class="tabgs" href="https://hauiums.in/SMS/ExRes/SMS_MarksFeed_ForRevised.aspx?wpid=-827553937&amp;Mwpid=4794" style="display:inline-block;width:110px;">Student Marks Entry(Revised)</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb9" title="Student Marks Entry(Igrade)" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_MarksFeedFor_PGPHD_For_Igrade_Students.aspx?wpid=1979894733&amp;Mwpid=4794" style="display:inline-block;width:110px;">Student Marks Entry(Igrade)</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb10" title="Student Marks Entry(Revised PG/PHD)" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_MarksFeedFor_PGPHD_For_Revised_Students.aspx?wpid=369180776&amp;Mwpid=4794" style="display:inline-block;width:110px;">Student Marks Entry(Revised PG/PHD)</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb11" title="Student Marks Entry PG/PhD Summer" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_MarksFeed_ForPGSummer.aspx?wpid=1568716035&amp;Mwpid=4794" style="display:inline-block;width:110px;">Student Marks Entry PG/PhD Summer</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb12" title="Student Grading (NCC/NSS)" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_StudentGrading.aspx?wpid=1584504377&amp;Mwpid=4794" style="display:inline-block;width:110px;">Student Grading (NCC/NSS)</a></div>
+            </td>
+	</tr>
+</tbody></table>
+
+    <br>
+    <script type="text/javascript" "="">
+    function open_html_report() {
+        window.open('SMS_TeacherReport_HTMLRPT_forMarksFeed.aspx', '_blank');
+       // window.open('/KVASU/SMS/Reports/SMS_TeacherReport_HTML_forMarksFeed.aspx');
+    }
+</script> 
+
+
+    <script language="JavaScript">
+
+   
+        var message = ""; function clickIE4() { if (event.button == 2) { alert(message); return false; } } function clickNS4(e) {
+     if (document.layers || document.getElementById && !document.all)
+     { if (e.which == 2 || e.which == 3 || e.which == 123) { alert(message); return false; } }
+ } if (document.layers) { document.captureEvents(Event.MOUSEDOWN); document.onmousedown = clickNS4; }
+ else if (document.all && !document.getElementById) { document.onmousedown = clickIE4; } document.oncontextmenu = new Function("return false")
+
+
+
+    
+  
+    
+        document.onkeypress = function (event) {
+            event = (event || window.event);
+            if (event.keyCode == 123) {
+                return false;
+            }
+        }
+        document.onmousedown = function (event) {
+            event = (event || window.event);
+            if (event.keyCode == 123) {
+                return false;
+            }
+        }
+        document.onkeydown = function (event) {
+            event = (event || window.event);
+            if (event.keyCode == 123) {
+                return false;
+            }
+        }
+        //for validate . key
+        document.onkeydown = function (event) {
+            event = (event || window.event);
+            if (event.keyCode == 190 || event.keyCode == 110) {
+                return false;
+            }
+        }
+
+
+</script>
+
+
+      <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('ctl00$ContentPlaceHolder1$ScriptManager1', 'aspnetForm', ['fctl00$ContentPlaceHolder1$recieptviewer$ReportViewer','','fctl00$ContentPlaceHolder1$recieptviewer$DocMap','','fctl00$ContentPlaceHolder1$recieptviewer$ctl09$ReportArea',''], [], ['ctl00$ContentPlaceHolder1$recieptviewer$ctl09$ReportControl$ctl00',''], 90, 'ctl00');
+//]]>
+</script>
+
+  
+    <table border="0" cellpadding="0" cellspacing="0" class="table" width="100%">
+         <tbody><tr>
+            <td colspan="6" class="gap">
+                
+            </td>
+        </tr>
+         <tr>
+            <td class="tableheading" colspan="6">
+                Student Marks Entry For Revised 
+            </td>
+        </tr>
+        <tr>
+            <td class="tdgap" colspan="6">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                
+<table border="0" cellpadding="0" cellspacing="0" class="table" width="100%">
+    <tbody><tr>
+        <td class="vtext" id="lblCollege">
+            College
+        </td>
+        <td class="colon">:</td>
+        <td class="required" colspan="4">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_D_ddlCollege__"><select name="ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$D_ddlCollege" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$D_ddlCollege\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_D_ddlCollege" class="dropdownvvlong">
+	<option value="-- Select College--">-- Select College--</option>
+	<option selected="selected" value="7">College of Basic Sciences And Humanities ( 05 ) </option>
+
+</select></span> *
+           
+        </td>
+        
+    </tr>
+    <tr>
+
+     <td class="vtext" id="lblAcdSession">
+         Academic Session
+        </td>      
+        <td class="colon">:</td>
+        <td class="required">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_D_ddlAcdSession__"><select name="ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$D_ddlAcdSession" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$D_ddlAcdSession\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_D_ddlAcdSession" class="dropdownlong">
+	<option value="--Select Academic Session--">--Select Academic Session--</option>
+	<option selected="selected" value="77">2025-2026 </option>
+	<option value="72">2024-2025 </option>
+	<option value="70">2023-2024 </option>
+	<option value="46">2022-2023 </option>
+	<option value="42">2021-2022 </option>
+	<option value="21">2020-2021 </option>
+	<option value="20">2019-2020 </option>
+	<option value="19">2018-2019 </option>
+	<option value="18">2017-2018 </option>
+	<option value="17">2016-2017 </option>
+	<option value="16">2015-2016 </option>
+	<option value="15">2014-2015 </option>
+	<option value="14">2013-2014 </option>
+	<option value="13">2012-2013 </option>
+	<option value="78">2011-2012 </option>
+	<option value="80">2010-2011 </option>
+	<option value="79">2009-2010 </option>
+
+</select></span> *
+            
+        </td>
+        
+    </tr>
+    <tr>
+        <td class="vtext" id="lblDegree" width="15%">
+            Degree
+             </td>
+             <td class="colon">:</td>
+        <td class="required">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_D_ddlDegree__"><select name="ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$D_ddlDegree" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$D_ddlDegree\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_D_ddlDegree" class="dropdown">
+	<option value="--Select Degree--">--Select Degree--</option>
+	<option value="1">B.Sc.(Hons.) Agriculture(4 Year) </option>
+	<option value="20">B.Sc.(Hons) Agriculture 2+4 Year </option>
+	<option value="29">B.Sc.(Hons.) Community Science </option>
+	<option selected="selected" value="57">B.Sc.(Hons.) Physical Science 4 Year </option>
+	<option value="58">B.Sc.(Hons.) Life Science 4 year </option>
+
+</select></span> *
+            
+            </td>
+            <td class="vtext" id="lblSemester" width="15%">
+            Class
+           
+          </td>
+          <td class="colon">:</td>
+        <td class="required">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_D_ddlSemester__"><select name="ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$D_ddlSemester" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$D_ddlSemester\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_D_ddlSemester" class="dropdown">
+	<option value=" -- Select Class-- "> -- Select Class-- </option>
+	<option selected="selected" value="1">I </option>
+	<option value="2">II </option>
+	<option value="3">III </option>
+	<option value="4">IV </option>
+	<option value="5">V </option>
+	<option value="6">VI </option>
+	<option value="7">VII </option>
+	<option value="8">VIII </option>
+
+</select></span> *
+            
+
+            </td></tr>
+            <tr>
+            <td class="vtext">
+            Department
+            </td>
+            <td class="colon">:</td>
+            <td>
+
+            <span id="Anthem_ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_ddlBranch__"><select name="ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$ddlBranch" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$ddlBranch\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_ddlBranch" class="dropdownlong">
+	<option selected="selected" value="-- Select Department --">-- Select Department --</option>
+
+</select></span>
+        </td>
+        <td id="Year" class="vtext">
+        Year
+        </td>
+         <td class="colon">:</td>
+            <td class="required">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_D_ddlYear__"><select name="ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$D_ddlYear" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$D_ddlYear\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_D_ddlYear" disabled="disabled" class="dropdown">
+	<option selected="selected" value="1">First</option>
+
+</select></span> *
+            
+        </td>
+    </tr>
+    <tr>
+        <td id="lblExamConfig" class="vtext" width="15%">
+            Exam Config.
+        </td>
+        <td class="colon">:</td>
+        <td class="required">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_D_ddlExamConfig__"><select name="ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$D_ddlExamConfig" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$SMSUC_MarksFeed_ForUGDegree$D_ddlExamConfig\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_SMSUC_MarksFeed_ForUGDegree_D_ddlExamConfig" class="dropdown">
+	<option value=" -- Select Exam Config-- "> -- Select Exam Config-- </option>
+	<option selected="selected" value="862">AUG 2025 - JAN 2026 --&gt;I  - R, II  - C, III  - R, IV  - C, IX  - R, V  - R, VI  - C, VII  - R, VIII  - C, X  - C, XI  - R, XII  - C</option>
+	<option value="865">FEB 2026 - JUL 2026 --&gt;I  - C, II  - R, III  - C, IV  - R, IX  - C, V  - C, VI  - R, VII  - C, VIII  - R, X  - R, XI  - C, XII  - R</option>
+
+</select></span> *
+            
+        </td>
+       
+
+    </tr>
+</tbody></table>
+
+            </td>
+        </tr>
+        <tr>
+        <td colspan="2" style="width:17%"></td>
+            <td colspan="3">
+                
+
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnGetCourse__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnGetCourse" value="GET COURSES" id="ctl00_ContentPlaceHolder1_btnGetCourse" class="button-common" cellpadding="0" cellspacing="0" style="width:131px;"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="tablesubheading" colspan="6" style="height: 19px">
+                Course Selection
+            </td>
+        </tr>
+        <tr>
+            <td id="lblCourse" class="vtext">
+                Course
+            </td>
+            <td class="colon">:</td>
+            <td class="required" colspan="4">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlCourse__"><select name="ctl00$ContentPlaceHolder1$ddlCourse" id="ctl00_ContentPlaceHolder1_ddlCourse" class="dropdownvvlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option selected="selected" value="--Select Course--">--Select Course--</option>
+
+</select></span> *
+                
+            </td>
+           
+      
+           
+           
+        </tr>
+       
+        <tr>
+            <td class="vtext">
+                Cr. Hr. Theory
+            </td>
+            <td class="colon">:</td>
+            <td class="required">
+               <span id="Anthem_ctl00_ContentPlaceHolder1_txtCrHrTheory__"><input name="ctl00$ContentPlaceHolder1$txtCrHrTheory" type="text" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtCrHrTheory"></span>
+            </td>
+            <td id="Td2" class="vtext">
+                Cr. Hr. Practical
+            </td>
+            <td class="colon">:</td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_txtCrHrPractical__"><input name="ctl00$ContentPlaceHolder1$txtCrHrPractical" type="text" readonly="readonly" id="ctl00_ContentPlaceHolder1_txtCrHrPractical"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">
+                Is NC
+            </td>
+            <td class="colon">:</td>
+            <td class="required">
+               <span id="Anthem_ctl00_ContentPlaceHolder1_chkIsNC__"><span disabled="disabled" class="chkbox"><input id="ctl00_ContentPlaceHolder1_chkIsNC" type="checkbox" name="ctl00$ContentPlaceHolder1$chkIsNC" disabled="disabled"></span></span>
+            </td>
+            <td id="Td4" class="vtext">
+                Exam Type
+            </td>
+            <td class="colon">:</td>
+            <td>                
+            <span id="Anthem_ctl00_ContentPlaceHolder1_ddlExamType__"><select name="ctl00$ContentPlaceHolder1$ddlExamType" id="ctl00_ContentPlaceHolder1_ddlExamType" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlExamType&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option selected="selected" value="1">Internal</option>
+	<option value="2">External</option>
+
+</select></span> 
+        </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+            </td>
+            <td colspan="3">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnSearch__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSearch" value="GET MARKS FILLING SHEET &gt;&gt;" onclick="return ValidateNotConfirm(aspnetForm);" id="ctl00_ContentPlaceHolder1_btnSearch" class="button-common" cellpadding="0" cellspacing="0" style="font-weight:normal;"></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;CLEARING..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0" style="font-weight:normal;"></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+            </td>
+        </tr>
+
+             <tr>
+            <td colspan="6">
+                
+                
+                <div id="Anthem_ctl00_ContentPlaceHolder1_pnlAuthenticate__"></div>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td colspan="6" class="tablesubheading">
+                Students Marks Filling Sheet
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <div id="Div2" class="DivStyleWithScroll" style="width: 100%; height: 600px">
+                    <div id="Anthem_ctl00_ContentPlaceHolder1_GV_Stu__"></div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnSave__"></span>
+
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnSubmit__"></span>
+
+                    <span id="Anthem_ctl00_ContentPlaceHolder1_btnView__"></span>
+                   <span id="Anthem_ctl00_ContentPlaceHolder1_btnUnProcess__"></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_Label1__"><span id="ctl00_ContentPlaceHolder1_Label1" class="lblmessage"></span></span>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="6">
+                <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+                    <noscript>
+	&nbsp;Your browser does not support scripts or has been configured not to allow scripts.
+</noscript><span id="ctl00_ContentPlaceHolder1_recieptviewer_ReportViewer"><div id="ctl00_ContentPlaceHolder1_recieptviewer" onclick="if ($get(&#39;ctl00_ContentPlaceHolder1_recieptviewer_ctl04&#39;) != null &amp;&amp; $get(&#39;ctl00_ContentPlaceHolder1_recieptviewer_ctl04&#39;).control != null) $get(&#39;ctl00_ContentPlaceHolder1_recieptviewer_ctl04&#39;).control.HideActiveDropDown();" onactivate="if ($get(&#39;ctl00_ContentPlaceHolder1_recieptviewer_ctl04&#39;) != null &amp;&amp; $get(&#39;ctl00_ContentPlaceHolder1_recieptviewer_ctl04&#39;).control != null) $get(&#39;ctl00_ContentPlaceHolder1_recieptviewer_ctl04&#39;).control.HideActiveDropDown();" style="height:400px;width:100%;">
+	<div id="ctl00_ContentPlaceHolder1_recieptviewer_HttpHandlerMissingErrorMessage" style="border-color:Red;border-width:2px;border-style:Solid;padding:10px;display:none;overflow:auto;font-size:.85em;">
+		<h2>
+			Report Viewer Configuration Error
+		</h2><p>The Report Viewer Web Control HTTP Handler has not been registered in the application's web.config file.  Add &lt;add verb="*" path="Reserved.ReportViewerWebControl.axd" type = "Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" /&gt; to the system.web/httpHandlers section of the web.config file, or add &lt;add name="ReportViewerWebControlHandler" preCondition="integratedMode" verb="*" path="Reserved.ReportViewerWebControl.axd" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" /&gt; to the system.webServer/handlers section for Internet Information Services 7 or later.</p>
+	</div><span id="ctl00_ContentPlaceHolder1_recieptviewer_ctl03"><input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ctl03$ctl00" id="ctl00_ContentPlaceHolder1_recieptviewer_ctl03_ctl00"><input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ctl03$ctl01" id="ctl00_ContentPlaceHolder1_recieptviewer_ctl03_ctl01"></span><input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ctl10" id="ctl00_ContentPlaceHolder1_recieptviewer_ctl10"><input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ctl11" id="ctl00_ContentPlaceHolder1_recieptviewer_ctl11" value="standards"><div id="ctl00_ContentPlaceHolder1_recieptviewer_AsyncWait" style="background-color: white; opacity: 0.7; position: absolute; display: none; z-index: 1000;">
+
+	</div><div id="ctl00_ContentPlaceHolder1_recieptviewer_AsyncWait_Wait" style="cursor: wait; background-color: rgb(236, 233, 216); padding: 15px; border: 1px solid black; display: none; position: absolute; z-index: 1001;">
+		<table height="100%">
+			<tbody><tr>
+				<td width="32px" height="32px"><img src="./Student Marks Entry For Revised_files/Reserved(1).ReportViewerWebControl.axd" style="height:32px;width:32px;border-width:0px;"></td><td style="vertical-align:middle;text-align:center;"><span style="font-family:Verdana;font-size:14pt;">Loading...</span><div style="margin-top:3px;">
+					<a href="javascript:$get(&#39;ctl00_ContentPlaceHolder1_recieptviewer_AsyncWait&#39;).control._cancelCurrentPostback();" style="font-family:Verdana;font-size:8pt;color:#3366CC;">Cancel</a>
+				</div></td>
+			</tr>
+		</tbody></table>
+	</div><input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$AsyncWait$HiddenCancelField" id="ctl00_ContentPlaceHolder1_recieptviewer_AsyncWait_HiddenCancelField" value="False"><table cellpadding="0" cellspacing="0" id="ctl00_ContentPlaceHolder1_recieptviewer_fixedTable" style="table-layout:fixed;width:100%;height:100%;">
+		<tbody><tr>
+			<td style="display:none;width:25%;"></td><td style="display:none;width:6px;"></td><td style="width:100%;"></td>
+		</tr><tr id="ParametersRowctl00_ContentPlaceHolder1_recieptviewer" style="display:none;">
+			<td colspan="3"></td>
+		</tr><tr style="height:6px;font-size:2pt;display:none;">
+			<td colspan="3" style="padding:0px;margin:0px;text-align:center;background-color:#ECE9D8;"><div id="ctl00_ContentPlaceHolder1_recieptviewer_ToggleParam">
+				<input type="image" name="ctl00$ContentPlaceHolder1$recieptviewer$ToggleParam$img" id="ctl00_ContentPlaceHolder1_recieptviewer_ToggleParam_img" title="Show / Hide Parameters" src="./Student Marks Entry For Revised_files/Reserved(2).ReportViewerWebControl.axd" alt="Show / Hide Parameters" align="middle" onclick="void(0);" style="border-width:0px;cursor:pointer;"><input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ToggleParam$store" id="ctl00_ContentPlaceHolder1_recieptviewer_ToggleParam_store"><input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ToggleParam$collapse" id="ctl00_ContentPlaceHolder1_recieptviewer_ToggleParam_collapse" value="false">
+			</div></td>
+		</tr><tr style="display:none;">
+
+		</tr><tr>
+			<td style="vertical-align: top; width: 25%; height: 400px; display: none;"><div style="width:100%;height:100%;">
+				<span id="ctl00_ContentPlaceHolder1_recieptviewer_DocMap"><div id="ctl00_ContentPlaceHolder1_recieptviewer_ctl08" style="display:none;">
+					<input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ctl08$ClientClickedId" id="ctl00_ContentPlaceHolder1_recieptviewer_ctl08_ClientClickedId">
+				</div></span>
+			</div></td><td style="display: none; width: 4px; padding: 0px; margin: 0px; height: 400px; vertical-align: middle; background-color: rgb(236, 233, 216);"><div id="ctl00_ContentPlaceHolder1_recieptviewer_ctl07">
+				<input type="image" name="ctl00$ContentPlaceHolder1$recieptviewer$ctl07$img" id="ctl00_ContentPlaceHolder1_recieptviewer_ctl07_img" title="Show / Hide Document Map" src="./Student Marks Entry For Revised_files/Reserved(3).ReportViewerWebControl.axd" alt="Show / Hide Document Map" align="top" onclick="void(0);" style="border-width:0px;cursor:pointer;"><input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ctl07$store" id="ctl00_ContentPlaceHolder1_recieptviewer_ctl07_store"><input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ctl07$collapse" id="ctl00_ContentPlaceHolder1_recieptviewer_ctl07_collapse" value="false">
+			</div></td><td style="height: 400px; vertical-align: top;"><div id="ctl00_ContentPlaceHolder1_recieptviewer_ctl09" style="height:100%;width:100%;overflow:auto;position:relative;">
+				<div id="VisibleReportContentctl00_ContentPlaceHolder1_recieptviewer_ctl09" style="height:100%;display:none;"></div><div id="ctl00_ContentPlaceHolder1_recieptviewer_ctl09_ReportArea">
+					<div newcontenttype="Microsoft.Reporting.WebFormsClient.ReportAreaContent.None" fornonreportcontentarea="false" id="ctl00_ContentPlaceHolder1_recieptviewer_ctl09_VisibilityState" style="visibility:none;">
+						<input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ctl09$VisibilityState$ctl00" value="None">
+					</div><input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ctl09$ScrollPosition" id="ctl00_ContentPlaceHolder1_recieptviewer_ctl09_ScrollPosition"><span id="ctl00_ContentPlaceHolder1_recieptviewer_ctl09_Reserved_AsyncLoadTarget"></span><div id="ctl00_ContentPlaceHolder1_recieptviewer_ctl09_ReportControl" style="display:none;">
+						<span></span><input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ctl09$ReportControl$ctl02"><input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ctl09$ReportControl$ctl03"><input type="hidden" name="ctl00$ContentPlaceHolder1$recieptviewer$ctl09$ReportControl$ctl04" id="ctl00_ContentPlaceHolder1_recieptviewer_ctl09_ReportControl_ctl04" value="100">
+					</div><div id="ctl00_ContentPlaceHolder1_recieptviewer_ctl09_NonReportContent" style="height: 100%; width: 100%; display: none;">
+
+					</div>
+				</div>
+			</div></td>
+		</tr>
+	</tbody></table>
+</div></span>
+                    
+                </div>
+               
+            </td>
+        </tr>
+    </tbody></table>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+
+<script type="text/javascript">
+//<![CDATA[
+alert('No Courses Available');//]]>
+</script>
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+<script type="text/javascript">
+//<![CDATA[
+Sys.Application.add_init(function() {
+    
+if (typeof Microsoft == 'undefined' ||
+    typeof Microsoft.Reporting == 'undefined' ||
+    typeof Microsoft.Reporting.WebFormsClient == 'undefined' ||
+    typeof Microsoft.Reporting.WebFormsClient.ReportViewer == 'undefined')
+    Sys.UI.DomElement.setVisible($get('ctl00_ContentPlaceHolder1_recieptviewer_HttpHandlerMissingErrorMessage'), true);
+    $create(Microsoft.Reporting.WebFormsClient.ReportViewer, {"_internalViewerId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl03","id":"ctl00_ContentPlaceHolder1_recieptviewer"}, null, null);
+});
+Sys.WebForms.PageRequestManager.getInstance()._registerDisposeScript("ctl00_ContentPlaceHolder1_recieptviewer_ReportViewer", "$find(\u0027ctl00_ContentPlaceHolder1_recieptviewer_SessionKeepAlive\u0027).dispose();");
+Sys.Application.add_init(function() {
+    $create(Microsoft.Reporting.WebFormsClient._InternalReportViewer, {"ActionParamId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl03_ctl01","ActionTypeId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl03_ctl00","BaseHeight":"400px","BaseWidth":"100%","BrowserModeId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl11","DirectionCacheId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl10","DocMapAreaId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl08","DocMapHeaderOverflowDivId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl08DocMapHeaderOverflowDiv","DocMapSplitterId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl07","FixedTableId":"ctl00_ContentPlaceHolder1_recieptviewer_fixedTable","HasSizingRow":true,"PostBackToClientScript":function(){__doPostBack('ctl00$ContentPlaceHolder1$recieptviewer$ctl03','');},"PromptAreaRowId":"ParametersRowctl00_ContentPlaceHolder1_recieptviewer","PromptSplitterId":"ctl00_ContentPlaceHolder1_recieptviewer_ToggleParam","ReportAreaId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl09","ReportViewerId":"ctl00_ContentPlaceHolder1_recieptviewer","UnableToLoadPrintMessage":"Unable to load client print control."}, null, null, $get("ctl00_ContentPlaceHolder1_recieptviewer_ctl03"));
+    $create(Microsoft.Reporting.WebFormsClient._SessionKeepAlive, {"KeepAliveBody":null,"KeepAliveIntervalSeconds":11940,"KeepAliveUrl":"/Reserved.ReportViewerWebControl.axd?OpType=SessionKeepAlive\u0026ControlID=b7cf1f9a883e4352913936ee41dd3dbb","id":"ctl00_ContentPlaceHolder1_recieptviewer_SessionKeepAlive"}, null, null);
+});
+Sys.Application.add_init(function() {
+    $create(Microsoft.Reporting.WebFormsClient._AsyncWaitControl, {"ClientCanceledId":"ctl00_ContentPlaceHolder1_recieptviewer_AsyncWait_HiddenCancelField","DisplayDelay":1000,"FixedTableId":"ctl00_ContentPlaceHolder1_recieptviewer_fixedTable","ReportViewerId":"ctl00_ContentPlaceHolder1_recieptviewer","SkipTimer":true,"TriggerIds":["ctl00_ContentPlaceHolder1_recieptviewer"],"WaitControlId":"ctl00_ContentPlaceHolder1_recieptviewer_AsyncWait_Wait"}, null, null, $get("ctl00_ContentPlaceHolder1_recieptviewer_AsyncWait"));
+});
+Sys.Application.add_init(function() {
+    $create(Microsoft.Reporting.WebFormsClient._Splitter, {"HoverColor":"#DDEEF7","ImageCollapse":"/Reserved.ReportViewerWebControl.axd?OpType=Resource\u0026Version=10.0.40219.1\u0026Name=Microsoft.Reporting.WebForms.Icons.SplitterHorizCollapse.png","ImageCollapseHover":"/Reserved.ReportViewerWebControl.axd?OpType=Resource\u0026Version=10.0.40219.1\u0026Name=Microsoft.Reporting.WebForms.Icons.SplitterHorizCollapseHover.png","ImageExpand":"/Reserved.ReportViewerWebControl.axd?OpType=Resource\u0026Version=10.0.40219.1\u0026Name=Microsoft.Reporting.WebForms.Icons.SplitterHorizExpand.png","ImageExpandHover":"/Reserved.ReportViewerWebControl.axd?OpType=Resource\u0026Version=10.0.40219.1\u0026Name=Microsoft.Reporting.WebForms.Icons.SplitterHorizExpandHover.png","ImageId":"ctl00_ContentPlaceHolder1_recieptviewer_ToggleParam_img","IsCollapsable":true,"NormalColor":"#ECE9D8","Resizable":false,"StoreCollapseField":"ctl00_ContentPlaceHolder1_recieptviewer_ToggleParam_collapse","StorePositionField":"ctl00_ContentPlaceHolder1_recieptviewer_ToggleParam_store","Vertical":false}, null, null, $get("ctl00_ContentPlaceHolder1_recieptviewer_ToggleParam"));
+});
+Sys.Application.add_init(function() {
+    $create(Microsoft.Reporting.WebFormsClient._Splitter, {"HoverColor":"#DDEEF7","ImageCollapse":"/Reserved.ReportViewerWebControl.axd?OpType=Resource\u0026Version=10.0.40219.1\u0026Name=Microsoft.Reporting.WebForms.Icons.SplitterVertCollapse.png","ImageCollapseHover":"/Reserved.ReportViewerWebControl.axd?OpType=Resource\u0026Version=10.0.40219.1\u0026Name=Microsoft.Reporting.WebForms.Icons.SplitterVertCollapseHover.png","ImageExpand":"/Reserved.ReportViewerWebControl.axd?OpType=Resource\u0026Version=10.0.40219.1\u0026Name=Microsoft.Reporting.WebForms.Icons.SplitterVertExpand.png","ImageExpandHover":"/Reserved.ReportViewerWebControl.axd?OpType=Resource\u0026Version=10.0.40219.1\u0026Name=Microsoft.Reporting.WebForms.Icons.SplitterVertExpandHover.png","ImageId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl07_img","IsCollapsable":true,"NormalColor":"#ECE9D8","Resizable":true,"StoreCollapseField":"ctl00_ContentPlaceHolder1_recieptviewer_ctl07_collapse","StorePositionField":"ctl00_ContentPlaceHolder1_recieptviewer_ctl07_store","Vertical":true}, null, null, $get("ctl00_ContentPlaceHolder1_recieptviewer_ctl07"));
+});
+Sys.Application.add_init(function() {
+    $create(Microsoft.Reporting.WebFormsClient._ReportArea, {"NonReportContentId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl09_NonReportContent","ReportAreaVisibilityStateId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl09_VisibilityState","ReportControlId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl09_ReportControl","ScrollPositionId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl09_ScrollPosition","VisibleReportContentContainerId":"VisibleReportContentctl00_ContentPlaceHolder1_recieptviewer_ctl09"}, null, null, $get("ctl00_ContentPlaceHolder1_recieptviewer_ctl09"));
+});
+Sys.Application.add_init(function() {
+    $create(Microsoft.Reporting.WebFormsClient._ReportPage, {"HiddenZoomLevelId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl09_ReportControl_ctl04","StyleElementId":"ctl00_ContentPlaceHolder1_recieptviewer_ctl09_ReportControl_styles"}, null, null, $get("ctl00_ContentPlaceHolder1_recieptviewer_ctl09_ReportControl"));
+});
+//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./Student Marks Entry For Revised_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Student Marks Entry For Revised_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table { border-collapse: collapse; width: 100%; font-family: Verdana, sans-serif; font-size: 10px; }
+        th, td { border: 1px solid black; padding: 5px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .header { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY<br>
+        STUDENT THESIS DETAIL REPORT<br>
+        <span style="font-size: 10px; font-weight: normal;">
+            College: {{ filters_info.college }} | Session: {{ filters_info.session }} | Degree: {{ filters_info.degree }}<br>
+            Report Generated on: {{ now.strftime('%d/%m/%Y %H:%M') }}
+        </span>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Admission No.</th>
+                <th>Student Name</th>
+                <th>Total Sem.</th>
+                <th>Thesis Submission Date</th>
+                <th>MC Date</th>
+                <th>Viva Notification Date</th>
+                <th>Result Publish Date</th>
+                <th>Thesis Notification No.</th>
+                <th>Viva Notification No.</th>
+                <th>Result Notification No.</th>
+                <th>Thesis Title</th>
+                <th>Adjudicator's Remarks</th>
+                <th>Resubmission,If Any</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in students %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ s.AdmissionNo }}</td>
+                <td>{{ s.fullname }}</td>
+                <td>{{ s.TotalSem or '' }}</td>
+                <td>{{ s.ThesisSubmissionDate.strftime('%d/%m/%Y') if s.ThesisSubmissionDate else '' }}</td>
+                <td>{{ s.MCDate.strftime('%d/%m/%Y') if s.MCDate else '' }}</td>
+                <td>{{ s.VivaNotificationDate.strftime('%d/%m/%Y') if s.VivaNotificationDate else '' }}</td>
+                <td>{{ s.ResultPublishDate.strftime('%d/%m/%Y') if s.ResultPublishDate else '' }}</td>
+                <td>{{ s.ThesisNotificationNo or '' }}</td>
+                <td>{{ s.VivaNotificationNo or '' }}</td>
+                <td>{{ s.ResultNotificationNo or '' }}</td>
+                <td>{{ s.ThesisTitle or '' }}</td>
+                <td>{{ s.AdjudicatorRemarks or '' }}</td>
+                <td>{{ s.Resubmission or '' }}</td>
+                <td>{{ s.Remarks or '' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

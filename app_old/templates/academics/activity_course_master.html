@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .textbox-small { width: 150px !important; }
+    .textbox-medium { width: 250px !important; }
+    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .required-star { color: red; font-weight: bold; }
+</style>
+
+<div class="hau-card">
+    <div class="tablesubheading">Activity Course Master</div>
+    <div style="padding: 15px;">
+        <!-- Add/Edit Form -->
+        <form method="POST" id="activityCourseForm">
+            <input type="hidden" name="action" value="SAVE">
+            <input type="hidden" name="pk_id" id="ca_id">
+            
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Activity Code</td><td class="colon">:</td>
+                    <td width="34%"><input type="text" name="code" id="ca_code" class="textbox textbox-small" required> <span class="required-star">*</span></td>
+                    <td class="vtext" width="15%">Activity Name</td><td class="colon">:</td>
+                    <td><input type="text" name="name" id="ca_name" class="textbox textbox-medium" required> <span class="required-star">*</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Session</td><td class="colon">:</td>
+                    <td>
+                        <select name="session_id" id="ca_session" class="dropdown" required>
+                            <option value="">--Select Session--</option>
+                            {% for s in lookups.sessions %}<option value="{{ s.pk_sessionid }}">{{ s.sessionname }}</option>{% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                    <td class="vtext">Semester</td><td class="colon">:</td>
+                    <td>
+                        <select name="sem_id" id="ca_sem" class="dropdown" required>
+                            <option value="">--Select Semester--</option>
+                            {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Display Order</td><td class="colon">:</td>
+                    <td><input type="number" name="order" id="ca_order" class="textbox textbox-small" value="1"></td>
+                    <td class="vtext">Activity Type</td><td class="colon">:</td>
+                    <td>
+                        <select name="type" id="ca_type" class="dropdown">
+                            <option value="A">Activity</option>
+                            <option value="C">Course</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <!-- COURSE DETAIL MAPPING -->
+                <tr>
+                    <td colspan="6">
+                        <div class="tablesubheading" style="background:#eee; color:#333; margin:15px 0;">Course/Activity Detail</div>
+                        <table class="table-grid-view" id="detailTable">
+                            <thead>
+                                <tr class="header-style">
+                                    <th>Activity</th><th>Course Name</th><th>Course Code</th><th>Order</th><th>Capacity</th><th>DEL</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detailBody">
+                                <!-- Dynamic Rows -->
+                            </tbody>
+                        </table>
+                        <div style="text-align:right;">
+                            <input type="button" value="ADD NEW DETAIL" class="button-common" onclick="addDetailRow()">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top: 20px;">
+                        <input type="submit" id="btnSave" value="SAVE" class="button-common" style="background:#3c8dbc; color:white; padding: 5px 30px;">
+                        <input type="button" value="RESET" class="button-common" style="margin-left:10px;" onclick="resetForm()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <!-- LIST -->
+        <div style="margin-top: 50px; border-top: 2px solid #3c8dbc; padding-top: 25px;">
+            <div class="tablesubheading">List of Activity Courses</div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <th width="50">S.No.</th>
+                        <th>Name</th>
+                        <th>Code</th>
+                        <th>Session</th>
+                        <th>Semester</th>
+                        <th width="60">EDIT</th>
+                        <th width="60">DELETE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index + (pagination.page - 1) * pagination.per_page }}</td>
+                        <td style="font-weight:bold;">{{ item.CourseActivity_Name }}</td>
+                        <td>{{ item.CourseActivity_Code }}</td>
+                        <td>{{ item.sessionname }}</td>
+                        <td align="center">{{ item.semester_roman }}</td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick="editItem({{ item.pk_CourseActivityID }})">
+                        </td>
+                        <td align="center">
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this record?')">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="id" value="{{ item.pk_CourseActivityID }}">
+                                <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if pagination.total_pages > 1 %}
+            <div class="pager-style">
+                {% if pagination.has_prev %}
+                    <a href="{{ url_for('academics.activity_course_master', page=pagination.page-1) }}">&lt;</a>
+                {% else %}
+                    <span class="disabled">&lt;</span>
+                {% endif %}
+
+                {% for p in page_range %}
+                    {% if p == '...' %}
+                        <span>{{ p }}</span>
+                    {% elif p == pagination.page %}
+                        <span class="active">{{ p }}</span>
+                    {% else %}
+                        <a href="{{ url_for('academics.activity_course_master', page=p) }}">{{ p }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if pagination.has_next %}
+                    <a href="{{ url_for('academics.activity_course_master', page=pagination.page+1) }}">&gt;</a>
+                {% else %}
+                    <span class="disabled">&gt;</span>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+const lookups = {{ lookups|tojson }};
+
+function addDetailRow(data = null) {
+    const tbody = document.getElementById('detailBody');
+    const tr = document.createElement('tr');
+    tr.className = 'item-style';
+    
+    let actOpts = '<option value="">-Select Activity-</option>';
+    lookups.activities.forEach(a => {
+        actOpts += `<option value="${a.id}" ${data && data.fk_activityid == a.id ? 'selected' : ''}>${a.name}</option>`;
+    });
+
+    tr.innerHTML = `
+        <td><select name="act_ids[]" class="dropdown" style="width:180px;">${actOpts}</select></td>
+        <td><input type="text" name="c_names[]" class="textbox" value="${data ? data.CourseName : ''}"></td>
+        <td><input type="text" name="c_codes[]" class="textbox textbox-small" style="width:80px !important;" value="${data ? data.CourseCode : ''}"></td>
+        <td><input type="number" name="c_orders[]" class="textbox textbox-small" style="width:50px !important;" value="${data ? data.CourseOrder : '1'}"></td>
+        <td><input type="number" name="caps[]" class="textbox textbox-small" style="width:60px !important;" value="${data ? data.capacity : '0'}"></td>
+        <td align="center"><img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer" onclick="this.closest('tr').remove()"></td>
+    `;
+    tbody.appendChild(tr);
+}
+
+async function editItem(id) {
+    const res = await fetch(`/academics/api/get_activity_course_details/${id}`);
+    const c = await res.json();
+    
+    document.getElementById('ca_id').value = c.pk_CourseActivityID;
+    document.getElementById('ca_code').value = c.CourseActivity_Code;
+    document.getElementById('ca_name').value = c.CourseActivity_Name;
+    document.getElementById('ca_session').value = c.sessionid;
+    document.getElementById('ca_sem').value = c.semesterid;
+    document.getElementById('ca_order').value = c.CourseActivity_Order;
+    document.getElementById('ca_type').value = (c.Activity_type || 'A').trim();
+
+    const tbody = document.getElementById('detailBody');
+    tbody.innerHTML = '';
+    if (c.details && c.details.length > 0) {
+        c.details.forEach(d => addDetailRow(d));
+    } else {
+        addDetailRow();
+    }
+    
+    document.getElementById('btnSave').value = 'UPDATE';
+    window.scrollTo(0, 0);
+}
+
+function resetForm() {
+    document.getElementById('ca_id').value = '';
+    document.getElementById('activityCourseForm').reset();
+    document.getElementById('detailBody').innerHTML = '';
+    document.getElementById('btnSave').value = 'SAVE';
+    addDetailRow();
+}
+
+window.onload = () => { if(!document.getElementById('ca_id').value) addDetailRow(); };
+</script>
+{% endblock %}

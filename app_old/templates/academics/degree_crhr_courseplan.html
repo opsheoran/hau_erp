@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" id="crhrCoursePlanForm">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="cp_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="6">
+                    <span class="mainheadingborderbottom">Degree Wise Credit Hours(Course Plan)</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Degree</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <select name="degree_id" id="cp_degree" class="dropdown w-300" required>
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td colspan="3"></td>
+            </tr>
+            
+            <tr><td colspan="6" height="10"></td></tr>
+            
+            <tr>
+                <td colspan="6">
+                    <table class="table-grid-view" width="98%" id="cpTable" border="1" cellspacing="1" cellpadding="1" rules="all" style="border:1px solid #D4D4D4;border-collapse:collapse;">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="5%">S.No.</th>
+                                <th width="30%">Course Type</th>
+                                <th width="30%">Minimum Credit Hours</th>
+                                <th width="30%">Maximum Credit Hours</th>
+                                <th width="10%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cpBody">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                    <div style="text-align:left; margin-top:8px; margin-left:167px;">
+                        <input type="button" value="ADD MORE" class="button-common" onclick="addCPRow()">
+                    </div>
+                </td>
+            </tr>
+            
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="submit" value="SAVE" id="btnSave" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetCPForm()" style="margin-left:10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tableheading" colspan="6">
+                List of Degree Wise Credit Hours
+            </td>
+        </tr>
+        <tr><td colspan="6" height="10"></td></tr>
+        <tr>
+            <td colspan="6">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th width="40%">Degree</th>
+                            <th width="7.5%">EDIT</th>
+                            <th width="7.5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                            <td align="center">{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td>{{ item.degreename }}</td>
+                            <td align="center">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editCoursePlan({{ item.id }})'>
+                            </td>
+                            <td align="center">
+                                <form method="POST" onsubmit="return confirm('Delete this record?');" style="display:inline;">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ item.id }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('academics.degree_crhr_courseplan', page=pagination.page-1) }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('academics.degree_crhr_courseplan', page=p) }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('academics.degree_crhr_courseplan', page=pagination.page+1) }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+const courseTypes = {{ lookups.course_types|tojson }};
+
+function addCPRow(data = null) {
+    const tbody = document.getElementById('cpBody');
+    const rowCount = tbody.rows.length;
+    const row = tbody.insertRow();
+    row.className = rowCount % 2 === 0 ? 'item-style' : 'item-style-alt';
+    const sNo = rowCount + 1;
+    const ctOptions = ['<option value="">-- Select Course Type --</option>']
+        .concat(courseTypes.map(c => `<option value="${c.id}">${c.name}</option>`))
+        .join('');
+    
+    row.innerHTML = `
+        <td align="center">${sNo}</td>
+        <td align="center">
+            <select name="course_type_id[]" class="dropdown" style="width:100%">
+                ${ctOptions}
+            </select>
+        </td>
+        <td align="center">
+            <input type="text" name="min_crhr[]" class="textboxsmall" value="0" maxlength="2" onkeydown="return IntegerOnly(event);" ondrag="return false" ondrop="return false" onpaste="return false;">
+        </td>
+        <td align="center">
+            <input type="text" name="max_crhr[]" class="textboxsmall" value="99" maxlength="2" onkeydown="return IntegerOnly(event);" ondrag="return false" ondrop="return false" onpaste="return false;">
+        </td>
+        <td align="center">
+            <img src="{{ url_for('static', filename='images/delete.gif') }}" style="cursor:pointer" onclick="removeCPRow(this);">
+        </td>
+    `;
+    
+    if (data) {
+        row.querySelector('select').value = data.course_type_id || '';
+        row.querySelector('input[name="min_crhr[]"]').value = data.min_crhr || 0;
+        row.querySelector('input[name="max_crhr[]"]').value = data.max_crhr || 99;
+    }
+}
+
+function removeCPRow(img) {
+    const row = img.closest('tr');
+    row.remove();
+    renumberCPRows();
+}
+
+function renumberCPRows() {
+    const tbody = document.getElementById('cpBody');
+    Array.from(tbody.rows).forEach((row, i) => {
+        row.cells[0].textContent = i + 1;
+        row.className = i % 2 === 0 ? 'item-style' : 'item-style-alt';
+    });
+}
+
+function editCoursePlan(id) {
+    fetch(`/academics/api/degree_crhr_courseplan/${id}`)
+        .then(r => r.json())
+        .then(data => {
+            if (!data || !data.master) return;
+            document.getElementById('cp_id').value = id;
+            document.getElementById('cp_degree').value = data.master.degree_id || '';
+            document.getElementById('btnSave').value = 'UPDATE';
+            const tbody = document.getElementById('cpBody');
+            tbody.innerHTML = '';
+            if (data.details && data.details.length > 0) {
+                data.details.forEach(d => addCPRow(d));
+            } else {
+                addCPRow();
+            }
+            window.scrollTo(0,0);
+        });
+}
+
+function resetCPForm() {
+    document.getElementById('cp_id').value = '';
+    document.getElementById('crhrCoursePlanForm').reset();
+    document.getElementById('cpBody').innerHTML = '';
+    document.getElementById('btnSave').value = 'SAVE';
+    addCPRow();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    addCPRow();
+});
+</script>
+{% endblock %}

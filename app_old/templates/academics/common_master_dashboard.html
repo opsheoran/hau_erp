@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tablesubheading">Common Masters Preparation</div>
+    <div style="padding: 25px;">
+        <div style="display: flex; flex-wrap: wrap; margin: -10px;">
+            {% for p in pages %}
+            <div style="width: 20%; padding: 10px;">
+                <a href="{{ p.url }}" style="text-decoration: none;">
+                    <div style="background: #fff; border: 1px solid #ddd; padding: 20px; text-align: center; border-radius: 4px; transition: all 0.3s; height: 100%;" onmouseover="this.style.borderColor='#3c8dbc'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.1)';" onmouseout="this.style.borderColor='#ddd'; this.style.boxShadow='none';">
+                        <div style="margin-bottom: 15px;">
+                            <img src="{{ url_for('static', filename='images/logo.png') }}" style="width: 48px; opacity: 0.7;">
+                        </div>
+                        <span style="color: #3c8dbc; font-weight: bold; font-size: 11px; text-transform: uppercase; display: block;">{{ p.PageName }}</span>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

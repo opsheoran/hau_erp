@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Mimic live ERP form styles */
+    .hau-form-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+    .hau-form-table td { padding: 4px 8px; vertical-align: middle; border: none !important; }
+    .vtext { font-family: Verdana; font-size: 11px; font-weight: bold; color: #333; width: 15%; }
+    .colon { width: 15px; text-align: center; font-weight: bold; }
+    .required { color: red; font-weight: bold; }
+    
+    .tableheading { background: #f4f4f4; padding: 10px; font-weight: bold; color: #3c8dbc; font-size: 11px; border-bottom: 1px solid #ddd; }
+    .tablesubheading { 
+        background-color: #2d5a27 !important; 
+        color: #ffffff !important; 
+        font-weight: bold; 
+        padding: 5px 10px; 
+        font-size: 12px; 
+        border: 1px solid #1e3d1a; 
+        display: block; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .table-grid-view { width: 100%; border-collapse: collapse; border: 1px solid #D4D4D4 !important; }
+    .header-style th { background: #f8f9fa; border: 1px solid #D4D4D4 !important; padding: 6px 10px; text-align: center; font-weight: bold; color: #333; }
+    .item-style td, .item-style-alt td { border: 1px solid #D4D4D4 !important; padding: 5px 8px; }
+    .item-style-alt { background: #FAFAFA; }
+
+    .button-common { 
+        background: #3c8dbc; 
+        color: white; 
+        border: 1px solid #2c729e; 
+        padding: 3px 15px; 
+        font-family: Verdana; 
+        font-size: 11px; 
+        font-weight: bold; 
+        cursor: pointer; 
+        border-radius: 2px;
+        height: 24px;
+    }
+    
+    /* Grayed out style */
+    .disabled-field { background-color: #eeeeee !important; color: #666 !important; }
+</style>
+
+<div class="tableheading">Location Wise Holidays Master</div>
+
+<!-- Search Area (Only TWO fields as requested) -->
+<div class="hau-card" style="padding: 15px; margin-bottom: 20px; border: 1px solid #ddd;">
+    <form method="POST" id="mainForm" onsubmit="enableFieldsBeforeSubmit()">
+        <input type="hidden" name="action" value="SAVE">
+        <input type="hidden" name="pk_id" id="form_pk_id">
+        
+        <table class="hau-form-table">
+            <tr>
+                <td class="vtext">Holiday Location</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="holiday_loc_id" id="form_hloc_id" class="dropdown" style="width: 250px;" required>
+                        <option value="">-- Select Holiday Location --</option>
+                        {% for hl in holiday_locations %}
+                        <option value="{{ hl.id }}">{{ hl.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                <td class="vtext" style="padding-left: 20px;">Year</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="year_id" id="form_year_id" class="dropdown" style="width: 150px;" required>
+                        <option value="">-- Select Year --</option>
+                        {% for y in years %}
+                        <option value="{{ y.id }}">{{ y.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                <td style="padding-left: 20px;">
+                    <button type="button" class="button-common" onclick="onViewClick()">VIEW</button>
+                    <button type="button" class="button-common" style="margin-left: 5px;" onclick="resetForm()">RESET</button>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Holiday Dates Grid (Hidden initially, shown after VIEW) -->
+        <div id="divHolidayDates" style="margin-top: 20px; display: none;">
+            <div class="tablesubheading" style="background:#f4f4f4; color:#3c8dbc; margin-bottom:10px;">Holiday Selection & Dates</div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <th width="50">S.No.</th>
+                        <th width="30%">Holiday</th>
+                        <th width="15%">Type</th>
+                        <th width="15%">From Date</th>
+                        <th width="15%">To Date</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="holidayDetailBody">
+                    <!-- Populated via JS -->
+                </tbody>
+            </table>
+            <div style="margin-top: 20px; text-align: center;">
+                <button type="submit" class="button-common">SAVE DETAILS</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- List Section (Always Visible) -->
+<div class="tablesubheading">List of Location Wise Holidays</div>
+<div class="hau-card" style="padding: 10px; border: 1px solid #ddd;">
+    <table class="table-grid-view">
+        <thead>
+            <tr class="header-style">
+                <th width="50">S.No.</th>
+                <th>Holiday Location</th>
+                <th>Year</th>
+                <th width="80">EDIT</th>
+                <th width="80">DELETE</th>
+                <th width="60">PRINT</th>
+            </tr>
+        </thead>
+        <tbody id="mappingListBody">
+            {% for h in holidays %}
+            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                <td align="center">{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                <td>{{ h.holidayloc }}</td>
+                <td align="center">{{ h.year_name }}</td>
+                <td align="center">
+                    <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" alt="Edit" title="Edit" 
+                         onclick='onEditFromList({{ h|tojson }})'>
+                </td>
+                <td align="center">
+                    <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this mapping?')">
+                        <input type="hidden" name="id" value="{{ h.pk_locholidayid }}">
+                        <input type="hidden" name="action" value="DELETE">
+                        <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete" title="Delete">
+                    </form>
+                </td>
+                <td align="center">
+                    <img src="{{ url_for('static', filename='images/print.gif') }}" style="cursor:pointer" alt="Print" title="Print" onclick="alert('Print functionality will be available in next update.')">
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" align="center" style="padding: 20px;">No mappings found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% include "includes/pagination.html" %}
+</div>
+
+<script>
+async function loadCommonHolidays(existingId = null) {
+    const body = document.getElementById('holidayDetailBody');
+    body.innerHTML = '<tr><td colspan="6" align="center">Loading common holidays...</td></tr>';
+    
+    let existingDetails = [];
+    if (existingId) {
+        const res = await fetch(`/leave/api/holiday_details/${existingId}`);
+        existingDetails = await res.json();
+    }
+
+    const resH = await fetch('/leave/api/common_holidays');
+    const allHolidays = await resH.json();
+
+    body.innerHTML = '';
+    if (allHolidays.length === 0) {
+        body.innerHTML = '<tr><td colspan="6" align="center">No common holidays defined.</td></tr>';
+        return;
+    }
+
+    allHolidays.forEach((h, i) => {
+        const detail = existingDetails.find(ed => ed.pk_commonholidayid == h.pk_commonholidayid) || {};
+        const row = body.insertRow();
+        row.className = (i % 2 === 0) ? 'item-style' : 'item-style-alt';
+        row.innerHTML = `
+            <td align="center">${i + 1}</td>
+            <td>${h.commonholiday} <input type="hidden" name="h_ids[]" value="${h.pk_commonholidayid}"></td>
+            <td align="center">${h.holidaytype}</td>
+            <td><input type="date" name="f_dates[]" value="${detail.FromDate || ''}" class="textbox" style="width:130px;"></td>
+            <td><input type="date" name="t_dates[]" value="${detail.ToDate || ''}" class="textbox" style="width:130px;"></td>
+            <td><input type="text" name="h_remarks[]" value="${detail.Remarks || ''}" class="textbox" style="width:100%;"></td>
+        `;
+    });
+
+    if (window.reinitDatePickers) {
+        window.reinitDatePickers("#holidayDetailBody input[type='date']");
+    }
+    
+    document.getElementById('divHolidayDates').style.display = 'block';
+}
+
+async function onViewClick() {
+    const hlocId = document.getElementById('form_hloc_id').value;
+    const lyear = document.getElementById('form_year_id').value;
+    
+    if (!hlocId || !lyear) {
+        alert("Please select Holiday Location and Year first.");
+        return;
+    }
+
+    // Check if mapping exists
+    const res = await fetch(`/leave/api/check_mapping_exists?hloc_id=${hlocId}&lyear=${lyear}`);
+    const data = await res.json();
+
+    if (data.exists) {
+        // Behaviors like Edit: Pre-fill and gray out
+        document.getElementById('form_pk_id').value = data.id;
+        document.getElementById('form_hloc_id').disabled = true;
+        document.getElementById('form_year_id').disabled = true;
+        document.getElementById('form_hloc_id').style.backgroundColor = '#eeeeee';
+        document.getElementById('form_year_id').style.backgroundColor = '#eeeeee';
+        await loadCommonHolidays(data.id);
+    } else {
+        // Behavior like New: Blank dates, top fields active
+        document.getElementById('form_pk_id').value = '';
+        document.getElementById('form_hloc_id').disabled = false;
+        document.getElementById('form_year_id').disabled = false;
+        document.getElementById('form_hloc_id').style.backgroundColor = '#ffffff';
+        document.getElementById('form_year_id').style.backgroundColor = '#ffffff';
+        await loadCommonHolidays();
+    }
+    
+    // Also filter the list at the bottom to show only these records
+    // Use setTimeout to allow the UI to update first, then redirect for the filter
+    // If you want to stay on the current entry mode, maybe just update the list via AJAX?
+    // But for now, let's just make the dropdown operational first.
+}
+
+function resetForm() {
+    document.getElementById('form_pk_id').value = '';
+    document.getElementById('mainForm').reset();
+    
+    const fields = ['form_hloc_id', 'form_year_id'];
+    fields.forEach(id => {
+        const el = document.getElementById(id);
+        el.disabled = false;
+        el.style.backgroundColor = '#ffffff';
+    });
+    
+    document.getElementById('divHolidayDates').style.display = 'none';
+    document.getElementById('holidayDetailBody').innerHTML = '';
+}
+
+function enableFieldsBeforeSubmit() {
+    document.getElementById('form_hloc_id').disabled = false;
+    document.getElementById('form_year_id').disabled = false;
+}
+
+async function onEditFromList(h) {
+    document.getElementById('form_pk_id').value = h.pk_locholidayid;
+    document.getElementById('form_hloc_id').value = h.fk_holidaylocid;
+    document.getElementById('form_year_id').value = h.fk_yearid;
+    
+    document.getElementById('form_hloc_id').disabled = true;
+    document.getElementById('form_year_id').disabled = true;
+    document.getElementById('form_hloc_id').style.backgroundColor = '#eeeeee';
+    document.getElementById('form_year_id').style.backgroundColor = '#eeeeee';
+    
+    await loadCommonHolidays(h.pk_locholidayid);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+{% endblock %}

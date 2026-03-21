@@ -1,0 +1,372 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .textbox-small { width: 100px !important; }
+    .textbox-medium { width: 200px !important; }
+    .pager-style span, .pager-style a { border: 1px solid #ddd; padding: 2px 8px; margin: 0 2px; text-decoration: none; color: #333; }
+    .pager-style span { color: red; font-weight: bold; background: #eee; }
+</style>
+
+<!-- SEARCH FILTERS -->
+<div class="tableheading" style="margin-bottom:10px;">
+    <form method="GET" style="display:flex; gap:20px; align-items:center;">
+        <span>Department:</span>
+        <select name="dept_id" class="dropdown textbox-medium">
+            <option value="">All Departments</option>
+            {% for d in lookups.depts %}<option value="{{ d.id }}" {{ 'selected' if filters.dept_id|string == d.id|string }}>{{ d.name }}</option>{% endfor %}
+        </select>
+        <span>Search:</span>
+        <input type="text" name="term" value="{{ filters.term or '' }}" class="textbox textbox-medium" placeholder="Code/Name...">
+        <input type="submit" value="SEARCH" class="button-common">
+    </form>
+</div>
+
+<!-- SAVE FORM -->
+<form method="POST" id="courseForm">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="pk_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="6">
+                    <span class="mainheadingborderbottom">Course/Subject Master</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <tr>
+                <td class="vtext">Course Code</td>
+                <td class="colon">:</td>
+                <td class="required" width="30%">
+                    <input type="text" name="coursecode" id="c_code" class="textbox textbox-medium" maxlength="20" required> *
+                </td>
+                <td class="vtext">Course Name</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="coursename" id="c_name" class="textbox textbox-medium" style="width:90%" required> *
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="dept_id" id="c_dept" class="dropdown textbox-medium" required>
+                        <option value="">--Select Course Department--</option>
+                        {% for d in lookups.depts %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                    </select> *
+                </td>
+                <td class="vtext">Paper Title</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="paper_title_id" id="c_title" class="dropdown textbox-medium">
+                        <option value="">--Select Paper Title--</option>
+                        {% for t in lookups.titles %}<option value="{{ t.pk_papertitleid }}">{{ t.papertitle }}</option>{% endfor %}
+                    </select>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Course Type</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="course_type_id" id="c_type" class="dropdown textbox-medium" required>
+                        <option value="">--Select Course Type--</option>
+                        {% for t in lookups.types %}<option value="{{ t.pk_coursetypeid }}">{{ t.coursetype }}</option>{% endfor %}
+                    </select> *
+                </td>
+                <td class="vtext">Report Order</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" name="report_order" id="c_order" class="textbox textbox-small" value="1"> *
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Cr Hr Theory</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="number" step="0.5" name="crhr_theory" id="c_theory" class="textbox textbox-small" value="0" required> *
+                </td>
+                <td class="vtext">Cr Hr Practical</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="number" step="0.5" name="crhr_practical" id="c_practical" class="textbox textbox-small" value="0" required> *
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Attributes</td>
+                <td class="colon">:</td>
+                <td colspan="4" class="required">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; font-size: 11px;">
+                        <label><input type="checkbox" name="is_nc" id="c_nc"> Is NC(Non Credit)?</label>
+                        <label><input type="checkbox" name="is_compulsory" id="c_compulsory"> Is Compulsory?</label>
+                        <label><input type="checkbox" name="is_internship" id="c_intern"> Is Internship?</label>
+                        <label><input type="checkbox" name="is_deficiency" id="c_deficiency"> Is Deficiency?</label>
+                        <label><input type="checkbox" name="is_grade" id="c_grade"> Is Grade?</label>
+                        <label><input type="checkbox" name="is_crhr_based" id="c_crhr_based"> Is Cr Hr Based?</label>
+                        <label><input type="checkbox" name="is_thesis" id="c_thesis"> Is Thesis?</label>
+                        <label><input type="checkbox" name="is_research" id="c_res"> Is Research?</label>
+                        <label><input type="checkbox" name="is_elective" id="c_elective"> Is Elective?</label>
+                        <label><input type="checkbox" name="is_nc_compulsory" id="c_nc_compulsory"> Is NC Compulsory?</label>
+                        <label><input type="checkbox" name="is_special" id="c_special"> Is Special?</label>
+                        <label><input type="checkbox" name="is_grace" id="c_grace"> Is Grace?</label>
+                        <label><input type="checkbox" name="is_seminar" id="c_seminar"> Is Seminar?</label>
+                        <label><input type="checkbox" name="is_obsolete" id="c_obsolete"> Is Obsolete?</label>
+                    </div>
+                </td>
+            </tr>
+            
+            <tr><td colspan="6" height="20"></td></tr>
+            
+            <!-- COURSE MAPPINGS -->
+            <tr>
+                <td colspan="6" class="tablesubheading">
+                    <span class="subheadingborderbottom">Course Mappings (Degree/Semester)</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <table class="table-grid-view" id="mapTable" width="100%">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="3%">S.No.</th>
+                                <th width="12%">Session From</th>
+                                <th width="12%">Session To</th>
+                                <th width="25%">Degree / Specialization</th>
+                                <th width="10%">Semester</th>
+                                <th width="8%">GP</th>
+                                <th width="8%">Is Active?</th>
+                                <th width="8%">Is Compulsory?</th>
+                                <th width="5%">DEL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mapBody">
+                            <!-- Rows added dynamically -->
+                        </tbody>
+                    </table>
+                    <div style="text-align:right; margin-top:5px;">
+                        <input type="button" value="ADD NEW DETAIL" class="button-common" onclick="addMapRow()">
+                    </div>
+                </td>
+            </tr>
+            
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="submit" value="SAVE" id="btnSave" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left:10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<!-- LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="6">
+                <span class="subheadingborderbottom">Existing Courses</span>
+            </td>
+        </tr>
+        <tr><td colspan="6" height="10"></td></tr>
+        <tr>
+            <td colspan="6">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th width="35%">Course Name</th>
+                            <th width="15%">Course Code</th>
+                            <th width="15%">Course Type</th>
+                            <th width="10%">CrHr Th</th>
+                            <th width="10%">CrHr Pr</th>
+                            <th width="10%">Order</th>
+                            <th width="7.5%">EDIT</th>
+                            <th width="7.5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in courses %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                            <td align="center">{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td>{{ item.coursename }}</td>
+                            <td>{{ item.coursecode }}</td>
+                            <td align="center">{{ item.coursetype }}</td>
+                            <td align="center">{{ item.crhr_theory }}</td>
+                            <td align="center">{{ item.crhr_practical }}</td>
+                            <td align="center">{{ item.reportorder }}</td>
+                            <td align="center">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editCourse({{ item.pk_courseid }})'>
+                            </td>
+                            <td align="center">
+                                <form method="POST" onsubmit="return confirm('Delete this course?');" style="display:inline;">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ item.pk_courseid }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="?page={{ pagination.page - 1 }}&dept_id={{ filters.dept_id }}&term={{ filters.term }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="?page={{ p }}&dept_id={{ filters.dept_id }}&term={{ filters.term }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="?page={{ pagination.page + 1 }}&dept_id={{ filters.dept_id }}&term={{ filters.term }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+const lookups = {{ lookups|tojson }};
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('pk_id').value) addMapRow();
+});
+
+function addMapRow(data = null) {
+    const tbody = document.getElementById('mapBody');
+    const rowCount = tbody.rows.length;
+    const row = tbody.insertRow();
+    row.className = rowCount % 2 === 0 ? 'item-style' : 'item-style-alt';
+    
+    row.innerHTML = `
+        <td align="center">${rowCount + 1}</td>
+        <td>
+            <select name="map_sess_from[]" class="dropdown" style="width:100%">
+                <option value="0">Sess From</option>
+                ${lookups.sessions.map(s => `<option value="${s.id}" ${data && data.fk_sessionid_from == s.id ? 'selected' : ''}>${s.name}</option>`).join('')}
+            </select>
+        </td>
+        <td>
+            <select name="map_sess_upto[]" class="dropdown" style="width:100%">
+                <option value="0">Sess To</option>
+                ${lookups.sessions.map(s => `<option value="${s.id}" ${data && data.fk_sessionid_upto == s.id ? 'selected' : ''}>${s.name}</option>`).join('')}
+            </select>
+        </td>
+        <td>
+            <select name="map_degree[]" class="dropdown" style="width:100%" required>
+                <option value="">--Select Degree--</option>
+                ${lookups.degrees.map(d => `<option value="${d.id}" ${data && data.fk_degreeid == d.id ? 'selected' : ''}>${d.name}</option>`).join('')}
+            </select>
+            <select name="map_branch[]" class="dropdown" style="width:100%; margin-top:5px;">
+                <option value="0">--Select Specialization--</option>
+                ${lookups.branches.map(b => `<option value="${b.Pk_BranchId}" ${data && data.fk_branchid == b.Pk_BranchId ? 'selected' : ''}>${b.Branchname}</option>`).join('')}
+            </select>
+        </td>
+        <td>
+            <select name="map_sem[]" class="dropdown" style="width:100%">
+                <option value="0">--Sem--</option>
+                ${lookups.semesters.map(s => `<option value="${s.id}" ${data && data.fk_semesterid == s.id ? 'selected' : ''}>${s.name}</option>`).join('')}
+            </select>
+        </td>
+        <td align="center">
+            <input type="text" name="map_ogpa[]" class="textbox" style="width:50px" value="${data ? (data.OGPA || 0) : 0}">
+        </td>
+        <td align="center">
+            <select name="map_active[]" class="dropdown" style="width:70px">
+                <option value="1" ${data && data.isactive ? 'selected' : ''}>YES</option>
+                <option value="0" ${data && !data.isactive ? 'selected' : ''}>NO</option>
+            </select>
+        </td>
+        <td align="center">
+            <select name="map_compuls[]" class="dropdown" style="width:70px">
+                <option value="1" ${data && data.iscompuls ? 'selected' : ''}>YES</option>
+                <option value="0" ${data && !data.iscompuls ? 'selected' : ''}>NO</option>
+            </select>
+        </td>
+        <td align="center">
+            <img src="{{ url_for('static', filename='images/delete.gif') }}" style="cursor:pointer" onclick="this.closest('tr').remove(); renumberRows();">
+        </td>
+    `;
+}
+
+function renumberRows() {
+    Array.from(document.getElementById('mapBody').rows).forEach((row, i) => {
+        row.cells[0].textContent = i + 1;
+        row.className = i % 2 === 0 ? 'item-style' : 'item-style-alt';
+    });
+}
+
+function editCourse(id) {
+    fetch(`/academics/api/get_course_details/${id}`)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('pk_id').value = id;
+            document.getElementById('c_code').value = data.coursecode.trim();
+            document.getElementById('c_name').value = data.coursename.trim();
+            document.getElementById('c_dept').value = data.fk_Deptid || '';
+            document.getElementById('c_title').value = data.fk_papertitleid || '';
+            document.getElementById('c_type').value = data.fk_coursetypeid || '';
+            document.getElementById('c_order').value = data.reportorder || 1;
+            document.getElementById('c_theory').value = data.crhr_theory || 0;
+            document.getElementById('c_practical').value = data.crhr_practical || 0;
+            
+            document.getElementById('c_nc').checked = !!data.isNC;
+            document.getElementById('c_compulsory').checked = !!data.IsCompulsory;
+            document.getElementById('c_intern').checked = !!data.isinternship;
+            document.getElementById('c_deficiency').checked = !!data.Isdeficiency;
+            document.getElementById('c_grade').checked = !!data.isgrade;
+            document.getElementById('c_crhr_based').checked = !!data.iscrhrbased;
+            document.getElementById('c_thesis').checked = !!data.isThesis;
+            document.getElementById('c_res').checked = !!data.IsResearch;
+            document.getElementById('c_elective').checked = !!data.iselective;
+            document.getElementById('c_nc_compulsory').checked = !!data.IsNcCompulsory;
+            document.getElementById('c_special').checked = !!data.IsSpecial;
+            document.getElementById('c_grace').checked = !!data.Isgrace;
+            document.getElementById('c_seminar').checked = !!data.IsSeminar;
+            document.getElementById('c_obsolete').checked = !!data.isobsolete;
+            
+            document.getElementById('btnSave').value = 'UPDATE';
+            
+            const tbody = document.getElementById('mapBody');
+            tbody.innerHTML = '';
+            if (data.mappings && data.mappings.length > 0) {
+                data.mappings.forEach(m => addMapRow(m));
+            } else {
+                addMapRow();
+            }
+            window.scrollTo(0,0);
+        });
+}
+
+function resetForm() {
+    document.getElementById('pk_id').value = '';
+    document.getElementById('courseForm').reset();
+    document.getElementById('mapBody').innerHTML = '';
+    document.getElementById('btnSave').value = 'SAVE';
+    addMapRow();
+}
+</script>
+{% endblock %}

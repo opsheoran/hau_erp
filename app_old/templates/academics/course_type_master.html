@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .textbox-small { width: 150px !important; }
+    .textbox-medium { width: 250px !important; }
+</style>
+
+<!-- SAVE FORM -->
+<form method="POST" id="typeForm">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="pk_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="3">
+                    <span class="mainheadingborderbottom">Course Type Master</span>
+                </td>
+            </tr>
+            <tr><td colspan="3" height="15"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Course Type</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="name" id="t_name" class="textbox textbox-medium" maxlength="49" required>
+                    *
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Order ID</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="number" name="order" id="t_order" class="textbox textbox-small" value="1" required>
+                    *
+                </td>
+            </tr>
+            
+            <tr><td colspan="3" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <input type="submit" value="SAVE" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left:10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<!-- LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="3">
+                <span class="subheadingborderbottom">List of Course Types</span>
+            </td>
+        </tr>
+        <tr><td colspan="3" height="10"></td></tr>
+        <tr>
+            <td colspan="3">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th width="45%">Course Type</th>
+                            <th width="40%">Order ID</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in types %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                            <td align="center">{{ loop.index }}</td>
+                            <td>{{ t.coursetype }}</td>
+                            <td align="center">{{ t.coursetypeorderid }}</td>
+                            <td align="center">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editT({{ t|tojson }})'>
+                            </td>
+                            <td align="center">
+                                <form method="POST" onsubmit="return confirm('Delete this course type?');" style="display:inline;">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ t.pk_coursetypeid }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination and pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="?page={{ pagination.page-1 }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="?page={{ p }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="?page={{ pagination.page+1 }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+function editT(t) {
+    document.getElementById('pk_id').value = t.pk_coursetypeid;
+    document.getElementById('t_name').value = t.coursetype.trim();
+    document.getElementById('t_order').value = t.coursetypeorderid;
+    window.scrollTo(0,0);
+}
+
+function resetForm() {
+    document.getElementById('pk_id').value = '';
+    document.getElementById('typeForm').reset();
+}
+</script>
+{% endblock %}

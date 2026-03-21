@@ -1,0 +1,200 @@
+<!-- Unified Employee Search Modal -->
+<div class="modal fade" id="empSearchModal" tabindex="-1" aria-hidden="true" style="z-index: 10050;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="tablesubheading d-flex justify-content-between align-items-center">
+                <span>Employee Search</span>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Tabs for Simple/Advanced -->
+                <ul class="nav nav-tabs mb-3" id="searchTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active py-1" id="simple-tab" data-bs-toggle="tab" data-bs-target="#simple-search" type="button" role="tab">Simple Search</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link py-1" id="advanced-tab" data-bs-toggle="tab" data-bs-target="#advanced-search" type="button" role="tab">Advanced Search</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="searchTabsContent">
+                    <!-- Simple Search -->
+                    <div class="tab-pane fade show active" id="simple-search" role="tabpanel">
+                        <div class="input-group mb-3">
+                            <input type="text" id="emp_search_simple_term" class="form-control form-control-sm" placeholder="Enter Name or Code (min 3 chars)..." onkeydown="if(event.keyCode==13){ event.preventDefault(); performEmpSearch('simple'); }">
+                            <button type="button" class="btn btn-sm btn-primary" onclick="performEmpSearch('simple')">SEARCH</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Advanced Search -->
+                    <div class="tab-pane fade" id="advanced-search" role="tabpanel">
+                        <table class="form-table w-100">
+                            <tr>
+                                <td class="vtext">Name</td><td><input type="text" id="adv_emp_name" class="textbox w-100"></td>
+                                <td class="vtext">Code</td><td><input type="text" id="adv_emp_code" class="textbox w-100"></td>
+                            </tr>
+                            <tr>
+                                <td class="vtext">Manual Code</td><td><input type="text" id="adv_manual_code" class="textbox w-100"></td>
+                                <td class="vtext">Department</td>
+                                <td>
+                                    <select id="adv_dept_id" class="dropdown w-100">
+                                        <option value="">-- All Department --</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-center pt-2">
+                                    <button type="button" class="button-common" onclick="performEmpSearch('advanced')">ADVANCED SEARCH</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="emp_search_results" style="max-height: 350px; overflow-y: auto; margin-top: 15px; border: 1px solid #eee;">
+                    <p class="text-muted small text-center p-4">Results will appear here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let empSearchTargetId = '';
+let empSearchTargetName = '';
+let empSearchCallback = null;
+let empSearchModalObj = null;
+
+function openEmpSearch(targetId, targetName, callback = null) {
+    empSearchTargetId = targetId;
+    empSearchTargetName = targetName;
+    empSearchCallback = callback;
+    
+    // Clear previous
+    document.getElementById('emp_search_simple_term').value = '';
+    document.getElementById('emp_search_results').innerHTML = '<p class="text-muted small text-center p-4">Results will appear here.</p>';
+    
+    if (!empSearchModalObj) {
+        empSearchModalObj = new bootstrap.Modal(document.getElementById('empSearchModal'));
+    }
+    
+    // Populate departments for advanced search if empty
+    const deptSelect = document.getElementById('adv_dept_id');
+    if (deptSelect && deptSelect.options.length <= 1) {
+        fetch('/leave/api/lookups').then(res => res.json()).then(data => {
+            if (data.depts) {
+                data.depts.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d.id;
+                    opt.text = d.name;
+                    deptSelect.appendChild(opt);
+                });
+            }
+        }).catch(e => console.log("Lookup fetch failed", e));
+    }
+    
+    empSearchModalObj.show();
+}
+
+// Alias for pages using ShowSearch
+function ShowSearch(target = 'emp') {
+    // Some pages pass a target like 'ro', 'rec1' etc.
+    // We handle this by setting the target field IDs based on the target name
+    if (target === 'ro') openEmpSearch('ro_id', 'ro_name');
+    else if (target === 'rec1') openEmpSearch('rec1_id', 'rec1_name');
+    else if (target === 'rec2') openEmpSearch('rec2_id', 'rec2_name');
+    else if (target === 'rec3') openEmpSearch('rec3_id', 'rec3_name');
+    else openEmpSearch('emp_id', 'emp_name');
+}
+
+async function performEmpSearch(type) {
+    const resultsDiv = document.getElementById('emp_search_results');
+    resultsDiv.innerHTML = '<p class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Searching...</p>';
+    
+    let url = '';
+    const modulePrefix = window.location.pathname.startsWith('/establishment') ? '/establishment' : '/leave';
+    
+    if (type === 'simple') {
+        const term = document.getElementById('emp_search_simple_term').value;
+        if (term.length < 2) {
+            resultsDiv.innerHTML = '<p class="text-danger text-center p-4">Please enter at least 2 characters.</p>';
+            return;
+        }
+        url = `${modulePrefix}/api/employee/search?term=${encodeURIComponent(term)}`;
+    } else {
+        const name = document.getElementById('adv_emp_name').value;
+        const code = document.getElementById('adv_emp_code').value;
+        const manual = document.getElementById('adv_manual_code').value;
+        const dept = document.getElementById('adv_dept_id').value;
+        url = `${modulePrefix}/api/employee/search_advanced?emp_name=${encodeURIComponent(name)}&emp_code=${encodeURIComponent(code)}&manual_code=${encodeURIComponent(manual)}&dept_id=${encodeURIComponent(dept)}`;
+    }
+    
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        if (!data || data.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-danger text-center p-4">No employees found matching criteria.</p>';
+            return;
+        }
+        
+        let html = '<table class="table table-sm table-hover small mb-0"><thead><tr class="header-style"><th>Code</th><th>Name</th><th>Designation</th><th>Department</th><th>Action</th></tr></thead><tbody>';
+        data.forEach(e => {
+            const displayName = e.name || '';
+            const displayCode = e.code || '';
+            const displayDesg = e.designation || '';
+            const displayDept = e.department || '';
+            const safeName = (displayName + ' (' + displayCode + ')').replace(/'/g, "'");
+            
+            html += `<tr class="item-style">
+                <td>${displayCode}</td>
+                <td>${displayName}</td>
+                <td>${displayDesg}</td>
+                <td>${displayDept}</td>
+                <td align="center"><button type="button" class="btn btn-xs btn-primary py-0 px-2" style="font-size:10px" onclick="selectSearchItem('${e.id}', '${safeName}')">SELECT</button></td>
+            </tr>`;
+        });
+        html += '</tbody></table>';
+        resultsDiv.innerHTML = html;
+    } catch (err) {
+        resultsDiv.innerHTML = '<p class="text-danger text-center p-4">Error connecting to server.</p>';
+    }
+}
+
+function selectSearchItem(id, name) {
+    // 1. Update fields if they exist
+    const idEl = document.getElementById(empSearchTargetId);
+    const nameEl = document.getElementById(empSearchTargetName);
+    
+    if (idEl) {
+        if (idEl.tagName === 'SELECT') {
+            idEl.innerHTML = `<option value="${id}" selected>${name}</option>`;
+        } else {
+            idEl.value = id;
+        }
+    }
+    
+    if (nameEl) {
+        if (nameEl.tagName === 'INPUT' || nameEl.tagName === 'TEXTAREA') {
+            nameEl.value = name;
+        } else {
+            nameEl.innerText = name;
+        }
+    }
+    
+    // 2. Call custom callback if provided
+    if (typeof empSearchCallback === 'function') {
+        empSearchCallback(id, name);
+    } 
+    // 3. Fallback to global selectItem if it exists and no callback was passed
+    else if (typeof window.selectItem === 'function') {
+        window.selectItem(id, name);
+    }
+    // 4. Specific fallback for legacy selectEmployee function name
+    else if (typeof window.selectEmployee === 'function') {
+        window.selectEmployee(id, name);
+    }
+
+    if (empSearchModalObj) empSearchModalObj.hide();
+}
+</script>

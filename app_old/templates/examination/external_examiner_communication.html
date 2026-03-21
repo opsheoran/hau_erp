@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- SEARCH FORM -->
+<form method="GET" id="searchForm">
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="7">
+                    <span class="mainheadingborderbottom">External Examiners Report</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Admitted Session</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <select name="session_id" id="session_id" class="textbox w-150">
+                        <option value="">[Select]</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td width="5%"></td>
+                <td class="vtext" width="15%">Degree</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <select name="degree_id" id="degree_id" class="textbox w-150">
+                        <option value="">[Select]</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Examinar Name</td>
+                <td class="colon">:</td>
+                <td colspan="5">
+                    <input type="text" name="examiner_name" id="examiner_name" class="textbox w-150" value="{{ filters.examiner_name }}">
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    <input type="submit" value="VIEW" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="window.location.href='{{ url_for('examination.external_examiner_communication') }}'" style="margin-left: 10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<!-- ACTION FORM (EMAIL) & LIST VIEW -->
+<form method="POST" id="actionForm">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="action" value="EMAIL">
+    <input type="hidden" name="filter_session" value="{{ filters.session_id }}">
+    <input type="hidden" name="filter_degree" value="{{ filters.degree_id }}">
+    <input type="hidden" name="filter_name" value="{{ filters.examiner_name }}">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tablesubheading" colspan="7">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <span class="subheadingborderbottom">List of External Examinars</span>
+                        <input type="submit" value="SEND EMAIL" class="button-common" style="margin-right: 10px;" onclick="return confirm('Send email to selected examiners?');">
+                    </div>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td colspan="7">
+                    <table class="table-grid-view" width="100%">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="5%">S.No.</th>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th width="10%">Is Active</th>
+                                <th width="5%">
+                                    All <br>
+                                    <input type="checkbox" id="chkAll" onclick="toggleAll(this)">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ex in examiners %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
+                                <td>{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                                <td>{{ ex.UserId }}</td>
+                                <td align="left">{{ ex.ExaminarName }}</td>
+                                <td align="left">{{ ex.Email }}</td>
+                                <td>{{ 'True' if ex.IsActive else 'False' }}</td>
+                                <td>
+                                    <input type="checkbox" name="examiner_ids" value="{{ ex.Pk_Exmid }}" class="chkExaminer">
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" align="center" style="padding:15px;">No records found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                    {% if pagination and pagination.total_pages > 1 %}
+                    <div class="pager-style">
+                        {% if pagination.has_prev %}
+                            <a href="{{ url_for('examination.external_examiner_communication', page=pagination.page-1, session_id=filters.session_id, degree_id=filters.degree_id, examiner_name=filters.examiner_name) }}">&lt;</a>
+                        {% else %}
+                            <span class="disabled">&lt;</span>
+                        {% endif %}
+
+                        {% for p in page_range %}
+                            {% if p == '...' %}
+                                <span>{{ p }}</span>
+                            {% elif p == pagination.page %}
+                                <span class="active">{{ p }}</span>
+                            {% else %}
+                                <a href="{{ url_for('examination.external_examiner_communication', page=p, session_id=filters.session_id, degree_id=filters.degree_id, examiner_name=filters.examiner_name) }}">{{ p }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if pagination.has_next %}
+                            <a href="{{ url_for('examination.external_examiner_communication', page=pagination.page+1, session_id=filters.session_id, degree_id=filters.degree_id, examiner_name=filters.examiner_name) }}">&gt;</a>
+                        {% else %}
+                            <span class="disabled">&gt;</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<script>
+function toggleAll(source) {
+    checkboxes = document.getElementsByClassName('chkExaminer');
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Admission No. Generation</span></div>
+    
+    <div style="padding: 10px;">
+        <form method="GET" id="filterForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td colspan="4" class="required">
+                            <select name="college_id" id="ddlCollege" class="dropdown w-300" required onchange="handleFilterChange()">
+                                <option value="">-- Select College--</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">For Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" id="ddlSession" class="dropdown w-200" required onchange="handleFilterChange()">
+                                <option value="">-- Select Session--</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                        <td class="vtext" width="15%">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" id="ddlDegree" class="dropdown w-250" required onchange="handleFilterChange()">
+                                <option value="">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Specialization</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="branch_id" id="ddlBranch" class="dropdown w-200">
+                                <option value="0">--Select Specialization--</option>
+                                {% for b in lookups.branches %}
+                                <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td class="vtext">Separator</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <input type="text" id="txt_separator" class="textbox w-100" value="{{ config.separator if config else '' }}" readonly style="background:#f0f0f0;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Prefix</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <input type="text" id="txt_prefix" class="textbox w-150" value="{{ config.prefix if config else '' }}" readonly style="background:#f0f0f0;">
+                        </td>
+                        <td class="vtext">Suffix</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <input type="text" id="txt_suffix" class="textbox w-150" value="{{ config.suffix if config else '' }}" readonly style="background:#f0f0f0;">
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="15"></td></tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="5">
+                            <input type="button" value="GENERATE" class="button-common" style="width:120px;" onclick="generateSuggestedNumbers()">
+                            <input type="button" value="UNPROCESS" class="button-common" style="width:120px; margin-left:5px;" onclick="confirmUnprocess()">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+        <div style="margin-bottom:10px; font-size:10px;">
+            <b style="color:red">[Not yet Generated and saved]</b>
+            <b style="color:orange; margin-left:15px;">[Generated and Saved]</b>
+            <b style="color:green; margin-left:15px;">[Generated saved and Locked]</b>
+        </div>
+
+        <form method="POST" id="generateForm">
+            <input type="hidden" name="action" value="SAVE">
+            <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4;">
+                <table class="table-grid-view" width="100%" id="gvStudentDtl">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th>Student Name</th>
+                            <th>Current Admission No.</th>
+                            <th>Suggested Admission No.</th>
+                            <th width="10%">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in students %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center">{{ loop.index }}</td>
+                            <td align="left">{{ s.fullname }} [{{ s.enrollmentno }}]</td>
+                            <td align="center">{{ s.AdmissionNo or 'N/A' }}</td>
+                            <td align="center">
+                                <input type="hidden" name="student_ids" value="{{ s.pk_sid }}">
+                                <input type="text" name="new_nos[]" class="textbox w-150 suggested-no" value="" placeholder="Press GENERATE">
+                            </td>
+                            <td align="center">
+                                {% if s.AdmissionNo %}
+                                <span style="color:orange; font-weight:bold;">Saved</span>
+                                {% else %}
+                                <span style="color:red; font-weight:bold;">Pending</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr class="item-style"><td colspan="5" align="center" style="padding:20px; color:#999;">Select College, Session and Degree to list students.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            {% if students %}
+            <div style="text-align:center; margin-top:20px;">
+                <input type="submit" value="SAVE GENERATED NUMBERS" class="button-common" style="width:200px;">
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<script>
+const nextSerial = {{ next_serial or 1 }};
+const config = {{ config|tojson if config else 'null' }};
+
+function handleFilterChange() {
+    document.getElementById('filterForm').submit();
+}
+
+function generateSuggestedNumbers() {
+    if (!config) {
+        alert("No configuration found for current selection.");
+        return;
+    }
+    
+    const rows = document.querySelectorAll('.suggested-no');
+    let serial = nextSerial;
+    
+    rows.forEach(input => {
+        // Only suggest for those without a current number OR if force generating
+        const currentNoCell = input.closest('tr').cells[2].innerText;
+        if (currentNoCell === 'N/A' || confirm("Override existing number?")) {
+            const serialStr = serial.toString().padStart(3, '0');
+            input.value = `${config.prefix}${config.separator}${serialStr}${config.suffix}`;
+            serial++;
+        }
+    });
+}
+
+function confirmUnprocess() {
+    if (confirm("Are you sure you want to unprocess? This will clear suggested (unsaved) numbers.")) {
+        document.querySelectorAll('.suggested-no').forEach(input => input.value = '');
+    }
+}
+</script>
+{% endblock %}

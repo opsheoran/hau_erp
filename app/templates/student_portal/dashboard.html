@@ -1,0 +1,234 @@
+{% extends "student_portal/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #fff;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin-bottom: 20px;
+    }
+
+    .login-stats {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .login-stats span {
+        margin-right: 20px;
+    }
+
+    .btn-outline {
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
+        background: transparent;
+        padding: 6px 12px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+
+    .btn-outline:hover {
+        background: var(--primary-color);
+        color: #fff;
+    }
+
+    .modules-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    .module-card {
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s, box-shadow 0.3s;
+        display: flex;
+        text-decoration: none;
+        color: inherit;
+        position: relative;
+    }
+
+    .module-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .module-icon {
+        width: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        color: #fff;
+    }
+
+    .c1 { background-color: #3498db; }
+    .c2 { background-color: #2ecc71; }
+    .c3 { background-color: #e74c3c; }
+    .c4 { background-color: #9b59b6; }
+    .c5 { background-color: #f1c40f; }
+    .c6 { background-color: #1abc9c; }
+    .c7 { background-color: #34495e; }
+    .c8 { background-color: #e67e22; }
+
+    .module-content {
+        padding: 20px;
+        flex: 1;
+    }
+
+    .module-title {
+        font-size: 18px;
+        font-weight: 500;
+        margin: 0 0 5px 0;
+        color: #333;
+    }
+
+    .module-desc {
+        font-size: 13px;
+        color: #777;
+        margin: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="login-stats">
+        <span><i class="fas fa-clock"></i> Last Login: Just now</span>
+        <span><i class="fas fa-sign-in-alt"></i> Current Login: {{ session.get('student_name') }}</span>
+    </div>
+    <a href="#" class="btn-outline"><i class="fas fa-key"></i> Change Password</a>
+</div>
+
+<div class="modules-grid">
+    <a href="#" class="module-card">
+        <div class="module-icon c8">
+            <i class="fas fa-home"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">My Home</h4>
+            <p class="module-desc">Return to the dashboard</p>
+        </div>
+    </a>
+
+    <a href="{{ url_for('student_portal.profile') }}" class="module-card">
+        <div class="module-icon c6">
+            <i class="fas fa-user"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">My Profile</h4>
+            <p class="module-desc">View your personal details</p>
+        </div>
+    </a>
+
+    <a href="{{ url_for('student_portal.card_entry') }}" class="module-card">
+        <div class="module-icon c7">
+            <i class="fas fa-id-card"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">Card Entry</h4>
+            <p class="module-desc">Fill out your registration card</p>
+        </div>
+    </a>
+
+    <a href="{{ url_for('student_portal.course_addition_withdrawal') }}" class="module-card">
+        <div class="module-icon c1">
+            <i class="fas fa-book"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">Course Add/Withdrawal</h4>
+            <p class="module-desc">Manage your enrolled courses</p>
+        </div>
+    </a>
+
+    <a href="#" class="module-card">
+        <div class="module-icon c2">
+            <i class="fas fa-star"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">I-Grade</h4>
+            <p class="module-desc">Apply for Incomplete Grade</p>
+        </div>
+    </a>
+
+    <a href="#" class="module-card">
+        <div class="module-icon c3">
+            <i class="fas fa-file-alt"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">Supplimentary</h4>
+            <p class="module-desc">Apply for Supplimentary Exams</p>
+        </div>
+    </a>
+
+    <a href="#" class="module-card">
+        <div class="module-icon c4">
+            <i class="fas fa-calendar-alt"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">Course Plan</h4>
+            <p class="module-desc">View Programme of Work</p>
+        </div>
+    </a>
+
+    <a href="#" class="module-card">
+        <div class="module-icon c5">
+            <i class="fas fa-list"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">Course Details</h4>
+            <p class="module-desc">View details of your courses</p>
+        </div>
+    </a>
+
+    <a href="#" class="module-card">
+        <div class="module-icon c6">
+            <i class="fas fa-credit-card"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">Online Fee Payment</h4>
+            <p class="module-desc">Pay your semester fees online</p>
+        </div>
+    </a>
+
+    <a href="#" class="module-card">
+        <div class="module-icon c7">
+            <i class="fas fa-receipt"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">Fee Details</h4>
+            <p class="module-desc">View your fee payment history</p>
+        </div>
+    </a>
+
+    <a href="#" class="module-card">
+        <div class="module-icon c1">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">Faculty Details</h4>
+            <p class="module-desc">View details of your faculty</p>
+        </div>
+    </a>
+
+    <a href="#" class="module-card">
+        <div class="module-icon c2">
+            <i class="fas fa-poll"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">View Marks</h4>
+            <p class="module-desc">Check your consolidated results</p>
+        </div>
+    </a>
+</div>
+{% endblock %}

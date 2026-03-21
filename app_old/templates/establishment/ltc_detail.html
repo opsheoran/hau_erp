@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="body">
+    <div id="ctl00_brdcrums" class="brdcums">
+        <div class="brdcrmsinnerdiv">
+            <img style="float: left; margin: 2px 5px 0 0;" src="{{ url_for('static', filename='images/home-icon.png') }}">
+            <span>Transactions</span>&nbsp;&gt;&nbsp;<span>Personal Details</span>&nbsp;&gt;&nbsp;<strong>LTC Detail</strong>
+        </div>
+    </div>
+    <div class="body-form">
+        <form method="POST">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="ltc_id" value="{{ edit_data.id if edit_data else '' }}">
+            <table cellpadding="0" cellspacing="0" border="0" style="width: 100%" align="left">
+                <tr><td colspan="7" class="tableheading">Employee LTC Detail</td></tr>
+                <tr><td colspan="7" class="tdgap"></td></tr>
+                <tr>
+                    <td style="width: 15%" class="vtext">Employee Code</td>
+                    <td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" id="txtEmpCode" class="textboxlong" readonly value="{{ emp.empcode if emp else '' }}">
+                        <input type="hidden" name="emp_id" id="hfEmpId" value="{{ emp.pk_empid if emp else '' }}">
+                        *
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" border="0" onclick="openEmpSearch('hfEmpId', '')" style="cursor:pointer; vertical-align:middle;">
+                    </td>
+                    <td></td>
+                    <td class="vtext">Employee Name</td>
+                    <td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" class="textboxlong" readonly value="{{ emp.empname if emp else '' }}">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Department</td>
+                    <td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" class="textboxlong" readonly value="{{ emp.dept_name if emp else '' }}">
+                    </td>
+                    <td></td>
+                    <td class="vtext">Designation</td>
+                    <td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" class="textboxlong" readonly value="{{ emp.designation if emp else '' }}">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Block Year</td>
+                    <td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" name="block_year" class="textbox" value="{{ edit_data.fromdate if edit_data else '' }}" required> *
+                    </td>
+                    <td></td>
+                    <td class="vtext">Date</td>
+                    <td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" name="ltc_date" class="textbox" value="{{ edit_data.todate if edit_data else '' }}" required>
+                        <span class="lblmessage">(DD/MM/YYYY)</span> *
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Amount paid</td>
+                    <td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" name="amount" class="textbox" value="{{ edit_data.PaidAmount if edit_data else '' }}" required> *
+                    </td>
+                    <td></td>
+                    <td class="vtext">Remarks</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <textarea name="remarks" rows="2" class="textboxmultiline">{{ edit_data.remarks if edit_data else '' }}</textarea>
+                    </td>
+                </tr>
+                <tr><td colspan="7" class="tdgap"></td></tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="5">
+                        <input type="submit" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" class="button-common">
+                        <input type="button" value="RESET" class="button-common" onclick="window.location.href='{{ url_for('establishment.employee_ltc_details') }}'">
+                    </td>
+                </tr>
+                <tr><td colspan="7" class="tdgap"></td></tr>
+                <tr><td colspan="7" class="tablesubheading">List of Employee LTC Detail</td></tr>
+                <tr><td colspan="7" class="tdgap"></td></tr>
+                <tr>
+                    <td colspan="7">
+                        <table class="table-grid-view" style="width:100%; border-collapse:collapse;" border="1">
+                            <tr class="header-style">
+                                <td>S. No.</td><td>Block Year</td><td>Date</td><td>Amount</td><td>Remarks</td><td>EDIT</td><td>DELETE</td>
+                            </tr>
+                            {% for r in ltc_records %}
+                            <tr class="item-style">
+                                <td align="center">{{ loop.index }}</td>
+                                <td>{{ r.blockyear }}</td>
+                                <td>{{ r.ltc_date_fmt }}</td>
+                                <td align="right">{{ "{:,.2f}".format(r.totalamount|float) }}</td>
+                                <td>{{ r.remarks or '' }}</td>
+                                <td align="center">
+                                    <a href="{{ url_for('establishment.employee_ltc_details', emp_id=emp_id, edit_id=r.id) }}"><img src="{{ url_for('static', filename='images/Edit.gif') }}"></a>
+                                </td>
+                                <td align="center">
+                                    {% if perm.AllowDelete %}
+                                    <a href="{{ url_for('establishment.employee_ltc_details', emp_id=emp_id, delete_id=r.id) }}" onclick="return confirm('Are you sure?')"><img src="{{ url_for('static', filename='images/Delete.gif') }}"></a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="7" align="center">No records found.</td></tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+{% include 'establishment/_search_modal.html' %}
+
+<script>
+    function selectItem(id, name, code) {
+        window.location.href = "?emp_id=" + id;
+    }
+</script>
+{% endblock %}

@@ -432,14 +432,19 @@ class ActivityCertificateModel:
 
 class CourseActivityModel:
     @staticmethod
+    def get_activity_categories():
+        return DB.fetch_all("SELECT pk_activityCategory_ID as id, ActivityCategory_Desc as name, ActivityCategory_Code as code FROM SMS_ActivityCategory_Mst ORDER BY ActivityCategory_Desc")
+
+    @staticmethod
     def get_course_activities(page=1, per_page=10):
         offset = (page - 1) * per_page
         total = DB.fetch_scalar("SELECT COUNT(*) FROM SMS_CourseActivity_Mst")
         query = f"""
-            SELECT M.*, S.sessionname, SEM.semester_roman
+            SELECT M.*, S.sessionname, SEM.semester_roman, CAT.ActivityCategory_Desc
             FROM SMS_CourseActivity_Mst M
             LEFT JOIN SMS_AcademicSession_Mst S ON M.sessionid = S.pk_sessionid
             LEFT JOIN SMS_Semester_Mst SEM ON M.semesterid = SEM.pk_semesterid
+            LEFT JOIN SMS_ActivityCategory_Mst CAT ON M.fk_ActivityCategory_ID = CAT.pk_activityCategory_ID
             ORDER BY M.pk_CourseActivityID
             OFFSET {offset} ROWS FETCH NEXT {per_page} ROWS ONLY
         """
@@ -467,24 +472,25 @@ class CourseActivityModel:
             name = data['name']
             sess_id = data['session_id']
             sem_id = data['sem_id']
+            cat_id = data.get('cat_id')
             order = data.get('order', 1)
-            a_type = data.get('type', 'A')
+            a_type = data.get('type', 'N')
 
             if data.get('pk_id'):
                 ca_id = data['pk_id']
                 cursor.execute("""
                     UPDATE SMS_CourseActivity_Mst SET CourseActivity_Code=?, CourseActivity_Name=?, 
-                    sessionid=?, semesterid=?, CourseActivity_Order=?, Activity_type=?
+                    sessionid=?, semesterid=?, CourseActivity_Order=?, Activity_type=?, fk_ActivityCategory_ID=?
                     WHERE pk_CourseActivityID=?
-                """, [code, name, sess_id, sem_id, order, a_type, ca_id])
+                """, [code, name, sess_id, sem_id, order, a_type, cat_id, ca_id])
                 cursor.execute("DELETE FROM SMS_CourseActivity_Dtl WHERE fk_CourseActivityID=?", [ca_id])
             else:
                 cursor.execute("""
                     INSERT INTO SMS_CourseActivity_Mst (CourseActivity_Code, CourseActivity_Name, 
-                    sessionid, semesterid, CourseActivity_Order, Activity_type)
+                    sessionid, semesterid, CourseActivity_Order, Activity_type, fk_ActivityCategory_ID)
                     OUTPUT INSERTED.pk_CourseActivityID
-                    VALUES (?, ?, ?, ?, ?, ?)
-                """, [code, name, sess_id, sem_id, order, a_type])
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, [code, name, sess_id, sem_id, order, a_type, cat_id])
                 ca_id = cursor.fetchone()[0]
 
             act_ids = data.getlist('act_ids[]')

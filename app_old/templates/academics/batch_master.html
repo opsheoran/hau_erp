@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- SAVE FORM -->
+<form method="POST" id="batchForm">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="pk_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="6">
+                    <span class="mainheadingborderbottom">Class - Batch Master</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">College</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <select name="college_id" id="b_college" class="dropdown w-250" required>
+                        <option value="">--Select College--</option>
+                        {% for c in lookups.colleges %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext" width="15%">Session</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <select name="session_id" id="b_session" class="dropdown w-150" required>
+                        <option value="">--Select Session--</option>
+                        {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="degree_id" id="b_degree" class="dropdown w-250" required>
+                        <option value="">--Select Degree--</option>
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext">Class</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="sem_id" id="b_sem" class="dropdown w-150" required>
+                        <option value="">--Select Class--</option>
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Specialization</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="branch_id" id="b_branch" class="dropdown w-250">
+                        <option value="">--Select Specialization--</option>
+                    </select>
+                </td>
+                <td class="vtext">Type</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="type" id="b_type" class="dropdown w-100">
+                        <option value="">--Select Type--</option>
+                        {% for t in lookups.batch_types %}<option value="{{ t.id }}">{{ t.name }}</option>{% endfor %}
+                    </select>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">No. of Batches</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" name="count" id="b_count" class="textbox w-100" value="1" required>
+                </td>
+                <td colspan="3"></td>
+            </tr>
+            
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="submit" value="SAVE" id="btnSave" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left:10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<!-- LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="6">
+                <span class="subheadingborderbottom">List of Batches</span>
+            </td>
+        </tr>
+        <tr><td colspan="6" height="10"></td></tr>
+        <tr>
+            <td colspan="6">
+                <table class="table-grid-view" width="100%" id="batchList">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th width="30%">College</th>
+                            <th width="10%">Academic Session</th>
+                            <th width="20%">Degree</th>
+                            <th width="7%">Class</th>
+                            <th width="12%">Specialization</th>
+                            <th width="8%">TheoryPractical</th>
+                            <th width="8%">No. of Batches</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody id="batchListBody">
+                        {% for item in items %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                            <td align="center">{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td>{{ item.collegename }}</td>
+                            <td>{{ item.sessionname }}</td>
+                            <td>{{ item.degreename }}</td>
+                            <td align="center">{{ item.semester_roman }}</td>
+                            <td>{{ item.specialization or '' }}</td>
+                            <td align="center">{{ item.theory_practical_label }}</td>
+                            <td align="center">{{ item.no_of_batch }}</td>
+                            <td align="center">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editB({{ item|tojson }})'>
+                            </td>
+                            <td align="center">
+                                <form method="POST" onsubmit="return confirm('Delete this record?');" style="display:inline;">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ item.pk_batchid }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style" id="batchPager">
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('academics.batch_master', page=pagination.page-1) }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('academics.batch_master', page=p) }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('academics.batch_master', page=pagination.page+1) }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+function setDegreeOptions(degrees) {
+    const degree = document.getElementById('b_degree');
+    degree.innerHTML = '<option value="">--Select Degree--</option>';
+    degrees.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.id || d.pk_degreeid;
+        opt.textContent = d.name || d.degreename;
+        degree.appendChild(opt);
+    });
+}
+
+function setSemesterOptions(semesters) {
+    const sem = document.getElementById('b_sem');
+    sem.innerHTML = '<option value="">--Select Class--</option>';
+    semesters.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id || s.pk_semesterid;
+        opt.textContent = s.name || s.semester_roman;
+        sem.appendChild(opt);
+    });
+}
+
+function setBranchOptions(branches) {
+    const br = document.getElementById('b_branch');
+    br.innerHTML = '<option value="">--Select Specialization--</option>';
+    branches.forEach(b => {
+        const opt = document.createElement('option');
+        opt.value = b.id;
+        opt.textContent = b.name;
+        br.appendChild(opt);
+    });
+}
+
+function renderBatchList(items) {
+    const tbody = document.getElementById('batchListBody');
+    tbody.innerHTML = '';
+    if (!items || items.length === 0) {
+        tbody.innerHTML = '<tr class="item-style"><td colspan="10" align="center">No records found.</td></tr>';
+        return;
+    }
+    items.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = idx % 2 === 0 ? 'item-style' : 'item-style-alt';
+        tr.innerHTML = `
+            <td align="center">${idx + 1}</td>
+            <td>${item.collegename || ''}</td>
+            <td>${item.sessionname || ''}</td>
+            <td>${item.degreename || ''}</td>
+            <td align="center">${item.semester_roman || ''}</td>
+            <td>${item.specialization || ''}</td>
+            <td align="center">${item.theory_practical_label || ''}</td>
+            <td align="center">${item.no_of_batch || ''}</td>
+            <td align="center"><img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editB(${JSON.stringify(item).replace(/"/g, '&quot;')})'></td>
+            <td align="center">
+                <form method="POST" onsubmit="return confirm('Delete this record?');" style="display:inline;">
+                    <input type="hidden" name="action" value="DELETE">
+                    <input type="hidden" name="id" value="${item.pk_batchid}">
+                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                </form>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+async function loadDegrees() {
+    const collegeId = document.getElementById('b_college').value;
+    const sessionId = document.getElementById('b_session').value;
+    if (!collegeId || !sessionId) {
+        setDegreeOptions([]);
+        setSemesterOptions([]);
+        setBranchOptions([]);
+        return;
+    }
+    const res = await fetch(`/academics/api/college/${collegeId}/degrees`);
+    const data = await res.json();
+    setDegreeOptions(data);
+    setSemesterOptions([]);
+    setBranchOptions([]);
+}
+
+async function loadSemesters() {
+    const degreeId = document.getElementById('b_degree').value;
+    if (!degreeId) {
+        setSemesterOptions([]);
+        setBranchOptions([]);
+        return;
+    }
+    const res = await fetch(`/academics/api/get_degree_semesters/${degreeId}`);
+    const data = await res.json();
+    setSemesterOptions(data);
+}
+
+async function loadBranches() {
+    const collegeId = document.getElementById('b_college').value;
+    const degreeId = document.getElementById('b_degree').value;
+    if (!collegeId || !degreeId) {
+        setBranchOptions([]);
+        return;
+    }
+    const res = await fetch(`/academics/api/college/${collegeId}/degree/${degreeId}/branches`);
+    const data = await res.json();
+    setBranchOptions(data);
+}
+
+async function loadBatchList() {
+    const collegeId = document.getElementById('b_college').value;
+    const sessionId = document.getElementById('b_session').value;
+    const degreeId = document.getElementById('b_degree').value;
+    const semId = document.getElementById('b_sem').value;
+    const params = new URLSearchParams({
+        college_id: collegeId || '',
+        session_id: sessionId || '',
+        degree_id: degreeId || '',
+        semester_id: semId || ''
+    });
+    const res = await fetch(`/academics/api/batches?${params.toString()}`);
+    const data = await res.json();
+    const pager = document.getElementById('batchPager');
+    if (pager) pager.style.display = 'none';
+    renderBatchList(data);
+}
+
+function editB(item) {
+    document.getElementById('pk_id').value = item.pk_batchid;
+    document.getElementById('b_college').value = item.fk_collegeid;
+    document.getElementById('b_session').value = item.fk_sessionid;
+    loadDegrees().then(() => {
+        document.getElementById('b_degree').value = item.fk_degreeid;
+        loadSemesters().then(() => {
+            const sem = document.getElementById('b_sem');
+            sem.value = item.fk_semesterid;
+            if (!sem.value && item.semester_roman) {
+                const opt = Array.from(sem.options).find(o => o.textContent.trim() === item.semester_roman.trim());
+                if (opt) sem.value = opt.value;
+            }
+        });
+        loadBranches().then(() => {
+            document.getElementById('b_branch').value = item.fk_branchid || '';
+        });
+    });
+    document.getElementById('b_type').value = item.theory_practical_value || item.theory_practical || '';
+    document.getElementById('b_count').value = item.no_of_batch;
+    document.getElementById('btnSave').value = 'UPDATE';
+    window.scrollTo(0,0);
+}
+
+function resetForm() {
+    document.getElementById('pk_id').value = '';
+    document.getElementById('batchForm').reset();
+    document.getElementById('btnSave').value = 'SAVE';
+}
+
+document.getElementById('b_college').addEventListener('change', function() {
+    loadDegrees();
+    loadBatchList();
+});
+
+document.getElementById('b_session').addEventListener('change', function() {
+    loadDegrees();
+    loadBatchList();
+});
+
+document.getElementById('b_degree').addEventListener('change', function() {
+    loadSemesters();
+    loadBranches();
+});
+
+document.getElementById('b_sem').addEventListener('change', function() {
+    loadBatchList();
+});
+</script>
+{% endblock %}

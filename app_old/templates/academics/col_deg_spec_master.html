@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- SAVE FORM -->
+<form method="POST" id="mappingForm">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="pk_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="6">
+                    <span class="mainheadingborderbottom">College Degree Specialization Mapping</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">College</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="college_id" id="m_college" class="dropdown w-250" required>
+                        <option value="">--Select College--</option>
+                        {% for c in lookups.colleges %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext" width="15%">Degree</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="degree_id" id="m_degree" class="dropdown w-250" required>
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}<option value="{{ d.id }}" data-isug="{{ d.isug }}" data-isphd="{{ d.isphd }}">{{ d.name }}</option>{% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td colspan="4">
+                    <textarea name="remarks" id="m_remarks" class="textbox w-300" rows="2"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">&nbsp;</td>
+                <td colspan="5">&nbsp;</td>
+            </tr>
+            
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <!-- SPECIALIZATION SELECTION -->
+            <tr class="spec-section">
+                <td colspan="6" class="tablesubheading">
+                    <span class="subheadingborderbottom">Specialization Detail</span>
+                </td>
+            </tr>
+            <tr class="spec-section"><td colspan="6" height="5"></td></tr>
+            <tr class="spec-section">
+                <td colspan="6">
+                    <table class="table-grid-view" id="specTable" width="100%">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="5%">S. No.</th>
+                                <th width="45%">Specialization</th>
+                                <th width="20%">Specialization Type</th>
+                                <th width="25%">Remarks</th>
+                                <th width="5%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="specBody">
+                            <!-- Rows added dynamically -->
+                        </tbody>
+                    </table>
+                    <div id="specAddBtn" style="text-align:right; margin-top:5px;">
+                        <input type="button" value="Add More Specialization Detail" class="button-common" onclick="addSpecRow()" style="width:250px;">
+                    </div>
+                </td>
+            </tr>
+            
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="submit" value="SAVE" id="btnSave" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left:10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<!-- LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="6">
+                <span class="subheadingborderbottom">List of College Degree Specialization Mapped</span>
+            </td>
+        </tr>
+        <tr><td colspan="6" height="10"></td></tr>
+        <tr>
+            <td colspan="6">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th width="15%">College</th>
+                            <th width="15%">Degree</th>
+                            <th width="15%">Remarks</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                            <td align="center">{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td>{{ item.collegename }}</td>
+                            <td>{{ item.degreename }}</td>
+                            <td>{{ item.Remarks or '' }}</td>
+                            <td align="center">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editMap({{ item.PK_Coldgbrid }})'>
+                            </td>
+                            <td align="center">
+                                <form method="POST" onsubmit="return confirm('Delete this mapping?');" style="display:inline;">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ item.PK_Coldgbrid }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('academics.col_deg_spec_master', page=pagination.page-1) }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('academics.col_deg_spec_master', page=p) }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('academics.col_deg_spec_master', page=pagination.page+1) }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+const branches = {{ lookups.branches|tojson }};
+const specTypes = {{ lookups.spec_types|tojson }};
+const allDegrees = {{ lookups.degrees|tojson }};
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('pk_id').value) addSpecRow();
+});
+
+function addSpecRow(data = null) {
+    const tbody = document.getElementById('specBody');
+    const rowCount = tbody.rows.length;
+    const row = tbody.insertRow();
+    row.className = rowCount % 2 === 0 ? 'item-style' : 'item-style-alt';
+    const selectedType = data && data.SpecializationType ? String(data.SpecializationType).trim() : '';
+    const typeOptions = specTypes.map(t => {
+        const val = t.id || t.name;
+        const txt = t.name || t.id;
+        return `<option value="${val}" ${selectedType && selectedType === String(val) ? 'selected' : ''}>${txt}</option>`;
+    });
+    if (selectedType && !specTypes.some(t => String(t.id || t.name) === selectedType)) {
+        typeOptions.unshift(`<option value="${selectedType}" selected>${selectedType}</option>`);
+    }
+    
+    row.innerHTML = `
+        <td align="center">${rowCount + 1}</td>
+        <td>
+            <select name="spec_ids[]" class="dropdown" style="width:100%" required>
+                <option value="">--Select Specialization--</option>
+                ${branches.map(b => `<option value="${b.Pk_BranchId}" ${(data && (data.fk_BranchId == b.Pk_BranchId || data.fk_branchid == b.Pk_BranchId || data.branchid == b.Pk_BranchId)) ? 'selected' : ''}>${b.Branchname}</option>`).join('')}
+            </select>
+        </td>
+        <td>
+            <select name="spec_types[]" class="dropdown" style="width:100%">
+                <option value="">--Select Type--</option>
+                ${typeOptions.join('')}
+            </select>
+        </td>
+        <td>
+            <textarea name="spec_remarks[]" class="textbox" rows="2" style="width:100%">${data ? (data.Remarks || '') : ''}</textarea>
+        </td>
+        <td align="center">
+            <img src="{{ url_for('static', filename='images/delete.gif') }}" style="cursor:pointer" onclick="this.closest('tr').remove(); renumberRows();">
+        </td>
+    `;
+}
+
+function renumberRows() {
+    Array.from(document.getElementById('specBody').rows).forEach((row, i) => {
+        row.cells[0].textContent = i + 1;
+        row.className = i % 2 === 0 ? 'item-style' : 'item-style-alt';
+    });
+}
+
+function setDegreeOptions(degrees) {
+    const degree = document.getElementById('m_degree');
+    degree.innerHTML = '<option value="">--Select Degree--</option>';
+    degrees.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.id || d.pk_degreeid;
+        opt.textContent = d.name || d.degreename;
+        if (d.isug !== undefined && d.isug !== null) opt.dataset.isug = d.isug;
+        if (d.isphd !== undefined && d.isphd !== null) opt.dataset.isphd = d.isphd;
+        degree.appendChild(opt);
+    });
+}
+
+function degreeAllowsSpec() {
+    const degree = document.getElementById('m_degree');
+    const opt = degree.options[degree.selectedIndex];
+    if (!opt) return false;
+    const isug = (opt.dataset.isug || '').trim();
+    const isphd = (opt.dataset.isphd || '').toLowerCase() === 'true' || opt.dataset.isphd === '1';
+    return isug === 'M' || isug === 'P' || isphd;
+}
+
+function toggleSpecSection() {
+    const visible = degreeAllowsSpec();
+    document.querySelectorAll('.spec-section').forEach(el => {
+        el.style.display = visible ? '' : 'none';
+    });
+    const addBtn = document.getElementById('specAddBtn');
+    if (addBtn) addBtn.style.display = visible ? '' : 'none';
+    if (!visible) {
+        const tbody = document.getElementById('specBody');
+        tbody.innerHTML = '';
+    } else if (!document.getElementById('specBody').rows.length) {
+        addSpecRow();
+    }
+}
+
+async function loadDegreesForCollege() {
+    const collegeId = document.getElementById('m_college').value;
+    if (!collegeId) {
+        setDegreeOptions(allDegrees);
+        toggleSpecSection();
+        return;
+    }
+    try {
+        const res = await fetch(`/academics/api/college/${collegeId}/degrees`);
+        const data = await res.json();
+        setDegreeOptions(data && data.length ? data : allDegrees);
+        toggleSpecSection();
+    } catch (e) {
+        setDegreeOptions(allDegrees);
+        toggleSpecSection();
+    }
+}
+
+function editMap(id) {
+    fetch(`/academics/api/mapping/${id}/details`)
+        .then(r => r.json())
+        .then(data => {
+            const master = data.master;
+            const details = data.details;
+            
+            document.getElementById('pk_id').value = id;
+            document.getElementById('m_college').value = master.fk_CollegeId;
+            document.getElementById('m_remarks').value = (master.Remarks || '').trim();
+            document.getElementById('btnSave').value = 'UPDATE';
+            
+            loadDegreesForCollege().then(() => {
+                document.getElementById('m_degree').value = master.fk_Degreeid;
+                toggleSpecSection();
+                const tbody = document.getElementById('specBody');
+                tbody.innerHTML = '';
+                if (details && details.length > 0 && degreeAllowsSpec()) {
+                    details.forEach(d => addSpecRow(d));
+                } else {
+                    if (degreeAllowsSpec()) addSpecRow();
+                }
+            });
+            window.scrollTo(0,0);
+        });
+}
+
+function resetForm() {
+    document.getElementById('pk_id').value = '';
+    document.getElementById('mappingForm').reset();
+    document.getElementById('specBody').innerHTML = '';
+    addSpecRow();
+    setDegreeOptions(allDegrees);
+    toggleSpecSection();
+}
+
+document.getElementById('m_college').addEventListener('change', function() {
+    loadDegreesForCollege();
+});
+document.getElementById('m_degree').addEventListener('change', function() {
+    toggleSpecSection();
+});
+</script>
+{% endblock %}

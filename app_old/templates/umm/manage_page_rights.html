@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="GET" id="aspnetForm_GET" class="no-print">
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="6" class="tableheading">
+                    <span class="mainheadingborderbottom">Assign webpage rights to the user</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="10"></td></tr>
+            <tr>
+                <td class="vtext" width="15%">Location</td>
+                <td class="colon" width="2%">:</td>
+                <td width="30%">
+                    <select name="loc_id" id="ctl00_ContentPlaceHolder1_D_ddlLocation" class="dropdownlong" onchange="this.form.submit()">
+                        <option value=""> -- Select Location --</option>
+                        {% for l in locations %}
+                        <option value="{{ l.id }}" {% if sel_loc|string == l.id|string %}selected{% endif %}>{{ l.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext" width="15%">User Name</td>
+                <td class="colon" width="2%">:</td>
+                <td>
+                    <select name="user_id" id="ctl00_ContentPlaceHolder1_D_ddlUserName" class="dropdownlong" onchange="this.form.submit()">
+                        <option value="">-- Select User --</option>
+                        {% for u in users %}
+                        <option value="{{ u.id }}" {% if sel_user|string == u.id|string %}selected{% endif %}>{{ u.loginname }} ~ {{ u.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" class="tdgap"></td>
+            </tr>
+            <tr>
+                <td colspan="6" valign="top">
+                    <div id="ctl00_ContentPlaceHolder1_gvUserModules_div">
+                        <table class="table-grid-view" cellspacing="1" cellpadding="1" border="1" id="ctl00_ContentPlaceHolder1_gvUserModules" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+                            <tbody>
+                                <tr class="header-style" align="left">
+                                    <th scope="col">S.No</th><th scope="col">Module(s) Name</th>
+                                </tr>
+                                {% for m in all_modules %}
+                                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                                    <td align="center" style="width:50px;">{{ loop.index }}</td>
+                                    <td>
+                                        <a href="javascript:void(0);" onclick="viewModulePages('{{ m.id }}')" class="gridlink">{{ m.name }}</a>
+                                        <span style="color:#666; font-size:10px;"> (Click to view webpages of the module)</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="15"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <a href="{{ url_for('umm.manage_page_rights') }}" class="button-common" style="text-decoration:none; display:inline-block; line-height:24px; padding:0 12px; vertical-align:middle;">RESET</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+{% if sel_loc and sel_user and sel_module %}
+<form method="POST" id="aspnetForm" style="margin-top:20px;">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="loc_id" value="{{ sel_loc }}">
+    <input type="hidden" name="user_id" value="{{ sel_user }}">
+    <input type="hidden" name="module_id" value="{{ sel_module }}">
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tablesubheading">
+                    <span class="subheadingborderbottom">Web Page Rights</span>
+                </td>
+            </tr>
+            <tr><td height="10"></td></tr>
+            <tr>
+                <td>
+                    <div style="background-color: #f9f9f9; padding: 10px; border: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <label class="vtext">Filter Pages:</label>
+                            <input type="text" id="txtPageFilter" class="textboxlong" style="width:260px;" placeholder="Search menu name...">
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span class="chkbox">
+                                <input type="checkbox" id="chkSelectAllRows"> <label for="chkSelectAllRows">Select All Rows</label>
+                            </span>
+                            <span style="margin-left:15px;"></span>
+                            <input type="submit" name="action" value="UPDATE" class="button-common" style="height:26px;">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr><td height="10"></td></tr>
+            <tr>
+                <td>
+                    <div style="overflow-y: scroll; max-height: 550px; border: 1px solid #ccc; background:#fff;">
+                        <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1" style="border-collapse:collapse;" id="ctl00_ContentPlaceHolder1_gvWebPages">
+                            <thead>
+                                <tr class="header-style">
+                                    <th width="50px">S.No</th>
+                                    <th width="50px">Sel</th>
+                                    <th align="left">Menu Name</th>
+                                    <th align="left">Parent Menu</th>
+                                    <th width="80px">ADD <input id="chkAllAdd" type="checkbox" onclick="chkAll(this)"></th>
+                                    <th width="80px">UPDATE <input id="chkAllUpdate" type="checkbox" onclick="chkAll(this)"></th>
+                                    <th width="80px">DELETE <input id="chkAllDelete" type="checkbox" onclick="chkAll(this)"></th>
+                                    <th width="80px">SEARCH <input id="chkAllView" type="checkbox" onclick="chkAll(this)"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for p in pages %}
+                                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" data-menu="{{ (p.name or '')|lower }}" data-parent="{{ (p.parent_name or '')|lower }}">
+                                    <td align="center">{{ loop.index }}</td>
+                                    <td align="center"><input class="row-select" type="checkbox" id="chkPage{{ loop.index }}" name="chkPage{{ loop.index }}"></td>
+                                    <td style="font-weight:bold;">{{ p.name }}</td>
+                                    <td>{{ p.parent_name }}</td>
+                                    <td align="center">
+                                        <input type="checkbox" name="add_{{ p.id }}" id="ctl00_ContentPlaceHolder1_gvWebPages_ctl{{ '%02d' % (loop.index + 1) }}_chkAdd" class="col-add" {% if p.rights.AllowAdd %}checked{% endif %}>
+                                    </td>
+                                    <td align="center">
+                                        <input type="checkbox" name="update_{{ p.id }}" id="ctl00_ContentPlaceHolder1_gvWebPages_ctl{{ '%02d' % (loop.index + 1) }}_chkEdit" class="col-update" {% if p.rights.AllowUpdate %}checked{% endif %}>
+                                    </td>
+                                    <td align="center">
+                                        <input type="checkbox" name="delete_{{ p.id }}" id="ctl00_ContentPlaceHolder1_gvWebPages_ctl{{ '%02d' % (loop.index + 1) }}_chkDelete" class="col-delete" {% if p.rights.AllowDelete %}checked{% endif %}>
+                                    </td>
+                                    <td align="center">
+                                        <input type="checkbox" name="view_{{ p.id }}" id="ctl00_ContentPlaceHolder1_gvWebPages_ctl{{ '%02d' % (loop.index + 1) }}_chkView" class="col-view" {% if p.rights.AllowView %}checked{% endif %}>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr><td height="20"></td></tr>
+            <tr>
+                <td align="center">
+                    <input type="submit" name="action" value="UPDATE" class="button-common" style="height: 30px; font-weight: bold; width: 150px;">
+                    <span style="margin-left:15px;"></span>
+                    <input type="submit" name="action" value="RESET" class="button-common" style="height: 30px; width: 100px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+{% else %}
+<div style="text-align:center; padding: 40px; color: #666; font-style: italic; border: 1px solid #ddd; background: #fafafa; margin-top:20px;">
+    Please select <b>Location</b>, <b>User</b> and <b>Module</b> then click <b>VIEW</b>.
+</div>
+{% endif %}
+
+<script>
+function viewModulePages(moduleId) {
+    const locId = document.getElementById('ctl00_ContentPlaceHolder1_D_ddlLocation').value;
+    const userId = document.getElementById('ctl00_ContentPlaceHolder1_D_ddlUserName').value;
+
+    if (!locId || !userId) {
+        if (window.showToast) {
+            window.showToast("First select Location and User Name!", "warning");
+        } else {
+            alert("First select Location and User Name!");
+        }
+        return;
+    }
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('loc_id', locId);
+    url.searchParams.set('user_id', userId);
+    url.searchParams.set('module_id', moduleId);
+    window.location.href = url.toString();
+}
+
+function chkAll(chkbok) {
+    var chkId = chkbok.id;
+    var check = chkbok.checked;
+    var elem = document.getElementById("ctl00_ContentPlaceHolder1_gvWebPages");
+    if (!elem) return;
+    var arrRows = elem.querySelectorAll('tbody tr');
+    
+    var selectedRows = [];
+    arrRows.forEach((tr, idx) => {
+        var rowIdx = idx + 1;
+        var chkPage = document.getElementById("chkPage" + rowIdx);
+        if (chkPage && chkPage.checked) {
+            selectedRows.push(tr);
+        }
+    });
+
+    var targetRows = selectedRows.length > 0 ? selectedRows : Array.from(arrRows);
+
+    targetRows.forEach(tr => {
+        var chk;
+        if (chkId == "chkAllAdd") chk = tr.querySelector('.col-add');
+        if (chkId == "chkAllUpdate") chk = tr.querySelector('.col-update');
+        if (chkId == "chkAllDelete") chk = tr.querySelector('.col-delete');
+        if (chkId == "chkAllView") chk = tr.querySelector('.col-view');
+        
+        if (chk) chk.checked = check;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const selectAllRows = document.getElementById('chkSelectAllRows');
+    if (selectAllRows) {
+        selectAllRows.addEventListener('change', (e) => {
+            document.querySelectorAll('.row-select').forEach(cb => cb.checked = e.target.checked);
+        });
+    }
+
+    const txtFilter = document.getElementById('txtPageFilter');
+    if (txtFilter) {
+        txtFilter.addEventListener('input', (e) => {
+            const q = e.target.value.toLowerCase();
+            document.querySelectorAll('#ctl00_ContentPlaceHolder1_gvWebPages tbody tr').forEach(tr => {
+                const text = tr.innerText.toLowerCase();
+                tr.style.display = text.includes(q) ? '' : 'none';
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

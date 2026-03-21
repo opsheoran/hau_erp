@@ -1,0 +1,44 @@
+
+    @staticmethod
+    def get_rejected_requests(emp_id, page=1, per_page=10):
+        offset = (page - 1) * per_page
+        total = DB.fetch_scalar("SELECT COUNT(*) FROM SAL_Leave_Request_Mst WHERE fk_reportingto = ? AND leavestatus = 'R'", [emp_id])
+        query = f"""
+        SELECT R.pk_leavereqid as RequestID, E.empname as EmployeeName, E.empcode, 
+        L.leavetype as LeaveType,
+        CONVERT(varchar, R.reqdate, 103) as RequestDate,
+        R.StartTime as RequestTime,
+        CONVERT(varchar, R.fromdate, 103) as FromDate,
+        CONVERT(varchar, R.todate, 103) as ToDate,
+        R.totalleavedays as Days,
+        CONVERT(varchar, R.responsedate, 103) as ActionDate,
+        R.reasonforleave as Reason, R.remarks as Comments
+        FROM SAL_Leave_Request_Mst R
+        INNER JOIN SAL_Employee_Mst E ON R.fk_reqempid = E.pk_empid
+        INNER JOIN SAL_Leavetype_Mst L ON R.fk_leaveid = L.pk_leaveid
+        WHERE R.fk_reportingto = ? AND R.leavestatus = 'R'
+        ORDER BY R.responsedate DESC
+        OFFSET {offset} ROWS FETCH NEXT {per_page} ROWS ONLY
+        """
+        return DB.fetch_all(query, [emp_id]), total
+
+    @staticmethod
+    def get_lower_level_stats(emp_id):
+        # Requests where the current user is an upper-level approver but lower levels already acted
+        # Implementation depends on workflow mapping; using placeholder for now
+        return []
+
+    @staticmethod
+    def get_upper_level_stats(emp_id):
+        # Requests where the current user acted but an upper-level approver also acted
+        query = """
+        SELECT R.pk_leavereqid as RequestID, E.empname as EmployeeName, L.leavetype as LeaveType,
+        CONVERT(varchar, R.reqdate, 103) as RequestDate, CONVERT(varchar, R.fromdate, 103) as FromDate,
+        CONVERT(varchar, R.todate, 103) as ToDate, R.totalleavedays as Days,
+        R.remarks as Comments, R.contactno
+        FROM SAL_Leave_Request_Mst R
+        INNER JOIN SAL_Employee_Mst E ON R.fk_reqempid = E.pk_empid
+        INNER JOIN SAL_Leavetype_Mst L ON R.fk_leaveid = L.pk_leaveid
+        WHERE R.fk_reportingto = ? AND R.leavestatus IN ('A','R')
+        """
+        return DB.fetch_all(query, [emp_id])

@@ -1,0 +1,831 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .inner-tab-container { margin-top: 10px; }
+    .inner-tabbing { border-bottom: 2px solid #3c8dbc; margin-bottom: 15px; }
+    .inner-tab { 
+        display: inline-block; padding: 6px 15px; cursor: pointer; background: #eee; 
+        border: 1px solid #ddd; border-bottom: none; margin-right: 3px; font-size: 11px;
+        font-weight: bold;
+    }
+    .inner-tab.active { background: #3c8dbc; color: #fff; border-color: #3c8dbc; }
+    
+    .tab-content { display: none; padding: 10px; border: 1px solid #ddd; border-top: none; background: #fff; }
+    .tab-content.active { display: block; }
+
+    /* Modal Styling */
+    .modal-overlay {
+        display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+        background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+        background-color: #fff; margin: 10% auto; padding: 20px; border: 1px solid #888;
+        width: 50%; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+</style>
+
+<div class="hau-card">
+    <div class="tableheading" style="margin-bottom:0;">
+        <span class="mainheadingborderbottom">Student Biodata</span>
+    </div>
+
+    <!-- INNER TABS (Sub-modules of BioData) -->
+    <div class="inner-tab-container" style="padding: 0 15px;">
+        <div class="inner-tabbing">
+            <div class="inner-tab active" onclick="showTab('basic')">Basic Details</div>
+            <div class="inner-tab" onclick="showTab('category')">Category Details</div>
+            <div class="inner-tab" onclick="showTab('education')">Education</div>
+            <div class="inner-tab" onclick="showTab('previous')">Previous Degree Course Details</div>
+            <div class="inner-tab" onclick="showTab('sports')">Sports/Preadmission Details</div>
+        </div>
+
+        <form method="POST" id="bioForm" enctype="multipart/form-data">
+            <input type="hidden" name="pk_sid" id="pk_sid" value="{{ student_data.basic.pk_sid if student_data else '' }}">
+            
+            <!-- BASIC DETAILS TAB -->
+            <div id="tab-basic" class="tab-content active">
+                <table class="form-table" width="100%">
+                    <tr>
+                        <td class="vtext" width="15%">Upload Image</td>
+                        <td class="colon">:</td>
+                        <td width="35%">
+                            <div style="display:flex; align-items:center;">
+                                <img id="stu_img_preview" src="{{ url_for('static', filename='images/User_icon.jpg') }}" style="height:60px; width:60px; border:1px solid #ccc; margin-right:10px;">
+                                <input type="file" name="stu_image" accept="image/*" onchange="previewImage(this)" style="font-size:10px;">
+                            </div>
+                        </td>
+                        <td class="vtext" width="15%">Admission No.</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <input type="text" name="admission_no" id="c_adm_no" class="textbox w-150" value="{{ student_data.basic.AdmissionNo if student_data else '' }}">
+                            <span class="required">*</span>
+                            <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="searchByAdmissionNo()" title="Search by Admission/Enrollment No" style="cursor:pointer; vertical-align:middle; width:18px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">College Name</td>
+                        <td class="colon">:</td>
+                        <td colspan="4">
+                            <select name="college_id" id="c_college" class="dropdown w-300" required>
+                                <option value="">--Select College--</option>
+                                {% for c in lookups.colleges %}<option value="{{ c.id }}" {% if student_data and student_data.basic.fk_collegeid == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+                            </select> <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree Name</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="degree_id" id="c_degree" class="dropdown w-200" required>
+                                <option value="">--Select Degree--</option>
+                                {% for d in lookups.degrees %}<option value="{{ d.id }}" {% if student_data and student_data.basic.fk_degreeid == d.id %}selected{% endif %}>{{ d.name }}</option>{% endfor %}
+                            </select> <span class="required">*</span>
+                        </td>
+                        <td class="vtext">Session</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="session_id" id="c_session" class="dropdown w-150" required>
+                                <option value="">--Select Session--</option>
+                                {% for s in lookups.sessions %}<option value="{{ s.id }}" {% if student_data and student_data.basic.fk_adm_session == s.id %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
+                            </select> <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Name of the Candidate</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="salutation_id" id="c_sal" class="dropdown w-75">
+                                {% for s in lookups.salutations %}<option value="{{ s.id }}" {% if student_data and student_data.basic.fk_salutationid == s.id %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
+                            </select> <span class="required">*</span>
+                            <input type="text" name="fullname" id="c_name" class="textbox w-150" value="{{ student_data.basic.fullname if student_data else '' }}" required> <span class="required">*</span>
+                        </td>
+                        <td class="vtext">Date Of Birth</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <input type="date" name="dob" id="c_dob" class="textbox w-150" value="{{ student_data.basic.dob if student_data and student_data.basic.dob else '' }}" required>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="vtext">Father Name</td>
+                        <td class="colon">:</td>
+                        <td><input type="text" name="fname" id="c_fname" class="textbox w-200" value="{{ student_data.basic.fname if student_data else '' }}"></td>
+                        <td class="vtext">Father's age/DOB</td>
+                        <td class="colon">:</td>
+                        <td><input type="date" name="f_dob" id="c_fdob" class="textbox w-150" value="{{ student_data.basic.FatherDOB if student_data and student_data.basic.FatherDOB else '' }}"></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Occupation Of Father</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="f_occu_id" id="c_foccu" class="dropdown w-200">
+                                <option value="">---Select---</option>
+                                {% for o in lookups.occupations %}<option value="{{ o.id }}" {% if student_data and student_data.basic.FK_occuidF == o.id %}selected{% endif %}>{{ o.name }}</option>{% endfor %}
+                            </select><br>
+                            <textarea name="f_occu_addr" id="c_foccu_addr" class="textbox w-250" style="margin-top:3px; height:30px;">{{ student_data.basic.OccuAddressF if student_data else '' }}</textarea>
+                        </td>
+                        <td class="vtext">Education Qualification</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="f_edu_id" id="c_fedu" class="dropdown w-200">
+                                <option value="">----Select---</option>
+                                {% for q in lookups.qualifications %}<option value="{{ q.id }}" {% if student_data and student_data.basic.FK_EduQuaid == q.id %}selected{% endif %}>{{ q.name }}</option>{% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="vtext">Mother Name</td>
+                        <td class="colon">:</td>
+                        <td><input type="text" name="mname" id="c_mname" class="textbox w-200" value="{{ student_data.basic.mname if student_data else '' }}"></td>
+                        <td class="vtext">Mother's age/DOB</td>
+                        <td class="colon">:</td>
+                        <td><input type="date" name="m_dob" id="c_mdob" class="textbox w-150" value="{{ student_data.basic.MotherDOB if student_data and student_data.basic.MotherDOB else '' }}"></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Occupation Of Mother</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="m_occu_id" id="c_moccu" class="dropdown w-200">
+                                <option value="">---Select---</option>
+                                {% for o in lookups.occupations %}<option value="{{ o.id }}" {% if student_data and student_data.basic.FK_occuidM == o.id %}selected{% endif %}>{{ o.name }}</option>{% endfor %}
+                            </select><br>
+                            <textarea name="m_occu_addr" id="c_moccu_addr" class="textbox w-250" style="margin-top:3px; height:30px;">{{ student_data.basic.OccuAddressM if student_data else '' }}</textarea>
+                        </td>
+                        <td class="vtext">Education Qualification</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="m_edu_id" id="c_medu" class="dropdown w-200">
+                                <option value="">---Select---</option>
+                                {% for q in lookups.qualifications %}<option value="{{ q.id }}" {% if student_data and student_data.basic.FK_EduQuaidM == q.id %}selected{% endif %}>{{ q.name }}</option>{% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Annual income of Family</td>
+                        <td class="colon">:</td>
+                        <td><input type="number" name="family_income" id="c_income" class="textbox w-100" value="{{ student_data.basic.FamilyAnnualIncome if student_data else '' }}"> <span class="required">*</span></td>
+                    </tr>
+
+                    <tr><td colspan="6" height="20"></td></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <input type="submit" value="SAVE" class="button-common">
+                            <input type="button" value="Next" class="button-common" onclick="showTab('category')" style="margin-left:10px;">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- CATEGORY DETAILS TAB -->
+            <div id="tab-category" class="tab-content">
+                <table class="form-table" width="100%">
+                    <tr>
+                        <td class="vtext" width="15%">Category</td><td class="colon">:</td>
+                        <td width="35%">
+                            <select name="cat_id" id="c_cat" class="dropdown w-200" required>
+                                <option value="">--Select--</option>
+                                {% for c in lookups.categories %}<option value="{{ c.id }}" {% if student_data and student_data.basic.fk_catid == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+                            </select> <span class="required">*</span>
+                        </td>
+                        <td class="vtext" width="15%">Religion</td><td class="colon">:</td>
+                        <td>
+                            <select name="rel_id" id="c_rel" class="dropdown w-200" required>
+                                <option value="">--Select--</option>
+                                {% for r in lookups.religions %}<option value="{{ r.id }}" {% if student_data and student_data.basic.fk_religionid == r.id %}selected{% endif %}>{{ r.name }}</option>{% endfor %}
+                            </select> <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Caste/sub caste in category</td><td class="colon">:</td>
+                        <td><input type="text" name="caste" id="c_caste" class="textbox w-200" value="{{ student_data.basic.Cast if student_data else '' }}"> <span class="required">*</span></td>
+                        <td class="vtext">Aadhaar No.</td><td class="colon">:</td>
+                        <td><input type="text" name="aadhar_no" id="c_aadhar" class="textbox w-200" maxlength="12" value="{{ student_data.basic.AdharNo if student_data else '' }}"> <span class="required">*</span></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Telephone No. (Residency)</td><td class="colon">:</td>
+                        <td><input type="text" name="tel_res" id="c_tel_res" class="textbox w-150" placeholder="XXX-XXXXXX" value="{{ student_data.basic.Telephoneno if student_data else '' }}"> <span class="required">*</span></td>
+                        <td class="vtext">Ph.No</td><td class="colon">:</td>
+                        <td><input type="text" name="ph_no" id="c_ph_no" class="textbox w-150" value="{{ student_data.basic.phoneno if student_data else '' }}"> <span class="required">*</span></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Students Mobile No.</td><td class="colon">:</td>
+                        <td><input type="text" name="stu_mobile" id="c_stu_mobile" class="textbox w-150" value="{{ student_data.basic.CorrPhoneno if student_data else '' }}"> <span class="required">*</span></td>
+                        <td class="vtext">Parents Contact No.</td><td class="colon">:</td>
+                        <td><input type="text" name="parent_mobile" id="c_parent_mobile" class="textbox w-150" value="{{ student_data.basic.PContactMobileNo if student_data else '' }}"> <span class="required">*</span></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">E-mail ID</td><td class="colon">:</td>
+                        <td><input type="email" name="email" id="c_email" class="textbox w-200" value="{{ student_data.basic.s_emailid if student_data else '' }}"> <span class="required">*</span></td>
+                        <td class="vtext">Landline with code</td><td class="colon">:</td>
+                        <td><input type="text" name="landline" id="c_landline" class="textbox w-150" placeholder="XXX-XXXXXX" value="{{ student_data.basic.PContactNoLandline if student_data else '' }}"> <span class="required">*</span></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Correspondence address</td><td class="colon">:</td>
+                        <td><textarea name="postal_address" id="c_corr_addr" class="textbox w-300" style="height:40px;">{{ student_data.basic.postaladdress if student_data else '' }}</textarea></td>
+                        <td class="vtext">Permanent Address</td><td class="colon">:</td>
+                        <td><textarea name="p_address" id="c_perm_addr" class="textbox w-300" style="height:40px;">{{ student_data.basic.paddress if student_data else '' }}</textarea> <span class="required">*</span></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Type</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="addr_type" id="c_type_rural" value="Rural" {% if student_data and student_data.basic.PAddressType == 'Rural' %}checked{% endif %}> Rural/Panchyat</label>
+                            <label style="margin-left:10px;"><input type="radio" name="addr_type" id="c_type_urban" value="Urban" {% if student_data and student_data.basic.PAddressType == 'Urban' %}checked{% endif %}> Urban/Municipalty</label>
+                        </td>
+                        <td class="vtext">Criminal Conviction?</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="criminal" id="c_crim_y" value="Y" {% if student_data and student_data.basic.CriminalCase == 'Y' %}checked{% endif %}> Yes</label>
+                            <label style="margin-left:10px;"><input type="radio" name="criminal" id="c_crim_n" value="N" {% if not student_data or student_data.basic.CriminalCase == 'N' %}checked{% endif %}> No</label>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+
+                    <tr><td colspan="6" height="25"></td></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <input type="button" value="PREVIOUS" class="button-common" onclick="showTab('basic')">
+                            <input type="submit" value="SAVE" class="button-common" style="margin-left:10px;">
+                            <input type="button" value="Next" class="button-common" onclick="showTab('education')" style="margin-left:10px;">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- EDUCATION TAB -->
+            <div id="tab-education" class="tab-content">
+                <table class="form-table" width="100%">
+                    <tr>
+                        <td class="vtext" width="15%">No of siblings</td><td class="colon">:</td>
+                        <td width="35%">
+                            Brother <input type="number" name="sib_bro" id="c_bro" class="textbox w-50" value="{{ student_data.basic.NoOfSiblingBro if student_data else '0' }}">
+                            Sister <input type="number" name="sib_sis" id="c_sis" class="textbox w-50" value="{{ student_data.basic.NoOfSiblingSis if student_data else '0' }}">
+                        </td>
+                        <td class="vtext" width="15%">Govt job family members</td><td class="colon">:</td>
+                        <td><input type="number" name="gov_job" id="c_gov_job" class="textbox w-75" value="{{ student_data.basic.MembersInGovJob if student_data else '0' }}"> <span class="required">*</span></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">BPL/APL</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="bpl_apl" id="c_bpl" value="BPL" {% if student_data and student_data.basic.IsBPL == 'BPL' %}checked{% endif %}> BPL</label>
+                            <label style="margin-left:10px;"><input type="radio" name="bpl_apl" id="c_apl" value="APL" {% if not student_data or student_data.basic.IsBPL == 'APL' %}checked{% endif %}> APL</label>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext">Have Land</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="have_land" id="c_land_y" value="Y" {% if student_data and student_data.basic.HaveLand == 'Y' %}checked{% endif %}> Yes</label>
+                            <label style="margin-left:10px;"><input type="radio" name="have_land" id="c_land_n" value="N" {% if not student_data or student_data.basic.HaveLand == 'N' %}checked{% endif %}> No</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Start schooling</td><td class="colon">:</td>
+                        <td><input type="number" name="start_school" id="c_start_school" class="textbox w-75" value="{{ student_data.basic.StartAgeSchooling if student_data else '' }}"> Years <span class="required">*</span></td>
+                        <td class="vtext">Family Type</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="family_type" id="c_fam_joint" value="Joint" {% if student_data and student_data.basic.IsFamilyJoint == 'Joint' %}checked{% endif %}> Joint</label>
+                            <label style="margin-left:10px;"><input type="radio" name="family_type" id="c_fam_nuc" value="Nuclear" {% if not student_data or student_data.basic.IsFamilyJoint == 'Nuclear' %}checked{% endif %}> Nuclear</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">House Type</td><td class="colon">:</td>
+                        <td colspan="4">
+                            <label><input type="radio" name="house_type" id="c_house_own" value="Owned" {% if student_data and student_data.basic.HouseDisc == 'Owned' %}checked{% endif %}> Owned</label>
+                            <label style="margin-left:10px;"><input type="radio" name="house_type" id="c_house_rent" value="Rental" {% if student_data and student_data.basic.HouseDisc == 'Rental' %}checked{% endif %}> Rental</label>
+                            <label style="margin-left:10px;"><input type="radio" name="house_type" id="c_house_self" value="Self Built" {% if student_data and student_data.basic.HouseDisc == 'Self Built' %}checked{% endif %}> Self Built</label>
+                            <label style="margin-left:10px;"><input type="radio" name="house_type" id="c_house_anc" value="Ancestral" {% if student_data and student_data.basic.HouseDisc == 'Ancestral' %}checked{% endif %}> Ancestral</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Your hobbies</td><td class="colon">:</td>
+                        <td><input type="text" name="hobbies" id="c_hobbies" class="textbox w-250" value="{{ student_data.basic.Hobbies if student_data else '' }}"></td>
+                        <td class="vtext">Parents married since</td><td class="colon">:</td>
+                        <td><input type="text" name="married_since" id="c_married_since" class="textbox w-150" value="{{ student_data.basic.PerentMarriedDate if student_data else '' }}"></td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Livestock/pets</td><td class="colon">:</td>
+                        <td><input type="text" name="pets" id="c_pets" class="textbox w-250" value="{{ student_data.basic.PetOwnedDisc if student_data else '' }}"></td>
+                        <td class="vtext">Why opt Vet sciences</td><td class="colon">:</td>
+                        <td><input type="text" name="why_vet" id="c_why_vet" class="textbox w-250" value="{{ student_data.basic.WhyOptVS if student_data else '' }}"></td>
+                    </tr>
+                </table>
+
+                <div class="tablesubheading" style="margin-top:15px; background:none;">
+                    <span class="subheadingborderbottom">Education Details Of Student</span>
+                </div>
+                <table class="table-grid-view" width="100%" id="eduTable">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="3%">S.No.</th>
+                            <th>Education Type</th>
+                            <th>School Type</th>
+                            <th>School Details</th>
+                            <th width="5%">DEL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eduBody"></tbody>
+                </table>
+                <div style="text-align:right; margin-top:5px;">
+                    <input type="button" value="ADD NEW DETAIL" class="button-common" onclick="addSchoolingRow()" style="width:150px;">
+                </div>
+
+                <div style="margin-top:20px;">
+                    <input type="button" value="PREVIOUS" class="button-common" onclick="showTab('category')">
+                    <input type="submit" value="SAVE" class="button-common" style="margin-left:10px;">
+                    <input type="button" value="NEXT" class="button-common" onclick="showTab('previous')" style="margin-left:10px;">
+                </div>
+            </div>
+            
+            <!-- PREVIOUS DEGREE TAB -->
+            <div id="tab-previous" class="tab-content">
+                <div class="tablesubheading" style="background:none;">
+                    <span class="subheadingborderbottom">Undergraduate Preparation Of The Major Field</span>
+                </div>
+                <table class="form-table">
+                    <tr>
+                        <td class="vtext">Previous Degree Name</td><td class="colon">:</td>
+                        <td>
+                            <select name="ug_degree_id" id="c_ug_degree" class="dropdown w-200">
+                                <option value="0">--Select Degree--</option>
+                                {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                            </select> <span class="required">*</span>
+                        </td>
+                        <td class="vtext">NOT IN LIST</td><td class="colon">:</td>
+                        <td><input type="text" name="ug_degree_other" id="c_ug_degree_other" class="textbox w-200"></td>
+                    </tr>
+                </table>
+                <table class="table-grid-view" width="100%" id="ugTable">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="3%">S.No.</th>
+                            <th width="20%">Search Course</th>
+                            <th width="20%">Course Name</th>
+                            <th width="10%">Course Code</th>
+                            <th width="12%">Course Type</th>
+                            <th width="8%">Cr_Th</th>
+                            <th width="8%">Cr_Pr</th>
+                            <th width="8%">Grade</th>
+                            <th width="8%">Marks</th>
+                            <th width="5%">DEL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ugBody"></tbody>
+                </table>
+                <div style="text-align:right; margin-top:5px;">
+                    <input type="button" value="ADD NEW DETAIL" class="button-common" onclick="addUgRow()" style="width:150px;">
+                </div>
+
+                <div class="tablesubheading" style="margin-top:20px; background:none;">
+                    <span class="subheadingborderbottom">Postgraduate Preparation Of The Major Field</span>
+                </div>
+                <table class="form-table">
+                    <tr>
+                        <td class="vtext">Previous Degree Name</td><td class="colon">:</td>
+                        <td>
+                            <select name="pg_degree_id" id="c_pg_degree" class="dropdown w-200">
+                                <option value="0">--Select Degree--</option>
+                                {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                            </select> <span class="required">*</span>
+                        </td>
+                        <td class="vtext">NOT IN LIST</td><td class="colon">:</td>
+                        <td><input type="text" name="pg_degree_other" id="c_pg_degree_other" class="textbox w-200"></td>
+                    </tr>
+                </table>
+                <table class="table-grid-view" width="100%" id="pgTable">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="3%">S.No.</th>
+                            <th width="20%">Search Course</th>
+                            <th width="20%">Course Name</th>
+                            <th width="10%">Course Code</th>
+                            <th width="12%">Course Type</th>
+                            <th width="8%">Cr_Th</th>
+                            <th width="8%">Cr_Pr</th>
+                            <th width="8%">Grade</th>
+                            <th width="8%">Marks</th>
+                            <th width="5%">DEL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pgBody"></tbody>
+                </table>
+                <div style="text-align:right; margin-top:5px;">
+                    <input type="button" value="ADD NEW DETAIL" class="button-common" onclick="addPgRow()" style="width:150px;">
+                </div>
+
+                <div style="margin-top:20px;">
+                    <input type="button" value="PREVIOUS" class="button-common" onclick="showTab('education')">
+                    <input type="submit" value="SAVE" class="button-common" style="margin-left:10px;">
+                    <input type="button" value="NEXT" class="button-common" onclick="showTab('sports')" style="margin-left:10px;">
+                </div>
+            </div>
+
+            <!-- SPORTS TAB -->
+            <div id="tab-sports" class="tab-content">
+                <div class="tablesubheading" style="background:none;">
+                    <span class="subheadingborderbottom">Sports Participation Details</span>
+                </div>
+                <table class="form-table" width="100%">
+                    <tr>
+                        <td class="vtext">Participation in sports/recreation</td><td class="colon">:</td>
+                        <td width="35%">
+                            <label><input type="radio" name="sports_part" id="c_sport_y" value="Y"> Yes</label>
+                            <label style="margin-left:10px;"><input type="radio" name="sports_part" id="c_sport_n" value="N" checked> No</label>
+                        </td>
+                        <td class="vtext" width="15%">Do you have a passport?</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="have_passport" id="c_pass_y" value="Y" onchange="toggleDtl(this, 'passport_dtl')"> Yes</label>
+                            <label style="margin-left:10px;"><input type="radio" name="have_passport" id="c_pass_n" value="N" checked onchange="toggleDtl(this, 'passport_dtl')"> No</label>
+                            <input type="text" name="passport_dtl" id="passport_dtl" class="textbox w-150" style="display:none;" placeholder="Give details">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Read daily newspaper?</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="read_news" id="c_news_y" value="Y" onchange="toggleDtl(this, 'news_dtl')"> Yes</label>
+                            <label style="margin-left:10px;"><input type="radio" name="read_news" id="c_news_n" value="N" checked onchange="toggleDtl(this, 'news_dtl')"> No</label>
+                            <input type="text" name="news_dtl" id="news_dtl" class="textbox w-150" style="display:none;" placeholder="Give details">
+                        </td>
+                        <td class="vtext">Traveled abroad?</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="travel_abroad" id="c_abr_y" value="Y" onchange="toggleDtl(this, 'abroad_dtl')"> Yes</label>
+                            <label style="margin-left:10px;"><input type="radio" name="travel_abroad" id="c_abr_n" value="N" checked onchange="toggleDtl(this, 'abroad_dtl')"> No</label>
+                            <input type="text" name="abroad_dtl" id="abroad_dtl" class="textbox w-150" style="display:none;" placeholder="Purpose, duration etc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Family member staying abroad?</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="relative_abroad" id="c_rel_abr_y" value="Y" onchange="toggleDtl(this, 'relative_dtl')"> Yes</label>
+                            <label style="margin-left:10px;"><input type="radio" name="relative_abroad" id="c_rel_abr_n" value="N" checked onchange="toggleDtl(this, 'relative_dtl')"> No</label>
+                            <input type="text" name="relative_dtl" id="relative_dtl" class="textbox w-150" style="display:none;" placeholder="Give details">
+                        </td>
+                        <td class="vtext">Coaching for admission test?</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="coaching" id="c_coach_y" value="Y"> Yes</label>
+                            <label style="margin-left:10px;"><input type="radio" name="coaching" id="c_coach_n" value="N" checked> No</label>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Possess a P.C./Laptop?</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="pc_laptop" id="c_pc_y" value="Y"> Yes</label>
+                            <label style="margin-left:10px;"><input type="radio" name="pc_laptop" id="c_pc_n" value="N" checked> No</label>
+                        </td>
+                        <td class="vtext">Are you net connected?</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="net_conn" id="c_net_y" value="Y"> Yes</label>
+                            <label style="margin-left:10px;"><input type="radio" name="net_conn" id="c_net_n" value="N" checked> No</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Intend after degree?</td><td class="colon">:</td>
+                        <td colspan="4">
+                            <label><input type="radio" name="intend" id="c_int_hs" value="Higher Studies"> Higher Studies</label>
+                            <label style="margin-left:10px;"><input type="radio" name="intend" id="c_int_gov" value="Govt. Job"> Govt. Job</label>
+                            <label style="margin-left:10px;"><input type="radio" name="intend" id="c_int_pvt" value="Pvt. Practice"> Pvt. Practice</label>
+                            <label style="margin-left:10px;"><input type="radio" name="intend" id="c_int_res" value="Research"> Research</label>
+                            <label style="margin-left:10px;"><input type="radio" name="intend" id="c_int_oth" value="Other"> Other</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Land ownership?</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="land_possess" id="c_land_poss_y" value="Y"> Yes</label>
+                            <label style="margin-left:10px;"><input type="radio" name="land_possess" id="c_land_poss_n" value="N" checked> No</label>
+                        </td>
+                        <td class="vtext">Family own vehicle?</td><td class="colon">:</td>
+                        <td>
+                            <label><input type="radio" name="have_vehicle" id="c_veh_y" value="Y" onchange="toggleDtl(this, 'vehicle_dtl')"> Yes</label>
+                            <label style="margin-left:10px;"><input type="radio" name="have_vehicle" id="c_veh_n" value="N" checked onchange="toggleDtl(this, 'vehicle_dtl')"> No</label>
+                            <input type="text" name="vehicle_dtl" id="vehicle_dtl" class="textbox w-150" style="display:none;" placeholder="Give details">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Lines of internet/computer</td><td class="colon">:</td>
+                        <td colspan="4"><input type="text" name="net_lines" id="c_net_lines" class="textbox w-300"></td>
+                    </tr>
+                </table>
+
+                <div class="tablesubheading" style="margin-top:15px; background:none;">
+                    <span class="subheadingborderbottom">PreAdmission Details</span>
+                </div>
+                <table class="table-grid-view" width="100%" id="preTable">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="3%">S.No.</th>
+                            <th width="15%">Exam</th>
+                            <th>Univ/Board</th>
+                            <th width="8%">Year</th>
+                            <th width="10%">Roll. No.</th>
+                            <th width="8%">Max Marks</th>
+                            <th width="8%">Marks Obt.</th>
+                            <th width="8%">%</th>
+                            <th>Subjects</th>
+                            <th width="5%">DEL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="preBody"></tbody>
+                </table>
+                <div style="text-align:right; margin-top:5px;">
+                    <input type="button" value="ADD NEW DETAIL" class="button-common" onclick="addPreRow()" style="width:150px;">
+                </div>
+
+                <div style="margin-top:20px;">
+                    <input type="button" value="PREVIOUS" class="button-common" onclick="showTab('previous')">
+                    <input type="submit" value="SAVE" class="button-common" style="margin-left:10px;">
+                </div>
+            </div>
+        </form>
+
+        <script>
+        const lookups = {{ lookups|tojson }};
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.inner-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            const tabs = document.querySelectorAll('.inner-tab');
+            tabs.forEach(t => { if(t.getAttribute('onclick').includes(tabId)) t.classList.add('active'); });
+        }
+
+        function toggleDtl(radio, targetId) { 
+            const target = document.getElementById(targetId);
+            if(target) target.style.display = radio.value === 'Y' ? 'inline-block' : 'none'; 
+        }
+
+        function onCourseChange(select, prefix) {
+            const row = select.closest('tr');
+            const opt = select.options[select.selectedIndex];
+            const hiddenCid = row.querySelector(`input[name="${prefix}_cid[]"]`);
+            const nameInput = row.querySelector(`input[name="${prefix}_cname[]"]`);
+            const codeInput = row.querySelector(`input[name="${prefix}_ccode[]"]`);
+            
+            if (opt.value) {
+                hiddenCid.value = opt.value;
+                nameInput.value = opt.getAttribute('data-name');
+                codeInput.value = opt.getAttribute('data-code');
+            } else {
+                hiddenCid.value = '';
+                nameInput.value = '';
+                codeInput.value = '';
+            }
+        }
+
+        function addSchoolingRow(data = null) {
+            const tbody = document.getElementById('eduBody');
+            const rowCount = tbody.rows.length;
+            const row = tbody.insertRow();
+            row.className = rowCount % 2 === 0 ? 'item-style' : 'item-style-alt';
+            row.innerHTML = `
+                <td align="center">${rowCount + 1}</td>
+                <td><select name="edu_type_id[]" class="dropdown w-200">${lookups.edu_types.map(e => `<option value="${e.id}" ${data && data.fk_Edutypeid == e.id ? 'selected' : ''}>${e.name}</option>`).join('')}</select></td>
+                <td><select name="school_type[]" class="dropdown w-150"><option value="Government" ${data && data.fK_schooltypeid == 'Government' ? 'selected' : ''}>Government</option><option value="Private" ${data && data.fK_schooltypeid == 'Private' ? 'selected' : ''}>Private</option></select></td>
+                <td><input type="text" name="school_dtl[]" class="textbox w-300" value="${data ? (data.details || '') : ''}"></td>
+                <td align="center"><img src="{{ url_for('static', filename='images/delete.gif') }}" style="cursor:pointer" onclick="this.closest('tr').remove(); renumberRows('eduBody');"></td>
+            `;
+        }
+
+                function addUgRow(data = null) {
+
+                    const tbody = document.getElementById('ugBody');
+
+                    const rowCount = tbody.rows.length;
+
+                    const row = tbody.insertRow();
+
+                    row.className = rowCount % 2 === 0 ? 'item-style' : 'item-style-alt';
+
+                    row.innerHTML = `
+
+                        <td align="center">${rowCount + 1}</td>
+
+                        <td>
+
+                            <select class="dropdown w-200" onchange="onCourseChange(this, 'ug')">
+
+                                <option value="">--Search Course--</option>
+
+                                ${lookups.courses.map(c => `<option value="${c.id}" ${data && data.fk_courseid == c.id ? 'selected' : ''} data-code="${c.coursecode}" data-name="${c.coursename}">${c.name}</option>`).join('')}
+
+                            </select>
+
+                            <input type="hidden" name="ug_cid[]" value="${data ? (data.fk_courseid || '') : ''}">
+
+                        </td>
+
+                        <td><input type="text" name="ug_cname[]" class="textbox w-200" value="${data ? (data.coursename || '') : ''}"></td>
+
+                        <td><input type="text" name="ug_ccode[]" class="textbox w-100" value="${data ? (data.coursecode || '') : ''}"></td>
+
+                        <td>
+
+                            <select name="ug_ctype[]" class="dropdown w-100">
+
+                                ${lookups.course_types.map(t => `<option value="${t.id}" ${data && data.fk_coursetypeid == t.id ? 'selected' : ''}>${t.name}</option>`).join('')}
+
+                            </select>
+
+                        </td>
+
+                        <td><input type="number" step="0.5" name="ug_th[]" class="textbox w-50" value="${data ? (data.crtheory || 0) : 0}"></td>
+
+                        <td><input type="number" step="0.5" name="ug_pr[]" class="textbox w-50" value="${data ? (data.crpractical || 0) : 0}"></td>
+
+                        <td>
+
+                            <select name="ug_grade[]" class="dropdown w-50">
+
+                                <option value="">--</option>
+
+                                ${lookups.grades.map(g => `<option value="${g.id}" ${data && data.isgrade == g.id ? 'selected' : ''}>${g.name}</option>`).join('')}
+
+                            </select>
+
+                        </td>
+
+                        <td><input type="text" name="ug_marks[]" class="textbox w-50" value="${data ? (data.marks || '') : ''}"></td>
+
+                        <td align="center"><img src="{{ url_for('static', filename='images/delete.gif') }}" style="cursor:pointer" onclick="this.closest('tr').remove(); renumberRows('ugBody');"></td>
+
+                    `;
+
+                }
+
+        
+
+        function addPgRow(data = null) {
+            const tbody = document.getElementById('pgBody');
+            const rowCount = tbody.rows.length;
+            const row = tbody.insertRow();
+            row.className = rowCount % 2 === 0 ? 'item-style' : 'item-style-alt';
+            row.innerHTML = `
+                <td align="center">${rowCount + 1}</td>
+                <td>
+                    <select class="dropdown w-200" onchange="onCourseChange(this, 'pg')">
+                        <option value="">--Search Course--</option>
+                        ${lookups.courses.map(c => `<option value="${c.id}" ${data && data.fk_courseid == c.id ? 'selected' : ''} data-code="${c.coursecode}" data-name="${c.coursename}">${c.name}</option>`).join('')}
+                    </select>
+                    <input type="hidden" name="pg_cid[]" value="${data ? (data.fk_courseid || '') : ''}">
+                </td>
+                <td><input type="text" name="pg_cname[]" class="textbox w-200" value="${data ? (data.coursename || '') : ''}"></td>
+                <td><input type="text" name="pg_ccode[]" class="textbox w-100" value="${data ? (data.coursecode || '') : ''}"></td>
+                <td><select name="pg_ctype[]" class="dropdown w-100">${lookups.course_types.map(t => `<option value="${t.id}" ${data && data.fk_coursetypeid == t.id ? 'selected' : ''}>${t.name}</option>`).join('')}</select></td>
+                <td><input type="number" step="0.5" name="pg_th[]" class="textbox w-50" value="${data ? (data.crtheory || 0) : 0}"></td>
+                <td><input type="number" step="0.5" name="pg_pr[]" class="textbox w-50" value="${data ? (data.crpractical || 0) : 0}"></td>
+                <td><select name="pg_grade[]" class="dropdown w-50"><option value="">--</option>${lookups.grades.map(g => `<option value="${g.id}" ${data && data.isgrade == g.id ? 'selected' : ''}>${g.name}</option>`).join('')}</select></td>
+                <td><input type="text" name="pg_marks[]" class="textbox w-50" value="${data ? (data.marks || '') : ''}"></td>
+                <td align="center"><img src="{{ url_for('static', filename='images/delete.gif') }}" style="cursor:pointer" onclick="this.closest('tr').remove(); renumberRows('pgBody');"></td>
+            `;
+        }
+
+        function addPreRow(data = null) {
+            const tbody = document.getElementById('preBody');
+            const rowCount = tbody.rows.length;
+            const row = tbody.insertRow();
+            row.className = rowCount % 2 === 0 ? 'item-style' : 'item-style-alt';
+            row.innerHTML = `
+                <td align="center">${rowCount + 1}</td>
+                <td><select name="pre_exam[]" class="dropdown w-150">${lookups.exams.map(e => `<option value="${e.id}" ${data && data.fk_ExamId == e.id ? 'selected' : ''}>${e.name}</option>`).join('')}</select></td>
+                <td><input type="text" name="pre_univ[]" class="textbox w-200" value="${data ? (data.Univ_Board || '') : ''}"></td>
+                <td><input type="number" name="pre_year[]" class="textbox w-75" value="${data ? (data.Year || '') : ''}"></td>
+                <td><input type="text" name="pre_roll[]" class="textbox w-100" value="${data ? (data.RollNo || '') : ''}"></td>
+                <td><input type="number" name="pre_max[]" class="textbox w-75" value="${data ? (data.MaxMarks || '') : ''}"></td>
+                <td><input type="number" name="pre_obt[]" class="textbox w-75" value="${data ? (data.MarksObtained || '') : ''}"></td>
+                <td><input type="number" step="0.01" name="pre_per[]" class="textbox w-75" value="${data ? (data.Percentage || '') : ''}"></td>
+                <td><input type="text" name="pre_sub[]" class="textbox w-200" value="${data ? (data.SubjectDetails || '') : ''}"></td>
+                <td align="center"><img src="{{ url_for('static', filename='images/delete.gif') }}" style="cursor:pointer" onclick="this.closest('tr').remove(); renumberRows('preBody');"></td>
+            `;
+        }
+
+        function renumberRows(id) {
+            Array.from(document.getElementById(id).rows).forEach((row, i) => {
+                row.cells[0].textContent = i + 1;
+                row.className = i % 2 === 0 ? 'item-style' : 'item-style-alt';
+            });
+        }
+
+        async function searchByAdmissionNo() {
+            const admNo = document.getElementById('c_adm_no').value;
+            if (!admNo) { alert("Please enter Admission/Enrollment No."); return; }
+            window.showToast("Searching for " + admNo + "...", "info");
+            try {
+                const res = await fetch(`/academics/api/student/get_full_details?enrollment_no=${encodeURIComponent(admNo)}`);
+                if(!res.ok) throw new Error("Search failed");
+                const data = await res.json();
+                if (data.error) { window.showToast(data.error, "danger"); return; }
+                populateForm(data);
+            } catch(e) { window.showToast("Error searching student", "danger"); }
+        }
+
+        function populateForm(data) {
+            const b = data.basic;
+            document.getElementById('pk_sid').value = b.pk_sid;
+            document.getElementById('c_adm_no').value = b.AdmissionNo || b.enrollmentno || '';
+            document.getElementById('c_college').value = b.fk_collegeid || '';
+            document.getElementById('c_degree').value = b.fk_degreeid || '';
+            document.getElementById('c_session').value = b.fk_adm_session || '';
+            document.getElementById('c_sal').value = b.fk_salutationid || '';
+            document.getElementById('c_name').value = b.fullname || '';
+            if(b.dob) document.getElementById('c_dob').value = b.dob.split('T')[0];
+            document.getElementById('c_fname').value = b.fname || '';
+            if(b.FatherDOB) document.getElementById('c_fdob').value = b.FatherDOB.split('T')[0];
+            document.getElementById('c_foccu').value = b.FK_occuidF || '';
+            document.getElementById('c_foccu_addr').value = b.OccuAddressF || '';
+            document.getElementById('c_fedu').value = b.FK_EduQuaid || '';
+            document.getElementById('c_mname').value = b.mname || '';
+            if(b.MotherDOB) document.getElementById('c_mdob').value = b.MotherDOB.split('T')[0];
+            document.getElementById('c_moccu').value = b.FK_occuidM || '';
+            document.getElementById('c_moccu_addr').value = b.OccuAddressM || '';
+            document.getElementById('c_medu').value = b.FK_EduQuaidM || '';
+            document.getElementById('c_income').value = b.FamilyAnnualIncome || '';
+
+            // Category details
+            document.getElementById('c_cat').value = b.fk_catid || '';
+            document.getElementById('c_rel').value = b.fk_religionid || '';
+            document.getElementById('c_caste').value = b.Cast || '';
+            document.getElementById('c_aadhar').value = b.AdharNo || '';
+            document.getElementById('c_tel_res').value = b.Telephoneno || '';
+            document.getElementById('c_ph_no').value = b.phoneno || '';
+            document.getElementById('c_stu_mobile').value = b.CorrPhoneno || '';
+            document.getElementById('c_parent_mobile').value = b.PContactMobileNo || '';
+            document.getElementById('c_email').value = b.s_emailid || '';
+            document.getElementById('c_landline').value = b.PContactNoLandline || '';
+            document.getElementById('c_corr_addr').value = b.postaladdress || '';
+            document.getElementById('c_perm_addr').value = b.paddress || '';
+            if(b.PAddressType === 'Rural') document.getElementById('c_type_rural').checked = true; else if(b.PAddressType === 'Urban') document.getElementById('c_type_urban').checked = true;
+            if(b.CriminalCase === 'Y') document.getElementById('c_crim_y').checked = true; else document.getElementById('c_crim_n').checked = true;
+
+            // Education
+            document.getElementById('c_bro').value = b.NoOfSiblingBro || 0;
+            document.getElementById('c_sis').value = b.NoOfSiblingSis || 0;
+            document.getElementById('c_gov_job').value = b.MembersInGovJob || 0;
+            if(b.IsBPL === 'BPL') document.getElementById('c_bpl').checked = true; else document.getElementById('c_apl').checked = true;
+            if(b.HaveLand === 'Y') document.getElementById('c_land_y').checked = true; else document.getElementById('c_land_n').checked = true;
+            document.getElementById('c_start_school').value = b.StartAgeSchooling || '';
+            if(b.IsFamilyJoint === 'Joint') document.getElementById('c_fam_joint').checked = true; else document.getElementById('c_fam_nuc').checked = true;
+            
+            // Sports & Extras
+            if(b.ParticipatioInsports === 'Y') document.getElementById('c_sport_y').checked = true; else document.getElementById('c_sport_n').checked = true;
+            if(b.HavePassport === 'Y') {
+                document.getElementById('c_pass_y').checked = true;
+                document.getElementById('passport_dtl').style.display = 'inline-block';
+                document.getElementById('passport_dtl').value = b.PassportDetails || '';
+            }
+            if(b.ReadNewsPaper === 'Y') {
+                document.getElementById('c_news_y').checked = true;
+                document.getElementById('news_dtl').style.display = 'inline-block';
+                document.getElementById('news_dtl').value = b.NewsPaperDtl || '';
+            }
+            if(b.IsVisitedAbroad === 'Y') {
+                document.getElementById('c_abr_y').checked = true;
+                document.getElementById('abroad_dtl').style.display = 'inline-block';
+                document.getElementById('abroad_dtl').value = b.AbroadVisitDisc || '';
+            }
+            if(b.IsStayingAbroad === 'Y') {
+                document.getElementById('c_rel_abr_y').checked = true;
+                document.getElementById('relative_dtl').style.display = 'inline-block';
+                document.getElementById('relative_dtl').value = b.AbroadStayDetails || '';
+            }
+            if(b.DidCoaching === 'Y') document.getElementById('c_coach_y').checked = true; else document.getElementById('c_coach_n').checked = true;
+            if(b.HavePCLaptop === 'Y') document.getElementById('c_pc_y').checked = true; else document.getElementById('c_pc_n').checked = true;
+            if(b.HaveNetconnection === 'Y') document.getElementById('c_net_y').checked = true; else document.getElementById('c_net_n').checked = true;
+            document.getElementById('c_net_lines').value = b.InternetSourse || '';
+            if(b.HaveVehicle === 'Y') {
+                document.getElementById('c_veh_y').checked = true;
+                document.getElementById('vehicle_dtl').style.display = 'inline-block';
+                document.getElementById('vehicle_dtl').value = b.VehicleDtl || '';
+            }
+            if(b.IsLandPossess === 'Y') document.getElementById('c_land_poss_y').checked = true; else document.getElementById('c_land_poss_n').checked = true;
+            
+            const intendRadios = document.getElementsByName('intend');
+            intendRadios.forEach(r => { if(r.value === b.IntendAfterDegree) r.checked = true; });
+
+            // Rebuild dynamic tables
+            document.getElementById('eduBody').innerHTML = '';
+            if(data.schooling && data.schooling.length) data.schooling.forEach(s => addSchoolingRow(s)); else addSchoolingRow();
+            
+            document.getElementById('ugBody').innerHTML = '';
+            if(data.ug_detail && data.ug_detail.length) data.ug_detail.forEach(u => addUgRow(u)); else addUgRow();
+            
+            document.getElementById('pgBody').innerHTML = '';
+            if(data.pg_detail && data.pg_detail.length) data.pg_detail.forEach(p => addPgRow(p)); else addPgRow();
+            
+            document.getElementById('preBody').innerHTML = '';
+            if(data.preadmission && data.preadmission.length) data.preadmission.forEach(p => addPreRow(p)); else addPreRow();
+
+            window.showToast("Profile loaded for " + b.fullname, "success");
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            {% if not student_data %}
+            addSchoolingRow(); addUgRow(); addPgRow(); addPreRow();
+            {% else %}
+            populateForm({{ student_data|tojson }});
+            {% endif %}
+        });
+        </script>
+    </div>
+</div>
+{% endblock %}

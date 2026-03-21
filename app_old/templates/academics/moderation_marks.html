@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- SAVE FORM -->
+<form method="POST" id="modForm">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="pk_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="6">
+                    <span class="mainheadingborderbottom">Moderation Marks Detail</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Degree</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <select name="degree_id" id="m_degree" class="dropdown w-250" required>
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext" width="15%">Semester</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <select name="sem_id" id="m_sem" class="dropdown w-150" required>
+                        <option value="">--Select Semester--</option>
+                        {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Paper Title</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="paper_title_id" id="m_title" class="dropdown w-250">
+                        <option value="">--Select Title--</option>
+                        {% for t in lookups.titles %}<option value="{{ t.pk_papertitleid }}">{{ t.papertitle }}</option>{% endfor %}
+                    </select>
+                </td>
+                <td class="vtext">Marks</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" step="0.01" name="marks" id="m_marks" class="textbox w-100" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr><td colspan="6" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="submit" value="SAVE" id="btnSave" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left:10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<!-- LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="6">
+                <span class="subheadingborderbottom">List of Moderation Marks</span>
+            </td>
+        </tr>
+        <tr><td colspan="6" height="10"></td></tr>
+        <tr>
+            <td colspan="6">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th width="25%">Degree</th>
+                            <th width="15%">Semester</th>
+                            <th width="30%">Paper Title</th>
+                            <th width="10%">Marks</th>
+                            <th width="7.5%">EDIT</th>
+                            <th width="7.5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                            <td align="center">{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td>{{ item.degreename }}</td>
+                            <td align="center">{{ item.semester_roman }}</td>
+                            <td>{{ item.papertitle or '-' }}</td>
+                            <td align="center">{{ item.marks }}</td>
+                            <td align="center">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editM({{ item|tojson }})'>
+                            </td>
+                            <td align="center">
+                                <form method="POST" onsubmit="return confirm('Delete this record?');" style="display:inline;">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ item.id }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('academics.moderation_marks', page=pagination.page-1) }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('academics.moderation_marks', page=p) }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('academics.moderation_marks', page=pagination.page+1) }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+function setSemesterOptions(semesters) {
+    const sem = document.getElementById('m_sem');
+    sem.innerHTML = '<option value="">--Select Semester--</option>';
+    semesters.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id || s.pk_semesterid;
+        opt.textContent = s.name || s.semester_roman;
+        sem.appendChild(opt);
+    });
+}
+
+async function loadSemesters() {
+    const degreeId = document.getElementById('m_degree').value;
+    if (!degreeId) {
+        setSemesterOptions([]);
+        return;
+    }
+    try {
+        const res = await fetch(`/academics/api/get_degree_semesters/${degreeId}`);
+        const data = await res.json();
+        setSemesterOptions(data);
+    } catch (e) {
+        setSemesterOptions([]);
+    }
+}
+
+function editM(item) {
+    document.getElementById('pk_id').value = item.id;
+    document.getElementById('m_degree').value = item.pk_degreeid;
+    loadSemesters().then(() => {
+        document.getElementById('m_sem').value = item.pk_semesterid;
+    });
+    document.getElementById('m_title').value = item.pk_papertitleid || '';
+    document.getElementById('m_marks').value = item.marks;
+    document.getElementById('btnSave').value = 'UPDATE';
+    window.scrollTo(0,0);
+}
+
+function resetForm() {
+    document.getElementById('pk_id').value = '';
+    document.getElementById('modForm').reset();
+    document.getElementById('btnSave').value = 'SAVE';
+}
+
+document.getElementById('m_degree').addEventListener('change', function() {
+    loadSemesters();
+});
+</script>
+{% endblock %}

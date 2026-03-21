@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<!-- saved from url=(0086)https://hauiums.in/SMS/Masters/SMS_CourseActivity_Mst.aspx?wpid=-1487359410&Mwpid=4720 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Activity Course Master_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Activity Course Master_files/default.css" type="text/css" rel="stylesheet"><link href="./Activity Course Master_files/font.css" type="text/css" rel="stylesheet"><link href="./Activity Course Master_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Activity Course Master_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/SMS/Masters/SMS_CourseActivity_Mst.aspx?wpid=-1487359410&amp;Mwpid=4720" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMjAyMjI2ODk5NA8WBh4FY291bnQCCB4CaWQFAjgxHghhY3Rpdml0eTKZGwABAAAA/////wEAAAAAAAAADAIAAABOU3lzdGVtLkRhdGEsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5BQEAAAATU3lzdGVtLkRhdGEuRGF0YVNldAMAAAAXRGF0YVNldC5SZW1vdGluZ1ZlcnNpb24JWG1sU2NoZW1hC1htbERpZmZHcmFtAwEBDlN5c3RlbS5WZXJzaW9uAgAAAAkDAAAABgQAAACSBjw/eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9InV0Zi0xNiI/Pg0KPHhzOnNjaGVtYSBpZD0iTmV3RGF0YVNldCIgeG1sbnM9IiIgeG1sbnM6eHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIiB4bWxuczptc2RhdGE9InVybjpzY2hlbWFzLW1pY3Jvc29mdC1jb206eG1sLW1zZGF0YSI+DQogIDx4czplbGVtZW50IG5hbWU9Ik5ld0RhdGFTZXQiIG1zZGF0YTpJc0RhdGFTZXQ9InRydWUiIG1zZGF0YTpVc2VDdXJyZW50TG9jYWxlPSJ0cnVlIj4NCiAgICA8eHM6Y29tcGxleFR5cGU+DQogICAgICA8eHM6Y2hvaWNlIG1pbk9jY3Vycz0iMCIgbWF4T2NjdXJzPSJ1bmJvdW5kZWQiPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJUYWJsZSI+DQogICAgICAgICAgPHhzOmNvbXBsZXhUeXBlPg0KICAgICAgICAgICAgPHhzOnNlcXVlbmNlPg0KICAgICAgICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJQS19BY3RpZCIgdHlwZT0ieHM6aW50IiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSIiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iYWN0aXZpdHkiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgICAgICA8L3hzOnNlcXVlbmNlPg0KICAgICAgICAgIDwveHM6Y29tcGxleFR5cGU+DQogICAgICAgIDwveHM6ZWxlbWVudD4NCiAgICAgIDwveHM6Y2hvaWNlPg0KICAgIDwveHM6Y29tcGxleFR5cGU+DQogIDwveHM6ZWxlbWVudD4NCjwveHM6c2NoZW1hPgYFAAAA3hI8ZGlmZmdyOmRpZmZncmFtIHhtbG5zOm1zZGF0YT0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp4bWwtbXNkYXRhIiB4bWxuczpkaWZmZ3I9InVybjpzY2hlbWFzLW1pY3Jvc29mdC1jb206eG1sLWRpZmZncmFtLXYxIj48TmV3RGF0YVNldD48VGFibGUgZGlmZmdyOmlkPSJUYWJsZTEiIG1zZGF0YTpyb3dPcmRlcj0iMCI+PFBLX0FjdGlkPjg8L1BLX0FjdGlkPjxhY3Rpdml0eT5QaGlsYXRlbHkgfHwgSW5kLTEzPC9hY3Rpdml0eT48L1RhYmxlPjxUYWJsZSBkaWZmZ3I6aWQ9IlRhYmxlMiIgbXNkYXRhOnJvd09yZGVyPSIxIj48UEtfQWN0aWQ+MTM8L1BLX0FjdGlkPjxhY3Rpdml0eT5QaG90b2dyYXBoeSB8fCBJbmQtMTc8L2FjdGl2aXR5PjwvVGFibGU+PFRhYmxlIGRpZmZncjppZD0iVGFibGUzIiBtc2RhdGE6cm93T3JkZXI9IjIiPjxQS19BY3RpZD4xOTwvUEtfQWN0aWQ+PGFjdGl2aXR5PkthYmFkZGkgfHwgSW5kLTE5PC9hY3Rpdml0eT48L1RhYmxlPjxUYWJsZSBkaWZmZ3I6aWQ9IlRhYmxlNCIgbXNkYXRhOnJvd09yZGVyPSIzIj48UEtfQWN0aWQ+MjA8L1BLX0FjdGlkPjxhY3Rpdml0eT5BdGhsZXRpY3MgfHwgT3V0ZC0xPC9hY3Rpdml0eT48L1RhYmxlPjxUYWJsZSBkaWZmZ3I6aWQ9IlRhYmxlNSIgbXNkYXRhOnJvd09yZGVyPSI0Ij48UEtfQWN0aWQ+MjI8L1BLX0FjdGlkPjxhY3Rpdml0eT5CYXNrZXRiYWxsIHx8IE91dGQtMjwvYWN0aXZpdHk+PC9UYWJsZT48VGFibGUgZGlmZmdyOmlkPSJUYWJsZTYiIG1zZGF0YTpyb3dPcmRlcj0iNSI+PFBLX0FjdGlkPjIzPC9QS19BY3RpZD48YWN0aXZpdHk+Q3JpY2tldCB8fCBPdXRkLTM8L2FjdGl2aXR5PjwvVGFibGU+PFRhYmxlIGRpZmZncjppZD0iVGFibGU3IiBtc2RhdGE6cm93T3JkZXI9IjYiPjxQS19BY3RpZD4yNDwvUEtfQWN0aWQ+PGFjdGl2aXR5PkZvb3RiYWxsIHx8IE91dGQtNDwvYWN0aXZpdHk+PC9UYWJsZT48VGFibGUgZGlmZmdyOmlkPSJUYWJsZTgiIG1zZGF0YTpyb3dPcmRlcj0iNyI+PFBLX0FjdGlkPjI1PC9QS19BY3RpZD48YWN0aXZpdHk+SGFuZGJhbGwgfHwgT3V0ZC01PC9hY3Rpdml0eT48L1RhYmxlPjxUYWJsZSBkaWZmZ3I6aWQ9IlRhYmxlOSIgbXNkYXRhOnJvd09yZGVyPSI4Ij48UEtfQWN0aWQ+MjY8L1BLX0FjdGlkPjxhY3Rpdml0eT5Ib2NrZXkgfHwgT3V0ZC02PC9hY3Rpdml0eT48L1RhYmxlPjxUYWJsZSBkaWZmZ3I6aWQ9IlRhYmxlMTAiIG1zZGF0YTpyb3dPcmRlcj0iOSI+PFBLX0FjdGlkPjI3PC9QS19BY3RpZD48YWN0aXZpdHk+S2FiYWRkaSB8fCBPdXRkLTc8L2FjdGl2aXR5PjwvVGFibGU+PFRhYmxlIGRpZmZncjppZD0iVGFibGUxMSIgbXNkYXRhOnJvd09yZGVyPSIxMCI+PFBLX0FjdGlkPjI4PC9QS19BY3RpZD48YWN0aXZpdHk+S29yZmJhbGwgfHwgT3V0ZC04PC9hY3Rpdml0eT48L1RhYmxlPjxUYWJsZSBkaWZmZ3I6aWQ9IlRhYmxlMTIiIG1zZGF0YTpyb3dPcmRlcj0iMTEiPjxQS19BY3RpZD4yOTwvUEtfQWN0aWQ+PGFjdGl2aXR5PlN3aW1taW5nIHx8IE91dGQtOTwvYWN0aXZpdHk+PC9UYWJsZT48VGFibGUgZGlmZmdyOmlkPSJUYWJsZTEzIiBtc2RhdGE6cm93T3JkZXI9IjEyIj48UEtfQWN0aWQ+MzA8L1BLX0FjdGlkPjxhY3Rpdml0eT5MYXduIFRlbm5pcyB8fCBPdXRkLTEwPC9hY3Rpdml0eT48L1RhYmxlPjxUYWJsZSBkaWZmZ3I6aWQ9IlRhYmxlMTQiIG1zZGF0YTpyb3dPcmRlcj0iMTMiPjxQS19BY3RpZD4zMTwvUEtfQWN0aWQ+PGFjdGl2aXR5PlZvbGxleWJhbGwgfHwgT3V0ZC0xMTwvYWN0aXZpdHk+PC9UYWJsZT48VGFibGUgZGlmZmdyOmlkPSJUYWJsZTE1IiBtc2RhdGE6cm93T3JkZXI9IjE0Ij48UEtfQWN0aWQ+MzI8L1BLX0FjdGlkPjxhY3Rpdml0eT5XdXNodSB8fCBPdXRkLTEyPC9hY3Rpdml0eT48L1RhYmxlPjxUYWJsZSBkaWZmZ3I6aWQ9IlRhYmxlMTYiIG1zZGF0YTpyb3dPcmRlcj0iMTUiPjxQS19BY3RpZD4zMzwvUEtfQWN0aWQ+PGFjdGl2aXR5PllvZ2EgfHwgT3V0ZC0xMzwvYWN0aXZpdHk+PC9UYWJsZT48VGFibGUgZGlmZmdyOmlkPSJUYWJsZTE3IiBtc2RhdGE6cm93T3JkZXI9IjE2Ij48UEtfQWN0aWQ+MzQ8L1BLX0FjdGlkPjxhY3Rpdml0eT5QaG90b2dyYXBoeSB8fCBPdXQtMTc8L2FjdGl2aXR5PjwvVGFibGU+PFRhYmxlIGRpZmZncjppZD0iVGFibGUxOCIgbXNkYXRhOnJvd09yZGVyPSIxNyI+PFBLX0FjdGlkPjM1PC9QS19BY3RpZD48YWN0aXZpdHk+RXF1ZXN0cmlhbiB8fCBPVVQtMjA8L2FjdGl2aXR5PjwvVGFibGU+PFRhYmxlIGRpZmZncjppZD0iVGFibGUxOSIgbXNkYXRhOnJvd09yZGVyPSIxOCI+PFBLX0FjdGlkPjM2PC9QS19BY3RpZD48YWN0aXZpdHk+S2hva2hvIHx8IE9VVC0yMTwvYWN0aXZpdHk+PC9UYWJsZT48L05ld0RhdGFTZXQ+PC9kaWZmZ3I6ZGlmZmdyYW0+BAMAAAAOU3lzdGVtLlZlcnNpb24EAAAABl9NYWpvcgZfTWlub3IGX0J1aWxkCV9SZXZpc2lvbgAAAAAICAgIAgAAAAAAAAD//////////wsWAmYPDxYCHgdQZW5kaW5nBQEwZBYCAgEPZBYQAgIPDxYCHgRUZXh0BQ4gUmFqYmVlciBTaW5naGRkAgQPDxYCHwQFG0xMVC4gLSAzLzIwLzIwMjYgODo0MzowOCBQTWRkAgUPDxYCHwQFG0NMVC4gLSAzLzIxLzIwMjYgNjowMzo1MyBBTWRkAgYPDxYCHwQFDiBSYWpiZWVyIFNpbmdoZGQCBw8PFgIfBAUNQ09CUyZILCBIaXNhcmRkAgkPZBYCZg8WAh8EBXo8c3Bhbj5Db3Vyc2UgRGV0YWlsczwvc3Bhbj4mbmJzcDs+Jm5ic3A7PHNwYW4+Q291cnNlIE1hbmFnZW1lbnQ8L3NwYW4+Jm5ic3A7PiZuYnNwOzxzdHJvbmc+QWN0aXZpdHkgQ291cnNlIE1hc3RlcjwvU3Ryb25nPmQCCg9kFhYCAQ8PFgIfBAUDT3V0ZGQCAg8PFgIfBAUHT3V0ZG9vcmRkAgMPEA8WBh4NRGF0YVRleHRGaWVsZAUVQWN0aXZpdHlDYXRlZ29yeV9Db2RlHg5EYXRhVmFsdWVGaWVsZAUWcGtfYWN0aXZpdHlDYXRlZ29yeV9JRB4LXyFEYXRhQm91bmRnZBAVBh4tLSBTZWxlY3QgQWN0aXZpdHkgQ2F0ZWdvcnkgLS0FRVRSICAFTEZQICAFU1BUICAFU1RDICAFVFJQICAVBh4tLSBTZWxlY3QgQWN0aXZpdHkgQ2F0ZWdvcnkgLS0BMQEyATUBMwE0FCsDBmdnZ2dnZxYBAgNkAgQPEGRkFgECAmQCBQ8PFgIfBAUBMWRkAgYPEA8WBh8FBQtzZXNzaW9ubmFtZR8GBQxwa19zZXNzaW9uaWQfB2dkEBUSDlNlbGVjdCBTZXNzaW9uCjIwMjUtMjAyNiAKMjAyNC0yMDI1IAoyMDIzLTIwMjQgCjIwMjItMjAyMyAKMjAyMS0yMDIyIAoyMDIwLTIwMjEgCjIwMTktMjAyMCAKMjAxOC0yMDE5IAoyMDE3LTIwMTggCjIwMTYtMjAxNyAKMjAxNS0yMDE2IAoyMDE0LTIwMTUgCjIwMTMtMjAxNCAKMjAxMi0yMDEzIAoyMDExLTIwMTIgCjIwMTAtMjAxMSAKMjAwOS0yMDEwIBUSDlNlbGVjdCBTZXNzaW9uAjc3AjcyAjcwAjQ2AjQyAjIxAjIwAjE5AjE4AjE3AjE2AjE1AjE0AjEzAjc4AjgwAjc5FCsDEmdnZ2dnZ2dnZ2dnZ2dnZ2dnZxYBAgFkAgcPEGRkFgECAWQCCA88KwARAwAPFgQfB2ceC18hSXRlbUNvdW50AglkARAWABYAFgAMFCsAABYCZg9kFhQCAQ9kFhJmD2QWAmYPFQEBMWQCAQ9kFgICAQ8QDxYGHwdnHwUFCGFjdGl2aXR5HwYFCFBLX0FjdGlkZBAVFA9TZWxlY3QgQWN0aXZpdHkTUGhpbGF0ZWx5IHx8IEluZC0xMxVQaG90b2dyYXBoeSB8fCBJbmQtMTcRS2FiYWRkaSB8fCBJbmQtMTkTQXRobGV0aWNzIHx8IE91dGQtMRRCYXNrZXRiYWxsIHx8IE91dGQtMhFDcmlja2V0IHx8IE91dGQtMxJGb290YmFsbCB8fCBPdXRkLTQSSGFuZGJhbGwgfHwgT3V0ZC01EEhvY2tleSB8fCBPdXRkLTYRS2FiYWRkaSB8fCBPdXRkLTcSS29yZmJhbGwgfHwgT3V0ZC04ElN3aW1taW5nIHx8IE91dGQtORZMYXduIFRlbm5pcyB8fCBPdXRkLTEwFVZvbGxleWJhbGwgfHwgT3V0ZC0xMRBXdXNodSB8fCBPdXRkLTEyD1lvZ2EgfHwgT3V0ZC0xMxVQaG90b2dyYXBoeSB8fCBPdXQtMTcURXF1ZXN0cmlhbiB8fCBPVVQtMjAQS2hva2hvIHx8IE9VVC0yMRUUD1NlbGVjdCBBY3Rpdml0eQE4AjEzAjE5AjIwAjIyAjIzAjI0AjI1AjI2AjI3AjI4AjI5AjMwAjMxAjMyAjMzAjM0AjM1AjM2FCsDFGdnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnFgECBGQCAg9kFgICAQ8PFgIfBAUGT3V0ZC0xZGQCAw9kFgICAQ8PFgIfBAUJQXRobGV0aWNzZGQCBA9kFgICAQ8PFgIfBAUBMWRkAgUPZBYCAgEPDxYCHwQFAjUwZGQCBg9kFgICAQ8PFgIeD0NvbW1hbmRBcmd1bWVudAUBMWRkAgcPZBYCAgEPDxYCHwkFATFkZAIID2QWAgIBDxYCHgVWYWx1ZQUDODUyZAICD2QWEmYPZBYCZg8VAQEyZAIBD2QWAgIBDxAPFgYfB2cfBQUIYWN0aXZpdHkfBgUIUEtfQWN0aWRkEBUUD1NlbGVjdCBBY3Rpdml0eRNQaGlsYXRlbHkgfHwgSW5kLTEzFVBob3RvZ3JhcGh5IHx8IEluZC0xNxFLYWJhZGRpIHx8IEluZC0xORNBdGhsZXRpY3MgfHwgT3V0ZC0xFEJhc2tldGJhbGwgfHwgT3V0ZC0yEUNyaWNrZXQgfHwgT3V0ZC0zEkZvb3RiYWxsIHx8IE91dGQtNBJIYW5kYmFsbCB8fCBPdXRkLTUQSG9ja2V5IHx8IE91dGQtNhFLYWJhZGRpIHx8IE91dGQtNxJLb3JmYmFsbCB8fCBPdXRkLTgSU3dpbW1pbmcgfHwgT3V0ZC05Fkxhd24gVGVubmlzIHx8IE91dGQtMTAVVm9sbGV5YmFsbCB8fCBPdXRkLTExEFd1c2h1IHx8IE91dGQtMTIPWW9nYSB8fCBPdXRkLTEzFVBob3RvZ3JhcGh5IHx8IE91dC0xNxRFcXVlc3RyaWFuIHx8IE9VVC0yMBBLaG9raG8gfHwgT1VULTIxFRQPU2VsZWN0IEFjdGl2aXR5ATgCMTMCMTkCMjACMjICMjMCMjQCMjUCMjYCMjcCMjgCMjkCMzACMzECMzICMzMCMzQCMzUCMzYUKwMUZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2cWAQIFZAICD2QWAgIBDw8WAh8EBQZPdXRkLTJkZAIDD2QWAgIBDw8WAh8EBQpCYXNrZXRiYWxsZGQCBA9kFgICAQ8PFgIfBAUBM2RkAgUPZBYCAgEPDxYCHwQFAjQwZGQCBg9kFgICAQ8PFgIfCQUBMmRkAgcPZBYCAgEPDxYCHwkFATJkZAIID2QWAgIBDxYCHwoFAzg1M2QCAw9kFhJmD2QWAmYPFQEBM2QCAQ9kFgICAQ8QDxYGHwdnHwUFCGFjdGl2aXR5HwYFCFBLX0FjdGlkZBAVFA9TZWxlY3QgQWN0aXZpdHkTUGhpbGF0ZWx5IHx8IEluZC0xMxVQaG90b2dyYXBoeSB8fCBJbmQtMTcRS2FiYWRkaSB8fCBJbmQtMTkTQXRobGV0aWNzIHx8IE91dGQtMRRCYXNrZXRiYWxsIHx8IE91dGQtMhFDcmlja2V0IHx8IE91dGQtMxJGb290YmFsbCB8fCBPdXRkLTQSSGFuZGJhbGwgfHwgT3V0ZC01EEhvY2tleSB8fCBPdXRkLTYRS2FiYWRkaSB8fCBPdXRkLTcSS29yZmJhbGwgfHwgT3V0ZC04ElN3aW1taW5nIHx8IE91dGQtORZMYXduIFRlbm5pcyB8fCBPdXRkLTEwFVZvbGxleWJhbGwgfHwgT3V0ZC0xMRBXdXNodSB8fCBPdXRkLTEyD1lvZ2EgfHwgT3V0ZC0xMxVQaG90b2dyYXBoeSB8fCBPdXQtMTcURXF1ZXN0cmlhbiB8fCBPVVQtMjAQS2hva2hvIHx8IE9VVC0yMRUUD1NlbGVjdCBBY3Rpdml0eQE4AjEzAjE5AjIwAjIyAjIzAjI0AjI1AjI2AjI3AjI4AjI5AjMwAjMxAjMyAjMzAjM0AjM1AjM2FCsDFGdnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnFgECBmQCAg9kFgICAQ8PFgIfBAUGT3V0ZC0zZGQCAw9kFgICAQ8PFgIfBAUHQ3JpY2tldGRkAgQPZBYCAgEPDxYCHwQFATVkZAIFD2QWAgIBDw8WAh8EBQI1MGRkAgYPZBYCAgEPDxYCHwkFATNkZAIHD2QWAgIBDw8WAh8JBQEzZGQCCA9kFgICAQ8WAh8KBQM4NTRkAgQPZBYSZg9kFgJmDxUBATRkAgEPZBYCAgEPEA8WBh8HZx8FBQhhY3Rpdml0eR8GBQhQS19BY3RpZGQQFRQPU2VsZWN0IEFjdGl2aXR5E1BoaWxhdGVseSB8fCBJbmQtMTMVUGhvdG9ncmFwaHkgfHwgSW5kLTE3EUthYmFkZGkgfHwgSW5kLTE5E0F0aGxldGljcyB8fCBPdXRkLTEUQmFza2V0YmFsbCB8fCBPdXRkLTIRQ3JpY2tldCB8fCBPdXRkLTMSRm9vdGJhbGwgfHwgT3V0ZC00EkhhbmRiYWxsIHx8IE91dGQtNRBIb2NrZXkgfHwgT3V0ZC02EUthYmFkZGkgfHwgT3V0ZC03EktvcmZiYWxsIHx8IE91dGQtOBJTd2ltbWluZyB8fCBPdXRkLTkWTGF3biBUZW5uaXMgfHwgT3V0ZC0xMBVWb2xsZXliYWxsIHx8IE91dGQtMTEQV3VzaHUgfHwgT3V0ZC0xMg9Zb2dhIHx8IE91dGQtMTMVUGhvdG9ncmFwaHkgfHwgT3V0LTE3FEVxdWVzdHJpYW4gfHwgT1VULTIwEEtob2tobyB8fCBPVVQtMjEVFA9TZWxlY3QgQWN0aXZpdHkBOAIxMwIxOQIyMAIyMgIyMwIyNAIyNQIyNgIyNwIyOAIyOQIzMAIzMQIzMgIzMwIzNAIzNQIzNhQrAxRnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZxYBAgdkAgIPZBYCAgEPDxYCHwQFBk91dGQtNGRkAgMPZBYCAgEPDxYCHwQFCEZvb3RiYWxsZGQCBA9kFgICAQ8PFgIfBAUBNmRkAgUPZBYCAgEPDxYCHwQFAjUwZGQCBg9kFgICAQ8PFgIfCQUBNGRkAgcPZBYCAgEPDxYCHwkFATRkZAIID2QWAgIBDxYCHwoFAzg1NWQCBQ9kFhJmD2QWAmYPFQEBNWQCAQ9kFgICAQ8QDxYGHwdnHwUFCGFjdGl2aXR5HwYFCFBLX0FjdGlkZBAVFA9TZWxlY3QgQWN0aXZpdHkTUGhpbGF0ZWx5IHx8IEluZC0xMxVQaG90b2dyYXBoeSB8fCBJbmQtMTcRS2FiYWRkaSB8fCBJbmQtMTkTQXRobGV0aWNzIHx8IE91dGQtMRRCYXNrZXRiYWxsIHx8IE91dGQtMhFDcmlja2V0IHx8IE91dGQtMxJGb290YmFsbCB8fCBPdXRkLTQSSGFuZGJhbGwgfHwgT3V0ZC01EEhvY2tleSB8fCBPdXRkLTYRS2FiYWRkaSB8fCBPdXRkLTcSS29yZmJhbGwgfHwgT3V0ZC04ElN3aW1taW5nIHx8IE91dGQtORZMYXduIFRlbm5pcyB8fCBPdXRkLTEwFVZvbGxleWJhbGwgfHwgT3V0ZC0xMRBXdXNodSB8fCBPdXRkLTEyD1lvZ2EgfHwgT3V0ZC0xMxVQaG90b2dyYXBoeSB8fCBPdXQtMTcURXF1ZXN0cmlhbiB8fCBPVVQtMjAQS2hva2hvIHx8IE9VVC0yMRUUD1NlbGVjdCBBY3Rpdml0eQE4AjEzAjE5AjIwAjIyAjIzAjI0AjI1AjI2AjI3AjI4AjI5AjMwAjMxAjMyAjMzAjM0AjM1AjM2FCsDFGdnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnFgECCGQCAg9kFgICAQ8PFgIfBAUGT3V0ZC01ZGQCAw9kFgICAQ8PFgIfBAUISGFuZGJhbGxkZAIED2QWAgIBDw8WAh8EBQE3ZGQCBQ9kFgICAQ8PFgIfBAUCNTBkZAIGD2QWAgIBDw8WAh8JBQE1ZGQCBw9kFgICAQ8PFgIfCQUBNWRkAggPZBYCAgEPFgIfCgUDODU2ZAIGD2QWEmYPZBYCZg8VAQE2ZAIBD2QWAgIBDxAPFgYfB2cfBQUIYWN0aXZpdHkfBgUIUEtfQWN0aWRkEBUUD1NlbGVjdCBBY3Rpdml0eRNQaGlsYXRlbHkgfHwgSW5kLTEzFVBob3RvZ3JhcGh5IHx8IEluZC0xNxFLYWJhZGRpIHx8IEluZC0xORNBdGhsZXRpY3MgfHwgT3V0ZC0xFEJhc2tldGJhbGwgfHwgT3V0ZC0yEUNyaWNrZXQgfHwgT3V0ZC0zEkZvb3RiYWxsIHx8IE91dGQtNBJIYW5kYmFsbCB8fCBPdXRkLTUQSG9ja2V5IHx8IE91dGQtNhFLYWJhZGRpIHx8IE91dGQtNxJLb3JmYmFsbCB8fCBPdXRkLTgSU3dpbW1pbmcgfHwgT3V0ZC05Fkxhd24gVGVubmlzIHx8IE91dGQtMTAVVm9sbGV5YmFsbCB8fCBPdXRkLTExEFd1c2h1IHx8IE91dGQtMTIPWW9nYSB8fCBPdXRkLTEzFVBob3RvZ3JhcGh5IHx8IE91dC0xNxRFcXVlc3RyaWFuIHx8IE9VVC0yMBBLaG9raG8gfHwgT1VULTIxFRQPU2VsZWN0IEFjdGl2aXR5ATgCMTMCMTkCMjACMjICMjMCMjQCMjUCMjYCMjcCMjgCMjkCMzACMzECMzICMzMCMzQCMzUCMzYUKwMUZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2cWAQIJZAICD2QWAgIBDw8WAh8EBQZPdXRkLTZkZAIDD2QWAgIBDw8WAh8EBQZIb2NrZXlkZAIED2QWAgIBDw8WAh8EBQE4ZGQCBQ9kFgICAQ8PFgIfBAUCNTBkZAIGD2QWAgIBDw8WAh8JBQE2ZGQCBw9kFgICAQ8PFgIfCQUBNmRkAggPZBYCAgEPFgIfCgUDODU3ZAIHD2QWEmYPZBYCZg8VAQE3ZAIBD2QWAgIBDxAPFgYfB2cfBQUIYWN0aXZpdHkfBgUIUEtfQWN0aWRkEBUUD1NlbGVjdCBBY3Rpdml0eRNQaGlsYXRlbHkgfHwgSW5kLTEzFVBob3RvZ3JhcGh5IHx8IEluZC0xNxFLYWJhZGRpIHx8IEluZC0xORNBdGhsZXRpY3MgfHwgT3V0ZC0xFEJhc2tldGJhbGwgfHwgT3V0ZC0yEUNyaWNrZXQgfHwgT3V0ZC0zEkZvb3RiYWxsIHx8IE91dGQtNBJIYW5kYmFsbCB8fCBPdXRkLTUQSG9ja2V5IHx8IE91dGQtNhFLYWJhZGRpIHx8IE91dGQtNxJLb3JmYmFsbCB8fCBPdXRkLTgSU3dpbW1pbmcgfHwgT3V0ZC05Fkxhd24gVGVubmlzIHx8IE91dGQtMTAVVm9sbGV5YmFsbCB8fCBPdXRkLTExEFd1c2h1IHx8IE91dGQtMTIPWW9nYSB8fCBPdXRkLTEzFVBob3RvZ3JhcGh5IHx8IE91dC0xNxRFcXVlc3RyaWFuIHx8IE9VVC0yMBBLaG9raG8gfHwgT1VULTIxFRQPU2VsZWN0IEFjdGl2aXR5ATgCMTMCMTkCMjACMjICMjMCMjQCMjUCMjYCMjcCMjgCMjkCMzACMzECMzICMzMCMzQCMzUCMzYUKwMUZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2cWAQIOZAICD2QWAgIBDw8WAh8EBQdPdXRkLTExZGQCAw9kFgICAQ8PFgIfBAUKVm9sbGV5YmFsbGRkAgQPZBYCAgEPDxYCHwQFAjEwZGQCBQ9kFgICAQ8PFgIfBAUCNTBkZAIGD2QWAgIBDw8WAh8JBQE3ZGQCBw9kFgICAQ8PFgIfCQUBN2RkAggPZBYCAgEPFgIfCgUDODU4ZAIID2QWEmYPZBYCZg8VAQE4ZAIBD2QWAgIBDxAPFgYfB2cfBQUIYWN0aXZpdHkfBgUIUEtfQWN0aWRkEBUUD1NlbGVjdCBBY3Rpdml0eRNQaGlsYXRlbHkgfHwgSW5kLTEzFVBob3RvZ3JhcGh5IHx8IEluZC0xNxFLYWJhZGRpIHx8IEluZC0xORNBdGhsZXRpY3MgfHwgT3V0ZC0xFEJhc2tldGJhbGwgfHwgT3V0ZC0yEUNyaWNrZXQgfHwgT3V0ZC0zEkZvb3RiYWxsIHx8IE91dGQtNBJIYW5kYmFsbCB8fCBPdXRkLTUQSG9ja2V5IHx8IE91dGQtNhFLYWJhZGRpIHx8IE91dGQtNxJLb3JmYmFsbCB8fCBPdXRkLTgSU3dpbW1pbmcgfHwgT3V0ZC05Fkxhd24gVGVubmlzIHx8IE91dGQtMTAVVm9sbGV5YmFsbCB8fCBPdXRkLTExEFd1c2h1IHx8IE91dGQtMTIPWW9nYSB8fCBPdXRkLTEzFVBob3RvZ3JhcGh5IHx8IE91dC0xNxRFcXVlc3RyaWFuIHx8IE9VVC0yMBBLaG9raG8gfHwgT1VULTIxFRQPU2VsZWN0IEFjdGl2aXR5ATgC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">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Activity Course Master_files/WebResource.axd" type="text/javascript"></script>
+<script src="./Activity Course Master_files/WebResource(1).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="7DD9990C">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="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">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Activity Course Master_files/admission.png">
+                            Admission &amp; Academics
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/SMS/Masters/SMS_CourseActivity_Mst.aspx?wpid=-1487359410&amp;Mwpid=4720#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> Rajbeer Singh</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> Rajbeer Singh</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COBS&amp;H, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/SMS/Masters/SMS_CourseActivity_Mst.aspx?wpid=-1487359410&amp;Mwpid=4720#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Activity Course Master_files/WebResource(2).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Masters and Config." class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2361#" tabindex="-1">Masters and Config.</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:3" role="menuitem" style="position: relative;"><a title="Common Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2398#" tabindex="-1">Common Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:3" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Common Masters preparation" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4718" tabindex="-1">Common Masters preparation</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:6" role="menuitem" style="position: relative;"><a title="Administrative Configurations" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2403#" tabindex="-1">Administrative Configurations</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:6" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Academic Configurations Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4719" tabindex="-1">Academic Configurations Management</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:10" role="menuitem" style="position: relative; float: left;"><a title="Course Details" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2401#" tabindex="-1">Course Details</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:10" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Course Management" class="level2 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4720" tabindex="-1">Course Management</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:13" role="menuitem" style="position: relative; float: left;"><a title="Admission" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2399#" tabindex="-1">Admission</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:13" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:14" role="menuitem" style="position: relative;"><a title="Admission Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2400#" tabindex="-1">Admission Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:14" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Admission Masters Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4721" tabindex="-1">Admission Masters Management</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:17" role="menuitem" style="position: relative;"><a title="Eligibility &amp; Enrollments" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2402#" tabindex="-1">Post Admission Activities</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:17" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Admission No. Generation and Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4722" tabindex="-1">Admission No. Generation and Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Bio Data Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4723" tabindex="-1">Student Bio Data Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Advisory Committee Management for PG/PHD Programme" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4727" tabindex="-1">Advisory Committee Management for PG/PHD Programme</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:23" role="menuitem" style="position: relative; float: left;"><a title="Academics" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2388#" tabindex="-1">Academics</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:23" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:24" role="menuitem" style="position: relative;"><a title="Academics Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=3753#" tabindex="-1">Academics Masters and Cofiguration</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:24" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Calender Event/Notification Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4728" tabindex="-1">Calender Event/Notification Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Transfer, Reg Cancel, Extend, Advisory allocation" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4733" tabindex="-1">Academic Miscellaneous Activities</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:28" role="menuitem" style="position: relative;"><a title="Student Course Allocation" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=3961#" tabindex="-1">Student Course Allocation</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:28" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Subject/Course Allocation and Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4734" tabindex="-1">Student Subject/Course Allocation and Management</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:32" role="menuitem" style="position: relative; float: left;"><a title="Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=4040#" tabindex="-1">Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:32" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:33" role="menuitem" style="position: relative;"><a title="Admission Reports" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=4041#" tabindex="-1">Admission Reports</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:33" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Admission No. Certificate Report, Student Registration Report etc" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4735" tabindex="-1">Admission miscellaneous Reports</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:36" role="menuitem" style="position: relative;"><a title="Academics Reports" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2429#" tabindex="-1">Academics Reports</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:36" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Academic miscellaneous Reports" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4736" tabindex="-1">Academic miscellaneous Reports</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Course content upload Report" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=8474" tabindex="-1">Course content upload report</a></li>
+			</ul></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Course Details</span>&nbsp;&gt;&nbsp;<span>Course Management</span>&nbsp;&gt;&nbsp;<strong>Activity Course Master</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Activity Course Master_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <table id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_Table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tbody><tr>
+		<td align="left" class="tabbing">
+                <div id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_div1" style="display:inline; width:100%">
+                <a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb1" title="Course Type Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_CourseType_Mst.aspx?wpid=-400586907&amp;Mwpid=4720" style="display:inline-block;width:110px;">Course Type Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb2" title="Paper/Course Title Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_PaperTitle_Mst.aspx?wpid=-1487490480&amp;Mwpid=4720" style="display:inline-block;width:110px;">Paper/Course Title Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb3" title="Course/Subject Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_Course_Dtl.aspx?wpid=1938065253&amp;Mwpid=4720" style="display:inline-block;width:110px;">Course/Subject Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb4" title="ActivityCourse Master" class="tabgs" href="https://hauiums.in/SMS/Masters/SMS_CourseActivity_Mst.aspx?wpid=-1487359410&amp;Mwpid=4720" style="display:inline-block;width:110px;">Activity Course Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb5" title="Activity Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_Activity_mst.aspx?wpid=1972131621&amp;Mwpid=4720" style="display:inline-block;width:110px;">Activity Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb6" title="Package Master" class="tabg" href="https://hauiums.in/SMS/Masters/sms_package_mst.aspx?wpid=1938261858&amp;Mwpid=4720" style="display:inline-block;width:110px;">Package Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb7" title="Course Detail Report" class="tabg" href="https://hauiums.in/SMS/Reports/SMS_Course_Dtl_Rpt.aspx?wpid=-1587134370&amp;Mwpid=4720" style="display:inline-block;width:110px;">Course Detail Report</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb8" title="Syllabus Creation [Master]" class="tabg" href="https://hauiums.in/SMS/Reports/SMS_subject_syllabusCreation.aspx?wpid=-371548627&amp;Mwpid=4720" style="display:inline-block;width:110px;">Syllabus Creation [Master]</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb9" title="PGS Course Limit [Master]" class="tabg" href="https://hauiums.in/SMS/AdmAcd/SMS_SessionWise_PGS_CourseLimit.aspx?wpid=1576610206&amp;Mwpid=4720" style="display:inline-block;width:110px;">PGS Course Limit [Master]</a></div>
+            </td>
+	</tr>
+</tbody></table>
+
+    <table border="0" class="table" width="100%">
+        <tbody><tr>
+            <td class="tableheading" colspan="6">
+   <span class="mainheadingborderbottom">Activity Course Master
+                </span>  
+            </td>
+        </tr>
+        <tr>
+            <td class="tdgap" colspan="6"></td>
+        </tr>
+        <tr>
+            <td id="lblActivityCode" class="vtext" width="15%">Activity Code
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtActivityCode__"><input name="ctl00$ContentPlaceHolder1$R_txtActivityCode" type="text" value="Out" maxlength="10" id="ctl00_ContentPlaceHolder1_R_txtActivityCode" tabindex="3" class="textbox"></span>&nbsp;*
+                    
+            </td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td id="lblActivityName" class="vtext">Activity Name
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtActivityName__"><input name="ctl00$ContentPlaceHolder1$R_txtActivityName" type="text" value="Outdoor" maxlength="255" id="ctl00_ContentPlaceHolder1_R_txtActivityName" tabindex="3" class="textbox"></span>&nbsp;*
+            </td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td id="lblActivityCategory" class="vtext">Activity Category
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlActivityCategory__"><select name="ctl00$ContentPlaceHolder1$D_ddlActivityCategory" id="ctl00_ContentPlaceHolder1_D_ddlActivityCategory" class="dropdown">
+	<option value="-- Select Activity Category --">-- Select Activity Category --</option>
+	<option value="1">ETR  </option>
+	<option value="2">LFP  </option>
+	<option selected="selected" value="5">SPT  </option>
+	<option value="3">STC  </option>
+	<option value="4">TRP  </option>
+
+</select></span>
+                &nbsp;*
+            </td>
+            <td colspan="3"></td>
+        </tr>
+         <tr>
+            <td id="lblActivitytype" class="vtext">Activity type
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+               <span id="Anthem_ctl00_ContentPlaceHolder1_ddl_Activity__"><select name="ctl00$ContentPlaceHolder1$ddl_Activity" id="ctl00_ContentPlaceHolder1_ddl_Activity" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddl_Activity&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value="N">---Select Activity Type--</option>
+	<option value="I">Indoor</option>
+	<option selected="selected" value="O">Outdoor</option>
+
+</select></span>
+                    
+                &nbsp;*
+            </td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td id="lblActivityOrder" class="vtext">Activity Order
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_R_txtActivityOrder__"><input name="ctl00$ContentPlaceHolder1$R_txtActivityOrder" type="text" value="1" maxlength="3" id="ctl00_ContentPlaceHolder1_R_txtActivityOrder" tabindex="4" class="textbox" onkeydown="return IntegerOnly(event);"></span>&nbsp;*
+            </td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+             <td id="lblActivivitysession" class="vtext">Activity Session
+            </td>
+            <td class="colon">:
+            </td>
+            <td colspan="6"><span id="Anthem_ctl00_ContentPlaceHolder1_ddlSessionFrom__"><select name="ctl00$ContentPlaceHolder1$ddlSessionFrom" id="ctl00_ContentPlaceHolder1_ddlSessionFrom" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlSessionFrom&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value="Select Session">Select Session</option>
+	<option selected="selected" value="77">2025-2026 </option>
+	<option value="72">2024-2025 </option>
+	<option value="70">2023-2024 </option>
+	<option value="46">2022-2023 </option>
+	<option value="42">2021-2022 </option>
+	<option value="21">2020-2021 </option>
+	<option value="20">2019-2020 </option>
+	<option value="19">2018-2019 </option>
+	<option value="18">2017-2018 </option>
+	<option value="17">2016-2017 </option>
+	<option value="16">2015-2016 </option>
+	<option value="15">2014-2015 </option>
+	<option value="14">2013-2014 </option>
+	<option value="13">2012-2013 </option>
+	<option value="78">2011-2012 </option>
+	<option value="80">2010-2011 </option>
+	<option value="79">2009-2010 </option>
+
+</select></span></td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblActivivitysemester">Class
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlSemester__"><select name="ctl00$ContentPlaceHolder1$D_ddlSemester" id="ctl00_ContentPlaceHolder1_D_ddlSemester" class="dropdown" maxlength="49">
+	<option value="--Select Class--">--Select Class--</option>
+	<option selected="selected" value="1">Odd Semester</option>
+	<option value="2">Even Semester</option>
+
+</select></span>
+                *
+                </td>
+            
+        </tr>
+        <tr>
+            <td colspan="6">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail__"><div>
+	<table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_gvActivityDetail" style="width:98%;border:1px solid #D4D4D4;border-collapse:collapse;">
+		<tbody><tr class="header-style">
+			<th scope="col">S.No.</th><th scope="col">Activity</th><th scope="col">Activity Course Order</th><th scope="col">Capacity</th><th scope="col">ADD</th><th scope="col">DELETE</th>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:5%;">
+                                1
+                            </td><td align="center" style="width:10%;">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl02_ddlCourse__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$ddlCourse--><select name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$ddlCourse" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl02_ddlCourse" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$ddlCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+				<option value="Select Activity">Select Activity</option>
+				<option value="8">Philately || Ind-13</option>
+				<option value="13">Photography || Ind-17</option>
+				<option value="19">Kabaddi || Ind-19</option>
+				<option selected="selected" value="20">Athletics || Outd-1</option>
+				<option value="22">Basketball || Outd-2</option>
+				<option value="23">Cricket || Outd-3</option>
+				<option value="24">Football || Outd-4</option>
+				<option value="25">Handball || Outd-5</option>
+				<option value="26">Hockey || Outd-6</option>
+				<option value="27">Kabaddi || Outd-7</option>
+				<option value="28">Korfball || Outd-8</option>
+				<option value="29">Swimming || Outd-9</option>
+				<option value="30">Lawn Tennis || Outd-10</option>
+				<option value="31">Volleyball || Outd-11</option>
+				<option value="32">Wushu || Outd-12</option>
+				<option value="33">Yoga || Outd-13</option>
+				<option value="34">Photography || Out-17</option>
+				<option value="35">Equestrian || OUT-20</option>
+				<option value="36">Khokho || OUT-21</option>
+
+			</select><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$ddlCourse--></span>
+                                                
+                                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl02_txtOrder__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$txtOrder--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$txtOrder" type="text" value="1" maxlength="2" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl02_txtOrder" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$txtOrder--></span>
+                                
+                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl02_txtcapcity__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$txtcapcity--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$txtcapcity" type="text" value="50" maxlength="3" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl02_txtcapcity" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$txtcapcity--></span>
+                                
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl02_lnkAdd__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$lnkAdd--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$lnkAdd&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Wait..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl02_lnkAdd" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$lnkAdd&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Add.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$lnkAdd--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl02_lnkDeleteDetail1__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$lnkDeleteDetail1--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$lnkDeleteDetail1&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Deleting&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl02_lnkDeleteDetail1" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$lnkDeleteDetail1&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Remove.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl02$lnkDeleteDetail1--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:5%;">
+                                2
+                            </td><td align="center" style="width:10%;">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl03_ddlCourse__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$ddlCourse--><select name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$ddlCourse" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl03_ddlCourse" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$ddlCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+				<option value="Select Activity">Select Activity</option>
+				<option value="8">Philately || Ind-13</option>
+				<option value="13">Photography || Ind-17</option>
+				<option value="19">Kabaddi || Ind-19</option>
+				<option value="20">Athletics || Outd-1</option>
+				<option selected="selected" value="22">Basketball || Outd-2</option>
+				<option value="23">Cricket || Outd-3</option>
+				<option value="24">Football || Outd-4</option>
+				<option value="25">Handball || Outd-5</option>
+				<option value="26">Hockey || Outd-6</option>
+				<option value="27">Kabaddi || Outd-7</option>
+				<option value="28">Korfball || Outd-8</option>
+				<option value="29">Swimming || Outd-9</option>
+				<option value="30">Lawn Tennis || Outd-10</option>
+				<option value="31">Volleyball || Outd-11</option>
+				<option value="32">Wushu || Outd-12</option>
+				<option value="33">Yoga || Outd-13</option>
+				<option value="34">Photography || Out-17</option>
+				<option value="35">Equestrian || OUT-20</option>
+				<option value="36">Khokho || OUT-21</option>
+
+			</select><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$ddlCourse--></span>
+                                                
+                                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl03_txtOrder__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$txtOrder--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$txtOrder" type="text" value="3" maxlength="2" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl03_txtOrder" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$txtOrder--></span>
+                                
+                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl03_txtcapcity__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$txtcapcity--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$txtcapcity" type="text" value="40" maxlength="3" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl03_txtcapcity" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$txtcapcity--></span>
+                                
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl03_lnkAdd__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$lnkAdd--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$lnkAdd&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Wait..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl03_lnkAdd" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$lnkAdd&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Add.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$lnkAdd--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl03_lnkDeleteDetail1__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$lnkDeleteDetail1--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$lnkDeleteDetail1&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Deleting&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl03_lnkDeleteDetail1" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$lnkDeleteDetail1&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Remove.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl03$lnkDeleteDetail1--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:5%;">
+                                3
+                            </td><td align="center" style="width:10%;">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl04_ddlCourse__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$ddlCourse--><select name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$ddlCourse" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl04_ddlCourse" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$ddlCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+				<option value="Select Activity">Select Activity</option>
+				<option value="8">Philately || Ind-13</option>
+				<option value="13">Photography || Ind-17</option>
+				<option value="19">Kabaddi || Ind-19</option>
+				<option value="20">Athletics || Outd-1</option>
+				<option value="22">Basketball || Outd-2</option>
+				<option selected="selected" value="23">Cricket || Outd-3</option>
+				<option value="24">Football || Outd-4</option>
+				<option value="25">Handball || Outd-5</option>
+				<option value="26">Hockey || Outd-6</option>
+				<option value="27">Kabaddi || Outd-7</option>
+				<option value="28">Korfball || Outd-8</option>
+				<option value="29">Swimming || Outd-9</option>
+				<option value="30">Lawn Tennis || Outd-10</option>
+				<option value="31">Volleyball || Outd-11</option>
+				<option value="32">Wushu || Outd-12</option>
+				<option value="33">Yoga || Outd-13</option>
+				<option value="34">Photography || Out-17</option>
+				<option value="35">Equestrian || OUT-20</option>
+				<option value="36">Khokho || OUT-21</option>
+
+			</select><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$ddlCourse--></span>
+                                                
+                                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl04_txtOrder__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$txtOrder--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$txtOrder" type="text" value="5" maxlength="2" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl04_txtOrder" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$txtOrder--></span>
+                                
+                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl04_txtcapcity__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$txtcapcity--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$txtcapcity" type="text" value="50" maxlength="3" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl04_txtcapcity" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$txtcapcity--></span>
+                                
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl04_lnkAdd__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$lnkAdd--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$lnkAdd&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Wait..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl04_lnkAdd" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$lnkAdd&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Add.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$lnkAdd--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl04_lnkDeleteDetail1__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$lnkDeleteDetail1--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$lnkDeleteDetail1&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Deleting&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl04_lnkDeleteDetail1" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$lnkDeleteDetail1&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Remove.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl04$lnkDeleteDetail1--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:5%;">
+                                4
+                            </td><td align="center" style="width:10%;">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl05_ddlCourse__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$ddlCourse--><select name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$ddlCourse" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl05_ddlCourse" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$ddlCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+				<option value="Select Activity">Select Activity</option>
+				<option value="8">Philately || Ind-13</option>
+				<option value="13">Photography || Ind-17</option>
+				<option value="19">Kabaddi || Ind-19</option>
+				<option value="20">Athletics || Outd-1</option>
+				<option value="22">Basketball || Outd-2</option>
+				<option value="23">Cricket || Outd-3</option>
+				<option selected="selected" value="24">Football || Outd-4</option>
+				<option value="25">Handball || Outd-5</option>
+				<option value="26">Hockey || Outd-6</option>
+				<option value="27">Kabaddi || Outd-7</option>
+				<option value="28">Korfball || Outd-8</option>
+				<option value="29">Swimming || Outd-9</option>
+				<option value="30">Lawn Tennis || Outd-10</option>
+				<option value="31">Volleyball || Outd-11</option>
+				<option value="32">Wushu || Outd-12</option>
+				<option value="33">Yoga || Outd-13</option>
+				<option value="34">Photography || Out-17</option>
+				<option value="35">Equestrian || OUT-20</option>
+				<option value="36">Khokho || OUT-21</option>
+
+			</select><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$ddlCourse--></span>
+                                                
+                                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl05_txtOrder__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$txtOrder--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$txtOrder" type="text" value="6" maxlength="2" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl05_txtOrder" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$txtOrder--></span>
+                                
+                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl05_txtcapcity__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$txtcapcity--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$txtcapcity" type="text" value="50" maxlength="3" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl05_txtcapcity" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$txtcapcity--></span>
+                                
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl05_lnkAdd__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$lnkAdd--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$lnkAdd&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Wait..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl05_lnkAdd" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$lnkAdd&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Add.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$lnkAdd--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl05_lnkDeleteDetail1__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$lnkDeleteDetail1--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$lnkDeleteDetail1&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Deleting&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl05_lnkDeleteDetail1" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$lnkDeleteDetail1&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Remove.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl05$lnkDeleteDetail1--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:5%;">
+                                5
+                            </td><td align="center" style="width:10%;">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl06_ddlCourse__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$ddlCourse--><select name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$ddlCourse" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl06_ddlCourse" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$ddlCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+				<option value="Select Activity">Select Activity</option>
+				<option value="8">Philately || Ind-13</option>
+				<option value="13">Photography || Ind-17</option>
+				<option value="19">Kabaddi || Ind-19</option>
+				<option value="20">Athletics || Outd-1</option>
+				<option value="22">Basketball || Outd-2</option>
+				<option value="23">Cricket || Outd-3</option>
+				<option value="24">Football || Outd-4</option>
+				<option selected="selected" value="25">Handball || Outd-5</option>
+				<option value="26">Hockey || Outd-6</option>
+				<option value="27">Kabaddi || Outd-7</option>
+				<option value="28">Korfball || Outd-8</option>
+				<option value="29">Swimming || Outd-9</option>
+				<option value="30">Lawn Tennis || Outd-10</option>
+				<option value="31">Volleyball || Outd-11</option>
+				<option value="32">Wushu || Outd-12</option>
+				<option value="33">Yoga || Outd-13</option>
+				<option value="34">Photography || Out-17</option>
+				<option value="35">Equestrian || OUT-20</option>
+				<option value="36">Khokho || OUT-21</option>
+
+			</select><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$ddlCourse--></span>
+                                                
+                                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl06_txtOrder__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$txtOrder--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$txtOrder" type="text" value="7" maxlength="2" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl06_txtOrder" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$txtOrder--></span>
+                                
+                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl06_txtcapcity__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$txtcapcity--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$txtcapcity" type="text" value="50" maxlength="3" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl06_txtcapcity" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$txtcapcity--></span>
+                                
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl06_lnkAdd__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$lnkAdd--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$lnkAdd&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Wait..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl06_lnkAdd" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$lnkAdd&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Add.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$lnkAdd--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl06_lnkDeleteDetail1__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$lnkDeleteDetail1--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$lnkDeleteDetail1&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Deleting&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl06_lnkDeleteDetail1" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$lnkDeleteDetail1&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Remove.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl06$lnkDeleteDetail1--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:5%;">
+                                6
+                            </td><td align="center" style="width:10%;">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl07_ddlCourse__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$ddlCourse--><select name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$ddlCourse" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl07_ddlCourse" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$ddlCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+				<option value="Select Activity">Select Activity</option>
+				<option value="8">Philately || Ind-13</option>
+				<option value="13">Photography || Ind-17</option>
+				<option value="19">Kabaddi || Ind-19</option>
+				<option value="20">Athletics || Outd-1</option>
+				<option value="22">Basketball || Outd-2</option>
+				<option value="23">Cricket || Outd-3</option>
+				<option value="24">Football || Outd-4</option>
+				<option value="25">Handball || Outd-5</option>
+				<option selected="selected" value="26">Hockey || Outd-6</option>
+				<option value="27">Kabaddi || Outd-7</option>
+				<option value="28">Korfball || Outd-8</option>
+				<option value="29">Swimming || Outd-9</option>
+				<option value="30">Lawn Tennis || Outd-10</option>
+				<option value="31">Volleyball || Outd-11</option>
+				<option value="32">Wushu || Outd-12</option>
+				<option value="33">Yoga || Outd-13</option>
+				<option value="34">Photography || Out-17</option>
+				<option value="35">Equestrian || OUT-20</option>
+				<option value="36">Khokho || OUT-21</option>
+
+			</select><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$ddlCourse--></span>
+                                                
+                                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl07_txtOrder__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$txtOrder--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$txtOrder" type="text" value="8" maxlength="2" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl07_txtOrder" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$txtOrder--></span>
+                                
+                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl07_txtcapcity__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$txtcapcity--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$txtcapcity" type="text" value="50" maxlength="3" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl07_txtcapcity" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$txtcapcity--></span>
+                                
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl07_lnkAdd__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$lnkAdd--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$lnkAdd&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Wait..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl07_lnkAdd" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$lnkAdd&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Add.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$lnkAdd--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl07_lnkDeleteDetail1__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$lnkDeleteDetail1--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$lnkDeleteDetail1&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Deleting&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl07_lnkDeleteDetail1" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$lnkDeleteDetail1&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Remove.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl07$lnkDeleteDetail1--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:5%;">
+                                7
+                            </td><td align="center" style="width:10%;">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl08_ddlCourse__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$ddlCourse--><select name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$ddlCourse" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl08_ddlCourse" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$ddlCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+				<option value="Select Activity">Select Activity</option>
+				<option value="8">Philately || Ind-13</option>
+				<option value="13">Photography || Ind-17</option>
+				<option value="19">Kabaddi || Ind-19</option>
+				<option value="20">Athletics || Outd-1</option>
+				<option value="22">Basketball || Outd-2</option>
+				<option value="23">Cricket || Outd-3</option>
+				<option value="24">Football || Outd-4</option>
+				<option value="25">Handball || Outd-5</option>
+				<option value="26">Hockey || Outd-6</option>
+				<option value="27">Kabaddi || Outd-7</option>
+				<option value="28">Korfball || Outd-8</option>
+				<option value="29">Swimming || Outd-9</option>
+				<option value="30">Lawn Tennis || Outd-10</option>
+				<option selected="selected" value="31">Volleyball || Outd-11</option>
+				<option value="32">Wushu || Outd-12</option>
+				<option value="33">Yoga || Outd-13</option>
+				<option value="34">Photography || Out-17</option>
+				<option value="35">Equestrian || OUT-20</option>
+				<option value="36">Khokho || OUT-21</option>
+
+			</select><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$ddlCourse--></span>
+                                                
+                                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl08_txtOrder__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$txtOrder--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$txtOrder" type="text" value="10" maxlength="2" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl08_txtOrder" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$txtOrder--></span>
+                                
+                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl08_txtcapcity__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$txtcapcity--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$txtcapcity" type="text" value="50" maxlength="3" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl08_txtcapcity" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$txtcapcity--></span>
+                                
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl08_lnkAdd__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$lnkAdd--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$lnkAdd&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Wait..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl08_lnkAdd" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$lnkAdd&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Add.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$lnkAdd--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl08_lnkDeleteDetail1__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$lnkDeleteDetail1--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$lnkDeleteDetail1&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Deleting&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl08_lnkDeleteDetail1" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$lnkDeleteDetail1&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Remove.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl08$lnkDeleteDetail1--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:5%;">
+                                8
+                            </td><td align="center" style="width:10%;">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl09_ddlCourse__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$ddlCourse--><select name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$ddlCourse" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl09_ddlCourse" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$ddlCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+				<option value="Select Activity">Select Activity</option>
+				<option value="8">Philately || Ind-13</option>
+				<option value="13">Photography || Ind-17</option>
+				<option value="19">Kabaddi || Ind-19</option>
+				<option value="20">Athletics || Outd-1</option>
+				<option value="22">Basketball || Outd-2</option>
+				<option value="23">Cricket || Outd-3</option>
+				<option value="24">Football || Outd-4</option>
+				<option value="25">Handball || Outd-5</option>
+				<option value="26">Hockey || Outd-6</option>
+				<option value="27">Kabaddi || Outd-7</option>
+				<option value="28">Korfball || Outd-8</option>
+				<option value="29">Swimming || Outd-9</option>
+				<option value="30">Lawn Tennis || Outd-10</option>
+				<option value="31">Volleyball || Outd-11</option>
+				<option value="32">Wushu || Outd-12</option>
+				<option selected="selected" value="33">Yoga || Outd-13</option>
+				<option value="34">Photography || Out-17</option>
+				<option value="35">Equestrian || OUT-20</option>
+				<option value="36">Khokho || OUT-21</option>
+
+			</select><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$ddlCourse--></span>
+                                                
+                                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl09_txtOrder__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$txtOrder--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$txtOrder" type="text" value="12" maxlength="2" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl09_txtOrder" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$txtOrder--></span>
+                                
+                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl09_txtcapcity__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$txtcapcity--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$txtcapcity" type="text" value="50" maxlength="3" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl09_txtcapcity" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$txtcapcity--></span>
+                                
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl09_lnkAdd__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$lnkAdd--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$lnkAdd&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Wait..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl09_lnkAdd" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$lnkAdd&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Add.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$lnkAdd--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl09_lnkDeleteDetail1__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$lnkDeleteDetail1--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$lnkDeleteDetail1&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Deleting&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl09_lnkDeleteDetail1" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$lnkDeleteDetail1&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Remove.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl09$lnkDeleteDetail1--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:5%;">
+                                9
+                            </td><td align="center" style="width:10%;">
+                                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl10_ddlCourse__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$ddlCourse--><select name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$ddlCourse" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl10_ddlCourse" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$ddlCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+				<option value="Select Activity">Select Activity</option>
+				<option value="8">Philately || Ind-13</option>
+				<option value="13">Photography || Ind-17</option>
+				<option value="19">Kabaddi || Ind-19</option>
+				<option value="20">Athletics || Outd-1</option>
+				<option value="22">Basketball || Outd-2</option>
+				<option value="23">Cricket || Outd-3</option>
+				<option value="24">Football || Outd-4</option>
+				<option value="25">Handball || Outd-5</option>
+				<option value="26">Hockey || Outd-6</option>
+				<option value="27">Kabaddi || Outd-7</option>
+				<option value="28">Korfball || Outd-8</option>
+				<option value="29">Swimming || Outd-9</option>
+				<option value="30">Lawn Tennis || Outd-10</option>
+				<option value="31">Volleyball || Outd-11</option>
+				<option value="32">Wushu || Outd-12</option>
+				<option value="33">Yoga || Outd-13</option>
+				<option selected="selected" value="34">Photography || Out-17</option>
+				<option value="35">Equestrian || OUT-20</option>
+				<option value="36">Khokho || OUT-21</option>
+
+			</select><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$ddlCourse--></span>
+                                                
+                                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl10_txtOrder__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$txtOrder--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$txtOrder" type="text" value="13" maxlength="2" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl10_txtOrder" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$txtOrder--></span>
+                                
+                            </td><td align="center">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl10_txtcapcity__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$txtcapcity--><input name="ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$txtcapcity" type="text" value="30" maxlength="3" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl10_txtcapcity" class="gtextbox" onkeydown="return IntegerOnly(event);"><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$txtcapcity--></span>
+                                
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl10_lnkAdd__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$lnkAdd--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$lnkAdd&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Wait..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl10_lnkAdd" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$lnkAdd&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Add.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$lnkAdd--></span>
+                            </td><td align="center" style="width:10%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvActivityDetail_ctl10_lnkDeleteDetail1__"><!--START:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$lnkDeleteDetail1--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$lnkDeleteDetail1&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Deleting&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvActivityDetail_ctl10_lnkDeleteDetail1" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$lnkDeleteDetail1&#39;,&#39;&#39;)">
+                            <img src="./Activity Course Master_files/Remove.jpeg" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvActivityDetail$ctl10$lnkDeleteDetail1--></span>
+                            </td>
+		</tr>
+	</tbody></table>
+</div></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6"></td>
+        </tr>
+        <tr>
+            <td colspan="6"></td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="4">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tbody><tr>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnSave__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="UPDATE" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSave&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;UPDATING...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSave" tabindex="7" class="button-common" cellpadding="0" cellspacing="0" style="font-weight:normal;"></span>
+                        </td>
+                        <td class="btngap"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;CLEARING..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" tabindex="8" class="button-common" cellpadding="0" cellspacing="0" style="font-weight:normal;"></span>
+                        </td>
+                        <td colspan="2">
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdgap" colspan="6" style="height: 21px"></td>
+        </tr>
+        <tr>
+            <td class="tablesubheading" colspan="6">Activity Course(s) Details List
+            </td>
+        </tr>
+        <tr>
+            <td class="tdgap" colspan="6"></td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_gvDetails__"><div>
+	<table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_gvDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+		<tbody><tr class="header-style">
+			<th scope="col">S.No.</th><th scope="col">Activity Course Code</th><th scope="col">Activity Course Name</th><th scope="col">Session</th><th scope="col">Semester</th><th scope="col">Activity Course Order</th><th scope="col">EDIT</th><th scope="col">DELETE</th>
+		</tr><tr class="item-style" style="color:Black;background-color:#E4EAFF;font-weight:normal;">
+			<td align="center" style="width:5%;">
+                                41
+                            </td><td align="center" style="width:20%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_lnkSelect__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkSelect--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkSelect&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_lnkSelect" class="gridlink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkSelect&#39;,&#39;&#39;)">Out</a><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkSelect--></span>
+                            </td><td align="center" style="width:15%;">Outdoor</td><td align="center" style="width:15%;">2025-2026 </td><td align="center" style="width:15%;">Odd</td><td align="center" style="width:15%;">1</td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkEdit&#39;,&#39;&#39;)">
+                                <img src="./Activity Course Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Deleting...&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkDelete&#39;,&#39;&#39;)">
+                                <img src="./Activity Course Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:5%;">
+                                42
+                            </td><td align="center" style="width:20%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_lnkSelect__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkSelect--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkSelect&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_lnkSelect" class="gridlink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkSelect&#39;,&#39;&#39;)">In</a><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkSelect--></span>
+                            </td><td align="center" style="width:15%;">Indoor</td><td align="center" style="width:15%;">2025-2026 </td><td align="center" style="width:15%;">Even
+</td><td align="center" style="width:15%;">2</td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkEdit&#39;,&#39;&#39;)">
+                                <img src="./Activity Course Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Deleting...&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkDelete&#39;,&#39;&#39;)">
+                                <img src="./Activity Course Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:5%;">
+                                43
+                            </td><td align="center" style="width:20%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_lnkSelect__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkSelect--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkSelect&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_lnkSelect" class="gridlink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkSelect&#39;,&#39;&#39;)">Out</a><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkSelect--></span>
+                            </td><td align="center" style="width:15%;">Outdoor</td><td align="center" style="width:15%;">2025-2026 </td><td align="center" style="width:15%;">Even
+</td><td align="center" style="width:15%;">2</td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_lnkEdit" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkEdit&#39;,&#39;&#39;)">
+                                <img src="./Activity Course Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Deleting...&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_lnkDelete" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkDelete&#39;,&#39;&#39;)">
+                                <img src="./Activity Course Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkDelete--></span>
+                            </td>
+		</tr><tr class="pager-style" align="center" style="color:#000000;">
+			<td colspan="8"><table border="0">
+				<tbody><tr>
+					<td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl06$ctl01&#39;,&#39;Page$1&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails&#39;,&#39;Page$1&#39;)" style="color:#000000;">1</a></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl06$ctl02&#39;,&#39;Page$2&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails&#39;,&#39;Page$2&#39;)" style="color:#000000;">2</a></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl06$ctl03&#39;,&#39;Page$3&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails&#39;,&#39;Page$3&#39;)" style="color:#000000;">3</a></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl06$ctl04&#39;,&#39;Page$4&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails&#39;,&#39;Page$4&#39;)" style="color:#000000;">4</a></td><td><span>5</span></td>
+				</tr>
+			</tbody></table></td>
+		</tr>
+	</tbody></table>
+</div></div>
+            </td>
+        </tr>
+    </tbody></table>
+    <iframe width="174" height="189" name="gToday:normal:agenda.js" id="gToday:normal:agenda.js" src="./Activity Course Master_files/ipopeng.html" scrolling="no" frameborder="0" style="visibility: visible; z-index: 119; position: absolute; top: -500px; left: -500px;"></iframe>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script></form>
+
+
+<script language="javascript" src="./Activity Course Master_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Activity Course Master_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Achievement / Disciplinary Approval</span>
+    </div>
+
+    <div style="padding: 15px;">
+        <form method="GET">
+            <table class="form-table" width="100%">
+                <tr>
+                    <td class="vtext" width="12%">College</td>
+                    <td class="colon">:</td>
+                    <td width="35%">
+                        <select name="college_id" class="dropdown w-300">
+                            <option value="">-- Select College --</option>
+                            {% for c in lookups.colleges %}<option value="{{ c.id }}" {% if filters.college_id == c.id|string %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext" width="12%">Session</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="session_id" class="dropdown w-150">
+                            <option value="">--Select Session--</option>
+                            {% for s in lookups.sessions %}<option value="{{ s.id }}" {% if filters.session_id == s.id|string %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top:10px;">
+                        <input type="submit" value="SEARCH PENDING" class="button-common" style="width:150px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 25px;">
+            <table class="table-grid-view" width="100%">
+                <thead>
+                    <tr class="header-style">
+                        <th width="5%"><input type="checkbox"></th>
+                        <th width="5%">S.No.</th>
+                        <th width="15%">Adm. No.</th>
+                        <th>Student Name</th>
+                        <th>Category</th>
+                        <th>Details</th>
+                        <th width="10%">Type</th>
+                        <th width="10%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="item-style">
+                        <td align="center"><input type="checkbox"></td>
+                        <td align="center">1</td>
+                        <td align="center">2020BS123M</td>
+                        <td>RAJESH KUMAR</td>
+                        <td>Sports</td>
+                        <td>Gold Medal in Inter-University Athletics</td>
+                        <td align="center"><span style="color:green; font-weight:bold;">Achievement</span></td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/edit.gif') }}" style="cursor:pointer" title="View Detail">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="text-align:center; margin-top:20px;">
+                <input type="button" value="APPROVE SELECTED" class="button-common" style="width:150px; background:#3c8dbc; color:white;">
+                <input type="button" value="REJECT SELECTED" class="button-common" style="margin-left:10px; width:150px; background:#d9534f; border-color:#d43f3a;">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

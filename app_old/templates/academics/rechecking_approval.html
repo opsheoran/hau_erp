@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">{{ title }}</span>
+    </div>
+
+    <form id="filterForm" method="GET">
+        <table width="100%" class="filter-table">
+            <tr>
+                <td class="vtext">College</td>
+                <td class="colon">:</td>
+                <td colspan="4">
+                    <select name="college_id" id="ddlCollege" class="dropdown w-300" onchange="loadDegrees()">
+                        <option value="">--Select College--</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Session</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="session_id" id="ddlSession" class="dropdown w-200">
+                        <option value="">--Select Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="degree_id" id="ddlDegree" class="dropdown w-300">
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" align="center" style="padding-top: 15px;">
+                    <input type="submit" value="VIEW REQUESTS" class="button-common">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div style="margin-top: 25px;">
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <th style="width: 5%;">S.No.</th>
+                    <th style="width: 25%;">Student Name</th>
+                    <th style="width: 15%;">Admission No.</th>
+                    <th style="width: 25%;">Course</th>
+                    <th style="width: 10%;">Old Marks</th>
+                    <th style="width: 10%;">New Marks</th>
+                    <th style="width: 10%;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ item.studentname }}</td>
+                    <td align="center">{{ item.AdmissionNo }}</td>
+                    <td>{{ item.coursename }} [{{ item.coursecode }}]</td>
+                    <td align="center">{{ item.minmarks or '-' }}</td> <!-- Placeholder for old marks if not in reval -->
+                    <td align="center">{{ item.marks_obt }}</td>
+                    <td align="center">
+                        <input type="checkbox" name="approve_{{ item.Pk_Stumarksdtlid }}">
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" align="center" style="color: red; padding: 20px;">No pending rechecking requests found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% if items %}
+        <div style="margin-top: 20px; text-align: center;">
+            <input type="button" value="APPROVE SELECTED" class="button-common" style="width: 150px;">
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function loadDegrees() {
+    var cid = document.getElementById('ddlCollege').value;
+    if (!cid) return;
+    fetch('/academics/api/college/' + cid + '/degrees')
+        .then(r => r.json())
+        .then(data => {
+            var ddl = document.getElementById('ddlDegree');
+            ddl.innerHTML = '<option value="">--Select Degree--</option>';
+            data.forEach(d => {
+                var o = document.createElement('option');
+                o.value = d.id;
+                o.textContent = d.name;
+                ddl.appendChild(o);
+            });
+        });
+}
+</script>
+{% endblock %}

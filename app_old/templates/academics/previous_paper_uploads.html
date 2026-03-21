@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Previous Question Paper Uploads</span>
+    </div>
+
+    <form id="filterForm" method="GET">
+        <table width="100%" class="filter-table">
+            <tr>
+                <td class="vtext">College</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="ddlCollege" class="dropdown w-300" onchange="loadDegrees()">
+                        <option value="">--Select College--</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Academic Session</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="session_id" id="ddlSession" class="dropdown w-200" onchange="refreshGrid()">
+                        <option value="">--Select Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="degree_id" id="ddlDegree" class="dropdown w-300" onchange="onDegreeChange()">
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Class</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="semester_id" id="ddlSemester" class="dropdown w-150" onchange="onSemesterChange()">
+                        <option value="">--Select Class--</option>
+                        {% for s in lookups.semesters %}
+                        <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.semester_roman }}</option>
+                        {% endfor %}
+                    </select> <span class="required">*</span>
+                </td>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="branch_id" id="ddlBranch" class="dropdown w-250" onchange="loadCourses()">
+                        <option value="0">--Select Department--</option>
+                        {% for b in lookups.branches %}
+                        <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                        {% endfor %}
+                    </select> (Only For PG Courses)
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Year</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <input type="text" id="txtYear" class="textbox w-150" value="" readonly>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div style="margin-top: 20px; padding: 15px; border: 1px solid #ddd; background: #fdfdfd;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">Upload New Question Paper</span>
+        </div>
+        <form method="POST" enctype="multipart/form-data" onsubmit="return validateUpload()">
+            <input type="hidden" name="college_id" value="{{ filters.college_id }}">
+            <input type="hidden" name="session_id" value="{{ filters.session_id }}">
+            <input type="hidden" name="degree_id" value="{{ filters.degree_id }}">
+            <input type="hidden" name="semester_id" value="{{ filters.semester_id }}">
+            <input type="hidden" name="branch_id" value="{{ filters.branch_id }}">
+
+            <table width="100%">
+                <tr>
+                    <td class="vtext" style="width: 15%">Subject</td>
+                    <td class="colon">:</td>
+                    <td class="required">
+                        <select name="course_id" id="ddlCourse" class="dropdown w-300" required>
+                            <option value="0">--Select Course--</option>
+                            {% for c in lookups.courses %}
+                            <option value="{{ c.pk_courseid }}" {% if filters.course_id|string == c.pk_courseid|string %}selected{% endif %}>{{ c.coursename }} / {{ c.coursecode }}{% if c.sessionname %} [{{ c.sessionname }} ]{% endif %}</option>
+                            {% endfor %}
+                        </select> *
+                    </td>
+                    <td class="vtext" style="width: 15%">Report Upload</td>
+                    <td class="colon">:</td>
+                    <td class="required">
+                        <input type="file" name="report_file" id="flUpload" class="textbox" onchange="checkFileSize(this)" required>
+                        <div style="font-size: 10px; color: #ff9600; font-weight: bold; margin-top: 5px;">
+                            (Pdf File Only And Should not Be More Than 2MB)
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="5" style="padding-top: 15px; text-align: center;">
+                        <input type="submit" value="UPLOAD" class="button-common" style="width: 120px;">
+                        <input type="button" value="VIEW" class="button-common" style="width: 100px; margin: 0 10px;" onclick="refreshGrid()">
+                        <input type="button" value="RESET" class="button-common" style="width: 100px;" onclick="window.location.href='{{ url_for('academics_mgmt.previous_paper_uploads') }}'">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <div style="margin-top: 25px;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">List Of Question Papers uploaded</span>
+        </div>
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <th style="width: 5%;">S.No.</th>
+                    <th style="width: 40%;">Course Name</th>
+                    <th style="width: 20%;">File Name</th>
+                    <th style="width: 15%;">Upload Date</th>
+                    <th style="width: 10%;">Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ item.coursename }} [ {{ item.coursecode }} ]</td>
+                    <td>{{ item.uploadfileName }}</td>
+                    <td align="center">{{ item.Date }}</td>
+                    <td align="center">
+                        <a href="{{ url_for('static', filename=item.FilePath) }}" target="_blank">
+                            <img src="{{ url_for('static', filename='images/download.png') }}" alt="Download">
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" align="center" style="color: red; padding: 20px;">No records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function loadDegrees() {
+    var cid = document.getElementById('ddlCollege').value;
+    if (!cid) return;
+    fetch('/academics/api/college/' + cid + '/degrees')
+        .then(r => r.json())
+        .then(data => {
+            setOptions(document.getElementById('ddlDegree'), data, '--Select Degree--');
+        });
+}
+
+function onDegreeChange() {
+    var did = document.getElementById('ddlDegree').value;
+    var cid = document.getElementById('ddlCollege').value;
+    if (!did || !cid) return;
+    fetch('/academics/api/degree/' + did + '/branches')
+        .then(r => r.json())
+        .then(data => {
+            setOptions(document.getElementById('ddlBranch'), data, '--Select Department--');
+        });
+}
+
+function onSemesterChange() {
+    loadYear();
+    loadCourses();
+}
+
+function loadYear() {
+    var sid = document.getElementById('ddlSemester').value;
+    if (!sid) {
+        document.getElementById('txtYear').value = '';
+        return;
+    }
+    fetch('/academics/api/get_semester_year/' + sid)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('txtYear').value = (data && data.degreeyear_char) ? data.degreeyear_char : '';
+        });
+}
+
+function loadCourses() {
+    var did = document.getElementById('ddlDegree').value;
+    var sid = document.getElementById('ddlSemester').value;
+    var bid = document.getElementById('ddlBranch').value;
+    var sess = document.getElementById('ddlSession').value;
+    if (!did || !sid) return;
+    
+    var url = '/academics/api/get_courses_filtered?degree_id=' + did + '&semester_id=' + sid + '&branch_id=' + bid + '&session_id=' + sess;
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            var select = document.getElementById('ddlCourse');
+            select.innerHTML = '<option value="0">--Select Course--</option>';
+            data.forEach(c => {
+                var o = document.createElement('option');
+                o.value = c.pk_courseid || c.id;
+                if (c.coursename && c.coursecode) {
+                    o.textContent = c.coursename + ' / ' + c.coursecode + (c.sessionname ? (' [' + c.sessionname + ' ]') : '');
+                } else {
+                    o.textContent = c.name || '';
+                }
+                select.appendChild(o);
+            });
+        });
+}
+
+function setOptions(dropdown, data, defaultText) {
+    dropdown.innerHTML = '<option value="">' + defaultText + '</option>';
+    data.forEach(function(item) {
+        var opt = document.createElement('option');
+        opt.value = item.id || item.pk_branchid;
+        opt.textContent = item.name || item.Branchname;
+        dropdown.appendChild(opt);
+    });
+}
+
+function refreshGrid() {
+    document.getElementById('filterForm').submit();
+}
+
+function checkFileSize(fileInput) {
+    if (fileInput.files.length > 0) {
+        var size = fileInput.files[0].size; 
+        if (size > 2 * 1024 * 1024) {
+            alert("File should not be more than 2MB.");
+            fileInput.value = "";
+            return false;
+        }
+        var ext = fileInput.value.split('.').pop().toLowerCase();
+        if (ext !== 'pdf') {
+            alert("Only PDF files are allowed.");
+            fileInput.value = "";
+            return false;
+        }
+    }
+}
+
+function validateUpload() {
+    var cid = document.getElementById('ddlCollege').value;
+    var sid = document.getElementById('ddlSession').value;
+    var did = document.getElementById('ddlDegree').value;
+    var semid = document.getElementById('ddlSemester').value;
+    var courseid = document.getElementById('ddlCourse').value;
+    
+    if (!cid || !sid || !did || !semid || courseid === "0") {
+        alert("Please select all required fields.");
+        return false;
+    }
+    return true;
+}
+
+// Initialize Year display on load (for already-selected Class)
+loadYear();
+</script>
+
+<style>
+    .filter-table td { padding: 5px; }
+    .vtext { font-size: 11px; font-weight: bold; width: 120px; }
+</style>
+{% endblock %}

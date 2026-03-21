@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" id="aspnetForm">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="edit_id" value="{{ edit_data.id if edit_data else '' }}">
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="3" class="tableheading">
+                    <span class="mainheadingborderbottom">Common Messaging</span>
+                </td>
+            </tr>
+            <tr><td colspan="3" height="10"></td></tr>
+
+            <tr>
+                <td class="vtext" width="20%" valign="top">Message</td>
+                <td class="colon" valign="top">:</td>
+                <td class="required">
+                    <textarea name="message" id="txtRemarks" class="textbox w-300" style="height:64px;" required>{{ edit_data.message if edit_data else '' }}</textarea>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Is Active</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="checkbox" name="is_active" id="chkIsActive" {% if edit_data and edit_data.isactive %}checked{% endif %}>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Publish Date</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="publish_date" type="date" id="txtPublishDate" class="textbox w-150" value="{{ edit_data.PublishDate if edit_data else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+
+            <tr><td colspan="3" height="15"></td></tr>
+            <tr>
+                <td></td><td></td>
+                <td>
+                    {% if perm.AllowAdd or perm.AllowUpdate %}
+                    <input type="submit" name="action" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" id="btnSave" class="button-common">
+                    {% endif %}
+                    <span style="margin-left:10px;"></span>
+                    <input type="submit" name="action" value="RESET" id="btnReset" class="button-common">
+                    
+                    <span id="lblMsg" class="lblmessage" style="margin-left:20px; font-weight:bold; color:Green;">
+                        {% with messages = get_flashed_messages(category_filter=["success"]) %}
+                            {% if messages %}{{ messages[-1] }}{% endif %}
+                        {% endwith %}
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="margin-top:30px;">
+        <tbody>
+            <tr>
+                <td class="tablesubheading" colspan="3">
+                    <span class="subheadingborderbottom">List of Messages</span>
+                </td>
+            </tr>
+            <tr><td height="10" colspan="3"></td></tr>
+            
+            <tr>
+                <td colspan="3">
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1" style="border-collapse:collapse;" id="dgDetails">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="5%">S. No.</th>
+                                <th width="10%">DDO</th>
+                                <th width="10%">Location</th>
+                                <th>Message</th>
+                                <th width="12%">Publish Date</th>
+                                <th width="8%">Is Active</th>
+                                <th width="8%">EDIT</th>
+                                <th width="8%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for m in messages_list %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                <td align="center">{{ loop.index }}</td>
+                                <td>{{ m.ddo_name if m.ddo_name else '' }}</td>
+                                <td>{{ m.loc_name if m.loc_name else '' }}</td>
+                                <td>{{ m.message }}</td>
+                                <td align="center">{{ m.PublishDate.strftime('%d/%m/%Y') if m.PublishDate else '' }}</td>
+                                <td align="center">{{ 'True' if m.isactive else 'False' }}</td>
+                                <td align="center">
+                                    <a href="{{ url_for('umm.send_message', edit_id=m.id) }}">
+                                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit" border="0">
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    <button type="submit" name="action" value="DELETE" onclick="return confirm('Are you sure you want to delete this message?');" style="border:none; background:none; cursor:pointer; padding:0;">
+                                        <input type="hidden" name="delete_id" value="{{ m.id }}">
+                                        <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete" border="0">
+                                    </button>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="8" align="center" style="padding:10px;">No messages found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<script>
+    setTimeout(function() {
+        var msg = document.getElementById('lblMsg');
+        if (msg) msg.innerHTML = '';
+    }, 5000);
+</script>
+
+{% endblock %}

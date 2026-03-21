@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<span>Transactions</span>&nbsp;&gt;&nbsp;<span>Personal Details</span>&nbsp;&gt;&nbsp;<strong>Employee Permission of Qualification Details</strong>
+{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="target_emp_id" value="{{ employee_info.pk_empid if employee_info else '' }}">
+    <input type="hidden" name="edu_id" value="{{ edit_data.id if edit_data else '' }}">
+
+    <!-- SHARED SEARCH MODAL -->
+    {% include 'establishment/_search_modal.html' %}
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">Employee Permission of Qualification Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Employee Code</td>
+                <td class="colon">:</td>
+                <td class="required" width="30%">
+                    <input name="empcode" type="text" class="textbox w-150" value="{{ employee_info.empcode if employee_info else '' }}" readonly>
+                    <a href="javascript:void(0);" onclick="openEmpSearch('emp_id', '')">
+                        <img src="{{ url_for('static', filename='srec.jpg') }}" border="0" style="vertical-align:middle; cursor:pointer;">
+                    </a>
+                    <span class="required">*</span>
+                </td>
+                <td width="2%"></td>
+                <td class="vtext" width="15%">Employee Name</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="text" class="textbox w-250" value="{{ employee_info.empname if employee_info else '' }}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ employee_info.dept_name if employee_info else '' }}" readonly>
+                </td>
+                <td></td>
+                <td class="vtext">Designation</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ employee_info.designation if employee_info else '' }}" readonly>
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td class="vtext">Year of Admission</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="admission_year" type="text" class="textbox w-150" maxlength="4" value="{{ edit_data.admissionyear if edit_data else '' }}" required onkeypress="return isNumberKey(event)">
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Order Number</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="order_no" type="text" class="textbox w-250" value="{{ edit_data.orderno if edit_data else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">School/Institute/College<br>(University/Board)</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <textarea name="school" class="textbox w-300" rows="2" required>{{ edit_data.School_Institute if edit_data else '' }}</textarea>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Order Date</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="order_date" type="date" class="textbox w-150" value="{{ edit_data.order_date_iso if edit_data else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Name Of Exam</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <textarea name="exam_name" class="textbox w-300" rows="2" required>{{ edit_data.Name_Of_Exam if edit_data else '' }}</textarea>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Upload Document</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="file" name="document_file" class="textbox w-250">
+                    <div style="font-size:11px; font-weight:bold; color:#666;">(Size <= 2MB)</div>
+                    {% if edit_data and edit_data.filename %}
+                    <div style="margin-top:5px;">
+                        Currently: <a href="{{ url_for('static', filename='uploads/employee_permissions/' + edit_data.filename) }}" target="_blank">{{ edit_data.filename }}</a>
+                    </div>
+                    {% endif %}
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="20"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    {% if (edit_data and perm.AllowUpdate) or (not edit_data and perm.AllowAdd) %}
+                    <input type="submit" name="action" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" class="button-common">
+                    {% endif %}
+                    <input type="submit" name="action" value="RESET" class="button-common" formnovalidate>
+                </td>
+            </tr>
+            
+            {% if employee_info %}
+            <tr><td colspan="7" height="30"></td></tr>
+            <tr>
+                <td colspan="7" class="tablesubheading">
+                    <span class="subheadingborderbottom">List of Employee Education Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td colspan="7">
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="5%">S. No.</th>
+                                <th width="12%">Year Of Admission</th>
+                                <th width="15%">Order No.</th>
+                                <th width="20%">School/Institute/College</th>
+                                <th width="20%">Name Of Exam</th>
+                                <th width="12%">Order Date</th>
+                                <th width="8%">EDIT</th>
+                                <th width="8%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in permissions %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                <td align="center">{{ loop.index }}</td>
+                                <td align="center">{{ p.admissionyear }}</td>
+                                <td>{{ p.orderno }}</td>
+                                <td>{{ p.School_Institute }}</td>
+                                <td>{{ p.Name_Of_Exam }}</td>
+                                <td align="center">{{ p.order_date_fmt }}</td>
+                                <td align="center">
+                                    <a href="{{ url_for('establishment.employee_permission_details', emp_id=emp_id, edit_id=p.id) }}">
+                                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    {% if perm.AllowDelete %}
+                                    <a href="{{ url_for('establishment.employee_permission_details', emp_id=emp_id, delete_id=p.id) }}" onclick="return confirm('Are you sure you want to delete this record?')">
+                                        <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="8" align="center" style="padding:10px;">No permissions found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function selectItem(id, name) {
+        window.location.href = "{{ url_for('establishment.employee_permission_details') }}?emp_id=" + id;
+    }
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+</script>
+{% endblock %}

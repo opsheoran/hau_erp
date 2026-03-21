@@ -1,0 +1,75 @@
+﻿{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<span>Transactions</span>&nbsp;&gt;&nbsp;<span>Increment/Promotion</span>&nbsp;&gt;&nbsp;<strong>Non Teaching Employee Promotion Approval</strong>
+{% endblock %}
+
+{% block content %}
+<form method="GET">
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">Non Teaching Employee Promotion Approval</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td class="vtext" width="15%">Status</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <select name="status_filter" class="dropdown w-200" onchange="this.form.submit()">
+                        <option value="" {% if not status_filter %}selected{% endif %}>All</option>
+                        <option value="P" {% if status_filter=='P' %}selected{% endif %}>Pending</option>
+                        <option value="A" {% if status_filter=='A' %}selected{% endif %}>Approved</option>
+                        <option value="R" {% if status_filter=='R' %}selected{% endif %}>Rejected</option>
+                    </select>
+                </td>
+                <td colspan="4"></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1" style="margin-top:10px;">
+    <thead>
+        <tr class="header-style">
+            <th width="5%">S. No.</th>
+            <th width="12%">Emp Code</th>
+            <th>Emp Name</th>
+            <th width="20%">Designation</th>
+            <th width="10%">Current</th>
+            <th width="23%">Set Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in rows %}
+        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+            <td align="center">{{ loop.index }}</td>
+            <td>{{ r.empcode or r.EmpCode or r.EmployeeCode or r.employee_code or r.employeecode }}</td>
+            <td>{{ r.empname or r.EmpName or r.employee_name or r.EmployeeName }}</td>
+            <td>{{ r.designation or r.Designation }}</td>
+            <td align="center">{{ r.Status or r.status }}</td>
+            <td align="center">
+                {% if perm.AllowUpdate %}
+                <form method="POST" style="margin:0; display:inline;">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                    <input type="hidden" name="row_id" value="{{ r.row_id }}">
+                    <select name="new_status" class="dropdown w-150">
+                        <option value="P">Pending</option>
+                        <option value="A">Approved</option>
+                        <option value="R">Rejected</option>
+                    </select>
+                    <button type="submit" class="button-common" style="padding:2px 10px;">Update</button>
+                </form>
+                {% else %}
+                -
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" align="center" style="padding:10px;">No records found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

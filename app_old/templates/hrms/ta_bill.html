@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .ta-form-table td { padding: 4px 8px; font-size: 11px; }
+    .journey-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 10px; }
+    .journey-table th { background: #3c8dbc; color: #fff; padding: 5px; border: 1px solid #2c729e; }
+    .journey-table td { border: 1px solid #ccc; padding: 2px; }
+    .journey-table input, .journey-table select { width: 100%; border: none; font-size: 10px; padding: 2px; }
+    .journey-table input:focus { background: #ffffd0; outline: none; }
+    .total-box { font-weight: bold; background: #eee; text-align: right; padding-right: 10px; }
+</style>
+
+<div style="padding: 10px 20px;">
+    <div class="card card-hau">
+        <div class="tableheading">TA Employee Bill Details</div>
+        <div class="card-body">
+            
+            {% if not editing and action != 'new' %}
+            <!-- List View -->
+            <div class="tablesubheading">List of TA Bills</div>
+            <table width="100%" border="1" style="border:1px solid #D4D4D4; border-collapse:collapse; font-size: 11px; margin-top: 10px;">
+                <tr style="background: #eee; font-weight: bold; text-align: center;">
+                    <th style="padding:5px;">S.No.</th><th>Bill No</th><th>Bill Date</th><th>Amount</th><th>Journey Purpose</th><th>Status</th><th>Action</th>
+                </tr>
+                {% for h in history %}
+                <tr style="background-color: {{ 'White' if loop.index % 2 != 0 else '#F0F0F0' }};">
+                    <td align="center">{{ loop.index }}</td>
+                    <td align="center">{{ h.AdvanceBillNo or '-' }}</td>
+                    <td align="center">{{ h.bill_date }}</td>
+                    <td align="right" style="padding-right:10px;">{{ "{:,.2f}".format(h.BillAmount) }}</td>
+                    <td>{{ h.Journey_Purpose }}</td>
+                    <td align="center">{{ h.status_desc }}</td>
+                    <td align="center">
+                        <a href="?edit_id={{ h.PkID }}" style="color:blue;">View/Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not history %}
+                <tr><td colspan="7" align="center" style="padding:10px;">No Record Found!</td></tr>
+                {% endif %}
+            </table>
+            <div class="mt-3">
+                <a href="?action=new" class="btn btn-sm btn-primary">+ Create New TA Bill</a>
+            </div>
+            {% endif %}
+
+            {% if action == 'new' or editing %}
+            <!-- Entry Form -->
+            <form method="POST" id="taForm">
+                <div style="border:1px solid #ccc; padding:15px; background:#f9f9f9;">
+                    <table width="100%" class="ta-form-table">
+                        <tr><td class="tablesubheading" colspan="4">Master Details</td></tr>
+                        <tr style="height:10px;"></tr>
+                        <tr>
+                            <td class="vtext">Journey Purpose:</td>
+                            <td colspan="3"><input type="text" name="purpose" class="textbox w-100" value="{{ bill.Journey_Purpose if editing else '' }}" required></td>
+                        </tr>
+                        <tr>
+                            <td class="vtext">TA Section:</td>
+                            <td><input type="text" name="section" class="textbox" value="{{ bill.TA_Section if editing else '' }}"></td>
+                            <td class="vtext">Meeting Date:</td>
+                            <td><input type="date" name="meeting_date" class="textbox" value="{{ bill.Meeting_Date if editing else '' }}"></td>
+                        </tr>
+                    </table>
+
+                    <div class="tablesubheading mt-4">Journey Details (Segments)</div>
+                    <table class="journey-table" id="journeyTable">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">From Station</th><th colspan="2">Departure</th><th rowspan="2">To Station</th><th colspan="2">Arrival</th><th rowspan="2">Mode</th><th rowspan="2">KM</th><th rowspan="2">Amount</th><th rowspan="2">DA/Halt</th><th rowspan="2">Total</th><th rowspan="2">×</th>
+                            </tr>
+                            <tr>
+                                <th>Date</th><th>Time</th><th>Date</th><th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if editing %}
+                                {% for seg in segments %}
+                                <tr class="j-row">
+                                    <td><input type="text" name="j_from[]" value="{{ seg.From_Station }}" required></td>
+                                    <td><input type="date" name="j_fdate[]" value="{{ seg.fdate }}" required></td>
+                                    <td><input type="text" name="j_ftime[]" value="{{ seg.FromHour }}:{{ seg.FromMinute }}" placeholder="HH:MM"></td>
+                                    <td><input type="text" name="j_to[]" value="{{ seg.To_Station }}" required></td>
+                                    <td><input type="date" name="j_tdate[]" value="{{ seg.tdate }}" required></td>
+                                    <td><input type="text" name="j_ttime[]" value="{{ seg.ToHour }}:{{ seg.ToMinute }}" placeholder="HH:MM"></td>
+                                    <td>
+                                        <select name="j_mode[]">
+                                            <option value="Train" {% if seg.ModeJourney == 'Train' %}selected{% endif %}>Train</option>
+                                            <option value="Bus" {% if seg.ModeJourney == 'Bus' %}selected{% endif %}>Bus</option>
+                                            <option value="Taxi" {% if seg.ModeJourney == 'Taxi' %}selected{% endif %}>Taxi</option>
+                                            <option value="Own Car" {% if seg.ModeJourney == 'Own Car' %}selected{% endif %}>Own Car</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="number" name="j_km[]" class="calc-trig" value="{{ seg.JourneyKm|int }}"></td>
+                                    <td><input type="number" name="j_amt[]" class="calc-trig" value="{{ seg.JourneyAmount|int }}"></td>
+                                    <td><input type="number" name="j_da[]" class="calc-trig" value="{{ seg.AllowanceAmount|int }}"></td>
+                                    <td align="right" class="row-total">0.00</td>
+                                    <td align="center"><button type="button" class="btn btn-xs btn-danger" onclick="this.closest('tr').remove(); calcTA();">×</button></td>
+                                </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="10" class="total-box">GRAND TOTAL:</td>
+                                <td id="grand-total" class="total-box">0.00</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <button type="button" class="btn btn-xs btn-success mt-2" onclick="addJourneyRow()">+ Add Segment</button>
+
+                    <div class="mt-4 border-top pt-3 text-center">
+                        <input type="submit" value="SAVE AS DRAFT" class="btn btn-sm btn-hau-primary">
+                        <input type="submit" name="final_submit" value="SUBMIT TO ADMIN" class="btn btn-sm btn-danger ms-2">
+                        <a href="{{ url_for('hrms.ta_bill_view') }}" class="btn btn-sm btn-hau-secondary ms-2">CANCEL</a>
+                    </div>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function addJourneyRow() {
+    const tbody = document.querySelector('#journeyTable tbody');
+    const tr = document.createElement('tr');
+    tr.className = 'j-row';
+    tr.innerHTML = `
+        <td><input type="text" name="j_from[]" required></td>
+        <td><input type="date" name="j_fdate[]" required></td>
+        <td><input type="text" name="j_ftime[]" placeholder="HH:MM"></td>
+        <td><input type="text" name="j_to[]" required></td>
+        <td><input type="date" name="j_tdate[]" required></td>
+        <td><input type="text" name="j_ttime[]" placeholder="HH:MM"></td>
+        <td>
+            <select name="j_mode[]">
+                <option value="Train">Train</option><option value="Bus">Bus</option><option value="Taxi">Taxi</option><option value="Own Car">Own Car</option>
+            </select>
+        </td>
+        <td><input type="number" name="j_km[]" class="calc-trig" value="0"></td>
+        <td><input type="number" name="j_amt[]" class="calc-trig" value="0"></td>
+        <td><input type="number" name="j_da[]" class="calc-trig" value="0"></td>
+        <td align="right" class="row-total">0.00</td>
+        <td align="center"><button type="button" class="btn btn-xs btn-danger" onclick="this.closest('tr').remove(); calcTA();">×</button></td>
+    `;
+    tbody.appendChild(tr);
+    document.querySelectorAll('.calc-trig').forEach(el => el.oninput = calcTA);
+}
+
+function calcTA() {
+    let grand = 0;
+    document.querySelectorAll('.j-row').forEach(row => {
+        const amt = parseFloat(row.querySelector('[name="j_amt[]"]').value) || 0;
+        const da = parseFloat(row.querySelector('[name="j_da[]"]').value) || 0;
+        const total = amt + da;
+        row.querySelector('.row-total').innerText = total.toFixed(2);
+        grand += total;
+    });
+    document.getElementById('grand-total').innerText = grand.toFixed(2);
+}
+
+{% if action == 'new' %}
+window.onload = addJourneyRow;
+{% endif %}
+</script>
+{% endblock %}

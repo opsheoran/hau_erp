@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Course Addition/Withdrawal By Teacher</span></div>
+    
+    <div style="padding: 10px;">
+        <form method="GET" id="filterForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">Academic Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" class="dropdownlong" onchange="this.form.submit()">
+                                <option value="0">--Select Academic Session--</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td colspan="3">
+                            <input type="submit" value="VIEW" class="button-common" style="width:100px;">
+                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="window.location.href='{{ url_for('academics.add_with_approval_teacher') }}'">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <div class="tablesubheading" style="margin-top: 20px;">Pending Course Add/Withdrawal Request</div>
+        <table class="grid-table" width="100%">
+            <thead>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Adm. No.</th>
+                    <th>Student Name</th>
+                    <th>Course Code</th>
+                    <th>Course Title</th>
+                    <th>Type</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in pending %}
+                <tr>
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ r.enrollmentno }}</td>
+                    <td>{{ r.fullname }}</td>
+                    <td>{{ r.coursecode }}</td>
+                    <td>{{ r.coursename }}</td>
+                    <td>{{ 'Addition' if r.Addwith_type == 'A' else 'Withdrawal' }}</td>
+                    <td align="center">
+                        <button class="button-common" onclick="showApprovalPopup('{{ r.Pk_AddWith }}', '{{ r.fullname }}', '{{ r.coursecode }}')">ACTION</button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" align="center">No pending requests found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="tablesubheading" style="margin-top: 30px;">Processed Course Add/Withdrawal Request</div>
+        <table class="grid-table" width="100%">
+            <thead>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Adm. No.</th>
+                    <th>Student Name</th>
+                    <th>Course Code</th>
+                    <th>Course Title</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in processed %}
+                <tr>
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ r.enrollmentno }}</td>
+                    <td>{{ r.fullname }}</td>
+                    <td>{{ r.coursecode }}</td>
+                    <td>{{ r.coursename }}</td>
+                    <td>{{ 'Addition' if r.Addwith_type == 'A' else 'Withdrawal' }}</td>
+                    <td align="center">
+                        <b style="color: {{ 'green' if r.Teach_approv == 'A' else 'red' }};">
+                            {{ 'APPROVED' if r.Teach_approv == 'A' else 'REJECTED' }}
+                        </b>
+                    </td>
+                    <td>{{ r.Teach_approv_date }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="8" align="center">No processed requests found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal for Approval -->
+<div id="approvalModal" class="modal" style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4);">
+    <div class="modal-content hau-card" style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 500px;">
+        <div class="tableheading"><span class="mainheadingborderbottom">Approve/Reject Request</span></div>
+        <form method="POST">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="pk_id" id="modal_pk_id">
+            <table width="100%" class="form-table">
+                <tr>
+                    <td class="vtext">Student:</td>
+                    <td id="modal_student_name"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Course:</td>
+                    <td id="modal_course_code"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Action:</td>
+                    <td>
+                        <input type="radio" name="action" value="APPROVE" checked> Approve
+                        <input type="radio" name="action" value="REJECT"> Reject
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Remarks:</td>
+                    <td><textarea name="remarks" class="textbox" style="width: 300px; height: 60px;"></textarea></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center">
+                        <input type="submit" value="SUBMIT" class="button-common">
+                        <button type="button" class="button-common" onclick="document.getElementById('approvalModal').style.display='none'">CANCEL</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<script>
+function showApprovalPopup(id, name, course) {
+    document.getElementById('modal_pk_id').value = id;
+    document.getElementById('modal_student_name').innerText = name;
+    document.getElementById('modal_course_code').innerText = course;
+    document.getElementById('approvalModal').style.display = 'block';
+}
+</script>
+{% endblock %}

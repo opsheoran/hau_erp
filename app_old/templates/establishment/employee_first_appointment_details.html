@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<span>Transactions</span>&nbsp;&gt;&nbsp;<span>Increment/Promotion</span>&nbsp;&gt;&nbsp;<strong>Employee First Appointment Details</strong>
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="emp_id" value="{{ emp.pk_empid if emp else '' }}">
+    <input type="hidden" name="edit_id" value="{{ record.pk_appointmentid if record else '' }}">
+
+    <!-- SHARED SEARCH MODAL -->
+    {% include 'establishment/_search_modal.html' %}
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">Employee Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">DDO</td>
+                <td class="colon">:</td>
+                <td class="required" width="30%">
+                    <select name="ddo_id" class="dropdown w-250" disabled>
+                        <option value="">-- Select DDO --</option>
+                        {% for d in ddos %}
+                        <option value="{{ d.id }}" {% if emp and emp.fk_ddoid|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td width="2%"></td>
+                <td class="vtext" width="15%">Employee Code</td>
+                <td class="colon">:</td>
+                <td class="required" width="30%">
+                    <input name="empcode" type="text" class="textbox w-150" value="{{ emp.empcode if emp else '' }}" readonly>
+                    <a href="javascript:void(0);" onclick="openEmpSearch('emp_id', '')">
+                        <img src="{{ url_for('static', filename='srec.jpg') }}" border="0" style="vertical-align:middle; cursor:pointer;">
+                    </a>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Employee Name</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ emp.empname if emp else '' }}" readonly>
+                </td>
+                <td></td>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ emp.dept_name if emp else '' }}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Designation</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" class="textbox w-250" value="{{ emp.designation if emp else '' }}" readonly>
+                </td>
+                <td></td>
+                <td class="vtext">Appointment Title</td>
+                <td class="colon">:</td>
+                <td>
+                    <textarea name="title" class="textbox w-250" rows="2">{{ record.title if record else '' }}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td colspan="5">
+                    <textarea name="remarks" class="textbox w-500" rows="2">{{ record.remarks if record else '' }}</textarea>
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="20"></td></tr>
+            <tr>
+                <td colspan="7" class="tablesubheading">
+                    <span class="subheadingborderbottom">First Appointment Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext">Date of Joining</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="joining_date" type="text" class="textboxdate w-150" value="{{ (record.joining_date_fmt or '') if record else '' }}" required placeholder="DD/MM/YYYY">
+                    <select name="joining_time" class="dropdown w-100">
+                        <option value="Fore Noon" {% if record and record.JoiningTime == 'Fore Noon' %}selected{% endif %}>Fore Noon</option>
+                        <option value="After Noon" {% if record and record.JoiningTime == 'After Noon' %}selected{% endif %}>After Noon</option>
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Order No.</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="order_no" type="text" class="textbox w-200" value="{{ (record.OrderNo or '') if record else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Appointment Date</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="appointment_date" type="text" class="textboxdate w-150" value="{{ (record.appointment_date_fmt or '') if record else '' }}" required placeholder="DD/MM/YYYY">
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">DDO</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="appointment_ddo" type="text" class="textbox w-250" value="{{ (record.DDO or '') if record else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Designation</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="appointment_designation" type="text" class="textbox w-250" value="{{ (record.Designation or '') if record else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="appointment_department" type="text" class="textbox w-250" value="{{ (record.Department or '') if record else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Basic</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="basic" type="text" class="textbox w-150" value="{{ (record.BasicPay or '') if record else '' }}" required onkeypress="return isNumberKey(event)">
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Pay Scale</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="pay_scale" type="text" class="textbox w-250" value="{{ (record.PayScale or '') if record else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Probation Period Completed Date</td>
+                <td class="colon">:</td>
+                <td>
+                    <input name="probation_date" type="text" class="textboxdate w-150" value="{{ (record.probation_date_fmt or '') if record else '' }}" placeholder="DD/MM/YYYY">
+                </td>
+                <td></td>
+                <td class="vtext">Sr. No</td>
+                <td class="colon">:</td>
+                <td>
+                    <input name="sr_no" type="text" class="textbox w-150" value="{{ (record.SrNo or '') if record else '' }}">
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Due Date of Completion of PP</td>
+                <td class="colon">:</td>
+                <td>
+                    <input name="due_date_pp" type="text" class="textboxdate w-150" value="{{ (record.due_date_pp_fmt or '') if record else '' }}" placeholder="DD/MM/YYYY">
+                </td>
+                <td colspan="4"></td>
+            </tr>
+            
+            <tr><td colspan="7" height="20"></td></tr>
+            <tr>
+                <td colspan="7">
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1" id="probationTermsGrid">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="10%">S. No.</th>
+                                <th width="40%">Terms and Conditions of Probation</th>
+                                <th width="40%">When and how Fulfill</th>
+                                <th width="10%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for term in terms %}
+                            <tr class="item-style">
+                                <td align="center">{{ loop.index }}</td>
+                                <td align="center">
+                                    <textarea name="prob_term[]" rows="2" style="width:95%">{{ term.description }}</textarea>
+                                </td>
+                                <td align="center">
+                                    <textarea name="prob_fulfill[]" rows="2" style="width:95%">{{ term.description2 }}</textarea>
+                                </td>
+                                <td align="center">
+                                    <img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer" onclick="deleteRow(this)">
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr class="item-style">
+                                <td align="center">1</td>
+                                <td align="center">
+                                    <textarea name="prob_term[]" rows="2" style="width:95%"></textarea>
+                                </td>
+                                <td align="center">
+                                    <textarea name="prob_fulfill[]" rows="2" style="width:95%"></textarea>
+                                </td>
+                                <td align="center">
+                                    <img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer" onclick="deleteRow(this)">
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div style="margin-top:5px;">
+                        <input type="button" value="ADD" class="button-common" onclick="addRow()">
+                    </div>
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="20"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    {% set has_db_record = record and record.pk_appointmentid %}
+                    {% if (has_db_record and perm.AllowUpdate) or (not has_db_record and perm.AllowAdd) %}
+                    <input type="submit" name="action" value="{{ 'UPDATE' if has_db_record else 'SAVE' }}" class="button-common">
+                    {% endif %}
+                    {% if has_db_record and perm.AllowDelete %}
+                    <input type="submit" name="action" value="DELETE" class="button-common" onclick="return confirm('Are you sure?')">
+                    {% endif %}
+                    <input type="submit" name="action" value="RESET" class="button-common" formnovalidate>
+                </td>
+            </tr>
+            
+            {% if emp %}
+            <tr><td colspan="7" height="30"></td></tr>
+            <tr>
+                <td colspan="7" class="tablesubheading">
+                    <span class="subheadingborderbottom">List of First Appointment Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td colspan="7">
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="10%">S. No.</th>
+                                <th width="30%">Title</th>
+                                <th width="20%">Order No.</th>
+                                <th width="20%">Joining Date</th>
+                                <th width="20%">EDIT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for a in appointments %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                <td align="center">{{ loop.index }}</td>
+                                <td>{{ a.title }}</td>
+                                <td align="center">{{ a.OrderNo }}</td>
+                                <td align="center">{{ a.joining_date_fmt }}</td>
+                                <td align="center">
+                                    <a href="{{ url_for('establishment.employee_first_appointment_details', emp_id=emp.pk_empid, edit=a.id) }}">
+                                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                                    </a>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="5" align="center" style="padding:10px;">No records found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function selectItem(id, name) {
+        window.location.href = "{{ url_for('establishment.employee_first_appointment_details') }}?emp_id=" + id;
+    }
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
+            return false;
+        return true;
+    }
+    function addRow() {
+        const table = document.getElementById('probationTermsGrid').getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow();
+        newRow.className = 'item-style';
+        const rowCount = table.rows.length;
+        newRow.innerHTML = `
+            <td align="center">${rowCount}</td>
+            <td align="center"><textarea name="prob_term[]" rows="2" style="width:95%"></textarea></td>
+            <td align="center"><textarea name="prob_fulfill[]" rows="2" style="width:95%"></textarea></td>
+            <td align="center"><img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer" onclick="deleteRow(this)"></td>
+        `;
+    }
+    function deleteRow(btn) {
+        const row = btn.parentNode.parentNode;
+        if (document.getElementById('probationTermsGrid').rows.length > 2) {
+            row.parentNode.removeChild(row);
+            // Re-index
+            const table = document.getElementById('probationTermsGrid').getElementsByTagName('tbody')[0];
+            for (let i = 0; i < table.rows.length; i++) {
+                table.rows[i].cells[0].innerText = i + 1;
+            }
+        }
+    }
+</script>
+{% endblock %}

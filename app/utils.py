@@ -386,6 +386,8 @@ def get_page_url(page_name):
     except: return '#'
 
 PAGE_URL_MAPPING = {
+    'Marks Process for UG and MBA': 'examination.marks_process_ug_mba',
+    'Marks Process for PG': 'examination.marks_process_pg_phd',
     'DeanPGS Marks Approval': 'examination.deanpgs_marks_approval',
     'DeanPGS Approval': 'examination.deanpgs_approval_form',
     'Registrar Approval': 'examination.registrar_approval',
@@ -932,7 +934,86 @@ def generate_advisory_status_pdf(status_list, filters_info=None):
         ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
     ]))
     elements.append(table)
-    
+
+    doc.build(elements)
+    buffer.seek(0)
+    return buffer
+
+def generate_teacher_course_assignment_pdf(report_data):
+    from datetime import datetime
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=1*cm, leftMargin=1*cm, topMargin=1*cm, bottomMargin=1*cm)
+    styles = getSampleStyleSheet()
+
+    style_center = ParagraphStyle(name='Center', parent=styles['Normal'], alignment=TA_CENTER, fontName='Helvetica-Bold', fontSize=14)
+    style_title = ParagraphStyle(name='Title', parent=styles['Normal'], alignment=TA_CENTER, fontName='Helvetica-Bold', fontSize=12, spaceAfter=10)
+    style_normal = ParagraphStyle(name='NormalSmall', parent=styles['Normal'], fontSize=9)
+    style_bold = ParagraphStyle(name='BoldSmall', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=9)
+
+    elements = []
+
+    # Header
+    elements.append(Paragraph("CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY, HISAR", style_center))
+    elements.append(Paragraph("Course Offer and Teacher Course Assignment Report", style_title))
+    elements.append(Spacer(1, 0.2*cm))
+
+    # Info Section
+    info = report_data[0]
+    info_data = [
+        [Paragraph(f"<b>College:</b> {info['collegename']}", style_normal), Paragraph(f"<b>Session:</b> {info['sessionname']}", style_normal)],
+        [Paragraph(f"<b>Degree:</b> {info['degreename']}", style_normal), Paragraph(f"<b>Class:</b> {info['semestername']}", style_normal)],
+        [Paragraph(f"<b>Print Date:</b> {datetime.now().strftime('%d-%m-%Y %H:%M:%S')}", style_normal), ""]
+    ]
+    info_table = Table(info_data, colWidths=[12*cm, 7*cm])
+    info_table.setStyle(TableStyle([
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+    ]))
+    elements.append(info_table)
+    elements.append(Spacer(1, 0.4*cm))
+
+    # Data Table
+    table_data = [[
+        Paragraph("S.No", style_bold),
+        Paragraph("Course Code", style_bold),
+        Paragraph("Course Name", style_bold),
+        Paragraph("Credits (T+P)", style_bold),
+        Paragraph("Assignment Type", style_bold)
+    ]]
+
+    # Group by teacher
+    grouped = {}
+    for row in report_data:
+        t_key = f"{row['teacher_code']} - {row['teacher_name']}"
+        if t_key not in grouped:
+            grouped[t_key] = []
+        grouped[t_key].append(row)
+
+    s_no = 1
+    for teacher, courses in grouped.items():
+        table_data.append([
+            None,
+            Paragraph(f"<b>Teacher: {teacher}</b>", style_bold),
+            None, None, None
+        ])
+        for c in courses:
+            table_data.append([
+                Paragraph(str(s_no), style_normal),
+                Paragraph(c['coursecode'] or '', style_normal),
+                Paragraph(c['coursename'] or '', style_normal),
+                Paragraph(f"{c['crhr_theory']}+{c['crhr_practical']}", style_normal),
+                Paragraph("Main Teacher" if c['IsMainTeacher'] else "Co-Teacher", style_normal)
+            ])
+            s_no += 1
+
+    data_table = Table(table_data, colWidths=[1.2*cm, 3.5*cm, 8.8*cm, 2.5*cm, 3*cm], repeatRows=1)
+    data_table.setStyle(TableStyle([
+        ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('BACKGROUND', (0,0), (4,0), colors.lightgrey),
+    ]))
+
+    elements.append(data_table)
+
     doc.build(elements)
     buffer.seek(0)
     return buffer

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .textbox-small { width: 150px !important; }
+    .textbox-medium { width: 250px !important; }
+    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .required-star { color: red; font-weight: bold; }
+</style>
+
+<div class="hau-card" style="max-width: 600px;">
+    <div class="tablesubheading">Nationality Master</div>
+    <div style="padding: 15px;">
+        <form method="POST">
+            <input type="hidden" name="action" value="SAVE">
+            <input type="hidden" name="pk_id" id="n_id">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="25%">Nationality</td><td class="colon">:</td>
+                    <td>
+                        <input type="text" name="name" id="n_name" class="textbox textbox-medium" required>
+                        <span class="required-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td style="padding-top: 15px;">
+                        <input type="submit" id="btn_save" value="SAVE" class="button-common" style="background:#3c8dbc; color:white; padding: 5px 20px;">
+                        <input type="button" value="RESET" class="button-common" style="margin-left:10px;" onclick="resetForm()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 40px;">
+            <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">List of Nationalities</div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <th width="50">S.No.</th>
+                        <th>Nationality</th>
+                        <th width="60">EDIT</th>
+                        <th width="60">DELETE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for n in nationalities %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td style="font-weight: bold;">{{ n.name }}</td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick="editN({{ n|tojson }})">
+                        </td>
+                        <td align="center">
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this nationality?')">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="id" value="{{ n.pk_nid }}">
+                                <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}" style="border-width:0px; cursor:pointer;">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function editN(n) {
+    document.getElementById('n_id').value = n.pk_nid;
+    document.getElementById('n_name').value = n.name;
+    document.getElementById('btn_save').value = 'UPDATE';
+    window.scrollTo(0,0);
+}
+function resetForm() {
+    document.getElementById('n_id').value = '';
+    document.querySelector('form').reset();
+    document.getElementById('btn_save').value = 'SAVE';
+}
+</script>
+{% endblock %}

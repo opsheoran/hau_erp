@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Student Marks Entry(UG and MBA)</span>
+    </div>
+
+    <div style="padding: 15px;">
+        <form method="GET" id="filterForm">
+            <table class="form-table" width="100%">
+                <tr>
+                    <td class="vtext" width="12%">Session</td><td class="colon">:</td>
+                    <td width="21%">
+                        <select name="session_id" class="dropdown w-150" required>
+                            <option value="">--Select--</option>
+                            {% for s in lookups.sessions %}<option value="{{ s.id }}" {% if filters.session_id == s.id|string %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext" width="12%">Degree</td><td class="colon">:</td>
+                    <td width="21%">
+                        <select name="degree_id" id="f_degree" class="dropdown w-200" required onchange="loadDegreeSpecifics(this.value)">
+                            <option value="">--Select--</option>
+                            {% for d in lookups.degrees %}<option value="{{ d.id }}" {% if filters.degree_id == d.id|string %}selected{% endif %}>{{ d.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext" width="12%">Semester</td><td class="colon">:</td>
+                    <td>
+                        <select name="semester_id" id="f_semester" class="dropdown w-100" required onchange="loadCourses()">
+                            <option value="">--Select--</option>
+                            {% for s in lookups.semesters %}<option value="{{ s.id }}" {% if filters.semester_id == s.id|string %}selected{% endif %}>{{ s.semester_roman }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Branch</td><td class="colon">:</td>
+                    <td>
+                        <select name="branch_id" id="f_branch" class="dropdown w-150" onchange="loadCourses()">
+                            <option value="0">--All--</option>
+                            {% for b in lookups.branches %}<option value="{{ b.id }}" {% if filters.branch_id == b.id|string %}selected{% endif %}>{{ b.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext">Course</td><td class="colon">:</td>
+                    <td>
+                        <select name="course_id" id="f_course" class="dropdown w-200" required>
+                            <option value="">--Select--</option>
+                            {% for c in lookups.courses %}<option value="{{ c.id }}" {% if filters.course_id == c.id|string %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext">Exam Type</td><td class="colon">:</td>
+                    <td>
+                        <select name="exam_id" class="dropdown w-150" required>
+                            <option value="">--Select--</option>
+                            {% for e in lookups.exams %}<option value="{{ e.pk_examid }}" {% if filters.exam_id == e.pk_examid|string %}selected{% endif %}>{{ e.exam }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8" style="text-align:center; padding-top:10px;">
+                        <input type="submit" value="SEARCH" class="button-common">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        {% if data %}
+        <div style="margin-top: 20px;">
+            <form method="POST" action="{{ url_for('examination.marks_entry_ug', **request.args) }}">
+                <input type="hidden" name="dgmapid" value="{{ data.dgmapid }}">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th width="12%">Adm. No.</th>
+                            <th>Student Name</th>
+                            <th width="10%">Max Marks</th>
+                            <th width="12%">Marks Obtained</th>
+                            <th width="8%">Absent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in data.students %}
+                        <tr class="{{ loop.cycle('item-style', 'item-style-alt') }}">
+                            <td align="center">{{ loop.index }}</td>
+                            <td align="center">{{ s.AdmissionNo or s.enrollmentno }}</td>
+                            <td>{{ s.fullname }}</td>
+                            <td align="center">
+                                <input type="number" name="max_marks[]" class="textbox w-75" value="{{ s.maxmarks or 100 }}" step="0.5">
+                            </td>
+                            <td align="center">
+                                <input type="hidden" name="alloc_id[]" value="{{ s.Pk_stucourseallocid }}">
+                                <input type="number" name="marks[]" class="textbox w-75 m-input" value="{{ s.marks_obt if s.marks_obt is not none else '' }}" step="0.5" {% if s.isabsentt %}disabled{% endif %}>
+                            </td>
+                            <td align="center">
+                                <input type="checkbox" name="absent[]" value="{{ s.Pk_stucourseallocid }}" class="abs-check" {% if s.isabsentt %}checked{% endif %} onchange="toggleMarks(this)">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div style="text-align:center; margin-top:15px;">
+                    <input type="submit" value="SAVE MARKS" class="button-common" style="background:#3c8dbc; color:white; width:120px;">
+                </div>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function toggleMarks(chk) {
+    const row = chk.closest('tr');
+    const input = row.querySelector('.m-input');
+    if (chk.checked) {
+        input.value = '';
+        input.disabled = true;
+    } else {
+        input.disabled = false;
+    }
+}
+
+async function loadDegreeSpecifics(degreeId) {
+    if (!degreeId) return;
+    
+    // Load Branches
+    const branchSelect = document.getElementById('f_branch');
+    branchSelect.innerHTML = '<option value="0">Loading...</option>';
+    try {
+        const r = await fetch(`/academics/api/degree/${degreeId}/branches`);
+        const branches = await r.json();
+        let html = '<option value="0">--All--</option>';
+        branches.forEach(b => { html += `<option value="${b.id}">${b.name}</option>`; });
+        branchSelect.innerHTML = html;
+    } catch(e) { branchSelect.innerHTML = '<option value="0">--All--</option>'; }
+
+    // Load Semesters (Class)
+    const semSelect = document.getElementById('f_semester');
+    semSelect.innerHTML = '<option value="">Loading...</option>';
+    try {
+        const r = await fetch(`/academics/api/get_degree_semesters/${degreeId}`);
+        const sems = await r.json();
+        let html = '<option value="">--Select--</option>';
+        sems.forEach(s => { html += `<option value="${s.id}">${s.name}</option>`; });
+        semSelect.innerHTML = html;
+    } catch(e) { semSelect.innerHTML = '<option value="">--Select--</option>'; }
+}
+
+async function loadCourses() {
+    const degreeId = document.getElementById('f_degree').value;
+    const semId = document.getElementById('f_semester').value;
+    const branchId = document.getElementById('f_branch').value;
+    
+    if (!degreeId || !semId) return;
+    
+    const courseSelect = document.getElementById('f_course');
+    courseSelect.innerHTML = '<option value="">Loading...</option>';
+    try {
+        const r = await fetch(`/academics/api/get_courses_filtered?degree_id=${degreeId}&semester_id=${semId}&branch_id=${branchId}`);
+        const courses = await r.json();
+        let html = '<option value="">--Select--</option>';
+        courses.forEach(c => { html += `<option value="${c.id}">${c.name}</option>`; });
+        courseSelect.innerHTML = html;
+    } catch(e) { courseSelect.innerHTML = '<option value="">--Select--</option>'; }
+}
+</script>
+{% endblock %}

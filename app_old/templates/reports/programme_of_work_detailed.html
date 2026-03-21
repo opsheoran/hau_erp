@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Programme of Work (PG/PhD)</title>
+    <style>
+        @page { size: A4; margin: 1.5cm; }
+        body { font-family: Verdana, sans-serif; font-size: 10.5px; line-height: 1.4; color: #000; }
+        .page-break { page-break-after: always; }
+        
+        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
+        .uni-logo { width: 70px; height: 70px; }
+        .uni-name { font-size: 14px; font-weight: bold; text-align: center; }
+        .report-title { font-size: 12px; font-weight: bold; text-align: center; margin-top: 5px; }
+        
+        .to-dean { margin-top: 15px; margin-bottom: 15px; }
+        .main-para { text-align: justify; margin-bottom: 15px; }
+        
+        .box-table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 10px; }
+        .box-table td { border: 1px solid #000; padding: 5px; height: 22px; }
+        
+        .data-table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-top: -1px; }
+        .data-table th, .data-table td { border: 1px solid #000; padding: 5px; text-align: left; vertical-align: top; }
+        .data-table th { background-color: #fff; font-weight: bold; text-align: center; height: 30px; }
+        
+        .section-heading { width: 100%; text-align: center; font-weight: bold; border: 1px solid #000; padding: 6px 0; background-color: #fff; margin-top: 10px; text-transform: uppercase; font-size: 11px; }
+        
+        .sig-section { margin-top: 40px; width: 100%; position: relative; }
+        .sig-hod { text-align: right; margin-bottom: 40px; font-weight: bold; padding-right: 50px; }
+        .sig-dean { text-align: left; font-weight: bold; }
+        
+        .footer-note { font-size: 10px; margin-top: 10px; font-weight: bold; }
+        
+        .bold { font-weight: bold; }
+        .text-center { text-align: center; }
+    </style>
+</head>
+<body>
+    {% for s in students %}
+    <div class="{% if not loop.last %}page-break{% endif %}">
+        <!-- University Header -->
+        <table class="header-table">
+            <tr>
+                <td width="15%"><img src="/static/images/logo.png" class="uni-logo" onerror="this.style.display='none'"></td>
+                <td class="text-center">
+                    <div class="uni-name">CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY</div>
+                    <div class="report-title">PROGRAMME OF WORK FOR POSTGRADUATE STUDIES</div>
+                </td>
+                <td width="15%"></td>
+            </tr>
+        </table>
+
+        <div class="to-dean">
+            To<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;The Dean, Postgraduate Studies
+        </div>
+
+        <div class="main-para">
+            The Advisory Committee of <span class="bold">{{ s.info.fullname }}</span> Admission No <span class="bold">{{ s.info.AdmissionNo }}</span> admitted to {{ s.info.degreename }} programme in the college of <span class="bold">{{ s.info.collegename }}</span> in <span class="bold">II</span> semester <span class="bold">{{ s.info.sessionname }}</span>, majoring in <span class="bold">{{ s.info.Branchname }}</span> after a conference with his/her submit the following statement and recommendations:
+        </div>
+
+        <!-- Major/Minor Fields Box -->
+        <table class="box-table">
+            <tr>
+                <td width="25%">His/Her Major Field</td>
+                <td>{{ s.info.Branchname }}</td>
+            </tr>
+            <tr>
+                <td>His/Her Minor field</td>
+                <td>{{ s.committee.minor.department if s.committee.minor else '' }}</td>
+            </tr>
+        </table>
+
+        <div class="section-heading">ACADEMIC QUALIFICATION PRIOR TO JOINING THE UNIVERSITY</div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="18%">Degree or Diploma</th>
+                    <th width="12%">Year of Passing</th>
+                    <th width="12%">Division</th>
+                    <th width="22%">Aggregate percentage of marks or grade point average</th>
+                    <th width="18%">Institution</th>
+                    <th width="18%">Major Subject</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for q in s.qualifications %}
+                <tr>
+                    <td>{{ q.examname }}</td>
+                    <td class="text-center">{{ q.yearofpassing }}</td>
+                    <td class="text-center">{{ q.division or '' }}</td>
+                    <td class="text-center">{{ q.percentage }}</td>
+                    <td>{{ q.Bord_Univ }}</td>
+                    <td>{{ q.Specialization or '' }}</td>
+                </tr>
+                {% endfor %}
+                {% if not s.qualifications %}
+                <tr><td style="height: 25px;"></td><td></td><td></td><td></td><td></td><td></td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <div class="section-heading">Undergraduate Prepration Of Major Field</div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="8%">S.No.</th>
+                    <th width="42%">Courses or Subjects Take</th>
+                    <th width="20%">Course Code</th>
+                    <th width="15%">Credit Hours</th>
+                    <th width="15%">Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in s.ug_prep %}
+                <tr>
+                    <td class="text-center">{{ loop.index }}</td>
+                    <td>{{ c.coursename }}</td>
+                    <td>{{ c.coursecode }}</td>
+                    <td class="text-center">{{ c.crtheory }}+{{ c.crpractical }}</td>
+                    <td class="text-center">{{ c.grade }}</td>
+                </tr>
+                {% endfor %}
+                {% if not s.ug_prep %}
+                <tr><td class="text-center" style="height: 22px;">1</td><td></td><td></td><td></td><td></td></tr>
+                <tr><td class="text-center" style="height: 22px;">2</td><td></td><td></td><td></td><td></td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <div class="section-heading">Previous postgraduate training, if any, for the major and minor fields</div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="20%">Classification of Courses</th>
+                    <th width="15%">Course No.</th>
+                    <th width="45%">Title of the Course</th>
+                    <th width="10%">Credit Hours</th>
+                    <th width="10%">Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set pg_groups = [('MA','Major Subject'), ('MI','Minor Subject'), ('SU','Supporting Subject'), ('CP','Non Credit Compulsory Courses')] %}
+                <tr><td colspan="5" class="bold">i) Deficieincies to be completed</td></tr>
+                {% set def_found = false %}
+                {% for c in s.pg_training %}{% if c.classification == 'DE' %}
+                <tr><td></td><td>{{ c.coursecode }}</td><td>{{ c.coursename }}</td><td class="text-center">{{ c.crtheory }}+{{ c.crpractical }}</td><td class="text-center">{{ c.grade }}</td></tr>
+                {% set def_found = true %}{% endif %}{% endfor %}
+                {% if not def_found %}<tr><td class="text-center" style="height: 22px;">1</td><td></td><td></td><td></td><td></td></tr>{% endif %}
+
+                {% for code, label in pg_groups %}
+                <tr><td colspan="5" class="bold">{% if loop.index == 1 %}ii){% elif loop.index == 2 %}iii){% elif loop.index == 3 %}iv){% else %}v){% endif %} {{ label }}</td></tr>
+                {% set found = false %}
+                {% for c in s.pg_training %}{% if c.classification == code %}
+                <tr><td></td><td>{{ c.coursecode }}</td><td>{{ c.coursename }}</td><td class="text-center">{{ c.crtheory }}+{{ c.crpractical }}</td><td class="text-center">{{ c.grade }}</td></tr>
+                {% set found = true %}{% endif %}{% endfor %}
+                {% if not found %}<tr><td class="text-center" style="height: 22px;">1</td><td></td><td></td><td></td><td></td></tr>{% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="page-break-before: always; margin-top: 20px;"></div>
+
+        <div class="section-heading">Course to be completed by the student to meet post-graduate ({{ 'Ph.D.' if 'Ph.D' in s.info.degreename else 'M.Sc.' }}) requirment:</div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="20%">Classification of course</th>
+                    <th width="15%">Course No.</th>
+                    <th width="50%">Title Of Course</th>
+                    <th width="15%">Credit Hour</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- i) Deficiencies -->
+                <tr><td colspan="4" class="bold">i) Deficiencies to be completed</td></tr>
+                {% set def_courses = s.grouped_courses.get('DE', []) %}
+                {% for c in def_courses %}
+                <tr><td class="text-center">{{ loop.index }}</td><td>{{ c.coursecode }}</td><td>{{ c.coursename }}</td><td class="text-center">{{ c.crhrth }}+{{ c.crhrpr }}</td></tr>
+                {% endfor %}
+                {% if not def_courses %}<tr><td class="text-center" style="height: 22px;">1</td><td></td><td></td><td></td></tr>{% endif %}
+                <tr class="bold"><td colspan="3" style="text-align: right;">Total Credit Hours</td><td class="text-center">{{ def_courses|sum(attribute='crhrth') + def_courses|sum(attribute='crhrpr') }}</td></tr>
+
+                <!-- ii) Major Subject -->
+                <tr><td colspan="4" class="bold">ii) Major Subject</td></tr>
+                {% set maj_courses = s.grouped_courses.get('MA', []) %}
+                {% for c in maj_courses %}
+                <tr><td class="text-center">{{ loop.index }}</td><td>{{ c.coursecode }}</td><td>{{ c.coursename }}</td><td class="text-center">{{ c.crhrth }}+{{ c.crhrpr }}</td></tr>
+                {% endfor %}
+                <tr class="bold"><td colspan="3" style="text-align: right;">Total Credit Hours</td><td class="text-center">{{ maj_courses|sum(attribute='crhrth') + maj_courses|sum(attribute='crhrpr') }}</td></tr>
+
+                <!-- iii) Minor Subject -->
+                <tr><td colspan="4" class="bold">iii) Minor Subject</td></tr>
+                {% set min_courses = s.grouped_courses.get('MI', []) %}
+                {% for c in min_courses %}
+                <tr><td class="text-center">{{ loop.index }}</td><td>{{ c.coursecode }}</td><td>{{ c.coursename }}</td><td class="text-center">{{ c.crhrth }}+{{ c.crhrpr }}</td></tr>
+                {% endfor %}
+                <tr class="bold"><td colspan="3" style="text-align: right;">Total Credit Hours</td><td class="text-center">{{ min_courses|sum(attribute='crhrth') + min_courses|sum(attribute='crhrpr') }}</td></tr>
+
+                <!-- iv) Research Subject -->
+                <tr><td colspan="4" class="bold">iv) Research Subject</td></tr>
+                {% set res_courses = s.grouped_courses.get('RE', []) %}
+                {% for c in res_courses %}
+                <tr><td class="text-center">{{ loop.index }}</td><td>{{ c.coursecode }}</td><td>{{ c.coursename }}</td><td class="text-center">{{ c.crhrth }}+{{ c.crhrpr }}</td></tr>
+                {% endfor %}
+                <tr class="bold"><td colspan="3" style="text-align: right;">Total Credit Hours</td><td class="text-center">{{ res_courses|sum(attribute='crhrth') + res_courses|sum(attribute='crhrpr') }}</td></tr>
+
+                <!-- v) Seminar Subject -->
+                <tr><td colspan="4" class="bold">v) Seminar Subject</td></tr>
+                {% set sem_courses = s.grouped_courses.get('SE', []) %}
+                {% for c in sem_courses %}
+                <tr><td class="text-center">{{ loop.index }}</td><td>{{ c.coursecode }}</td><td>{{ c.coursename }}</td><td class="text-center">{{ c.crhrth }}+{{ c.crhrpr }}</td></tr>
+                {% endfor %}
+                <tr class="bold"><td colspan="3" style="text-align: right;">Total Credit Hours</td><td class="text-center">{{ sem_courses|sum(attribute='crhrth') + sem_courses|sum(attribute='crhrpr') }}</td></tr>
+
+                <!-- vi) Non Credit Compulsory Courses -->
+                <tr><td colspan="4" class="bold">vi) Non Credit Compulsory Courses</td></tr>
+                {% set cp_courses = s.grouped_courses.get('CP', []) %}
+                {% for c in cp_courses %}
+                <tr><td class="text-center">{{ loop.index }}</td><td>{{ c.coursecode }}</td><td>{{ c.coursename }}</td><td class="text-center">{{ c.crhrth }}+{{ c.crhrpr }}</td></tr>
+                {% endfor %}
+                {% if not cp_courses %}<tr><td class="text-center" style="height: 22px;">1</td><td></td><td></td><td></td></tr>{% endif %}
+            </tbody>
+        </table>
+
+        <div class="section-heading">ADVISORY COMMITTEE</div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="5%"></th>
+                    <th width="20%">Status</th>
+                    <th width="25%">Name</th>
+                    <th width="20%">Designation</th>
+                    <th width="20%">Department</th>
+                    <th width="10%">Sign</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in s.committee.all %}
+                <tr>
+                    <td class="text-center">{{ loop.index }}</td>
+                    <td>{{ m.role_name }}</td>
+                    <td>{{ m.empname }}</td>
+                    <td>{{ m.designation or '' }}</td>
+                    <td>{{ m.department }}</td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="footer-note">Forwarded (6copies) to the Dean,Postgraduate studies for approval</div>
+
+        <div class="sig-section">
+            <div class="sig-hod">
+                <br><br>Head Of Department
+            </div>
+            <div class="sig-dean">
+                Approved<br><br><br>
+                Dean,Postgraduate studies
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>

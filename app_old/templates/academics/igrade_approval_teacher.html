@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">I Grade Course By Teacher </span></div>
+    
+    <div style="padding: 10px;">
+        <form method="GET" id="filterForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">Academic Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" class="dropdown w-200" required onchange="this.form.submit()">
+                                <option value="0">--Select Academic Session--</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr><td colspan="3" height="10"></td></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <input type="submit" value="VIEW" class="button-common" style="width:100px;">
+                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="window.location.href='{{ url_for('academics.igrade_approval_teacher') }}'">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+        <div class="tablesubheading"><span class="subheadingborderbottom">Pending I Grade Course Request</span></div>
+        <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4; margin-top:10px;">
+            <table class="table-grid-view" width="100%">
+                <thead>
+                    <tr class="header-style">
+                        <th>S.No.</th>
+                        <th>Student Name</th>
+                        <th>Admission No.</th>
+                        <th>Degree</th>
+                        <th>Specialization</th>
+                        <th>Semester</th>
+                        <th>Course Name</th>
+                        <th>View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in pending %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
+                        <td>{{ loop.index }}</td>
+                        <td align="left">{{ r.fullname }}</td>
+                        <td>{{ r.AdmissionNo }}</td>
+                        <td>{{ r.degreename }}</td>
+                        <td>{{ r.Branchname }}</td>
+                        <td>{{ r.semester_roman }}</td>
+                        <td align="left">{{ r.coursecode }} {{ r.coursename }}</td>
+                        <td>
+                            <a href="javascript:void(0)" onclick="openApprovalPopup('{{ r.Pk_Ig }}', '{{ r.coursecode }} {{ r.coursename }}', '{{ r.crhr_th }}+{{ r.crhr_pr }}')">view</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr class="item-style"><td colspan="8" align="center" style="padding:20px; color:#999;">No pending requests found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+        <div class="tablesubheading"><span class="subheadingborderbottom">Processed I Grade Course Request</span></div>
+        <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4; margin-top:10px;">
+            <table class="table-grid-view" width="100%">
+                <thead>
+                    <tr class="header-style">
+                        <th>S.No.</th>
+                        <th>Student Name</th>
+                        <th>Admission No.</th>
+                        <th>Degree</th>
+                        <th>Specialization</th>
+                        <th>Semester</th>
+                        <th>Course Name</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in processed %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
+                        <td>{{ loop.index }}</td>
+                        <td align="left">{{ r.fullname }}</td>
+                        <td>{{ r.AdmissionNo }}</td>
+                        <td>{{ r.degreename }}</td>
+                        <td>{{ r.Branchname }}</td>
+                        <td>{{ r.semester_roman }}</td>
+                        <td align="left">{{ r.coursecode }} {{ r.coursename }}</td>
+                        <td>{{ 'Approved' if r.Teach_approv == 'A' else 'Rejected' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr class="item-style"><td colspan="8" align="center" style="padding:20px; color:#999;">No processed records.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- APPROVAL POPUP -->
+<div id="SearchDiv" class="white_content-new" style="display: none; position: fixed; top: 20%; left: 25%; width: 50%; background: white; border: 2px solid #ccc; z-index: 1000; padding: 20px;">
+    <div class="popupboxouter">
+        <div class="popupbox">
+            <div onclick="document.getElementById('SearchDiv').style.display='none';" style="float:right; cursor:pointer; font-weight:bold;">X</div>
+            <div class="tableheading">Student Details</div>
+            <form method="POST">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                <input type="hidden" name="pk_id" id="hdn_pk">
+                <table cellpadding="5" cellspacing="0" border="0" width="100%" class="form-table">
+                    <tbody>
+                        <tr>
+                            <td class="vtext">Course Name:</td>
+                            <td><span id="lbl_course"></span></td>
+                            <td class="vtext">Credit Hour:</td>
+                            <td><span id="Lbl_cr"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="vtext">Remarks:</td>
+                            <td><input name="remarks" type="text" class="textbox w-200"></td>
+                            <td colspan="2">
+                                <input type="radio" name="action" value="A" checked id="rb_app"><label for="rb_app">Approved</label>
+                                <input type="radio" name="action" value="R" id="rb_rej"><label for="rb_rej">Reject</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" align="center" style="padding-top:20px;">
+                                <input type="submit" value="Submit" class="button-common" style="width: 80px">
+                                <input type="button" value="Close" class="button-common" style="width: 80px; margin-left:10px;" onclick="document.getElementById('SearchDiv').style.display='none';">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="fade" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+
+<script>
+function openApprovalPopup(pk, course, cr) {
+    document.getElementById('hdn_pk').value = pk;
+    document.getElementById('lbl_course').innerText = course;
+    document.getElementById('Lbl_cr').innerText = cr;
+    document.getElementById('SearchDiv').style.display = 'block';
+    document.getElementById('fade').style.display = 'block';
+}
+</script>
+{% endblock %}

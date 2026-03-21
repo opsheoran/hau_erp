@@ -1,0 +1,360 @@
+{% extends 'student_portal/base.html' %}
+
+{% block title %}Course Addition/Withdrawal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card-entry-container {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        padding: 30px;
+        margin-bottom: 20px;
+    }
+
+    .form-group-inline {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 20px;
+        background: #f8f9fa;
+        padding: 15px 20px;
+        border-radius: 6px;
+        border: 1px solid #eee;
+        margin-bottom: 30px;
+    }
+
+    .tablesubheading {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 8px 15px;
+        font-weight: 500;
+        font-size: 14px;
+        border-radius: 4px 4px 0 0;
+        margin-top: 20px;
+        margin-bottom: 0;
+    }
+
+    .table-grid-view {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+    }
+
+    .table-grid-view th {
+        background-color: #f1f5f1;
+        color: var(--primary-color);
+        padding: 10px;
+        text-align: center;
+        font-weight: 500;
+        border: 1px solid #ddd;
+        font-size: 13px;
+    }
+
+    .table-grid-view td {
+        padding: 8px 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .table-grid-view td.text-left {
+        text-align: left;
+    }
+
+    .btn {
+        padding: 8px 25px;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 4px;
+        cursor: pointer;
+        border: none;
+        transition: background 0.3s;
+    }
+
+    .btn-submit {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .btn-submit:hover {
+        background-color: var(--secondary-color);
+    }
+    
+    .btn-reset {
+        background-color: #7f8c8d;
+        color: white;
+    }
+
+    .btn-reset:hover {
+        background-color: #95a5a6;
+    }
+
+    .control-label {
+        font-weight: 500;
+        font-size: 14px;
+        color: #333;
+        width: 150px;
+        text-align: right;
+    }
+
+    .form-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .form-input {
+        flex: 1;
+        max-width: 500px;
+        margin-left: 20px;
+    }
+
+    select, input[type="text"] {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card-entry-container">
+    <h2 style="margin-top: 0; color: #333; font-size: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px;">
+        Course Addition Withdrawal
+    </h2>
+
+    <div class="form-group-inline" style="flex-direction: column; align-items: flex-start;">
+        <form method="POST" action="{{ url_for('student_portal.course_addition_withdrawal') }}" style="width: 100%;">
+            <input type="hidden" name="_csrf_token" id="csrf_token" value="{{ csrf_token }}">
+            <div class="form-row">
+                <div class="control-label">Change Type :</div>
+                <div class="form-input" style="display: flex; gap: 20px;">
+                    <label style="cursor: pointer;">
+                        <input type="radio" name="change_type" value="A" checked onchange="fetchCourses()"> Addition
+                    </label>
+                    <label style="cursor: pointer;">
+                        <input type="radio" name="change_type" value="W" onchange="fetchCourses()"> Withdrawal
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="control-label">Course :</div>
+                <div class="form-input">
+                    <select name="course" id="ddlCourse" required onchange="calculateCredits()">
+                        <option value="" data-th="0" data-pr="0">-- Select Course --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="control-label">Reason :</div>
+                <div class="form-input">
+                    <input type="text" name="reason" id="txtReason" required placeholder="Enter valid reason">
+                </div>
+            </div>
+            
+            <!-- Credit Hours Display -->
+            <div class="form-row" style="margin-top: 15px;">
+                <div class="control-label" style="color: var(--primary-color);">Current Credit Hrs :</div>
+                <div class="form-input" style="display: flex; gap: 30px; align-items: center;">
+                    <span style="font-weight: bold; font-size: 16px;" id="current_credits">{{ total_current_credits }}</span>
+                    
+                    <span style="color: #666; font-size: 13px;">Min. Credit Hrs : <strong id="min_credits">{{ min_cr }}</strong></span>
+                    <span style="color: #666; font-size: 13px;">Max. Credit Hrs : <strong id="max_credits">{{ max_cr }}</strong></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="control-label" style="color: var(--primary-color);">Change in Credit Hrs :</div>
+                <div class="form-input" style="display: flex; align-items: center; gap: 15px;">
+                    <div>
+                        <input type="text" id="crhr_th" name="crhr_th" value="0" readonly style="width: 50px; text-align: center; background: #eee;">
+                        <span style="margin: 0 5px;">+</span>
+                        <input type="text" id="crhr_pr" name="crhr_pr" value="0" readonly style="width: 50px; text-align: center; background: #eee;">
+                    </div>
+                    
+                    <div style="margin-left: 20px; font-weight: 500;">
+                        Modified Credit Hrs : 
+                        <span id="modified_credits" style="font-weight: bold; font-size: 16px; color: #e74c3c;">{{ total_current_credits }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row" style="margin-top: 25px;">
+                <div class="control-label"></div>
+                <div class="form-input" style="display: flex; gap: 15px;">
+                    <button type="submit" class="btn btn-submit" onclick="return validateSubmission()">Apply</button>
+                    <button type="reset" class="btn btn-reset" onclick="setTimeout(calculateCredits, 100)">Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="tablesubheading">List Of Courses</div>
+    <div class="table-responsive">
+        <table class="table-grid-view">
+            <thead>
+                <tr>
+                    <th>S.No.</th>
+                    <th class="text-left">Course Name</th>
+                    <th>Session</th>
+                    <th>Semester</th>
+                    <th>Change Type</th>
+                    <th>Approval</th>
+                    <th>Teacher</th>
+                    <th>Advisor/Hod</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in history %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="text-left">{{ r.coursename }} [ {{ r.coursecode }} ] { {{ r.crhr_theory }} + {{ r.crhr_practical }} }</td>
+                    <td>{{ r.Session }}</td>
+                    <td>{{ r.semester_roman }}</td>
+                    <td>{{ 'Addition' if r.Addwith_type.strip() == 'A' else 'Withdrawal' }}</td>
+                    <td>
+                        {% if r.Approval %}
+                            <span style="color: #27ae60; font-weight: bold;">Approved</span>
+                        {% else %}
+                            <span style="color: #f39c12; font-weight: bold;">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if r.Teach_approv == 'A' %}
+                            <span style="color: #27ae60; font-weight: bold;">Approved</span>
+                        {% elif r.Teach_approv == 'R' %}
+                            <span style="color: #e74c3c; font-weight: bold;">Rejected</span>
+                        {% else %}
+                            <span style="color: #7f8c8d;">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if r.dean_approv == 'A' %}
+                            <span style="color: #27ae60; font-weight: bold;">Approved</span>
+                        {% elif r.dean_approv == 'R' %}
+                            <span style="color: #e74c3c; font-weight: bold;">Rejected</span>
+                        {% else %}
+                            <span style="color: #7f8c8d;">Pending</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" class="empty-row" style="color: #e74c3c; font-weight: 500; padding: 15px !important;">No addition/withdrawal records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+// Add validation and dynamic calculation JS
+function calculateCredits() {
+    const ddlCourse = document.getElementById('ddlCourse');
+    if (ddlCourse.selectedIndex <= 0) {
+        document.getElementById('crhr_th').value = '0';
+        document.getElementById('crhr_pr').value = '0';
+        document.getElementById('modified_credits').textContent = document.getElementById('current_credits').textContent;
+        return;
+    }
+    
+    const option = ddlCourse.options[ddlCourse.selectedIndex];
+    const th = parseInt(option.getAttribute('data-th') || 0);
+    const pr = parseInt(option.getAttribute('data-pr') || 0);
+    const isNC = option.getAttribute('data-isnc') === 'true';
+    
+    document.getElementById('crhr_th').value = th;
+    document.getElementById('crhr_pr').value = pr;
+    
+    // Only alter credit count if it's a credit course
+    if (!isNC) {
+        const changeType = document.querySelector('input[name="change_type"]:checked').value;
+        const currentTotal = parseInt(document.getElementById('current_credits').textContent);
+        
+        let newTotal = currentTotal;
+        if (changeType === 'A') {
+            newTotal = currentTotal + th + pr;
+        } else if (changeType === 'W') {
+            newTotal = currentTotal - th - pr;
+        }
+        
+        document.getElementById('modified_credits').textContent = newTotal;
+    } else {
+        document.getElementById('modified_credits').textContent = document.getElementById('current_credits').textContent;
+    }
+}
+
+function validateSubmission() {
+    const ddlCourse = document.getElementById('ddlCourse');
+    if (ddlCourse.selectedIndex <= 0) {
+        alert('Please select Course!!');
+        return false;
+    }
+    
+    const reason = document.getElementById('txtReason').value.trim();
+    if (reason === '') {
+        alert('Please Enter Reason for the Change Course!!');
+        return false;
+    }
+    
+    const modifiedCredits = parseInt(document.getElementById('modified_credits').textContent);
+    const minCredits = parseInt(document.getElementById('min_credits').textContent);
+    const maxCredits = parseInt(document.getElementById('max_credits').textContent);
+    
+    if (modifiedCredits > maxCredits || modifiedCredits < minCredits) {
+        alert('Final Opted Credit Hours should be between Min. and Max. Credit Hours!!');
+        return false;
+    }
+    
+    return confirm('Are you sure to change the course?');
+}
+
+
+function fetchCourses() {
+    const changeType = document.querySelector('input[name="change_type"]:checked').value;
+    const ddlCourse = document.getElementById('ddlCourse');
+    
+    // Clear current options
+    ddlCourse.innerHTML = '<option value="">-- Loading... --</option>';
+    
+    fetch('{{ url_for("student_portal.course_addition_withdrawal") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': document.getElementById('csrf_token').value
+        },
+        body: 'action_type=' + changeType
+    })
+    .then(response => response.json())
+    .then(data => {
+        ddlCourse.innerHTML = '<option value="" data-th="0" data-pr="0">-- Select Course --</option>';
+        data.courses.forEach(course => {
+            const option = document.createElement('option');
+            option.value = course.id;
+            option.textContent = course.text;
+            option.setAttribute('data-th', course.th);
+            option.setAttribute('data-pr', course.pr);
+            option.setAttribute('data-isnc', course.isNC);
+            ddlCourse.appendChild(option);
+        });
+        calculateCredits();
+    })
+    .catch(error => {
+        console.error('Error fetching courses:', error);
+        ddlCourse.innerHTML = '<option value="">-- Error loading courses --</option>';
+    });
+}
+
+// Initial load
+document.addEventListener('DOMContentLoaded', fetchCourses);
+</script>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .textbox-small { width: 150px !important; }
+    .textbox-medium { width: 250px !important; }
+    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .required-star { color: red; font-weight: bold; }
+</style>
+
+<div class="hau-card">
+    <div class="tablesubheading">Certificate Batch Master</div>
+    <div style="padding: 15px;">
+        <form method="POST">
+            <input type="hidden" name="pk_id" id="b_id">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">College</td><td class="colon">:</td>
+                    <td width="34%">
+                        <select name="college_id" id="b_college" class="dropdown textbox-medium" required>
+                            {% for c in colleges %}<option value="{{ c.pk_collegeid }}">{{ c.collegename }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext" width="15%">Degree</td><td class="colon">:</td>
+                    <td>
+                        <select name="degree_id" id="b_degree" class="dropdown textbox-medium" required>
+                            {% for d in degrees %}<option value="{{ d.pk_degreeid }}">{{ d.degreename }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Academic Session</td><td class="colon">:</td>
+                    <td>
+                        <select name="session_id" id="b_sess" class="dropdown textbox-small" required>
+                            {% for s in sessions %}<option value="{{ s.pk_sessionid }}">{{ s.sessionname }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext">Batch Name</td><td class="colon">:</td>
+                    <td><input type="text" name="name" id="b_name" class="textbox textbox-small" required> <span class="required-star">*</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Status</td><td class="colon">:</td>
+                    <td colspan="4"><label><input type="checkbox" name="active" id="b_active" checked> Is Active</label></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top: 15px;">
+                        <input type="submit" value="SAVE BATCH" class="button-common" style="background:#3c8dbc; color:white; padding: 5px 20px;">
+                        <input type="button" value="RESET" class="button-common" style="margin-left:10px;" onclick="resetForm()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 40px;">
+            <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">Existing Batches</div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td>Batch Name</td><td>College</td><td>Degree</td><td>Session</td><td>EDIT</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in batches %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td style="font-weight: bold;">{{ b.batchname }}</td>
+                        <td>{{ b.collegename }}</td>
+                        <td>{{ b.degreename }}</td>
+                        <td align="center">{{ b.sessionname }}</td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editB({{ b|tojson }})'>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function editB(b) {
+    document.getElementById('b_id').value = b.pk_batchid;
+    document.getElementById('b_name').value = b.batchname;
+    document.getElementById('b_college').value = b.fk_collegeid;
+    document.getElementById('b_degree').value = b.fk_degreeid;
+    document.getElementById('b_sess').value = b.fk_sessionid;
+    document.getElementById('b_active').checked = b.isactive;
+    window.scrollTo(0,0);
+}
+function resetForm() {
+    document.getElementById('b_id').value = '';
+    document.querySelector('form').reset();
+}
+</script>
+{% endblock %}

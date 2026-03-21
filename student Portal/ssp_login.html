@@ -1,0 +1,373 @@
+
+<!-- saved from url=(0023)https://ssp.hauiums.in/ -->
+<html lang="en"><head id="Head1"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>
+	CCS HAU Portal
+</title><meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"><link href="./ssp_login_files/bootstrap.css" rel="stylesheet">
+
+
+    <script type="text/javascript" src="./ssp_login_files/jquery-1.10.0.min.js.download"></script>
+    
+    <script type="text/javascript" src="./ssp_login_files/functions.js.download"></script>
+
+
+    
+    <script type="text/javascript">
+
+        function ShowSearch(obj) { 
+            document.getElementById('lightbook').style.display = 'block';
+        }
+        function HideSearch(obj) {
+            document.getElementById('lightbook').style.display = 'none';
+        }
+    </script>
+     
+    <script type="text/javascript">
+        function Check() {
+            f.username.focus();
+            var index = document.URL.lastIndexOf('?');
+            if (parseInt(index) > -1) {
+                window.location.href = "loginpage.aspx";
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = 'AppError.aspx';
+            }
+        }
+
+        function checkscript() {
+
+            if (event.keyCode == 188 || event.keyCode == 190) {
+                return false;
+            }
+
+            if (event.keyCode == 222) {
+                document.form1.outstring.value = "";
+            }
+        }
+
+
+        function DisableBackButton() {
+            window.history.forward();
+
+        }
+        DisableBackButton();
+        window.onload = DisableBackButton;
+        window.onpageshow = function (evt) { if (evt.persisted) DisableBackButton() }
+        window.onunload = function () { void (0) }
+
+    </script>
+    <script type="text/javascript">
+        //    function blankcheck() {
+        //        }
+        //        function resetUname() {
+        //        }
+        //        function Tfocus() {
+        //            document.getElementById("R_txtLogin").focus()
+        //        }
+
+        function onsubmitclick() {
+
+            if (document.getElementById("R_txtLogin").value == "" || document.getElementById("R_txtPass").value == "") {
+                alert("User Name and Password can not be blank !!!")
+                if (document.getElementById("R_txtLogin").value == "")
+                    document.getElementById("R_txtLogin").focus();
+                else if (document.getElementById("R_txtPass").value == "")
+                    document.getElementById("R_txtPass").focus();
+                else
+                    document.getElementById("R_txtLogin").focus();
+
+                return false;
+            }
+        }
+
+
+
+
+        function onResetclick() {
+
+            if (document.getElementById("ApplicationNo").value == "" || document.getElementById("R_txtDob").value == "") {
+                alert("Enrollment No. and DOB can not be blank !!!")
+                if (document.getElementById("ApplicationNo").value == "")
+                    document.getElementById("ApplicationNo").focus();
+                else if (document.getElementById("R_txtDob").value == "")
+                    document.getElementById("R_txtDob").focus();
+                else
+                    document.getElementById("ApplicationNo").focus();
+
+                return false;
+            }
+        }
+
+    </script>
+
+
+
+    <script type="text/javascript">
+        //
+        //Amit Dalakoti
+        //10/26/2016
+        //Start
+        var images = []; // Global Variable.
+        $(document).ready(function () {
+
+            fun();
+            // fun() Using it for calling Web Method ("GetImageNames")
+            // from  "UserLoginPageManagementDtl.aspx" page.
+            function fun() {
+                $.ajax({
+                    type: "POST",
+                    url: "/Luvasssp/SMS/Masters/UserLoginPageManagementDtl.aspx/GetImageNames",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+
+                        images = getXMLToArray(response.d); //Passing XML to function
+                        changeBackground(); // Calling ChangeBackground function.
+                    },
+                    error: function (f) {
+                        console.log('F');
+                    }
+                });
+            }
+            // Function For converting the XMl into Array.
+            function getXMLToArray(xml) {
+
+                var array = $(xml).find("ImageName").map(function () {
+                    return $(this).text();
+                }).get();
+                return array;
+            }
+            //Function to Change Background
+            function changeBackground() {
+                console.log("A");
+                console.log(images);
+                var randomNumber = Math.floor(Math.random() * images.length);
+                var bgImg = images[randomNumber]; // Setting Random Number.                 
+                $('body').css('background', 'url(../FTPsite/Luvas/Loginimage/' + bgImg + ') no-repeat');
+                $('body').css('background-size', '100%');
+                setTimeout(changeBackground, 5000); // Setting Time for recall.
+            }
+        });
+        //10/26/2016
+        //End
+    </script>
+
+    <style>
+        .vtext {
+            font-size: 12px;
+        }
+    </style>
+
+<link href="./ssp_login_files/default.css" type="text/css" rel="stylesheet"><link href="./ssp_login_files/facebox.css" type="text/css" rel="stylesheet"></head>
+<body class="erploginpage" onload="Check();burstCache();" onkeydown="return checkscript();" style="">
+    <form name="form1" method="post" action="https://ssp.hauiums.in/" id="form1">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTU5MzUxNTU3M2RkdqozcqW0S5eXaEvqtAP2Tzca2X01UwIkiidrRaFwPZU=">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./ssp_login_files/WebResource.axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "form1";
+//]]>
+</script>
+<script src="./ssp_login_files/WebResource(1).axd" type="text/javascript"></script>
+<script src="./ssp_login_files/WebResource(2).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="F0C7EF03">
+	<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+	<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAgfxSn3zTS/WlNWMQXLkMy1d4N0rrn7vh2RQQFas86OD031MHfIBkYtnBaXK2ITxS+inihG6d/Xh3PZm3b5AoMQ4W74COrJJ8h5MjuZorsg4yC21kLrjnwNGJva0uE3amK2neccqilOtlU+MB+LB5jlgCbceUSne/KRoFpGXYIxO+xKmTlqb+ZGl/kkM5GQAqsOrhjemYlCqIkuZACXekNH">
+</div>
+
+        <div class="studentheader">
+            <div class="studentheaderinner">
+                <div class="col-md-12 col-sm-12">
+                    <div class="logo-hau">
+                        <span class="logoimg">
+                            <img src="./ssp_login_files/ccshau-logo.png"></span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            
+            <div style="text-align:center; font-size: larger; font-weight:700;">
+                <ul>
+                 <li><a href="http://ssp.hauiums.in/uploads/Registration%20Process%20for%20UG%20Students.pdf" target="_blank" style="display:none;">Registration Process for UG Students</a></li>
+                 <li><a href="http://ssp.hauiums.in/uploads/Registration%20Process%20for%20PG%20Students.pdf" target="_blank" style="display:none;">Registration Process for PG Students</a></li>
+            </ul>
+            </div>      
+        </div>
+        <div class="loginbase">
+            <div class="candidate-lgn-div">
+                <div class="candidate-lgn-div-inner">
+                    <div class="loginpgmain">
+                        <div class="adminheading">
+                            <h2>Login</h2>
+                            <h6>Welcome to CCSHAU, please Provide your user name and password.</h6>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label>Enrollment No.:</label>
+
+                                    <span id="Anthem_R_txtLogin__"><input name="R_txtLogin" type="text" maxlength="50" id="R_txtLogin" tabindex="1" class="form-control"></span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <label>Password:</label>
+                                    <span id="Anthem_R_txtPass__"><input name="R_txtPass" type="password" maxlength="50" id="R_txtPass" class="form-control"></span>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group loginbtn">
+                                    <span class="a-btn">
+                                        <span id="Anthem_btnLogin__"><input type="submit" name="btnLogin" value="Login" onclick="return onsubmitclick();javascript:Anthem_FireCallBackEvent(this,event,&#39;btnLogin&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;Wait...&#39;,true,null,null,null,true,true);return false;" id="btnLogin" class="button-common1" cellpadding="0" cellspacing="0"></span>
+                                        <span id="Anthem_lblError__"><span id="lblError" class="lblmessage" style="font-weight:bold;text-decoration:none;"></span></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p style="margin-bottom: 0;">
+                                    <span id="Anthem_FPassword__"><input type="submit" name="FPassword" value="Forgot Password?" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;FPassword&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;Wait...&#39;,true,null,null,null,true,true);return false;" id="FPassword" class="button-common1" cellpadding="0" cellspacing="0" style="background: none; border: none; color: #ff6000"></span>
+                                    
+                                </p>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+         <div class="footer">
+
+            <ul style="float: left; width: 100%; text-align: center; margin-bottom: 0;">
+
+                <li style="list-style: none">
+
+                     
+                </li>
+            </ul>
+        </div>
+
+
+
+
+        <div id="lightbook" class="white_content-new" style="display: none">
+            <div class="popupboxouter" style="width: 50%;">
+                <div class="popupbox" style="margin-top: 30%;">
+                    <div onclick="document.getElementById(&#39;lightbook&#39;).style.display=&#39;none&#39;;" class="close">
+                        X
+                    </div>
+                    <div>
+                        <div id="Div2" style="display: block;">
+                            <table border="0" class="table" width="100%">
+                                <tbody><tr>
+                                    <td colspan="6">
+                                        <div class="popupheading">Forgot Passwoard? </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" class="forgot-popup-content">
+                                        <div id="Anthem_pnlheads__"><div id="pnlheads">
+	
+                                            <table width="100%">
+
+                                                <tbody><tr>
+                                                    <td colspan="6"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="vtext">Enrollment No
+                                                    </td>
+                                                    <td class="colon">: </td>
+                                                    <td>
+                                                        <span id="Anthem_ApplicationNo__"><input name="ApplicationNo" type="text" maxlength="15" id="ApplicationNo" class="textbox"></span>
+                                                    </td>
+                                                    <td class="vtext">DOB
+                                                    </td>
+                                                    <td class="colon">: </td>
+                                                    <td>
+                                                        <span id="Anthem_R_txtDob__"><input name="R_txtDob" id="R_txtDob" class="textbox" type="Date"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="6"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+
+                                                    <td colspan="4">
+                                                        <span id="Anthem_btnResetPasswrd__"><input type="submit" name="btnResetPasswrd" value="Submit" onclick="return onResetclick();javascript:Anthem_FireCallBackEvent(this,event,&#39;btnResetPasswrd&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;Wait...&#39;,true,null,null,null,true,true);return false;" id="btnResetPasswrd" class="button-common1" cellpadding="0" cellspacing="0"></span>
+                                                    </td>
+                                                </tr>
+                                            </tbody></table>
+
+                                        
+</div></div>
+                                    </td>
+                                </tr>
+                            </tbody></table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    
+
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('R_txtLogin');//]]>
+</script>
+</form>
+
+
+
+
+</body></html>

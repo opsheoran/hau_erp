@@ -1,0 +1,57 @@
+{% macro render_horizontal_tabs(menu_config, current_category, current_sub_cat, current_folder, active_page) %}
+<table id="tabbing_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td align="left" class="tabbing">
+                <div style="display:inline; width:100%">
+                    {% if menu_config and current_category in menu_config %}
+                        {% set cat_obj = menu_config[current_category] %}
+                        {% if current_sub_cat in cat_obj %}
+                            {% set sub_cat_obj = cat_obj[current_sub_cat] %}
+                            {% if current_folder in sub_cat_obj %}
+                                {% set pages = sub_cat_obj[current_folder] %}
+                                {% for p in pages %}
+                                    <a href="{{ get_page_url(p) }}" title="{{ p }}" 
+                                       class="{% if p == active_page %}tabg_active{% else %}tabg{% endif %}" 
+                                       style="display:inline-block;">{{ p }}</a>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<style>
+    .tabbing { padding-bottom: 5px; border-bottom: 1px solid #D4D4D4; margin-bottom: 10px; }
+    .tabg { 
+        padding: 5px 10px; 
+        background-color: #E6E6E6; 
+        color: #333; 
+        text-decoration: none; 
+        border: 1px solid #D4D4D4; 
+        margin-right: 2px; 
+        font-size: 11px;
+        white-space: nowrap;
+        margin-bottom: 2px;
+    }
+    .tabg:hover { background-color: #D4D4D4; }
+    .tabg_active { 
+        padding: 5px 10px; 
+        background-color: #fff; 
+        color: #000; 
+        font-weight: bold; 
+        text-decoration: none; 
+        border: 1px solid #D4D4D4; 
+        border-bottom: 1px solid #fff; 
+        margin-right: 2px; 
+        font-size: 11px;
+        white-space: nowrap;
+        position: relative;
+        top: 1px;
+        margin-bottom: 2px;
+    }
+</style>
+{% endmacro %}

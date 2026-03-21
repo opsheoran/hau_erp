@@ -1,0 +1,347 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .hau-form-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+    .hau-form-table td { padding: 4px 8px; vertical-align: middle; border: none !important; }
+    .vtext { font-family: Verdana; font-size: 11px; font-weight: bold; color: #333; width: 15%; }
+    .colon { width: 15px; text-align: center; font-weight: bold; }
+    .required { color: red; font-weight: bold; }
+    
+    .tableheading { background: #f4f4f4; padding: 10px; font-weight: bold; color: #3c8dbc; font-size: 11px; border-bottom: 1px solid #ddd; }
+    .tablesubheading { 
+        background-color: #2d5a27 !important; 
+        color: #ffffff !important; 
+        font-weight: bold; 
+        padding: 5px 10px; 
+        font-size: 12px; 
+        border: 1px solid #1e3d1a; 
+        display: block; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .table-grid-view { width: 100%; border-collapse: collapse; border: 1px solid #D4D4D4 !important; margin-bottom: 20px; }
+    .header-style th, .header-style td { background: #f8f9fa; border: 1px solid #D4D4D4 !important; padding: 6px 10px; text-align: center; font-weight: bold; color: #333; }
+    .item-style td, .item-style-alt td { border: 1px solid #D4D4D4 !important; padding: 5px 8px; font-size: 11px; }
+    .item-style-alt { background: #FAFAFA; }
+
+    .button-common { 
+        background: #3c8dbc; 
+        color: white; 
+        border: 1px solid #2c729e; 
+        padding: 3px 15px; 
+        font-family: Verdana; 
+        font-size: 11px; 
+        font-weight: bold; 
+        cursor: pointer; 
+        border-radius: 2px;
+        height: 24px;
+    }
+</style>
+
+<div class="tableheading">Leave Type Master</div>
+
+<div class="hau-card" style="padding: 15px; margin-bottom: 20px; border: 1px solid #ddd;">
+    <!-- MASTER SECTION -->
+    <form method="POST" id="masterForm">
+        <input type="hidden" name="action" value="SAVE_MASTER">
+        <input type="hidden" name="pk_leaveid" id="m_pk_leaveid" value="{{ master.pk_leaveid if master else '' }}">
+        
+        <table class="hau-form-table">
+            <tr>
+                <td class="vtext">Leave Type</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="leavetype" id="m_leavetype" class="textbox" style="width: 250px;" value="{{ master.leavetype if master else '' }}" required> *
+                </td>
+                <td class="vtext" style="padding-left: 20px;">Short Description</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="shortdesc" id="m_shortdesc" class="textbox" style="width: 150px;" value="{{ master.shortdesc if master else '' }}" required> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Leave Nature</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="nature_code" id="m_nature_code" class="dropdown" style="width: 250px;" required>
+                        <option value="">-- Select Leave Nature Type --</option>
+                        <option value="N" {% if master and master.leavenature == 'N' %}selected{% endif %}>Normal</option>
+                        <option value="L" {% if master and master.leavenature == 'L' %}selected{% endif %}>Leave Without Allowance</option>
+                        <option value="O" {% if master and master.leavenature == 'O' %}selected{% endif %}>Weekly Off</option>
+                        <option value="H" {% if master and master.leavenature == 'H' %}selected{% endif %}>Holiday</option>
+                        <option value="F" {% if master and master.leavenature == 'F' %}selected{% endif %}>Half Holiday</option>
+                        <option value="R" {% if master and master.leavenature == 'R' %}selected{% endif %}>Restricted Holiday</option>
+                    </select> *
+                </td>
+                <td class="vtext" style="padding-left: 20px;">Gender</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="gender" id="m_gender" class="dropdown" style="width: 150px;" required>
+                        <option value="B" {% if master and master.gender == 'B' %}selected{% endif %}>-- Both --</option>
+                        <option value="M" {% if master and master.gender == 'M' %}selected{% endif %}>Male</option>
+                        <option value="F" {% if master and master.gender == 'F' %}selected{% endif %}>Female</option>
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Fixed Leave Type</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="fixed_id" id="m_fixed_id" class="dropdown" style="width: 250px;">
+                        <option value="">-- Select Fixed Leave Type --</option>
+                        {% for ft in lookups.fixed_types %}
+                        <option value="{{ ft.id }}" {% if master and master.fk_leavefixedid == ft.id %}selected{% endif %}>{{ ft.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td class="vtext" style="padding-left: 20px;">Remarks</td>
+                <td class="colon">:</td>
+                <td>
+                    <textarea name="remarks" id="m_remarks" rows="2" class="textbox" style="width: 250px;">{{ master.remarks if master else '' }}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4" style="padding-top: 10px;">
+                    <button type="submit" class="button-common" style="padding: 5px 30px;">{% if master %}UPDATE MASTER{% else %}SAVE MASTER{% endif %}</button>
+                    <button type="button" class="button-common" style="margin-left: 10px; background: #eee; color: #333; border-color: #ccc;" onclick="location.href='{{ url_for('leave.leave_type_master') }}'">RESET ALL</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    {% if master %}
+    <!-- DETAILS SECTION -->
+    <div class="tablesubheading" style="margin-top: 30px;">Leave Type Details for: {{ master.leavetype }}</div>
+    <form method="POST" id="detailForm" style="margin-top: 15px; border: 1px solid #eee; padding: 15px;">
+        <input type="hidden" name="action" value="SAVE_DETAIL">
+        <input type="hidden" name="pk_leaveid" value="{{ master.pk_leaveid }}">
+        <input type="hidden" name="pk_detail_id" id="d_pk_id">
+        
+        <table class="hau-form-table">
+            <tr>
+                <td class="vtext">Nature Type</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="nature_id" id="d_nature_id" class="dropdown" style="width: 200px;" required>
+                        <option value="">-- Select Nature Type --</option>
+                        {% for n in lookups.natures %}
+                        <option value="{{ n.id }}">{{ n.nature }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                <td class="vtext" style="padding-left: 20px;">Employee Category</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="category" id="d_category" class="dropdown" style="width: 200px;" required>
+                        <option value=""> --Select Employee Category-- </option>
+                        <option value="T">TEACHING</option>
+                        <option value="N">NON-TEACHING</option>
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Eligibility (In Months)</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="number" name="eligibility" id="d_eligibility" class="textbox" value="0" required> *
+                </td>
+                <td class="vtext" style="padding-left: 20px;">Max Leave Balance</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="number" name="max_balance" id="d_max_balance" class="textbox" value="0" required> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Leave Limit/Instance</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="number" name="limit_per_instance" id="d_limit_per_instance" class="textbox" value="0" required> *
+                </td>
+                <td class="vtext" style="padding-left: 20px;">Max Leave Per Year</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="number" name="max_per_year" id="d_max_per_year" class="textbox" value="0" required> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">HPL / CF / Cashable</td>
+                <td class="colon">:</td>
+                <td>
+                    <label><input type="checkbox" name="hpl" id="d_hpl"> HPL</label>
+                    <label style="margin-left: 10px;"><input type="checkbox" name="cf" id="d_cf"> CF</label>
+                    <label style="margin-left: 10px;"><input type="checkbox" name="cashable" id="d_cashable"> Cashable</label>
+                </td>
+                <td class="vtext" style="padding-left: 20px;">CF Limit</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" name="cf_limit" id="d_cf_limit" class="textbox" value="0">
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Off Covered</td>
+                <td class="colon">:</td>
+                <td>
+                    <label><input type="checkbox" name="off_covered" id="d_off_covered"> Yes</label>
+                </td>
+                <td class="vtext" style="padding-left: 20px;">Encashment (Post Ret.)</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" name="encashment_after" id="d_encashment_after" class="textbox" value="0">
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Formula</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="formula_id" id="d_formula_id" class="dropdown" style="width: 200px;">
+                        <option value="">-- Select Formula --</option>
+                        {% for f in lookups.formulas %}
+                        <option value="{{ f.id }}">{{ f.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td class="vtext" style="padding-left: 20px;">Amount</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" name="amount" id="d_amount" class="textbox" value="0">
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Min limit / Days Before</td>
+                <td class="colon">:</td>
+                <td colspan="4">
+                    Min Limit: <input type="number" name="min_limit" id="d_min_limit" class="textbox" style="width: 80px;" value="0">
+                    <span style="margin-left: 20px;">Days Before:</span>
+                    <input type="number" name="days_before" id="d_days_before" class="textbox" style="width: 80px;" value="0">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4" style="padding-top: 15px;">
+                    <button type="submit" class="button-common" style="padding: 5px 40px;">SAVE DETAIL CONFIG</button>
+                    <button type="button" class="button-common" style="margin-left: 10px; background: #eee; color: #333; border-color: #ccc;" onclick="resetDetailForm()">RESET DETAIL</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <!-- Details Grid -->
+    <table class="table-grid-view" style="margin-top: 20px;">
+        <thead>
+            <tr class="header-style">
+                <th>S.No.</th>
+                <th>Nature Type</th>
+                <th>Category</th>
+                <th>Instance Limit</th>
+                <th>Max/Year</th>
+                <th>Max Balance</th>
+                <th>CF</th>
+                <th>Cashable</th>
+                <th>EDIT</th>
+                <th>DELETE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in details %}
+            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                <td align="center">{{ loop.index }}</td>
+                <td>{{ d.nature }}</td>
+                <td align="center">{{ 'Teaching' if d.employeecategory == 'T' else 'Non-Teaching' }}</td>
+                <td align="center">{{ d.leavelimitperinstance }}</td>
+                <td align="center">{{ d.maxperyear }}</td>
+                <td align="center">{{ d.totalleavebalancelimit }}</td>
+                <td align="center">{{ 'Yes' if d.cf else 'No' }}</td>
+                <td align="center">{{ 'Yes' if d.cashable else 'No' }}</td>
+                <td align="center">
+                    <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick="editDetail('{{ d.pk_id }}')">
+                </td>
+                <td align="center">
+                    <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this detail?')">
+                        <input type="hidden" name="action" value="DELETE_DETAIL">
+                        <input type="hidden" name="did" value="{{ d.pk_id }}">
+                        <input type="hidden" name="lt_id" value="{{ master.pk_leaveid }}">
+                        <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+
+<!-- LIST SECTION (BOTTOM) -->
+<div class="tablesubheading">List of Leave Type</div>
+<div class="hau-card" style="padding: 10px; border: 1px solid #ddd;">
+    <table class="table-grid-view">
+        <thead>
+            <tr class="header-style">
+                <th width="50">S.No.</th>
+                <th>Leave Type</th>
+                <th>Short Description</th>
+                <th width="80">EDIT</th>
+                <th width="80">DELETE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lt in leave_types %}
+            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                <td align="center">{{ loop.index }}</td>
+                <td>{{ lt.name }}</td>
+                <td align="center">{{ lt.shortdesc }}</td>
+                <td align="center">
+                    <a href="{{ url_for('leave.leave_type_master', edit_id=lt.id) }}">
+                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                    </a>
+                </td>
+                <td align="center">
+                    <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this Leave Type and all its configurations?')">
+                        <input type="hidden" name="id" value="{{ lt.id }}">
+                        <input type="hidden" name="action" value="DELETE_MASTER">
+                        <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+function resetDetailForm() {
+    document.getElementById('detailForm').reset();
+    document.getElementById('d_pk_id').value = '';
+}
+
+function editDetail(did) {
+    // Note: This still uses /api/leave_type/detail/<did> which is correct
+    fetch(`/leave/api/leave_type/detail/${did}`)
+        .then(res => res.json())
+        .then(d => {
+            document.getElementById('d_pk_id').value = d.pk_id;
+            document.getElementById('d_nature_id').value = d.fk_natureid;
+            document.getElementById('d_category').value = d.employeecategory;
+            document.getElementById('d_eligibility').value = d.eligibilityinmonth;
+            document.getElementById('d_max_balance').value = d.totalleavebalancelimit;
+            document.getElementById('d_limit_per_instance').value = d.leavelimitperinstance;
+            document.getElementById('d_max_per_year').value = d.maxperyear;
+            document.getElementById('d_hpl').checked = d.hpl == 1;
+            document.getElementById('d_cf').checked = d.cf == 1;
+            document.getElementById('d_cashable').checked = d.cashable == 1;
+            document.getElementById('d_cf_limit').value = d.totalleavelimit;
+            document.getElementById('d_off_covered').checked = d.offcovered == 1;
+            document.getElementById('d_encashment_after').value = d.encashmentdays;
+            document.getElementById('d_formula_id').value = d.fk_formulaid || '';
+            document.getElementById('d_amount').value = d.amount;
+            document.getElementById('d_min_limit').value = d.MinimumAvailedLimit || 0;
+            document.getElementById('d_days_before').value = d.Daysbeforeapplyleave || 0;
+            
+            // Scroll to detail form
+            document.getElementById('detailForm').scrollIntoView({ behavior: 'smooth' });
+        });
+}
+</script>
+{% endblock %}

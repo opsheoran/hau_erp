@@ -1,0 +1,447 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-container">
+
+    <form method="post" id="mainForm" action="{{ url_for('examination.marks_process_ug_mba') }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="action" id="formAction" value="">
+        
+        <table border="0" cellpadding="0" cellspacing="0" class="form-table" width="100%">
+            <tr>
+                <td class="tableheading" colspan="6">Student Marks Process For UG and MBA</td>
+            </tr>
+            <tr>
+                <td class="tdgap" colspan="6"></td>
+            </tr>
+            <tr>
+                <td class="vtext" id="lblCollege" width="15%">College</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="college_id" class="textbox w-300" required onchange="fetchDegrees()">
+                        <option value="">--Select College--</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" id="lblAcdSession">Academic Session</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="session_id" id="session_id" class="textbox w-250" required onchange="fetchExamConfigs()">
+                        <option value="">--Select Academic Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext" id="lblDegree" width="15%">Degree</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" width="36%">
+                    <select name="degree_id" id="degree_id" class="textbox w-300" required onchange="handleDegreeChange()">
+                        <option value="">--Select Degree--</option>
+                    </select> *
+                </td>
+                <td class="vtext" id="lblSemester" width="15%">Class</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" width="30%">
+                    <select name="class_id" id="class_id" class="textbox w-150" required onchange="onClassSelect()">
+                        <option value="">-- Select Class --</option>
+                        {% for s in lookups.classes %}
+                        <option value="{{ s.id }}" data-order="{{ s.semesterorder | default(loop.index) }}" {% if filters.class_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Branch</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="branch_id" id="branch_id" class="textbox w-250">
+                        <option value="">--Select Branch--</option>
+                    </select>
+                </td>
+                <td id="Year" class="vtext">Year</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="year_id" id="year_id" class="textbox w-150" style="background:#f4f4f4; pointer-events:none;" required readonly>
+                        <option value="">--Select Year--</option>
+                        {% for y in lookups.years %}
+                        <option value="{{ y.id }}" {% if filters.year_id|string == y.id|string %}selected{% endif %}>{{ y.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td id="lblExamConfig" class="vtext" width="15%">Exam Config.</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="exam_config_id" id="exam_config_id" class="textbox w-250" required>
+                        <option value="">-- Select Exam Config --</option>
+                    </select> *
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <table class="radio" border="0">
+                        <tr>
+                            <td><span><input id="rbtExamType_0" type="radio" name="exam_type" value="1" {% if filters.exam_type == '1' %}checked{% endif %}><label for="rbtExamType_0">Regular/Back Exam</label></span></td>
+                            <td><span><input id="rbtExamType_1" type="radio" name="exam_type" value="2" {% if filters.exam_type == '2' %}checked{% endif %}><label for="rbtExamType_1">ReEvaluation Exam</label></span></td>
+                            <td><span><input id="rbtExamType_2" type="radio" name="exam_type" value="3" {% if filters.exam_type == '3' %}checked{% endif %}><label for="rbtExamType_2">Revised Exam</label></span></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="width: 17%"></td>
+                <td colspan="4">
+                    <button type="button" class="button-common" onclick="getStudents()">Get Student</button>
+                    <button type="button" class="button-common" style="font-weight:normal;" onclick="resetForm()">RESET</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" class="gap"></td>
+            </tr>
+        </table>
+        
+        {% if students %}
+        <div style="margin-bottom: 10px;">
+            <span>Total Student = {{ filters.total_students }}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span style="color:red;">Fail Student = {{ filters.fail_students }}</span>
+        </div>
+        <table border="0" cellpadding="0" cellspacing="0" class="form-table" width="100%">
+            <tr>
+                <td colspan="6" class="tablesubheading">Student List</td>
+            </tr>
+            <tr>
+                <td class="gap" colspan="6"></td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div style="height: 250px; overflow-y: auto;">
+                    <table class="table-grid-view" cellspacing="1" cellpadding="1" border="1" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+                        <thead>
+                            <tr class="header-style" style="position: sticky; top: 0; z-index: 1;">
+                                <th scope="col" style="width:5%;">S.No.</th>
+                                <th scope="col" style="width:30%; text-align:left;">Student Name</th>
+                                <th scope="col" style="width:15%;">
+                                    <span class="chkbox"><input type="checkbox" id="chkSelectAll" onclick="toggleAll(this)"><label for="chkSelectAll">Action</label></span>
+                                </th>
+                                <th scope="col" style="width:30%;">Last Process Date</th>
+                                <th scope="col">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr class="item-style" style="background-color:White;">
+                                <td align="center">{{ loop.index }}</td>
+                                <td align="left" {% if student.is_fail %}style="color:red;"{% endif %}>{{ student.name }}</td>
+                                <td align="center">
+                                    <span class="chkbox"><input type="checkbox" name="chk_student[]" value="{{ student.id }}" class="chk-student"></span>
+                                </td>
+                                <td align="center">{{ student.last_process_date }}</td>
+                                <td align="center">
+                                    <a href="javascript:void(0);" onclick="viewStudentResult('{{ student.id }}')">View</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" class="gap"></td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <button type="button" class="button-common" onclick="submitProcess()">Process</button>
+                </td>
+            </tr>
+            
+            <!-- Standalone Student Details Grid -->
+            <tr id="trStudentDetails" style="display:none;">
+                <td colspan="6">
+                    <div style="margin-top:20px; width:100%; overflow:auto;">
+                        <div id="studentDetailsContainer"></div>
+                        <div style="margin-top:10px;">
+                            <span id="lblTotalCourse">Total Course = 0</span> &nbsp;&nbsp;&nbsp;
+                            <span id="lblfailCourse" style="color:Red;">Fail Course = 0</span>
+                        </div>
+                        <div style="margin-top:10px;">
+                            <button type="button" class="button-common" onclick="alert('Not implemented yet')">UNFAIR MEAN ACTION</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="6" class="gap"></td>
+            </tr>
+            <tr>
+                <td class="tablesubheading" colspan="6">Locked Student</td>
+            </tr>
+            <tr>
+                <td class="gap" colspan="6"></td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <table class="table-grid-view" cellspacing="1" cellpadding="1" border="1" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+                        <thead>
+                            <tr class="header-style">
+                                <th scope="col" style="width:5%;">S.No.</th>
+                                <th scope="col" style="width:30%; text-align:left;">Student Name</th>
+                                <th scope="col" style="width:15%;">
+                                    <span class="chkbox"><input type="checkbox" id="chkSelectAllLocked" onclick="toggleAllLocked(this)"><label for="chkSelectAllLocked">Action</label></span>
+                                </th>
+                                <th scope="col" style="width:30%;">Process Date</th>
+                                <th scope="col">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Locked students placeholder -->
+                            <tr><td colspan="5" align="center" style="color:red;">No records to display.</td></tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        {% endif %}
+    </form>
+</div>
+
+<style>
+.inner-grid { width: 100%; border-collapse: collapse; border: 1px solid #ddd; }
+.inner-grid th { background-color: #2d5a27; color: white; padding: 4px; font-size: 11px; }
+.inner-grid td { border: 1px solid #ddd; padding: 4px; font-size: 11px; text-align: center; }
+.inner-grid td:first-child { text-align: left; }
+</style>
+
+<script>
+window.onload = function() {
+    if (document.getElementById('college_id').value) {
+        fetchDegrees('{{ filters.degree_id }}');
+    }
+    if (document.getElementById('degree_id').value && document.getElementById('session_id').value) {
+        fetchExamConfigs('{{ filters.exam_config_id }}');
+    }
+};
+
+function fetchDegrees(selectedDegreeId = null) {
+    const college_id = document.getElementById('college_id').value;
+    const degreeSelect = document.getElementById('degree_id');
+    const branchSelect = document.getElementById('branch_id');
+    
+    degreeSelect.innerHTML = '<option value="">--Select Degree--</option>';
+    branchSelect.innerHTML = '<option value="">--Select Branch--</option>';
+    
+    if (!college_id) return;
+    
+    fetch(`{{ url_for('examination.get_college_ug_mba_degrees') }}?college_id=${college_id}`)
+        .then(res => res.json())
+        .then(data => {
+            let html = '<option value="">--Select Degree--</option>';
+            data.forEach(d => {
+                const selected = (selectedDegreeId && d.id == selectedDegreeId) ? 'selected' : '';
+                html += `<option value="${d.id}" ${selected}>${d.name}</option>`;
+            });
+            degreeSelect.innerHTML = html;
+            
+            if (selectedDegreeId) {
+                fetchBranches('{{ filters.branch_id }}');
+            }
+        });
+}
+
+function handleDegreeChange() {
+    fetchBranches();
+    fetchExamConfigs();
+}
+
+function fetchBranches(selectedBranchId = null) {
+    const degree_id = document.getElementById('degree_id').value;
+    const branchSelect = document.getElementById('branch_id');
+    
+    branchSelect.innerHTML = '<option value="">--Select Branch--</option>';
+    
+    if (!degree_id) return;
+    
+    fetch(`{{ url_for('academics.get_degree_branches_api', degree_id=0) }}`.replace('0', degree_id))
+        .then(res => res.json())
+        .then(data => {
+            let html = '<option value="">--Select Branch--</option>';
+            data.forEach(b => {
+                const selected = (selectedBranchId && b.id == selectedBranchId) ? 'selected' : '';
+                html += `<option value="${b.id}" ${selected}>${b.name}</option>`;
+            });
+            branchSelect.innerHTML = html;
+        });
+}
+
+function fetchExamConfigs(selectedConfigId = null) {
+    const degree_id = document.getElementById('degree_id').value;
+    const session_id = document.getElementById('session_id').value;
+    const ddlConfig = document.getElementById('exam_config_id');
+    
+    ddlConfig.innerHTML = '<option value="">-- Select Exam Config --</option>';
+    
+    if (degree_id && session_id) {
+        fetch(`{{ url_for('examination.get_exam_configs_for_marks') }}?degree_id=${degree_id}&session_id=${session_id}`)
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(config => {
+                    let option = document.createElement('option');
+                    option.value = config.id;
+                    option.textContent = config.name;
+                    if (selectedConfigId && config.id == selectedConfigId) {
+                        option.selected = true;
+                    }
+                    ddlConfig.appendChild(option);
+                });
+            });
+    }
+}
+
+function onClassSelect() {
+    const classSelect = document.getElementById('class_id');
+    const yearSelect = document.getElementById('year_id');
+    
+    if (classSelect.selectedIndex > 0) {
+        const selectedOption = classSelect.options[classSelect.selectedIndex];
+        const semesterOrder = parseInt(selectedOption.getAttribute('data-order'), 10) || 1;
+        const computedYearOrder = Math.ceil(semesterOrder / 2);
+        
+        for (let i = 0; i < yearSelect.options.length; i++) {
+            if (i === computedYearOrder) {
+                yearSelect.selectedIndex = i;
+                break;
+            }
+        }
+    } else {
+        yearSelect.selectedIndex = 0;
+    }
+}
+
+function getStudents() {
+    // Validate required fields
+    if (!document.getElementById('college_id').value || 
+        !document.getElementById('session_id').value || 
+        !document.getElementById('degree_id').value || 
+        !document.getElementById('class_id').value || 
+        !document.getElementById('exam_config_id').value) {
+        alert("Please select all required fields.");
+        return;
+    }
+    
+    document.getElementById('formAction').value = 'GET_STUDENTS';
+    document.getElementById('mainForm').submit();
+}
+
+function submitProcess() {
+    const checkboxes = document.querySelectorAll('.chk-student:checked');
+    if(checkboxes.length === 0) {
+        alert("Please select at least one student.");
+        return;
+    }
+    
+    if(confirm("Are you sure you want to Process marks for the selected student(s)?")) {      
+        document.getElementById('formAction').value = 'PROCESS';
+        document.getElementById('mainForm').submit();
+    }
+}
+
+function resetForm() {
+    window.location.href = "{{ url_for('examination.marks_process_ug_mba') }}";
+}
+
+function toggleAll(source) {
+    var checkboxes = document.querySelectorAll('.chk-student');
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}
+
+function viewStudentResult(studentId) {
+    var sess = document.getElementById('session_id').value;
+    var sem = document.getElementById('class_id').value;
+    var degYear = document.getElementById('year_id').value;
+    var deg = document.getElementById('degree_id').value;
+
+    fetch(`{{ url_for('examination.get_student_courses_ug_mba') }}?student_id=${studentId}&session_id=${sess}&semester_id=${sem}&year_id=${degYear}&degree_id=${deg}`)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('trStudentDetails').style.display = 'table-row';
+            
+            let html = `
+                <table class="table-grid-view" cellspacing="1" cellpadding="1" border="1" style="width:100%; border:1px solid #D4D4D4; border-collapse:collapse;">
+                    <tr class="header-style">
+                        <th scope="col">S.No.</th>
+                        <th scope="col"><span class="chkbox"><input type="checkbox" onclick="toggleInnerAll(this, '${studentId}')"><label>UNFAIR MEAN</label></span></th>
+                        <th scope="col">Course Name</th>
+                        <th scope="col">In Theory</th>
+                        <th scope="col">In Practical</th>
+                        <th scope="col">Ex Theory</th>
+                        <th scope="col">Ex Practical</th>
+                        <th scope="col">InTh Grade</th>
+                        <th scope="col">InPr Grade</th>
+                        <th scope="col">ExTh Grade</th>
+                        <th scope="col">ExPr Grade</th>
+                        <th scope="col">GP</th>
+                        <th scope="col">CP</th>
+                        <th scope="col">GPA</th>
+                        <th scope="col">OGPA</th>
+                        <th scope="col">Passed</th>
+                    </tr>
+            `;
+            
+            let total = 0;
+            let fail = 0;
+
+            if(data.length === 0) {
+                html += `<tr><td colspan="16" style="color:red; text-align:center;">No courses found for this student.</td></tr>`;
+            } else {
+                total = data.length;
+                data.forEach((c, idx) => {
+                    html += `
+                        <tr class="item-style" style="background-color: ${idx % 2 === 0 ? 'White' : '#FAFAFA'}">
+                            <td align="center">${idx + 1}</td>
+                            <td align="center"><span class="chkbox"><input type="checkbox" class="chk-inner-${studentId}" value="${c.coursecode}"></span></td>
+                            <td align="left">${c.coursename} [${c.coursecode}]</td>
+                            <td align="center">${c.in_th}</td>
+                            <td align="center">${c.in_pr}</td>
+                            <td align="center">${c.ex_th}</td>
+                            <td align="center">${c.ex_pr}</td>
+                            <td align="center"></td>
+                            <td align="center"></td>
+                            <td align="center"></td>
+                            <td align="center"></td>
+                            <td align="center">${c.gp}</td>
+                            <td align="center">${c.cp}</td>
+                            <td align="center">${c.gpa}</td>
+                            <td align="center">${c.ogpa}</td>
+                            <td align="center">${c.passed}</td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            html += `</table>`;
+            document.getElementById('studentDetailsContainer').innerHTML = html;
+            document.getElementById('lblTotalCourse').innerText = 'Total Course = ' + total;
+            document.getElementById('lblfailCourse').innerText = 'Fail Course = ' + fail;
+        });
+}
+
+function toggleInnerAll(source, studentId) {
+    var checkboxes = document.querySelectorAll('.chk-inner-' + studentId);
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}
+</script>
+{% endblock %}

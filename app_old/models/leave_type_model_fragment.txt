@@ -1,0 +1,98 @@
+
+class LeaveTypeModel:
+    @staticmethod
+    def get_all_leave_types():
+        return DB.fetch_all("SELECT pk_leaveid as id, leavetype as name, shortdesc FROM SAL_Leavetype_Mst ORDER BY leavetype")
+
+    @staticmethod
+    def get_leave_type_by_id(lt_id):
+        return DB.fetch_one("SELECT * FROM SAL_Leavetype_Mst WHERE pk_leaveid = ?", [lt_id])
+
+    @staticmethod
+    def get_leave_type_details(lt_id):
+        query = """
+            SELECT D.*, N.nature, F.formula_desc
+            FROM SAL_Leavetype_Details D
+            LEFT JOIN SAL_Nature_Mst N ON D.fk_natureid = N.pk_natureid
+            LEFT JOIN SAL_Formula_Mst F ON D.fk_formulaid = F.pk_formulaid
+            WHERE D.fk_leaveid = ?
+        """
+        return DB.fetch_all(query, [lt_id])
+
+    @staticmethod
+    def get_lookups():
+        return {
+            'natures': DB.fetch_all("SELECT pk_natureid as id, nature FROM SAL_Nature_Mst ORDER BY nature"),
+            'fixed_types': DB.fetch_all("SELECT pk_leavefixedid as id, shortdesc as name FROM SAL_LeaveTypeFixed_Mst WHERE isactive=1"),
+            'formulas': DB.fetch_all("SELECT pk_formulaid as id, formula_desc as name FROM SAL_Formula_Mst ORDER BY formula_desc")
+        }
+
+    @staticmethod
+    def save_leave_type(data, user_id):
+        lt_id = data.get('id')
+        if lt_id:
+            sql = """
+                UPDATE SAL_Leavetype_Mst 
+                SET leavetype=?, shortdesc=?, fk_leavefixedid=?, leavenature=?, gender=?, remarks=?,
+                    fk_updUserID=?, fk_updDateID=GETDATE()
+                WHERE pk_leaveid=?
+            """
+            DB.execute(sql, [data['leavetype'], data['shortdesc'], data.get('fixed_id'), data['nature_code'], data['gender'], data.get('remarks'), user_id, lt_id])
+        else:
+            # Generate ID
+            count = DB.fetch_scalar("SELECT COUNT(*) FROM SAL_Leavetype_Mst")
+            lt_id = count + 1
+            sql = """
+                INSERT INTO SAL_Leavetype_Mst 
+                (pk_leaveid, leavetype, shortdesc, fk_leavefixedid, leavenature, gender, remarks, fk_insUserID, fk_insDateID)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, GETDATE())
+            """
+            DB.execute(sql, [lt_id, data['leavetype'], data['shortdesc'], data.get('fixed_id'), data['nature_code'], data['gender'], data.get('remarks'), user_id])
+        return lt_id
+
+    @staticmethod
+    def save_leave_type_detail(data, user_id):
+        pk_id = data.get('pk_id')
+        if pk_id:
+            sql = """
+                UPDATE SAL_Leavetype_Details 
+                SET fk_natureid=?, maxperyear=?, cf=?, totalleavelimit=?, leavelimitperinstance=?, 
+                    fixedtimesissue=?, totaltimesissue=?, cashable=?, amount=?, eligibilityinmonth=?, 
+                    offcovered=?, totalleavebalancelimit=?, fk_formulaid=?, encashmentdays=?, 
+                    employeecategory=?, hpl=?, MinimumAvailedLimit=?, Daysbeforeapplyleave=?,
+                    fk_updUserID=?, fk_updDateID=GETDATE()
+                WHERE pk_id=?
+            """
+            params = [
+                data['nature_id'], data['max_per_year'], data['cf'], data['cf_limit'], data['limit_per_instance'],
+                data['fixed_times'], data['total_times'], data['cashable'], data['amount'], data['eligibility'],
+                data['off_covered'], data['max_balance'], data.get('formula_id'), data['encashment_after'],
+                data['category'], data['hpl'], data['min_limit'], data['days_before'], user_id, pk_id
+            ]
+            DB.execute(sql, params)
+        else:
+            sql = """
+                INSERT INTO SAL_Leavetype_Details 
+                (fk_leaveid, fk_natureid, maxperyear, cf, totalleavelimit, leavelimitperinstance, 
+                 fixedtimesissue, totaltimesissue, cashable, amount, eligibilityinmonth, 
+                 offcovered, totalleavebalancelimit, fk_formulaid, encashmentdays, 
+                 employeecategory, hpl, MinimumAvailedLimit, Daysbeforeapplyleave,
+                 fk_updUserID, fk_updDateID)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())
+            """
+            params = [
+                data['leave_id'], data['nature_id'], data['max_per_year'], data['cf'], data['cf_limit'], data['limit_per_instance'],
+                data['fixed_times'], data['total_times'], data['cashable'], data['amount'], data['eligibility'],
+                data['off_covered'], data['max_balance'], data.get('formula_id'), data['encashment_after'],
+                data['category'], data['hpl'], data['min_limit'], data['days_before'], user_id
+            ]
+            DB.execute(sql, params)
+
+    @staticmethod
+    def delete_leave_type(lt_id):
+        DB.execute("DELETE FROM SAL_Leavetype_Details WHERE fk_leaveid = ?", [lt_id])
+        return DB.execute("DELETE FROM SAL_Leavetype_Mst WHERE pk_leaveid = ?", [lt_id])
+
+    @staticmethod
+    def delete_leave_type_detail(did):
+        return DB.execute("DELETE FROM SAL_Leavetype_Details WHERE pk_id = ?", [did])

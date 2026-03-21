@@ -2,8 +2,8 @@
 {% block content %}
 <style>
     .w-150 { width: 150px !important; }
+    .w-200 { width: 200px !important; }
     .w-250 { width: 250px !important; }
-    .w-350 { width: 363px !important; height: 60px !important; }
     .required-star { color: red; font-weight: bold; }
 </style>
 
@@ -23,56 +23,67 @@
                     <td><input type="text" name="name" id="ca_name" class="textbox w-250" required> <span class="required-star">*</span></td>
                 </tr>
                 <tr>
-                    <td class="vtext">Session</td><td class="colon">:</td>
+                    <td class="vtext">Activity Category</td><td class="colon">:</td>
                     <td>
-                        <select name="session_id" id="ca_session" class="textbox w-200" required>
-                            <option value="">--Select Session--</option>
-                            {% for s in lookups.sessions %}<option value="{{ s.pk_sessionid }}">{{ s.sessionname }}</option>{% endfor %}
+                        <select name="cat_id" id="ca_category" class="textbox w-200" required>
+                            <option value="">--Select Category--</option>
+                            {% for c in lookups.categories %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
                         </select> <span class="required-star">*</span>
                     </td>
-                    <td class="vtext">Semester</td><td class="colon">:</td>
+                    <td class="vtext">Activity type</td><td class="colon">:</td>
                     <td>
-                        <select name="sem_id" id="ca_sem" class="textbox w-200" required>
-                            <option value="">--Select Semester--</option>
-                            {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                        <select name="type" id="ca_type" class="textbox w-200" required>
+                            <option value="N">---Select Activity Type---</option>
+                            <option value="I">Indoor</option>
+                            <option value="O">Outdoor</option>
                         </select> <span class="required-star">*</span>
                     </td>
                 </tr>
                 <tr>
-                    <td class="vtext">Display Order</td><td class="colon">:</td>
-                    <td><input type="number" name="order" id="ca_order" class="textbox w-150" value="1"></td>
-                    <td class="vtext">Activity Type</td><td class="colon">:</td>
+                    <td class="vtext">Activity Order</td><td class="colon">:</td>
+                    <td><input type="number" name="order" id="ca_order" class="textbox w-150" value="1" required> <span class="required-star">*</span></td>
+                    <td class="vtext">Activity Session</td><td class="colon">:</td>
                     <td>
-                        <select name="type" id="ca_type" class="textbox w-200">
-                            <option value="A">Activity</option>
-                            <option value="C">Course</option>
-                        </select>
+                        <select name="session_id" id="ca_session" class="textbox w-200" required>
+                            <option value="">--Select Session--</option>
+                            {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                        </select> <span class="required-star">*</span>
                     </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Class</td><td class="colon">:</td>
+                    <td>
+                        <select name="sem_id" id="ca_sem" class="textbox w-200" required>
+                            <option value="">--Select Class--</option>
+                            {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                    <td colspan="3"></td>
                 </tr>
 
                 <!-- COURSE DETAIL MAPPING -->
                 <tr>
-                    <td colspan="6">
-                        <div class="tablesubheading" style="background:#eee; color:#333; margin:15px 0;">Course/Activity Detail</div>
-                        <table class="table-grid-view" id="detailTable">
+                    <td colspan="6" style="padding-top:20px;">
+                        <table class="table-grid-view" width="100%">
                             <thead>
                                 <tr class="header-style">
-                                    <th>Activity</th><th>Course Name</th><th>Course Code</th><th>Order</th><th>Capacity</th><th>DEL</th>
+                                    <th>S.No.</th>
+                                    <th>Activity</th>
+                                    <th>Activity Course Order</th>
+                                    <th>Capacity</th>
+                                    <th>ADD</th>
+                                    <th>DELETE</th>
                                 </tr>
                             </thead>
                             <tbody id="detailBody">
                                 <!-- Dynamic Rows -->
                             </tbody>
                         </table>
-                        <div style="text-align:right;">
-                            <input type="button" value="ADD NEW DETAIL" class="button-common" onclick="addDetailRow()">
-                        </div>
                     </td>
                 </tr>
 
                 <tr>
-                    <td colspan="2"></td>
-                    <td colspan="4" style="padding-top: 20px;">
+                    <td colspan="6" style="padding-top: 20px; text-align: center;">
                         <input type="submit" id="btnSave" value="SAVE" class="button-common" style="background:#3c8dbc; color:white; padding: 5px 30px;">
                         <input type="button" value="RESET" class="button-common" style="margin-left:10px;" onclick="resetForm()">
                     </td>
@@ -81,28 +92,30 @@
         </form>
 
         <!-- LIST -->
-        <div style="margin-top: 50px; border-top: 2px solid #3c8dbc; padding-top: 25px;">
-            <div class="tablesubheading">List of Activity Courses</div>
-            <table class="table-grid-view">
+        <div style="margin-top: 50px;">
+            <div class="tablesubheading">Activity Course(s) Details List</div>
+            <table class="table-grid-view" width="100%" style="margin-top:10px;">
                 <thead>
                     <tr class="header-style">
                         <th width="50">S.No.</th>
-                        <th>Name</th>
-                        <th>Code</th>
+                        <th>Activity Course Code</th>
+                        <th>Activity Course Name</th>
                         <th>Session</th>
                         <th>Semester</th>
+                        <th>Activity Course Order</th>
                         <th width="60">EDIT</th>
                         <th width="60">DELETE</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in items %}
-                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                    <tr class="item-style">
                         <td align="center">{{ loop.index + (pagination.page - 1) * pagination.per_page }}</td>
-                        <td style="font-weight:bold;">{{ item.CourseActivity_Name }}</td>
-                        <td>{{ item.CourseActivity_Code }}</td>
-                        <td>{{ item.sessionname }}</td>
+                        <td align="center">{{ item.CourseActivity_Code }}</td>
+                        <td align="center">{{ item.CourseActivity_Name }}</td>
+                        <td align="center">{{ item.sessionname }}</td>
                         <td align="center">{{ item.semester_roman }}</td>
+                        <td align="center">{{ item.CourseActivity_Order }}</td>
                         <td align="center">
                             <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick="editItem({{ item.pk_CourseActivityID }})">
                         </td>
@@ -132,6 +145,7 @@ function addDetailRow(data = null) {
     const tbody = document.getElementById('detailBody');
     const tr = document.createElement('tr');
     tr.className = 'item-style';
+    const rowIdx = tbody.children.length + 1;
     
     let actOpts = '<option value="">-Select Activity-</option>';
     lookups.activities.forEach(a => {
@@ -139,14 +153,49 @@ function addDetailRow(data = null) {
     });
 
     tr.innerHTML = `
-        <td><select name="act_ids[]" class="textbox w-200" style="width:180px;">${actOpts}</select></td>
-        <td><input type="text" name="c_names[]" class="textbox" value="${data ? data.CourseName : ''}"></td>
-        <td><input type="text" name="c_codes[]" class="textbox w-150" style="width:80px !important;" value="${data ? data.CourseCode : ''}"></td>
-        <td><input type="number" name="c_orders[]" class="textbox w-150" style="width:50px !important;" value="${data ? data.CourseOrder : '1'}"></td>
-        <td><input type="number" name="caps[]" class="textbox w-150" style="width:60px !important;" value="${data ? data.capacity : '0'}"></td>
-        <td align="center"><img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer" onclick="this.closest('tr').remove()"></td>
+        <td align="center" class="sno">${rowIdx}</td>
+        <td align="center">
+            <select name="act_ids[]" class="textbox w-250" required>
+                ${actOpts}
+            </select>
+            <input type="hidden" name="c_names[]" value="${data ? data.CourseName : ''}">
+            <input type="hidden" name="c_codes[]" value="${data ? data.CourseCode : ''}">
+        </td>
+        <td align="center"><input type="number" name="c_orders[]" class="textbox" style="width:60px" required value="${data ? data.CourseOrder : 1}"></td>
+        <td align="center"><input type="number" name="caps[]" class="textbox" style="width:60px" required value="${data ? data.capacity : 50}"></td>
+        <td align="center">
+            <a href="javascript:void(0)" onclick="addDetailRow()"><img src="{{ url_for('static', filename='images/Add.jpeg') }}"></a>
+        </td>
+        <td align="center">
+            <a href="javascript:void(0)" onclick="removeDetailRow(this)"><img src="{{ url_for('static', filename='images/Remove.jpeg') }}"></a>
+        </td>
     `;
+    
+    const select = tr.querySelector('select');
+    select.onchange = function() {
+        const text = this.options[this.selectedIndex].text;
+        const parts = text.split('||');
+        tr.querySelector('input[name="c_names[]"]').value = parts[0].trim();
+        tr.querySelector('input[name="c_codes[]"]').value = parts[1] ? parts[1].trim() : parts[0].trim();
+    };
+
     tbody.appendChild(tr);
+    updateSNo();
+}
+
+function removeDetailRow(btn) {
+    const tbody = document.getElementById('detailBody');
+    if (tbody.children.length > 1) {
+        btn.closest('tr').remove();
+        updateSNo();
+    }
+}
+
+function updateSNo() {
+    const snos = document.querySelectorAll('#detailBody .sno');
+    snos.forEach((td, idx) => {
+        td.innerText = idx + 1;
+    });
 }
 
 async function editItem(id) {
@@ -159,7 +208,8 @@ async function editItem(id) {
     document.getElementById('ca_session').value = c.sessionid;
     document.getElementById('ca_sem').value = c.semesterid;
     document.getElementById('ca_order').value = c.CourseActivity_Order;
-    document.getElementById('ca_type').value = (c.Activity_type || 'A').trim();
+    document.getElementById('ca_type').value = (c.Activity_type || 'N').trim();
+    document.getElementById('ca_category').value = c.fk_ActivityCategory_ID || '';
 
     const tbody = document.getElementById('detailBody');
     tbody.innerHTML = '';

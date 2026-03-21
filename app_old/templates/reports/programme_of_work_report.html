@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Programme of Work Report</title>
+    <style>
+        body { font-family: Verdana, sans-serif; font-size: 10px; margin: 20px; }
+        .report-header { text-align: center; margin-bottom: 20px; }
+        .report-title { font-size: 16px; font-weight: bold; text-decoration: underline; }
+        .report-table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-top: 10px; }
+        .report-table th, .report-table td { border: 1px solid #000; padding: 5px; text-align: left; }
+        .report-table th { background-color: #eee; font-weight: bold; text-align: center; }
+        .footer { margin-top: 30px; font-style: italic; font-size: 9px; text-align: right; }
+    </style>
+</head>
+<body>
+    <div class="report-header">
+        <div class="report-title">PROGRAMME OF WORK FOR PG</div>
+        <div style="margin-top:5px;"><b>CCS HARYANA AGRICULTURAL UNIVERSITY, HISAR</b></div>
+    </div>
+
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th width="5%">S.No.</th>
+                <th width="10%">Adm. No.</th>
+                <th width="20%">Student Name</th>
+                <th width="15%">Degree</th>
+                <th width="15%">Department</th>
+                <th width="15%">Major Advisor</th>
+                <th width="10%">Min. Credits</th>
+                <th width="10%">Completed</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in students %}
+            <tr>
+                <td align="center">{{ loop.index }}</td>
+                <td>{{ s.AdmissionNo }}</td>
+                <td><b>{{ s.fullname }}</b></td>
+                <td>{{ s.degreename }}</td>
+                <td>{{ s.Branchname }}</td>
+                <td>{{ s.advisor_name }}</td>
+                <td align="center">{{ s.min_credits }}</td>
+                <td align="center">{{ s.completed_credits }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8" align="center" style="padding: 20px;">No records found for the selected criteria.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Report Generated On: {{ now.strftime('%d/%m/%Y %I:%M %p') }}
+    </div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">College Degree Seat Report</span>
+    </div>
+
+    <div style="padding: 15px;">
+        <form method="GET">
+            <table class="form-table" width="100%">
+                <tr>
+                    <td class="vtext" width="12%">College</td><td class="colon">:</td>
+                    <td width="35%">
+                        <select name="college_id" class="dropdown w-250" required>
+                            <option value="">--Select College--</option>
+                            {% for c in lookups.colleges %}<option value="{{ c.id }}" {% if filters.college_id == c.id|string %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext" width="12%">Session</td><td class="colon">:</td>
+                    <td>
+                        <select name="session_id" class="dropdown w-150" required>
+                            <option value="">--Select Session--</option>
+                            {% for s in lookups.sessions %}<option value="{{ s.id }}" {% if filters.session_id == s.id|string %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Format</td><td class="colon">:</td>
+                    <td>
+                        <label><input type="radio" name="fmt" value="pdf" checked> PDF</label>
+                        <label style="margin-left:10px;"><input type="radio" name="fmt" value="excel"> Excel</label>
+                    </td>
+                    <td colspan="3" style="text-align:right;">
+                        <input type="submit" value="VIEW REPORT" class="button-common" style="width:120px;">
+                        {% if data %}
+                        <a href="{{ url_for('academics.college_degree_seat_report', fmt='excel', **filters) }}" class="button-common" style="background:#00a65a; color:white; padding: 5px 15px; text-decoration:none; margin-left:10px;">EXPORT EXCEL</a>
+                        <a href="{{ url_for('academics.college_degree_seat_report', fmt='pdf', **filters) }}" target="_blank" class="button-common" style="background:#d9534f; color:white; padding: 5px 15px; text-decoration:none; margin-left:5px;">PRINT PDF</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        {% if data %}
+        <div style="margin-top: 25px;">
+            <table class="table-grid-view" width="100%">
+                <thead>
+                    <tr class="header-style">
+                        <th width="5%">S.No.</th>
+                        <th>College</th>
+                        <th>Degree</th>
+                        <th>Specialization</th>
+                        <th width="10%">Seats</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in data %}
+                    <tr class="{{ loop.cycle('item-style', 'item-style-alt') }}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td>{{ item.collegename }}</td>
+                        <td>{{ item.degreename }}</td>
+                        <td>{{ item.Branchname or 'All' }}</td>
+                        <td align="center"><b>{{ item.totseat }}</b></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% elif filters.college_id %}
+        <div style="text-align:center; padding:30px; color:#999;">No seat details found for selected filters.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

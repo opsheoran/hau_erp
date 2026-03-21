@@ -2892,7 +2892,8 @@ def activity_course_master():
     lookups = {
         'sessions': InfrastructureModel.get_sessions(),
         'semesters': InfrastructureModel.get_all_semesters(),
-        'activities': ActivityCertificateModel.get_activities()
+        'activities': ActivityCertificateModel.get_activities(),
+        'categories': CourseActivityModel.get_activity_categories()
     }
     
     return render_template('academics/activity_course_master.html', items=items, lookups=lookups, pagination=pagination, page_range=page_range)
@@ -2934,7 +2935,8 @@ def activity_master():
 @academics_bp.route('/api/get_activity_course_details/<int:ca_id>')
 def get_activity_course_details_api(ca_id):
     details = CourseActivityModel.get_course_activity_details(ca_id)
-    return jsonify(details)
+    from app.utils import clean_json_data
+    return jsonify(clean_json_data(details))
 
 @academics_bp.route('/package_master', methods=['GET', 'POST'])
 @permission_required('Package Master')

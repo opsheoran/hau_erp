@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" id="facultyForm">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_facultyid" id="f_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="3">
+                    <span class="mainheadingborderbottom">Faculty Master</span>
+                </td>
+            </tr>
+            <tr><td colspan="3" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Faculty Name</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="faculty" id="f_name" class="textbox w-250" maxlength="250" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Faculty Short Name</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="facultyshort" id="f_short" class="textbox w-150" maxlength="49" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Report Order</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" name="rpt_order" id="f_order" class="textbox w-100" maxlength="2" value="1">
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="remarks" id="f_remarks" class="textbox w-250" maxlength="49">
+                </td>
+            </tr>
+            
+            <tr><td colspan="3" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <input type="submit" value="SAVE" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left:10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="3">
+                <span class="subheadingborderbottom">List of Faculties</span>
+            </td>
+        </tr>
+        <tr><td colspan="3" height="10"></td></tr>
+        <tr>
+            <td colspan="3">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th width="40%">Faculty Name</th>
+                            <th width="45%">Faculty Short Name</th>
+                            <th width="45%">Report Order</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for f in faculties %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="left">
+                            <td align="center">{{ loop.index }}</td>
+                            <td>{{ f.faculty }}</td>
+                            <td>{{ f.facultyshort }}</td>
+                            <td>{{ f.rpt_order }}</td>
+                            <td align="center">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editF({{ f|tojson }})'>
+                            </td>
+                            <td align="center">
+                                <form method="POST" onsubmit="return confirm('Are you sure you want to delete this faculty?');" style="display:inline;">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ f.pk_facultyid }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+function editF(f) {
+    document.getElementById('f_id').value = f.pk_facultyid;
+    document.getElementById('f_name').value = f.faculty.trim();
+    document.getElementById('f_short').value = f.facultyshort.trim();
+    document.getElementById('f_order').value = f.rpt_order;
+    document.getElementById('f_remarks').value = (f.Remarks || '').trim();
+    window.scrollTo(0,0);
+}
+
+function resetForm() {
+    document.getElementById('f_id').value = '';
+    document.getElementById('facultyForm').reset();
+}
+</script>
+{% endblock %}

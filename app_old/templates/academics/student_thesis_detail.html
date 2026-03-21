@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Student Thesis Detail</span></div>
+    
+    <div style="padding: 10px;">
+        <!-- FILTER FORM -->
+        <form method="GET" id="filterForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td class="required" colspan="4">
+                            <select name="college_id" class="dropdown w-300" required onchange="handleFilterChange()">
+                                <option value="0">--Select College--</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Academic Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" class="dropdown w-200" required>
+                                <option value="0">--Select Academic Session--</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" class="dropdown w-300" required onchange="handleFilterChange()">
+                                <option value="0">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext" width="15%">Class</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="semester_id" id="ddlSemester" class="dropdown w-150" onchange="calculateYear()">
+                                <option value="0"> -- Select Class -- </option>
+                                {% for s in lookups.semesters %}
+                                <option value="{{ s.pk_semesterid }}" {% if filters.semester_id|string == s.pk_semesterid|string %}selected{% endif %} data-order="{{ s.semesterorder }}">{{ s.semester_roman }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Department</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="branch_id" class="dropdown w-300">
+                                <option value="0">-- Select Department --</option>
+                                {% for b in lookups.branches %}
+                                <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext">Year</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <input type="text" id="txtYear" class="textbox w-100" style="background-color:#eee;" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Report Format</td>
+                        <td class="colon">:</td>
+                        <td colspan="4">
+                            <input type="radio" name="format" value="word"> Word Format
+                            <input type="radio" name="format" value="excel"> Excel Format
+                            <input type="radio" name="format" value="pdf" checked> PDF Format
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="10"></td></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="4">
+                            <input type="submit" value="VIEW" class="button-common" style="width:100px;">
+                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="window.location.href='{{ url_for('academics.student_thesis_detail') }}'">
+                            <input type="button" value="PRINT THESIS DETAIL" class="button-common" style="width:150px; margin-left:5px;" onclick="viewReport()">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+        <div class="tablesubheading"><span class="subheadingborderbottom">List of Students</span></div>
+        <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4; margin-top:10px;">
+            <table class="table-grid-view" width="100%" id="gvThesis">
+                <thead>
+                    <tr class="header-style">
+                        <th width="3%"><input type="checkbox" id="chkAll" onclick="toggleAll('chkDetails', this.checked)"></th>
+                        <th width="3%">S.No.</th>
+                        <th width="5%"><input type="checkbox" id="chkAllFee" onclick="toggleAll('chkFee', this.checked)"><br>Is Fee Remitted</th>
+                        <th>Admission No.</th>
+                        <th>Student Name</th>
+                        <th>Total Sem.</th>
+                        <th>Thesis Submission Date</th>
+                        <th>MC Date</th>
+                        <th>Viva Notification Date</th>
+                        <th>Result Publish Date</th>
+                        <th>Thesis Notification No.</th>
+                        <th>Viva Notification No.</th>
+                        <th>Result Notification No.</th>
+                        <th>Thesis Title</th>
+                        <th>Adjudicator's Remarks</th>
+                        <th>Resubmission, If Any</th>
+                        <th>Remarks</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in students %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" valign="top">
+                        <form method="POST">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                            <input type="hidden" name="action" value="UPDATE_SINGLE">
+                            <input type="hidden" name="sid" value="{{ s.pk_sid }}">
+                            
+                            <td align="center"><input type="checkbox" class="chkDetails"></td>
+                            <td align="center">{{ loop.index }}</td>
+                            <td align="center"><input type="checkbox" name="is_fee_remitted" value="1" class="chkFee" {% if s.IsFeeRemitted %}checked{% endif %}></td>
+                            <td align="left">{{ s.AdmissionNo }}</td>
+                            <td align="center">
+                                <a href="javascript:void(0)" onclick="window.open('/academics/student/{{ s.pk_sid }}/alert', 'popup', 'width=400,height=400')" style="text-decoration:underline; color:black;">{{ s.fullname }}</a>
+                            </td>
+                            <td align="center"><input type="text" name="total_sem" class="textbox w-50" value="{{ s.TotalSem or '' }}"></td>
+                            <td align="center"><input type="text" name="thesis_sub_date" class="textbox w-100" value="{{ s.ThesisSubmissionDate.strftime('%d/%m/%Y') if s.ThesisSubmissionDate else '' }}" placeholder="dd/MM/yyyy"></td>
+                            <td align="center"><input type="text" name="mc_date" class="textbox w-100" value="{{ s.MCDate.strftime('%d/%m/%Y') if s.MCDate else '' }}" placeholder="dd/MM/yyyy"></td>
+                            <td align="center"><input type="text" name="viva_date" class="textbox w-100" value="{{ s.VivaNotificationDate.strftime('%d/%m/%Y') if s.VivaNotificationDate else '' }}" placeholder="dd/MM/yyyy"></td>
+                            <td align="center"><input type="text" name="result_date" class="textbox w-100" value="{{ s.ResultPublishDate.strftime('%d/%m/%Y') if s.ResultPublishDate else '' }}" placeholder="dd/MM/yyyy"></td>
+                            <td align="center"><input type="text" name="thesis_not_no" class="textbox w-75" value="{{ s.ThesisNotificationNo or '' }}"></td>
+                            <td align="center"><input type="text" name="viva_not_no" class="textbox w-75" value="{{ s.VivaNotificationNo or '' }}"></td>
+                            <td align="center"><input type="text" name="result_not_no" class="textbox w-75" value="{{ s.ResultNotificationNo or '' }}"></td>
+                            <td align="center"><textarea name="thesis_title" class="w-100" style="height:40px; font-size:10px;">{{ s.ThesisTitle or '' }}</textarea></td>
+                            <td align="center"><textarea name="adjudicator_remarks" class="w-100" style="height:40px; font-size:10px;">{{ s.AdjudicatorRemarks or '' }}</textarea></td>
+                            <td align="center"><textarea name="resubmission" class="w-100" style="height:40px; font-size:10px;">{{ s.Resubmission or '' }}</textarea></td>
+                            <td align="center"><textarea name="remarks" class="w-100" style="height:40px; font-size:10px;">{{ s.Remarks or '' }}</textarea></td>
+                            <td align="center"><input type="submit" value="Save" class="button-common" style="padding:2px 5px; min-width:40px;"></td>
+                        </form>
+                    </tr>
+                    {% else %}
+                    <tr class="item-style"><td colspan="18" align="center" style="padding:20px; color:#999;">No student records found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function viewReport() {
+    const form = document.getElementById('filterForm');
+    const formData = new FormData(form);
+    const params = new URLSearchParams();
+    
+    for (const pair of formData.entries()) {
+        params.append(pair[0], pair[1]);
+    }
+    
+    const format = document.querySelector('input[name="format"]:checked').value;
+    params.append('format', format);
+    
+    window.open('/academics/student_thesis_report?' + params.toString(), '_blank');
+}
+
+function calculateYear() {
+    const ddl = document.getElementById('ddlSemester');
+    const txt = document.getElementById('txtYear');
+    if(!ddl || !txt) return;
+    
+    const opt = ddl.options[ddl.selectedIndex];
+    const order = parseInt(opt.getAttribute('data-order') || '0');
+    
+    if(order <= 0) { txt.value = ""; return; }
+    
+    const years = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
+    const yearIdx = Math.floor((order - 1) / 2);
+    txt.value = years[yearIdx] || "N/A";
+}
+
+function handleFilterChange() {
+    localStorage.setItem('thesis_scroll', window.scrollY);
+    document.getElementById('filterForm').submit();
+}
+
+function toggleAll(className, checked) {
+    document.querySelectorAll('.' + className).forEach(el => el.checked = checked);
+}
+
+window.addEventListener('load', () => {
+    const scrollPos = localStorage.getItem('thesis_scroll');
+    if (scrollPos) {
+        window.scrollTo(0, parseInt(scrollPos));
+        localStorage.removeItem('thesis_scroll');
+    }
+    calculateYear();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<!-- saved from url=(0072)https://hauiums.in/SMS/ExRes/SMS_HOD_ApprovalWithChanges.aspx?Mwpid=5346 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./HOD Marks Approval Form_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./HOD Marks Approval Form_files/default.css" type="text/css" rel="stylesheet"><link href="./HOD Marks Approval Form_files/font.css" type="text/css" rel="stylesheet"><link href="./HOD Marks Approval Form_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./HOD Marks Approval Form_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/SMS/ExRes/SMS_HOD_ApprovalWithChanges.aspx?Mwpid=5346" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./HOD Marks Approval Form_files/WebResource.axd" type="text/javascript"></script>
+<script src="./HOD Marks Approval Form_files/WebResource(1).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="982E838D">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="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">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./HOD Marks Approval Form_files/Examination.png">
+                            Examination &amp; Results
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/SMS/ExRes/SMS_HOD_ApprovalWithChanges.aspx?Mwpid=5346#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment">Dr. O.P. Sheoran</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName">Dr. O.P. Sheoran</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COBS&amp;H, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/SMS/ExRes/SMS_HOD_ApprovalWithChanges.aspx?Mwpid=5346#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./HOD Marks Approval Form_files/WebResource(2).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Marks Entries" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2415#" tabindex="-1">Marks Entries</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Master and Configuration Management" class="level2 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4794" tabindex="-1">Marks Entry</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:5" role="menuitem" style="position: relative; float: left;"><a title="Post-Examination Activities" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2405#" tabindex="-1">Post-Examination Activities</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:5" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:6" role="menuitem" style="position: relative;"><a title="Marks Entry Approval" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8451#" tabindex="-1">Marks Entry Approval</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:6" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="HOD Marks Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_HOD_ApprovalWithChanges.aspx?Mwpid=5346" tabindex="-1">HOD Marks Approval</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:10" role="menuitem" style="position: relative; float: left;"><a title="Results &amp; Grade Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2419#" tabindex="-1">Results &amp; Grade Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:10" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:11" role="menuitem" style="position: relative;"><a title="Marks Entry Status" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8446#" tabindex="-1">Marks Entry Status</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:11" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Entry Status For PG/PHD" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_MarksEntryStatusPGPHD_dtl.aspx?Mwpid=6373" tabindex="-1">Marks Entry Status For PG/PHD</a></li>
+			</ul></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Post-Examination Activities</span>&nbsp;&gt;&nbsp;<span>Marks Entry Approval</span>&nbsp;&gt;&nbsp;<strong>HOD Marks Approval</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./HOD Marks Approval Form_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+
+    <style>
+        .tablehover tr.item-style:hover {
+            /*background:#dfeece !important;*/
+            background: #E4EAFF !important;
+        }
+    </style>
+
+
+
+    
+
+    
+
+
+    <table border="0" cellpadding="0" cellspacing="0" class="table" width="100%" style="height: 410px">
+
+
+        <tbody><tr>
+            <td class="tableheading" colspan="6">HOD Marks Approval Form
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lblCollege">College
+            </td>
+            <td class="colon">:</td>
+            <td class="required" colspan="4">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlCollege__"><select name="ctl00$ContentPlaceHolder1$D_ddlCollege" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$D_ddlCollege\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_D_ddlCollege" class="dropdownvvlong">
+	<option value="-- Select College--">-- Select College--</option>
+	<option selected="selected" value="7">College of Basic Sciences And Humanities ( 05 ) </option>
+
+</select></span>
+                *
+           
+            </td>
+
+        </tr>
+
+
+
+        <tr>
+
+            <td class="vtext" id="lblAcdSession" width="15%">Academic Session
+            </td>
+            <td class="colon">:</td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlAcdSession__"><select name="ctl00$ContentPlaceHolder1$D_ddlAcdSession" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$D_ddlAcdSession\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_D_ddlAcdSession" class="dropdownlong">
+	<option value="--Select Academic Session--">--Select Academic Session--</option>
+	<option selected="selected" value="77">2025-2026 </option>
+	<option value="72">2024-2025 </option>
+	<option value="70">2023-2024 </option>
+	<option value="46">2022-2023 </option>
+	<option value="42">2021-2022 </option>
+	<option value="21">2020-2021 </option>
+	<option value="20">2019-2020 </option>
+	<option value="19">2018-2019 </option>
+	<option value="18">2017-2018 </option>
+	<option value="17">2016-2017 </option>
+	<option value="16">2015-2016 </option>
+	<option value="15">2014-2015 </option>
+	<option value="14">2013-2014 </option>
+	<option value="13">2012-2013 </option>
+	<option value="78">2011-2012 </option>
+	<option value="80">2010-2011 </option>
+	<option value="79">2009-2010 </option>
+
+</select></span>
+                *
+
+
+            
+            </td>
+
+            <td class="vtext" id="lblDegree" width="15%">Degree
+            </td>
+            <td class="colon">:</td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlDegree__"><select name="ctl00$ContentPlaceHolder1$D_ddlDegree" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$D_ddlDegree\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_D_ddlDegree" class="dropdown">
+	<option value="--Select Degree--">--Select Degree--</option>
+	<option value="1">B.Sc.(Hons.) Agriculture(4 Year) </option>
+	<option value="20">B.Sc.(Hons) Agriculture 2+4 Year </option>
+	<option selected="selected" value="24">M.Sc (BS&amp;H) </option>
+	<option value="25">Ph.D (BS&amp;H) </option>
+	<option value="29">B.Sc.(Hons.) Community Science </option>
+	<option value="35">Ph.D (HS) </option>
+	<option value="36">Ph.D (COA) </option>
+	<option value="39">Post-Graduate Diploma in Communication skills in English </option>
+	<option value="40">Post-Graduate Diploma in English Hindi Translation </option>
+	<option value="57">B.Sc.(Hons.) Physical Science 4 Year </option>
+	<option value="58">B.Sc.(Hons.) Life Science 4 year </option>
+
+</select></span>
+            *
+            
+        
+        </td></tr>
+
+        <tr>
+            <td id="lblsemester" class="vtext">Semester
+            </td>
+            <td class="colon">:
+            </td>
+            <td valign="top" class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddl_semester__"><select name="ctl00$ContentPlaceHolder1$ddl_semester" id="ctl00_ContentPlaceHolder1_ddl_semester" tabindex="3" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddl_semester&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;">
+	<option value="--Select Semester--">--Select Semester--</option>
+	<option selected="selected" value="1">Odd Semester</option>
+	<option value="2">Even Semester</option>
+
+</select></span>
+                *
+            </td>
+
+            <td id="lblExamType" class="vtext">Exam Type
+            </td>
+            <td class="colon">:</td>
+            <td>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlExamType__"><select name="ctl00$ContentPlaceHolder1$ddlExamType" id="ctl00_ContentPlaceHolder1_ddlExamType" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlExamType&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option selected="selected" value="1">Internal</option>
+
+</select></span>
+            </td>
+
+
+        </tr>
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="4">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_rbtSupplySummer__"><table id="ctl00_ContentPlaceHolder1_rbtSupplySummer" class="radio" border="0">
+	<tbody><tr>
+		<td><span><input id="ctl00_ContentPlaceHolder1_rbtSupplySummer_0" type="radio" name="ctl00$ContentPlaceHolder1$rbtSupplySummer" value="1" checked="checked"><label for="ctl00_ContentPlaceHolder1_rbtSupplySummer_0">Regular/Back Exam</label></span></td><td><span><input id="ctl00_ContentPlaceHolder1_rbtSupplySummer_1" type="radio" name="ctl00$ContentPlaceHolder1$rbtSupplySummer" value="2" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$rbtSupplySummer$1\&#39;,\&#39;\&#39;)&#39;, 0)"><label for="ctl00_ContentPlaceHolder1_rbtSupplySummer_1">Supplementary Exam</label></span></td><td><span><input id="ctl00_ContentPlaceHolder1_rbtSupplySummer_2" type="radio" name="ctl00$ContentPlaceHolder1$rbtSupplySummer" value="4" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$rbtSupplySummer$2\&#39;,\&#39;\&#39;)&#39;, 0)"><label for="ctl00_ContentPlaceHolder1_rbtSupplySummer_2">Summer Exam</label></span></td><td><span><input id="ctl00_ContentPlaceHolder1_rbtSupplySummer_3" type="radio" name="ctl00$ContentPlaceHolder1$rbtSupplySummer" value="3" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$rbtSupplySummer$3\&#39;,\&#39;\&#39;)&#39;, 0)"><label for="ctl00_ContentPlaceHolder1_rbtSupplySummer_3">Igrade Exam</label></span></td>
+	</tr>
+</tbody></table></div>
+
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td></td>
+            <td></td>
+            <td class="required" colspan="4">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnView__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnView" value="VIEW" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnView&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;SEARCHING..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnView" tabindex="10" class="button-common" cellpadding="0" cellspacing="0"></span>
+
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;RESETTING..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" tabindex="10" class="button-common" cellpadding="0" cellspacing="0"></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg"></span></span>
+
+
+
+            </td>
+
+        </tr>
+
+
+        <tr>
+            <td class="tablesubheading" colspan="6">List of Pending Sheet</td>
+        </tr>
+
+        <tr>
+            <td class="tdgap" colspan="6">
+
+                <div id="Div1" class="DivStyleWithScroll" style="width: 100%; height: 275px">
+                    <div id="Anthem_ctl00_ContentPlaceHolder1_gvDetails__" style=""><div>
+
+</div></div>
+                </div>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td class="tablesubheading" colspan="6">List of Approved Sheet</td>
+        </tr>
+
+        <tr>
+            <td class="tdgap" colspan="6">
+
+                <div id="Div2" class="DivStyleWithScroll" style="width: 100%; height: 275px">
+                    <div id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1__" style=""><div>
+	<table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_gvDetails1" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+		<tbody><tr class="header-style">
+			<th scope="col">S.No.</th><th scope="col">Course</th><th scope="col">Current Session</th><th scope="col">Semester</th><th scope="col">Year</th><th scope="col">Regular/Back</th><th scope="col">Student Count</th><th scope="col">View/Edit</th>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblsno">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblcoursecode">MATH 512 BSMA || Mathematical Analysis(3+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl02_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl02$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl02_hdnpk_courseid" value="2185"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl02_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl02$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl02_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl02_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl02$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl02_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl02_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl02$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl02_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl02_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl02$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl02_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lblCount">2</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lnkView&#39;,&#39;Select$1&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl02_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl02$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblsno">2</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblcoursecode">MATH 516 BSMA || Integral Equations and Calculus of Variations(2+1)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl03_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl03$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl03_hdnpk_courseid" value="2189"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl03_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl03$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl03_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl03_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl03$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl03_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl03_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl03$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl03_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl03_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl03$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl03_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lblCount">2</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lnkView&#39;,&#39;Select$2&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl03_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl03$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblsno">3</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblcoursecode">MATH 519 BSMA || Fuzzy Set Theory(3+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl04_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl04$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl04_hdnpk_courseid" value="2192"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl04_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl04$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl04_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl04_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl04$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl04_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl04_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl04$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl04_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl04_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl04$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl04_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lblCount">2</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lnkView&#39;,&#39;Select$3&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl04_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl04$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblsno">4</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblcoursecode">MATH 521 BSMA || Topology(3+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl05_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl05$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl05_hdnpk_courseid" value="2194"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl05_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl05$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl05_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl05_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl05$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl05_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl05_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl05$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl05_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl05_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl05$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl05_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lblCount">2</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lnkView&#39;,&#39;Select$4&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl05_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl05$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblsno">5</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblcoursecode">STAT 502 BSMA || Statistical Methods for Applied Sciences(3+1)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl06_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl06$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl06_hdnpk_courseid" value="2295"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl06_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl06$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl06_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl06_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl06$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl06_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl06_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl06$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl06_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl06_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl06$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl06_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lblCount">11</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lnkView&#39;,&#39;Select$5&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl06_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl06$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblsno">6</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblcoursecode">STAT 551 BSMA || Mathematics-I(3+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl07_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl07$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl07_hdnpk_courseid" value="2265"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl07_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl07$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl07_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl07_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl07$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl07_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl07_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl07$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl07_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl07_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl07$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl07_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lblCount">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lnkView&#39;,&#39;Select$6&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl07_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl07$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblsno">7</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblcoursecode">STAT 552 BSMA || Probability Theory(2+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl08_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl08$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl08_hdnpk_courseid" value="2254"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl08_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl08$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl08_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl08_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl08$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl08_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl08_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl08$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl08_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl08_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl08$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl08_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lblCount">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lnkView&#39;,&#39;Select$7&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl08_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl08$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblsno">8</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblcoursecode">STAT 553 BSMA || Statistical Methods(2+1)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl09_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl09$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl09_hdnpk_courseid" value="2255"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl09_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl09$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl09_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl09_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl09$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl09_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl09_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl09$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl09_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl09_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl09$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl09_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lblCount">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lnkView&#39;,&#39;Select$8&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl09_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl09$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblsno">9</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblcoursecode">STAT 564 BSMA || Theory of Sampling Techniques(2+1)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl10_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl10$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl10_hdnpk_courseid" value="2258"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl10_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl10$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl10_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl10_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl10$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl10_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl10_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl10$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl10_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl10_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl10$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl10_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lblCount">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lnkView&#39;,&#39;Select$9&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl10_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl10$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblsno">10</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblcoursecode">MATH 512 BSMA || Mathematical Analysis(3+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl11_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl11$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl11_hdnpk_courseid" value="2185"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblsemester">III </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl11_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl11$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl11_hdnpk_semesterid" value="3"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblyear">Second</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl11_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl11$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl11_hdnpk_degreeyearid" value="2"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl11_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl11$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl11_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl11_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl11$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl11_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lblCount">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lnkView&#39;,&#39;Select$10&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl11_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl11$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblsno">11</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblcoursecode">MATH 516 BSMA || Integral Equations and Calculus of Variations(2+1)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl12_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl12$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl12_hdnpk_courseid" value="2189"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblsemester">III </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl12_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl12$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl12_hdnpk_semesterid" value="3"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblyear">Second</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl12_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl12$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl12_hdnpk_degreeyearid" value="2"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl12_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl12$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl12_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl12_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl12$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl12_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lblCount">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lnkView&#39;,&#39;Select$11&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl12_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl12$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblsno">12</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblcoursecode">MATH 519 BSMA || Fuzzy Set Theory(3+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl13_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl13$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl13_hdnpk_courseid" value="2192"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblsemester">III </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl13_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl13$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl13_hdnpk_semesterid" value="3"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblyear">Second</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl13_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl13$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl13_hdnpk_degreeyearid" value="2"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl13_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl13$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl13_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl13_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl13$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl13_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lblCount">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lnkView&#39;,&#39;Select$12&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl13_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl13$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblsno">13</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblcoursecode">MATH 521 BSMA || Topology(3+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl14_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl14$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl14_hdnpk_courseid" value="2194"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblsemester">III </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl14_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl14$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl14_hdnpk_semesterid" value="3"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblyear">Second</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl14_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl14$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl14_hdnpk_degreeyearid" value="2"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl14_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl14$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl14_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl14_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl14$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl14_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lblCount">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lnkView&#39;,&#39;Select$13&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl14_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl14$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblsno">14</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblcoursecode">STAT 502 BSMA || Statistical Methods for Applied Sciences(3+1)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl15_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl15$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl15_hdnpk_courseid" value="2295"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblsemester">III </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl15_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl15$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl15_hdnpk_semesterid" value="3"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblyear">Second</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl15_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl15$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl15_hdnpk_degreeyearid" value="2"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl15_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl15$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl15_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl15_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl15$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl15_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lblCount">9</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lnkView&#39;,&#39;Select$14&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl15_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl15$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblsno">15</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblcoursecode">STAT 521 BSMA || Applied Regression Analysis(2+1)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl16_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl16$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl16_hdnpk_courseid" value="3461"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblsemester">III </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl16_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl16$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl16_hdnpk_semesterid" value="3"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblyear">Second</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl16_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl16$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl16_hdnpk_degreeyearid" value="2"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl16_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl16$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl16_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl16_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl16$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl16_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lblCount">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lnkView&#39;,&#39;Select$15&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl16_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl16$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblsno">16</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblcoursecode">STAT 522 BSMA || DATA Analysis using Statistical Package(2+1)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl17_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl17$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl17_hdnpk_courseid" value="3550"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblsemester">III </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl17_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl17$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl17_hdnpk_semesterid" value="3"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblyear">Second</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl17_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl17$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl17_hdnpk_degreeyearid" value="2"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl17_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl17$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl17_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl17_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl17$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl17_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lblCount">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lnkView&#39;,&#39;Select$16&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl17_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl17$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblsno">17</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblcoursecode">STAT 591 BSMA || Seminar(0+1)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl18_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl18$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl18_hdnpk_courseid" value="2263"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblsemester">III </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl18_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl18$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl18_hdnpk_semesterid" value="3"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblyear">Second</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl18_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl18$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl18_hdnpk_degreeyearid" value="2"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl18_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl18$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl18_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl18_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl18$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl18_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lblCount">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lnkView&#39;,&#39;Select$17&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl18_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl18$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblsno">18</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblcoursecode">STAT 599 BSMA || Research(30+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl19_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl19$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl19_hdnpk_courseid" value="2264"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblsemester">III </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl19_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl19$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl19_hdnpk_semesterid" value="3"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblyear">Second</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl19_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl19$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl19_hdnpk_degreeyearid" value="2"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl19_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl19$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl19_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl19_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl19$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl19_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lblCount">2</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lnkView&#39;,&#39;Select$18&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl19_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl19$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblsno">19</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblsno--></span>
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblcoursecode">MATH 599 BSMA || Master's Reseach(20+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl20_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl20$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl20_hdnpk_courseid" value="3755"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$hdnpk_courseid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblsession--></span>
+
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblsemester">V </span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblsemester--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl20_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl20$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl20_hdnpk_semesterid" value="5"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$hdnpk_semesterid--></span>
+
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblyear">Third</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblyear--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl20_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl20$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl20_hdnpk_degreeyearid" value="3"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$hdnpk_degreeyearid--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblRB--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl20_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl20$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl20_hdnpk_configid" value="816"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$hdnpk_configid--></span>
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl20_islockedbyHOD__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$islockedbyHOD--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails1$ctl20$islockedbyHOD" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl20_islockedbyHOD" value="True"><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$islockedbyHOD--></span>
+
+                                </td><td align="left" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lblCount">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lblCount--></span>
+
+
+                                </td><td align="center" style="width:4%;">
+                                    <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lnkView&#39;,&#39;Select$19&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails1_ctl20_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails1$ctl20$lnkView&#39;,&#39;&#39;)">View</a>
+
+                                </td>
+		</tr>
+	</tbody></table>
+</div></div>
+                </div>
+
+            </td>
+        </tr>
+
+
+
+
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+
+
+        <tr>
+            <td colspan="2"></td>
+            <td>
+
+
+                <span id="Anthem_ctl00_ContentPlaceHolder1_Label1__"><span id="ctl00_ContentPlaceHolder1_Label1" class="lblmessage"></span></span>
+
+            </td>
+        </tr>
+
+
+
+    </tbody></table>
+
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script></form>
+
+
+<script language="javascript" src="./HOD Marks Approval Form_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./HOD Marks Approval Form_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

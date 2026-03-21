@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% from "includes/pager_macro.html" import render_pager %}
+{% block content %}
+<style>
+    /* Exact styles from live system */
+    .vtext { font-family: Verdana; font-size: 11px; font-weight: bold; color: #333333; }
+    .colon { font-family: Verdana; font-size: 11px; font-weight: bold; color: #333333; text-align: center; width: 15px; }
+    .textboxlong { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; height: 18px; width: 300px; }
+    .textboxmultiline { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; }
+    .dropdown { font-family: Verdana; font-size: 11px; border: 1px solid #c0c0c0; height: 22px; }
+    .button-common { font-family: Verdana; font-size: 11px; font-weight: bold; height: 24px; cursor: pointer; }
+    .tableheading { font-family: Verdana; font-size: 13px; font-weight: bold; color: #ffffff !important; background-color: #2d5a27 !important; padding: 5px; text-transform: uppercase; border: 1px solid #1e3d1a; }
+    .tablesubheading { font-family: Verdana; font-size: 12px; font-weight: bold; color: #ffffff !important; background-color: #2d5a27 !important; padding: 5px; border: 1px solid #1e3d1a; }
+    .table-grid-view { font-family: Verdana; font-size: 11px; border-collapse: collapse; width: 100%; }
+    .header-style { background-color: #eeeeee; color: #333333; font-weight: bold; text-align: center; }
+    .item-style { background-color: #ffffff; color: #333333; }
+    .item-style-alt { background-color: #f0f0f0; color: #333333; }
+    .box { border: 1px solid #d4d4d4; background: #fff; margin-bottom: 20px; padding: 10px; }
+</style>
+
+<div style="padding: 10px;">
+    <!-- Balance Grid -->
+    <div class="box">
+        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%">
+            <tr><td class="tableheading">Leave Adjustment Request</td></tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr><td><b style="color: Blue;">{{ session.user_name }}</b></td></tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+                <td>
+                    <table class="table-grid-view" border="1" style="border:1px solid #D4D4D4;">
+                        <tr class="header-style">
+                            <td>S.No.</td><td>Leave Type</td><td>Total Leave (Days)</td><td>Availed Leave (Days)</td><td>Adjusted Leave (Days)</td><td>Balance Leave (Days)</td><td>Applied Leave (Days)</td><td>Applied Balance Leave(Days)</td>
+                        </tr>
+                        {% for b in balances %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center">{{ loop.index }}</td>
+                            <td>{{ b.leavetype }}</td>
+                            <td align="right">{{ "{:,.2f}".format(b.total|float) }}</td>
+                            <td align="right">{{ "{:,.2f}".format(b.availed|float) }}</td>
+                            <td align="right">{{ "{:,.2f}".format(b.adjusted|float) }}</td>
+                            <td align="right"><b>{{ "{:,.2f}".format(b.balance|float) }}</b></td>
+                            <td align="right" style="color:red;">{{ "{:,.2f}".format(b.applied|float) }}</td>
+                            <td align="right"><b>{{ "{:,.2f}".format(b.applied_balance|float) }}</b></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Request Form -->
+    <div class="box">
+        <form method="POST">
+            <table border="0" cellpadding="3" cellspacing="0" width="100%">
+                <tr>
+                    <td class="vtext" style="width: 15%">Leave Request</td><td class="colon">:</td>
+                    <td class="required">
+                        <select name="leave_id" id="ddlLeave" class="dropdown" style="width:350px;" onchange="onLeaveSelect()">
+                            <option value="">-- Leave Type | From Date | To Date --</option>
+                            {% for l in leaves %}
+                            <option value="{{ l.RequestID }}" {% if selected_leave_id == l.RequestID|string %}selected{% endif %}>
+                                {{ l.display_text }}
+                            </option>
+                            {% endfor %}
+                        </select> *
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Reporting To</td><td class="colon">:</td>
+                    <td><input type="text" class="textboxlong" value="{{ taken_details.reporting_to_name if taken_details else '' }}" readonly></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Purpose</td><td class="colon">:</td>
+                    <td class="required">
+                        <select name="purpose" class="dropdown" style="width:225px;" required>
+                            <option value="0">Select Purpose</option>
+                            <option value="1">Leave Extend</option>
+                            <option value="2">Leave Reduce</option>
+                        </select> *
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Remarks</td><td class="colon">:</td>
+                    <td><textarea name="remarks" class="textboxmultiline" style="width:400px; height:40px;">{{ taken_details.remarks if taken_details else '' }}</textarea></td>
+                </tr>
+            </table>
+
+            <div style="border-top: 3px solid #2d5a27; margin: 20px 0;"></div>
+
+            <table border="0" cellpadding="3" cellspacing="0" width="100%" style="padding-top:15px;">
+                <tr>
+                    <td class="vtext" width="15%">Reporting To</td><td class="colon">:</td>
+                    <td class="required" width="33%"><input type="text" class="textbox" style="width:200px;" value="{{ taken_details.reporting_to_name if taken_details else '' }}" readonly>*</td>
+                    <td class="vtext" width="15%">Leave Type</td><td class="colon">:</td>
+                    <td class="required"><input type="text" class="textbox" style="width:200px;" value="{{ taken_details.leavetype if taken_details else '' }}" readonly>*</td>
+                </tr>
+                <tr>
+                    <td class="vtext">From Date</td><td class="colon">:</td>
+                    <td class="required"><input type="text" class="textbox" style="width:100px;" value="{{ taken_details.fromdate.strftime('%d/%m/%Y') if taken_details and taken_details.fromdate else '' }}" readonly>*</td>
+                    <td class="vtext">To Date</td><td class="colon">:</td>
+                    <td class="required"><input type="text" class="textbox" style="width:100px;" value="{{ taken_details.todate.strftime('%d/%m/%Y') if taken_details and taken_details.todate else '' }}" readonly>*</td>
+                </tr>
+                <tr>
+                    <td class="vtext">Station Leave From</td><td class="colon">:</td>
+                    <td><input type="text" class="textbox" style="width:100px;" value="{{ taken_details.Stationfromdate.strftime('%d/%m/%Y') if taken_details and taken_details.Stationfromdate and taken_details.Stationfromdate.strftime('%Y-%m-%d') != '1900-01-01' else '' }}" readonly></td>
+                    <td class="vtext">Station Leave To</td><td class="colon">:</td>
+                    <td><input type="text" class="textbox" style="width:100px;" value="{{ taken_details.Stationtodate.strftime('%d/%m/%Y') if taken_details and taken_details.Stationtodate and taken_details.Stationtodate.strftime('%Y-%m-%d') != '1900-01-01' else '' }}" readonly></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Contact Number</td><td class="colon">:</td>
+                    <td class="required"><input type="text" class="textbox" style="width:200px;" value="{{ taken_details.contact if taken_details else '' }}" readonly>*</td>
+                    <td class="vtext">With Medical</td><td class="colon">:</td>
+                    <td><input type="checkbox" disabled {% if taken_details and taken_details.HPLWMed %}checked{% endif %}></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Recommend Code</td><td class="colon">:</td>
+                    <td><input type="text" class="textbox" style="width:200px;" value="{{ taken_details.recommendEmpCode if taken_details else '' }}" readonly></td>
+                    <td class="vtext">Commuted leave</td><td class="colon">:</td>
+                    <td><input type="checkbox" disabled {% if taken_details and taken_details.CommutedLeave %}checked{% endif %}></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Reason For Leave</td><td class="colon">:</td>
+                    <td class="required"><textarea class="textboxmultiline" rows="2" style="width:90%;" readonly>{{ taken_details.reason if taken_details else '' }}</textarea>*</td>
+                    <td class="vtext">Leave of Kind Due</td><td class="colon">:</td>
+                    <td><input type="checkbox" disabled {% if taken_details and taken_details.HPLFStd %}checked{% endif %}></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Address During Leave</td><td class="colon">:</td>
+                    <td class="required">
+                        {% set is_optional = taken_details and (taken_details.fk_leaveid|string == '9' or taken_details.fk_leaveid|string == '7') %}
+                        <textarea class="textboxmultiline" rows="2" style="width:90%;" readonly>{{ taken_details.address if taken_details else '' }}</textarea>
+                        {% if not is_optional %}<span style="color:red; font-weight:bold;">*</span>{% endif %}
+                    </td>
+                    <td class="vtext">Adjust Days</td><td class="colon">:</td>
+                    <td class="required"><input type="number" step="0.5" name="adj_days" class="dropdown" style="width:80px;" required>*</td>
+                </tr>
+                <tr><td colspan="6" style="height:15px;"></td></tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4">
+                        <input type="submit" value="DONE" class="button-common" style="width:120px; background:#2d5a27; color:white; border:1px solid #1e3d1a;">
+                        <input type="reset" value="RESET" class="button-common" style="margin-left:10px; width:100px; background:#eee; color:#333; border:1px solid #ccc;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+<script>
+function onLeaveSelect() {
+    var val = document.getElementById('ddlLeave').value;
+    if (val) {
+        window.location = '?leave_id=' + val;
+    }
+}
+</script>
+
+    <!-- History Grid -->
+    <div class="box">
+        <table cellpadding="0" cellspacing="0" border="0" style="width: 100%">
+            <tr><td class="tablesubheading">List of Leave Adjustment Request</td></tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+                <td>
+                    <table class="table-grid-view" border="1" style="border:1px solid #D4D4D4;">
+                        <tr class="header-style">
+                            <td>S.No.</td><td>Reporting To</td><td>Leave Type</td><td>Adj. Req. Date</td><td>From Date</td><td>To Date</td><td>Total Leave Days</td><td>Status</td><td>EDIT</td>
+                        </tr>
+                        {% for h in history %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center">{{ loop.index + (pagination.page - 1) * 10 }}</td>
+                            <td>{{ h.ReportingTo or '' }}</td>
+                            <td>{{ h.LeaveType }}</td>
+                            <td align="center">{{ h.RequestDate }}</td>
+                            <td align="center">{{ h.FromDate }}</td>
+                            <td align="center">{{ h.ToDate }}</td>
+                            <td align="right">{{ "{:,.2f}".format(h.Days|float) }}</td>
+                            <td align="center"><b>{{ h.Status }}</b></td>
+                            <td align="center"><img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer"></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                {{ render_pager(pagination) }}
+            </td>
+        </tr>
+    </table>
+    </div>
+</div>
+{% endblock %}

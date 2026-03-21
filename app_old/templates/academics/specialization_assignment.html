@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <!-- FILTER FORM (GET) -->
+    <form method="GET">
+        <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="tableheading" colspan="7">
+                        <span class="mainheadingborderbottom">Student Specialization Assignment</span>
+                    </td>
+                </tr>
+                <tr><td colspan="7" height="10"></td></tr>
+                
+                <tr>
+                    <td class="vtext" width="15%">College</td>
+                    <td class="colon">:</td>
+                    <td width="30%">
+                        <select name="college_id" class="dropdown w-300" required onchange="this.form.submit()">
+                            <option value="">--Select College--</option>
+                            {% for c in lookups.colleges %}
+                            <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                    <td width="5%"></td>
+                    <td class="vtext" width="15%">Admitted Session</td>
+                    <td class="colon">:</td>
+                    <td width="35%">
+                        <select name="session_id" class="dropdown w-200" required>
+                            <option value="">--Select Session--</option>
+                            {% for s in lookups.sessions %}
+                            <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="vtext">Degree</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="degree_id" class="dropdown w-300" required onchange="this.form.submit()">
+                            <option value="">--Select Degree--</option>
+                            {% for d in lookups.degrees %}
+                            <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                    <td></td>
+                    <td class="vtext">Specialization</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="filter_branch_id" class="dropdown w-200">
+                            <option value="0">--Select Specialization--</option>
+                            {% for b in lookups.branches %}
+                            <option value="{{ b.id }}" {% if filters.filter_branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                </tr>
+                
+                <tr><td colspan="7" height="10"></td></tr>
+                
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="5">
+                        <input type="submit" value="GET STUDENTS" class="button-common" style="width:120px;">
+                        <input type="button" value="VIEW" class="button-common" style="width:100px; margin-left:5px;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <br>
+
+    <!-- SAVE FORM (POST) -->
+    <form method="POST">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+        <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="vtext" width="15%">Student Name</td>
+                    <td class="colon">:</td>
+                    <td colspan="5">
+                        <select name="sid" class="dropdown w-300" required onchange="loadStudentDisciplines(this.value)">
+                            <option value="">--Select Student Name--</option>
+                            {% for s in students %}
+                            <option value="{{ s.pk_sid }}" {% if sid|string == s.pk_sid|string %}selected{% endif %}>{{ s.fullname }} [ {{ s.enrollmentno }} ]</option>
+                            {% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                </tr>
+                
+                <tr><td colspan="7" height="15"></td></tr>
+                
+                <tr>
+                    <td class="tablesubheading" colspan="7">
+                        <span class="subheadingborderbottom">Specialization Details</span>
+                    </td>
+                </tr>
+                <tr><td colspan="7" height="10"></td></tr>
+                
+                <tr>
+                    <td class="vtext">Major Subject</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="major_id" id="ddlMajor" class="dropdown w-250" required>
+                            <option value="">--Select Major Subject--</option>
+                            {% for b in lookups.branches %}
+                            <option value="{{ b.id }}">{{ b.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                    <td colspan="4"></td>
+                </tr>
+                
+                <tr>
+                    <td class="vtext">Minor Subject</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="minor_id" id="ddlMinor" class="dropdown w-250" required>
+                            <option value="">--Select Minor Subject--</option>
+                            {% for b in lookups.branches %}
+                            <option value="{{ b.id }}">{{ b.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                    <td colspan="4"></td>
+                </tr>
+                
+                <tr>
+                    <td class="vtext">Supporting Subject</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="supporting_id" id="ddlSupporting" class="dropdown w-250" required>
+                            <option value="">--Select Supporting Subject--</option>
+                            {% for b in lookups.branches %}
+                            <option value="{{ b.id }}">{{ b.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                    <td colspan="4"></td>
+                </tr>
+                
+                <tr>
+                    <td class="vtext">Major Advisor</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="advisor_id" id="ddlAdvisor" class="dropdown w-250" required>
+                            <option value="">--Select Major Advisor--</option>
+                            {% for e in lookups.employees %}
+                            <option value="{{ e.id }}">{{ e.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                    <td colspan="4"></td>
+                </tr>
+                
+                <tr><td colspan="7" height="15"></td></tr>
+                
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="5">
+                        <input type="submit" value="SAVE" class="button-common" style="width:100px;">
+                        <input type="reset" value="RESET" class="button-common" style="width:100px; margin-left:5px;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <br>
+
+    <!-- LIST VIEW -->
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tablesubheading" colspan="7">
+                    <span class="subheadingborderbottom">List of Students</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td colspan="7">
+                    <table class="table-grid-view" width="100%">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="5%">S.No.</th>
+                                <th>Student Name</th>
+                                <th>Degree Name</th>
+                                <th>Admitted Session</th>
+                                <th>Major Subject</th>
+                                <th>Minor Subject</th>
+                                <th>Supporting Subject</th>
+                                <th width="5%">EDIT</th>
+                                <th width="5%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in students %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
+                                <td>{{ loop.index }}</td>
+                                <td align="left">{{ s.fullname }} [ {{ s.enrollmentno }} ]</td>
+                                <td align="left">{{ degree_name }}</td>
+                                <td align="left">{{ session_name }}</td>
+                                <td align="left">{{ s.major_name or '-' }}</td>
+                                <td align="left">{{ s.minor_name or '-' }}</td>
+                                <td align="left">{{ s.supporting_name or '-' }}</td>
+                                <td>
+                                    <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editStudent({{ s.pk_sid }})'>
+                                </td>
+                                <td>
+                                    <img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer">
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr class="item-style">
+                                <td colspan="9" align="center" style="padding:20px; color:#999;">No student records found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function editStudent(sid) {
+    document.querySelector('select[name="sid"]').value = sid;
+    loadStudentDisciplines(sid);
+    window.scrollTo(0,0);
+}
+
+function loadStudentDisciplines(sid) {
+    if(!sid || sid === '0') return;
+    fetch('/academics/api/student/' + sid + '/specializations')
+        .then(res => res.json())
+        .then(data => {
+            if(data.major_id) document.getElementById('ddlMajor').value = data.major_id;
+            if(data.minor_id) document.getElementById('ddlMinor').value = data.minor_id;
+            if(data.supporting_id) document.getElementById('ddlSupporting').value = data.supporting_id;
+            if(data.advisor_id) document.getElementById('ddlAdvisor').value = data.advisor_id;
+        });
+}
+</script>
+{% endblock %}

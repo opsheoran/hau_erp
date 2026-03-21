@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Batch Assignment</span></div>
+    
+    <div style="padding: 10px;">
+        <form method="GET" id="filterForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td colspan="4" class="required">
+                            <select name="college_id" id="ddlCollege" class="dropdown w-300" required onchange="handleFilterChange()">
+                                <option value="">-- Select College --</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Academic Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" id="ddlSession" class="dropdown w-200" required onchange="handleFilterChange()">
+                                <option value="">-- Select Session --</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                        <td class="vtext" width="15%">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" id="ddlDegree" class="dropdown w-250" required onchange="handleFilterChange()">
+                                <option value="">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Class</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="semester_id" id="ddlSemester" class="dropdown w-150" required onchange="fetchBatches()">
+                                <option value=""> -- Select Semester -- </option>
+                                {% for s in lookups.semesters %}
+                                <option value="{{ s.pk_semesterid }}" {% if filters.semester_id|string == s.pk_semesterid|string %}selected{% endif %}>{{ s.semester_roman }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                        <td class="vtext">Theory/Practical</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="type_tp" id="ddlTP" class="dropdown w-150" required onchange="fetchBatches()">
+                                <option value="T" {% if filters.type_tp == 'T' %}selected{% endif %}>Theory</option>
+                                <option value="P" {% if filters.type_tp == 'P' %}selected{% endif %}>Practical</option>
+                            </select> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Specialization</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="branch_id" id="ddlBranch" class="dropdown w-200">
+                                <option value="0">-- Select Specialization --</option>
+                                {% for b in lookups.branches %}
+                                <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td class="vtext">Batch</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="batch_id" id="ddlBatch" class="dropdown w-200">
+                                <option value="8803">ALL</option>
+                                {% for b in lookups.batches %}
+                                <option value="{{ b.id }}" {% if filters.batch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Report Format</td>
+                        <td class="colon">:</td>
+                        <td colspan="4">
+                            <input type="radio" name="format" value="word"> Word Format
+                            <input type="radio" name="format" value="excel"> Excel Format
+                            <input type="radio" name="format" value="pdf" checked> PDF Format
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="15"></td></tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="5">
+                            <input type="submit" value="VIEW STUDENTS" class="button-common" style="width:150px;">
+                            <input type="button" value="VIEW REPORT" class="button-common" style="width:120px; margin-left:5px;" onclick="viewReport()">
+                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="location.href='{{ url_for('academics.batch_assignment') }}'">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+        <div class="tablesubheading" style="color:red"><b>Note: Batch can not be changed of those students whose Attendance is Already Entertained.</b></div>
+        <div class="tablesubheading">List of Students</div>
+        
+        <form method="POST">
+            <input type="hidden" name="type_tp" value="{{ filters.type_tp }}">
+            <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4;">
+                <table class="table-grid-view" width="100%" id="gvDetails">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%"><input type="checkbox" id="chkAll" onclick="toggleSelectAll(this)"></th>
+                            <th width="5%">S.No.</th>
+                            <th>Student Name</th>
+                            <th>Admission No.</th>
+                            <th>Current Batch</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in students %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center"><input type="checkbox" name="chk_student" value="{{ s.pk_sid }}" class="student-chk"></td>
+                            <td align="center">{{ loop.index }}</td>
+                            <td align="left">{{ s.fullname }} [{{ s.enrollmentno }}]</td>
+                            <td align="center">{{ s.AdmissionNo or 'N/A' }}</td>
+                            <td align="center">{{ s.BatchName or 'None' }}</td>
+                        </tr>
+                        {% else %}
+                        <tr class="item-style"><td colspan="5" align="center" style="padding:20px; color:#999;">Apply filters to list students.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if students %}
+            <div style="margin-top:20px; padding:10px; background:#f9f9f9; border:1px solid #ddd;">
+                <table border="0">
+                    <tr>
+                        <td class="vtext">Select Batch to Assign</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="batch_id" id="assign_batch_id" class="dropdown w-250" required>
+                                <option value="">-- Select Batch Name --</option>
+                                {% for b in lookups.batches %}
+                                <option value="{{ b.id }}">{{ b.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td style="padding-left:20px;">
+                            <input type="submit" value="SAVE ASSIGNMENT" class="button-common" style="width:150px;">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<script>
+function handleFilterChange() {
+    document.getElementById('filterForm').submit();
+}
+
+async function fetchBatches() {
+    const clg = document.getElementById('ddlCollege').value;
+    const deg = document.getElementById('ddlDegree').value;
+    const sem = document.getElementById('ddlSemester').value;
+    const tp = document.getElementById('ddlTP').value;
+    
+    if (clg && deg && sem && tp) {
+        const res = await fetch(`/academics/api/admission/get_batches?college_id=${clg}&degree_id=${deg}&semester_id=${sem}&type_tp=${tp}`);
+        const batches = await res.json();
+        
+        const ddl = document.getElementById('ddlBatch');
+        const ddlAssign = document.getElementById('assign_batch_id');
+        
+        [ddl, ddlAssign].forEach(d => {
+            if(!d) return;
+            const currentVal = d.value;
+            d.innerHTML = (d === ddl ? '<option value="8803">ALL</option>' : '<option value="">-- Select Batch Name --</option>');
+            batches.forEach(b => {
+                d.innerHTML += `<option value="${b.id}" ${currentVal == b.id ? 'selected' : ''}>${b.name}</option>`;
+            });
+        });
+    }
+}
+
+function viewReport() {
+    const form = document.getElementById('filterForm');
+    const formData = new FormData(form);
+    const params = new URLSearchParams();
+    for (const pair of formData.entries()) { params.append(pair[0], pair[1]); }
+    const format = document.querySelector('input[name="format"]:checked').value;
+    params.append('format', format);
+    window.open('/academics/batch_assignment_report?' + params.toString(), '_blank');
+}
+
+function toggleSelectAll(master) {
+    const chks = document.querySelectorAll('.student-chk');
+    chks.forEach(c => c.checked = master.checked);
+}
+</script>
+{% endblock %}

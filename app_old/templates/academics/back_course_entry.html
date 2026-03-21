@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Back Course Entry</span>
+    </div>
+
+    <div style="padding: 15px;">
+        <form method="POST">
+            <table class="form-table" width="100%">
+                <tr>
+                    <td class="vtext" width="15%">Enrollment No.</td><td class="colon">:</td>
+                    <td width="35%">
+                        <input type="text" name="enrollment_no" id="enrollment_no" class="textbox w-200" required> <span class="required">*</span>
+                        <input type="button" value="Validate" class="button-common" style="margin-left:5px;" onclick="validateStudent()">
+                        <span id="student_name" style="margin-left:10px; font-weight:bold; color:green;"></span>
+                    </td>
+                    <td colspan="3"></td>
+                </tr>
+                <tr><td colspan="6" style="padding:10px 0;"><hr style="border:0.5px solid #eee;"></td></tr>
+                <tr>
+                    <td class="vtext">Course Code</td><td class="colon">:</td>
+                    <td>
+                        <input type="text" name="course_code" id="course_code" class="textbox w-150">
+                        <input type="button" value="🔍" class="button-common" onclick="searchCourses()">
+                    </td>
+                    <td class="vtext" width="15%">Course</td><td class="colon">:</td>
+                    <td>
+                        <select name="course_id" id="course_id" class="dropdown w-250">
+                            <option value="">--Select Course--</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Semester</td><td class="colon">:</td>
+                    <td>
+                        <select name="semester_id" class="dropdown w-150">
+                            <option value="">--Select Semester--</option>
+                            {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top: 20px;">
+                        <input type="submit" value="SAVE" class="button-common" style="width:120px; background:#3c8dbc; color:white;">
+                        <input type="button" value="RESET" class="button-common" onclick="location.reload()" style="margin-left:10px; width:100px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function validateStudent() {
+    const en = document.getElementById('enrollment_no').value;
+    if(!en) return alert('Enter Enrollment No.');
+    fetch(`/academics/validate_student/${en}`)
+        .then(r => r.json())
+        .then(data => {
+            if(data.success) {
+                document.getElementById('student_name').innerText = data.name;
+            } else {
+                alert(data.message);
+                document.getElementById('student_name').innerText = '';
+            }
+        });
+}
+
+function searchCourses() {
+    const code = document.getElementById('course_code').value;
+    const ddl = document.getElementById('course_id');
+    fetch(`/academics/search_courses?code=${code}`)
+        .then(r => r.json())
+        .then(data => {
+            ddl.innerHTML = '<option value="">--Select Course--</option>';
+            data.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                opt.innerText = c.name;
+                ddl.appendChild(opt);
+            });
+        });
+}
+</script>
+{% endblock %}

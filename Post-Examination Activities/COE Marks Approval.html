@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<!-- saved from url=(0072)https://hauiums.in/SMS/ExRes/SMS_COE_ApprovalWithChanges.aspx?Mwpid=5299 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./COE Marks Approval_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./COE Marks Approval_files/default.css" type="text/css" rel="stylesheet"><link href="./COE Marks Approval_files/font.css" type="text/css" rel="stylesheet"><link href="./COE Marks Approval_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./COE Marks Approval_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/SMS/ExRes/SMS_COE_ApprovalWithChanges.aspx?Mwpid=5299" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTEzMDcyNzMyNjIPZBYCZg8PFgIeB1BlbmRpbmcFATBkFgICAQ9kFhACAg8PFgIeBFRleHQFDiBSYWpiZWVyIFNpbmdoZGQCBA8PFgIfAQUbTExULiAtIDMvMTgvMjAyNiAxOjE0OjM4IFBNZGQCBQ8PFgIfAQUbQ0xULiAtIDMvMTkvMjAyNiA1OjQ3OjE4IEFNZGQCBg8PFgIfAQUOIFJhamJlZXIgU2luZ2hkZAIHDw8WAh8BBQ1DT0JTJkgsIEhpc2FyZGQCCQ9kFgJmDxYCHwEFhgE8c3Bhbj5Qb3N0LUV4YW1pbmF0aW9uIEFjdGl2aXRpZXM8L3NwYW4+Jm5ic3A7PiZuYnNwOzxzcGFuPk1hcmtzIEVudHJ5IEFwcHJvdmFsPC9zcGFuPiZuYnNwOz4mbmJzcDs8c3Ryb25nPkNPRSBNYXJrcyBBcHByb3ZhbDwvU3Ryb25nPmQCCg9kFhACAQ8QDxYGHg1EYXRhVGV4dEZpZWxkBQtjb2xsZWdlbmFtZR4ORGF0YVZhbHVlRmllbGQFDHBrX2NvbGxlZ2VpZB4LXyFEYXRhQm91bmRnZBAVAhMtLSBTZWxlY3QgQ29sbGVnZS0tMENvbGxlZ2Ugb2YgQmFzaWMgU2NpZW5jZXMgQW5kIEh1bWFuaXRpZXMgKCAwNSApIBUCEy0tIFNlbGVjdCBDb2xsZWdlLS0BNxQrAwJnZxYBAgFkAgMPEA8WBh8CBQtzZXNzaW9ubmFtZR8DBQxwa19zZXNzaW9uaWQfBGdkEBUSGy0tU2VsZWN0IEFjYWRlbWljIFNlc3Npb24tLQoyMDI1LTIwMjYgCjIwMjQtMjAyNSAKMjAyMy0yMDI0IAoyMDIyLTIwMjMgCjIwMjEtMjAyMiAKMjAyMC0yMDIxIAoyMDE5LTIwMjAgCjIwMTgtMjAxOSAKMjAxNy0yMDE4IAoyMDE2LTIwMTcgCjIwMTUtMjAxNiAKMjAxNC0yMDE1IAoyMDEzLTIwMTQgCjIwMTItMjAxMyAKMjAxMS0yMDEyIAoyMDEwLTIwMTEgCjIwMDktMjAxMCAVEhstLVNlbGVjdCBBY2FkZW1pYyBTZXNzaW9uLS0CNzcCNzICNzACNDYCNDICMjECMjACMTkCMTgCMTcCMTYCMTUCMTQCMTMCNzgCODACNzkUKwMSZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnFgECAWQCBQ8QDxYGHwIFCmRlZ3JlZW5hbWUfAwULZmtfZGVncmVlaWQfBGdkEBUGES0tU2VsZWN0IERlZ3JlZS0tIUIuU2MuKEhvbnMuKSBBZ3JpY3VsdHVyZSg0IFllYXIpICFCLlNjLihIb25zKSBBZ3JpY3VsdHVyZSAyKzQgWWVhciAfQi5TYy4oSG9ucy4pIENvbW11bml0eSBTY2llbmNlICVCLlNjLihIb25zLikgUGh5c2ljYWwgU2NpZW5jZSA0IFllYXIgIUIuU2MuKEhvbnMuKSBMaWZlIFNjaWVuY2UgNCB5ZWFyIBUGES0tU2VsZWN0IERlZ3JlZS0tATECMjACMjkCNTcCNTgUKwMGZ2dnZ2dnFgECBGQCBw8QZGQWAQIBZAIJDxBkZBYBZmQCCw8QZGQWAWZkAhMPPCsAEQMADxYGHwRnHgtfIUl0ZW1Db3VudAIJHg1BbnRoZW1WaXNpYmxlZ2QBEBYAFgAWAAwUKwAAFgJmD2QWFAIBD2QWEmYPZBYCAgEPDxYCHwEFATFkZAIBD2QWBAIBDw8WAh8BBR9DSEVNLUNDLTEwMSB8fCBDaGVtaXN0cnktSSgzKzEpZGQCAw8WAh4FVmFsdWUFBDQwMDZkAgIPZBYCAgEPDxYCHwEFCjIwMjUtMjAyNiBkZAIDD2QWBAIBDw8WAh8BBQJJIGRkAgMPFgIfBwUBMWQCBA9kFgQCAQ8PFgIfAQUFRmlyc3RkZAIDDxYCHwcFATFkAgUPZBYGAgEPDxYCHwEFAVJkZAIDDxYCHwcFAzg2MmQCBQ8WAh8HBQVGYWxzZWQCBg9kFgICAQ8PFgIfAQUCMjNkZAIHD2QWAgIBDw8WAh4PQ29tbWFuZEFyZ3VtZW50BQExZGQCCA9kFgICAQ8QD2QWAh4Hb25jbGljawWcAWphdmFzY3JpcHQ6QW50aGVtX0ZpcmVDYWxsQmFja0V2ZW50KHRoaXMsZXZlbnQsJ2N0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkZ3ZEZXRhaWxzJGN0bDAyJGNoa3NlbGVjdENvdXJzZScsJycsZmFsc2UsJycsJycsJycsdHJ1ZSxudWxsLG51bGwsbnVsbCx0cnVlLHRydWUpO2RkZAICD2QWEmYPZBYCAgEPDxYCHwEFATJkZAIBD2QWBAIBDw8WAh8BBShDT01QLU0tMTAxIHx8IENvbXB1dGVyIEZ1bmRhbWVudGFscygyKzApZGQCAw8WAh8HBQQ0MDIzZAICD2QWAgIBDw8WAh8BBQoyMDI1LTIwMjYgZGQCAw9kFgQCAQ8PFgIfAQUCSSBkZAIDDxYCHwcFATFkAgQPZBYEAgEPDxYCHwEFBUZpcnN0ZGQCAw8WAh8HBQExZAIFD2QWBgIBDw8WAh8BBQFSZGQCAw8WAh8HBQM4NjJkAgUPFgIfBwUFRmFsc2VkAgYPZBYCAgEPDxYCHwEFAjE2ZGQCBw9kFgICAQ8PFgIfCAUBMmRkAggPZBYCAgEPEA9kFgIfCQWcAWphdmFzY3JpcHQ6QW50aGVtX0ZpcmVDYWxsQmFja0V2ZW50KHRoaXMsZXZlbnQsJ2N0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkZ3ZEZXRhaWxzJGN0bDAzJGNoa3NlbGVjdENvdXJzZScsJycsZmFsc2UsJycsJycsJycsdHJ1ZSxudWxsLG51bGwsbnVsbCx0cnVlLHRydWUpO2RkZAIDD2QWEmYPZBYCAgEPDxYCHwEFATNkZAIBD2QWBAIBDw8WAh8BBTFDT01QLVNFQy0xMDEgfHwgT2ZmaWNlIFNvZnR3YXJlIEFwcGxpY2F0aW9ucygxKzIpZGQCAw8WAh8HBQQ0MDI1ZAICD2QWAgIBDw8WAh8BBQoyMDI1LTIwMjYgZGQCAw9kFgQCAQ8PFgIfAQUCSSBkZAIDDxYCHwcFATFkAgQPZBYEAgEPDxYCHwEFBUZpcnN0ZGQCAw8WAh8HBQExZAIFD2QWBgIBDw8WAh8BBQFSZGQCAw8WAh8HBQM4NjJkAgUPFgIfBwUFRmFsc2VkAgYPZBYCAgEPDxYCHwEFAjIzZGQCBw9kFgICAQ8PFgIfCAUBM2RkAggPZBYCAgEPEA9kFgIfCQWcAWphdmFzY3JpcHQ6QW50aGVtX0ZpcmVDYWxsQmFja0V2ZW50KHRoaXMsZXZlbnQsJ2N0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkZ3ZEZXRhaWxzJGN0bDA0JGNoa3NlbGVjdENvdXJzZScsJycsZmFsc2UsJycsJycsJycsdHJ1ZSxudWxsLG51bGwsbnVsbCx0cnVlLHRydWUpO2RkZAIED2QWEmYPZBYCAgEPDxYCHwEFATRkZAIBD2QWBAIBDw8WAh8BBStFTkctQUVDLTEwMSB8fCBFbmdsaXNoIENvbW11bmljYXRpb24tSSgxKzEpZGQCAw8WAh8HBQQ0MDM0ZAICD2QWAgIBDw8WAh8BBQoyMDI1LTIwMjYgZGQCAw9kFgQCAQ8PFgIfAQUCSSBkZAIDDxYCHwcFATFkAgQPZBYEAgEPDxYCHwEFBUZpcnN0ZGQCAw8WAh8HBQExZAIFD2QWBgIBDw8WAh8BBQFSZGQCAw8WAh8HBQM4NjJkAgUPFgIfBwUFRmFsc2VkAgYPZBYCAgEPDxYCHwEFAjIzZGQCBw9kFgICAQ8PFgIfCAUBNGRkAggPZBYCAgEPEA9kFgIfCQWcAWphdmFzY3JpcHQ6QW50aGVtX0ZpcmVDYWxsQmFja0V2ZW50KHRoaXMsZXZlbnQsJ2N0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkZ3ZEZXRhaWxzJGN0bDA1JGNoa3NlbGVjdENvdXJzZScsJycsZmFsc2UsJycsJycsJycsdHJ1ZSxudWxsLG51bGwsbnVsbCx0cnVlLHRydWUpO2RkZAIFD2QWEmYPZBYCAgEPDxYCHwEFATVkZAIBD2QWBAIBDw8WAh8BBSdFTlMtVkFDLTEwMSB8fCBFbnZpcm9ubWVudCBTdHVkaWVzKDIrMClkZAIDDxYCHwcFBDQwMjZkAgIPZBYCAgEPDxYCHwEFCjIwMjUtMjAyNiBkZAIDD2QWBAIBDw8WAh8BBQJJIGRkAgMPFgIfBwUBMWQCBA9kFgQCAQ8PFgIfAQUFRmlyc3RkZAIDDxYCHwcFATFkAgUPZBYGAgEPDxYCHwEFAVJkZAIDDxYCHwcFAzg2MmQCBQ8WAh8HBQVGYWxzZWQCBg9kFgICAQ8PFgIfAQUCMjNkZAIHD2QWAgIBDw8WAh8IBQE1ZGQCCA9kFgICAQ8QD2QWAh8JBZwBamF2YXNjcmlwdDpBbnRoZW1fRmlyZUNhbGxCYWNrRXZlbnQodGhpcyxldmVudCwnY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRndkRldGFpbHMkY3RsMDYkY2hrc2VsZWN0Q291cnNlJywnJyxmYWxzZSwnJywnJywnJyx0cnVlLG51bGwsbnVsbCxudWxsLHRydWUsdHJ1ZSk7ZGRkAgYPZBYSZg9kFgICAQ8PFgIfAQUBNmRkAgEPZBYEAgEPDxYCHwEFNE1BVEgtQ0MtMTAxIHx8IExpbmVhciBBbGdlYnJhIGFuZCBNYXRyaXggVGhlb3J5KDQrMClkZAIDDxYCHwcFBDQwMDdkAgIPZBYCAgEPDxYCHwEFCjIwMjUtMjAyNiBkZAIDD2QWBAIBDw8WAh8BBQJJIGRkAgMPFgIfBwUBMWQCBA9kFgQCAQ8PFgIfAQUFRmlyc3RkZAIDDxYCHwcFATFkAgUPZBYGAgEPDxYCHwEFAVJkZAIDDxYCHwcFAzg2MmQCBQ8WAh8HBQVGYWxzZWQCBg9kFgICAQ8PFgIfAQUCMjNkZAIHD2QWAgIBDw8WAh8IBQE2ZGQCCA9kFgICAQ8QD2QWAh8JBZwBamF2YXNjcmlwdDpBbnRoZW1fRmlyZUNhbGxCYWNrRXZlbnQodGhpcyxldmVudCwnY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRndkRldGFpbHMkY3RsMDckY2hrc2VsZWN0Q291cnNlJywnJyxmYWxzZSwnJywnJywnJyx0cnVlLG51bGwsbnVsbCxudWxsLHRydWUsdHJ1ZSk7ZGRkAgcPZBYSZg9kFgICAQ8PFgIfAQUBN2RkAgEPZBYEAgEPDxYCHwEFHFBIWS1DQy0xMDEgfHwgTWVjaGFuaWNzKDMrMSlkZAIDDxYCHwcFBDQwMDVkAgIPZBYCAgEPDxYCHwEFCjIwMjUtMjAyNiBkZAIDD2QWBAIBDw8WAh8BBQJJIGRkAgMPFgIfBwUBMWQCBA9kFgQCAQ8PFgIfAQUFRmlyc3RkZAIDDxYCHwcFATFkAgUPZBYGAgEPDxYCHwEFAVJkZAIDDxYCHwcFAzg2MmQCBQ8WAh8HBQVGYWxzZWQCBg9kFgICAQ8PFgIfAQUCMjNkZAIHD2QWAgIBDw8WAh8IBQE3ZGQCCA9kFgICAQ8QD2QWAh8JBZwBamF2YXNjcmlwdDpBbnRoZW1fRmlyZUNhbGxCYWNrRXZlbnQodGhpcyxldmVudCwnY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRndkRldGFpbHMkY3RsMDgkY2hrc2VsZWN0Q291cnNlJywnJyxmYWxzZSwnJywnJywnJyx0cnVlLG51bGwsbnVsbCxudWxsLHRydWUsdHJ1ZSk7ZGRkAggPZBYSZg9kFgICAQ8PFgIfAQUBOGRkAgEPZBYEAgEPDxYCHwEFKFNUQVQtTS0xMDEgfHwgU3RhdGlzdGljYWwgTWV0aG9kcy1JKDIrMClkZAIDDxYCHwcFBDQwMjJkAgIPZBYCAgEPDxYCHwEFCjIwMjUtMjAyNiBkZAIDD2QWBAIBDw8WAh8BBQJJIGRkAgMPFgIfBwUBMWQCBA9kFgQCAQ8PFgIfAQUFRmlyc3RkZAIDDxYCHwcFATFkAgUPZBYGAgEPDxYCHwEFAVJkZAIDDxYCHwcFAzg2MmQCBQ8WAh8HBQVGYWxzZWQCBg9kFgICAQ8PFgIfAQUBN2RkAgcPZBYCAgEPDxYCHwgFAThkZAIID2QWAgIBDxAPZBYCHwkFnAFqYXZhc2NyaXB0OkFudGhlbV9GaXJlQ2FsbEJhY2tFdmVudCh0aGlzLGV2ZW50LCdjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJGd2RGV0YWlscyRjdGwwOSRjaGtzZWxlY3RDb3Vyc2UnLCcnLGZhbHNlLCcnLCcnLCcnLHRydWUsbnVsbCxudWxsLG51bGwsdHJ1ZSx0cnVlKTtkZGQCCQ9kFhJmD2QWAgIBDw8WAh8BBQE5ZGQCAQ9kFgQCAQ8PFgIfAQUjU1RBVC1NREMtMTAxIHx8IEJpby1TdGF0aXN0aWNzKDIrMSlkZAIDDxYCHwcFBDQwMjRkAgIPZBYCAgEPDxYCHwEFCjIwMjUtMjAyNiBkZAIDD2QWBAIBDw8WAh8BBQJJIGRkAgMPFgIfBwUBMWQCBA9kFgQCAQ8PFgIfAQUFRmlyc3RkZAIDDxYCHwcFATFkAgUPZBYGAgEPDxYCHwEFAVJkZAIDDxYCHwcFAzg2MmQCBQ8WAh8HBQVGYWxzZWQCBg9kFgICAQ8PFgIfAQUCMjNkZAIHD2QWAgIBDw8WAh8IBQE5ZGQCCA9kFgICAQ8QD2QWAh8JBZwBamF2YXNjcmlwdDpBbnRoZW1fRmlyZUNhbGxCYWNrRXZlbnQodGhpcyxldmVudCwnY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRndkRldGFpbHMkY3RsMTAkY2hrc2VsZWN0Q291cnNlJywnJyxmYWxzZSwnJywnJywnJyx0cnVlLG51bGwsbnVsbCxudWxsLHRydWUsdHJ1ZSk7ZGRkAgoPDxYCHgdWaXNpYmxlaGRkAhcPPCsAEQMADxYGHwRnHwVmHwZnZAEQFgAWABYADBQrAABkAgsPDxYCHwFlZGQYAwUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgoFDGN0bDAwJGhwbEJ0bgU5Y3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRndkRldGFpbHMkY3RsMDIkY2hrc2VsZWN0Q291cnNlBTljdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJGd2RGV0YWlscyRjdGwwMyRjaGtzZWxlY3RDb3Vyc2UFOWN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkZ3ZEZXRhaWxzJGN0bDA0JGNoa3NlbGVjdENvdXJzZQU5Y3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRndkRldGFpbHMkY3RsMDUkY2hrc2VsZWN0Q291cnNlBTljdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJGd2RGV0YWlscyRjdGwwNiRjaGtzZWxlY3RDb3Vyc2UFOWN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkZ3ZEZXRhaWxzJGN0bDA3JGNoa3NlbGVjdENvdXJzZQU5Y3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRndkRldGFpbHMkY3RsMDgkY2hrc2VsZWN0Q291cnNlBTljdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJGd2RGV0YWlscyRjdGwwOSRjaGtzZWxlY3RDb3Vyc2UFOWN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkZ3ZEZXRhaWxzJGN0bDEwJGNoa3NlbGVjdENvdXJzZQUkY3RsMDAkQ29udGVudFBsYWNlSG9sZGVyMSRndkRldGFpbHMxDzwrAAwBCGZkBSNjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJGd2RGV0YWlscw88KwAMAQgCAWR8Jnu/A+Rt1MGz3qEBoIU/lhcK3Qyq5FOpTrK4nYl+hg==">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./COE Marks Approval_files/WebResource.axd" type="text/javascript"></script>
+<script src="./COE Marks Approval_files/WebResource(1).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="FBA19314">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="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">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./COE Marks Approval_files/Examination.png">
+                            Examination &amp; Results
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/SMS/ExRes/SMS_COE_ApprovalWithChanges.aspx?Mwpid=5299#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> Rajbeer Singh</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> Rajbeer Singh</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COBS&amp;H, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/SMS/ExRes/SMS_COE_ApprovalWithChanges.aspx?Mwpid=5299#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./COE Marks Approval_files/WebResource(2).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Examination Masters &amp; Config." class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2414#" tabindex="-1">Examination Masters &amp; Config.</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Master and Configuration Management" class="level2 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4713" tabindex="-1">Master and Configuration Management</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:5" role="menuitem" style="position: relative; float: left;"><a title="Marks Entries" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2415#" tabindex="-1">Marks Entries</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:5" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Master and Configuration Management" class="level2 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4794" tabindex="-1">Marks Entry</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:8" role="menuitem" style="position: relative; float: left;"><a title="Post-Examination Activities" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2405#" tabindex="-1">Post-Examination Activities</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:8" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:9" role="menuitem" style="position: relative;"><a title="Marks Entry Approval" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8451#" tabindex="-1">Marks Entry Approval</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:9" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="HOD Marks Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_HOD_ApprovalWithChanges.aspx?Mwpid=5346" tabindex="-1">HOD Marks Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="COE Marks Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_COE_ApprovalWithChanges.aspx?Mwpid=5299" tabindex="-1">COE Marks Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Registrar Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_Registrar_ApprovalForm.aspx?Mwpid=5056" tabindex="-1">Registrar Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="DeanPGS Marks Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_DeanPGS_ApprovalWithChanges.aspx?Mwpid=5369" tabindex="-1">DeanPGS Marks Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="DeanPGS Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_DeanPGS_ApprovalForm.aspx?Mwpid=5349" tabindex="-1">DeanPGS Approval</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:16" role="menuitem" style="position: relative;"><a title="Marks Process" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8455#" tabindex="-1">Marks Process</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:16" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for UG and MBA" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_Lock.aspx?Mwpid=4750" tabindex="-1">Marks Process for UG and MBA</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for PG" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_ForPGPHD.aspx?Mwpid=5356" tabindex="-1">Marks Process for PG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for Summer" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_ForSummer.aspx?Mwpid=8432" tabindex="-1">Marks Process for Summer</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for Supplementary" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_SupplySummer.aspx?Mwpid=5347" tabindex="-1">Marks Process for Supplementary</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:22" role="menuitem" style="position: relative;"><a title="Others" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8456#" tabindex="-1">Others</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:22" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Grace Marks" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_GraceByCOE.aspx?Mwpid=5124" tabindex="-1">Grace Marks</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="RollNumber Encryption" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_CodingGeneration.aspx?Mwpid=5189" tabindex="-1">RollNumber Encryption</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Print Result Report" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksGrace.aspx?Mwpid=5203" tabindex="-1">Print Result Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Encrypted Roll Number Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_Course_Allocation_ReportSummaryResult_Rpt.aspx?Mwpid=5191" tabindex="-1">Encrypted Roll Number Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Grace Marks(Supplementary/Summer)" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_GraceByCOE_ForSupplySummer.aspx?Mwpid=5348" tabindex="-1">Grace Marks(Supplementary/Summer)</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Rechecking Status" class="level3 dynamic" href="https://hauiums.in/SMS/AdmAcd/SMS_Recheckingstatus.aspx?Mwpid=7376" tabindex="-1">Rechecking Status</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:31" role="menuitem" style="position: relative; float: left;"><a title="Results &amp; Grade Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2419#" tabindex="-1">Results &amp; Grade Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:31" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:32" role="menuitem" style="position: relative;"><a title="Marks Entry Status" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8446#" tabindex="-1">Marks Entry Status</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:32" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Entry Status for UG and MBA" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_MarksEntryStatus_dtl.aspx?Mwpid=5206" tabindex="-1">Marks Entry Status for UG and MBA</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Entry Status For PG/PHD" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_MarksEntryStatusPGPHD_dtl.aspx?Mwpid=6373" tabindex="-1">Marks Entry Status For PG/PHD</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Entry Status for Supplementary/Summer" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_MarksEntryStatus_dtl_For_SuppliSummer.aspx?Mwpid=8383" tabindex="-1">Marks Entry Status for Supplementary/Summer</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:37" role="menuitem" style="position: relative;"><a title="results" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8447#" tabindex="-1">Results</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:37" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for UG" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheetUG_YearBased.aspx?Mwpid=2420" tabindex="-1">Student Result for UG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for Supplementary" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheet_ForSupplySummer.aspx?Mwpid=5350" tabindex="-1">Student Result for Supplementary</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for PG and MBA" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheetPG_YearBased.aspx?Mwpid=5351" tabindex="-1">Student Result for PG and MBA</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for Summer" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheetSummer_YearBased.aspx?Mwpid=8434" tabindex="-1">Student Result for Summer</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:43" role="menuitem" style="position: relative;"><a title="Others" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8448#" tabindex="-1">Others</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:43" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Consolidate Results  " class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_ConsolidateResult.aspx?Mwpid=5172" tabindex="-1">Consolidate Results   </a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="DMC &amp; Notification Report" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_DMCNotification.aspx?Mwpid=5352" tabindex="-1">DMC &amp; Notification Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Print Degree Certificates" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_DegreeCertificatesForUG.aspx?Mwpid=8439" tabindex="-1">Print Degree Certificates for UG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Print Degree Certificates for PG" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_DegreeCertificatesForPG.aspx?Mwpid=8462" tabindex="-1">Print Degree Certificates for PG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Weightage Consolidate Report" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_Student_Weightage_Consolidate.aspx?Mwpid=5353" tabindex="-1">Weightage Consolidate Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="College/Subject Wise Topper List" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_CollegeSubjectWiseTopperList.aspx?Mwpid=8437" tabindex="-1">College/Subject Wise Topper List</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Certificate Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_TranscriptReportForUG.aspx?Mwpid=7377" tabindex="-1">Student Certificate Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Revised &amp; ReChecking Old_New Marks Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_Revised_ReEvaluation_Old_NewMarks.aspx?Mwpid=8387" tabindex="-1">Revised &amp; ReChecking Old_New Marks Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="UMC Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_UMCReport.aspx?Mwpid=8412" tabindex="-1">UMC Report</a></li>
+			</ul></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Post-Examination Activities</span>&nbsp;&gt;&nbsp;<span>Marks Entry Approval</span>&nbsp;&gt;&nbsp;<strong>COE Marks Approval</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./COE Marks Approval_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+
+    <style>
+        .tablehover tr.item-style:hover {
+            /*background:#dfeece !important;*/
+             background:#E4EAFF !important;
+            
+        }
+    </style>
+
+
+
+  
+
+   
+
+
+<table border="0" cellpadding="0" cellspacing="0" class="table" width="100%" style="height: 410px">
+
+
+    <tbody><tr>
+            <td class="tableheading" colspan="6">COE Marks Approval Form
+            </td>
+        </tr>
+    <tr>
+        <td class="vtext" id="lblCollege">
+            College
+        </td>
+        <td class="colon">:</td>
+        <td class="required" colspan="4">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlCollege__"><select name="ctl00$ContentPlaceHolder1$D_ddlCollege" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$D_ddlCollege\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_D_ddlCollege" class="dropdownvvlong">
+	<option value="-- Select College--">-- Select College--</option>
+	<option selected="selected" value="7">College of Basic Sciences And Humanities ( 05 ) </option>
+
+</select></span> *
+           
+        </td>
+      
+    </tr>
+
+   
+
+      <tr>
+
+     <td class="vtext" id="lblAcdSession" width="15%">
+         Academic Session
+        </td>      
+        <td class="colon">:</td>
+        <td class="required">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlAcdSession__"><select name="ctl00$ContentPlaceHolder1$D_ddlAcdSession" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$D_ddlAcdSession\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_D_ddlAcdSession" class="dropdownlong">
+	<option value="--Select Academic Session--">--Select Academic Session--</option>
+	<option selected="selected" value="77">2025-2026 </option>
+	<option value="72">2024-2025 </option>
+	<option value="70">2023-2024 </option>
+	<option value="46">2022-2023 </option>
+	<option value="42">2021-2022 </option>
+	<option value="21">2020-2021 </option>
+	<option value="20">2019-2020 </option>
+	<option value="19">2018-2019 </option>
+	<option value="18">2017-2018 </option>
+	<option value="17">2016-2017 </option>
+	<option value="16">2015-2016 </option>
+	<option value="15">2014-2015 </option>
+	<option value="14">2013-2014 </option>
+	<option value="13">2012-2013 </option>
+	<option value="78">2011-2012 </option>
+	<option value="80">2010-2011 </option>
+	<option value="79">2009-2010 </option>
+
+</select></span> *
+
+
+            
+        </td>
+
+            <td class="vtext" id="lblDegree" width="15%">
+            Degree
+             </td>
+             <td class="colon">:</td>
+        <td class="required">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlDegree__"><select name="ctl00$ContentPlaceHolder1$D_ddlDegree" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$D_ddlDegree\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl00_ContentPlaceHolder1_D_ddlDegree" class="dropdown">
+	<option value="--Select Degree--">--Select Degree--</option>
+	<option value="1">B.Sc.(Hons.) Agriculture(4 Year) </option>
+	<option value="20">B.Sc.(Hons) Agriculture 2+4 Year </option>
+	<option value="29">B.Sc.(Hons.) Community Science </option>
+	<option selected="selected" value="57">B.Sc.(Hons.) Physical Science 4 Year </option>
+	<option value="58">B.Sc.(Hons.) Life Science 4 year </option>
+
+</select></span> *
+            
+        
+    </td></tr>
+
+     <tr>
+          <td id="lblsemester" class="vtext">Semester
+            </td>
+            <td class="colon">:
+            </td>
+            <td valign="top" class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddl_semester__"><select name="ctl00$ContentPlaceHolder1$ddl_semester" id="ctl00_ContentPlaceHolder1_ddl_semester" tabindex="3" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddl_semester&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;">
+	<option value="--Select Semester--">--Select Semester--</option>
+	<option selected="selected" value="1">Odd Semester</option>
+	<option value="2">Even Semester</option>
+
+</select></span>
+                *
+            </td>
+
+           <td id="lblExamType" class="vtext">Exam Type
+            </td>
+            <td class="colon">:</td>
+            <td>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlExamType__"><select name="ctl00$ContentPlaceHolder1$ddlExamType" id="ctl00_ContentPlaceHolder1_ddlExamType" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlExamType&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option selected="selected" value="1">Internal</option>
+	<option value="2">External</option>
+
+</select></span>
+            </td>
+
+        
+            </tr>
+
+      <tr>
+
+         <td></td>
+          <td></td>
+          <td colspan="4">
+               <div id="Anthem_ctl00_ContentPlaceHolder1_rbtSupplySummer__"><table id="ctl00_ContentPlaceHolder1_rbtSupplySummer" class="radio" border="0">
+	<tbody><tr>
+		<td><span><input id="ctl00_ContentPlaceHolder1_rbtSupplySummer_0" type="radio" name="ctl00$ContentPlaceHolder1$rbtSupplySummer" value="1" checked="checked"><label for="ctl00_ContentPlaceHolder1_rbtSupplySummer_0">Regular/Back Exam</label></span></td><td><span><input id="ctl00_ContentPlaceHolder1_rbtSupplySummer_1" type="radio" name="ctl00$ContentPlaceHolder1$rbtSupplySummer" value="2" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$rbtSupplySummer$1\&#39;,\&#39;\&#39;)&#39;, 0)"><label for="ctl00_ContentPlaceHolder1_rbtSupplySummer_1">Supple/Summer Exam</label></span></td><td><span><input id="ctl00_ContentPlaceHolder1_rbtSupplySummer_2" type="radio" name="ctl00$ContentPlaceHolder1$rbtSupplySummer" value="3" onclick="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$rbtSupplySummer$2\&#39;,\&#39;\&#39;)&#39;, 0)"><label for="ctl00_ContentPlaceHolder1_rbtSupplySummer_2">Revised Exam</label></span></td>
+	</tr>
+</tbody></table></div>
+            </td>
+          
+       </tr>
+
+        <tr>
+          <td></td>
+          <td></td>
+         <td class="required" colspan="4">
+          <span id="Anthem_ctl00_ContentPlaceHolder1_btnView__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnView" value="VIEW" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnView&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;SEARCHING..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnView" tabindex="10" class="button-common" cellpadding="0" cellspacing="0"></span>
+
+          <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;RESETTING..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" tabindex="10" class="button-common" cellpadding="0" cellspacing="0"></span>
+          <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg"></span></span>
+
+          </td>
+
+      
+
+      </tr>
+
+            <tr>
+            <td class="tablesubheading" colspan="6">
+                List of Pending Sheet</td>
+        </tr>
+
+        <tr>
+            <td class="tdgap" colspan="6">
+                  
+             <div id="Div1" class="DivStyleWithScroll" style="width: 100%; height:275px">
+                     <div id="Anthem_ctl00_ContentPlaceHolder1_gvDetails__" style=""><div>
+	<table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_gvDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+		<tbody><tr class="header-style">
+			<th scope="col">S.No.</th><th scope="col">Course</th><th scope="col">Current Session</th><th scope="col">Semester</th><th scope="col">Year</th><th scope="col">Regular/Back</th><th scope="col">Student Count</th><th scope="col">View/Edit</th><th scope="col">Select</th>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblsno">1</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblsno--></span>
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblcoursecode">CHEM-CC-101 || Chemistry-I(3+1)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_hdnpk_courseid" value="4006"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdnpk_courseid--></span>
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblsession--></span>
+
+                                   
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblsemester--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdnpk_semesterid--></span>
+                                    
+                                   
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblyear--></span>
+                                     
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdnpk_degreeyearid--></span>
+                                    
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblRB--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_hdnpk_configid" value="862"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdnpk_configid--></span>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_hdislockedbyCOE__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdislockedbyCOE--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdislockedbyCOE" id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_hdislockedbyCOE" value="False"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$hdislockedbyCOE--></span>
+                               
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_lblCount">23</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$lblCount--></span>
+                               
+                               
+                                </td><td align="center" style="width:4%;">
+                            <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkView&#39;,&#39;Select$1&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl02$lnkView&#39;,&#39;&#39;)">View</a>                         
+                                  
+                                </td><td align="center" style="width:4%;">
+                                    
+
+                             
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl02_chkselectCourse__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl02$chkselectCourse--><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_gvDetails_ctl02_chkselectCourse" type="checkbox" name="ctl00$ContentPlaceHolder1$gvDetails$ctl02$chkselectCourse" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl02$chkselectCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);"></span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl02$chkselectCourse--></span>
+                                </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblsno">2</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblsno--></span>
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblcoursecode">COMP-M-101 || Computer Fundamentals(2+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_hdnpk_courseid" value="4023"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdnpk_courseid--></span>
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblsession--></span>
+
+                                   
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblsemester--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdnpk_semesterid--></span>
+                                    
+                                   
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblyear--></span>
+                                     
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdnpk_degreeyearid--></span>
+                                    
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblRB--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_hdnpk_configid" value="862"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdnpk_configid--></span>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_hdislockedbyCOE__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdislockedbyCOE--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdislockedbyCOE" id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_hdislockedbyCOE" value="False"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$hdislockedbyCOE--></span>
+                               
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_lblCount">16</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$lblCount--></span>
+                               
+                               
+                                </td><td align="center" style="width:4%;">
+                            <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkView&#39;,&#39;Select$2&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl03$lnkView&#39;,&#39;&#39;)">View</a>                         
+                                  
+                                </td><td align="center" style="width:4%;">
+                                    
+
+                             
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl03_chkselectCourse__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl03$chkselectCourse--><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_gvDetails_ctl03_chkselectCourse" type="checkbox" name="ctl00$ContentPlaceHolder1$gvDetails$ctl03$chkselectCourse" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl03$chkselectCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);"></span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl03$chkselectCourse--></span>
+                                </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblsno">3</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblsno--></span>
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblcoursecode">COMP-SEC-101 || Office Software Applications(1+2)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_hdnpk_courseid" value="4025"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdnpk_courseid--></span>
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblsession--></span>
+
+                                   
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblsemester--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdnpk_semesterid--></span>
+                                    
+                                   
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblyear--></span>
+                                     
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdnpk_degreeyearid--></span>
+                                    
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblRB--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_hdnpk_configid" value="862"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdnpk_configid--></span>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_hdislockedbyCOE__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdislockedbyCOE--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdislockedbyCOE" id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_hdislockedbyCOE" value="False"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$hdislockedbyCOE--></span>
+                               
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_lblCount">23</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$lblCount--></span>
+                               
+                               
+                                </td><td align="center" style="width:4%;">
+                            <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkView&#39;,&#39;Select$3&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl04$lnkView&#39;,&#39;&#39;)">View</a>                         
+                                  
+                                </td><td align="center" style="width:4%;">
+                                    
+
+                             
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl04_chkselectCourse__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl04$chkselectCourse--><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_gvDetails_ctl04_chkselectCourse" type="checkbox" name="ctl00$ContentPlaceHolder1$gvDetails$ctl04$chkselectCourse" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl04$chkselectCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);"></span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl04$chkselectCourse--></span>
+                                </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblsno">4</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblsno--></span>
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblcoursecode">ENG-AEC-101 || English Communication-I(1+1)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl05_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_hdnpk_courseid" value="4034"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdnpk_courseid--></span>
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblsession--></span>
+
+                                   
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblsemester--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl05_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdnpk_semesterid--></span>
+                                    
+                                   
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblyear--></span>
+                                     
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl05_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdnpk_degreeyearid--></span>
+                                    
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblRB--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl05_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_hdnpk_configid" value="862"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdnpk_configid--></span>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl05_hdislockedbyCOE__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdislockedbyCOE--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdislockedbyCOE" id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_hdislockedbyCOE" value="False"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl05$hdislockedbyCOE--></span>
+                               
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_lblCount">23</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl05$lblCount--></span>
+                               
+                               
+                                </td><td align="center" style="width:4%;">
+                            <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl05$lnkView&#39;,&#39;Select$4&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl05$lnkView&#39;,&#39;&#39;)">View</a>                         
+                                  
+                                </td><td align="center" style="width:4%;">
+                                    
+
+                             
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl05_chkselectCourse__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl05$chkselectCourse--><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_gvDetails_ctl05_chkselectCourse" type="checkbox" name="ctl00$ContentPlaceHolder1$gvDetails$ctl05$chkselectCourse" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl05$chkselectCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);"></span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl05$chkselectCourse--></span>
+                                </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblsno">5</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblsno--></span>
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblcoursecode">ENS-VAC-101 || Environment Studies(2+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl06_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_hdnpk_courseid" value="4026"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdnpk_courseid--></span>
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblsession--></span>
+
+                                   
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblsemester--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl06_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdnpk_semesterid--></span>
+                                    
+                                   
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblyear--></span>
+                                     
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl06_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdnpk_degreeyearid--></span>
+                                    
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblRB--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl06_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_hdnpk_configid" value="862"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdnpk_configid--></span>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl06_hdislockedbyCOE__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdislockedbyCOE--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdislockedbyCOE" id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_hdislockedbyCOE" value="False"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl06$hdislockedbyCOE--></span>
+                               
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_lblCount">23</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl06$lblCount--></span>
+                               
+                               
+                                </td><td align="center" style="width:4%;">
+                            <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl06$lnkView&#39;,&#39;Select$5&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl06$lnkView&#39;,&#39;&#39;)">View</a>                         
+                                  
+                                </td><td align="center" style="width:4%;">
+                                    
+
+                             
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl06_chkselectCourse__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl06$chkselectCourse--><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_gvDetails_ctl06_chkselectCourse" type="checkbox" name="ctl00$ContentPlaceHolder1$gvDetails$ctl06$chkselectCourse" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl06$chkselectCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);"></span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl06$chkselectCourse--></span>
+                                </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblsno">6</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblsno--></span>
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblcoursecode">MATH-CC-101 || Linear Algebra and Matrix Theory(4+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl07_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_hdnpk_courseid" value="4007"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdnpk_courseid--></span>
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblsession--></span>
+
+                                   
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblsemester--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl07_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdnpk_semesterid--></span>
+                                    
+                                   
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblyear--></span>
+                                     
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl07_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdnpk_degreeyearid--></span>
+                                    
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblRB--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl07_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_hdnpk_configid" value="862"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdnpk_configid--></span>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl07_hdislockedbyCOE__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdislockedbyCOE--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdislockedbyCOE" id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_hdislockedbyCOE" value="False"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl07$hdislockedbyCOE--></span>
+                               
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_lblCount">23</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl07$lblCount--></span>
+                               
+                               
+                                </td><td align="center" style="width:4%;">
+                            <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl07$lnkView&#39;,&#39;Select$6&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl07$lnkView&#39;,&#39;&#39;)">View</a>                         
+                                  
+                                </td><td align="center" style="width:4%;">
+                                    
+
+                             
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl07_chkselectCourse__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl07$chkselectCourse--><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_gvDetails_ctl07_chkselectCourse" type="checkbox" name="ctl00$ContentPlaceHolder1$gvDetails$ctl07$chkselectCourse" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl07$chkselectCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);"></span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl07$chkselectCourse--></span>
+                                </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblsno">7</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblsno--></span>
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblcoursecode">PHY-CC-101 || Mechanics(3+1)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl08_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_hdnpk_courseid" value="4005"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdnpk_courseid--></span>
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblsession--></span>
+
+                                   
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblsemester--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl08_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdnpk_semesterid--></span>
+                                    
+                                   
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblyear--></span>
+                                     
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl08_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdnpk_degreeyearid--></span>
+                                    
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblRB--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl08_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_hdnpk_configid" value="862"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdnpk_configid--></span>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl08_hdislockedbyCOE__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdislockedbyCOE--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdislockedbyCOE" id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_hdislockedbyCOE" value="False"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl08$hdislockedbyCOE--></span>
+                               
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_lblCount">23</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl08$lblCount--></span>
+                               
+                               
+                                </td><td align="center" style="width:4%;">
+                            <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl08$lnkView&#39;,&#39;Select$7&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl08$lnkView&#39;,&#39;&#39;)">View</a>                         
+                                  
+                                </td><td align="center" style="width:4%;">
+                                    
+
+                             
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl08_chkselectCourse__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl08$chkselectCourse--><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_gvDetails_ctl08_chkselectCourse" type="checkbox" name="ctl00$ContentPlaceHolder1$gvDetails$ctl08$chkselectCourse" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl08$chkselectCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);"></span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl08$chkselectCourse--></span>
+                                </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblsno">8</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblsno--></span>
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblcoursecode">STAT-M-101 || Statistical Methods-I(2+0)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl09_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_hdnpk_courseid" value="4022"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdnpk_courseid--></span>
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblsession--></span>
+
+                                   
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblsemester--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl09_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdnpk_semesterid--></span>
+                                    
+                                   
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblyear--></span>
+                                     
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl09_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdnpk_degreeyearid--></span>
+                                    
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblRB--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl09_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_hdnpk_configid" value="862"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdnpk_configid--></span>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl09_hdislockedbyCOE__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdislockedbyCOE--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdislockedbyCOE" id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_hdislockedbyCOE" value="False"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl09$hdislockedbyCOE--></span>
+                               
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_lblCount">7</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl09$lblCount--></span>
+                               
+                               
+                                </td><td align="center" style="width:4%;">
+                            <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl09$lnkView&#39;,&#39;Select$8&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl09$lnkView&#39;,&#39;&#39;)">View</a>                         
+                                  
+                                </td><td align="center" style="width:4%;">
+                                    
+
+                             
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl09_chkselectCourse__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl09$chkselectCourse--><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_gvDetails_ctl09_chkselectCourse" type="checkbox" name="ctl00$ContentPlaceHolder1$gvDetails$ctl09$chkselectCourse" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl09$chkselectCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);"></span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl09$chkselectCourse--></span>
+                                </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center" style="width:4%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblsno__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblsno--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblsno">9</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblsno--></span>
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblcoursecode__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblcoursecode--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblcoursecode">STAT-MDC-101 || Bio-Statistics(2+1)</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblcoursecode--></span>
+
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl10_hdnpk_courseid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdnpk_courseid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdnpk_courseid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_hdnpk_courseid" value="4024"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdnpk_courseid--></span>
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblsession__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblsession--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblsession">2025-2026 </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblsession--></span>
+
+                                   
+                                                                        
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblsemester__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblsemester--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblsemester">I </span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblsemester--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl10_hdnpk_semesterid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdnpk_semesterid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdnpk_semesterid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_hdnpk_semesterid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdnpk_semesterid--></span>
+                                    
+                                   
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblyear__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblyear--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblyear">First</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblyear--></span>
+                                     
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl10_hdnpk_degreeyearid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdnpk_degreeyearid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdnpk_degreeyearid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_hdnpk_degreeyearid" value="1"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdnpk_degreeyearid--></span>
+                                    
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblRB__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblRB--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblRB">R</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblRB--></span>
+                                     <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl10_hdnpk_configid__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdnpk_configid--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdnpk_configid" id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_hdnpk_configid" value="862"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdnpk_configid--></span>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl10_hdislockedbyCOE__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdislockedbyCOE--><input type="hidden" name="ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdislockedbyCOE" id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_hdislockedbyCOE" value="False"><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl10$hdislockedbyCOE--></span>
+                               
+                                </td><td align="left" style="width:4%;">                                    
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblCount__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblCount--><span id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_lblCount">23</span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl10$lblCount--></span>
+                               
+                               
+                                </td><td align="center" style="width:4%;">
+                            <a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl10$lnkView&#39;,&#39;Select$9&#39;,true,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_lnkView" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl10$lnkView&#39;,&#39;&#39;)">View</a>                         
+                                  
+                                </td><td align="center" style="width:4%;">
+                                    
+
+                             
+                                      <span id="Anthem_ctl00_ContentPlaceHolder1_gvDetails_ctl10_chkselectCourse__"><!--START:ctl00$ContentPlaceHolder1$gvDetails$ctl10$chkselectCourse--><span class="chkbox"><input id="ctl00_ContentPlaceHolder1_gvDetails_ctl10_chkselectCourse" type="checkbox" name="ctl00$ContentPlaceHolder1$gvDetails$ctl10$chkselectCourse" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvDetails$ctl10$chkselectCourse&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);"></span><!--END:ctl00$ContentPlaceHolder1$gvDetails$ctl10$chkselectCourse--></span>
+                                </td>
+		</tr>
+	</tbody></table>
+</div></div>
+                  </div>
+                       
+            </td>
+        </tr>
+          <tr>
+
+         <td></td>
+          <td></td>
+         <td class="required" colspan="4">
+       
+             <span id="Anthem_ctl00_ContentPlaceHolder1_btnApprove__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnApprove" value="Approve" onclick="return confirm(&#39;Do you really want to Approve the Sheet?&#39;);javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnApprove&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;Approving...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnApprove" class="button-common" cellpadding="0" cellspacing="0"></span>
+
+        </td>
+
+      </tr> 
+
+
+              <tr>
+            <td class="tablesubheading" colspan="6">
+                List of Approved Sheet</td>
+             </tr>
+    
+        <tr>
+            <td class="tdgap" colspan="6">
+                  
+             <div id="Div2" class="DivStyleWithScroll" style="width: 100%; height:275px">
+                     <div id="Anthem_ctl00_ContentPlaceHolder1_gvDetails1__" style=""><div>
+
+</div></div>
+                  </div>
+                       
+            </td>
+        </tr>
+
+
+
+
+        <tr>
+            <td colspan="6">
+                  
+                &nbsp;</td>
+        </tr>
+
+
+     <tr>
+            <td colspan="2"></td>
+            <td>
+                
+
+                <span id="Anthem_ctl00_ContentPlaceHolder1_Label1__"><span id="ctl00_ContentPlaceHolder1_Label1" class="lblmessage"></span></span>
+             
+            </td>
+        </tr>
+
+
+   
+    </tbody></table>
+
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script></form>
+
+
+<script language="javascript" src="./COE Marks Approval_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./COE Marks Approval_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

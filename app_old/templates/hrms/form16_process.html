@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="padding: 10px 20px;">
+    <div class="card card-hau">
+        <div class="tableheading">Form 16 Generation (Process)</div>
+        <div class="card-body">
+            
+            <!-- FILTER FORM -->
+            <form method="POST" id="filterForm">
+                <div style="border:1px solid #ccc; padding:15px; background:#f9f9f9; margin-bottom: 20px;">
+                    <table width="100%" style="font-size: 11px;">
+                        <tr>
+                            <td class="vtext" width="120">Financial Year:</td>
+                            <td>
+                                <select name="fin_year" class="dropdown" style="width: 200px;">
+                                    {% for fy in fin_years %}
+                                    <option value="{{ fy.id }}" {% if fy.id == selected_fin_id %}selected{% endif %}>{{ fy.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td class="vtext" width="120">DDO:</td>
+                            <td>
+                                <select name="ddo" class="dropdown" style="width: 250px;">
+                                    <option value="">-- ALL --</option>
+                                    {% for d in ddos %}
+                                    <option value="{{ d.id }}">{{ d.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vtext">Location:</td>
+                            <td>
+                                <select name="location" class="dropdown" style="width: 200px;">
+                                    <option value="">-- ALL --</option>
+                                    {% for l in locations %}
+                                    <option value="{{ l.id }}">{{ l.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td class="vtext">Department:</td>
+                            <td>
+                                <select name="dept" class="dropdown" style="width: 250px;">
+                                    <option value="">-- ALL --</option>
+                                    {% for d in departments %}
+                                    <option value="{{ d.id }}">{{ d.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="padding-top: 10px;">
+                                <button type="submit" class="btn btn-sm btn-hau-primary">VIEW EMPLOYEES</button>
+                                <button type="reset" class="btn btn-sm btn-hau-secondary ms-2">RESET</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="tablesubheading">List of Employee (Form 16 Not Generated)</div>
+                <div style="height: 250px; overflow-y: auto; border: 1px solid #ddd; margin-bottom: 20px;">
+                    <table width="100%" border="1" style="border-collapse:collapse; font-size: 10px;">
+                        <tr style="background: #eee; font-weight: bold; position: sticky; top: 0;">
+                            <th style="padding:4px;"><input type="checkbox" id="chkAll"></th>
+                            <th>S.No.</th><th>Code</th><th>Name</th><th>Location</th><th>Designation</th><th>Action</th>
+                        </tr>
+                        {% for e in not_processed %}
+                        <tr style="background: #fff;">
+                            <td align="center"><input type="checkbox" name="emp_ids[]" value="{{ e.pk_empid }}"></td>
+                            <td align="center">{{ loop.index }}</td>
+                            <td align="center">{{ e.empcode }}</td>
+                            <td>{{ e.empname }}</td>
+                            <td>{{ e.location }}</td>
+                            <td>{{ e.designation }}</td>
+                            <td align="center">
+                                <a href="{{ url_for('hrms.form16_generation', emp_id=e.pk_empid, fin_year=selected_fin_id) }}" class="btn btn-xs btn-primary">GENERATE</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                <div class="mt-2 mb-4">
+                    <button type="submit" name="action" value="PROCESS" class="btn btn-sm btn-primary">PROCESS SELECTED</button>
+                </div>
+
+                <div class="tablesubheading">List of Employee (Form 16 Generated)</div>
+                <div style="height: 200px; overflow-y: auto; border: 1px solid #ddd;">
+                    <table width="100%" border="1" style="border-collapse:collapse; font-size: 10px;">
+                        <tr style="background: #eee; font-weight: bold; position: sticky; top: 0;">
+                            <th style="padding:4px;"><input type="checkbox" id="chkUAll"></th>
+                            <th>S.No.</th><th>Code</th><th>Name</th><th>Designation</th><th>Action</th>
+                        </tr>
+                        {% for e in processed %}
+                        <tr>
+                            <td align="center"><input type="checkbox" name="emp_ids[]" value="{{ e.pk_empid }}"></td>
+                            <td align="center">{{ loop.index }}</td>
+                            <td align="center">{{ e.empcode }}</td>
+                            <td>{{ e.empname }}</td>
+                            <td>{{ e.designation }}</td>
+                            <td align="center">
+                                <a href="{{ url_for('hrms.form16_generation', emp_id=e.pk_empid, fin_year=selected_fin_id) }}" class="btn btn-xs btn-primary">EDIT</a>
+                                <a href="{{ url_for('hrms.download_form16_pdf', emp_id=e.pk_empid, fin_id=selected_fin_id) }}" class="btn btn-xs btn-danger">PREVIEW PDF</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                <div class="mt-2">
+                    <button type="submit" name="action" value="UNPROCESS" class="btn btn-sm btn-warning">UN-PROCESS SELECTED</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('chkAll').onclick = function() {
+    document.querySelectorAll('input[name="emp_ids[]"]').forEach(cb => cb.checked = this.checked);
+};
+</script>
+{% endblock %}

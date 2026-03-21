@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+<span>Transactions</span>&nbsp;&gt;&nbsp;<span>Increment/Promotion</span>&nbsp;&gt;&nbsp;<strong>Employee Promotion/Financial Up-gradation</strong>
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="target_emp_id" value="{{ employee_info.pk_empid if employee_info else '' }}">
+    <input type="hidden" name="pid" value="{{ edit_data.id if edit_data else '' }}">
+
+    <!-- SHARED SEARCH MODAL -->
+    {% include 'establishment/_search_modal.html' %}
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="7" class="tableheading">
+                    <span class="mainheadingborderbottom">Employee Promotion/Financial Up-gradation Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Employee Code</td>
+                <td class="colon">:</td>
+                <td class="required" width="30%">
+                    <input name="empcode" type="text" class="textbox w-150" value="{{ employee_info.empcode if employee_info else '' }}" readonly>
+                    <a href="javascript:void(0);" onclick="openEmpSearch('emp_id', '')">
+                        <img src="{{ url_for('static', filename='srec.jpg') }}" border="0" style="vertical-align:middle; cursor:pointer;">
+                    </a>
+                    <span class="required">*</span>
+                </td>
+                <td width="2%"></td>
+                <td class="vtext" width="15%">Employee Name</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <input type="text" class="textbox w-250" value="{{ employee_info.empname if employee_info else '' }}" readonly>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Status</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="status" class="dropdown w-200" required>
+                        <option value="P" {% if edit_data and edit_data.ptstatus == 'P' %}selected{% endif %}>Promotion</option>
+                        <option value="H" {% if edit_data and edit_data.ptstatus == 'H' %}selected{% endif %}>Higher Grade</option>
+                        <option value="T" {% if edit_data and edit_data.ptstatus == 'T' %}selected{% endif %}>Transfer</option>
+                        <option value="S2" {% if edit_data and edit_data.ptstatus == 'S2' %}selected{% endif %}>Stage - II</option>
+                        <option value="S3" {% if edit_data and edit_data.ptstatus == 'S3' %}selected{% endif %}>Stage - III</option>
+                        <option value="RD" {% if edit_data and edit_data.ptstatus == 'RD' %}selected{% endif %}>Redesignation</option>
+                        <option value="CC" {% if edit_data and edit_data.ptstatus == 'CC' %}selected{% endif %}>Change Cadre</option>
+                        <option value="AD" {% if edit_data and edit_data.ptstatus == 'AD' %}selected{% endif %}>Adjusted</option>
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Order Date</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="order_date" type="text" class="textboxdate w-150" value="{{ edit_data.order_date_iso if edit_data else '' }}" required placeholder="DD/MM/YYYY">
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Promotion Type</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="promo_type_sel" class="dropdown w-200">
+                        <option value="Regular" {% if edit_data and edit_data.promo_type_sel == 'Regular' %}selected{% endif %}>Regular</option>
+                        <option value="Adhoc" {% if edit_data and edit_data.promo_type_sel == 'Adhoc' %}selected{% endif %}>Adhoc</option>
+                    </select>
+                </td>
+                <td></td>
+                <td class="vtext">Probation Completed Date</td>
+                <td class="colon">:</td>
+                <td>
+                    <input name="prob_date" type="text" class="textboxdate w-150" value="{{ edit_data.Prob_CompDate if edit_data else '' }}" placeholder="DD/MM/YYYY">
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Old DDO</td>
+                <td class="colon">:</td>
+                <td><input name="old_ddo" type="text" class="textbox w-250" value="{{ edit_data.ddo_name if edit_data else employee_info.ddo_name if employee_info else '' }}" readonly></td>
+                <td></td>
+                <td class="vtext">New DDO</td>
+                <td class="colon">:</td>
+                <td><input name="new_ddo" type="text" class="textbox w-250" value="{{ edit_data.Newpostingddo if edit_data else '' }}"></td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Basic (Old)</td>
+                <td class="colon">:</td>
+                <td><input name="old_basic" type="text" class="textbox w-150" value="{{ edit_data.earlierbasic if edit_data else employee_info.curbasic if employee_info else '0' }}"></td>
+                <td></td>
+                <td class="vtext">Basic (New)</td>
+                <td class="colon">:</td>
+                <td><input name="new_basic" type="text" class="textbox w-150" value="{{ edit_data.newbasic if edit_data else '0' }}"></td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Order No.</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input name="order_no" type="text" class="textbox w-200" value="{{ edit_data.promotioncode if edit_data else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Date of Joining</td>
+                <td class="colon">:</td>
+                <td>
+                    <input name="doj" type="text" class="textboxdate w-150" value="{{ edit_data.dateofjoining if edit_data else '' }}" placeholder="DD/MM/YYYY">
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td colspan="5">
+                    <textarea name="remarks" class="textbox w-500" rows="2">{{ edit_data.remarks if edit_data else '' }}</textarea>
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="20"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    {% if (edit_data and perm.AllowUpdate) or (not edit_data and perm.AllowAdd) %}
+                    <input type="submit" name="action" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" class="button-common">
+                    {% endif %}
+                    <input type="submit" name="action" value="RESET" class="button-common" formnovalidate>
+                </td>
+            </tr>
+            
+            {% if employee_info %}
+            <tr><td colspan="7" height="30"></td></tr>
+            <tr>
+                <td colspan="7" class="tablesubheading">
+                    <span class="subheadingborderbottom">List of Employee Promotion Details</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td colspan="7">
+                    <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="5%">S. No.</th>
+                                <th width="20%">Order No.</th>
+                                <th width="15%">Date</th>
+                                <th width="15%">Old Basic</th>
+                                <th width="15%">New Basic</th>
+                                <th width="10%">EDIT</th>
+                                <th width="10%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in promotions %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                <td align="center">{{ loop.index }}</td>
+                                <td>{{ p.promotioncode }}</td>
+                                <td align="center">{{ p.dated_fmt }}</td>
+                                <td align="right">{{ p.earlierbasic }}</td>
+                                <td align="right">{{ p.newbasic }}</td>
+                                <td align="center">
+                                    <a href="{{ url_for('establishment.employee_promotion_details', emp_id=emp_id, edit_id=p.id) }}">
+                                        <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    {% if perm.AllowDelete %}
+                                    <a href="{{ url_for('establishment.employee_promotion_details', emp_id=emp_id, delete_id=p.id) }}" onclick="return confirm('Are you sure?')">
+                                        <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="7" align="center" style="padding:10px;">No records found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function selectItem(id, name) {
+        window.location.href = "{{ url_for('establishment.employee_promotion_details') }}?emp_id=" + id;
+    }
+</script>
+{% endblock %}

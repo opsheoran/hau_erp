@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .textbox-small { width: 150px !important; }
+    .textbox-medium { width: 250px !important; }
+    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .required-star { color: red; font-weight: bold; }
+</style>
+
+<div class="hau-card">
+    <div class="tablesubheading">Syllabus Creation Master</div>
+    <div style="padding: 15px;">
+        <form method="POST">
+            <input type="hidden" name="action" value="SAVE">
+            <input type="hidden" name="pk_id" id="s_id">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Degree</td><td class="colon">:</td>
+                    <td width="34%">
+                        <select name="degree_id" id="s_degree" class="dropdown textbox-medium" required>
+                            <option value="">-- Select Degree --</option>
+                            {% for d in degrees %}
+                            <option value="{{ d.pk_degreeid }}">{{ d.degreename }}</option>
+                            {% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                    <td class="vtext" width="15%">From Session</td><td class="colon">:</td>
+                    <td>
+                        <select name="from_session" id="s_from" class="dropdown textbox-small" required>
+                            <option value="">-- Select --</option>
+                            {% for s in sessions %}
+                            <option value="{{ s.sessionname }}">{{ s.sessionname }}</option>
+                            {% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">To Session</td><td class="colon">:</td>
+                    <td>
+                        <select name="to_session" id="s_to" class="dropdown textbox-small" required>
+                            <option value="">-- Select --</option>
+                            {% for s in sessions %}
+                            <option value="{{ s.sessionname }}">{{ s.sessionname }}</option>
+                            {% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                    <td class="vtext">Select Course</td><td class="colon">:</td>
+                    <td>
+                        <select name="course_id" id="s_course" class="dropdown textbox-medium" required>
+                            <option value="">-- Select --</option>
+                            {% for c in courses %}
+                            <option value="{{ c.pk_courseid }}">{{ c.coursename }} [{{ c.coursecode }}]</option>
+                            {% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Syllabus Content</td><td class="colon">:</td>
+                    <td colspan="4">
+                        <textarea name="syllabus_content" id="s_content" class="textbox" style="height:150px; font-family: monospace;"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top: 15px;">
+                        <input type="submit" value="SAVE SYLLABUS" class="button-common">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 40px;">
+            <div class="tablesubheading">Existing Syllabus Records</div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <th width="60">S.No.</th><th>Degree</th><th width="120">From Session</th><th width="120">To Session</th><th width="100">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in syllabuses %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td>{{ s.degreename }}</td>
+                        <td align="center">{{ s.fromSession }}</td>
+                        <td align="center">{{ s.toSession }}</td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick="editS('{{ s.pk_syllforCourse }}', '{{ s.fk_Degreeid }}', '{{ s.fromSession }}', '{{ s.toSession }}')">
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this syllabus?')">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="id" value="{{ s.pk_syllforCourse }}">
+                                <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}" style="margin-left:5px;">
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" align="center" style="padding:20px;">No syllabus records found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function editS(id, deg, from, to) {
+    document.getElementById('s_id').value = id;
+    document.getElementById('s_degree').value = deg;
+    document.getElementById('s_from').value = from;
+    document.getElementById('s_to').value = to;
+    window.scrollTo(0, 0);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="hau-card">
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="3">
+                    <span class="mainheadingborderbottom">Employee- Degree Map</span>
+                </td>
+            </tr>
+            <tr><td colspan="3" height="10"></td></tr>
+        </tbody>
+    </table>
+
+    <div style="padding: 10px;">
+        <form method="POST">
+            <input type="hidden" name="action" value="SAVE">
+            <input type="hidden" name="pk_id" id="map_id">
+            
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">College</td><td class="colon">:</td>
+                    <td>
+                        <select name="college_id" id="m_college" class="dropdown w-300" required onchange="loadCollegeDegrees(this.value)">
+                            <option value="">--Select College--</option>
+                            {% for c in lookups.colleges %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Employee</td><td class="colon">:</td>
+                    <td>
+                        <select name="user_id" id="m_user" class="dropdown w-300" required>
+                            <option value="">--Select Employee--</option>
+                            {% for e in lookups.employees %}<option value="{{ e.id }}">{{ e.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Degrees</td><td class="colon">:</td>
+                    <td>
+                        <div id="degree_container" style="border:1px solid #ccc; padding:8px; max-height:150px; overflow-y:auto; width:300px; background:#fff; font-size:11px;">
+                            <span style="color:#999 italic">Please select a college first...</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td style="padding-top: 15px;">
+                        <input type="submit" id="btn_save" value="SAVE" class="button-common">
+                        <input type="button" value="RESET" class="button-common" style="margin-left:10px;" onclick="location.reload()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 30px;">
+            <div class="tablesubheading">
+                <span class="subheadingborderbottom">List of Employee-Degree Mappings</span>
+            </div>
+            <table class="table-grid-view" width="100%">
+                <thead>
+                    <tr class="header-style">
+                        <th width="50">S.No.</th>
+                        <th>Employee Name</th>
+                        <th>Degree Name</th>
+                        <th width="60">DELETE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index + (pagination.page - 1) * pagination.per_page }}</td>
+                        <td style="font-weight: bold;">{{ item.empname }}</td>
+                        <td>{{ item.degreename }}</td>
+                        <td align="center">
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this mapping?')">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="id" value="{{ item.PK_EmDgMapID }}">
+                                <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if pagination.total_pages > 1 %}
+            <div class="pager-style">
+                {% if pagination.has_prev %}
+                    <a href="{{ url_for('academics.employee_degree_map', page=pagination.page-1) }}">&lt;</a>
+                {% else %}
+                    <span class="disabled">&lt;</span>
+                {% endif %}
+
+                {% for p in page_range %}
+                    {% if p == '...' %}
+                        <span>{{ p }}</span>
+                    {% elif p == pagination.page %}
+                        <span class="active">{{ p }}</span>
+                    {% else %}
+                        <a href="{{ url_for('academics.employee_degree_map', page=p) }}">{{ p }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if pagination.has_next %}
+                    <a href="{{ url_for('academics.employee_degree_map', page=pagination.page+1) }}">&gt;</a>
+                {% else %}
+                    <span class="disabled">&gt;</span>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+async function loadCollegeDegrees(collegeId) {
+    const container = document.getElementById('degree_container');
+    if (!collegeId) {
+        container.innerHTML = '<span style="color:#999 italic">Please select a college first...</span>';
+        return;
+    }
+    container.innerHTML = 'Loading degrees...';
+    try {
+        const response = await fetch(`/academics/api/college/${collegeId}/degrees`);
+        const degrees = await response.json();
+        if (degrees.length === 0) {
+            container.innerHTML = '<span style="color:red">No degrees mapped to this college in Col-Deg-Specialization Master.</span>';
+            return;
+        }
+        let html = '';
+        degrees.forEach(d => {
+            html += `<label style="display:block; margin-bottom:5px;"><input type="checkbox" name="degree_ids" value="${d.pk_degreeid}"> ${d.degreename}</label>`;
+        });
+        container.innerHTML = html;
+    } catch (e) {
+        container.innerHTML = '<span style="color:red">Error loading degrees.</span>';
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,66 @@
+<style>
+    .popup-container { font-family: Verdana; font-size: 11px; padding: 10px; }
+    .popup-header { background: #3c8dbc; color: white; padding: 8px; font-weight: bold; font-size: 12px; margin-bottom: 10px; }
+    .info-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+    .info-table td { padding: 4px; border: 1px solid #ddd; }
+    .label-cell { background: #f9f9f9; font-weight: bold; width: 25%; }
+    .data-grid { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .data-grid th { background: #e4eaff; padding: 6px; border: 1px solid #ddd; font-weight: bold; text-align: left; }
+    .data-grid td { padding: 6px; border: 1px solid #ddd; }
+    .section-title { background: #eee; padding: 5px; font-weight: bold; margin-top: 15px; border-left: 3px solid #3c8dbc; }
+</style>
+
+<div class="popup-container">
+    <div class="popup-header">Self Assessment Report (SAR) Details - {{ main.empname }}</div>
+    
+    <table class="info-table">
+        <tr>
+            <td class="label-cell">Employee Name</td><td>{{ main.empname }}</td>
+            <td class="label-cell">Designation</td><td>{{ main.designation }}</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Department</td><td>{{ main.dept_name }}</td>
+            <td class="label-cell">HAU Joining Date</td><td>{{ main.hau_doj_fmt }}</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Basic Pay</td><td>{{ main.BasicPay }}</td>
+            <td class="label-cell">Grade Pay</td><td>{{ main.GradePay }}</td>
+        </tr>
+        <tr>
+            <td class="label-cell">Period From</td><td>{{ main.PeriodFrom }}</td>
+            <td class="label-cell">Period To</td><td>{{ main.PeriodTo }}</td>
+        </tr>
+    </table>
+
+    <div class="section-title">Publications</div>
+    <table class="data-grid">
+        <tr><th width="10%">S.No</th><th>Description</th></tr>
+        {% for pub in publications %}
+        <tr><td>{{ loop.index }}</td><td>{{ pub.description }}</td></tr>
+        {% else %}
+        <tr><td colspan="2" align="center">No publications recorded.</td></tr>
+        {% endfor %}
+    </table>
+
+    <div class="section-title">Activities (Teaching / Research / Extension)</div>
+    <table class="data-grid">
+        <tr>
+            <th width="10%">S.No</th>
+            <th width="20%">Activity Type</th>
+            <th>Description</th>
+            <th>Additional Info</th>
+        </tr>
+        {% for act in activities %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>
+                {% if act.Activity == 1 %}Teaching{% elif act.Activity == 2 %}Research{% elif act.Activity == 3 %}Extension{% else %}Other{% endif %}
+            </td>
+            <td>{{ act.description }}</td>
+            <td>{{ act.description1 or '' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" align="center">No activities recorded.</td></tr>
+        {% endfor %}
+    </table>
+</div>

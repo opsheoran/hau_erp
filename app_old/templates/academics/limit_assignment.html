@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <form method="POST" id="limitForm">
+        <input type="hidden" name="action" value="SAVE">
+        <input type="hidden" name="id" id="limit_id">
+        
+        <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="tableheading" colspan="7">
+                        <span class="mainheadingborderbottom">Limit Assignment</span>
+                    </td>
+                </tr>
+                <tr><td colspan="7" height="10"></td></tr>
+                
+                <tr>
+                    <td class="vtext" width="15%">College</td>
+                    <td class="colon">:</td>
+                    <td width="30%">
+                        <select name="college_id" id="fk_collegeid" class="dropdown w-250" required>
+                            <option value="">--Select College--</option>
+                            {% for c in lookups.colleges %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                    <td width="5%"></td>
+                    <td class="vtext" width="15%">Admitted Session</td>
+                    <td class="colon">:</td>
+                    <td width="35%">
+                        <select name="session_id" id="fk_sessionid" class="dropdown w-200" required>
+                            <option value="">--Select Session--</option>
+                            {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="vtext">Degree</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="degree_id" id="fk_degreeid" class="dropdown w-250" required>
+                            <option value="">--Select Degree--</option>
+                            {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                    <td></td>
+                    <td class="vtext">Student Limit</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <input type="number" name="student_limit" id="StudentLimit" class="textbox w-100" required>
+                        <span class="required">*</span>
+                    </td>
+                </tr>
+                
+                <tr><td colspan="7" height="15"></td></tr>
+                
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="5">
+                        <input type="submit" value="SAVE" class="button-common">
+                        <input type="button" value="RESET" class="button-common" onclick="resetLimitForm()" style="margin-left: 10px;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <br>
+
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tablesubheading" colspan="7">
+                    <span class="subheadingborderbottom">List of Limit Assignments</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            <tr>
+                <td colspan="7">
+                    <table class="table-grid-view" width="100%">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="5%">S.No.</th>
+                                <th>College Name</th>
+                                <th>Session</th>
+                                <th>Degree</th>
+                                <th width="15%">Student Limit</th>
+                                <th width="5%">EDIT</th>
+                                <th width="5%">DELETE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
+                                <td>{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                                <td align="left">{{ item.collegename }}</td>
+                                <td>{{ item.sessionname }}</td>
+                                <td align="left">{{ item.degreename }}</td>
+                                <td><b>{{ item.StudentLimit }}</b></td>
+                                <td>
+                                    <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editLimit({{ item|tojson }})'>
+                                </td>
+                                <td>
+                                    <form method="POST" onsubmit="return confirm('Are you sure?');" style="display:inline;">
+                                        <input type="hidden" name="action" value="DELETE">
+                                        <input type="hidden" name="id" value="{{ item.pk_limitid }}">
+                                        <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}">
+                                    </form>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr class="item-style"><td colspan="7" align="center" style="padding:20px; color:#999;">No assignments found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                    {% if pagination.total_pages > 1 %}
+                    <div class="pager-style">
+                        {% if pagination.has_prev %}<a href="{{ url_for('academics.limit_assignment', page=pagination.page-1, **filters) }}">&lt;</a>{% endif %}
+                        {% for p in page_range %}
+                            {% if p == '...' %}<span>{{ p }}</span>
+                            {% elif p == pagination.page %}<span class="active">{{ p }}</span>
+                            {% else %}<a href="{{ url_for('academics.limit_assignment', page=p, **filters) }}">{{ p }}</a>{% endif %}
+                        {% endfor %}
+                        {% if pagination.has_next %}<a href="{{ url_for('academics.limit_assignment', page=pagination.page+1, **filters) }}">&gt;</a>{% endif %}
+                    </div>
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function editLimit(item) {
+    document.getElementById('limit_id').value = item.pk_limitid;
+    document.getElementById('fk_collegeid').value = item.Fk_collegeid;
+    document.getElementById('fk_sessionid').value = item.Fk_Sessionid;
+    document.getElementById('fk_degreeid').value = item.FK_Degreeid;
+    document.getElementById('StudentLimit').value = item.StudentLimit;
+    window.scrollTo(0,0);
+}
+
+function resetLimitForm() {
+    document.getElementById('limit_id').value = '';
+    document.getElementById('limitForm').reset();
+}
+</script>
+{% endblock %}

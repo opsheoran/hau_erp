@@ -1,0 +1,390 @@
+{% extends "student_portal/base.html" %}
+
+{% block title %}Card Entry{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card-entry-container {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        padding: 30px;
+        margin-bottom: 20px;
+    }
+
+    .form-group-inline {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 20px;
+        background: #f8f9fa;
+        padding: 15px 20px;
+        border-radius: 6px;
+        border: 1px solid #eee;
+        margin-bottom: 30px;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+    }
+
+    .info-item strong {
+        color: var(--primary-color);
+        margin-right: 8px;
+    }
+
+    .info-item span {
+        color: #333;
+        font-weight: 500;
+    }
+
+    .tablesubheading {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 8px 15px;
+        font-weight: 500;
+        font-size: 14px;
+        border-radius: 4px 4px 0 0;
+        margin-top: 20px;
+        margin-bottom: 0;
+    }
+
+    .table-grid-view {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+    }
+
+    .table-grid-view th {
+        background-color: #f1f5f1;
+        color: var(--primary-color);
+        padding: 10px;
+        text-align: center;
+        font-weight: 500;
+        border: 1px solid #ddd;
+        font-size: 13px;
+    }
+
+    .table-grid-view td {
+        padding: 8px 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .table-grid-view td.text-left {
+        text-align: left;
+    }
+
+    .empty-row {
+        color: #e74c3c;
+        font-weight: 500;
+        padding: 15px !important;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 8px 25px;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 4px;
+        cursor: pointer;
+        border: none;
+        transition: background 0.3s;
+    }
+
+    .btn-save {
+        background-color: #f39c12;
+        color: white;
+    }
+
+    .btn-save:hover {
+        background-color: #e67e22;
+    }
+
+    .btn-submit {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .btn-submit:hover {
+        background-color: var(--secondary-color);
+    }
+    
+    .btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .status-banner {
+        padding: 15px;
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        font-weight: 500;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card-entry-container">
+    <h2 style="margin-top: 0; color: #333; font-size: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px;">Card Entry</h2>
+
+    {% if is_submitted %}
+    <div class="status-banner">
+        <i class="fas fa-lock"></i> Your Card Entry has been submitted and is currently locked.
+    </div>
+    {% endif %}
+
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #eee; margin-bottom: 20px; font-size: 14px;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="5">
+            <tr>
+                <td width="15%"><strong>Degree</strong></td>
+                <td width="2%"><strong>:</strong></td>
+                <td width="45%">{{ student.degreename or '' }} {% if student.branchname %}[ {{ student.branchname }} ]{% endif %}</td>
+                <td width="15%"><strong>Semester</strong></td>
+                <td width="2%"><strong>:</strong></td>
+                <td width="21%">{{ student.semester_roman or '' }}</td>
+            </tr>
+            <tr>
+                <td><strong>Min. Credit Hrs</strong></td>
+                <td><strong>:</strong></td>
+                <td>9</td>
+                <td><strong>Max. Credit Hrs</strong></td>
+                <td><strong>:</strong></td>
+                <td>22</td>
+            </tr>
+            <tr>
+                <td><strong>Selected Credit Hrs</strong></td>
+                <td><strong>:</strong></td>
+                <td colspan="4"><span id="lbl_crhr" style="font-weight:bold; color:var(--primary-color);">0</span></td>
+            </tr>
+        </table>
+    </div>
+
+    <form method="POST" action="{{ url_for('student_portal.card_entry') }}" id="cardEntryForm">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="action" id="formAction" value="SAVE">
+
+        <!-- Major Courses -->
+        <div class="tablesubheading">Major Courses</div>
+        <table class="table-grid-view">
+            <tr>
+                <th width="5%">S.No.</th>
+                <th width="55%">Course Title</th>
+                <th width="20%">Course Code</th>
+                <th width="20%">Credit Hours</th>
+            </tr>
+            {% if major_courses %}
+                {% for c in major_courses %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="text-left">
+                        <label>
+                            <input type="checkbox" name="chkcourse" value="{{ c.Pk_stucourseallocid }}" class="course-checkbox" data-credits="{{ c.total_cr }}" {{ c.checked }} {% if is_submitted %}disabled{% endif %} onchange="CountCredit()"> 
+                            {{ c.coursename }}
+                        </label>
+                    </td>
+                    <td>{{ c.coursecode }}</td>
+                    <td>{{ c.cr_text }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="4" class="empty-row">No Courses Available!!</td></tr>
+            {% endif %}
+        </table>
+
+        <!-- Minor Courses -->
+        <div class="tablesubheading">Minor Courses</div>
+        <table class="table-grid-view">
+            <tr>
+                <th width="5%">S.No.</th>
+                <th width="55%">Course Title</th>
+                <th width="20%">Course Code</th>
+                <th width="20%">Credit Hours</th>
+            </tr>
+            {% if minor_courses %}
+                {% for c in minor_courses %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="text-left">
+                        <label>
+                            <input type="checkbox" name="chkcourse" value="{{ c.Pk_stucourseallocid }}" class="course-checkbox" data-credits="{{ c.total_cr }}" {{ c.checked }} {% if is_submitted %}disabled{% endif %} onchange="CountCredit()"> 
+                            {{ c.coursename }}
+                        </label>
+                    </td>
+                    <td>{{ c.coursecode }}</td>
+                    <td>{{ c.cr_text }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="4" class="empty-row">No Courses Available!!</td></tr>
+            {% endif %}
+        </table>
+
+        <!-- Supporting Courses -->
+        <div class="tablesubheading">Supporting Courses</div>
+        <table class="table-grid-view">
+            <tr>
+                <th width="5%">S.No.</th>
+                <th width="55%">Course Title</th>
+                <th width="20%">Course Code</th>
+                <th width="20%">Credit Hours</th>
+            </tr>
+            {% if support_courses %}
+                {% for c in support_courses %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="text-left">
+                        <label>
+                            <input type="checkbox" name="chkcourse" value="{{ c.Pk_stucourseallocid }}" class="course-checkbox" data-credits="{{ c.total_cr }}" {{ c.checked }} {% if is_submitted %}disabled{% endif %} onchange="CountCredit()"> 
+                            {{ c.coursename }}
+                        </label>
+                    </td>
+                    <td>{{ c.coursecode }}</td>
+                    <td>{{ c.cr_text }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="4" class="empty-row">No Courses Available!!</td></tr>
+            {% endif %}
+        </table>
+
+        <!-- Non Credit Courses -->
+        <div class="tablesubheading">Non Credit Courses</div>
+        <table class="table-grid-view">
+            <tr>
+                <th width="5%">S.No.</th>
+                <th width="55%">Course Title</th>
+                <th width="20%">Course Code</th>
+                <th width="20%">Credit Hours</th>
+            </tr>
+            {% if nc_courses %}
+                {% for c in nc_courses %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="text-left">
+                        <label>
+                            <input type="checkbox" name="chkcourse" value="{{ c.Pk_stucourseallocid }}" class="course-checkbox" data-credits="{{ c.total_cr }}" {{ c.checked }} {% if is_submitted %}disabled{% endif %} onchange="CountCredit()"> 
+                            {{ c.coursename }}
+                        </label>
+                    </td>
+                    <td>{{ c.coursecode }}</td>
+                    <td>{{ c.cr_text }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="4" class="empty-row">No Courses Available!!</td></tr>
+            {% endif %}
+        </table>
+
+        <!-- Deficiency Courses -->
+        <div class="tablesubheading">Deficiency Courses</div>
+        <table class="table-grid-view">
+            <tr>
+                <th width="5%">S.No.</th>
+                <th width="55%">Course Title</th>
+                <th width="20%">Course Code</th>
+                <th width="20%">Credit Hours</th>
+            </tr>
+            {% if deficiency_courses %}
+                {% for c in deficiency_courses %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="text-left">
+                        <label>
+                            <input type="checkbox" name="chkcourse" value="{{ c.Pk_stucourseallocid }}" class="course-checkbox" data-credits="{{ c.total_cr }}" {{ c.checked }} {% if is_submitted %}disabled{% endif %} onchange="CountCredit()"> 
+                            {{ c.coursename }}
+                        </label>
+                    </td>
+                    <td>{{ c.coursecode }}</td>
+                    <td>{{ c.cr_text }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="4" class="empty-row">No Deficiency Courses Available!!</td></tr>
+            {% endif %}
+        </table>
+
+        <!-- Back Courses -->
+        <div class="tablesubheading">Back Courses</div>
+        <table class="table-grid-view">
+            <tr>
+                <th width="5%">S.No.</th>
+                <th width="45%">Course Title</th>
+                <th width="20%">Course Code</th>
+                <th width="15%">Credit Hours</th>
+                <th width="15%">IS NC</th>
+            </tr>
+            {% if back_courses %}
+                {% for c in back_courses %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="text-left">
+                        <label>
+                            <input type="checkbox" name="chkcourse" value="{{ c.Pk_stucourseallocid }}" class="course-checkbox" data-credits="{{ c.total_cr }}" {{ c.checked }} {% if is_submitted %}disabled{% endif %} onchange="CountCredit()"> 
+                            {{ c.coursename }}
+                        </label>
+                    </td>
+                    <td>{{ c.coursecode }}</td>
+                    <td>{{ c.cr_text }}</td>
+                    <td>{{ 'Yes' if c.isNC else 'No' }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="5" class="empty-row">No Back Course Available!!</td></tr>
+            {% endif %}
+        </table>
+
+        {% if not is_submitted %}
+        <div class="button-group">
+            <button type="button" class="btn btn-save" onclick="submitForm('SAVE')">Save</button>
+            <button type="button" class="btn btn-submit" onclick="submitForm('SUBMIT')">Submit</button>
+        </div>
+        {% endif %}
+    </form>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function CountCredit() {
+        let total = 0;
+        const checkboxes = document.querySelectorAll('.course-checkbox');
+        checkboxes.forEach(cb => {
+            if (cb.checked) {
+                total += parseFloat(cb.getAttribute('data-credits') || 0);
+            }
+        });
+        document.getElementById('lbl_crhr').innerText = total;
+    }
+
+    function submitForm(action) {
+        if (action === 'SUBMIT') {
+            if (!confirm('Are you sure you want to final submit your card entry? This cannot be undone.')) {
+                return;
+            }
+        }
+        document.getElementById('formAction').value = action;
+        document.getElementById('cardEntryForm').submit();
+    }
+
+    // Initialize counts on load
+    window.onload = function() {
+        CountCredit();
+    };
+</script>
+{% endblock %}

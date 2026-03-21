@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .textbox-small { width: 150px !important; }
+    .textbox-medium { width: 250px !important; }
+    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .required-star { color: red; font-weight: bold; }
+</style>
+
+<div class="hau-card">
+    <div class="tablesubheading">Course Allocation Approval</div>
+    <div style="padding: 15px;">
+        <form method="GET">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">College</td><td class="colon">:</td>
+                    <td width="34%">
+                        <select name="college_id" class="dropdown textbox-medium" required>
+                            <option value="">-- Select --</option>
+                            {% for c in colleges %}<option value="{{ c.pk_collegeid }}" {% if filters.college_id|string == c.pk_collegeid|string %}selected{% endif %}>{{ c.collegename }}</option>{% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                    <td class="vtext" width="15%">Session</td><td class="colon">:</td>
+                    <td>
+                        <select name="session_id" class="dropdown textbox-small" required>
+                            <option value="">-- Select --</option>
+                            {% for s in sessions %}<option value="{{ s.pk_sessionid }}" {% if filters.session_id|string == s.pk_sessionid|string %}selected{% endif %}>{{ s.sessionname }}</option>{% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Degree</td><td class="colon">:</td>
+                    <td>
+                        <select name="degree_id" class="dropdown textbox-medium">
+                            <option value="">-- All Degrees --</option>
+                            {% for d in degrees %}<option value="{{ d.pk_degreeid }}" {% if filters.degree_id|string == d.pk_degreeid|string %}selected{% endif %}>{{ d.degreename }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td colspan="3" style="padding-top: 10px;">
+                        <input type="submit" value="GET STUDENTS" class="button-common" style="background:#3c8dbc; color:white; padding: 5px 20px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        {% if students %}
+        <div style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 20px;">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="25%">Select Student to View Courses</td><td class="colon">:</td>
+                    <td>
+                        <select id="sel_student" class="dropdown" style="width: 350px !important;" onchange="loadStudentCourses(this.value)">
+                            <option value="">-- Select Student --</option>
+                            {% for s in students %}<option value="{{ s.pk_sid }}">{{ s.fullname }} ({{ s.AdmissionNo }})</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            </table>
+
+            <div id="course_grid_area" style="display:none; margin-top: 25px;">
+                <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">Allocated Courses</div>
+                <table class="table-grid-view">
+                    <thead>
+                        <tr class="header-style">
+                            <td width="60">S.No.</td><td>Course Code</td><td>Course Name</td><td>Credits (T+P)</td><td>Type</td><td>Approval Status</td>
+                        </tr>
+                    </thead>
+                    <tbody id="course_body"></tbody>
+                </table>
+                <div style="margin-top: 20px; text-align: center;">
+                    <input type="button" value="APPROVE ALL COURSES" class="button-common" style="background:#28a745; color:white; padding: 10px 30px;" onclick="approveAll()">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function loadStudentCourses(sid) {
+    if (!sid) {
+        document.getElementById('course_grid_area').style.display = 'none';
+        return;
+    }
+    fetch(`/academics/api/student_courses/${sid}?session_id={{ filters.session_id }}`)
+        .then(res => res.json())
+        .then(data => {
+            let html = '';
+            data.forEach((c, i) => {
+                const status = c.Teacher_AprrovalStatus === 'A' ? '<span style="color:green; font-weight:bold;">Approved</span>' : '<span style="color:orange; font-weight:bold;">Pending</span>';
+                html += `<tr class="${i % 2 !== 0 ? 'item-style-alt' : 'item-style'}">
+                    <td align="center">${i+1}</td>
+                    <td align="center"><b>${c.CourseCode}</b></td>
+                    <td>${c.CourseName}</td>
+                    <td align="center">${c.crhrth}+${c.crhrpr}</td>
+                    <td align="center">${c.coursetype || ''}</td>
+                    <td align="center">${status}</td>
+                </tr>`;
+            });
+            document.getElementById('course_body').innerHTML = html;
+            document.getElementById('course_grid_area').style.display = 'block';
+        });
+}
+
+function approveAll() {
+    const sid = document.getElementById('sel_student').value;
+    if (!sid) return;
+    if (confirm('Are you sure you want to approve all courses for this student?')) {
+        const formData = new FormData();
+        formData.append('student_id', sid);
+        formData.append('session_id', '{{ filters.session_id }}');
+        fetch('/academics/api/approve_courses', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    loadStudentCourses(sid);
+                }
+            });
+    }
+}
+</script>
+{% endblock %}

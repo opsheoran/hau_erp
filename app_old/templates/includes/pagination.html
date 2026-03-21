@@ -1,0 +1,48 @@
+{% if pagination and pagination.total_pages and pagination.total_pages > 1 %}
+{% set args = request.args.to_dict() %}
+{% set _ = args.pop('page', None) %}
+{% set pr = [] %} {# SLIDING_WINDOW #}
+{% if pagination.total_pages <= 15 %}
+  {% for i in range(1, pagination.total_pages + 1) %}{% set _ = pr.append(i) %}{% endfor %}
+{% else %}
+  {% if pagination.page <= 10 %}
+    {% for i in range(1, 11) %}{% set _ = pr.append(i) %}{% endfor %}
+    {% set _ = pr.append('...') %}{% set _ = pr.append(pagination.total_pages - 1) %}{% set _ = pr.append(pagination.total_pages) %}
+  {% elif pagination.page >= pagination.total_pages - 9 %}
+    {% set _ = pr.append(1) %}{% set _ = pr.append(2) %}{% set _ = pr.append('...') %}
+    {% for i in range(pagination.total_pages - 10, pagination.total_pages + 1) %}{% set _ = pr.append(i) %}{% endfor %}
+  {% else %}
+    {% set _ = pr.append(1) %}{% set _ = pr.append(2) %}{% set _ = pr.append('...') %}
+    {% for i in range(pagination.page - 3, pagination.page + 4) %}{% set _ = pr.append(i) %}{% endfor %}
+    {% set _ = pr.append('...') %}{% set _ = pr.append(pagination.total_pages - 1) %}{% set _ = pr.append(pagination.total_pages) %}
+  {% endif %}
+{% endif %}
+
+<div class="pager-style no-print">
+    {% if pagination.has_prev %}
+    <a href="{{ url_for(request.endpoint, page=pagination.page-1, **args) }}">&laquo; Prev</a>
+    {% else %}
+    <span class="disabled">&laquo; Prev</span>
+    {% endif %}
+
+    {% for p in pr %}
+        {% if p == '...' %}
+        <span class="disabled">...</span>
+        {% elif p == pagination.page %}
+        <span class="active">{{ p }}</span>
+        {% else %}
+        <a href="{{ url_for(request.endpoint, page=p, **args) }}">{{ p }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if pagination.has_next %}
+    <a href="{{ url_for(request.endpoint, page=pagination.page+1, **args) }}">Next &raquo;</a>
+    {% else %}
+    <span class="disabled">Next &raquo;</span>
+    {% endif %}
+
+    <span class="disabled" style="border: none; margin-left: 8px;">
+        Page {{ pagination.page }} of {{ pagination.total_pages }} (Total {{ pagination.total }})
+    </span>
+</div>
+{% endif %}

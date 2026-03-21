@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="GET" id="aspnetForm_GET">
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="6" class="tableheading">
+                    <span class="mainheadingborderbottom">Assign webpages rights to the Multiple User</span>
+                </td>
+            </tr>
+            <tr><td colspan="6" height="10"></td></tr>
+            <tr>
+                <td class="vtext" width="15%">User Type</td>
+                <td class="colon" width="2%">:</td>
+                <td width="30%">
+                    <span class="chkbox">
+                        <input type="radio" name="user_type" value="HOD" id="typeHOD" {% if sel_type == 'HOD' %}checked{% endif %} onchange="this.form.submit()">
+                        <label for="typeHOD">HOD</label>
+                        <span style="margin-left:15px;"></span>
+                        <input type="radio" name="user_type" value="Teacher" id="typeTeacher" {% if sel_type == 'Teacher' %}checked{% endif %} onchange="this.form.submit()">
+                        <label for="typeTeacher">Teacher</label>
+                    </span>
+                </td>
+                <td class="vtext" width="15%">Module Name</td>
+                <td class="colon" width="2%">:</td>
+                <td>
+                    <select name="module_id" id="ctl00_ContentPlaceHolder1_D_ddlModuleName" class="dropdownlong" onchange="this.form.submit()">
+                        <option value="">-- Select Module --</option>
+                        {% for m in modules %}
+                        <option value="{{ m.id }}" {% if sel_module == m.id|string %}selected{% endif %}>{{ m.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Select Location</td>
+                <td class="colon">:</td>
+                <td colspan="4">
+                    <select name="loc_id" id="ctl00_ContentPlaceHolder1_D_ddlLocation" class="dropdownlong" onchange="this.form.submit()">
+                        <option value=""> -- Select Location --</option>
+                        {% for l in locations %}
+                        <option value="{{ l.id }}" {% if sel_loc == l.id|string %}selected{% endif %}>{{ l.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+{% if sel_module and sel_loc %}
+<form method="POST" id="aspnetForm" style="margin-top:20px;">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="module_id" value="{{ sel_module }}">
+    <input type="hidden" name="loc_id" value="{{ sel_loc }}">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="3">
+                    <div class="tablesubheading">
+                        <span class="subheadingborderbottom">Select User(s)</span>
+                    </div>
+                    <div style="height: 250px; overflow-y: scroll; border: 1px solid #ccc; background: #fff; margin-top:5px;">
+                        <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1" style="border-collapse:collapse;" id="ctl00_ContentPlaceHolder1_gvUserDtl">
+                            <thead>
+                                <tr class="header-style">
+                                    <th width="50px">S.No.</th>
+                                    <th width="50px"><input type="checkbox" id="chkAllUsers" onclick="checkAllRows(this, 'user-chk')"></th>
+                                    <th align="left">Login ID</th>
+                                    <th align="left">Name</th>
+                                    <th align="left">Department</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for u in users %}
+                                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                    <td align="center">{{ loop.index }}</td>
+                                    <td align="center">
+                                        <input type="checkbox" name="user_ids" value="{{ u.id }}" class="user-chk">
+                                    </td>
+                                    <td><b>{{ u.loginname }}</b></td>
+                                    <td>{{ u.name }}</td>
+                                    <td>{{ u.dept_name or '' }}</td>
+                                </tr>
+                                {% endfor %}
+                                {% if not users %}
+                                <tr><td colspan="5" align="center" style="padding:15px; color:#999;">No users found for selected location/type.</td></tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr><td height="20"></td></tr>
+            <tr>
+                <td colspan="3">
+                    <div class="tablesubheading">
+                        <span class="subheadingborderbottom">Select Pages and Assign Rights</span>
+                    </div>
+                    <div style="height: 350px; overflow-y: scroll; border: 1px solid #ccc; background: #fff; margin-top:5px;">
+                        <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1" style="border-collapse:collapse;" id="ctl00_ContentPlaceHolder1_gvWebPages">
+                            <thead>
+                                <tr class="header-style">
+                                    <th width="50px">S.No</th>
+                                    <th width="50px"><input type="checkbox" id="chkAllPages" onclick="checkAllRows(this, 'page-chk')"></th>
+                                    <th align="left">Menu Name</th>
+                                    <th align="left">Parent Menu</th>
+                                    <th width="80px">ADD <input id="chkAllAdd" type="checkbox" onclick="chkAllCols(this, 'col-add')"></th>
+                                    <th width="80px">UPDATE <input id="chkAllUpdate" type="checkbox" onclick="chkAllCols(this, 'col-update')"></th>
+                                    <th width="80px">DELETE <input id="chkAllDelete" type="checkbox" onclick="chkAllCols(this, 'col-delete')"></th>
+                                    <th width="80px">SEARCH <input id="chkAllView" type="checkbox" onclick="chkAllCols(this, 'col-view')"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for p in pages %}
+                                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                    <td align="center">{{ loop.index }}</td>
+                                    <td align="center">
+                                        <input type="checkbox" name="page_ids" value="{{ p.id }}" class="page-chk">
+                                    </td>
+                                    <td style="font-weight:bold;">{{ p.name }}</td>
+                                    <td>{{ p.parent_name }}</td>
+                                    <td align="center"><input type="checkbox" name="allow_add" class="col-add"></td>
+                                    <td align="center"><input type="checkbox" name="allow_update" class="col-update"></td>
+                                    <td align="center"><input type="checkbox" name="allow_delete" class="col-delete"></td>
+                                    <td align="center"><input type="checkbox" name="allow_view" class="col-view" checked></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr><td height="20"></td></tr>
+            <tr>
+                <td align="center">
+                    <input type="submit" value="ASSIGN RIGHTS" class="button-common" style="height:35px; width:200px; font-weight:bold;" onclick="return validateAndSubmit()">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+{% else %}
+<div style="text-align:center; padding: 40px; color: #666; font-style: italic; border: 1px solid #ddd; background: #fafafa; margin-top:20px;">
+    Please select Module and Location to manage multiple user rights.
+</div>
+{% endif %}
+
+<script>
+function checkAllRows(master, className) {
+    document.querySelectorAll('.' + className).forEach(cb => cb.checked = master.checked);
+}
+
+function chkAllCols(master, className) {
+    document.querySelectorAll('.' + className).forEach(cb => cb.checked = master.checked);
+}
+
+function validateAndSubmit() {
+    const selectedUsers = document.querySelectorAll('.user-chk:checked').length;
+    const selectedPages = document.querySelectorAll('.page-chk:checked').length;
+
+    if (selectedUsers === 0) {
+        alert("Please select at least one User!");
+        return false;
+    }
+    if (selectedPages === 0) {
+        alert("Please select at least one Page!");
+        return false;
+    }
+
+    return confirm('Assign these rights to all selected users for all selected pages?');
+}
+</script>
+{% endblock %}

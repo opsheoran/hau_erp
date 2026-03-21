@@ -1,0 +1,160 @@
+<html>
+<head>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 1cm;
+        }
+        body { font-family: Arial, sans-serif; font-size: 9pt; line-height: 1.1; color: #000; }
+        .container { width: 100%; }
+        
+        .header-table { width: 100%; border-bottom: 1pt solid black; margin-bottom: 10pt; }
+        .uni-name { font-size: 13pt; font-weight: bold; text-align: center; }
+        .pay-title { font-size: 10pt; font-weight: bold; text-align: center; text-decoration: underline; margin-top: 5pt; }
+        
+        .info-table { width: 100%; margin-bottom: 10pt; }
+        .info-table td { padding: 1pt; vertical-align: top; font-size: 8pt; }
+        .lbl { font-weight: bold; width: 70pt; }
+        .colon { width: 5pt; }
+        
+        .data-table { width: 100%; border: 0.5pt solid black; border-collapse: collapse; }
+        .data-table th { background-color: #eee; border: 0.5pt solid black; padding: 3pt; font-weight: bold; text-align: center; }
+        .data-table td { border: 0.5pt solid black; padding: 2pt 4pt; vertical-align: top; }
+        
+        .grid-inner { width: 100%; border-collapse: collapse; }
+        .grid-inner td { border: none; padding: 1pt 0; font-size: 8pt; }
+        .amt { text-align: right; width: 50pt; }
+        
+        .totals-table { width: 100%; border: 0.5pt solid black; border-top: none; background-color: #f9f9f9; }
+        .totals-table td { padding: 4pt; font-weight: bold; border-right: 0.5pt solid black; }
+        
+        .words-box { margin-top: 10pt; border: 0.5pt solid black; padding: 5pt; font-weight: bold; }
+        .footer-table { width: 100%; margin-top: 30pt; }
+        .sig-box { border-top: 0.5pt solid black; width: 150pt; text-align: center; padding-top: 3pt; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section using Table for stability -->
+        <table class="header-table">
+            <tr>
+                <td width="15%" align="left">
+                    {% if logo_path %}
+                    <img src="{{ logo_path }}" width="50" height="50">
+                    {% endif %}
+                </td>
+                <td width="85%" align="center">
+                    <div class="uni-name">CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY, HISAR</div>
+                    <div class="pay-title">PAY SLIP FOR {{ s.month_name }} - {{ s.year }}</div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Employee Info Section -->
+        <table class="info-table">
+            <tr>
+                <td class="lbl">DEPARTMENT</td><td class="colon">:</td><td width="40%">{{ s.master.department|default('-', true) }}</td>
+                <td class="lbl">Scheme</td><td class="colon">:</td><td width="30%">{{ s.master.scheme_name|default('-', true) }}</td>
+            </tr>
+            <tr>
+                <td class="lbl">EMP NO</td><td class="colon">:</td><td>{{ s.master.empcode|default('-', true) }}</td>
+                <td class="lbl">PAY BAND</td><td class="colon">:</td><td>{{ s.master.level_name or '14' }}</td>
+            </tr>
+            <tr>
+                <td class="lbl">NAME</td><td class="colon">:</td><td>{{ s.master.empname|default('-', true) }}</td>
+                <td class="lbl">Grade Pay</td><td class="colon">:</td><td>{{ "{:.2f}".format(s.master.gradepay|default(0, true)) }}</td>
+            </tr>
+            <tr>
+                <td class="lbl">PAID DAYS</td><td class="colon">:</td><td>{{ "{:.2f}".format(s.master.ELDays|default(31, true)) }}</td>
+                <td class="lbl">PF Code</td><td class="colon">:</td><td>{{ s.master.gpf_nps_no|default('-', true) }}</td>
+            </tr>
+            <tr>
+                <td class="lbl">DESIG</td><td class="colon">:</td><td>{{ s.master.designation|default('-', true) }}</td>
+                <td class="lbl">DOB</td><td class="colon">:</td><td>{{ s.master.dob_fmt|default('-', true) }}</td>
+            </tr>
+            <tr>
+                <td class="lbl">BANK A/C</td><td class="colon">:</td><td>{{ s.master.bankaccountno|default('-', true) }}</td>
+                <td class="lbl">PAN NO</td><td class="colon">:</td><td>{{ s.master.panno|default('-', true) }}</td>
+            </tr>
+        </table>
+
+        <!-- Salary Data Grid -->
+        <table class="data-table">
+            <tr>
+                <th width="35%">EARNINGS</th>
+                <th width="35%">DEDUCTIONS</th>
+                <th width="30%">LOAN DETAILS</th>
+            </tr>
+            <tr>
+                <td>
+                    <table class="grid-inner">
+                        {% for e in s.earnings %}
+                        <tr>
+                            <td>{{ e.description }}</td>
+                            <td class="amt">{{ "{:,.2f}".format(e.paid_amount|default(0, true)) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+                <td>
+                    <table class="grid-inner">
+                        {% for d in s.deductions %}
+                        <tr>
+                            <td>{{ d.description }}</td>
+                            <td class="amt">{{ "{:,.2f}".format(d.paid_amount|default(0, true)) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+                <td>
+                    <table class="grid-inner" style="font-size: 7.5pt;">
+                        {% if s.loans %}
+                        <tr style="font-weight:bold;"><td>Loan</td><td class="amt">Ins.</td><td class="amt">Bal.</td></tr>
+                        {% for l in s.loans %}
+                        <tr>
+                            <td>{{ l.description }}</td>
+                            <td class="amt">{{ "{:,.0f}".format(l.InstalmentAmount|default(0, true)) }}</td>
+                            <td class="amt">{{ "{:,.0f}".format(l.balAmount|default(0, true)) }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr><td colspan="3" align="center">No Loans</td></tr>
+                        {% endif %}
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Totals Row -->
+        <table class="totals-table">
+            <tr>
+                <td width="35%">Total Earnings : <span style="display:inline-block; width: 50pt; text-align:right;">{{ "{:,.2f}".format(s.master.GrossTotal|default(0, true)) }}</span></td>
+                <td width="35%">Total Deductions : <span style="display:inline-block; width: 50pt; text-align:right;">{{ "{:,.2f}".format(s.master.TotalDeductions|default(0, true)) }}</span></td>
+                <td width="30%" border="none"></td>
+            </tr>
+        </table>
+
+        <!-- Net Payable words -->
+        <div class="words-box">
+            <table width="100%">
+                <tr>
+                    <td width="70%">Net Payable (in words): Rs. {{ s.net_words }}</td>
+                    <td width="30%" align="right" style="font-size: 11pt;">Net Pay: {{ "{:,.2f}".format(s.master.NetPay|default(0, true)) }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <table class="footer-table">
+            <tr>
+                <td width="60%" style="font-size: 8pt; vertical-align: bottom;">
+                    This is a computer generated document and does not require signature.
+                </td>
+                <td width="40%" align="right">
+                    <div class="sig-box">D.D.O/Officer Incharge</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+{% block extra_head %}
+<style>
+    .tablesubheading { 
+        background-color: #2d5a27 !important; 
+        color: #ffffff !important; 
+        font-weight: bold; 
+        padding: 5px 10px; 
+        font-size: 12px; 
+        border: 1px solid #1e3d1a; 
+        display: block; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+<div class="hau-card">
+    <div class="tablesubheading">Service Departure Details</div>
+    <div style="padding: 15px;">
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <td>S.No.</td><td>Employee Name</td><td>Leave Type</td><td>Requested Date</td><td>From Date</td><td>To Date</td><td>Total Leave Days</td><td>Status</td><td>Contact No.</td><td>Response</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for h in history %}
+                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                    <td align="center">{{ loop.index + (pagination.page - 1) * 10 }}</td>
+                    <td>{{ h.EmployeeName }}</td>
+                    <td>{{ h.LeaveType }}</td>
+                    <td align="center">{{ h.RequestedDate }}</td>
+                    <td align="center">{{ h.FromDate }}</td>
+                    <td align="center">{{ h.ToDate }}</td>
+                    <td align="right">{{ "{:.2f}".format(h.totalleavedays) }}</td>
+                    <td align="center">Approved</td>
+                    <td align="center">{{ h.contactno or '' }}</td>
+                    <td align="center">
+                        <a href="?req_id={{ h.RequestID }}" title="View Request">🔍</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not history %}
+                <tr><td colspan="10" align="center" style="padding:20px;">No Record Found!</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <!-- Standard Pagination -->
+        {% if pagination.total_pages > 1 %}
+        <div style="margin-top:10px; text-align:right; font-family:Verdana; font-size:11px;">
+            <span>Page {{ pagination.page }} of {{ pagination.total_pages }} </span>
+            {% if pagination.has_prev %}
+            <a href="?page={{ pagination.page - 1 }}" class="btn-hau">Previous</a>
+            {% endif %}
+            {% if pagination.has_next %}
+            <a href="?page={{ pagination.page + 1 }}" class="btn-hau" style="margin-left:5px;">Next</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if selected_req %}
+        <div style="margin-top:30px; border-top: 1px solid #ccc; padding-top:20px;">
+            <div class="tablesubheading">Add Departure Details</div>
+            <form method="POST">
+                <input type="hidden" name="req_id" value="{{ selected_req.pk_leavereqid }}">
+                <table class="form-table" style="margin-top:15px;">
+                    <tr>
+                        <td class="vtext" width="150">Departure Date</td><td class="colon">:</td>
+                        <td>
+                            <input type="date" name="date" class="textbox" value="{{ selected_req.fromdate.strftime('%Y-%m-%d') if selected_req.fromdate else '' }}" required>
+                            <select name="period" class="dropdown" style="margin-left:10px;">
+                                <option value="FN">FN</option>
+                                <option value="AN" selected>AN</option>
+                            </select> <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Remark</td><td class="colon">:</td>
+                        <td>
+                            <textarea name="remark" style="width:400px; height:50px;" class="textbox" required></textarea> <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td style="padding-top:15px;">
+                            <input type="submit" value="SUBMIT" class="button-common" style="background:#3c8dbc; color:white;">
+                            <input type="reset" value="RESET" class="button-common" style="margin-left:10px;">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

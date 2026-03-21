@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Student Degree Complete Detail</span></div>
+    
+    <div style="padding: 10px;">
+        <form method="GET" id="filterForm">
+            <input type="hidden" name="view" id="hdnView" value="{{ filters.view or '0' }}">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td colspan="4" class="required">
+                            <select name="college_id" id="ddlColleges" class="dropdown w-300" required onchange="handleCollegeChange()">
+                                <option value="0">--Select College--</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Academic Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" id="D_ddlAcdSession" class="dropdown w-200" required onchange="handleSessionChange()">
+                                <option value="0">--Select Academic Session--</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                        <td class="vtext" width="15%">Degree Complete Date</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <input type="date" name="comp_date" id="V_txtDegCompleteDate" class="textbox w-150" value="{{ now.strftime('%Y-%m-%d') }}"> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" id="ddlDegree" class="dropdown w-250" required onchange="handleDegreeChange()">
+                                <option value="">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                        <td class="vtext">Class</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="semester_id" id="ddlSemester" class="dropdown w-150">
+                                <option value="0">--Select Class--</option>
+                                {% for s in lookups.semesters %}
+                                <option value="{{ s.pk_semesterid }}" {% if filters.semester_id|string == s.pk_semesterid|string %}selected{% endif %}>{{ s.semester_roman }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="15"></td></tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="5">
+                            <input type="button" value="VIEW" class="button-common" style="width:100px;" onclick="triggerView()">
+                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:10px;" onclick="location.href='{{ url_for('academics.degree_complete_detail') }}'">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+        <div class="tablesubheading">List of Student</div>
+        <form method="POST">
+            <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4;">
+                <table class="table-grid-view" width="50%" align="center">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="10%">S.No.</th>
+                            <th width="15%">Select</th>
+                            <th width="30%">Enrollnment No.</th>
+                            <th>Student Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in students %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center">{{ loop.index }}</td>
+                            <td align="center"><input type="checkbox" name="chk_comp" value="{{ s.pk_sid }}"></td>
+                            <td align="left">{{ s.enrollmentno }}</td>
+                            <td>{{ s.fullname }}</td>
+                        </tr>
+                        {% else %}
+                        <tr class="item-style"><td colspan="4" align="center" style="padding:20px; color:#999;">Apply filters and press VIEW.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if students %}
+            <div style="text-align:center; margin-top:10px;">
+                <input type="submit" value="SAVE COMPLETION" class="button-common" style="width:150px;">
+            </div>
+            {% endif %}
+        </form>
+
+        <br><br>
+        <div class="tableheading"><span class="mainheadingborderbottom">Student Degree Complete Report</span></div>
+        <form id="reportForm">
+            <table border="0" class="form-table" width="100%">
+                <tr>
+                    <td class="vtext" width="15%">From Date</td>
+                    <td class="colon">:</td>
+                    <td class="required">
+                        <input type="date" name="from_date" id="from_date" class="textbox w-150" value="{{ now.strftime('%Y-01-01') }}"> *
+                    </td>
+                    <td class="vtext" width="15%">To Date</td>
+                    <td class="colon">:</td>
+                    <td class="required">
+                        <input type="date" name="to_date" id="to_date" class="textbox w-150" value="{{ now.strftime('%Y-%m-%d') }}"> *
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Report Format</td>
+                    <td class="colon">:</td>
+                    <td colspan="4">
+                        <input type="radio" name="format" value="word"> Word Format
+                        <input type="radio" name="format" value="excel"> Excel Format
+                        <input type="radio" name="format" value="pdf" checked> PDF Format
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top:10px;">
+                        <input type="button" value="GET REPORT" class="button-common" style="width:120px;" onclick="viewDegreeReport()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<script>
+function handleCollegeChange() {
+    document.getElementById('hdnView').value = '0';
+    document.getElementById('D_ddlAcdSession').value = '0';
+    document.getElementById('ddlDegree').innerHTML = '<option value="">--Select Degree--</option>';
+    document.getElementById('ddlSemester').innerHTML = '<option value="0">--Select Class--</option>';
+    document.getElementById('filterForm').submit();
+}
+
+function handleSessionChange() {
+    document.getElementById('hdnView').value = '0';
+    document.getElementById('ddlDegree').innerHTML = '<option value="">--Select Degree--</option>';
+    document.getElementById('ddlSemester').innerHTML = '<option value="0">--Select Class--</option>';
+    document.getElementById('filterForm').submit();
+}
+
+function handleDegreeChange() {
+    document.getElementById('hdnView').value = '0';
+    document.getElementById('ddlSemester').innerHTML = '<option value="0">--Select Class--</option>';
+    document.getElementById('filterForm').submit();
+}
+
+function triggerView() {
+    const sem = document.getElementById('ddlSemester').value;
+    if (!sem || sem === '0') {
+        alert("Please select Class (Semester) before viewing students.");
+        return;
+    }
+    document.getElementById('hdnView').value = '1';
+    document.getElementById('filterForm').submit();
+}
+
+function viewDegreeReport() {
+    alert("Degree completion report logic being implemented...");
+}
+</script>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .textbox-small { width: 150px !important; }
+    .textbox-medium { width: 250px !important; }
+    .textarea-medium { width: 363px !important; height: 60px !important; }
+    .required-star { color: red; font-weight: bold; }
+</style>
+
+<div class="hau-card">
+    <div class="tablesubheading">Activity Course Master</div>
+    <div style="padding: 15px;">
+        <form method="POST">
+            <input type="hidden" name="pk_id" id="ca_id">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Course Code</td><td class="colon">:</td>
+                    <td width="34%"><input type="text" name="code" id="ca_code" class="textbox textbox-small" required> <span class="required-star">*</span></td>
+                    <td class="vtext" width="15%">Course Name</td><td class="colon">:</td>
+                    <td><input type="text" name="name" id="ca_name" class="textbox textbox-medium" required> <span class="required-star">*</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Category</td><td class="colon">:</td>
+                    <td>
+                        <select name="category_id" id="ca_cat" class="dropdown textbox-medium" required>
+                            <option value="">-- Select Category --</option>
+                            {% for c in categories %}<option value="{{ c.pk_activityCategory_ID }}">{{ c.ActivityCategory_Desc }}</option>{% endfor %}
+                        </select> <span class="required-star">*</span>
+                    </td>
+                    <td class="vtext">Display Order</td><td class="colon">:</td>
+                    <td><input type="number" name="order" id="ca_order" class="textbox textbox-small" value="1"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top: 15px;">
+                        <input type="submit" value="SAVE COURSE" class="button-common" style="background:#3c8dbc; color:white; padding: 5px 20px;">
+                        <input type="button" value="RESET" class="button-common" style="margin-left:10px;" onclick="resetForm()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 40px;">
+            <div class="tablesubheading" style="background:#eee; color:#333; margin-bottom:10px;">Existing Course Activities</div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td width="60">Order</td><td>Code</td><td>Name</td><td>Category</td><td>EDIT</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in activities %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ a.CourseActivity_Order }}</td>
+                        <td align="center"><b>{{ a.CourseActivity_Code }}</b></td>
+                        <td>{{ a.CourseActivity_Name }}</td>
+                        <td>{{ a.ActivityCategory_Desc }}</td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editCA({{ a|tojson }})'>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function editCA(a) {
+    document.getElementById('ca_id').value = a.pk_CourseActivityID;
+    document.getElementById('ca_code').value = a.CourseActivity_Code;
+    document.getElementById('ca_name').value = a.CourseActivity_Name;
+    document.getElementById('ca_cat').value = a.fk_activityCategory_ID;
+    document.getElementById('ca_order').value = a.CourseActivity_Order;
+    window.scrollTo(0,0);
+}
+function resetForm() {
+    document.getElementById('ca_id').value = '';
+    document.querySelector('form').reset();
+}
+</script>
+{% endblock %}

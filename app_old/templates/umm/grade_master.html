@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Grade Master</span>
+    </div>
+    
+    <div style="padding: 15px;">
+        <form method="POST">
+            <input type="hidden" name="edit_id" value="{{ edit_data.pk_gradeid if edit_data else '' }}">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Grade Name</td><td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" name="gname" class="textbox" style="width: 150px;" value="{{ edit_data.gradename if edit_data else '' }}" required maxlength="6">
+                        <span style="color:red;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Grade Pay</td><td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" name="gpay" class="textbox" style="width: 150px;" value="{{ edit_data.gradepay if edit_data else '0' }}" required maxlength="6" onkeypress="return isNumberKey(event);">
+                        <span style="color:red;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Increment Type</td><td class="colon">:</td>
+                    <td class="required">
+                        <select name="inc_type" class="dropdown" style="width: 150px;">
+                            <option value="P" {% if edit_data and edit_data.inctype == 'P' %}selected{% endif %}>Percent</option>
+                            <option value="A" {% if edit_data and edit_data.inctype == 'A' %}selected{% endif %}>Fix Amount</option>
+                        </select>
+                        <span style="color:red;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Grade Code/Level</td><td class="colon">:</td>
+                    <td>
+                        <input type="text" name="gcode" class="textbox" style="width: 150px;" value="{{ edit_data.gradecode if edit_data else '' }}" maxlength="10">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Remarks</td><td class="colon">:</td>
+                    <td>
+                        <textarea name="remarks" class="textbox" style="width: 400px; height: 40px;">{{ edit_data.remarks if edit_data else '' }}</textarea>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td colspan="3" class="tablesubheading" style="padding-top: 20px;">
+                        <span class="subheadingborderbottom">Grade Amount Detail</span>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="vtext">G1</td><td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" name="g1" id="txtG1" class="textbox" style="width: 150px;" value="0" onkeypress="return isNumberKey(event);">
+                        <span style="color:red;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">G2</td><td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" name="g2" id="txtG2" class="textbox" style="width: 150px;" value="0" onkeypress="return isNumberKey(event);">
+                        <span style="color:red;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Special Pay (G3)</td><td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" name="g3" id="txtG3" class="textbox" style="width: 150px;" value="0">
+                        <span style="color:red;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">NPA (G4)</td><td class="colon">:</td>
+                    <td>
+                        <input type="text" name="g4" id="txtG4" class="textbox" style="width: 150px;" value="0">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Cyclo-Allowance (G5)</td><td class="colon">:</td>
+                    <td>
+                        <input type="text" name="g5" id="txtG5" class="textbox" style="width: 150px;" value="0">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Special Allowance (G6)</td><td class="colon">:</td>
+                    <td>
+                        <input type="text" name="g6" id="txtG6" class="textbox" style="width: 150px;" value="0">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Order</td><td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" name="order" id="txtOrder" class="textbox" style="width: 150px;" value="1" onkeypress="return isNumberKey(event);">
+                        <span style="color:red;">*</span>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td></td><td></td>
+                    <td style="padding-top: 15px;">
+                        <button type="submit" name="action" value="ADD_DETAIL" class="button-common">ADD</button>
+                        <button type="button" class="button-common" onclick="resetDetailFields()">RESET</button>
+                    </td>
+                </tr>
+                
+                {% if details %}
+                <tr>
+                    <td colspan="3" style="padding-top: 20px;">
+                        <table class="table-grid-view">
+                            <thead>
+                                <tr class="header-style">
+                                    <td>S.No.</td><td>G1</td><td>G2</td><td>Special Pay</td><td>NPA</td><td>Cyclo-Allowance</td><td>Special Allowance</td><td>Order</td><td>DELETE</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for d in details %}
+                                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                                    <td align="center">{{ loop.index }}</td>
+                                    <td align="center">{{ d.G1amount }}</td>
+                                    <td align="center">{{ d.G2amount }}</td>
+                                    <td align="center">{{ d.G3amount or '0' }}</td>
+                                    <td align="center">{{ d.G4amount or '' }}</td>
+                                    <td align="center">{{ d.G5amount or '' }}</td>
+                                    <td align="center">{{ d.G6amount or '' }}</td>
+                                    <td align="center">{{ d.Gorder }}</td>
+                                    <td align="center">
+                                        <a href="javascript:void(0);" onclick="editDetail('{{ d.pk_gdtlid }}', '{{ d.G1amount }}', '{{ d.G2amount }}', '{{ d.G3amount }}', '{{ d.G4amount }}', '{{ d.G5amount }}', '{{ d.G6amount }}', '{{ d.Gorder }}')">
+                                            <img src="{{ url_for('static', filename='images/Edit.gif') }}">
+                                        </a>
+                                    </td>
+                                    <td align="center">
+                                        <button type="submit" name="action" value="DELETE_DETAIL" onclick="document.getElementsByName('detail_id')[0].value='{{ d.pk_gdtlid }}';" style="background:none; border:none; padding:0; cursor:pointer;">
+                                            <img src="{{ url_for('static', filename='images/Delete.gif') }}">
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <input type="hidden" name="detail_id" value="">
+                    </td>
+                </tr>
+                {% endif %}
+                
+                <tr>
+                    <td colspan="3" style="padding-top: 30px; border-top: 1px solid #ddd;">
+                        <input type="submit" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" class="button-common">
+                        <a href="{{ url_for('umm.grade_master') }}" class="button-common" style="text-decoration:none; display:inline-block; padding: 2px 10px;">RESET</a>
+                        <input type="button" value="Print" class="button-common" onclick="window.print();">
+                        <span id="lblMsg" class="lblmessage" style="margin-left: 10px;"></span>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 40px;">
+            <div class="tablesubheading">
+                <span class="subheadingborderbottom">List of Grades</span>
+            </div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td>S. No.</td><td>Grade Details</td><td>Grade Pay</td><td>Increment Type</td><td>EDIT</td><td>DELETE</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for g in grades %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index + pagination.per_page * (pagination.page - 1) }}</td>
+                        <td>{{ g.gradedetails or '' }}</td>
+                        <td align="center">{{ g.gradepay or '0' }}</td>
+                        <td align="center">{{ 'Percent' if g.inctype == 'P' else 'Fix Amount' }}</td>
+                        <td align="center">
+                            <a href="{{ url_for('umm.grade_master', edit_id=g.id) }}">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}">
+                            </a>
+                        </td>
+                        <td align="center">
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="delete_id" value="{{ g.id }}">
+                                <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'includes/pagination.html' %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
+            return false;
+        return true;
+    }
+    
+    function resetDetailFields() {
+        document.getElementById('txtG1').value = '0';
+        document.getElementById('txtG2').value = '0';
+        document.getElementById('txtG3').value = '0';
+        document.getElementById('txtG4').value = '0';
+        document.getElementById('txtG5').value = '0';
+        document.getElementById('txtG6').value = '0';
+        document.getElementById('txtOrder').value = '1';
+        document.getElementsByName('detail_id')[0].value = '';
+        document.querySelector('button[value="ADD_DETAIL"]').innerText = 'ADD';
+    }
+
+    function editDetail(id, g1, g2, g3, g4, g5, g6, order) {
+        document.getElementById('txtG1').value = g1;
+        document.getElementById('txtG2').value = g2;
+        document.getElementById('txtG3').value = g3 === 'None' ? '0' : g3;
+        document.getElementById('txtG4').value = g4 === 'None' ? '0' : g4;
+        document.getElementById('txtG5').value = g5 === 'None' ? '0' : g5;
+        document.getElementById('txtG6').value = g6 === 'None' ? '0' : g6;
+        document.getElementById('txtOrder').value = order;
+        document.getElementsByName('detail_id')[0].value = id;
+        document.querySelector('button[value="ADD_DETAIL"]').innerText = 'UPDATE';
+        window.scrollTo(0, document.getElementById('txtG1').offsetTop - 100);
+    }
+</script>
+
+{% if get_flashed_messages() %}
+<script>
+    document.getElementById('lblMsg').innerText = "{{ get_flashed_messages()[0] }}";
+</script>
+{% endif %}
+{% endblock %}

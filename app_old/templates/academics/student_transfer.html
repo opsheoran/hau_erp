@@ -1,0 +1,479 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Student Transfer Details</span>
+    </div>
+
+    <div style="color:#CC0000; margin: 10px 0 15px 0;">
+        In order to Transfer Student, Admission No. should be generated first
+    </div>
+
+    <form id="filterForm" method="GET">
+        <table width="100%" class="filter-table">
+            <tr>
+                <td class="vtext">College</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="ddlCollege" class="dropdown w-350" onchange="onCollegeChange()">
+                        <option value="">-- Select College --</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Academic Session</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="session_id" id="ddlSession" class="dropdown w-250">
+                        <option value="">--Select Academic Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Degree</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="degree_id" id="ddlDegree" class="dropdown w-350" onchange="onDegreeChange()">
+                        <option value="">-- Select Degree --</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext">Class</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="semester_id" id="ddlSemester" class="dropdown w-200" onchange="loadYear()">
+                        <option value="">--Select Class--</option>
+                        {% for s in lookups.semesters %}
+                        <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="branch_id" id="ddlBranch" class="dropdown w-350">
+                        <option value="0">--Select Department--</option>
+                        {% for b in lookups.branches %}
+                        <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span style="color:#666;">(Optional)</span>
+                </td>
+                <td class="vtext">Year</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" id="txtYear" class="textbox w-200" value="" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Student Admission No.</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="admission_no" id="txtAdmissionNo" class="textbox w-250" value="{{ search.admission_no or '' }}">
+                </td>
+                <td class="vtext">Student Name</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="student_name" id="txtStudentName" class="textbox w-250" value="{{ search.student_name or '' }}">
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Report Format</td>
+                <td class="colon">:</td>
+                <td colspan="4">
+                    <label style="margin-right:12px;"><input type="radio" name="ui_rpt_format" value="1"> Word Format</label>
+                    <label style="margin-right:12px;"><input type="radio" name="ui_rpt_format" value="2"> Excel Format</label>
+                    <label style="margin-right:12px;"><input type="radio" name="ui_rpt_format" value="3" checked> PDF Format</label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4" style="padding-top: 6px;">
+                    <input type="submit" value="SEARCH" class="button-common" style="width:110px;">
+                    <input type="button" value="RESET" class="button-common" style="width:110px; margin-left:10px;" onclick="window.location.href='{{ url_for('academics_mgmt.student_transfer_details') }}'">
+                    <input type="button" value="VIEW REPORT" class="button-common" style="width:130px; margin-left:10px;" onclick="submitReport()">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <form id="reportForm" method="POST" style="display:none;">
+        <input type="hidden" name="action" value="VIEW_REPORT">
+        <input type="hidden" name="college_id" id="rCollege">
+        <input type="hidden" name="session_id" id="rSession">
+        <input type="hidden" name="degree_id" id="rDegree">
+        <input type="hidden" name="semester_id" id="rSemester">
+        <input type="hidden" name="branch_id" id="rBranch">
+        <input type="hidden" name="admission_no" id="rAdmissionNo">
+        <input type="hidden" name="student_name" id="rStudentName">
+        <input type="hidden" name="rpt_format" id="rFormat" value="3">
+    </form>
+
+    <div style="margin-top: 20px;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">Transfer Single Student</span>
+            <a href="#" style="margin-left:10px;" onclick="toggleSection('singlePanel'); return false;">Show / Hide</a>
+        </div>
+
+        <div id="singlePanel" style="display:none; padding:10px; border:1px solid #ddd; background:#fdfdfd;">
+            <form method="POST" onsubmit="return validateSingleTransfer()">
+                <input type="hidden" name="action" value="TRANSFER_SINGLE">
+                <table width="100%" class="filter-table">
+                    <tr>
+                        <td class="vtext">College</td>
+                        <td class="colon">:</td>
+                        <td class="required" colspan="3">
+                            <select name="single_college_id" id="singleCollege" class="dropdown w-350">
+                                <option value="">-- SELECT COLLEGE --</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}">{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Enter Old Admission No.</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <input type="text" name="old_admission_no" id="oldAdmNo" class="textbox w-250">
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Enter New Admission No.</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <input type="text" name="new_admission_no" id="newAdmNo" class="textbox w-250">
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td><td></td>
+                        <td style="padding-top:6px;">
+                            <input type="submit" value="SAVE" class="button-common" style="width:110px;">
+                            <input type="button" value="RESET" class="button-common" style="width:110px; margin-left:10px;" onclick="resetSingleTransfer()">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">Swap Students</span>
+            <a href="#" style="margin-left:10px;" onclick="toggleSection('swapPanel'); return false;">Show / Hide</a>
+        </div>
+
+        <div id="swapPanel" style="display:none; padding:10px; border:1px solid #ddd; background:#fdfdfd;">
+            <form method="POST" onsubmit="return validateSwap()">
+                <input type="hidden" name="action" value="SWAP">
+                <table width="100%" class="filter-table">
+                    <tr>
+                        <td class="vtext">College</td>
+                        <td class="colon">:</td>
+                        <td class="required" colspan="3">
+                            <select name="swap_college_id" id="swapCollege" class="dropdown w-350" onchange="clearSwapNames()">
+                                <option value="">-- SELECT COLLEGE --</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}">{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Admission No. of First Student</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <input type="text" name="admission_no_1" id="admNo1" class="textbox w-250" onblur="lookupSwapStudent('admNo1','name1')">
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext">Name of First Student</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <input type="text" id="name1" class="textbox w-250" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Admission No. of Second Student</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <input type="text" name="admission_no_2" id="admNo2" class="textbox w-250" onblur="lookupSwapStudent('admNo2','name2')">
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext">Name of Second Student</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <input type="text" id="name2" class="textbox w-250" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td><td></td>
+                        <td style="padding-top:6px;">
+                            <input type="submit" value="SWAP" class="button-common" style="width:110px; font-weight:normal;">
+                            <input type="button" value="RESET" class="button-common" style="width:110px; margin-left:10px;" onclick="resetSwap()">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <div style="margin-top: 25px;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">List of Students</span>
+        </div>
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <th style="width: 8%;">S No.</th>
+                    <th style="width: 55%;">Student Name</th>
+                    <th style="width: 25%;">Admission No.</th>
+                    <th style="width: 12%;">Print</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                    <td align="center">{{ loop.index + (pagination.page - 1) * pagination.per_page }}</td>
+                    <td>
+                        <a href="#" class="gridlink" onclick="printStudent('{{ item.AdmissionNo }}'); return false;">
+                            {{ item.fullname }}
+                        </a>
+                    </td>
+                    <td align="left">{{ item.AdmissionNo }}</td>
+                    <td align="center">
+                        <a href="#" title="Print" onclick="printStudent('{{ item.AdmissionNo }}'); return false;">
+                            <img src="{{ url_for('static', filename='images/print.gif') }}" alt="Print" border="0">
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" align="center" style="color: red; padding: 20px;">No records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% include "includes/pagination.html" %}
+    </div>
+</div>
+
+<script>
+function toggleSection(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'block' : 'none';
+}
+
+function setDisabled(selectEl, disabled) {
+    if (!selectEl) return;
+    selectEl.disabled = !!disabled;
+    if (disabled) {
+        selectEl.style.backgroundColor = '#eee';
+        selectEl.style.color = '#666';
+    } else {
+        selectEl.style.backgroundColor = '';
+        selectEl.style.color = '';
+    }
+}
+
+async function onCollegeChange() {
+    const collegeId = document.getElementById('ddlCollege').value;
+
+    // Reset dependent fields
+    document.getElementById('ddlSession').value = '';
+    document.getElementById('ddlDegree').innerHTML = '<option value="">-- Select Degree --</option>';
+    document.getElementById('ddlSemester').value = '';
+    document.getElementById('ddlBranch').innerHTML = '<option value="0">--Select Department--</option>';
+    document.getElementById('txtYear').value = '';
+    document.getElementById('txtAdmissionNo').value = '';
+    document.getElementById('txtStudentName').value = '';
+    setDisabled(document.getElementById('ddlSemester'), true);
+    setDisabled(document.getElementById('ddlBranch'), true);
+
+    if (!collegeId) return;
+    await loadDegrees(collegeId);
+}
+
+async function loadDegrees(collegeId) {
+    try {
+        const resp = await fetch(`{{ url_for('academics.get_college_degrees_api', college_id=0) }}`.replace('/0/', `/${collegeId}/`));
+        const rows = await resp.json();
+        const ddl = document.getElementById('ddlDegree');
+        ddl.innerHTML = '<option value="">-- Select Degree --</option>';
+        (rows || []).forEach(r => {
+            const opt = document.createElement('option');
+            opt.value = r.id;
+            opt.textContent = r.name;
+            ddl.appendChild(opt);
+        });
+    } catch (e) {
+        console.error('Degree load failed', e);
+    }
+}
+
+async function onDegreeChange() {
+    const degreeId = document.getElementById('ddlDegree').value;
+
+    // Reset semester/branch/year on degree change (as per live behavior)
+    document.getElementById('ddlSemester').value = '';
+    document.getElementById('txtYear').value = '';
+    document.getElementById('ddlBranch').innerHTML = '<option value="0">--Select Department--</option>';
+    setDisabled(document.getElementById('ddlBranch'), true);
+
+    setDisabled(document.getElementById('ddlSemester'), !degreeId);
+    if (!degreeId) return;
+
+    await loadBranches(degreeId);
+}
+
+async function loadBranches(degreeId) {
+    try {
+        const resp = await fetch(`{{ url_for('academics.get_degree_branches_api', degree_id=0) }}`.replace('/0', `/${degreeId}`));
+        const rows = await resp.json();
+        const ddl = document.getElementById('ddlBranch');
+        ddl.innerHTML = '<option value="0">--Select Department--</option>';
+        (rows || []).forEach(r => {
+            const opt = document.createElement('option');
+            opt.value = r.id;
+            opt.textContent = r.name;
+            ddl.appendChild(opt);
+        });
+        setDisabled(ddl, (rows || []).length === 0);
+    } catch (e) {
+        console.error('Branch load failed', e);
+        setDisabled(document.getElementById('ddlBranch'), true);
+    }
+}
+
+async function loadYear() {
+    const semId = document.getElementById('ddlSemester').value;
+    document.getElementById('txtYear').value = '';
+    if (!semId) return;
+    try {
+        const resp = await fetch(`{{ url_for('academics.get_semester_year_api', semester_id=0) }}`.replace('/0', `/${semId}`));
+        const row = await resp.json();
+        document.getElementById('txtYear').value = row.degreeyear_char || '';
+    } catch (e) {
+        console.error('Year load failed', e);
+    }
+}
+
+function submitReport() {
+    // Copy current UI selections into reportForm and submit as POST.
+    const requiredIds = ['ddlCollege', 'ddlSession', 'ddlDegree', 'ddlSemester'];
+    for (const id of requiredIds) {
+        const v = (document.getElementById(id).value || '').trim();
+        if (!v) {
+            alert('Please select College, Academic Session, Degree and Class first.');
+            return;
+        }
+    }
+
+    document.getElementById('rCollege').value = document.getElementById('ddlCollege').value;
+    document.getElementById('rSession').value = document.getElementById('ddlSession').value;
+    document.getElementById('rDegree').value = document.getElementById('ddlDegree').value;
+    document.getElementById('rSemester').value = document.getElementById('ddlSemester').value;
+    document.getElementById('rBranch').value = document.getElementById('ddlBranch').value || 0;
+    document.getElementById('rAdmissionNo').value = document.getElementById('txtAdmissionNo').value || '';
+    document.getElementById('rStudentName').value = document.getElementById('txtStudentName').value || '';
+
+    const fmt = document.querySelector('input[name="ui_rpt_format"]:checked');
+    document.getElementById('rFormat').value = fmt ? fmt.value : '3';
+
+    document.getElementById('reportForm').submit();
+}
+
+function printStudent(admNo) {
+    // Print is just a report for that Admission No within current filters.
+    document.getElementById('txtAdmissionNo').value = admNo || '';
+    submitReport();
+}
+
+function validateSingleTransfer() {
+    const c = (document.getElementById('singleCollege').value || '').trim();
+    const o = (document.getElementById('oldAdmNo').value || '').trim();
+    const n = (document.getElementById('newAdmNo').value || '').trim();
+    if (!c) { alert('Please select College'); return false; }
+    if (!o) { alert('Please enter Old Admission No.'); return false; }
+    if (!n) { alert('Please enter New Admission No.'); return false; }
+    if (o === n) { alert('Old and New Admission No. cannot be same.'); return false; }
+    return confirm('Update Admission No. for this student?');
+}
+
+function resetSingleTransfer() {
+    document.getElementById('singleCollege').value = '';
+    document.getElementById('oldAdmNo').value = '';
+    document.getElementById('newAdmNo').value = '';
+}
+
+function validateSwap() {
+    const c = (document.getElementById('swapCollege').value || '').trim();
+    const a1 = (document.getElementById('admNo1').value || '').trim();
+    const a2 = (document.getElementById('admNo2').value || '').trim();
+    if (!c) { alert('Please select College'); return false; }
+    if (!a1 || !a2) { alert('Please enter both Admission No. values.'); return false; }
+    if (a1 === a2) { alert('Admission No. values cannot be same.'); return false; }
+    return confirm('Swap Admission No. between these two students?');
+}
+
+function resetSwap() {
+    document.getElementById('swapCollege').value = '';
+    document.getElementById('admNo1').value = '';
+    document.getElementById('admNo2').value = '';
+    document.getElementById('name1').value = '';
+    document.getElementById('name2').value = '';
+}
+
+function clearSwapNames() {
+    document.getElementById('name1').value = '';
+    document.getElementById('name2').value = '';
+}
+
+async function lookupSwapStudent(admInputId, nameInputId) {
+    const collegeId = (document.getElementById('swapCollege').value || '').trim();
+    const admNo = (document.getElementById(admInputId).value || '').trim();
+    const nameEl = document.getElementById(nameInputId);
+    nameEl.value = '';
+    if (!collegeId || !admNo) return;
+    try {
+        const qs = new URLSearchParams({college_id: collegeId, admission_no: admNo}).toString();
+        const resp = await fetch(`{{ url_for('academics_mgmt.student_lookup') }}?${qs}`);
+        const row = await resp.json();
+        nameEl.value = row.fullname || '';
+    } catch (e) {
+        console.error('Lookup failed', e);
+    }
+}
+
+// Initialize dependent controls on first load
+(function initStudentTransfer() {
+    const hasDegree = !!(document.getElementById('ddlDegree').value || '').trim();
+    setDisabled(document.getElementById('ddlSemester'), !hasDegree);
+
+    const branchesCount = document.getElementById('ddlBranch').options.length;
+    setDisabled(document.getElementById('ddlBranch'), branchesCount <= 1);
+
+    loadYear();
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- SAVE FORM -->
+<form method="POST" id="degExamForm">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="pk_id">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="7">
+                    <span class="mainheadingborderbottom">Degree Exam Master</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Academic Session</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <select name="session_from" id="session_from" class="textbox w-150" required>
+                        <option value="">[Select]</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td width="5%"></td>
+                <td class="vtext" width="15%">Degree</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <select name="degree_id" id="degree_id" class="textbox w-150" required>
+                        <option value="">[Select]</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}">{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Exam</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="exam_id" id="exam_id" class="textbox w-150" required>
+                        <option value="">[Select]</option>
+                        {% for e in lookups.exams %}
+                        <option value="{{ e.pk_examid }}">{{ e.exam }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td colspan="4"></td>
+            </tr>
+            
+            <tr>
+                <td colspan="7" style="padding-top: 10px; color: red; font-size: 11px;">
+                    * * Please Create in order External-&gt;Internal-&gt;Assignment (if applicable)
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    <input type="submit" value="SAVE" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left: 10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<br>
+
+<!-- FILTER & LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="7">
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <span class="subheadingborderbottom">Degree Exam Search</span>
+                    <a href="javascript:void(0);" onclick="var el=document.getElementById('searchFilters'); el.style.display=(el.style.display==='none'?'':'none');" style="color: #66afe9; text-decoration: none; font-weight: bold; font-size: 11px;">Show / Hide</a>
+                </div>
+            </td>
+        </tr>
+        <tr id="searchFilters" style="display: none;">
+            <td colspan="7" style="padding: 10px 0;">
+                <form method="GET" style="display:inline-flex; align-items:center;">
+                    <strong class="vtext">Filter By Degree:</strong>&nbsp;
+                    <select name="filter_degree" class="textbox w-150" style="margin: 0 10px;">
+                        <option value="0">-- All --</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filter_degree|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" value="SEARCH" class="button-common">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td class="tablesubheading" colspan="7">
+                <span class="subheadingborderbottom">List of Degree Exams</span>
+            </td>
+        </tr>
+        <tr><td colspan="7" height="10"></td></tr>
+        <tr>
+            <td colspan="7">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th>Degree</th>
+                            <th>Exam</th>
+                            <th>Academic Session</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in mappings %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
+                            <td>{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td align="left"><b>{{ m.degreename }}</b></td>
+                            <td align="left">{{ m.exam }}</td>
+                            <td>{{ m.session_from_name }}</td>
+                            <td>
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editMap({{ m|tojson|safe }})'>
+                            </td>
+                            <td>
+                                <form method="POST" onsubmit="return confirm('Are you sure you want to delete this mapping?');" style="display:inline;">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ m.pk_dgexammapid }}">
+                                    <input type="hidden" name="filter_degree" value="{{ filter_degree or '' }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('examination.degree_exam_master', page=pagination.page-1, filter_degree=filter_degree) }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('examination.degree_exam_master', page=p, filter_degree=filter_degree) }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('examination.degree_exam_master', page=pagination.page+1, filter_degree=filter_degree) }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+function editMap(m) {
+    document.getElementById('pk_id').value = m.pk_dgexammapid;
+    document.getElementById('degree_id').value = m.fk_degreeid || '';
+    document.getElementById('exam_id').value = m.fk_examid || '';
+    document.getElementById('session_from').value = m.fk_acasessionid_from || '';
+    window.scrollTo(0,0);
+}
+
+function resetForm() {
+    document.getElementById('pk_id').value = '';
+    document.getElementById('degExamForm').reset();
+}
+</script>
+{% endblock %}

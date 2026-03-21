@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Student Personal Detail Report</span>
+    </div>
+
+    <div style="padding: 15px;">
+        <form method="POST">
+            <table class="form-table" width="100%">
+                <tr>
+                    <td class="vtext" width="15%">College</td>
+                    <td class="colon">:</td>
+                    <td width="30%">
+                        <select name="college_id" class="dropdown w-250">
+                            <option value="0">--Select College--</option>
+                            {% for c in lookups.colleges %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext" width="15%">Academic Session</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="session_id" class="dropdown w-200">
+                            <option value="0">--Select Session--</option>
+                            {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Degree</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="degree_id" class="dropdown w-250">
+                            <option value="0">--Select Degree--</option>
+                            {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext">Class</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="semester_id" class="dropdown w-150">
+                            <option value="0">--Select Class--</option>
+                            {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.semester_roman }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Report Type</td>
+                    <td class="colon">:</td>
+                    <td colspan="4" style="font-size:11px;">
+                        <label><input type="radio" name="rpt_type" value="1" checked> Registered Student</label>
+                        <label style="margin-left:15px;"><input type="radio" name="rpt_type" value="2"> Registration Cancelled</label>
+                        <label style="margin-left:15px;"><input type="radio" name="rpt_type" value="3"> Both</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Report Format</td>
+                    <td class="colon">:</td>
+                    <td colspan="4" style="font-size:11px;">
+                        <label><input type="radio" name="rpt_format" value="Excel"> Excel Format</label>
+                        <label style="margin-left:15px;"><input type="radio" name="rpt_format" value="PDF" checked> PDF Format</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top:15px;">
+                        <input type="submit" value="VIEW" class="button-common" style="width:100px;">
+                        <input type="button" value="RESET" class="button-common" onclick="location.reload()" style="margin-left:10px; width:100px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+{% endblock %}

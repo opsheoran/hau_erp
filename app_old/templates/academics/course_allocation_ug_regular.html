@@ -1,0 +1,341 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .DivStyleWithScroll {
+        height: 200px;
+        overflow-y: scroll;
+        border: 1px solid #ccc;
+        padding: 5px;
+        background-color: #fff;
+    }
+    .chkboxlist {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .chkboxlist td {
+        padding: 2px;
+    }
+    .chkboxlist label {
+        margin-left: 5px;
+        font-family: Verdana, sans-serif;
+        font-size: 11px;
+    }
+    .chkbox {
+        font-family: Verdana;
+        font-size: 11px;
+        font-weight: bold;
+    }
+</style>
+
+<form method="POST" action="{{ url_for('course_allocation.course_allocation_ug_regular') }}" id="aspnetForm">
+    <input type="hidden" name="action" id="actionField" value="">
+    <input type="hidden" name="fetch" id="fetchField" value="{{ filters.fetch or '' }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    
+    <table width="100%">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="2"><span class="mainheadingborderbottom">Student Course Allocation For UG(regular)</span></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table width="100%">
+                        <tbody>
+                            <tr>
+                                <td class="vtext" id="lblCollege">College</td>
+                                <td class="colon">:</td>
+                                <td class="required" colspan="4">
+                                    <select name="college_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlCollege" class="dropdownvvlong" onchange="this.form.submit()">
+                                        <option value="">-- Select College --</option>
+                                        {% for c in lookups.colleges %}
+                                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                        {% endfor %}
+                                    </select> *
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vtext" id="lblSession">Academic Session</td>
+                                <td class="colon">:</td>
+                                <td class="required">
+                                    <select name="session_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlSession" class="dropdown" onchange="this.form.submit()">
+                                        <option value="">-- Select Session --</option>
+                                        {% for s in lookups.sessions %}
+                                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                        {% endfor %}
+                                    </select> *
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vtext" id="lblDegree">Degree</td>
+                                <td class="colon">:</td>
+                                <td class="required">
+                                    <select name="degree_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlDegree" class="dropdown" onchange="this.form.submit()">
+                                        <option value="">-- Select Degree --</option>
+                                        {% for d in lookups.degrees %}
+                                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                        {% endfor %}
+                                    </select> *
+                                </td>
+                                <td class="vtext" id="lblSemester">Class</td>
+                                <td class="colon">:</td>
+                                <td class="required">
+                                    <select name="semester_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlSemester" class="dropdown" onchange="this.form.submit()">
+                                        <option value="">-- Select Class --</option>
+                                        {% for s in lookups.semesters %}
+                                        <option value="{{ s.id }}" {% if filters.semester_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                        {% endfor %}
+                                    </select> *
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vtext">Specialization</td>
+                                <td class="colon">:</td>
+                                <td class="required">
+                                    <select name="branch_id" id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_ddlBranch" class="dropdownlong" onchange="this.form.submit()">
+                                        <option value="">-- Select Specialization --</option>
+                                        {% for b in lookups.branches %}
+                                        <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                                        {% endfor %}
+                                    </select> *(mandatory for PG/PHd)
+                                </td>
+                                <td class="vtext">Year</td>
+                                <td class="colon">:</td>
+                                <td>
+                                    <input type="hidden" name="year" value="{{ filters.year or '' }}">
+                                    <select id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_ddlYear" class="dropdown" disabled="disabled">
+                                        {% if lookups.years %}
+                                            {% for y in lookups.years %}
+                                            <option value="{{ y.pk_degreeyearid }}" {% if filters.year|string == y.pk_degreeyearid|string %}selected{% endif %}>{{ y.degreeyear_char }}</option>
+                                            {% endfor %}
+                                        {% else %}
+                                            <option value="{{ filters.year or '' }}">{{ filters.year or '' }}</option>
+                                        {% endif %}
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr id="td_certificate_Batch" style="display:none;">
+                                <td class="vtext">Certificate Batch</td>
+                                <td class="colon">:</td>
+                                <td>
+                                    <select id="ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_ddlcertbatch" class="dropdown">
+                                        <option value="">-- Select Certificate Batch --</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table width="100%">
+                        <tbody>
+                            <tr>
+                                <td width="16%"></td>
+                                <td>
+                                    <input type="button" value="GET STUDENT" id="ctl00_ContentPlaceHolder1_btnGetStudents" onclick="getStudents()" class="button-common">
+                                    <input type="button" value="RESET" onclick="window.location.href='{{ url_for('course_allocation.course_allocation_ug_regular') }}'" class="button-common">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+                                        <tr>
+                                            <td class="vtext" width="16%">Exam Config&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</td>
+                                            <td>
+                                                <select name="exconfig_id" id="ctl00_ContentPlaceHolder1_ddlconfig" class="dropdownverylong" onchange="this.form.submit()" 
+                                                    {% if not filters.fetch == '1' and not filters.exconfig_id %}disabled="disabled" style="background-color: #e1e1e1;"{% endif %}>
+                                                    <option value="">-- Select Exam Config.--</option>
+                                                    {% for ec in lookups.exam_configs %}
+                                                    <option value="{{ ec.id }}" {% if filters.exconfig_id|string == ec.id|string %}selected{% endif %}>{{ ec.display_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+                        <!-- 1. LIST OF COURSES -->
+            <tr>
+                <td class="tablesubheading" colspan="2"><span class="subheadingborderbottom">List of Courses</span></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span class="chkbox">
+                        <input type="checkbox" id="ctl00_ContentPlaceHolder1_chkAllcorecourse" {% if courses %}checked="checked"{% endif %} onclick="toggleCheckboxes('ctl00_ContentPlaceHolder1_chkAllcorecourse', 'ctl00_ContentPlaceHolder1_chkCoreCourses')">
+                        <label for="ctl00_ContentPlaceHolder1_chkAllcorecourse">ALL</label>
+                    </span>
+                    <div id="ctl00_ContentPlaceHolder1_divcorecourse" class="DivStyleWithScroll">
+                        <table id="ctl00_ContentPlaceHolder1_chkCoreCourses" class="chkboxlist">
+                            <tbody>
+                                {% if courses %}
+                                    {% for c in courses %}
+                                    <tr>
+                                        <td>
+                                            <span>
+                                                <input type="checkbox" name="course_ids" value="{{ c.id }}" id="ctl00_ContentPlaceHolder1_chkCoreCourses_{{ loop.index0 }}" checked="checked">
+                                                <label for="ctl00_ContentPlaceHolder1_chkCoreCourses_{{ loop.index0 }}">{{ c.name }} / {{ c.code }} [{{ c.session_name or '' }}]</label>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr><td style="color:#999; padding:10px;">No courses found for the selected criteria.</td></tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- 2. LIST OF STUDENTS -->
+            <tr>
+                <td colspan="2" class="tablesubheading"><span class="subheadingborderbottom">List of Students</span></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span class="chkbox">
+                        <input type="checkbox" id="ctl00_ContentPlaceHolder1_chkAllstu" {% if students %}checked="checked"{% endif %} onclick="toggleCheckboxes('ctl00_ContentPlaceHolder1_chkAllstu', 'ctl00_ContentPlaceHolder1_chkStudents')">
+                        <label for="ctl00_ContentPlaceHolder1_chkAllstu">ALL</label>
+                    </span>
+                    <div id="ctl00_ContentPlaceHolder1_divStudent" class="DivStyleWithScroll">
+                        <table id="ctl00_ContentPlaceHolder1_chkStudents" class="chkboxlist">
+                            <tbody>
+                                {% if students %}
+                                    {% for s in students %}
+                                    <tr>
+                                        <td>
+                                            <span>
+                                                <input type="checkbox" name="student_ids" value="{{ s.id }}" id="ctl00_ContentPlaceHolder1_chkStudents_{{ loop.index0 }}" checked="checked">
+                                                <label for="ctl00_ContentPlaceHolder1_chkStudents_{{ loop.index0 }}">{{ s.name }} [{{ s.admission_no }}]</label>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr><td style="color:#999; padding:10px;">No students found for the selected criteria.</td></tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td align="center">
+                    <input type="button" value="SAVE" id="ctl00_ContentPlaceHolder1_btnSave" onclick="saveAllocation()" class="button-common" style="margin-right: 5px;">
+                </td>
+            </tr>
+
+            <tr><td colspan="2">&nbsp;</td></tr>
+
+            <!-- 3. LIST OF STUDENTS COURSE ALLOCATED -->
+            <tr>
+                <td colspan="2" class="tablesubheading"><span class="subheadingborderbottom">List of Students Course Allocated</span></td>
+            </tr>
+            <tr>
+                <td class="vtext" colspan="2">
+                    <div id="Div3" class="DivStyleWithScroll" style="width: 100%; height: 500px">
+                        <table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_gvStuSel" style="width:99%;border:1px solid #D4D4D4;border-collapse:collapse;">
+                            <tbody>
+                                <tr class="header-style">
+                                    <th scope="col" style="width:10%;">S.No.</th>
+                                    <th scope="col" style="width:15%;">Student Name</th>
+                                    <th scope="col" style="width:15%;">Course Name</th>
+                                    <th align="center" scope="col" style="width:20%;">UNPROCESS</th>
+                                </tr>
+                                {% if allocated_students %}
+                                    {% for s in allocated_students %}
+                                    <tr class="item-style" style="background-color:{{ 'White' if loop.index % 2 != 0 else '#FAFAFA' }};">
+                                        <td align="center" style="width:10%;">{{ loop.index }}</td>
+                                        <td align="center" style="width:15%;">
+                                            <a href="{{ url_for('academics.student_alert', sid=s.id) }}" onclick="window.open(this.href,'StudentAlert','width=1000,height=650,scrollbars=yes,resizable=yes'); return false;" style="color:Black;text-decoration:underline;">{{ s.name }} [{{ s.admission_no }}]</a>
+                                        </td>
+                                        <td align="center" style="width:15%;">
+                                            <span id="ctl00_ContentPlaceHolder1_gvStuSel_ctl0{{ loop.index + 1 }}_lblcoursename">{{ s.courses or 'Course Not Allotted' }}</span>
+                                        </td>
+                                        <td align="center" style="width:20%;">
+                                            {% if s.courses %}
+                                            <a href="javascript:void(0);" id="ctl00_ContentPlaceHolder1_gvStuSel_ctl0{{ loop.index + 1 }}_alertlinkcourse" onclick="deallocateStudent({{ s.id }})" style="color:Blue;text-decoration:underline;">Unprocess</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr class="item-style">
+                                        <td colspan="4" align="center" style="padding:20px; color:#999;">No allocations found for the selected Exam Config.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<!-- Hidden form for deallocation -->
+<form id="deallocateForm" method="POST" action="{{ url_for('course_allocation.course_allocation_ug_regular') }}">
+    <input type="hidden" name="action" value="DEALLOCATE">
+    <input type="hidden" name="deallocate_sid" id="deallocate_sid">
+    <input type="hidden" name="exconfig_id" value="{{ filters.exconfig_id or '' }}">
+    <input type="hidden" name="college_id" value="{{ filters.college_id or '' }}">
+    <input type="hidden" name="session_id" value="{{ filters.session_id or '' }}">
+    <input type="hidden" name="degree_id" value="{{ filters.degree_id or '' }}">
+    <input type="hidden" name="branch_id" value="{{ filters.branch_id or '' }}">
+    <input type="hidden" name="semester_id" value="{{ filters.semester_id or '' }}">
+    <input type="hidden" name="year" value="{{ filters.year or '' }}">
+    <input type="hidden" name="fetch" value="{{ filters.fetch or '1' }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+</form>
+
+<script>
+    function getStudents() {
+        if (!document.getElementById('ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlCollege').value || 
+            !document.getElementById('ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlSession').value || 
+            !document.getElementById('ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlDegree').value || 
+            !document.getElementById('ctl00_ContentPlaceHolder1_SMSUC_StuCourseAllocForUG1_D_ddlSemester').value) {
+            alert('Please select College, Session, Degree and Class first.');
+            return;
+        }
+        document.getElementById('fetchField').value = '1';
+        document.getElementById('aspnetForm').submit();
+    }
+
+    function saveAllocation() {
+        const studentCheckboxes = document.querySelectorAll('input[name="student_ids"]:checked');
+        const courseCheckboxes = document.querySelectorAll('input[name="course_ids"]:checked');
+        
+        if (studentCheckboxes.length === 0 || courseCheckboxes.length === 0) {
+            alert('Please select at least one student and one course.');
+            return;
+        }
+        
+        if (!document.getElementById('ctl00_ContentPlaceHolder1_ddlconfig').value) {
+            alert('Please select Exam Config.');
+            return;
+        }
+
+        document.getElementById('actionField').value = 'SAVE';
+        document.getElementById('aspnetForm').submit();
+    }
+
+    function toggleCheckboxes(masterId, containerId) {
+        const master = document.getElementById(masterId);
+        const container = document.getElementById(containerId);
+        const checkboxes = container.getElementsByTagName('input');
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].type === 'checkbox') {
+                checkboxes[i].checked = master.checked;
+            }
+        }
+    }
+
+    function deallocateStudent(sid) {
+        if(confirm('Are you sure you want to unprocess this student?')) {
+            document.getElementById('deallocate_sid').value = sid;
+            document.getElementById('deallocateForm').submit();
+        }
+    }
+</script>
+{% endblock %}

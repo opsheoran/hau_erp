@@ -1,0 +1,478 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .inner-tabbing { border-bottom: 2px solid #3c8dbc; margin-bottom: 15px; }
+    .inner-tab { 
+        display: inline-block; padding: 6px 15px; cursor: pointer; background: #eee; 
+        border: 1px solid #ddd; border-bottom: none; margin-right: 3px; font-size: 11px;
+        font-weight: bold;
+    }
+    .inner-tab.active { background: #3c8dbc; color: #fff; border-color: #3c8dbc; }
+    .tab-content { display: none; padding: 10px; border: 1px solid #ddd; border-top: none; background: #fff; }
+    .tab-content.active { display: block; }
+    .required { color: red; font-weight: bold; }
+</style>
+
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Student Registration</span>
+    </div>
+
+    <!-- INTERNAL TABS -->
+    <div class="inner-tabbing" style="padding: 0 15px;">
+        <div class="inner-tab active" id="btn-basic" onclick="showTab('basic')">Basic Details</div>
+        <div class="inner-tab" id="btn-qualification" onclick="showTab('qualification')">Qualification</div>
+        <div class="inner-tab" id="btn-certificate" onclick="showTab('certificate')">Certificate</div>
+        <div class="inner-tab" id="btn-cancel" onclick="showTab('cancel')">Registration Cancel</div>
+    </div>
+
+    <form method="POST" id="regForm" enctype="multipart/form-data">
+        <!-- BASIC DETAILS TAB -->
+        <div id="tab-basic" class="tab-content active">
+            <table class="form-table" width="100%">
+                <tr>
+                    <td class="tablesubheading" colspan="6"><span class="subheadingborderbottom">Basic Details</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext" width="15%">Student Name</td><td class="colon">:</td>
+                    <td width="35%">
+                        <select name="salutation_id" class="dropdown w-75">
+                            {% for s in lookups.salutations %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                        </select>
+                        <input type="text" name="fullname" class="textbox w-150" required> <span class="required">*</span>
+                    </td>
+                    <td class="vtext" width="15%">Mother's Name</td><td class="colon">:</td>
+                    <td><input type="text" name="mname" class="textbox w-200" required> <span class="required">*</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Father's Name</td><td class="colon">:</td>
+                    <td><input type="text" name="fname" class="textbox w-200"></td>
+                    <td class="vtext">Student 's Name(in hindi)</td><td class="colon">:</td>
+                    <td><input type="text" name="fullname_hindi" class="textbox w-200"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Mother 's Name(in hindi)</td><td class="colon">:</td>
+                    <td><input type="text" name="mname_hindi" class="textbox w-200"></td>
+                    <td class="vtext">Father 's Name(in hindi)</td><td class="colon">:</td>
+                    <td><input type="text" name="fname_hindi" class="textbox w-200"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">College</td><td class="colon">:</td>
+                    <td colspan="4">
+                        <select name="college_id" class="dropdown w-300" required>
+                            <option value="">--Select College--</option>
+                            {% for c in lookups.colleges %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Admitted Session</td><td class="colon">:</td>
+                    <td>
+                        <select name="session_id" class="dropdown w-200" required>
+                            <option value="">--Select Academic Session--</option>
+                            {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                    <td class="vtext">Admission No.</td><td class="colon">:</td>
+                    <td><input type="text" name="admission_no" class="textbox w-150" required> <span class="required">*</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Current Session</td><td class="colon">:</td>
+                    <td>
+                        <input type="text" value="2025-2026" class="textbox w-150" disabled> <span class="required">*</span>
+                    </td>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Degree</td><td class="colon">:</td>
+                    <td>
+                        <select name="degree_id" class="dropdown w-250" required>
+                            <option value="">--Select Degree--</option>
+                            {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                    <td class="vtext">Class</td><td class="colon">:</td>
+                    <td>
+                        <select name="semester_id" class="dropdown w-150" required>
+                            <option value="">--Select Class--</option>
+                            {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.semester_roman }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Specialization</td><td class="colon">:</td>
+                    <td>
+                        <select name="branch_id" class="dropdown w-250">
+                            <option value="">--Select Specialization--</option>
+                            {% for b in lookups.branches %}<option value="{{ b.id }}">{{ b.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                    <td class="vtext">Year</td><td class="colon">:</td>
+                    <td>
+                        <select name="year_id" class="dropdown w-150">
+                            <option value="">--Select Year--</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select> <span class="required">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Gender</td><td class="colon">:</td>
+                    <td>
+                        <select name="gender" class="dropdown w-100" required>
+                            <option value="0">--Select Gender--</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="T">Transgender</option>
+                        </select> <span class="required">*</span>
+                    </td>
+                    <td class="vtext">Date of Birth</td><td class="colon">:</td>
+                    <td><input type="date" name="dob" class="textbox w-150" required> <span class="required">*</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Qualifying/Institution Quota</td><td class="colon">:</td>
+                    <td>
+                        <select name="rank_id" class="dropdown w-200">
+                            <option value="0">--Select Qualifying/Institution Quota--</option>
+                            {% for r in lookups.ranks %}<option value="{{ r.id }}">{{ r.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext">Rank</td><td class="colon">:</td>
+                    <td><input type="text" name="rank_no" class="textbox w-100"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Nationality</td><td class="colon">:</td>
+                    <td>
+                        <select name="nid" class="dropdown w-200">
+                            <option value="0">--Select Nationality--</option>
+                            {% for n in lookups.nationalities %}<option value="{{ n.pk_nid }}" {% if n.name == 'INDIAN' %}selected{% endif %}>{{ n.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                    <td class="vtext">State</td><td class="colon">:</td>
+                    <td>
+                        <select name="state_id" class="dropdown w-200">
+                            <option value="0">--Select State--</option>
+                            {% for s in lookups.states %}<option value="{{ s.id }}" {% if s.name == 'Haryana' %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Religion</td><td class="colon">:</td>
+                    <td>
+                        <select name="religion_id" class="dropdown w-200">
+                            <option value="0">--Select Religion--</option>
+                            {% for r in lookups.religions %}<option value="{{ r.id }}">{{ r.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                    <td class="vtext">District</td><td class="colon">:</td>
+                    <td>
+                        <select name="district_id" class="dropdown w-200">
+                            <option value="0">--Select District--</option>
+                            {% for d in lookups.districts %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Category</td><td class="colon">:</td>
+                    <td>
+                        <select name="cat_id" class="dropdown w-200" required>
+                            <option value="0">--Select Category--</option>
+                            {% for c in lookups.categories %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                    <td class="vtext">Seat Type</td><td class="colon">:</td>
+                    <td>
+                        <select name="seat_type_id" class="dropdown w-200" required>
+                            <option value="0">--Select Seat Type--</option>
+                            {% for st in lookups.seat_types %}<option value="{{ st.id }}">{{ st.name }}</option>{% endfor %}
+                        </select> <span class="required">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Parent's Email Id</td><td class="colon">:</td>
+                    <td><input type="email" name="p_email" class="textbox w-250"></td>
+                    <td class="vtext">Student's Email Id</td><td class="colon">:</td>
+                    <td><input type="email" name="email" class="textbox w-250" required> <span class="required">*</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Parent's Contact No.</td><td class="colon">:</td>
+                    <td><input type="text" name="p_mobile" class="textbox w-150" maxlength="11"> <span class="required">*</span></td>
+                    <td class="vtext">Student's Contact No.</td><td class="colon">:</td>
+                    <td><input type="text" name="mobile" class="textbox w-150" required maxlength="11"> <span class="required">*</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Passport No.</td><td class="colon">:</td>
+                    <td><input type="text" name="passport_no" class="textbox w-200"></td>
+                    <td class="vtext">Place of Passport Issue</td><td class="colon">:</td>
+                    <td><input type="text" name="passport_place" class="textbox w-200"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Passport Expiry Date</td><td class="colon">:</td>
+                    <td><input type="date" name="passport_expiry" class="textbox w-150"></td>
+                    <td class="vtext">Admission Date</td><td class="colon">:</td>
+                    <td><input type="date" name="doa" class="textbox w-150" required> <span class="required">*</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Place of Birth</td><td class="colon">:</td>
+                    <td><input type="text" name="birth_place" class="textbox w-200"></td>
+                    <td class="vtext">Reporting Date</td><td class="colon">:</td>
+                    <td><input type="date" name="report_date" class="textbox w-150" required> <span class="required">*</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Is Physically Handicapped?</td><td class="colon">:</td>
+                    <td><input type="checkbox" name="is_ph" class="chkbox"></td>
+                    <td class="vtext">Spot Admission?</td><td class="colon">:</td>
+                    <td><input type="checkbox" name="is_spot" class="chkbox"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Fee Exempted?</td><td class="colon">:</td>
+                    <td>
+                        <label><input type="radio" name="fee_exempted" value="0" checked> No</label>
+                        <label style="margin-left:10px;"><input type="radio" name="fee_exempted" value="1"> Yes</label>
+                    </td>
+                    <td class="vtext">Remarks</td><td class="colon">:</td>
+                    <td><textarea name="remarks" class="textbox w-200" style="height:40px;"></textarea></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Domicile</td><td class="colon">:</td>
+                    <td><input type="checkbox" name="is_domicile" class="chkbox"></td>
+                    <td class="vtext">Marital Status</td><td class="colon">:</td>
+                    <td>
+                        <label><input type="radio" name="marital_status" value="M"> Married</label>
+                        <label style="margin-left:10px;"><input type="radio" name="marital_status" value="S" checked> Single</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Aadhaar Number</td><td class="colon">:</td>
+                    <td><input type="text" name="aadhaar_no" class="textbox w-200" maxlength="12"></td>
+                    <td class="vtext">Lateral Entry</td><td class="colon">:</td>
+                    <td><input type="checkbox" name="is_lateral" class="chkbox"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Student USID</td><td class="colon">:</td>
+                    <td><input type="text" name="usid" class="textbox w-200"></td>
+                    <td class="vtext">Blood Group</td><td class="colon">:</td>
+                    <td>
+                        <select name="blood_group" class="dropdown w-150">
+                            <option value="">--Select Blood--</option>
+                            <option value="A+">A+</option><option value="A-">A-</option>
+                            <option value="B+">B+</option><option value="B-">B-</option>
+                            <option value="O+">O+</option><option value="O-">O-</option>
+                            <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Bank Name</td><td class="colon">:</td>
+                    <td><input type="text" name="bank_name" class="textbox w-250"></td>
+                    <td class="vtext">Bank A/C Number</td><td class="colon">:</td>
+                    <td><input type="text" name="bank_ac" class="textbox w-200"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">IFSC Code</td><td class="colon">:</td>
+                    <td><input type="text" name="bank_ifsc" class="textbox w-150"></td>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <td class="tableheading" colspan="6"><span class="mainheadingborderbottom">Address Details</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Current Address</td><td class="colon">:</td>
+                    <td class="required">
+                        <textarea name="p_address" class="textbox w-300" style="height:40px;"></textarea> *
+                    </td>
+                    <td class="vtext">Postal Address</td><td class="colon">:</td>
+                    <td class="required">
+                        <textarea name="postal_address" id="postal_address" class="textbox w-300" style="height:40px;"></textarea>
+                        <br><label style="font-size:10px;"><input type="checkbox" onclick="copyAddress(this)"> Same As</label> *
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top:20px;">
+                        <input type="submit" value="SAVE" class="button-common" style="width:120px; background:#3c8dbc; color:white;">
+                        <input type="button" value="COPY LAST ENTRY" class="button-common" style="width:140px; margin-left:10px;">
+                        <input type="button" value="RESET" class="button-common" onclick="location.reload()" style="margin-left:10px; width:100px;">
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- QUALIFICATION TAB -->
+        <div id="tab-qualification" class="tab-content">
+            <table class="table-grid-view" width="100%">
+                <thead>
+                    <tr class="header-style">
+                        <th width="5%">S.No.</th>
+                        <th>Exam</th>
+                        <th>Univ/Board</th>
+                        <th>Year</th>
+                        <th>Roll No.</th>
+                        <th>Max Marks</th>
+                        <th>Marks Obtained</th>
+                        <th>Percentage</th>
+                        <th>Subjects</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(1, 6) %}
+                    <tr class="{{ loop.cycle('item-style', 'item-style-alt') }}">
+                        <td align="center">{{ i }}</td>
+                        <td>
+                            <select name="exam_id[]" class="dropdown w-150">
+                                <option value="">---Select Exam Type---</option>
+                                {% for e in lookups.edu_types %}<option value="{{ e.id }}">{{ e.name }}</option>{% endfor %}
+                            </select>
+                        </td>
+                        <td><input type="text" name="board[]" class="textbox w-150"></td>
+                        <td><input type="text" name="year[]" class="textbox w-50" maxlength="4"></td>
+                        <td><input type="text" name="roll_no[]" class="textbox w-75"></td>
+                        <td><input type="text" name="max_marks[]" class="textbox w-50"></td>
+                        <td><input type="text" name="marks_obt[]" class="textbox w-50"></td>
+                        <td><input type="text" name="per[]" class="textbox w-50" readonly placeholder="Auto"></td>
+                        <td><input type="text" name="subjects[]" class="textbox w-150"></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div style="text-align:right; margin-top:10px;">
+                <input type="button" value="Add More" class="button-common">
+                <input type="submit" value="SAVE QUALIFICATION" class="button-common" style="background:#3c8dbc; color:white;">
+            </div>
+        </div>
+
+        <!-- CERTIFICATE TAB -->
+        <div id="tab-certificate" class="tab-content">
+            <table class="form-table" width="100%" style="margin-bottom:20px; border:1px solid #ddd; padding:10px; background:#fefefe;">
+                <tr>
+                    <td class="tablesubheading" colspan="6"><span class="subheadingborderbottom">Certificates Upload</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext" width="15%">Select Certificate</td><td class="colon">:</td>
+                    <td width="35%">
+                        <select name="upload_cert_id" id="ddlCert" class="dropdown w-250">
+                            <option value="">--Select Certificate--</option>
+                            {% for c in lookups.certificates %}
+                            <option value="{{ loop.index }}">{{ c.name }} {% if c.required %}(R){% endif %}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext" width="15%">Choose File</td><td class="colon">:</td>
+                    <td>
+                        <input type="file" name="cert_file" id="cert_file" class="textbox w-200">
+                        <input type="button" value="Upload" class="button-common" style="margin-left:10px;" onclick="uploadFile()">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" class="required" style="font-size:10px;">Individual Certificate size should not be more than 2MB (jpg, png, pdf)</td>
+                </tr>
+            </table>
+
+            <table class="table-grid-view" width="100%">
+                <thead>
+                    <tr class="header-style">
+                        <th width="5%">S.No.</th>
+                        <th>Certificate Name</th>
+                        <th width="20%">File Name</th>
+                        <th width="15%">Status</th>
+                        <th width="10%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="item-style">
+                        <td colspan="5" align="center" style="padding:20px; color:#999;">No certificates uploaded yet.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- CANCEL TAB -->
+        <div id="tab-cancel" class="tab-content">
+            <table class="form-table" width="100%">
+                <tr>
+                    <td class="tablesubheading" colspan="6"><span class="subheadingborderbottom">Registration Cancel Details</span></td>
+                </tr>
+                <tr>
+                    <td class="vtext" width="20%">Is Registration Cancelled?</td><td class="colon">:</td>
+                    <td>
+                        <label><input type="checkbox" name="is_reg_cancelled" value="YES" class="chkbox"> YES</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Admitted Session</td><td class="colon">:</td>
+                    <td>
+                        <select name="cancel_session_id" class="dropdown w-250">
+                            <option value="">--Select Academic Session--</option>
+                            {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Semester</td><td class="colon">:</td>
+                    <td>
+                        <select name="cancel_semester_id" class="dropdown w-200">
+                            <option value="">--Select Semester--</option>
+                            {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.semester_roman }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Remarks</td><td class="colon">:</td>
+                    <td><textarea name="cancel_remarks" class="textbox w-300" style="height:60px;"></textarea></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td style="padding-top:20px;">
+                        <input type="submit" value="SAVE CANCELLATION" class="button-common" style="background:#d9534f; color:white; border-color:#d43f3a;">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+
+<script>
+function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.inner-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    document.getElementById('btn-' + tabId).classList.add('active');
+}
+
+function copyAddress(chk) {
+    if(chk.checked) {
+        document.getElementById('postal_address').value = document.getElementsByName('p_address')[0].value;
+    } else {
+        document.getElementById('postal_address').value = '';
+    }
+}
+
+function uploadFile() {
+    const fileInput = document.getElementById('cert_file');
+    const certDdl = document.getElementById('ddlCert');
+    if(!fileInput.files[0]) return alert('Select a file first');
+    if(!certDdl.value) return alert('Select certificate type');
+
+    const formData = new FormData();
+    formData.append('cert_file', fileInput.files[0]);
+    formData.append('upload_cert_id', certDdl.value);
+
+    fetch('/academics/upload_certificate', {
+        method: 'POST',
+        body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+        if(data.success) {
+            alert('File uploaded: ' + data.filename);
+            // In a full implementation, refresh the uploaded list table here
+        } else {
+            alert('Upload failed: ' + data.message);
+        }
+    });
+}
+</script>
+{% endblock %}

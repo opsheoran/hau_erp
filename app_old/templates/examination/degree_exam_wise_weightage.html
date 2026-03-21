@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.hidden { display: none; }
+</style>
+
+<!-- SAVE FORM -->
+<form method="POST" id="weightForm">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="action" value="SAVE">
+    <input type="hidden" name="pk_id" id="pk_id">
+    <input type="hidden" name="dgexammapid" id="dgexammapid">
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td class="tableheading" colspan="7">
+                    <span class="mainheadingborderbottom">Degree Exam Wise Weightage</span>
+                </td>
+            </tr>
+            <tr><td colspan="7" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="15%">Degree</td>
+                <td class="colon">:</td>
+                <td width="30%">
+                    <select name="degree_id" id="degree_id" class="textbox w-150" required onchange="resetGrid()">
+                        <option value="">[Select]</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}">{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td width="5%"></td>
+                <td class="vtext" width="15%">Academic Session (From)</td>
+                <td class="colon">:</td>
+                <td width="35%">
+                    <select name="session_from" id="session_from" class="textbox w-150" required onchange="resetGrid()">
+                        <option value="">[Select]</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="vtext">Degree Exam</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="exam_id" id="exam_id" class="textbox w-150" required onchange="resetGrid()">
+                        <option value="">[Select]</option>
+                        {% for e in lookups.exams %}
+                        <option value="{{ e.pk_examid }}" data-th="{{ '1' if e.istheory else '0' }}" data-pr="{{ '1' if e.ispractical else '0' }}">{{ e.exam }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="required">*</span>
+                </td>
+                <td></td>
+                <td class="vtext">Academic Session (Upto)</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="session_to" id="session_to" class="textbox w-150">
+                        <option value="">[Select]</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Options</td>
+                <td class="colon">:</td>
+                <td colspan="5">
+                    <label style="font-weight:normal; font-size:11px; margin-right: 15px;">
+                        <input type="checkbox" name="is_course_based" id="is_course_based" onclick="toggleCourseGrid()"> Is Course Based?
+                    </label>
+                </td>
+            </tr>
+
+            <!-- Header Level Weightage (Shown if not course based) -->
+            <tr id="row_non_course" class="hidden">
+                <td class="vtext">Weightage Without Practical</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" name="cwop" id="cwop" class="textbox w-100" min="0" max="100"> %
+                </td>
+                <td></td>
+                <td class="vtext">Weightage With Practical</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="number" name="cwp" id="cwp" class="textbox w-100" min="0" max="100"> %
+                </td>
+            </tr>
+            
+            <tr><td colspan="7" height="15"></td></tr>
+            
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    <input type="button" value="GET COURSES" class="button-common" onclick="fetchCourses()">
+                    <input type="submit" value="SAVE" class="button-common" style="margin-left: 10px;">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left: 10px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- DYNAMIC COURSE GRID -->
+    <div id="course_grid_container" class="hidden" style="margin-top: 20px;">
+        <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 5px;">
+            <tr>
+                <td class="tablesubheading">
+                    <span class="subheadingborderbottom">Course Available</span>
+                </td>
+            </tr>
+        </table>
+        <table class="table-grid-view" width="90%" style="margin:0 auto;" id="courseGridTable">
+            <thead>
+                <tr class="header-style">
+                    <th width="5%">S.No.</th>
+                    <th>Course</th>
+                    <th width="10%">Semester</th>
+                    <th width="10%">Year</th>
+                    <th width="12%">Cr Hr(Theory+Prac.)</th>
+                    <th class="col-th" width="10%">Max. Marks(Theory)</th>
+                    <th class="col-th" width="10%">Min. Marks(Theory)</th>
+                    <th class="col-pr" width="10%">Max. Marks(Practical)</th>
+                    <th class="col-pr" width="10%">Min. Marks(Practical)</th>
+                </tr>
+            </thead>
+            <tbody id="courseGridBody">
+            </tbody>
+        </table>
+    </div>
+</form>
+
+<br>
+
+<!-- FILTER & LIST VIEW -->
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr>
+            <td class="tablesubheading" colspan="7">
+                <span class="subheadingborderbottom">List of Weightages</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7" style="padding: 10px 0;">
+                <form method="GET" style="display:inline-flex; align-items:center;">
+                    <strong class="vtext">Degree:</strong>&nbsp;
+                    <select name="filter_degree" class="textbox w-150" style="margin: 0 10px;">
+                        <option value="0">-- All --</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <strong class="vtext">Session:</strong>&nbsp;
+                    <select name="filter_session" class="textbox w-150" style="margin: 0 10px;">
+                        <option value="0">-- All --</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <input type="submit" value="SEARCH" class="button-common">
+                </form>
+            </td>
+        </tr>
+        <tr><td colspan="7" height="10"></td></tr>
+        <tr>
+            <td colspan="7">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th>Degree</th>
+                            <th>Session From</th>
+                            <th>Degree Exam</th>
+                            <th>Is Course Based?</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for w in weightages %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
+                            <td>{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
+                            <td align="left"><b>{{ w.degreename }}</b></td>
+                            <td>{{ w.session_from_name }}</td>
+                            <td>{{ w.exam }}</td>
+                            <td><span class="chkbox"><input type="checkbox" disabled="disabled" {% if w.iscoursebasedwei %}checked="checked"{% endif %}/></span></td>
+                            <td>
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editWeightage({{ w|tojson|safe }})'>
+                            </td>
+                            <td>
+                                <form method="POST" onsubmit="return confirm('Are you sure you want to delete this weightage?');" style="display:inline;">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                                    <input type="hidden" name="action" value="DELETE">
+                                    <input type="hidden" name="id" value="{{ w.pk_dgexamweid }}">
+                                    <input type="hidden" name="filter_degree" value="{{ filters.degree_id or '' }}">
+                                    <input type="hidden" name="filter_session" value="{{ filters.session_id or '' }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}" alt="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if pagination.total_pages > 1 %}
+                <div class="pager-style">
+                    {% if pagination.has_prev %}
+                        <a href="{{ url_for('examination.degree_exam_wise_weightage', page=pagination.page-1, filter_degree=filters.degree_id, filter_session=filters.session_id) }}">&lt;</a>
+                    {% else %}
+                        <span class="disabled">&lt;</span>
+                    {% endif %}
+
+                    {% for p in page_range %}
+                        {% if p == '...' %}
+                            <span>{{ p }}</span>
+                        {% elif p == pagination.page %}
+                            <span class="active">{{ p }}</span>
+                        {% else %}
+                            <a href="{{ url_for('examination.degree_exam_wise_weightage', page=p, filter_degree=filters.degree_id, filter_session=filters.session_id) }}">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                        <a href="{{ url_for('examination.degree_exam_wise_weightage', page=pagination.page+1, filter_degree=filters.degree_id, filter_session=filters.session_id) }}">&gt;</a>
+                    {% else %}
+                        <span class="disabled">&gt;</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+let existingDetails = [];
+
+function toggleCourseGrid() {
+    const isCourse = document.getElementById('is_course_based').checked;
+    if(isCourse) {
+        document.getElementById('row_non_course').classList.add('hidden');
+        document.getElementById('course_grid_container').classList.remove('hidden');
+    } else {
+        document.getElementById('row_non_course').classList.remove('hidden');
+        document.getElementById('course_grid_container').classList.add('hidden');
+    }
+}
+
+function resetGrid() {
+    document.getElementById('courseGridBody').innerHTML = '';
+}
+
+function fetchCourses(callback) {
+    const degree_id = document.getElementById('degree_id').value;
+    const session_from = document.getElementById('session_from').value;
+    const exam_id = document.getElementById('exam_id').value;
+    
+    if(!degree_id || !session_from || !exam_id) {
+        alert("Please select Degree, Session From, and Exam.");
+        return;
+    }
+    
+    const selExam = document.getElementById('exam_id');
+    const opt = selExam.options[selExam.selectedIndex];
+    const isTh = opt.getAttribute('data-th') === '1';
+    const isPr = opt.getAttribute('data-pr') === '1';
+
+    // Toggle column visibility based on exam nature
+    document.querySelectorAll('.col-th').forEach(el => el.style.display = isTh ? '' : 'none');
+    document.querySelectorAll('.col-pr').forEach(el => el.style.display = isPr ? '' : 'none');
+    
+    fetch(`{{ url_for('examination.get_courses_for_exam_weightage') }}?degree_id=${degree_id}&exam_id=${exam_id}&session_id=${session_from}`)
+        .then(res => res.json())
+        .then(data => {
+            if(data.error) {
+                alert(data.error);
+                return;
+            }
+            document.getElementById('dgexammapid').value = data.dgmapid;
+            const tbody = document.getElementById('courseGridBody');
+            let html = '';
+            data.courses.forEach((c, idx) => {
+                let maxTh='', minTh='', maxPr='', minPr='';
+                if(existingDetails && existingDetails.length > 0) {
+                    const match = existingDetails.find(d => String(d.fk_courseid) === String(c.fk_courseid));
+                    if(match) {
+                        maxTh = match.maxmarks_th || '';
+                        minTh = match.minmarks_th || '';
+                        maxPr = match.maxmarks_pr || '';
+                        minPr = match.minmarks_pr || '';
+                    }
+                }
+                
+                html += `
+                <tr class="${idx % 2 === 0 ? 'item-style-alt' : 'item-style'}" align="center">
+                    <td>${idx + 1}
+                        <input type="hidden" name="sem_${c.fk_courseid}" value="${c.fk_semesterid}">
+                    </td>
+                    <td align="left">${c.coursecode} / ${c.coursename}</td>
+                    <td>${c.semester_roman || ''}</td>
+                    <td>${c.year_name || ''}</td>
+                    <td>${c.crhr_theory || '0'}+${c.crhr_practical || '0'}</td>
+                    <td class="col-th" style="display:${isTh ? '' : 'none'};"><input type="number" step="0.01" name="max_th_${c.fk_courseid}" value="${maxTh}" class="textbox w-100"></td>
+                    <td class="col-th" style="display:${isTh ? '' : 'none'};"><input type="number" step="0.01" name="min_th_${c.fk_courseid}" value="${minTh}" class="textbox w-100"></td>
+                    <td class="col-pr" style="display:${isPr ? '' : 'none'};"><input type="number" step="0.01" name="max_pr_${c.fk_courseid}" value="${maxPr}" class="textbox w-100"></td>
+                    <td class="col-pr" style="display:${isPr ? '' : 'none'};"><input type="number" step="0.01" name="min_pr_${c.fk_courseid}" value="${minPr}" class="textbox w-100"></td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+            
+            if(callback) callback();
+        });
+}
+
+function editWeightage(w) {
+    document.getElementById('pk_id').value = w.pk_dgexamweid;
+    document.getElementById('degree_id').value = w.fk_degreeid || '';
+    document.getElementById('session_from').value = w.fk_sessionid_from || '';
+    document.getElementById('session_to').value = w.fk_sessionid_upto || '';
+    document.getElementById('exam_id').value = w.fk_examid || '';
+    
+    document.getElementById('is_course_based').checked = !!w.iscoursebasedwei;
+    document.getElementById('cwp').value = w.cwp || '';
+    document.getElementById('cwop').value = w.cwop || '';
+    
+    existingDetails = w.details || [];
+    toggleCourseGrid();
+    
+    if(w.iscoursebasedwei) {
+        fetchCourses();
+    }
+    
+    window.scrollTo(0,0);
+}
+
+function resetForm() {
+    document.getElementById('pk_id').value = '';
+    document.getElementById('dgexammapid').value = '';
+    existingDetails = [];
+    document.getElementById('weightForm').reset();
+    resetGrid();
+    toggleCourseGrid();
+}
+</script>
+{% endblock %}

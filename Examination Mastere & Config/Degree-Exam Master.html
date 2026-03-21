@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<!-- saved from url=(0073)https://hauiums.in/SMS/ExRes/SMS_DgExam_Mst.aspx?wpid=49751787&Mwpid=4713 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style data-merge-styles="true"></style><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Degree-Exam Master_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Degree-Exam Master_files/default.css" type="text/css" rel="stylesheet"><link href="./Degree-Exam Master_files/font.css" type="text/css" rel="stylesheet"><link href="./Degree-Exam Master_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Degree-Exam Master_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/SMS/ExRes/SMS_DgExam_Mst.aspx?wpid=49751787&amp;Mwpid=4713" onkeypress="javascript:return WebForm_FireDefaultButton(event, &#39;ctl00_ContentPlaceHolder1_btnSave&#39;)" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./Degree-Exam Master_files/WebResource.axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Degree-Exam Master_files/WebResource(1).axd" type="text/javascript"></script>
+<script src="./Degree-Exam Master_files/WebResource(2).axd" type="text/javascript"></script>
+<script src="./Degree-Exam Master_files/WebResource(3).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="711FC1AD">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="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">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Degree-Exam Master_files/Examination.png">
+                            Examination &amp; Results
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/SMS/ExRes/SMS_DgExam_Mst.aspx?wpid=49751787&amp;Mwpid=4713#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> Rajbeer Singh</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> Rajbeer Singh</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COBS&amp;H, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/SMS/ExRes/SMS_DgExam_Mst.aspx?wpid=49751787&amp;Mwpid=4713#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Degree-Exam Master_files/WebResource(4).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Examination Masters &amp; Config." class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2414#" tabindex="-1">Examination Masters &amp; Config.</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Master and Configuration Management" class="level2 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4713" tabindex="-1">Master and Configuration Management</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:5" role="menuitem" style="position: relative; float: left;"><a title="Marks Entries" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2415#" tabindex="-1">Marks Entries</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:5" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Master and Configuration Management" class="level2 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4794" tabindex="-1">Marks Entry</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:8" role="menuitem" style="position: relative; float: left;"><a title="Post-Examination Activities" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2405#" tabindex="-1">Post-Examination Activities</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:8" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:9" role="menuitem" style="position: relative;"><a title="Marks Entry Approval" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8451#" tabindex="-1">Marks Entry Approval</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:9" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="HOD Marks Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_HOD_ApprovalWithChanges.aspx?Mwpid=5346" tabindex="-1">HOD Marks Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="COE Marks Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_COE_ApprovalWithChanges.aspx?Mwpid=5299" tabindex="-1">COE Marks Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Registrar Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_Registrar_ApprovalForm.aspx?Mwpid=5056" tabindex="-1">Registrar Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="DeanPGS Marks Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_DeanPGS_ApprovalWithChanges.aspx?Mwpid=5369" tabindex="-1">DeanPGS Marks Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="DeanPGS Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_DeanPGS_ApprovalForm.aspx?Mwpid=5349" tabindex="-1">DeanPGS Approval</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:16" role="menuitem" style="position: relative;"><a title="Marks Process" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8455#" tabindex="-1">Marks Process</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:16" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for UG and MBA" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_Lock.aspx?Mwpid=4750" tabindex="-1">Marks Process for UG and MBA</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for PG" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_ForPGPHD.aspx?Mwpid=5356" tabindex="-1">Marks Process for PG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for Summer" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_ForSummer.aspx?Mwpid=8432" tabindex="-1">Marks Process for Summer</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for Supplementary" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_SupplySummer.aspx?Mwpid=5347" tabindex="-1">Marks Process for Supplementary</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:22" role="menuitem" style="position: relative;"><a title="Others" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8456#" tabindex="-1">Others</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:22" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Grace Marks" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_GraceByCOE.aspx?Mwpid=5124" tabindex="-1">Grace Marks</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="RollNumber Encryption" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_CodingGeneration.aspx?Mwpid=5189" tabindex="-1">RollNumber Encryption</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Print Result Report" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksGrace.aspx?Mwpid=5203" tabindex="-1">Print Result Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Encrypted Roll Number Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_Course_Allocation_ReportSummaryResult_Rpt.aspx?Mwpid=5191" tabindex="-1">Encrypted Roll Number Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Grace Marks(Supplementary/Summer)" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_GraceByCOE_ForSupplySummer.aspx?Mwpid=5348" tabindex="-1">Grace Marks(Supplementary/Summer)</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Rechecking Status" class="level3 dynamic" href="https://hauiums.in/SMS/AdmAcd/SMS_Recheckingstatus.aspx?Mwpid=7376" tabindex="-1">Rechecking Status</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:31" role="menuitem" style="position: relative; float: left;"><a title="Results &amp; Grade Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2419#" tabindex="-1">Results &amp; Grade Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:31" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:32" role="menuitem" style="position: relative;"><a title="Marks Entry Status" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8446#" tabindex="-1">Marks Entry Status</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:32" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Entry Status for UG and MBA" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_MarksEntryStatus_dtl.aspx?Mwpid=5206" tabindex="-1">Marks Entry Status for UG and MBA</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Entry Status For PG/PHD" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_MarksEntryStatusPGPHD_dtl.aspx?Mwpid=6373" tabindex="-1">Marks Entry Status For PG/PHD</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Entry Status for Supplementary/Summer" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_MarksEntryStatus_dtl_For_SuppliSummer.aspx?Mwpid=8383" tabindex="-1">Marks Entry Status for Supplementary/Summer</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:37" role="menuitem" style="position: relative;"><a title="results" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8447#" tabindex="-1">Results</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:37" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for UG" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheetUG_YearBased.aspx?Mwpid=2420" tabindex="-1">Student Result for UG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for Supplementary" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheet_ForSupplySummer.aspx?Mwpid=5350" tabindex="-1">Student Result for Supplementary</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for PG and MBA" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheetPG_YearBased.aspx?Mwpid=5351" tabindex="-1">Student Result for PG and MBA</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for Summer" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheetSummer_YearBased.aspx?Mwpid=8434" tabindex="-1">Student Result for Summer</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:43" role="menuitem" style="position: relative;"><a title="Others" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8448#" tabindex="-1">Others</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:43" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Consolidate Results  " class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_ConsolidateResult.aspx?Mwpid=5172" tabindex="-1">Consolidate Results   </a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="DMC &amp; Notification Report" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_DMCNotification.aspx?Mwpid=5352" tabindex="-1">DMC &amp; Notification Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Print Degree Certificates" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_DegreeCertificatesForUG.aspx?Mwpid=8439" tabindex="-1">Print Degree Certificates for UG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Print Degree Certificates for PG" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_DegreeCertificatesForPG.aspx?Mwpid=8462" tabindex="-1">Print Degree Certificates for PG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Weightage Consolidate Report" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_Student_Weightage_Consolidate.aspx?Mwpid=5353" tabindex="-1">Weightage Consolidate Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="College/Subject Wise Topper List" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_CollegeSubjectWiseTopperList.aspx?Mwpid=8437" tabindex="-1">College/Subject Wise Topper List</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Certificate Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_TranscriptReportForUG.aspx?Mwpid=7377" tabindex="-1">Student Certificate Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Revised &amp; ReChecking Old_New Marks Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_Revised_ReEvaluation_Old_NewMarks.aspx?Mwpid=8387" tabindex="-1">Revised &amp; ReChecking Old_New Marks Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="UMC Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_UMCReport.aspx?Mwpid=8412" tabindex="-1">UMC Report</a></li>
+			</ul></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Examination Masters &amp; Config.</span>&nbsp;&gt;&nbsp;<span>Master and Configuration Management</span>&nbsp;&gt;&nbsp;<strong>Degree Exam Master</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Degree-Exam Master_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <table id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_Table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tbody><tr>
+		<td align="left" class="tabbing">
+                <div id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_div1" style="display:inline; width:100%">
+                <a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb1" title="Exam Master" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_Exam_Mst.aspx?wpid=2006066923&amp;Mwpid=4713" style="display:inline-block;width:110px;">Exam Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb2" title="Degree Exam Master" class="tabgs" href="https://hauiums.in/SMS/ExRes/SMS_DgExam_Mst.aspx?wpid=49751787&amp;Mwpid=4713" style="display:inline-block;width:110px;">Degree Exam Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb3" title="Degree Exam Wise Weightage" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_DgExamWeightage.aspx?wpid=23579587&amp;Mwpid=4713" style="display:inline-block;width:110px;">Degree Exam Wise Weightage</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb4" title="Exam Config Master" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_ExamConfig_MstDtl.aspx?wpid=-340479408&amp;Mwpid=4713" style="display:inline-block;width:110px;">Exam Config Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb5" title="External Examiner Detail" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_ExtExaminerDtl.aspx?wpid=-790621497&amp;Mwpid=4713" style="display:inline-block;width:110px;">External Examiner Detail</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb6" title="External Examiner Communication" class="tabg" href="https://hauiums.in/SMS/ExRes/SMS_SendEmail_Sms.aspx?wpid=1938065250&amp;Mwpid=4713" style="display:inline-block;width:110px;">External Examiner Communication</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb7" title="Update Weightage Post Marks Entry" class="tabg" href="https://hauiums.in/SMS/ExRes/UpdateWeightagePostMarksEntry.aspx?wpid=783094484&amp;Mwpid=4713" style="display:inline-block;width:110px;">Update Weightage Post Marks Entry</a></div>
+            </td>
+	</tr>
+</tbody></table>
+
+    <table border="0" style="width: 100%">
+        <tbody><tr>
+            <td colspan="6" class="tableheading">
+                Degree-Exam Master
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" style="width: 15%" id="lblSessionFrom">
+                Academic Session 
+            </td>
+            <td class="colon">
+                :
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlSessionFrom__"><select name="ctl00$ContentPlaceHolder1$D_ddlSessionFrom" id="ctl00_ContentPlaceHolder1_D_ddlSessionFrom" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlSessionFrom&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option selected="selected" value="-- Select Academic Session --">-- Select Academic Session --</option>
+	<option value="82">2026-2027 </option>
+	<option value="77">2025-2026 </option>
+	<option value="72">2024-2025 </option>
+	<option value="70">2023-2024 </option>
+	<option value="46">2022-2023 </option>
+	<option value="42">2021-2022 </option>
+	<option value="21">2020-2021 </option>
+	<option value="20">2019-2020 </option>
+	<option value="19">2018-2019 </option>
+	<option value="18">2017-2018 </option>
+	<option value="17">2016-2017 </option>
+	<option value="16">2015-2016 </option>
+	<option value="15">2014-2015 </option>
+	<option value="14">2013-2014 </option>
+	<option value="13">2012-2013 </option>
+	<option value="78">2011-2012 </option>
+	<option value="80">2010-2011 </option>
+	<option value="79">2009-2010 </option>
+
+</select></span>
+                *
+            </td>
+            
+        </tr>
+        <tr>
+            <td id="lblDegree" class="vtext" style="width: 15%">
+                Degree
+            </td>
+            <td class="colon">
+                :
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlDegree__"><select name="ctl00$ContentPlaceHolder1$D_ddlDegree" id="ctl00_ContentPlaceHolder1_D_ddlDegree" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlDegree&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option selected="selected" value="--Select Degree--">--Select Degree--</option>
+
+</select></span>
+                *
+            </td>
+            <td id="lblExam" class="vtext" style="width: 15%">
+                Exam
+            </td>
+            <td class="colon">
+                :
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlExam__"><select name="ctl00$ContentPlaceHolder1$D_ddlExam" id="ctl00_ContentPlaceHolder1_D_ddlExam" class="dropdown">
+	<option selected="selected" value="-- Select Exam --">-- Select Exam --</option>
+	<option value="13">Assignment </option>
+	<option value="7">External Practical </option>
+	<option value="3">External Theory </option>
+	<option value="18">Final Theory Internal</option>
+	<option value="15">Final Theory PG</option>
+	<option value="2">Internal Practical </option>
+	<option value="1">Internal Theory </option>
+	<option value="14">Midterm Theory PG</option>
+	<option value="16">Practical PG</option>
+
+</select></span>
+                *
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+            </td>
+            <td colspan="4">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnSave__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="SAVE" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSave&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;Saving...&#39;,true,btnSave_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSave" class="button-common" cellpadding="0" cellspacing="0"></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;Cleaning...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lblinfo__"><span id="ctl00_ContentPlaceHolder1_lblinfo"> * * Please Create in order External-&gt;Internal-&gt;Assignment (if applicable)</span></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" class="tdgap">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1" class="tablesubheading">
+                Degree Exam Search
+            </td>
+            <td class="tablesubheading" colspan="5">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lnkHide__"><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$lnkHide&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_lnkHide" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$lnkHide&#39;,&#39;&#39;)">Show / Hide</a></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_pnlSearch__"><div id="ctl00_ContentPlaceHolder1_pnlSearch" style="width:100%;">
+	
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                        <tbody><tr>
+                            <td class="vtext" style="width: 15%" id="Td1">
+                                 Academic Session
+                            </td>
+                            <td class="colon">
+                                :
+                            </td>
+                            <td>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlSessionFrom__"><!--START:ctl00$ContentPlaceHolder1$ddlSessionFrom--><select name="ctl00$ContentPlaceHolder1$ddlSessionFrom" id="ctl00_ContentPlaceHolder1_ddlSessionFrom" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlSessionFrom&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+		<option selected="selected" value="0">-- Select Academic Session --</option>
+		<option value="82">2026-2027 </option>
+		<option value="77">2025-2026 </option>
+		<option value="72">2024-2025 </option>
+		<option value="70">2023-2024 </option>
+		<option value="46">2022-2023 </option>
+		<option value="42">2021-2022 </option>
+		<option value="21">2020-2021 </option>
+		<option value="20">2019-2020 </option>
+		<option value="19">2018-2019 </option>
+		<option value="18">2017-2018 </option>
+		<option value="17">2016-2017 </option>
+		<option value="16">2015-2016 </option>
+		<option value="15">2014-2015 </option>
+		<option value="14">2013-2014 </option>
+		<option value="13">2012-2013 </option>
+		<option value="78">2011-2012 </option>
+		<option value="80">2010-2011 </option>
+		<option value="79">2009-2010 </option>
+
+	</select><!--END:ctl00$ContentPlaceHolder1$ddlSessionFrom--></span>
+                            </td>
+                            
+
+                        </tr>
+                        <tr>
+                            <td id="Td2" class="vtext" style="width: 15%">
+                                Degree
+                            </td>
+                            <td class="colon">
+                                :
+                            </td>
+                            <td>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlDegree__"><!--START:ctl00$ContentPlaceHolder1$ddlDegree--><select name="ctl00$ContentPlaceHolder1$ddlDegree" id="ctl00_ContentPlaceHolder1_ddlDegree" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlDegree&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+		<option selected="selected" value="0">-- Select Degree --</option>
+
+	</select><!--END:ctl00$ContentPlaceHolder1$ddlDegree--></span>
+                            </td>
+                            <td id="Td3" class="vtext" style="width: 15%">
+                                Exam
+                            </td>
+                            <td class="colon">
+                                :
+                            </td>
+                            <td>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlExam__"><!--START:ctl00$ContentPlaceHolder1$ddlExam--><select name="ctl00$ContentPlaceHolder1$ddlExam" id="ctl00_ContentPlaceHolder1_ddlExam" class="dropdown">
+		<option selected="selected" value="0">-- Select Exam --</option>
+		<option value="13">Assignment </option>
+		<option value="7">External Practical </option>
+		<option value="3">External Theory </option>
+		<option value="18">Final Theory Internal</option>
+		<option value="15">Final Theory PG</option>
+		<option value="2">Internal Practical </option>
+		<option value="1">Internal Theory </option>
+		<option value="14">Midterm Theory PG</option>
+		<option value="16">Practical PG</option>
+
+	</select><!--END:ctl00$ContentPlaceHolder1$ddlExam--></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                            </td>
+                            <td colspan="4">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_btnSearch__"><!--START:ctl00$ContentPlaceHolder1$btnSearch--><input type="submit" name="ctl00$ContentPlaceHolder1$btnSearch" value="SEARCH" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSearch&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSearch" class="button-common" cellpadding="0" cellspacing="0"><!--END:ctl00$ContentPlaceHolder1$btnSearch--></span>
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_btnSReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSReset&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+                            </td>
+                    </tr></tbody></table>
+                
+</div></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" class="tdgap">
+            </td>
+        </tr>
+        <tr>
+            <td class="tablesubheading" colspan="6">
+                List of Degree Exams
+            </td>
+        </tr>
+        <tr>
+            <td class="tdgap" colspan="6">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_gvtt__"><div>
+	<table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_gvtt" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+		<tbody><tr class="header-style">
+			<th scope="col" style="width:5%;">S.No.</th><th scope="col">Degree</th><th scope="col">Exam</th><th scope="col">Academic Session</th><th scope="col">EDIT</th><th scope="col">DELETE</th>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                1
+                            </td><td align="left" style="width:10%;">B.Tech.(Agricultural Engineering) </td><td align="left" style="width:10%;">Assignment </td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl02_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl02$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl02$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl02_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl02$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl02$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl02_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl02$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl02$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl02_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl02$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl02$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                2
+                            </td><td align="left" style="width:10%;">B.Tech.(Agricultural Engineering) </td><td align="left" style="width:10%;">External Theory </td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl03_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl03$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl03$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl03_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl03$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl03$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl03_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl03$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl03$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl03_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl03$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl03$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                3
+                            </td><td align="left" style="width:10%;">B.Tech.(Agricultural Engineering) </td><td align="left" style="width:10%;">Internal Theory </td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl04_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl04$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl04$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl04_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl04$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl04$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl04_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl04$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl04$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl04_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl04$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl04$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                4
+                            </td><td align="left" style="width:10%;">B.Tech.(Agricultural Engineering) </td><td align="left" style="width:10%;">Internal Practical </td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl05_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl05$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl05$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl05_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl05$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl05$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl05_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl05$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl05$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl05_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl05$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl05$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                5
+                            </td><td align="left" style="width:10%;">M.Sc (COA) </td><td align="left" style="width:10%;">Midterm Theory PG</td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl06_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl06$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl06$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl06_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl06$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl06$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl06_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl06$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl06$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl06_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl06$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl06$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                6
+                            </td><td align="left" style="width:10%;">M.Sc (BS&amp;H) </td><td align="left" style="width:10%;">Final Theory PG</td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl07_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl07$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl07$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl07_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl07$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl07$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl07_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl07$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl07$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl07_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl07$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl07$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                7
+                            </td><td align="left" style="width:10%;">M.Sc (BS&amp;H) </td><td align="left" style="width:10%;">Midterm Theory PG</td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl08_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl08$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl08$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl08_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl08$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl08$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl08_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl08$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl08$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl08_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl08$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl08$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                8
+                            </td><td align="left" style="width:10%;">M.Sc (BS&amp;H) </td><td align="left" style="width:10%;">Practical PG</td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl09_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl09$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl09$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl09_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl09$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl09$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl09_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl09$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl09$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl09_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl09$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl09$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                9
+                            </td><td align="left" style="width:10%;">M.Sc (COA) </td><td align="left" style="width:10%;">Final Theory PG</td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl10_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl10$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl10$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl10_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl10$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl10$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl10_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl10$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl10$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl10_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl10$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl10$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                10
+                            </td><td align="left" style="width:10%;">M.Sc (COA) </td><td align="left" style="width:10%;">Practical PG</td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl11_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl11$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl11$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl11_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl11$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl11$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl11_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl11$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl11$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl11_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl11$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl11$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                11
+                            </td><td align="left" style="width:10%;">Ph.D (BS&amp;H) </td><td align="left" style="width:10%;">Midterm Theory PG</td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl12_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl12$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl12$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl12_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl12$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl12$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl12_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl12$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl12$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl12_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl12$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl12$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                12
+                            </td><td align="left" style="width:10%;">Ph.D (BS&amp;H) </td><td align="left" style="width:10%;">Final Theory PG</td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl13_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl13$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl13$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl13_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl13$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl13$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl13_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl13$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl13$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl13_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl13$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl13$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                13
+                            </td><td align="left" style="width:10%;">Ph.D (BS&amp;H) </td><td align="left" style="width:10%;">Practical PG</td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl14_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl14$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl14$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl14_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl14$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl14$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl14_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl14$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl14$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl14_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl14$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl14$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:#FAFAFA;">
+			<td align="center">
+                                14
+                            </td><td align="left" style="width:10%;">Ph.D (COA) </td><td align="left" style="width:10%;">Midterm Theory PG</td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl15_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl15$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl15$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl15_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl15$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl15$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl15_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl15$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl15$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl15_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl15$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl15$lnkDelete--></span>
+                            </td>
+		</tr><tr class="item-style" style="background-color:White;">
+			<td align="center">
+                                15
+                            </td><td align="left" style="width:10%;">Ph.D (COA) </td><td align="left" style="width:10%;">Final Theory PG</td><td align="left" style="width:10%;">2025-2026 </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl16_lnkEdit__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl16$lnkEdit--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl16$lnkEdit&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl16_lnkEdit" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl16$lnkEdit&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Edit.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl16$lnkEdit--></span>
+                            </td><td align="center" style="width:5%;">
+                                <span id="Anthem_ctl00_ContentPlaceHolder1_gvtt_ctl16_lnkDelete__"><!--START:ctl00$ContentPlaceHolder1$gvtt$ctl16$lnkDelete--><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl16$lnkDelete&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,btnDelete_PreCallBack,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_gvtt_ctl16_lnkDelete" class="DataGriditemLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt$ctl16$lnkDelete&#39;,&#39;&#39;)">
+                            <img src="./Degree-Exam Master_files/Delete.gif" alt="" border="0">
+                                </a><!--END:ctl00$ContentPlaceHolder1$gvtt$ctl16$lnkDelete--></span>
+                            </td>
+		</tr><tr class="pager-style" align="center" style="color:#000000;">
+			<td colspan="6"><table border="0">
+				<tbody><tr>
+					<td><span>1</span></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl18$ctl02&#39;,&#39;Page$2&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading....&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt&#39;,&#39;Page$2&#39;)" style="color:#000000;">2</a></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl18$ctl03&#39;,&#39;Page$3&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading....&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt&#39;,&#39;Page$3&#39;)" style="color:#000000;">3</a></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl18$ctl04&#39;,&#39;Page$4&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading....&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt&#39;,&#39;Page$4&#39;)" style="color:#000000;">4</a></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl18$ctl05&#39;,&#39;Page$5&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading....&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt&#39;,&#39;Page$5&#39;)" style="color:#000000;">5</a></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl18$ctl06&#39;,&#39;Page$6&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading....&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt&#39;,&#39;Page$6&#39;)" style="color:#000000;">6</a></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl18$ctl07&#39;,&#39;Page$7&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading....&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt&#39;,&#39;Page$7&#39;)" style="color:#000000;">7</a></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl18$ctl08&#39;,&#39;Page$8&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading....&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt&#39;,&#39;Page$8&#39;)" style="color:#000000;">8</a></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl18$ctl09&#39;,&#39;Page$9&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading....&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt&#39;,&#39;Page$9&#39;)" style="color:#000000;">9</a></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl18$ctl10&#39;,&#39;Page$10&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading....&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt&#39;,&#39;Page$10&#39;)" style="color:#000000;">10</a></td><td><a onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$gvtt$ctl18$ctl11&#39;,&#39;Page$11&#39;,false,&#39;&#39;,&#39;&#39;,&#39;Loading....&#39;,true,null,null,null,true,true);return false;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvtt&#39;,&#39;Page$11&#39;)" style="color:#000000;">...</a></td>
+				</tr>
+			</tbody></table></td>
+		</tr>
+	</tbody></table>
+</div></div>
+            </td>
+        </tr>
+    </tbody></table>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_D_ddlSessionFrom');//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./Degree-Exam Master_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Degree-Exam Master_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

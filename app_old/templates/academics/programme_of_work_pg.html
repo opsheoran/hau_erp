@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Programme Of Work For PG</span></div>
+    
+    <div style="padding: 10px;">
+        <form method="GET" id="filterForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td class="required" colspan="4">
+                            <select name="college_id" class="dropdown w-300" required onchange="handleFilterChange()">
+                                <option value="0">--Select College--</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Academic Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" class="dropdown w-200" required>
+                                <option value="0">--Select Academic Session--</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" class="dropdown w-300" required onchange="handleFilterChange()">
+                                <option value="0">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext" width="15%">Class</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="semester_id" id="ddlSemester" class="dropdown w-150" onchange="calculateYear()">
+                                <option value="0"> -- Select Class -- </option>
+                                {% for s in lookups.semesters %}
+                                <option value="{{ s.pk_semesterid }}" {% if filters.semester_id|string == s.pk_semesterid|string %}selected{% endif %} data-order="{{ s.semesterorder }}">{{ s.semester_roman }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Department</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="branch_id" class="dropdown w-300">
+                                <option value="0">-- Select Department --</option>
+                                {% for b in lookups.branches %}
+                                <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext">Year</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <input type="text" id="txtYear" name="year" class="textbox w-100" style="background-color:#eee;" readonly value="{{ filters.year or '' }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Report Type</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="report_type" class="dropdown w-200">
+                                <option value="1" selected>Work for Programme</option>
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Report Format</td>
+                        <td class="colon">:</td>
+                        <td colspan="4">
+                            <input type="radio" name="format" value="word"> Word Format
+                            <input type="radio" name="format" value="excel"> Excel Format
+                            <input type="radio" name="format" value="pdf" checked> PDF Format
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="10"></td></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="4">
+                            <input type="button" value="VIEW" class="button-common" style="width:100px;" onclick="viewReport()">
+                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="window.location.href='{{ url_for('academics.programme_of_work_pg') }}'">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+
+<script>
+function viewReport() {
+    const form = document.getElementById('filterForm');
+    const formData = new FormData(form);
+    const params = new URLSearchParams();
+    
+    for (const pair of formData.entries()) {
+        params.append(pair[0], pair[1]);
+    }
+    
+    const format = document.querySelector('input[name="format"]:checked').value;
+    params.append('format', format);
+    
+    window.open('/academics/programme_of_work_report?' + params.toString(), '_blank');
+}
+
+function calculateYear() {
+    const ddl = document.getElementById('ddlSemester');
+    const txt = document.getElementById('txtYear');
+    if(!ddl || !txt) return;
+    
+    const opt = ddl.options[ddl.selectedIndex];
+    const order = parseInt(opt.getAttribute('data-order') || '0');
+    
+    if(order <= 0) { txt.value = ""; return; }
+    
+    const years = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
+    const yearIdx = Math.floor((order - 1) / 2);
+    txt.value = years[yearIdx] || "N/A";
+}
+
+function handleFilterChange() {
+    document.getElementById('filterForm').submit();
+}
+
+window.addEventListener('load', () => {
+    calculateYear();
+});
+</script>
+{% endblock %}

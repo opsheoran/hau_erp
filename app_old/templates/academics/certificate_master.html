@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Certificates Master</span>
+    </div>
+
+    <div style="padding: 15px;">
+        <form method="POST" id="certForm">
+            <input type="hidden" name="pk_id" id="cert_id">
+            <table class="form-table" width="100%">
+                <tr>
+                    <td class="vtext" width="15%">Certificate Name</td>
+                    <td class="colon">:</td>
+                    <td width="35%">
+                        <input type="text" name="name" id="cert_name" class="textbox w-250" required> <span class="required">*</span>
+                    </td>
+                    <td class="vtext" width="15%">Is Required?</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <input type="checkbox" name="is_required" id="is_required">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top:15px;">
+                        <input type="submit" value="SAVE" class="button-common" id="btn_save">
+                        <input type="button" value="RESET" class="button-common" onclick="resetForm()" style="margin-left:10px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 30px;">
+            <div class="tablesubheading">
+                <span class="subheadingborderbottom">Details</span>
+            </div>
+            <table class="table-grid-view" width="100%">
+                <thead>
+                    <tr class="header-style">
+                        <th width="5%">S.No.</th>
+                        <th>Certificate Name</th>
+                        <th width="15%">Required</th>
+                        <th width="10%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr class="{{ loop.cycle('item-style', 'item-style-alt') }}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td>{{ item.certificatename }}</td>
+                        <td align="center">{% if item.isrequired %}Yes{% else %}No{% endif %}</td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/edit.gif') }}" style="cursor:pointer" onclick='editCert({{ item|tojson }})'>
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this certificate?');">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="id" value="{{ item.pk_certificateid }}">
+                                <input type="image" src="{{ url_for('static', filename='images/delete.gif') }}">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            {% if pagination.total_pages > 1 %}
+            <div class="pager-style" style="text-align:center; margin-top:10px;">
+                {% if pagination.has_prev %}
+                <a href="{{ url_for('academics.certificate_master', page=pagination.page-1) }}">&lt;</a>
+                {% endif %}
+                {% for p in page_range %}
+                <a href="{{ url_for('academics.certificate_master', page=p) }}" class="{% if p == pagination.page %}active{% endif %}">{{ p }}</a>
+                {% endfor %}
+                {% if pagination.has_next %}
+                <a href="{{ url_for('academics.certificate_master', page=pagination.page+1) }}">&gt;</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function editCert(item) {
+    document.getElementById('cert_id').value = item.pk_certificateid;
+    document.getElementById('cert_name').value = item.certificatename;
+    document.getElementById('is_required').checked = item.isrequired == 1;
+    document.getElementById('btn_save').value = 'UPDATE';
+    window.scrollTo(0,0);
+}
+function resetForm() {
+    document.getElementById('cert_id').value = '';
+    document.getElementById('certForm').reset();
+    document.getElementById('btn_save').value = 'SAVE';
+}
+</script>
+{% endblock %}

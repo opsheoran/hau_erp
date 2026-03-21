@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Verdana, sans-serif; font-size: 10pt; }
+        .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+        .logo { width: 80px; height: 80px; }
+        .title { font-size: 14pt; font-weight: bold; margin-top: 5px; }
+        .subtitle { font-size: 12pt; margin-top: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #000; padding: 5px; text-align: left; }
+        th { background-color: #eee; }
+        .footer { margin-top: 30px; font-size: 8pt; text-align: right; }
+        @media print {
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body onload="window.print()">
+    <div class="header">
+        <img src="/static/images/logo.png" class="logo" onerror="this.src='https://hau.ac.in/images/logo.png'">
+        <div class="title">CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY</div>
+        <div class="subtitle">College Degree Wise Seat Report</div>
+        <div style="margin-top:10px;">Generated on: {{ now.strftime('%d-%m-%Y %H:%M') }}</div>
+    </div>
+
+    <div class="no-print" style="margin-bottom: 20px; background: #fff3cd; padding: 10px; border: 1px solid #ffeeba;">
+        Note: This is a print preview. Your browser's print dialog should open automatically.
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th width="5%">S.No.</th>
+                <th>College Name</th>
+                <th>Degree Name</th>
+                <th>Seat Type</th>
+                <th width="10%">Seats</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td align="center">{{ loop.index }}</td>
+                <td>{{ item.collegename }}</td>
+                <td>{{ item.degreename }}</td>
+                <td>{{ item.Seat_Type }}</td>
+                <td align="center">{{ item.Totalseats }}</td>
+                <td>{{ item.Remarks or '' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Computer Centre, CCS HAU Hisar
+    </div>
+</body>
+</html>

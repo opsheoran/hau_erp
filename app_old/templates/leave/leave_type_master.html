@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+{% block extra_head %}
+<style>
+    .tablesubheading { 
+        background-color: #2d5a27 !important; 
+        color: #ffffff !important; 
+        font-weight: bold; 
+        padding: 5px 10px; 
+        font-size: 12px; 
+        border: 1px solid #1e3d1a; 
+        display: block; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+<div class="hau-card">
+    <div class="tablesubheading">Leave Type Master</div>
+    <div style="padding: 15px;">
+        <form method="POST">
+            <input type="hidden" name="pk_leaveid" id="l_id">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Leave Type Name</td><td class="colon">:</td>
+                    <td><input type="text" name="leavetype" id="l_name" class="textbox" style="width: 250px;" required></td>
+                    <td class="vtext" width="15%">Short Description</td><td class="colon">:</td>
+                    <td><input type="text" name="shortdesc" id="l_short" class="textbox" style="width: 150px;" required></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Leave Nature</td><td class="colon">:</td>
+                    <td>
+                        <select name="leavenature" id="l_nature" class="dropdown" style="width: 200px;" required>
+                            <option value="C">CASUAL</option>
+                            <option value="E">EARNED</option>
+                            <option value="H">HALF PAY</option>
+                            <option value="D">DUTY</option>
+                            <option value="O">OTHER</option>
+                        </select>
+                    </td>
+                    <td class="vtext">Gender Applicability</td><td class="colon">:</td>
+                    <td>
+                        <select name="gender" id="l_gender" class="dropdown" style="width: 200px;" required>
+                            <option value="A">ALL</option>
+                            <option value="M">MALE ONLY</option>
+                            <option value="F">FEMALE ONLY</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Eligibility (Months)</td><td class="colon">:</td>
+                    <td><input type="number" name="eligibilityinmonth" id="l_elig" class="textbox" value="0" style="width: 100px;"></td>
+                    <td class="vtext">Max Per Installment</td><td class="colon">:</td>
+                    <td><input type="number" name="maxperyear" id="l_max" class="textbox" value="10" style="width: 100px;"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Max Balance Limit</td><td class="colon">:</td>
+                    <td><input type="number" name="totalleavebalancelimit" id="l_bal" class="textbox" value="300" style="width: 100px;"></td>
+                    <td class="vtext">Instance Limit</td><td class="colon">:</td>
+                    <td><input type="number" name="leavelimitperinstance" id="l_inst" class="textbox" value="0" style="width: 100px;"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Flags</td><td class="colon">:</td>
+                    <td colspan="4">
+                        <label style="margin-right:15px;"><input type="checkbox" name="cf" id="l_cf"> Carry Forward</label>
+                        <label style="margin-right:15px;"><input type="checkbox" name="hpl" id="l_hpl"> HPL</label>
+                        <label style="margin-right:15px;"><input type="checkbox" name="offcovered" id="l_off"> Off Covered</label>
+                        <label><input type="checkbox" name="cashable" id="l_cash"> Cashable</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Remarks</td><td class="colon">:</td>
+                    <td colspan="4"><input type="text" name="remarks" id="l_remarks" class="textbox" style="width: 400px;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="4" style="padding-top: 15px;">
+                        <input type="submit" value="SAVE CONFIG" class="button-common" style="background:#3c8dbc; color:white;">
+                        <input type="reset" value="RESET" class="button-common" style="margin-left: 10px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 30px;">
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td>Type</td><td>Short</td><td>Nature</td><td>Gender</td><td>Edit</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in leave_types %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td>{{ l.leavetype }}</td>
+                        <td align="center">{{ l.shortdesc }}</td>
+                        <td align="center">{{ l.leavenature }}</td>
+                        <td align="center">{{ l.gender }}</td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer;" onclick="editL('{{ l.pk_leaveid }}', '{{ l.leavetype }}', '{{ l.shortdesc }}', '{{ l.leavenature }}', '{{ l.gender }}', '{{ l.remarks or '' }}')">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function editL(id, name, short, nature, gender, remarks) {
+    document.getElementById('l_id').value = id;
+    document.getElementById('l_name').value = name;
+    document.getElementById('l_short').value = short;
+    document.getElementById('l_nature').value = nature;
+    document.getElementById('l_gender').value = gender;
+    document.getElementById('l_remarks').value = remarks;
+    window.scrollTo(0,0);
+}
+</script>
+{% endblock %}

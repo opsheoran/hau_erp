@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="POST">
+    {% if record %}
+    <input type="hidden" name="{{ cfg.pk }}" value="{{ record[cfg.pk] }}">
+    {% endif %}
+    
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td colspan="3" class="tableheading">
+                    <span class="mainheadingborderbottom">{{ cfg.title }} MANAGEMENT</span>
+                </td>
+            </tr>
+            <tr><td colspan="3" height="10"></td></tr>
+            
+            <tr>
+                <td class="vtext" width="20%">CODE / IDENTIFIER</td>
+                <td class="colon" width="2%">:</td>
+                <td>
+                    <input type="text" name="{{ cfg.pk }}" class="textbox" style="width: 200px;" 
+                           value="{{ record[cfg.pk] if record else '' }}" 
+                           {% if record %}readonly style="background:#eee;"{% endif %} required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">NAME / DESCRIPTION</td>
+                <td class="colon">:</td>
+                <td>
+                    <input type="text" name="{{ cfg.name }}" class="textboxlong" style="width: 450px;" 
+                           value="{{ record[cfg.name] if record else '' }}" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            
+            {# --- Extra Columns for specific masters --- #}
+            {% if key == 'department' %}
+            <tr>
+                <td class="vtext">ALIAS</td>
+                <td class="colon">:</td>
+                <td><input type="text" name="DeptAlias" class="textbox" style="width: 200px;" value="{{ record['DeptAlias'] if record else '' }}"></td>
+            </tr>
+            {% elif key == 'designation' %}
+            <tr>
+                <td class="vtext">DESIGNATION TYPE</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="isteaching" class="dropdown" style="width: 200px;">
+                        <option value="1" {% if record and record['isteaching'] %}selected{% endif %}>Teaching</option>
+                        <option value="0" {% if record and not record['isteaching'] %}selected{% endif %}>Non-Teaching</option>
+                    </select>
+                </td>
+            </tr>
+            {% endif %}
+            
+            <tr><td colspan="3" height="15"></td></tr>
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    {% if perms.AllowUpdate or perms.AllowAdd %}
+                    <input type="submit" value="{% if record %}UPDATE{% else %}SAVE{% endif %}" class="button-common">
+                    {% endif %}
+                    <span style="margin-left:10px;"></span>
+                    <a href="{{ url_for('establishment.' ~ key ~ '_master') }}" class="button-common" style="text-decoration:none; display:inline-block; line-height:24px; padding:0 12px; vertical-align:middle;">RESET</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="margin-top:20px;">
+    <tbody>
+        <tr>
+            <td class="tablesubheading">
+                <span class="subheadingborderbottom">EXISTING RECORDS ({{ pagination.total }})</span>
+            </td>
+        </tr>
+        <tr><td height="10"></td></tr>
+        <tr>
+            <td>
+                <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" border="1" style="border-collapse:collapse;">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="100px">CODE</th>
+                            <th align="left">DESCRIPTION</th>
+                            {% if key == 'department' %}<th>ALIAS</th>{% endif %}
+                            {% if key == 'designation' %}<th>TYPE</th>{% endif %}
+                            <th width="60px">EDIT</th>
+                            <th width="60px">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in data %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td align="center" style="font-weight:bold;">{{ row[cfg.pk] }}</td>
+                            <td>{{ row[cfg.name] }}</td>
+                            {% if key == 'department' %}<td align="center">{{ row['DeptAlias'] or '-' }}</td>{% endif %}
+                            {% if key == 'designation' %}<td align="center">{{ 'Teaching' if row['isteaching'] else 'Non-Teaching' }}</td>{% endif %}
+                            <td align="center">
+                                {% if perms.AllowUpdate %}
+                                <a href="{{ url_for('establishment.' ~ key ~ '_master', id=row[cfg.pk], page=pagination.page) }}">
+                                    <img src="{{ url_for('static', filename='images/Edit.gif') }}" border="0">
+                                </a>
+                                {% else %}
+                                <i class="bi bi-lock" style="color:#ccc;"></i>
+                                {% endif %}
+                            </td>
+                            <td align="center">
+                                {% if perms.AllowDelete %}
+                                <form method="POST" action="{{ url_for('establishment.delete_generic_master', key=key, id=row[cfg.pk]) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this record?')">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+                                    <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete" style="border:none;">
+                                </form>
+                                {% else %}
+                                <i class="bi bi-lock" style="color:#ccc;"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div style="margin-top:10px;">{% include 'includes/pagination.html' %}</div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

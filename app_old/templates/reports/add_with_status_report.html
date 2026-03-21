@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table { border-collapse: collapse; width: 100%; font-family: Verdana, sans-serif; font-size: 10px; }
+        th, td { border: 1px solid black; padding: 5px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .header { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY<br>
+        ADDITION/WITHDRAWAL APPROVAL STATUS REPORT<br>
+        <span style="font-size: 10px; font-weight: normal;">
+            Session: {{ filters_info.session }} | Degree: {{ filters_info.degree }}<br>
+            Report Generated on: {{ now.strftime('%d/%m/%Y %H:%M') }}
+        </span>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Admission No</th>
+                <th>Name</th>
+                <th>Specialisation</th>
+                <th>Semester</th>
+                <th>CourseName</th>
+                <th>Addition/Withdrawal</th>
+                <th>Date Applied</th>
+                <th>Instructor Approval Status</th>
+                <th>Advisor Approval Status</th>
+                <th>Fee Paid</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in status_list %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ s.AdmissionNo }}</td>
+                <td>{{ s.fullname }}</td>
+                <td>{{ s.Branchname }}</td>
+                <td>{{ s.semester_roman }}</td>
+                <td>{{ s.CourseName }}</td>
+                <td>{{ s.RequestType }}</td>
+                <td>{{ s.DateOfApply.strftime('%d/%m/%Y') if s.DateOfApply else '' }}</td>
+                <td>{{ s.InstructorStatus }}</td>
+                <td>{{ s.AdvisorStatus }}</td>
+                <td>{{ 'Paid' if s.Approval else 'Fee Not Paid' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

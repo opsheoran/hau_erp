@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Event Master</span>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="id" id="edit_id">
+        <table width="100%" class="filter-table">
+            <tr>
+                <td class="vtext" style="width: 150px;">Event Name</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="event_name" id="txtEventName" class="textbox w-250" required>
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext" style="width: 150px;">Code Alias</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="code_alias" id="txtCodeAlias" class="textbox w-150" required onkeypress="return isNumberKey(event)" maxlength="5">
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Event Order</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="event_order" id="txtEventOrder" class="textbox w-100" required onkeypress="return isNumberKey(event)" maxlength="3">
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td>
+                    <textarea name="remarks" id="txtRemarks" class="textbox w-250" style="height: 40px;"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="5" style="padding-top: 10px;">
+                    <input type="submit" value="SAVE" class="button-common">
+                    <input type="button" value="RESET" class="button-common" onclick="resetForm()">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div style="margin-top: 25px;">
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">List of Events</span>
+        </div>
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <th style="width: 5%;">S.No.</th>
+                    <th style="width: 40%;">Event Name</th>
+                    <th style="width: 15%;">Code Alias</th>
+                    <th style="width: 15%;">Event Order</th>
+                    <th style="width: 10%;">EDIT</th>
+                    <th style="width: 10%;">DELETE</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                    <td align="center">{{ pagination.page * 10 - 10 + loop.index }}</td>
+                    <td>{{ item.Event_name }}</td>
+                    <td align="center">{{ item.Code_alias }}</td>
+                    <td align="center">{{ item.Event_order }}</td>
+                    <td align="center">
+                        <a href="javascript:void(0)" onclick='editEvent({{ item | tojson | safe }})'>
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                        </a>
+                    </td>
+                    <td align="center">
+                        <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this event?')">
+                            <input type="hidden" name="action" value="DELETE">
+                            <input type="hidden" name="id" value="{{ item.pk_eventid }}">
+                            <button type="submit" style="background:none; border:none; padding:0; cursor:pointer;">
+                                <img src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete">
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% include "includes/pagination.html" %}
+    </div>
+</div>
+
+<script>
+function isNumberKey(evt) {
+    var charCode = (evt.which) ? evt.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) return false;
+    return true;
+}
+
+function editEvent(item) {
+    document.getElementById('edit_id').value = item.pk_eventid;
+    document.getElementById('txtEventName').value = item.Event_name;
+    document.getElementById('txtCodeAlias').value = item.Code_alias;
+    document.getElementById('txtEventOrder').value = item.Event_order;
+    document.getElementById('txtRemarks').value = item.Remarks || '';
+    window.scrollTo(0, 0);
+}
+
+function resetForm() {
+    document.getElementById('edit_id').value = '';
+    document.getElementById('txtEventName').value = '';
+    document.getElementById('txtCodeAlias').value = '';
+    document.getElementById('txtEventOrder').value = '';
+    document.getElementById('txtRemarks').value = '';
+}
+</script>
+
+<style>
+    .filter-table td { padding: 8px 5px; }
+    .vtext { font-size: 11px; font-weight: bold; }
+</style>
+{% endblock %}

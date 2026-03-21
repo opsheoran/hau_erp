@@ -158,12 +158,12 @@
             border-collapse: collapse; 
             border: 1px solid #e0e0e0;
             background-color: #ffffff;
-            font-size: 12px;
+            font-size: 11px;
         }
         .header-style th, .header-style td { 
             background: #2d5a27; 
             border: 1px solid #e0e0e0; 
-            padding: 10px 12px; 
+            padding: 6px 10px; 
             text-align: center; 
             font-weight: bold; 
             color: #ffffff; 
@@ -171,7 +171,7 @@
         }
         .item-style td, .item-style-alt td { 
             border: 1px solid #e0e0e0; 
-            padding: 10px 12px; 
+            padding: 6px 10px; 
             color: #333333;
         }
         .item-style { background: #ffffff; }
@@ -189,7 +189,7 @@
             overflow: hidden;
             margin-bottom: 20px;
         }
-        .form-table td { padding: 8px 12px; vertical-align: middle; }
+        .form-table td { padding: 3px 12px; vertical-align: middle; }
         
         .hau-card {
             background: #ffffff;
@@ -201,8 +201,8 @@
         }
 
         .filter-table { width: 100%; border-collapse: collapse; }
-        .filter-table td { padding: 8px 5px; vertical-align: middle; }
-        .vtext { font-weight: bold; color: #444; font-size: 11px; }
+        .filter-table td { padding: 3px 5px; vertical-align: middle; }
+        .vtext { font-weight: bold; color: #444; font-size: 10px; }
         .colon { width: 15px; text-align: center; font-weight: bold; }
 
         .pager-style { margin-top: 15px; text-align: center; font-family: Verdana; font-size: 11px; width: 100%; }
@@ -418,15 +418,15 @@
         .form-table input[type="number"], 
         .form-table input[type="email"], 
         .form-table textarea {
-            border-radius: 6px !important;
-            padding: 4px 12px !important;
+            border-radius: 3px !important;
+            padding: 1px 8px !important;
             height: auto !important;
-            min-height: 28px;
+            min-height: 22px;
             min-width: 0;
             border: 1px solid #aaa;
             box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
             font-family: Verdana, Arial, sans-serif;
-            font-size: 12px;
+            font-size: 10px;
             box-sizing: border-box;
         }
 
@@ -438,10 +438,12 @@
         .form-table select.dropdownvvlong {
             min-width: 0;
             border: 1px solid #aaa;
-            border-radius: 4px;
+            border-radius: 3px;
             font-family: Verdana, Arial, sans-serif;
-            font-size: 12px;
+            font-size: 10px;
             background-color: #fff;
+            height: 22px;
+            padding: 1px 4px;
         }
         
         .form-table .textbox:focus, 
@@ -528,51 +530,6 @@
         document.addEventListener('DOMContentLoaded', toggleDropdownMenus);
     </script>
 
-    <!-- User Requested Global Form Styling Overrides -->
-    <style>
-        .form-table .vtext {
-            text-align: right !important;
-            padding-right: 10px;
-        }
-        .form-table .textbox, 
-        .form-table input[type="text"], 
-        .form-table input[type="number"], 
-        .form-table input[type="email"], 
-        .form-table textarea {
-            border-radius: 6px !important;
-            padding: 4px 12px !important;
-            height: auto !important;
-            min-height: 28px;
-            min-width: 0;
-            border: 1px solid #aaa;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-            font-family: Verdana, Arial, sans-serif;
-            font-size: 12px;
-            box-sizing: border-box;
-        }
-
-        /* Clean native select handling without height auto bug */
-        .form-table select,
-        .form-table select.textbox,
-        .form-table select.dropdown,
-        .form-table select.dropdownlong,
-        .form-table select.dropdownvvlong {
-            min-width: 0;
-            border: 1px solid #aaa;
-            border-radius: 4px;
-            font-family: Verdana, Arial, sans-serif;
-            font-size: 12px;
-            background-color: #fff;
-        }
-        
-        .form-table .textbox:focus, 
-        .form-table select:focus,
-        .form-table input:focus {
-            border-color: #66afe9;
-            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6) !important;
-            outline: none;
-        }
-    </style>
     
     <script>
         window.showToast = function(message, category = 'success') {

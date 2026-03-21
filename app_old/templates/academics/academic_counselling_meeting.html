@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Academic Counselling Meeting</span>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <input type="hidden" name="id" id="edit_id">
+        <table width="100%" class="filter-table">
+            <tr>
+                <td class="vtext">Meeting Name</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="meeting_name" id="txtMeeting" class="textbox w-250" required maxlength="100">
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext">Meeting Date</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="date" name="meeting_date" id="txtDate" class="textbox w-150" required>
+                    <span class="required">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Meeting Agenda</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <textarea name="meeting_agenda" id="txtAgenda" class="textbox w-300" style="height: 60px;" required></textarea>
+                    <span class="required">*</span>
+                </td>
+                <td class="vtext">Report Upload</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="file" name="report_file" id="flUpload" class="textbox" onchange="checkFileSize(this)">
+                    <div style="font-size: 10px; color: #ff9600; font-weight: bold; margin-top: 5px;">
+                        (Pdf File Only And Should Not Be More Than 2MB)
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="5" style="padding-top: 10px;">
+                    <input type="submit" value="SAVE" class="button-common">
+                    <input type="button" value="CANCEL" class="button-common" onclick="resetForm()">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div style="margin-top: 25px;">
+        <div class="filter-area" style="padding: 10px; background: #f9f9f9; border: 1px solid #eee; margin-bottom: 15px;">
+            <form method="GET" style="display: flex; gap: 10px; align-items: center;">
+                <span class="vtext">Meeting Name :</span>
+                <input type="text" name="q" value="{{ search_term or '' }}" class="textbox w-250">
+                <input type="submit" value="SEARCH" class="button-common">
+                <input type="button" value="CLEAR" class="button-common" onclick="window.location.href='{{ url_for('academics_mgmt.academic_counselling_meeting') }}'">
+            </form>
+        </div>
+
+        <div class="tablesubheading">
+            <span class="subheadingborderbottom">List of Meetings</span>
+        </div>
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <th style="width: 5%;">S.No.</th>
+                    <th style="width: 30%;">Meeting Name</th>
+                    <th style="width: 15%;">Meeting Date</th>
+                    <th style="width: 30%;">Meeting Agenda</th>
+                    <th style="width: 10%;">EDIT</th>
+                    <th style="width: 10%;">Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr class="{{ 'item-style' if loop.index is odd else 'item-style-alt' }}">
+                    <td align="center">{{ pagination.page * 10 - 10 + loop.index }}</td>
+                    <td>{{ item.meetingname }}</td>
+                    <td align="center">{{ item.meetingdate }}</td>
+                    <td>{{ item.meetingagenda }}</td>
+                    <td align="center">
+                        <a href="javascript:void(0)" onclick='editMeeting({{ item | tojson | safe }})'>
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit">
+                        </a>
+                    </td>
+                    <td align="center">
+                        {% if item.filename %}
+                        <a href="{{ url_for('static', filename='uploads/counselling/' + item.filename) }}" target="_blank">
+                            <img src="{{ url_for('static', filename='images/download.png') }}" alt="Download">
+                        </a>
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% include "includes/pagination.html" %}
+    </div>
+</div>
+
+<script>
+function checkFileSize(fileInput) {
+    if (fileInput.files.length > 0) {
+        var size = fileInput.files[0].size; // in bytes
+        if (size > 2 * 1024 * 1024) {
+            alert("File should not be more than 2MB.");
+            fileInput.value = "";
+            return false;
+        }
+        var ext = fileInput.value.split('.').pop().toLowerCase();
+        if (ext !== 'pdf') {
+            alert("Only PDF files are allowed.");
+            fileInput.value = "";
+            return false;
+        }
+    }
+}
+
+function validateForm() {
+    var meeting = document.getElementById('txtMeeting').value;
+    var agenda = document.getElementById('txtAgenda').value;
+    var date = document.getElementById('txtDate').value;
+    
+    if (!meeting || !agenda || !date) {
+        alert("Please fill all required fields.");
+        return false;
+    }
+    
+    var fileInput = document.getElementById('flUpload');
+    var editId = document.getElementById('edit_id').value;
+    
+    if (!editId && fileInput.files.length === 0) {
+        alert("Please select a file to upload.");
+        return false;
+    }
+    return true;
+}
+
+function editMeeting(item) {
+    document.getElementById('edit_id').value = item.pk_Meetingid;
+    document.getElementById('txtMeeting').value = item.meetingname;
+    document.getElementById('txtAgenda').value = item.meetingagenda;
+
+    // Format date for input type=date (YYYY-MM-DD).
+    // `meetingdate` can arrive as `dd/mm/yyyy` (from clean_json_data on datetime),
+    // `yyyy-mm-dd`, or `yyyy-mm-dd HH:MM:SS` depending on DB column type/driver.
+    // Prefer server-computed ISO date (`meetingdate_iso`) to avoid browser parsing issues.
+    var rawDate = item.meetingdate_iso || item.meetingdate || item.meeting_date || item.meetingDate || item.MeetingDate || '';
+    document.getElementById('txtDate').value = toISODate(rawDate);
+    window.scrollTo(0, 0);
+}
+
+function toISODate(value) {
+    if (!value) return '';
+    var s = String(value).replace(/\u00a0/g, ' ').trim();
+    if (!s) return '';
+
+    // Avoid String.prototype.padStart for legacy browser compatibility.
+    function pad2(n) {
+        return ('0' + String(n)).slice(-2);
+    }
+
+    // ISO datetime: yyyy-mm-ddTHH:MM:SS...
+    if (s.indexOf('T') !== -1 && /^\d{4}-\d{1,2}-\d{1,2}T/.test(s)) s = s.split('T')[0];
+
+    // yyyy-mm-dd (optionally followed by time)
+    var iso = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:\s+.*)?$/);
+    if (iso) {
+        var im = pad2(iso[2]);
+        var id = pad2(iso[3]);
+        return iso[1] + '-' + im + '-' + id;
+    }
+
+    // dd/mm/yyyy (or d/m/yyyy) - disambiguate with mm/dd if needed.
+    var slash = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (slash) {
+        var a = parseInt(slash[1], 10);
+        var b = parseInt(slash[2], 10);
+        var year = slash[3];
+
+        // If a > 12, it must be day/month. If b > 12, it must be month/day.
+        var day = a;
+        var month = b;
+        if (b > 12 && a <= 12) {
+            month = a;
+            day = b;
+        }
+
+        var mm = pad2(month);
+        var dd = pad2(day);
+        return year + '-' + mm + '-' + dd;
+    }
+
+    // dd-mm-yyyy
+    var dash = s.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+    if (dash) {
+        var dday = pad2(dash[1]);
+        var dmon = pad2(dash[2]);
+        return dash[3] + '-' + dmon + '-' + dday;
+    }
+
+    // "Nov 23 2017 12:00AM" / "Nov 23, 2017" / "23 Nov 2017"
+    // Strip trailing time if present.
+    var withoutTime = s.replace(/\s+\d{1,2}:\d{2}(?::\d{2})?\s*(AM|PM)?\s*$/i, '').trim();
+    var months = {
+        jan: '01', january: '01',
+        feb: '02', february: '02',
+        mar: '03', march: '03',
+        apr: '04', april: '04',
+        may: '05',
+        jun: '06', june: '06',
+        jul: '07', july: '07',
+        aug: '08', august: '08',
+        sep: '09', sept: '09', september: '09',
+        oct: '10', october: '10',
+        nov: '11', november: '11',
+        dec: '12', december: '12'
+    };
+
+    var mdy = withoutTime.match(/^([A-Za-z]{3,9})\s+(\d{1,2}),?\s+(\d{4})$/);
+    if (mdy) {
+        var monKey = mdy[1].toLowerCase();
+        var monNum = months[monKey];
+        if (monNum) {
+            var dayNum = pad2(parseInt(mdy[2], 10));
+            return mdy[3] + '-' + monNum + '-' + dayNum;
+        }
+    }
+
+    var dmyText = withoutTime.match(/^(\d{1,2})\s+([A-Za-z]{3,9})\s+(\d{4})$/);
+    if (dmyText) {
+        var dMonKey = dmyText[2].toLowerCase();
+        var dMonNum = months[dMonKey];
+        if (dMonNum) {
+            var dDayNum = pad2(parseInt(dmyText[1], 10));
+            return dmyText[3] + '-' + dMonNum + '-' + dDayNum;
+        }
+    }
+
+    // Fallback: let browser parse (handles many locale formats); then format as ISO.
+    var d = new Date(s);
+    if (!isNaN(d.getTime())) {
+        var y = String(d.getFullYear());
+        var m = pad2(d.getMonth() + 1);
+        var day = pad2(d.getDate());
+        return y + '-' + m + '-' + day;
+    }
+
+    return '';
+}
+
+function resetForm() {
+    document.getElementById('edit_id').value = '';
+    document.getElementById('txtMeeting').value = '';
+    document.getElementById('txtAgenda').value = '';
+    document.getElementById('txtDate').value = '';
+    document.getElementById('flUpload').value = '';
+}
+</script>
+
+{% endblock %}

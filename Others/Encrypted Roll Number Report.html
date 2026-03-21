@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<!-- saved from url=(0092)https://hauiums.in/SMS/Reports/SMS_Course_Allocation_ReportSummaryResult_Rpt.aspx?Mwpid=5191 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Encrypted Roll Number Report_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Encrypted Roll Number Report_files/default.css" type="text/css" rel="stylesheet"><link href="./Encrypted Roll Number Report_files/font.css" type="text/css" rel="stylesheet"><link href="./Encrypted Roll Number Report_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Encrypted Roll Number Report_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/SMS/Reports/SMS_Course_Allocation_ReportSummaryResult_Rpt.aspx?Mwpid=5191" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./Encrypted Roll Number Report_files/WebResource.axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Encrypted Roll Number Report_files/WebResource(1).axd" type="text/javascript"></script>
+<script src="./Encrypted Roll Number Report_files/WebResource(2).axd" type="text/javascript"></script>
+<script src="./Encrypted Roll Number Report_files/WebResource(3).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="50834CF1">
+	<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+	<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+	<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="TmOeAYS85c23syoXEqOJn9X5QZs3iTzJ0dW1CeSFgm/3kjO3KKbt+0LHkszNo7iExmwI4mKZDW+5jIZ1CO2JvVRRTLWm8DIlQSHayY1BRcEluYda5PZQtO7DwSJenkKuiJL7ApZw86eBSIeN8fuIBPt8csb7Vxv0VewlXIsTCy5gtAROugkg1AqkhD1vMNK7eRi/drWhdrVHQTM7K8nT9nB6RI5t7DX4PDY1QoO1xxXA+2ReCIyrD4n3rkMehGrjEraI1SPXfo18PR+8LEmxV86ZMqJCpr3b4F/YGAmQe9oe2KReu/PLotfrqGoSy/rKyjM1W4sWEi4Ac8Ov4JlNbnv7SgDz5pLeqocfGtgzkBMFrge7D1qbC/1M4LU3fIiqoEVgMnqdoxqoB9qjwf0b/epMx5M4ezzQmb4eqxsDes4XDmIWf4rYDa8ZyIOGdMSg3GwCHyx1tAHpndG7cYlfq1GOtwzXEbBTFUeuaG1UMIOr83cvJ9EAOvTcL/8y5ON5Q5cIMUxnksfeAeSvA5pdJJqdtkPSpjPJvLTzV6BXQ24nFDro39UEEiy2CJD25IHXEdB7MBUZEML1fMkDFEeDKhFzxqrIVXR2Jv8h7DhzUC2TTfRUsRjhdT0/qh2S7qAMkK8IYaxOdbO5niXUCRW6p/BtXdcts4th/vkqgpDNsa9PzXWJcVAMVc8xFZeHw0DjJOLV/mkYxhlAScBG+INdSABpeGvRkPGLKTp7kGWyeBdPiOSUjVEdFxjLEvTvfMN2pfYHFnJbIhw8U+CoCmjeoYa8WJoCztB1R9hN6beiB27hdpEw0T+1SgiW0oRkQmXfJm7a3DwWCi0Pua12scwsDSmMX+cJGkg+/MZnvwGBsUwMJSdRILAYesgqlyrTdX2MPKPhNmqibmtKNMm0dNUkQMWMQPk1yDOWk+8ZRGndBzgybEaIc0YjVw69+HcfW+dB+YYm0+n1dmatQmMgUqs+o7drprG/e3hVqIFNuJqj4bkwAtq0AeeGTUagyI+cYH9wujDBOajm1l9lRK2RFEGlE2Kvy7bUiJXJ8tCoGFMqCqtYbx42g/lwgIrNjkftYi26+1J2vyM+blucpl5B4HBi/E6Fi9Exp/suwdhsIgO6t4w3CD4vvHiZw5bOpy9AgnV2PeNpmH9LdYmBzym1n1j0tHqEMSqGeqwFx0VNGFTNddzk/OlFZs2z3Z3890CLX2H7UwDLI/ZoUnM7p0u3GwXW2djVzIKol0T1LD48ZEeb2wY=">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Encrypted Roll Number Report_files/Examination.png">
+                            Examination &amp; Results
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/SMS/Reports/SMS_Course_Allocation_ReportSummaryResult_Rpt.aspx?Mwpid=5191#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> Rajbeer Singh</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> Rajbeer Singh</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COA, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/SMS/Reports/SMS_Course_Allocation_ReportSummaryResult_Rpt.aspx?Mwpid=5191#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Encrypted Roll Number Report_files/WebResource(4).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Examination Masters &amp; Config." class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2414#" tabindex="-1">Examination Masters &amp; Config.</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Master and Configuration Management" class="level2 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4713" tabindex="-1">Master and Configuration Management</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:5" role="menuitem" style="position: relative; float: left;"><a title="Marks Entries" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2415#" tabindex="-1">Marks Entries</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:5" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Master and Configuration Management" class="level2 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4794" tabindex="-1">Marks Entry</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:8" role="menuitem" style="position: relative; float: left;"><a title="Post-Examination Activities" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2405#" tabindex="-1">Post-Examination Activities</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:8" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:9" role="menuitem" style="position: relative;"><a title="Marks Entry Approval" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8451#" tabindex="-1">Marks Entry Approval</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:9" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="HOD Marks Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_HOD_ApprovalWithChanges.aspx?Mwpid=5346" tabindex="-1">HOD Marks Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="COE Marks Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_COE_ApprovalWithChanges.aspx?Mwpid=5299" tabindex="-1">COE Marks Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Registrar Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_Registrar_ApprovalForm.aspx?Mwpid=5056" tabindex="-1">Registrar Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="DeanPGS Marks Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_DeanPGS_ApprovalWithChanges.aspx?Mwpid=5369" tabindex="-1">DeanPGS Marks Approval</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="DeanPGS Approval" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_DeanPGS_ApprovalForm.aspx?Mwpid=5349" tabindex="-1">DeanPGS Approval</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:16" role="menuitem" style="position: relative;"><a title="Marks Process" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8455#" tabindex="-1">Marks Process</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:16" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for UG and MBA" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_Lock.aspx?Mwpid=4750" tabindex="-1">Marks Process for UG and MBA</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for PG" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_ForPGPHD.aspx?Mwpid=5356" tabindex="-1">Marks Process for PG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for Summer" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_ForSummer.aspx?Mwpid=8432" tabindex="-1">Marks Process for Summer</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Process for Supplementary" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksProcess_SupplySummer.aspx?Mwpid=5347" tabindex="-1">Marks Process for Supplementary</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:22" role="menuitem" style="position: relative;"><a title="Others" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8456#" tabindex="-1">Others</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:22" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Grace Marks" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_GraceByCOE.aspx?Mwpid=5124" tabindex="-1">Grace Marks</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="RollNumber Encryption" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_CodingGeneration.aspx?Mwpid=5189" tabindex="-1">RollNumber Encryption</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Print Result Report" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_ExamMarksGrace.aspx?Mwpid=5203" tabindex="-1">Print Result Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Encrypted Roll Number Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_Course_Allocation_ReportSummaryResult_Rpt.aspx?Mwpid=5191" tabindex="-1">Encrypted Roll Number Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Grace Marks(Supplementary/Summer)" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_GraceByCOE_ForSupplySummer.aspx?Mwpid=5348" tabindex="-1">Grace Marks(Supplementary/Summer)</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Rechecking Status" class="level3 dynamic" href="https://hauiums.in/SMS/AdmAcd/SMS_Recheckingstatus.aspx?Mwpid=7376" tabindex="-1">Rechecking Status</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:31" role="menuitem" style="position: relative; float: left;"><a title="Results &amp; Grade Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2419#" tabindex="-1">Results &amp; Grade Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:31" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:32" role="menuitem" style="position: relative;"><a title="Marks Entry Status" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8446#" tabindex="-1">Marks Entry Status</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:32" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Entry Status for UG and MBA" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_MarksEntryStatus_dtl.aspx?Mwpid=5206" tabindex="-1">Marks Entry Status for UG and MBA</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Entry Status For PG/PHD" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_MarksEntryStatusPGPHD_dtl.aspx?Mwpid=6373" tabindex="-1">Marks Entry Status For PG/PHD</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Marks Entry Status for Supplementary/Summer" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_MarksEntryStatus_dtl_For_SuppliSummer.aspx?Mwpid=8383" tabindex="-1">Marks Entry Status for Supplementary/Summer</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:37" role="menuitem" style="position: relative;"><a title="results" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8447#" tabindex="-1">Results</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:37" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for UG" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheetUG_YearBased.aspx?Mwpid=2420" tabindex="-1">Student Result for UG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for Supplementary" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheet_ForSupplySummer.aspx?Mwpid=5350" tabindex="-1">Student Result for Supplementary</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for PG and MBA" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheetPG_YearBased.aspx?Mwpid=5351" tabindex="-1">Student Result for PG and MBA</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Result for Summer" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_GradeSheetSummer_YearBased.aspx?Mwpid=8434" tabindex="-1">Student Result for Summer</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:43" role="menuitem" style="position: relative;"><a title="Others" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=8448#" tabindex="-1">Others</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:43" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Consolidate Results  " class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_ConsolidateResult.aspx?Mwpid=5172" tabindex="-1">Consolidate Results   </a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="DMC &amp; Notification Report" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_DMCNotification.aspx?Mwpid=5352" tabindex="-1">DMC &amp; Notification Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Print Degree Certificates" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_DegreeCertificatesForUG.aspx?Mwpid=8439" tabindex="-1">Print Degree Certificates for UG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Print Degree Certificates for PG" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_DegreeCertificatesForPG.aspx?Mwpid=8462" tabindex="-1">Print Degree Certificates for PG</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Weightage Consolidate Report" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_Student_Weightage_Consolidate.aspx?Mwpid=5353" tabindex="-1">Weightage Consolidate Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="College/Subject Wise Topper List" class="level3 dynamic" href="https://hauiums.in/SMS/ExRes/SMS_CollegeSubjectWiseTopperList.aspx?Mwpid=8437" tabindex="-1">College/Subject Wise Topper List</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Certificate Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_TranscriptReportForUG.aspx?Mwpid=7377" tabindex="-1">Student Certificate Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Revised &amp; ReChecking Old_New Marks Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_Revised_ReEvaluation_Old_NewMarks.aspx?Mwpid=8387" tabindex="-1">Revised &amp; ReChecking Old_New Marks Report</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="UMC Report" class="level3 dynamic" href="https://hauiums.in/SMS/Reports/SMS_UMCReport.aspx?Mwpid=8412" tabindex="-1">UMC Report</a></li>
+			</ul></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Post-Examination Activities</span>&nbsp;&gt;&nbsp;<span>Others</span>&nbsp;&gt;&nbsp;<strong>Encrypted Roll Number Report</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Encrypted Roll Number Report_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <table id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_Table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tbody><tr>
+		<td align="left" class="tabbing">
+                <div id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_div1" style="display:inline; width:100%">
+                </div>
+            </td>
+	</tr>
+</tbody></table>
+
+    <table border="0" class="table" width="100%">
+        <tbody><tr>
+            <td class="tableheading" colspan="3">
+                Encrypted Roll Number Report</td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tbody><tr>
+        <td class="vtext">
+            College
+        </td>
+        <td class="colon">
+            :
+        </td>
+        <td class="required" colspan="4">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddlColleges__"><select name="ctl00$ContentPlaceHolder1$StuSearchCriteria1$ddlColleges" id="ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddlColleges" class="dropdownvvlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$StuSearchCriteria1$ddlColleges&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" style="position: static">
+	<option value="0">--Select College--</option>
+	<option selected="selected" value="4">College of Agriculture ( 02 ) </option>
+
+</select></span> *
+        </td>
+    </tr>
+    <tr>
+     <td class="vtext">
+         Academic Session
+        </td>
+        <td class="colon">
+            :
+        </td>
+        <td class="required">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddlAcdSession__"><select name="ctl00$ContentPlaceHolder1$StuSearchCriteria1$ddlAcdSession" id="ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddlAcdSession" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$StuSearchCriteria1$ddlAcdSession&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" style="position: static">
+	<option value="0">--Select Academic Session--</option>
+	<option selected="selected" value="77">2025-2026 </option>
+	<option value="72">2024-2025 </option>
+	<option value="70">2023-2024 </option>
+	<option value="46">2022-2023 </option>
+	<option value="42">2021-2022 </option>
+	<option value="21">2020-2021 </option>
+	<option value="20">2019-2020 </option>
+	<option value="19">2018-2019 </option>
+	<option value="18">2017-2018 </option>
+	<option value="17">2016-2017 </option>
+	<option value="16">2015-2016 </option>
+	<option value="15">2014-2015 </option>
+	<option value="14">2013-2014 </option>
+	<option value="13">2012-2013 </option>
+	<option value="78">2011-2012 </option>
+	<option value="80">2010-2011 </option>
+	<option value="79">2009-2010 </option>
+
+</select></span> *
+        </td>
+        </tr>
+          <tr>
+       <td class="vtext">
+            Degree
+        </td>
+        <td class="colon">
+            :
+        </td>
+        <td class="required">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddlDegree__"><select name="ctl00$ContentPlaceHolder1$StuSearchCriteria1$ddlDegree" id="ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddlDegree" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$StuSearchCriteria1$ddlDegree&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" style="position: static">
+	<option value="--Select Degree--">--Select Degree--</option>
+	<option selected="selected" value="1">B.Sc.(Hons.) Agriculture(4 Year) </option>
+	<option value="20">B.Sc.(Hons) Agriculture 2+4 Year </option>
+	<option value="25">Ph.D (BS&amp;H) </option>
+	<option value="26">MBA(Agribusiness) </option>
+	<option value="27">MBA </option>
+	<option value="30">PG Diploma of Remote Sensing and GIS </option>
+	<option value="33">M.Sc (COA) </option>
+	<option value="36">Ph.D (COA) </option>
+	<option value="50">MBA -Rural </option>
+	<option value="53">B.Sc.(Hons.) Agribusiness Management </option>
+
+</select></span> *
+            <br>
+            <span id="Anthem_ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddldiscipline1__" style="display: none;"></span>
+        </td>
+        <td id="lblSemester" class="vtext">
+            Class
+        </td>
+        <td class="colon">
+            :
+        </td>
+        <td class="required">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddlSemester__"><select name="ctl00$ContentPlaceHolder1$StuSearchCriteria1$ddlSemester" id="ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddlSemester" class="dropdown" maxlength="49" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$StuSearchCriteria1$ddlSemester&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value="0">--Select Class--</option>
+	<option selected="selected" value="1">I </option>
+	<option value="2">II </option>
+	<option value="3">III </option>
+	<option value="4">IV </option>
+	<option value="5">V </option>
+	<option value="6">VI </option>
+	<option value="7">VII </option>
+	<option value="8">VIII </option>
+
+</select></span> *
+        </td>
+    </tr>
+    <tr>
+       
+     
+        
+        <td id="lblBranch" class="vtext" style="width: 15%">
+            Specialization</td>
+        <td class="colon">
+            :
+        </td>
+        <td class="required">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddlBranch__"><select name="ctl00$ContentPlaceHolder1$StuSearchCriteria1$ddlBranch" id="ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddlBranch" class="dropdown" maxlength="49">
+	<option selected="selected" value="0">--Select Specialization--</option>
+
+</select></span>
+        </td>
+  
+        <td id="lblYear" class="vtext" style="width: 15%">
+            Year
+        </td>
+        <td class="colon">
+            :
+        </td>
+        <td class="required">
+            <span id="Anthem_ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddlYear__"><select name="ctl00$ContentPlaceHolder1$StuSearchCriteria1$ddlYear" id="ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddlYear" disabled="disabled" class="dropdown" maxlength="49">
+	<option value="0">--Select Year--</option>
+	<option selected="selected" value="1">First</option>
+
+</select></span> *
+        </td>
+    </tr>
+</tbody></table>
+
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tbody><tr>                        
+
+                        <td class="vtext" width="15%">Report Format</td>
+                        <td class="colon">:
+                        </td>
+                        <td class="vtext">
+                            <div id="Anthem_ctl00_ContentPlaceHolder1_rbRptFormat__"><table id="ctl00_ContentPlaceHolder1_rbRptFormat" class="radio" border="0">
+	<tbody><tr>
+		<td><span><input id="ctl00_ContentPlaceHolder1_rbRptFormat_0" type="radio" name="ctl00$ContentPlaceHolder1$rbRptFormat" value="1"><label for="ctl00_ContentPlaceHolder1_rbRptFormat_0">Word Format</label></span></td><td><span><input id="ctl00_ContentPlaceHolder1_rbRptFormat_1" type="radio" name="ctl00$ContentPlaceHolder1$rbRptFormat" value="2"><label for="ctl00_ContentPlaceHolder1_rbRptFormat_1">Excel Format </label></span></td><td><span><input id="ctl00_ContentPlaceHolder1_rbRptFormat_2" type="radio" name="ctl00$ContentPlaceHolder1$rbRptFormat" value="3" checked="checked"><label for="ctl00_ContentPlaceHolder1_rbRptFormat_2">PDF Format </label></span></td>
+	</tr>
+</tbody></table></div>
+                        </td>
+                    </tr>
+
+                    <tr>                        
+                        <td colspan="3">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tbody><tr>
+                                    <td style="width: 16%"></td>
+                                    <td class="btngap">
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_btnSView__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSView" value="VIEW" id="ctl00_ContentPlaceHolder1_btnSView" class="button-common" cellpadding="0" cellspacing="0"></span>
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_btnSReaet__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSReaet" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSReaet&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSReaet" class="button-common" cellpadding="0" cellspacing="0"></span>
+                                        <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg"></span></span>
+                                    </td>
+
+
+                                </tr>
+                            </tbody></table>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+    </tbody></table>
+
+
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_StuSearchCriteria1_ddlColleges');//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./Encrypted Roll Number Report_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Encrypted Roll Number Report_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

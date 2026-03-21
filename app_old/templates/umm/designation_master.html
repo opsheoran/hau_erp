@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading">
+        <span class="mainheadingborderbottom">Designation Master</span>
+    </div>
+    
+    <div style="padding: 15px;">
+        <form method="POST">
+            <input type="hidden" name="edit_id" value="{{ edit_data.pk_desgid if edit_data else '' }}">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="15%">Designation</td><td class="colon">:</td>
+                    <td class="required" width="34%">
+                        <input type="text" name="name" class="textbox" style="width: 250px;" value="{{ edit_data.designation if edit_data else '' }}" required maxlength="100">
+                        <span style="color:red;">*</span>
+                    </td>
+                    <td width="2%"></td>
+                    <td class="vtext" width="15%">Grade</td><td class="colon">:</td>
+                    <td class="required">
+                        <select name="grade_id" id="ddlGrade" class="dropdown" style="width: 250px;" onchange="updateGradePay()">
+                            <option value="">-- Select Grade --</option>
+                            {% for g in grades %}<option value="{{ g.id }}" data-pay="{{ g.gradepay }}" {% if edit_data and edit_data.fk_gradeid==g.id %}selected{% endif %}>{{ g.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Designation Category</td><td class="colon">:</td>
+                    <td class="required">
+                        <select name="cat_id" class="dropdown" style="width: 250px;" required>
+                            <option value="">-- Select Category --</option>
+                            {% for c in categories %}<option value="{{ c.id }}" {% if edit_data and edit_data.fk_desgcat==c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+                        </select>
+                        <span style="color:red;">*</span>
+                    </td>
+                    <td></td>
+                    <td class="vtext">Grade-Pay</td><td class="colon">:</td>
+                    <td>
+                        <input type="text" name="gpay" id="txtGradePay" class="textbox" style="width: 250px;" value="{{ edit_data.gradepay if edit_data else '0' }}" readonly style="background:#eee;">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Class</td><td class="colon">:</td>
+                    <td class="required">
+                        <select name="class_id" class="dropdown" style="width: 250px;" required>
+                            <option value="">-- Select Class --</option>
+                            {% for cl in classes %}<option value="{{ cl.id }}" {% if edit_data and edit_data.fk_classId==cl.id %}selected{% endif %}>{{ cl.name }}</option>{% endfor %}
+                        </select>
+                        <span style="color:red;">*</span>
+                    </td>
+                    <td></td>
+                    <td class="vtext">Retirement Age</td><td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" name="retire_age" class="textbox" style="width: 250px;" value="{{ edit_data.retireage if edit_data else '60' }}" required onkeypress="return isNumberKey(event);">
+                        <span style="color:red;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Seniority Level</td><td class="colon">:</td>
+                    <td class="required">
+                        <input type="text" name="sen_level" class="textbox" style="width: 250px;" value="{{ edit_data.senioritylevel if edit_data else '1' }}" required onkeypress="return isNumberKey(event);">
+                        <span style="color:red;">*</span>
+                    </td>
+                    <td></td>
+                    <td class="vtext">Qualification</td><td class="colon">:</td>
+                    <td>
+                        <input type="text" name="qualification" class="textbox" style="width: 250px;" value="{{ edit_data.qualification if edit_data else '' }}" maxlength="255">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Remarks</td><td class="colon">:</td>
+                    <td>
+                        <input type="text" name="remarks" class="textbox" style="width: 250px;" value="{{ edit_data.remarks if edit_data else '' }}" maxlength="255">
+                    </td>
+                    <td></td>
+                    <td class="vtext">Is Appointing Authority?</td><td class="colon">:</td>
+                    <td>
+                        <input type="checkbox" name="is_auth" value="1" {% if edit_data and edit_data.Chk_AppointingAuth %}checked{% endif %}>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Next Designation</td><td class="colon">:</td>
+                    <td>
+                        <select name="next_desg" class="dropdown" style="width: 250px;">
+                            <option value="">-- Select Designation --</option>
+                            {% for d in all_desgs %}<option value="{{ d.id }}" {% if edit_data and edit_data.fk_Prodesig==d.id %}selected{% endif %}>{{ d.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td></td>
+                    <td class="vtext">Appointing Authority</td><td class="colon">:</td>
+                    <td>
+                        <select name="app_auth" class="dropdown" style="width: 250px;">
+                            <option value="">-- Select Designation --</option>
+                            {# Live site shows Registrar/VC, we can filter or show all #}
+                            {% for d in all_desgs %}<option value="{{ d.name }}" {% if edit_data and edit_data.Appointing_Auth==d.name %}selected{% endif %}>{{ d.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="5" style="padding-top: 15px;">
+                        <input type="submit" value="{{ 'UPDATE' if edit_data else 'SAVE' }}" class="button-common">
+                        <a href="{{ url_for('umm.designation_master') }}" class="button-common" style="text-decoration:none; display:inline-block; padding: 2px 10px;">RESET</a>
+                        <input type="button" value="Print" class="button-common" onclick="window.print();">
+                        <span id="lblMsg" class="lblmessage" style="margin-left: 10px;"></span>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top: 40px;">
+            <div class="tablesubheading">
+                <span class="subheadingborderbottom">List of Designations</span>
+            </div>
+            <table class="table-grid-view">
+                <thead>
+                    <tr class="header-style">
+                        <td>S. No.</td><td>Designation Name</td><td>Designation Category</td><td>Class</td><td>Grade</td><td>Seniority Level</td><td>Retirement Age</td><td>EDIT</td><td>DELETE</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for d in designations %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index + pagination.per_page * (pagination.page - 1) }}</td>
+                        <td class="fw-bold">{{ d.name }}</td>
+                        <td>{{ d.cat_name or '' }}</td>
+                        <td align="center">{{ d.class_name or '' }}</td>
+                        <td>{{ d.grade_name or '' }}</td>
+                        <td align="center">{{ d.senioritylevel }}</td>
+                        <td align="center">{{ d.retireage }}</td>
+                        <td align="center">
+                            <a href="{{ url_for('umm.designation_master', edit_id=d.id) }}">
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}">
+                            </a>
+                        </td>
+                        <td align="center">
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                                <input type="hidden" name="action" value="DELETE">
+                                <input type="hidden" name="delete_id" value="{{ d.id }}">
+                                <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'includes/pagination.html' %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+
+    function updateGradePay() {
+        var ddl = document.getElementById('ddlGrade');
+        var selectedOption = ddl.options[ddl.selectedIndex];
+        var pay = selectedOption.getAttribute('data-pay');
+        document.getElementById('txtGradePay').value = pay || '0';
+    }
+</script>
+
+{% if get_flashed_messages() %}
+<script>
+    document.getElementById('lblMsg').innerText = "{{ get_flashed_messages()[0] }}";
+</script>
+{% endif %}
+{% endblock %}

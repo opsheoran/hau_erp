@@ -1,0 +1,524 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Prepare Course Plan</span></div>
+    
+    <div style="padding: 10px;">
+        <!-- FILTER FORM -->
+        <form method="GET" id="filterForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="college_id" class="dropdown w-300" required onchange="handleFilterChange()">
+                                <option value="0">--Select College--</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext" width="15%">Admitted Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" class="dropdown w-200" required>
+                                <option value="0">--Select Academic Session--</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" class="dropdown w-300" required onchange="handleFilterChange()">
+                                <option value="0">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext">Specialization</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select name="branch_id" class="dropdown w-200">
+                                <option value="0">--Select Specialization--</option>
+                                {% for b in lookups.branches %}
+                                <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="10"></td></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="4">
+                            <input type="submit" value="GET STUDENTS" class="button-common" style="width:120px;">
+                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="window.location.href='{{ url_for('academics.course_plan') }}'">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+
+        <!-- STUDENT SELECTION -->
+        <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="vtext" width="15%">Student Name</td>
+                    <td class="colon">:</td>
+                    <td class="required">
+                        <select id="ddlStudent" class="dropdown w-300" onchange="loadStudent(this.value)">
+                            <option value="">--Select Student Name--</option>
+                            {% for s in students %}
+                            <option value="{{ s.pk_sid }}" {% if sid|string == s.pk_sid|string %}selected{% endif %}>{{ s.fullname }} [ {{ s.enrollmentno }} ]</option>
+                            {% endfor %}
+                        </select>
+                        <span class="required">*</span>
+                    </td>
+                    <td>
+                        <input type="button" value="Get Courses" class="button-common" style="width:100px;" onclick="loadStudent(document.getElementById('ddlStudent').value)">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br>
+
+        <!-- CREDIT LOAD STATISTICS -->
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="form-table">
+            <tbody>
+                <tr>
+                    <td width="200px"><b>Overall Current credits</b></td>
+                    <td class="colon">:</td>
+                    <td><span id="lblCurrentCr" style="color:Red;font-weight:bold;">0</span></td>
+                    <td width="200px"><b>Required Overall Credits(MIN)</b></td>
+                    <td class="colon">:</td>
+                    <td><span id="lblReqMinCr" style="color:Red;font-weight:bold;">0</span></td>
+                    <td width="200px"><b>Required Overall Credits(MAX)</b></td>
+                    <td class="colon">:</td>
+                    <td><span id="lblReqMaxCr" style="color:Red;font-weight:bold;">495</span></td>
+                </tr>
+                <tr>
+                    <td><b>Current Credit (Major Field)</b></td>
+                    <td class="colon">:</td>
+                    <td><span id="lblCurrentMajor" style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required Credit (Major Field)MIN</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required Credit (Major Field)MAX</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">99</span></td>
+                </tr>
+                <tr>
+                    <td><b>Current Credit (Minor Field)</b></td>
+                    <td class="colon">:</td>
+                    <td><span id="lblCurrentMinor" style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required Credit (Minor Field)MIN</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required Credit (Minor Field)MAX</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">99</span></td>
+                </tr>
+                <tr>
+                    <td><b>Current Credit (Supporting Field)</b></td>
+                    <td class="colon">:</td>
+                    <td><span id="lblCurrentSupporting" style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required Credit (Supporting Field)MIN</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required Credit (Supporting Field)MAX</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">99</span></td>
+                </tr>
+                <tr>
+                    <td><b>Current Credit Research</b></td>
+                    <td class="colon">:</td>
+                    <td><span id="lblCurrentResearch" style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required Credit Research MIN</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required Credit Research MAX</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">0</span></td>
+                </tr>
+                <tr>
+                    <td><b>Current Credit Seminar</b></td>
+                    <td class="colon">:</td>
+                    <td><span id="lblCurrentSeminar" style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required Credit Seminar MIN</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required Credit Seminar MAX</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">0</span></td>
+                </tr>
+                <tr>
+                    <td><b>Current NON Credit</b></td>
+                    <td class="colon">:</td>
+                    <td><span id="lblCurrentNC" style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required NON Credit MIN</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required NON Credit MAX</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">99</span></td>
+                </tr>
+                <tr>
+                    <td><b>Current Deficiency</b></td>
+                    <td class="colon">:</td>
+                    <td><span id="lblCurrentDE" style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required Deficiency MIN</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">0</span></td>
+                    <td><b>Required Deficiency MAX</b></td>
+                    <td class="colon">:</td>
+                    <td><span style="color:Red;font-weight:bold;">99</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="color:seagreen; font-size:10px; margin:10px 0; font-weight:bold;">
+            Note:-1)LightGray for major specialization courses 2)LightBlue for minor specialization courses 3)LightGreen for supporting specialization courses 4)LightSkyBlue for others courses from other degrees 5)LightCyan for Non Credit Compulsory courses
+        </div>
+
+        <div class="tablesubheading"><span class="subheadingborderbottom">List of Courses</span></div>
+        
+        <form method="POST" id="coursePlanForm">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="sid" id="hiddenSid">
+            
+            <div style="width: 100%; overflow: auto; height: 400px; border:1px solid #D4D4D4; margin-top:10px;">
+                <table class="table-grid-view" width="100%" id="gvCourses">
+                    <thead>
+                        <tr class="header-style">
+                            <th width="5%">S.No.</th>
+                            <th width="5%"><input type="checkbox" id="chkAll" onclick="toggleAll(this)"> ALL</th>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th>Credit Hours (T+P)</th>
+                            <th>Course Plan Type</th>
+                            <th width="5%">DELETE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="item-style"><td colspan="7" align="center" style="padding:20px; color:#999;">Select a student to view applicable courses.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <br>
+            <div class="tableheading"><span class="mainheadingborderbottom">Search Courses</span></div>
+            <table class="table-grid-view" width="100%" style="margin-top:10px;" id="gvSearchCoursesTable">
+                <thead>
+                    <tr class="header-style">
+                        <th width="5%">S.No.</th>
+                        <th width="5%">&nbsp;</th>
+                        <th width="15%">Course Code</th>
+                        <th width="20%">Course</th>
+                        <th width="25%">Course Name</th>
+                        <th width="10%">Credit Hours (T+P)</th>
+                        <th width="15%">Course Plan Type</th>
+                        <th width="5%">ADD</th>
+                        <th width="5%">DELETE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="item-style">
+                        <td>1</td>
+                        <td align="center"><input type="checkbox" disabled></td>
+                        <td align="center">
+                            <input type="text" id="txtSearchCode" class="textbox" style="width:100px;" onkeyup="filterSearchCourses()">
+                            <img src="{{ url_for('static', filename='images/srec.jpg') }}" style="cursor:pointer; vertical-align:middle;" onclick="filterSearchCourses()">
+                        </td>
+                        <td align="center">
+                            <select id="ddlSearchCourse" class="dropdown w-250" onchange="fillSearchDetails(this.value)">
+                                <option value="">--select course--</option>
+                            </select>
+                        </td>
+                        <td align="center"><input type="text" id="txtSearchName" class="textbox w-250" readonly></td>
+                        <td align="center"><span id="lblSearchCrHr"></span></td>
+                        <td align="center">
+                            <select id="ddlSearchType" class="dropdown w-150">
+                                <option value="">--Select Course Type--</option>
+                                <option value="MA">Major</option>
+                                <option value="MI">Minor</option>
+                                <option value="SU">Supporting</option>
+                                <option value="NC">Non Credit</option>
+                                <option value="DE">Deficiency</option>
+                                <option value="CP">Common PGS Courses</option>
+                                <option value="OP">Optional</option>
+                            </select>
+                        </td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/Add.jpeg') }}" style="cursor:pointer" onclick="addSearchedCourse()">
+                        </td>
+                        <td align="center">
+                            <img src="{{ url_for('static', filename='images/Remove.jpeg') }}" style="cursor:pointer" onclick="clearSearchFields()">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top:15px; text-align:center;">
+                <input type="submit" value="SAVE" class="button-common" style="width:100px;">
+                <input type="reset" value="RESET" class="button-common" style="width:100px; margin-left:5px;">
+                <input type="button" value="PRINT" class="button-common" style="width:100px; margin-left:5px;">
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+let availableCourses = [];
+let allUniversityCourses = []; 
+let currentPlanIds = new Set();
+let selectedTypes = {}; 
+
+window.addEventListener('beforeunload', () => {
+    localStorage.setItem('course_plan_scroll', window.scrollY);
+});
+window.addEventListener('load', () => {
+    const scrollPos = localStorage.getItem('course_plan_scroll');
+    if (scrollPos) {
+        window.scrollTo(0, parseInt(scrollPos));
+        localStorage.removeItem('course_plan_scroll');
+    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const sid = urlParams.get('sid');
+    if (sid) loadStudent(sid);
+    
+    fetch('/academics/api/courses')
+        .then(res => res.json())
+        .then(data => {
+            allUniversityCourses = data;
+        });
+});
+
+function loadStudent(sid) {
+    if(!sid || sid === '0') return;
+    document.getElementById('ddlStudent').value = sid;
+    document.getElementById('hiddenSid').value = sid;
+
+    fetch('/academics/api/student/' + sid + '/course_plan_data')
+        .then(res => res.json())
+        .then(data => {
+            availableCourses = data.available_courses;
+            currentPlanIds = new Set();
+            selectedTypes = {};
+            
+            data.current_plan.forEach(cp => {
+                currentPlanIds.add(cp.fk_courseid.toString());
+                selectedTypes[cp.fk_courseid.toString()] = cp.coursetype;
+            });
+            
+            availableCourses.forEach(c => {
+                if (!selectedTypes[c.pk_courseid.toString()]) {
+                    selectedTypes[c.pk_courseid.toString()] = c.default_type;
+                }
+            });
+
+            document.getElementById('lblReqMinCr').innerText = data.required_load.min_total;
+            document.getElementById('lblReqMaxCr').innerText = data.required_load.max_total;
+            
+            renderGrid();
+        });
+}
+
+function renderGrid() {
+    const tbody = document.querySelector('#gvCourses tbody');
+    tbody.innerHTML = "";
+    
+    availableCourses.forEach((c, index) => {
+        const isInPlan = currentPlanIds.has(c.pk_courseid.toString());
+        const planType = selectedTypes[c.pk_courseid.toString()] || 'MA';
+        
+        const row = document.createElement('tr');
+        row.className = (index + 1) % 2 === 0 ? 'item-style-alt' : 'item-style';
+        row.align = "center";
+        
+        const colors = {'MA': 'LightGray', 'MI': 'LightBlue', 'SU': 'LightGreen', 'CP': 'LightGrey', 'NC': 'LightCyan', 'DE': 'white', 'OP': 'LightSkyBlue'};
+        row.style.backgroundColor = colors[planType] || 'white';
+
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>
+                <input type="checkbox" name="course_id[]" value="${c.pk_courseid}" ${isInPlan ? 'checked' : ''} onchange="rowCheckChanged(this)">
+            </td>
+            <td>${c.coursecode}</td>
+            <td align="left">${c.coursename}</td>
+            <td>${c.crhr_theory} + ${c.crhr_practical}</td>
+            <td>
+                <select name="type[]" class="dropdown w-150" onchange="typeChanged(this, '${c.pk_courseid}')">
+                    <option value="MA" ${planType === 'MA' ? 'selected' : ''}>Major</option>
+                    <option value="MI" ${planType === 'MI' ? 'selected' : ''}>Minor</option>
+                    <option value="SU" ${planType === 'SU' ? 'selected' : ''}>Supporting</option>
+                    <option value="NC" ${planType === 'NC' ? 'selected' : ''}>Non Credit</option>
+                    <option value="DE" ${planType === 'DE' ? 'selected' : ''}>Deficiency</option>
+                    <option value="CP" ${planType === 'CP' ? 'selected' : ''}>Common PGS Courses</option>
+                    <option value="OP" ${planType === 'OP' ? 'selected' : ''}>Optional</option>
+                </select>
+            </td>
+            <td>
+                <img src="/static/images/Remove.jpeg" style="cursor:pointer" onclick="removeCourse('${c.pk_courseid}')">
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+    
+    recalculateStats();
+}
+
+function removeCourse(cid) {
+    availableCourses = availableCourses.filter(x => x.pk_courseid.toString() !== cid.toString());
+    currentPlanIds.delete(cid.toString());
+    delete selectedTypes[cid.toString()];
+    renderGrid();
+}
+
+function filterSearchCourses() {
+    const term = document.getElementById('txtSearchCode').value.toLowerCase();
+    const ddl = document.getElementById('ddlSearchCourse');
+    ddl.innerHTML = '<option value="">--select course--</option>';
+    
+    if (term.length < 2) return;
+
+    const filtered = allUniversityCourses.filter(c => 
+        c.coursecode.toLowerCase().includes(term) || 
+        c.coursename.toLowerCase().includes(term)
+    );
+    
+    filtered.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.pk_courseid;
+        opt.text = c.coursecode + ' - ' + c.coursename;
+        ddl.appendChild(opt);
+    });
+}
+
+function fillSearchDetails(cid) {
+    if(!cid) return;
+    const c = allUniversityCourses.find(x => x.pk_courseid.toString() === cid.toString());
+    if(c) {
+        document.getElementById('txtSearchName').value = c.coursename;
+        document.getElementById('lblSearchCrHr').innerText = c.crhr_theory + ' + ' + c.crhr_practical;
+    }
+}
+
+function addSearchedCourse() {
+    const cid = document.getElementById('ddlSearchCourse').value;
+    const type = document.getElementById('ddlSearchType').value;
+    if(!cid || !type || type === '') {
+        alert('Please select course and type.');
+        return;
+    }
+    
+    const c = allUniversityCourses.find(x => x.pk_courseid.toString() === cid.toString());
+    if(c) {
+        if(!availableCourses.find(x => x.pk_courseid.toString() === cid.toString())) {
+            const newCourse = {...c, default_type: type};
+            availableCourses.push(newCourse);
+            currentPlanIds.add(cid.toString());
+            selectedTypes[cid.toString()] = type;
+            renderGrid(); 
+            clearSearchFields();
+        } else {
+            alert('Course already in list.');
+        }
+    }
+}
+
+function clearSearchFields() {
+    document.getElementById('txtSearchCode').value = "";
+    document.getElementById('ddlSearchCourse').innerHTML = '<option value="">--select course--</option>';
+    document.getElementById('txtSearchName').value = "";
+    document.getElementById('lblSearchCrHr').innerText = "";
+    document.getElementById('ddlSearchType').value = "";
+}
+
+function rowCheckChanged(chk) {
+    const cid = chk.value;
+    if (chk.checked) currentPlanIds.add(cid.toString());
+    else currentPlanIds.delete(cid.toString());
+    
+    const row = chk.closest('tr');
+    const type = row.querySelector('select[name="type[]"]').value;
+    selectedTypes[cid.toString()] = type;
+    
+    const colors = {'MA': 'LightGray', 'MI': 'LightBlue', 'SU': 'LightGreen', 'CP': 'LightGrey', 'NC': 'LightCyan', 'DE': 'white', 'OP': 'LightSkyBlue'};
+    row.style.backgroundColor = colors[type] || 'white';
+    
+    recalculateStats();
+}
+
+function typeChanged(sel, cid) {
+    const type = sel.value;
+    selectedTypes[cid.toString()] = type;
+    const row = sel.closest('tr');
+    const colors = {'MA': 'LightGray', 'MI': 'LightBlue', 'SU': 'LightGreen', 'CP': 'LightGrey', 'NC': 'LightCyan', 'DE': 'white', 'OP': 'LightSkyBlue'};
+    row.style.backgroundColor = colors[type] || 'white';
+    recalculateStats();
+}
+
+function recalculateStats() {
+    let stats = { total: 0, major: 0, minor: 0, supporting: 0, research: 0, seminar: 0, non_credit: 0, deficiency: 0 };
+    
+    document.querySelectorAll('#gvCourses tbody tr').forEach(row => {
+        const chk = row.querySelector('input[name="course_id[]"]');
+        if (chk && chk.checked) {
+            const typeSelect = row.querySelector('select[name="type[]"]');
+            if(!typeSelect) return;
+            const type = typeSelect.value;
+            const code = row.cells[2].innerText;
+            const name = row.cells[3].innerText.toUpperCase();
+            const crText = row.cells[4].innerText;
+            const parts = crText.split('+');
+            const cr = parseFloat(parts[0] || 0) + parseFloat(parts[1] || 0);
+            
+            stats.total += cr;
+            if (type === 'MA') stats.major += cr;
+            else if (type === 'MI') stats.minor += cr;
+            else if (type === 'SU') stats.supporting += cr;
+            else if (type === 'NC') stats.non_credit += cr;
+            else if (type === 'DE') stats.deficiency += cr;
+            
+            if (name.includes('RESEARCH') || code.includes('599') || code.includes('699')) stats.research += cr;
+            if (name.includes('SEMINAR') || code.includes('591') || code.includes('691')) stats.seminar += cr;
+        }
+    });
+
+    document.getElementById('lblCurrentCr').innerText = stats.total;
+    document.getElementById('lblCurrentMajor').innerText = stats.major;
+    document.getElementById('lblCurrentMinor').innerText = stats.minor;
+    document.getElementById('lblCurrentSupporting').innerText = stats.supporting;
+    document.getElementById('lblCurrentResearch').innerText = stats.research;
+    document.getElementById('lblCurrentSeminar').innerText = stats.seminar;
+    document.getElementById('lblCurrentNC').innerText = stats.non_credit;
+    document.getElementById('lblCurrentDE').innerText = stats.deficiency;
+}
+
+function toggleAll(chk) {
+    document.querySelectorAll('#gvCourses input[name="course_id[]"]').forEach(el => {
+        el.checked = chk.checked;
+        if(el.checked) currentPlanIds.add(el.value.toString());
+        else currentPlanIds.delete(el.value.toString());
+    });
+    recalculateStats();
+}
+
+function handleFilterChange() {
+    localStorage.setItem('course_plan_scroll', window.scrollY);
+    document.getElementById('filterForm').submit();
+}
+</script>
+{% endblock %}

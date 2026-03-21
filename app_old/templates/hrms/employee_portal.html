@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .portal-header { font-size: 15px; color: #3c8dbc; font-weight: bold; border-bottom: 1px solid #3c8dbc; padding-bottom: 5px; margin-bottom: 15px; }
+    .shortcut-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    .shortcut-item { width: 130px; text-align: center; padding: 10px; vertical-align: top; }
+    .shortcut-card { border: 1px solid #ccc; padding: 10px; background: #fff; transition: all 0.2s; display: block; border-radius: 4px; text-decoration: none !important; }
+    .shortcut-card:hover { border-color: #3c8dbc; background: #f9f9f9; transform: scale(1.05); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .shortcut-card img { width: 60px; height: 60px; margin-bottom: 8px; border: 1px solid #ddd; padding: 4px; border-radius: 4px; }
+    .shortcut-title { font-weight: bold; color: #333; font-size: 11px; line-height: 1.2; display: block; }
+    
+    .notice-container { border: 1px solid #ccc; margin-bottom: 20px; }
+    .notice-head { background: #3c8dbc; color: #fff; padding: 6px 10px; font-weight: bold; font-size: 12px; }
+    .notice-body { height: 160px; overflow-y: scroll; padding: 10px; font-size: 11px; background: #fff; }
+</style>
+
+<div class="row">
+    <div class="col-md-8">
+        <h2 class="portal-header">My Shortcuts For Employee Portal</h2>
+        
+        <table class="shortcut-table">
+            <tr>
+                <!-- 1. My Profile -->
+                <td class="shortcut-item">
+                    <a href="{{ url_for('hrms.employee_portal') }}" class="shortcut-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+                        <span class="shortcut-title">My Profile</span>
+                    </a>
+                </td>
+                <!-- 2. Download Document -->
+                <td class="shortcut-item">
+                    <a href="#" class="shortcut-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2912/2912761.png" alt="Document">
+                        <span class="shortcut-title">Download Document</span>
+                    </a>
+                </td>
+                <!-- 3. Leave Request -->
+                <td class="shortcut-item">
+                    <div class="shortcut-card">
+                        <a href="{{ url_for('leave.leave_request') }}" style="text-decoration:none;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2662/2662174.png" alt="Leave">
+                            <span class="shortcut-title">Leave Request</span>
+                        </a>
+                        {% if pending_leaves_count > 0 %}
+                        <div style="margin-top:10px; border-top:1px dashed #ccc; padding-top:5px;">
+                            <a href="{{ url_for('leave.approvals') }}" class="text-danger fw-bold" style="font-size:10px; text-decoration:underline;">
+                                {{ pending_leaves_count }} Pending Approvals
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </td>
+                <!-- 4. Manage Course Plan -->
+                <td class="shortcut-item">
+                    <a href="#" class="shortcut-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3534/3534033.png" alt="Course">
+                        <span class="shortcut-title">Manage Course Plan</span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Notifications Table style mimic -->
+        <div class="card-hau border-success mt-5">
+            <div class="tableheading" style="background:#28a745; border-color:#28a745;">Leave Approval Request Notification</div>
+            <div class="card-body py-3">
+                {% if pending_leaves_count > 0 %}
+                <div class="d-flex align-items-center">
+                    <img src="{{ url_for('static', filename='images/gif-new.gif') }}" style="width: 35px; height: 25px; margin-right: 15px;">
+                    <a href="{{ url_for('leave.approvals') }}" class="fw-bold text-dark fs-6 text-decoration-underline">
+                        YOU HAVE {{ pending_leaves_count }} LEAVES TO APPROVE.
+                    </a>
+                </div>
+                {% else %}
+                <span class="text-muted fw-bold">NO PENDING REQUESTS FOUND.</span>
+                {% endif %}
+            </div>
+            <div class="tableheading" style="background:#f4f4f4; color:#3c8dbc; border-color:#ddd; border-top:1px solid #ddd;">Leave Adjustment Request Notification</div>
+            <div class="card-body py-2">
+                <span class="text-muted fw-bold">NO RECORD FOUND!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notice Boards -->
+    <div class="col-md-4">
+        <div class="notice-container">
+            <div class="notice-head">College Circular/Notice</div>
+            <div class="notice-body text-center text-muted py-5">No active circulars</div>
+        </div>
+        <div class="notice-container">
+            <div class="notice-head">General Notice</div>
+            <div class="notice-body">
+                <ul class="list-unstyled">
+                    <li class="border-bottom pb-1 mb-1">1. <a href="#" class="text-decoration-none">Finance Module Update</a></li>
+                    <li class="border-bottom pb-1 mb-1">2. <a href="#" class="text-decoration-none">HRMS Manual 2025</a></li>
+                    <li class="border-bottom pb-1 mb-1">3. <a href="#" class="text-decoration-none">SNE Approval Process</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

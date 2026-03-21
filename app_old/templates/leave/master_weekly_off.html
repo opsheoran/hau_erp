@@ -1,0 +1,398 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .hau-form-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+    .hau-form-table td { padding: 4px 8px; vertical-align: middle; border: none !important; }
+    .vtext { font-family: Verdana; font-size: 11px; font-weight: bold; color: #333; width: 15%; }
+    .colon { width: 15px; text-align: center; font-weight: bold; }
+    .required { color: red; font-weight: bold; }
+    
+    .tableheading { background: #f4f4f4; padding: 10px; font-weight: bold; color: #3c8dbc; font-size: 11px; border-bottom: 1px solid #ddd; }
+    .tablesubheading { 
+        background-color: #2d5a27 !important; 
+        color: #ffffff !important; 
+        font-weight: bold; 
+        padding: 5px 10px; 
+        font-size: 12px; 
+        border: 1px solid #1e3d1a; 
+        display: block; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .table-grid-view { width: 100%; border-collapse: collapse; border: 1px solid #D4D4D4 !important; }
+    .header-style th, .header-style td { background: #f8f9fa; border: 1px solid #D4D4D4 !important; padding: 6px 10px; text-align: center; font-weight: bold; color: #333; }
+    .item-style td, .item-style-alt td { border: 1px solid #D4D4D4 !important; padding: 5px 8px; }
+    .item-style-alt { background: #FAFAFA; }
+
+    .button-common { 
+        background: #3c8dbc; 
+        color: white; 
+        border: 1px solid #2c729e; 
+        padding: 3px 15px; 
+        font-family: Verdana; 
+        font-size: 11px; 
+        font-weight: bold; 
+        cursor: pointer; 
+        border-radius: 2px;
+        height: 24px;
+    }
+    
+    /* Dual listbox style */
+    .emp-selection-container { display: flex; gap: 20px; align-items: center; margin-top: 10px; }
+    .emp-list-box { width: 100%; height: 200px; border: 1px solid #ccc; overflow-y: auto; background: #fff; padding: 5px; }
+    .emp-item { display: block; padding: 2px 5px; font-size: 10px; border-bottom: 1px solid #eee; cursor: pointer; }
+    .emp-item:hover { background: #eef7ff; }
+    .selected-emp-list { width: 100%; height: 200px; border: 1px solid #ccc; }
+    
+    .white_content-new { 
+        display: none; position: fixed; top: 10%; left: 20%; width: 60%; height: auto; 
+        max-height: 80%; padding: 20px; border: 2px solid #3c8dbc; background-color: white; 
+        z-index: 9999; overflow-y: auto; box-shadow: 0px 0px 30px #000; 
+    }
+</style>
+
+<div class="tableheading">Weekly Off Master</div>
+
+<div class="hau-card" style="padding: 15px; margin-bottom: 20px; border: 1px solid #ddd;">
+    <form method="POST" id="mainForm">
+        <input type="hidden" name="action" value="SAVE">
+        <input type="hidden" name="pk_id" id="form_pk_id">
+        
+        <table class="hau-form-table">
+            <tr>
+                <td class="vtext">Holiday Location</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <select name="hloc_id" id="form_hloc_id" class="dropdown" style="width: 250px;" required>
+                        <option value="">-- Select Holiday Location --</option>
+                        {% for hl in holiday_locations %}
+                        <option value="{{ hl.id }}">{{ hl.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+                <td class="vtext" style="padding-left: 20px;">Description</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="description" id="form_description" class="textbox" style="width: 250px;" required> *
+                </td>
+            </tr>
+            <tr>
+                <td class="vtext">Remarks</td>
+                <td class="colon">:</td>
+                <td class="required">
+                    <input type="text" name="remarks" id="form_remarks" class="textbox" style="width: 250px;" required> *
+                </td>
+                <td colspan="3"></td>
+            </tr>
+        </table>
+
+        <!-- Weekly Off Details Grid -->
+        <div class="tablesubheading" style="background:#f4f4f4; color:#3c8dbc; margin-bottom:10px;">Weekly Off Details</div>
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <th width="50">S.No.</th>
+                    <th width="150">Day</th>
+                    <th width="100">1st</th>
+                    <th width="100">2nd</th>
+                    <th width="100">3rd</th>
+                    <th width="100">4th</th>
+                    <th width="100">5th</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set days = [
+                    ('Monday', 'mon'), ('Tuesday', 'tue'), ('Wednesday', 'wed'),
+                    ('Thursday', 'thur'), ('Friday', 'fri'), ('Saturday', 'sat'), ('Sunday', 'sun')
+                ] %}
+                {% for day_name, day_code in days %}
+                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td class="vtext" style="text-align: left;">{{ day_name }}</td>
+                    {% for w in range(1, 6) %}
+                    <td align="center">
+                        <select name="{{ day_code }}_w{{ w }}" id="{{ day_code }}_w{{ w }}" class="dropdown" style="width: 85px;">
+                            <option value="0">None</option>
+                            <option value="1">Full Day</option>
+                            <option value="2">Half Day</option>
+                        </select>
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Employee Selection Section -->
+        <div class="tableheading" style="margin-top: 30px;">Employees</div>
+        <div style="padding: 15px; border: 1px solid #eee;">
+            <table class="hau-form-table">
+                <tr>
+                    <td class="vtext">Employee Code</td><td class="colon">:</td>
+                    <td><input type="text" id="srch_emp_code" class="textbox"></td>
+                    <td class="vtext" style="padding-left: 20px;">Employee Name</td><td class="colon">:</td>
+                    <td><input type="text" id="srch_emp_name" class="textbox" style="width: 200px;"></td>
+                </tr>
+                <tr>
+                    <td class="vtext">Department</td><td class="colon">:</td>
+                    <td>
+                        <select id="srch_dept" class="dropdown" style="width: 200px;">
+                            <option value="">-- Select --</option>
+                            {% for d in lookups.depts %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                    <td class="vtext" style="padding-left: 20px;">Designation</td><td class="colon">:</td>
+                    <td>
+                        <select id="srch_desg" class="dropdown" style="width: 200px;">
+                            <option value="">-- Select --</option>
+                            {% for d in lookups.desgs %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="padding-top: 10px;">
+                        <button type="button" class="button-common" onclick="searchEmployees()">VIEW EMPLOYEES</button>
+                        <button type="button" class="button-common" style="margin-left: 5px;" onclick="resetEmpSearch()">RESET</button>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="emp-selection-container">
+                <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <span class="vtext">Found Employees</span>
+                        <label class="vtext"><input type="checkbox" id="chkAllEmp" onclick="toggleSelectAll()"> Select ALL</label>
+                    </div>
+                    <div class="emp-list-box" id="empSearchList">
+                        <!-- Populated via JS -->
+                        <div style="color: #999; padding: 20px; text-align: center;">Use search fields to find employees</div>
+                    </div>
+                </div>
+                
+                <div style="width: 40px; text-align: center; font-weight: bold; color: #3c8dbc; font-size: 20px;">
+                    &gt;&gt;&gt;
+                </div>
+                
+                <div style="flex: 1;">
+                    <div class="vtext" style="margin-bottom: 5px;">Selected Employees</div>
+                    <select multiple id="selectedEmpBox" class="selected-emp-list">
+                        <!-- Populated via JS -->
+                    </select>
+                    <div style="margin-top: 5px; text-align: right;">
+                        <button type="button" class="button-common" style="background: #d9534f; border-color: #d43f3a;" onclick="removeSelectedEmp()">REMOVE SELECTED</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">
+            <button type="submit" class="button-common" style="padding: 5px 40px;">SAVE CONFIGURATION</button>
+            <button type="button" class="button-common" style="margin-left: 10px; background: #eee; color: #333; border-color: #ccc;" onclick="resetForm()">RESET ALL</button>
+        </div>
+        
+        <!-- Hidden inputs for employee IDs to be submitted -->
+        <div id="hiddenEmpInputs"></div>
+    </form>
+</div>
+
+<!-- List of Weekly Off Details -->
+<div class="tablesubheading">List of Weekly Off Details</div>
+<div class="hau-card" style="padding: 10px; border: 1px solid #ddd;">
+    <table class="table-grid-view">
+        <thead>
+            <tr class="header-style">
+                <th width="50">S.No.</th>
+                <th>Description</th>
+                <th width="80">EDIT</th>
+                <th width="80">DELETE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for w in weekly_offs %}
+            <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                <td align="center">{{ loop.index }}</td>
+                <td>{{ w.Description }}</td>
+                <td align="center">
+                    <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" alt="Edit" title="Edit" 
+                         onclick='editWeeklyOff("{{ w.id }}")'>
+                </td>
+                <td align="center">
+                    <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this mapping?')">
+                        <input type="hidden" name="id" value="{{ w.id }}">
+                        <input type="hidden" name="action" value="DELETE">
+                        <input type="image" src="{{ url_for('static', filename='images/Delete.gif') }}" alt="Delete" title="Delete">
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" align="center" style="padding: 20px;">No records found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+let selectedEmployees = [];
+
+function searchEmployees() {
+    const code = document.getElementById('srch_emp_code').value;
+    const name = document.getElementById('srch_emp_name').value;
+    const dept = document.getElementById('srch_dept').value;
+    const desg = document.getElementById('srch_desg').value;
+    
+    if (!code && !name && !dept && !desg) {
+        alert("Please provide at least one search criteria.");
+        return;
+    }
+    
+    const qs = `emp_code=${encodeURIComponent(code)}&emp_name=${encodeURIComponent(name)}&dept_id=${encodeURIComponent(dept)}&desg_id=${encodeURIComponent(desg)}`;
+    
+    const list = document.getElementById('empSearchList');
+    list.innerHTML = '<div style="padding: 20px; text-align: center;">Searching...</div>';
+    
+    fetch(`/leave/api/employee/search_advanced?${qs}`)
+        .then(res => res.json())
+        .then(data => {
+            list.innerHTML = '';
+            if (data.length === 0) {
+                list.innerHTML = '<div style="padding: 20px; text-align: center;">No employees found.</div>';
+                return;
+            }
+            
+            data.forEach(e => {
+                // Check if already selected
+                if (selectedEmployees.some(se => se.id === e.id)) return;
+                
+                const div = document.createElement('div');
+                div.className = 'emp-item';
+                div.innerHTML = `<label><input type="checkbox" class="emp-chk" data-id="${e.id}" data-name="${e.display}" onchange="onEmpCheck(this)"> ${e.display}</label>`;
+                list.appendChild(div);
+            });
+        });
+}
+
+function onEmpCheck(chk) {
+    const id = chk.getAttribute('data-id');
+    const name = chk.getAttribute('data-name');
+    
+    if (chk.checked) {
+        if (!selectedEmployees.some(e => e.id === id)) {
+            selectedEmployees.push({id, name});
+        }
+    } else {
+        selectedEmployees = selectedEmployees.filter(e => e.id !== id);
+    }
+    updateSelectedList();
+}
+
+function toggleSelectAll() {
+    const chkAll = document.getElementById('chkAllEmp');
+    const checkboxes = document.querySelectorAll('.emp-chk');
+    checkboxes.forEach(chk => {
+        chk.checked = chkAll.checked;
+        onEmpCheck(chk);
+    });
+}
+
+function updateSelectedList() {
+    const box = document.getElementById('selectedEmpBox');
+    box.innerHTML = '';
+    const hiddenContainer = document.getElementById('hiddenEmpInputs');
+    hiddenContainer.innerHTML = '';
+    
+    selectedEmployees.forEach(e => {
+        const opt = document.createElement('option');
+        opt.value = e.id;
+        opt.text = e.name;
+        box.add(opt);
+        
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'emp_ids[]';
+        input.value = e.id;
+        hiddenContainer.appendChild(input);
+    });
+}
+
+function removeSelectedEmp() {
+    const box = document.getElementById('selectedEmpBox');
+    const toRemove = Array.from(box.selectedOptions).map(o => o.value);
+    selectedEmployees = selectedEmployees.filter(e => !toRemove.includes(e.id));
+    
+    // Uncheck in search list if present
+    toRemove.forEach(id => {
+        const chk = document.querySelector(`.emp-chk[data-id="${id}"]`);
+        if (chk) chk.checked = false;
+    });
+    
+    updateSelectedList();
+}
+
+function resetEmpSearch() {
+    document.getElementById('srch_emp_code').value = '';
+    document.getElementById('srch_emp_name').value = '';
+    document.getElementById('srch_dept').value = '';
+    document.getElementById('srch_desg').value = '';
+    document.getElementById('empSearchList').innerHTML = '<div style="color: #999; padding: 20px; text-align: center;">Use search fields to find employees</div>';
+}
+
+function resetForm() {
+    document.getElementById('mainForm').reset();
+    document.getElementById('form_pk_id').value = '';
+    
+    // Re-enable fields
+    const hloc = document.getElementById('form_hloc_id');
+    hloc.disabled = false;
+    hloc.style.backgroundColor = '#ffffff';
+    
+    selectedEmployees = [];
+    updateSelectedList();
+    resetEmpSearch();
+}
+
+function editWeeklyOff(id) {
+    fetch(`/leave/api/weekly_off/${id}`)
+        .then(res => res.json())
+        .then(data => {
+            const m = data.master;
+            document.getElementById('form_pk_id').value = m.pk_woffid;
+            document.getElementById('form_hloc_id').value = m.fk_holidaylocid;
+            document.getElementById('form_description').value = m.Description;
+            document.getElementById('form_remarks').value = m.Remarks;
+            
+            // Gray out Holiday Location on edit
+            const hloc = document.getElementById('form_hloc_id');
+            hloc.disabled = true;
+            hloc.style.backgroundColor = '#eeeeee';
+            
+            // Set week-wise configuration
+            const days = ['sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat'];
+            days.forEach(d => {
+                const val = m[d] || "0,0,0,0,0";
+                const weeks = val.split(',');
+                weeks.forEach((wVal, i) => {
+                    const el = document.getElementById(`${d}_w${i+1}`);
+                    if (el) el.value = wVal;
+                });
+            });
+            
+            // Set employees
+            selectedEmployees = data.employees.map(e => ({
+                id: e.pk_empid,
+                name: `${e.empname} | ${e.empcode} | ${e.designation || ''}`
+            }));
+            updateSelectedList();
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+}
+
+function enableFieldsBeforeSubmit() {
+    document.getElementById('form_hloc_id').disabled = false;
+}
+</script>
+{% endblock %}

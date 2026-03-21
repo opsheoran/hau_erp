@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+{% block extra_head %}
+<style>
+    .tablesubheading { 
+        background-color: #2d5a27 !important; 
+        color: #ffffff !important; 
+        font-weight: bold; 
+        padding: 5px 10px; 
+        font-size: 12px; 
+        border: 1px solid #1e3d1a; 
+        display: block; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+<div class="hau-card">
+    <div class="tablesubheading">Update Earned Leave Balance (1/11 Routine)</div>
+    <div style="padding: 15px;">
+        <div style="border:1px solid #3c8dbc; background:#f0f7ff; padding:10px; font-family:Verdana; font-size:11px; margin-bottom:20px;">
+            This routine calculates earned leave based on 1/11th of duty days since the last update.
+        </div>
+        
+        <form method="POST" style="max-width: 600px; margin: 0 auto;">
+            <table class="form-table">
+                <tr>
+                    <td class="vtext" width="30%">Target Employee</td><td class="colon">:</td>
+                    <td>
+                        <input type="hidden" name="emp_id" id="emp_id">
+                        <input type="text" id="emp_name" class="textbox" style="width: 250px;" readonly placeholder="Select employee...">
+                        <img src="{{ url_for('static', filename='images/srec.jpg') }}" onclick="ShowSearch()" style="cursor:pointer; vertical-align:middle;">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td style="padding-top: 20px;">
+                        <input type="submit" value="RUN UPDATE ROUTINE" class="button-common" style="background:#3c8dbc; color:white; padding: 5px 20px;">
+                        <input type="reset" value="RESET" class="button-common" style="margin-left:10px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        </div>
+    </div>
+    
+    <script>
+    function selectEmployee(id, name) {
+        document.getElementById('emp_id').value = id;
+        document.getElementById('emp_name').value = name;
+    }
+    </script>
+    {% endblock %}
+    

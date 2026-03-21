@@ -1,0 +1,647 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST" id="mainForm">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="action" id="formAction" value="SAVE">
+
+    <table border="0" cellpadding="0" cellspacing="0" class="form-table" width="100%">
+        <tbody>
+            <tr>
+                <td colspan="6" class="gap"></td>
+            </tr>
+            <tr>
+                <td class="tableheading" colspan="6">Student Marks Entry (UG and MBA)</td>
+            </tr>
+            <tr>
+                <td class="tdgap" colspan="6"></td>
+            </tr>
+            
+            <tr>
+                <td class="vtext" id="lblCollege" width="15%">College</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" colspan="4">
+                    <select name="college_id" id="college_id" class="dropdownvvlong" required onchange="fetchDegrees()">
+                        <option value="">-- Select College--</option>
+                        {% for c in lookups.colleges %}
+                        <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext" id="lblAcdSession">Academic Session</td>      
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="session_id" id="session_id" class="dropdownlong" required onchange="fetchExamConfigs()">
+                        <option value="">--Select Academic Session--</option>
+                        {% for s in lookups.sessions %}
+                        <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext" id="lblDegree">Degree</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="degree_id" id="degree_id" class="dropdown" required onchange="handleDegreeChange()">
+                        <option value="">--Select Degree--</option>
+                        {% for d in lookups.degrees %}
+                        <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext" id="lblSemester">Class</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="class_id" id="class_id" class="dropdown" required onchange="onClassSelect()">
+                        <option value=""> -- Select Class-- </option>
+                        {% for s in lookups.classes %}
+                        <option value="{{ s.id }}" data-order="{{ s.semesterorder | default(loop.index) }}" {% if filters.class_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Department</td>
+                <td class="colon">:</td>
+                <td>
+                    <select name="department_id" id="department_id" class="dropdownlong">
+                        <option value="">-- Select Department --</option>
+                        {% for d in lookups.departments %}
+                        <option value="{{ d.id }}" {% if filters.department_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td id="Year" class="vtext" width="15%">Year</td>
+                <td class="colon" width="2%">:</td>
+                <td class="required" width="36%">
+                    <select name="year_id" id="year_id" class="dropdown" style="background:#f4f4f4; pointer-events:none;" required readonly>
+                        <option value="">--Select Year--</option>
+                        {% for y in lookups.years %}
+                        <option value="{{ y.id }}" {% if filters.year_id|string == y.id|string %}selected{% endif %}>{{ y.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+
+            <tr>
+                <td id="lblExamConfig" class="vtext">Exam Config.</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="exam_config_id" id="exam_config_id" class="dropdown" required>
+                        <option value=""> -- Select Exam Config-- </option>
+                        {% for ec in lookups.exam_configs %}
+                        <option value="{{ ec.id }}" {% if filters.exam_config_id|string == ec.id|string %}selected{% endif %}>{{ ec.name }}</option>
+                        {% endfor %}
+                    </select> *
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Theory/Practical</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="th_pr" id="th_pr" class="dropdown" required onchange="fetchBatches()">
+                        <option value="">--Select--</option>
+                        <option value="T" {% if filters.th_pr == 'T' %}selected{% endif %}>Theory</option>
+                        <option value="P" {% if filters.th_pr == 'P' %}selected{% endif %}>Practical</option>
+                    </select> *
+                </td>
+            </tr>
+
+            <tr>
+                <td class="vtext">Batch</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="batch_id" id="batch_id" class="dropdown" required>
+                        <option value="">--Select Batch--</option>
+                    </select> *
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="button" value="GET COURSES" class="button-common" style="width:131px;" onclick="fetchCourses()">
+                </td>
+            </tr>
+
+            <!-- COURSE SELECTION -->
+            <tr id="courseSelectionHeading" style="display: none;">
+                <td class="tablesubheading" colspan="6" style="height: 19px">Course Selection</td>
+            </tr>
+            <tr class="courseSelectionRow" style="display: none;">
+                <td id="lblCourse" class="vtext">Course</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="course_id" id="course_id" class="dropdownlong" onchange="onCourseSelect()">
+                        <option value="">--Select Course--</option>
+                    </select> *
+                </td>
+            </tr>
+            <tr class="courseSelectionRow" style="display: none;">
+                <td class="vtext">Course Activity</td>
+                <td class="colon">:</td>
+                <td class="required" colspan="4">
+                    <select name="ddlCourseActivity" id="ddlCourseActivity" class="dropdownlong" disabled>
+                        <option value="0">--Select Activity--</option>
+                    </select> *
+                </td>
+            </tr>
+            <tr class="courseSelectionRow" style="display: none;">
+                <td class="vtext">Exam Type</td>
+                <td class="colon">:</td>
+                <td colspan="4">
+                    <select name="ddlExamType" id="ddlExamType" class="dropdown">
+                        <option value="1" selected>Internal</option>
+                        <option value="2">External</option>
+                    </select>
+                </td>
+            </tr>
+            <tr class="courseSelectionRow" style="display: none;">
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <input type="button" value="GET MARKS FILLING SHEET >>" class="button-common" style="font-weight:normal;" onclick="fetchStudents()">
+                    <input type="button" value="VIEW REPORT" class="button-common" style="font-weight:normal;" onclick="viewReport()">
+                    <input type="button" value="RESET" class="button-common" style="font-weight:normal;" onclick="window.location.href='{{ url_for('examination.student_marks_entry_ug') }}'">
+                </td>
+            </tr>
+
+            <!-- STUDENTS INFO AND GRID -->
+            <tr class="marksGridSection" style="display: none;">
+                <td colspan="4"></td>
+                <td colspan="2">
+                    <table cellspacing="0" rules="all" border="1" class="table-grid-view" style="width: 100%; border:1px solid #D4D4D4;border-collapse:collapse;">
+                        <tbody>
+                            <tr class="header-style">
+                                <th scope="col" style="width: 220px">Degree</th>
+                                <th scope="col" style="width: 80px">Semester</th>
+                                <th scope="col" style="width: 80px">Student Count</th>
+                            </tr>
+                            <tr class="item-style" align="center" style="background-color:White;">
+                                <td><span id="lbl_degree_name"></span></td>
+                                <td><span id="lbl_semester_name"></span></td>
+                                <td><span id="lbl_student_count"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+            <tr class="marksGridSection" style="display: none;">
+                <td colspan="6" class="tablesubheading">Students Marks Filling Sheet</td>
+            </tr>
+            
+            <tr class="marksGridSection" style="display: none;">
+                <td colspan="6">
+                    <div id="Div2" class="DivStyleWithScroll" style="width: 100%; max-height: 600px; overflow:auto;">
+                        <table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="marksGridTable" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+                            <thead>
+                                <tr class="header-style" id="marksGridHeader">
+                                    <!-- Dynamic headers -->
+                                </tr>
+                            </thead>
+                            <tbody id="marksGridBody">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="marksGridSection" style="display: none;">
+                <td colspan="2"></td>
+                <td colspan="4" style="padding-top: 10px;">
+                    <input type="hidden" name="alloc_ids" id="h_alloc_ids">
+                    <input type="hidden" name="exam_map_ids" id="h_exam_map_ids">
+                    <div id="actionButtons">
+                        <input type="button" value="SAVE" class="button-common" onclick="submitMarks('SAVE')">
+                        <input type="button" value="SUBMIT" class="button-common" onclick="submitMarks('SUBMIT')">
+                    </div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</form>
+
+<script>
+function fetchDegrees() {
+    const college_id = document.getElementById('college_id').value;
+    const degreeSelect = document.getElementById('degree_id');
+    const deptSelect = document.getElementById('department_id');
+    const classSelect = document.getElementById('class_id');
+    const yearSelect = document.getElementById('year_id');
+    const examConfigSelect = document.getElementById('exam_config_id');
+    const batchSelect = document.getElementById('batch_id');
+    
+    degreeSelect.innerHTML = '<option value="">--Select Degree--</option>';
+    deptSelect.innerHTML = '<option value="">-- Select Department --</option>';
+    classSelect.innerHTML = '<option value=""> -- Select Class-- </option>';
+    yearSelect.value = '';
+    examConfigSelect.innerHTML = '<option value=""> -- Select Exam Config-- </option>';
+    batchSelect.innerHTML = '<option value="">--Select Batch--</option>';
+    
+    if (!college_id) return;
+    
+    fetch(`{{ url_for('academics.get_college_degrees_api', college_id=0) }}`.replace('0', college_id))
+        .then(res => res.json())
+        .then(data => {
+            let html = '<option value="">--Select Degree--</option>';
+            data.forEach(d => {
+                html += `<option value="${d.id}">${d.name}</option>`;
+            });
+            degreeSelect.innerHTML = html;
+        });
+}
+
+function handleDegreeChange() {
+    fetchExamConfigs();
+    fetchSemesters();
+    fetchDepartments();
+}
+
+function fetchDepartments() {
+    const college_id = document.getElementById('college_id').value;
+    const degree_id = document.getElementById('degree_id').value;
+    const deptSelect = document.getElementById('department_id');
+    
+    deptSelect.innerHTML = '<option value="">-- Select Department --</option>';
+    
+    if (!college_id || !degree_id) return;
+    
+    let url = `{{ url_for('academics.get_college_degree_specializations_api', college_id=0, degree_id=0) }}`;
+    url = url.replace('0/degree/0', `${college_id}/degree/${degree_id}`);
+    
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            let html = '<option value="">-- Select Department --</option>';
+            data.forEach(d => {
+                html += `<option value="${d.id}">${d.name}</option>`;
+            });
+            deptSelect.innerHTML = html;
+        });
+}
+
+function fetchBatches() {
+    const college_id = document.getElementById('college_id').value;
+    const session_id = document.getElementById('session_id').value;
+    const degree_id = document.getElementById('degree_id').value;
+    const class_id = document.getElementById('class_id').value;
+    const th_pr = document.getElementById('th_pr').value;
+    const batchSelect = document.getElementById('batch_id');
+    
+    if(!college_id || !session_id || !degree_id || !class_id || !th_pr) {
+        batchSelect.innerHTML = '<option value="">--Select Batch--</option>';
+        return;
+    }
+    
+    fetch(`{{ url_for('examination.get_batches_for_marks_ug') }}?college_id=${college_id}&session_id=${session_id}&degree_id=${degree_id}&class_id=${class_id}&th_pr=${th_pr}`)
+        .then(res => res.json())
+        .then(data => {
+            let html = '<option value="">--Select Batch--</option>';
+            data.forEach(b => {
+                html += `<option value="${b.id}">${b.name}</option>`;
+            });
+            batchSelect.innerHTML = html;
+        });
+}
+
+function viewReport() {
+    const college_id = document.getElementById('college_id').value;
+    const session_id = document.getElementById('session_id').value;
+    const degree_id = document.getElementById('degree_id').value;
+    const class_id = document.getElementById('class_id').value;
+    const year_id = document.getElementById('year_id').value;
+    const exam_config_id = document.getElementById('exam_config_id').value;
+    const th_pr = document.getElementById('th_pr').value;
+    const batch_id = document.getElementById('batch_id').value;
+    const course_id = document.getElementById('course_id').value;
+
+    if(!course_id) {
+        alert("Please select a course and click GET MARKS FILLING SHEET first.");       
+        return;
+    }
+
+    let url = `{{ url_for('examination.generate_marks_report_ug') }}?college_id=${college_id}&session_id=${session_id}&degree_id=${degree_id}&class_id=${class_id}&course_id=${course_id}&year_id=${year_id}&exam_config_id=${exam_config_id}&th_pr=${th_pr}&batch_id=${batch_id}`;
+
+    window.open(url, '_blank');
+}
+function fetchExamConfigs() {
+    const degree_id = document.getElementById('degree_id').value;
+    const session_id = document.getElementById('session_id').value;
+    const examConfigSelect = document.getElementById('exam_config_id');
+    
+    if(!degree_id || !session_id) {
+        examConfigSelect.innerHTML = '<option value=""> -- Select Exam Config-- </option>';
+        return;
+    }
+    
+    fetch(`{{ url_for('examination.get_exam_configs_for_marks') }}?degree_id=${degree_id}&session_id=${session_id}`)
+        .then(res => res.json())
+        .then(data => {
+            let html = '<option value=""> -- Select Exam Config-- </option>';
+            data.forEach(ec => {
+                html += `<option value="${ec.id}">${ec.name}</option>`;
+            });
+            examConfigSelect.innerHTML = html;
+        });
+}
+
+function fetchSemesters() {
+    const degree_id = document.getElementById('degree_id').value;
+    const classSelect = document.getElementById('class_id');
+    const yearSelect = document.getElementById('year_id');
+    
+    if (!degree_id) {
+        classSelect.innerHTML = '<option value=""> -- Select Class-- </option>';
+        yearSelect.value = '';
+        return;
+    }
+    
+    fetch(`{{ url_for('examination.get_semesters_for_degree', degree_id=0) }}`.replace('0', degree_id))
+        .then(res => res.json())
+        .then(data => {
+            let html = '<option value=""> -- Select Class-- </option>';
+            data.forEach(sem => {
+                html += `<option value="${sem.id}" data-order="${sem.semesterorder}">${sem.name}</option>`;
+            });
+            classSelect.innerHTML = html;
+            yearSelect.value = '';
+        });
+}
+
+function onClassSelect() {
+    const classSelect = document.getElementById('class_id');
+    const yearSelect = document.getElementById('year_id');
+    
+    if (classSelect.selectedIndex <= 0) {
+        yearSelect.value = '';
+        return;
+    }
+    
+    const selectedOption = classSelect.options[classSelect.selectedIndex];
+    const order = parseInt(selectedOption.getAttribute('data-order')) || 1;
+    const yearValue = Math.ceil(order / 2).toString();
+    
+    // Auto-select the year based on the calculated yearValue
+    for(let i = 0; i < yearSelect.options.length; i++) {
+        if(yearSelect.options[i].value === yearValue) {
+            yearSelect.selectedIndex = i;
+            break;
+        }
+    }
+}
+
+function toggleRows(className, displayValue) {
+    document.querySelectorAll('.' + className).forEach(el => {
+        el.style.display = displayValue;
+    });
+}
+
+function fetchCourses() {
+    const college_id = document.getElementById('college_id').value;
+    const session_id = document.getElementById('session_id').value;
+    const degree_id = document.getElementById('degree_id').value;
+    const class_id = document.getElementById('class_id').value;
+    const department_id = document.getElementById('department_id').value;
+    const year_id = document.getElementById('year_id').value;
+    const exam_config_id = document.getElementById('exam_config_id').value;
+    const th_pr = document.getElementById('th_pr').value;
+    const batch_id = document.getElementById('batch_id').value;
+    
+    if(!college_id || !session_id || !degree_id || !class_id || !year_id || !exam_config_id || !th_pr || !batch_id) {
+        alert("Please select College, Session, Degree, Class, Year, Exam Config, Theory/Practical, and Batch.");
+        return;
+    }
+    
+    fetch(`{{ url_for('examination.get_courses_for_marks_entry_ug') }}?college_id=${college_id}&session_id=${session_id}&degree_id=${degree_id}&class_id=${class_id}&department_id=${department_id}&year_id=${year_id}&exam_config_id=${exam_config_id}&th_pr=${th_pr}&batch_id=${batch_id}`)
+        .then(res => res.json())
+        .then(data => {
+            if(data.error) {
+                alert(data.error);
+                return;
+            }
+            if(!data.courses || data.courses.length === 0) {
+                alert("No courses found for the selected criteria.");
+                return;
+            }
+            
+            const courseSelect = document.getElementById('course_id');
+            let html = '<option value="">--Select Course--</option>';
+            data.courses.forEach(c => {
+                html += `<option value="${c.id}" data-th="${c.crhr_theory}" data-pr="${c.crhr_practical}" data-nc="${c.is_nc}" data-type="${c.exam_type}">${c.name}</option>`;
+            });
+            courseSelect.innerHTML = html;
+            
+            document.getElementById('courseSelectionHeading').style.display = 'table-row';
+            toggleRows('courseSelectionRow', 'table-row');
+            toggleRows('marksGridSection', 'none');
+        });
+}
+
+function onCourseSelect() {
+    const courseSelect = document.getElementById('course_id');
+    const selectedOpt = courseSelect.options[courseSelect.selectedIndex];
+    
+    if(!selectedOpt.value) {
+        toggleRows('marksGridSection', 'none');
+        document.getElementById('txtCrHrTheory').value = '';
+        document.getElementById('txtCrHrPractical').value = '';
+        document.getElementById('chkIsNC').checked = false;
+        return;
+    }
+    
+    document.getElementById('txtCrHrTheory').value = selectedOpt.getAttribute('data-th') || '0';
+    document.getElementById('txtCrHrPractical').value = selectedOpt.getAttribute('data-pr') || '0';
+    document.getElementById('chkIsNC').checked = (selectedOpt.getAttribute('data-nc') === '1' || selectedOpt.getAttribute('data-nc') === 'true');
+    // We can also adjust exam type dropdown if needed based on data-type
+}
+
+function fetchStudents() {
+    const college_id = document.getElementById('college_id').value;
+    const session_id = document.getElementById('session_id').value;
+    const degree_id = document.getElementById('degree_id').value;
+    const class_id = document.getElementById('class_id').value;
+    const department_id = document.getElementById('department_id').value;
+    const year_id = document.getElementById('year_id').value;
+    const exam_config_id = document.getElementById('exam_config_id').value;
+    const th_pr = document.getElementById('th_pr').value;
+    const batch_id = document.getElementById('batch_id').value;
+    const course_id = document.getElementById('course_id').value;
+    
+    if(!course_id) {
+        alert("Please select a course first.");
+        return;
+    }
+    
+    let url = `{{ url_for('examination.get_students_for_marks_entry_ug') }}?college_id=${college_id}&session_id=${session_id}&degree_id=${degree_id}&class_id=${class_id}&course_id=${course_id}&year_id=${year_id}&th_pr=${th_pr}&batch_id=${batch_id}`;
+    if(department_id) url += `&department_id=${department_id}`;
+    
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            if(data.error) {
+                alert(data.error);
+                return;
+            }
+            if(!data.columns || data.columns.length === 0) {
+                alert("No active weightage configuration found for this course.");
+                return;
+            }
+            if(!data.students || data.students.length === 0) {
+                alert("No students found allocated to this course.");
+                return;
+            }
+            
+            document.getElementById('lbl_degree_name').innerText = data.degree_name;
+            document.getElementById('lbl_semester_name').innerText = data.semester_name;
+            document.getElementById('lbl_student_count').innerText = data.student_count;
+            
+            document.getElementById('h_alloc_ids').value = JSON.stringify(data.alloc_ids);
+            document.getElementById('h_exam_map_ids').value = JSON.stringify(data.exam_map_ids);
+            
+            // Render Headers
+            const headerRow = document.getElementById('marksGridHeader');
+            let headerHtml = `<th scope="col">S.No.</th><th scope="col">Student Name</th>`;
+            data.columns.forEach(col => {
+                headerHtml += `<th scope="col">${col.name}</th>`;
+            });
+            headerRow.innerHTML = headerHtml;
+            
+            // Render Rows
+            const tbody = document.getElementById('marksGridBody');
+            let bodyHtml = '';
+            let isAnyLocked = false;
+            
+            data.students.forEach((s, idx) => {
+                const lockedAttr = 'readonly style="background:#f4f4f4; color:#333;" disabled';
+                const disabledAttr = 'disabled';
+                const bgColor = (idx % 2 === 0) ? 'White' : '#FAFAFA';
+                
+                let rowHtml = `
+                <tr class="item-style" style="background-color:${bgColor};">
+                    <td align="center" style="width:4%;">${idx + 1}</td>
+                    <td align="left" style="width:20%;">
+                        <span>${s.fullname.toUpperCase()} || ${s.enrollmentno} || ${s.roll_no}</span>
+                    </td>`;
+                    
+                data.columns.forEach((col, c_idx) => {
+                    const markData = s.marks[col.id] || {val: '', absent: false};
+                    let markVal = markData.val;
+                    if(markVal !== null && markVal !== undefined && markVal !== '') {
+                        markVal = parseFloat(markVal).toString();
+                    } else {
+                        markVal = '';
+                    }
+                    const isAbs = markData.absent;
+                    const tabindex = (c_idx * 2) + 1;
+                    
+                    rowHtml += `
+                    <td>
+                        <input type="hidden" name="max_${s.alloc_id}_${col.id}" value="${col.max_val}">
+                        <div class="marks-entry-container">
+                            <input type="text" name="marks_${s.alloc_id}_${col.id}" value="${isAbs ? '' : markVal}" 
+                                   class="textbox marks-entry-input" ${lockedAttr}
+                                   id="txt_${s.alloc_id}_${col.id}" tabindex="${tabindex}">
+                            <input type="text" value="${col.max_val}" readonly="readonly" class="textbox marks-entry-max" tabindex="${tabindex + 1}">
+                            <select name="absent_${s.alloc_id}_${col.id}" class="textbox marks-entry-dropdown" ${disabledAttr} 
+                                    id="ddl_${s.alloc_id}_${col.id}">
+                                <option value="0" ${!isAbs ? 'selected' : ''}>P</option>
+                                <option value="1" ${isAbs ? 'selected' : ''}>A</option>
+                            </select>
+                        </div>
+                    </td>`;
+                });
+                
+                rowHtml += `</tr>`;
+                bodyHtml += rowHtml;
+            });
+            
+            tbody.innerHTML = bodyHtml;
+            toggleRows('marksGridSection', 'table-row');
+            
+            // Grid is read-only
+            document.getElementById('actionButtons').innerHTML = `
+                <input type="button" value="SAVE" class="button-common" disabled style="opacity: 0.5; cursor: not-allowed;">
+                <input type="button" value="SUBMIT" class="button-common" disabled style="opacity: 0.5; cursor: not-allowed; margin-left: 10px;">
+            `;
+        });
+}
+
+function validateMarks(inputObj, maxVal) {
+    if(inputObj.value !== '') {
+        const val = parseFloat(inputObj.value);
+        const max = parseFloat(maxVal);
+        if(val > max) {
+            alert(`Marks Cannot Be Greater Than Max Marks (${max})`);
+            inputObj.value = '';
+            inputObj.focus();
+        }
+    }
+}
+
+function toggleAbs(selectObj, txtId) {
+    const txtBox = document.getElementById(txtId);
+    if(selectObj.value === '1') {
+        txtBox.value = '';
+        txtBox.readOnly = true;
+        txtBox.style.background = '#f4f4f4';
+    } else {
+        txtBox.readOnly = false;
+        txtBox.style.background = '#fff';
+    }
+}
+
+function submitMarks(actionType) {
+    if(actionType === 'SUBMIT') {
+        if(!confirm('Are you sure you want to SUBMIT? Once submitted, marks will be locked and cannot be edited.')) {
+            return;
+        }
+    }
+    document.getElementById('formAction').value = actionType;
+    document.getElementById('mainForm').submit();
+}
+
+window.onload = function() {
+    if(document.getElementById('class_id').value) {
+        onClassSelect();
+    }
+    const th_pr_val = document.getElementById('th_pr').value;
+    if (th_pr_val) {
+        const college_id = document.getElementById('college_id').value;
+        const session_id = document.getElementById('session_id').value;
+        const degree_id = document.getElementById('degree_id').value;
+        const class_id = document.getElementById('class_id').value;
+        if(college_id && session_id && degree_id && class_id) {
+            fetch(`{{ url_for('examination.get_batches_for_marks_ug') }}?college_id=${college_id}&session_id=${session_id}&degree_id=${degree_id}&class_id=${class_id}&th_pr=${th_pr_val}`)
+            .then(res => res.json())
+            .then(data => {
+                let html = '<option value="">--Select Batch--</option>';
+                data.forEach(b => {
+                    const isSelected = b.id.toString() === '{{ filters.batch_id }}' ? 'selected' : '';
+                    html += `<option value="${b.id}" ${isSelected}>${b.name}</option>`;
+                });
+                document.getElementById('batch_id').innerHTML = html;
+                
+                // If course_id is present in filters, user probably wants to restore courses
+                if ('{{ filters.course_id }}') {
+                    fetchCourses();
+                    // We can't synchronously auto-select course and fetch students easily without chaining,
+                    // but this is enough to keep the dropdown values populated.
+                }
+            });
+        }
+    }
+};
+</script>
+{% endblock %}

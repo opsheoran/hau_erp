@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hau-card">
+    <div class="tablesubheading"><i class="bi bi-person-badge me-2"></i>Employee Profile: {{ p.basic.empname }}</div>
+    <div style="padding: 15px;">
+        
+        <div class="section-title" style="font-weight: bold; color: #3c8dbc; margin-bottom: 10px; text-transform: uppercase;">
+            Basic Information
+        </div>
+        <table width="100%" class="form-table mb-4">
+            <tr>
+                <td class="vtext" width="18%">Employee Code</td><td class="colon">:</td>
+                <td width="30%">{{ p.basic.empcode }}</td>
+                <td class="vtext" width="18%">Code (Manual)</td><td class="colon">:</td>
+                <td>{{ p.basic.manualempcode or '-' }}</td>
+            </tr>
+            <tr>
+                <td class="vtext">Gender</td><td class="colon">:</td>
+                <td>{{ p.basic.gender }}</td>
+                <td class="vtext">Aadhaar No</td><td class="colon">:</td>
+                <td>{{ p.basic.AadhaarNo or '-' }}</td>
+            </tr>
+            <tr>
+                <td class="vtext">Date of Birth</td><td class="colon">:</td>
+                <td>{{ p.basic.dob_fmt }}</td>
+                <td class="vtext">Joining Date</td><td class="colon">:</td>
+                <td>{{ p.basic.doj_fmt }}</td>
+            </tr>
+            <tr>
+                <td class="vtext">Designation</td><td class="colon">:</td>
+                <td style="font-weight: bold;">{{ p.basic.designation }}</td>
+                <td class="vtext">Nature</td><td class="colon">:</td>
+                <td>{{ p.basic.nature_type }}</td>
+            </tr>
+            <tr>
+                <td class="vtext">Department</td><td class="colon">:</td>
+                <td>{{ p.basic.department }}</td>
+                <td class="vtext">Location</td><td class="colon">:</td>
+                <td>{{ p.basic.actual_location_name }}</td>
+            </tr>
+            <tr>
+                <td class="vtext">DDO</td><td class="colon">:</td>
+                <td>{{ p.basic.actual_ddo_name }}</td>
+                <td class="vtext">Pay Mode</td><td class="colon">:</td>
+                <td>{{ 'Bank' if p.basic.paymode == 'B' else 'Cash' }}</td>
+            </tr>
+            <tr>
+                <td class="vtext">Basic Pay</td><td class="colon">:</td>
+                <td style="color: green; font-weight: bold;">{{ "{:,.2f}".format(p.basic.curbasic) }}</td>
+                <td class="vtext">PAN Number</td><td class="colon">:</td>
+                <td>{{ p.basic.panno or '-' }}</td>
+            </tr>
+        </table>
+
+        <div class="section-title" style="font-weight: bold; color: #3c8dbc; margin-bottom: 10px; text-transform: uppercase;">
+            Qualification Details
+        </div>
+        <table class="table-grid-view mb-4">
+            <thead>
+                <tr class="header-style">
+                    <td width="60px">S.No.</td>
+                    <td align="left">Exam Passed</td>
+                    <td align="left">Board/University</td>
+                    <td align="left">Subject</td>
+                    <td width="100px">Division</td>
+                    <td width="80px">%age</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for q in p.qualifications %}
+                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td>{{ q.exampassed }}</td>
+                    <td>{{ q.examiningbody }}</td>
+                    <td>{{ q.subject }}</td>
+                    <td align="center">{{ q.division }}</td>
+                    <td align="center" style="font-weight: bold;">{{ q.percentage }}%</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" align="center" style="padding: 10px;">No qualification records found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="section-title" style="font-weight: bold; color: #3c8dbc; margin-bottom: 10px; text-transform: uppercase;">
+            Family & Nominees
+        </div>
+        <div style="display: flex; gap: 20px;">
+            <div style="flex: 1;">
+                <table class="table-grid-view">
+                    <thead>
+                        <tr class="header-style"><td colspan="3">Family Members</td></tr>
+                        <tr class="header-style"><td>Name</td><td>Relation</td><td>DOB</td></tr>
+                    </thead>
+                    <tbody>
+                        {% for f in p.family %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td>{{ f.membername }}</td>
+                            <td align="center">{{ f.Relation_name }}</td>
+                            <td align="center">{{ f.dob_fmt }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div style="flex: 1;">
+                <table class="table-grid-view">
+                    <thead>
+                        <tr class="header-style"><td colspan="3">Nominees</td></tr>
+                        <tr class="header-style"><td>Name</td><td>Relation</td><td>Share %</td></tr>
+                    </thead>
+                    <tbody>
+                        {% for n in p.nominees %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                            <td>{{ n.NomineeName }}</td>
+                            <td align="center">{{ n.Ralation }}</td>
+                            <td align="center" style="font-weight: bold; color: #3c8dbc;">{{ n.SharingPart }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section-title" style="font-weight: bold; color: #3c8dbc; margin-top: 20px; margin-bottom: 10px; text-transform: uppercase;">
+            Loan & Advance Status
+        </div>
+        <table class="table-grid-view">
+            <thead>
+                <tr class="header-style">
+                    <td>S.No.</td>
+                    <td align="left">Loan/Adv. Type</td>
+                    <td>Amount</td>
+                    <td>Balance</td>
+                    <td>Total Inst.</td>
+                    <td>Inst. Amt.</td>
+                    <td>Left Inst.</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for l in p.loans %}
+                <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                    <td align="center">{{ loop.index }}</td>
+                    <td style="font-weight: bold;">{{ l.loan_type }}</td>
+                    <td align="right">{{ "{:,.2f}".format(l.lamount) }}</td>
+                    <td align="right" style="color: red; font-weight: bold;">{{ "{:,.2f}".format(l.balAmount) }}</td>
+                    <td align="center">{{ l.noOfInstalments }}</td>
+                    <td align="right">{{ "{:,.2f}".format(l.InstalmentAmount) }}</td>
+                    <td align="center" style="font-weight: bold; color: #3c8dbc;">{{ l.leftInstalments }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" align="center" style="padding: 10px;">No active loan records found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}

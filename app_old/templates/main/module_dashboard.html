@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hau-card">
+    <div class="tableheading" style="font-size: 15px; display: flex; align-items: center;">
+        {% if current_mod_icon %}
+        <div class="module-icon-circle" style="width: 20px; height: 20px; margin-right: 8px;">
+            <img src="{{ url_for('static', filename='images/' + current_mod_icon) }}" alt="Icon">
+        </div>
+        {% endif %}
+        {{ current_mod.modulename }} DASHBOARD
+    </div>
+    <div style="padding: 20px; background: #fff;">
+        <div style="color: #666; font-size: 11px; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+            LOCATION: <span style="font-weight: bold; color: #333;">{{ session.selected_loc_name or 'VC-52' }}</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; align-items: start;">
+            {% for top_name, top_data in menu.items() %}
+            <div class="dashboard-group">
+                <div class="group-header">
+                    {% if top_name|lower == 'master' %}
+                        <i class="fas fa-database me-2"></i>
+                    {% elif top_name|lower == 'transaction' %}
+                        <i class="fas fa-sync-alt me-2"></i>
+                    {% elif top_name|lower == 'reports' %}
+                        <i class="fas fa-file-invoice me-2"></i>
+                    {% else %}
+                        <i class="fas fa-folder me-2"></i>
+                    {% endif %}
+                    <strong>{{ top_name }}</strong>
+                </div>
+                
+                <div class="group-content">
+                    {% for sub_folder in top_data.subs %}
+                    <div class="sub-group">
+                        <div class="sub-header">{{ sub_folder.name }}</div>
+                        <ul class="link-list">
+                            {% for p in sub_folder.pages %}
+                            <li><a href="{{ p.url }}" class="dashboard-link">{{ p.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-group {
+        background: #fff;
+        border: 1px solid #d4d4d4;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+    .group-header {
+        background: #3c8dbc;
+        padding: 10px 15px;
+        color: #fff;
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+    .group-content {
+        padding: 15px;
+    }
+    .sub-group {
+        margin-bottom: 20px;
+    }
+    .sub-header {
+        color: #333;
+        font-weight: bold;
+        font-size: 11px;
+        border-bottom: 1px solid #3c8dbc;
+        padding-bottom: 3px;
+        margin-bottom: 8px;
+        background: #f9f9f9;
+        padding-left: 5px;
+    }
+    .link-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        margin-left: 10px;
+    }
+    .link-list li {
+        margin-bottom: 5px;
+    }
+    .dashboard-link {
+        color: #444;
+        text-decoration: none;
+        font-size: 11px;
+        display: block;
+        padding: 3px 8px;
+        border-radius: 2px;
+        transition: 0.2s;
+    }
+    .dashboard-link:hover {
+        background: #eef7ff;
+        color: #3c8dbc;
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
