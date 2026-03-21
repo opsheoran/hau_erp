@@ -1,6 +1,6 @@
 import os
 from werkzeug.utils import secure_filename
-from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, flash, make_response, send_file
+from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, flash, make_response, send_file, current_app
 import math
 import io
 from datetime import datetime
@@ -12,7 +12,7 @@ from app.models import (
     CourseActivityModel, PackageMasterModel, BoardMasterModel, 
     CertificateMasterModel, PgsCourseLimitModel, SeatDetailModel, 
     AdmissionModel, AdvisoryModel, StudentModel, CourseAllocationModel, ResearchModel, ThesisModel,
-    AdvisoryStatusModel, IGradeModel, BatchModel, EmployeeModel, AdvisorApprovalModel, TeacherApprovalModel, DswApprovalModel, LibraryApprovalModel, FeeApprovalModel, DeanApprovalModel
+    AdvisoryStatusModel, IGradeModel, BatchModel, EmployeeModel, AdvisorApprovalModel, TeacherApprovalModel, DswApprovalModel, LibraryApprovalModel, FeeApprovalModel, DeanApprovalModel, SyllabusModel, AdvisorAllocationModel
 )
 from functools import wraps
 from app.utils import get_page_url, get_pagination, get_pagination_range, clean_json_data
@@ -179,11 +179,15 @@ def session_master():
         'has_prev': page > 1,
         'has_next': page < (math.ceil(total / per_page) if total else 1)
     }
-    
+
     page_range = get_pagination_range(page, pagination['total_pages'])
-    
-    return render_template('academics/session_master.html', 
-                           sessions=sessions, 
+
+    # clean_json_data converts datetimes to 'DD/MM/YYYY' strings that the frontend can safely handle
+    sessions = clean_json_data(sessions)
+
+    return render_template('academics/session_master.html',
+                           sessions=sessions,
+                           sessions_json=sessions,
                            pagination=pagination,
                            page_range=page_range)
 
@@ -237,7 +241,7 @@ def degree_year_master():
     }
     
     page_range = get_pagination_range(page, pagination['total_pages'])
-    
+
     return render_template('academics/degree_year_master.html', 
                            years=years, 
                            pagination=pagination,
@@ -565,7 +569,7 @@ def get_college_details_data_api(college_id):
 
 @academics_bp.route('/api/get_all_employees')
 def get_all_employees_api():
-    sql = "SELECT pk_empid as id, empname + ' || ' + empcode as name FROM SAL_Employee_Mst WHERE active=1 ORDER BY empname"
+    sql = "SELECT pk_empid as id, empname + ' || ' + ISNULL(empcode, '') as name FROM SAL_Employee_Mst WHERE Isactive=1 ORDER BY empname"
     emps = DB.fetch_all(sql)
     return jsonify(emps)
 
@@ -770,7 +774,7 @@ def course_master():
 @academics_bp.route('/api/get_course_details/<int:course_id>')
 def get_course_details_api(course_id):
     details = CourseModel.get_course_details(course_id)
-    return jsonify(details)
+    return jsonify(clean_json_data(details))
 
 @academics_bp.route('/entitlement_master', methods=['GET', 'POST'])
 @permission_required('Entitlement Master')
@@ -1446,11 +1450,11 @@ def college_dean_approval():
 @academics_bp.app_context_processor
 def inject_academic_menu():
     if 'user_id' not in session or str(session.get('current_module_id')) not in ['32', '33']:
-        return dict(ACADEMIC_MENU_CONFIG=ACADEMIC_MENU_CONFIG, academics_tabs=[], academics_breadcrumb=[])
+        return dict(ACADEMIC_MENU_CONFIG=ACADEMIC_MENU_CONFIG, academic_tabs=[], academics_breadcrumb=[])
 
     curr_path = request.path.rstrip('/').lower()
     
-    academics_tabs = []
+    academic_tabs = []
     academics_breadcrumb = []
 
     for main_cat, subs in ACADEMIC_MENU_CONFIG.items():
@@ -1472,12 +1476,12 @@ def inject_academic_menu():
                         academics_breadcrumb = [main_cat, folder_name, p_name]
                 
                 if is_active_group:
-                    academics_tabs = tab_list
+                    academic_tabs = tab_list
                     break
-            if academics_tabs: break
-        if academics_tabs: break
+            if academic_tabs: break
+        if academic_tabs: break
 
-    return dict(ACADEMIC_MENU_CONFIG=ACADEMIC_MENU_CONFIG, academics_tabs=academics_tabs, academics_breadcrumb=academics_breadcrumb)
+    return dict(ACADEMIC_MENU_CONFIG=ACADEMIC_MENU_CONFIG, academic_tabs=academic_tabs, academics_breadcrumb=academics_breadcrumb)
 
 @academics_bp.route('/api/courses')
 def get_all_courses_api():
@@ -2404,6 +2408,11 @@ def course_offer_hod():
         master = AcademicsModel.get_course_offer_master(filters)
         if master:
             selected_ids = set(AcademicsModel.get_course_offer_selected_course_ids(master['Pk_courseallocid']))
+        else:
+            # Auto-check ONLY the courses that are officially mapped to this semester in the syllabus
+            branch_filter = f" AND fk_branchid = {filters.get('branch_id')}" if filters.get('branch_id') else ""
+            default_courses = DB.fetch_all(f"SELECT fk_courseid FROM SMS_Course_Mst_Dtl WHERE fk_degreeid = ? AND fk_semesterid = ?{branch_filter}", [filters.get('degree_id'), filters.get('semester_id')])
+            selected_ids = set(c['fk_courseid'] for c in default_courses)
 
     return render_template('academics/course_offer_hod.html',
                            lookups=lookups,
@@ -2981,22 +2990,16 @@ def package_master():
 
 @academics_bp.route('/api/get_degree_semesters/<int:degree_id>')
 def get_degree_semesters_api(degree_id):
-    # Live system seems to show I to VIII or similar based on min/max sem
-    degree = DB.fetch_one("SELECT minsem, maxsem FROM SMS_Degree_Mst WHERE pk_degreeid = ?", [degree_id])
-    if not degree:
-        return jsonify([])
-    
-    # Fetch all semesters and filter by degree range if applicable, 
-    # but usually semesters are fixed. Let's return all semesters but 
-    # the frontend will know the range from the degree object.
+    # Restrict to I to VIII as per live system standards
+    from app.models.academics import InfrastructureModel
     semesters = InfrastructureModel.get_all_semesters()
-    # We can also fetch only within min/max if needed.
-    return jsonify(semesters)
-
+    from app.utils import clean_json_data
+    return jsonify(clean_json_data(semesters))
 @academics_bp.route('/api/get_package_details/<int:pid>')
 def get_package_details_api(pid):
     details = PackageMasterModel.get_package_details(pid)
-    return jsonify(details)
+    from app.utils import clean_json_data
+    return jsonify(clean_json_data(details))
 
 @academics_bp.route('/board_master', methods=['GET', 'POST'])
 @permission_required('Board Master')
@@ -3070,17 +3073,32 @@ def certificates_master():
 @permission_required('Syllabus Creation [Master]')
 def syllabus_creation():
     if request.method == 'POST':
-        # Placeholder for save logic
-        flash('Functionality under construction.', 'info')
+        action = request.form.get('action')
+        if action == 'SAVE':
+            if SyllabusModel.save_syllabus(request.form):
+                flash('Syllabus saved successfully!', 'success')
+            else:
+                flash('Error saving syllabus.', 'danger')
         return redirect(url_for('academics.syllabus_creation'))
 
     sessions = InfrastructureModel.get_sessions()
     degrees = AcademicsModel.get_all_degrees()
-    
-    return render_template('academics/syllabus_creation.html', 
-                           sessions=sessions, 
+
+    return render_template('academics/syllabus_creation.html',
+                           sessions=sessions,
                            degrees=degrees)
 
+@academics_bp.route('/api/get_syllabus_courses', methods=['POST'])
+def get_syllabus_courses_api():
+    filters = request.json
+    courses = SyllabusModel.get_syllabus_courses(filters)
+    return jsonify(clean_json_data(courses))
+
+@academics_bp.route('/api/get_syllabus', methods=['POST'])
+def get_syllabus_api():
+    data = request.json
+    syllabus = SyllabusModel.get_syllabus(data.get('degree_id'), data.get('session_from'), data.get('session_to'), data.get('course_id'))
+    return jsonify({'syllabus': syllabus})
 @academics_bp.route('/course_detail_report', methods=['GET', 'POST'])
 @permission_required('Course Detail Report')
 def course_detail_report():
@@ -3123,15 +3141,112 @@ def course_detail_report():
             return response
 
         elif rpt_format == '3': # PDF
-            from xhtml2pdf import pisa
+            from reportlab.lib.pagesizes import A4
+            from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
+            from reportlab.lib import colors
+            from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+            from reportlab.lib.units import inch
             from datetime import datetime
-            now_str = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
-            rendered = render_template('academics/reports/course_detail_pdf.html', data=data, filters=filters, now=now_str)
-            pdf_out = io.BytesIO()
-            pisa.CreatePDF(io.BytesIO(rendered.encode("UTF-8")), dest=pdf_out)
-            pdf_out.seek(0)
+            import os
+
+            filter_names = {
+                'session': DB.fetch_scalar("SELECT sessionname FROM SMS_AcademicSession_Mst WHERE pk_sessionid = ?", [filters['session_from']]) if filters.get('session_from') and filters['session_from'] != '0' else 'All',
+                'degree': DB.fetch_scalar("SELECT degreename FROM SMS_Degree_Mst WHERE pk_degreeid = ?", [filters['degree_id']]) if filters.get('degree_id') and filters['degree_id'] != '0' else 'All',
+                'year': DB.fetch_scalar("SELECT degreeyear_char FROM SMS_DegreeYear_Mst WHERE pk_degreeyearid = ?", [filters['year_id']]) if filters.get('year_id') and filters['year_id'] != '0' else 'All',
+                'semester': DB.fetch_scalar("SELECT semester_roman FROM SMS_Semester_Mst WHERE pk_semesterid = ?", [filters['semester_id']]) if filters.get('semester_id') and filters['semester_id'] != '0' else 'All'
+            }
+
+            buffer = io.BytesIO()
+            doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=50)
+            elements = []
+            styles = getSampleStyleSheet()
+
+            # Custom Styles
+            title_style = ParagraphStyle('TitleStyle', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=14, alignment=1)
+            subtitle_style = ParagraphStyle('SubtitleStyle', parent=styles['Normal'], fontName='Helvetica', fontSize=11, alignment=1, spaceAfter=20)
             
-            response = make_response(pdf_out.getvalue())
+            # Header with Logo
+            logo_path = os.path.join(current_app.root_path, 'static', 'images', 'logo.png')
+            header_data = []
+            if os.path.exists(logo_path):
+                img = Image(logo_path, width=1*inch, height=1*inch)
+                header_data.append([img, Paragraph("CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY, HISAR", title_style)])
+            else:
+                header_data.append(["", Paragraph("CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY, HISAR", title_style)])
+            
+            header_table = Table(header_data, colWidths=[1.2*inch, 6*inch])
+            header_table.setStyle(TableStyle([
+                ('ALIGN', (0,0), (0,0), 'LEFT'),
+                ('ALIGN', (1,0), (1,0), 'CENTER'),
+                ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            ]))
+            elements.append(header_table)
+            elements.append(Spacer(1, 10))
+
+            # Subtitle
+            subtitle_text = f"Courses For Session <b>{filter_names['session']}</b>, Degree <b>{filter_names['degree']}</b>, Year <b>{filter_names['year']}</b>, Semester <b>{filter_names['semester']}</b>"
+            elements.append(Paragraph(subtitle_text, subtitle_style))
+
+            # Data Table
+            table_data = [['S.No.', 'Course Code', 'Course Name', 'Cr Hr\nTheory', 'Cr Hr\nPractical']]
+            for i, row in enumerate(data, 1):
+                table_data.append([
+                    str(i),
+                    row.get('coursecode', ''),
+                    Paragraph(row.get('coursename', ''), styles['Normal']),
+                    str(row.get('crhr_theory', '0')),
+                    str(row.get('crhr_practical', '0'))
+                ])
+
+            t = Table(table_data, colWidths=[0.5*inch, 1.5*inch, 3.8*inch, 0.8*inch, 0.8*inch])
+            t.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (-1,0), colors.white),
+                ('TEXTCOLOR', (0,0), (-1,0), colors.black),
+                ('ALIGN', (0,0), (-1,0), 'CENTER'),
+                ('ALIGN', (0,1), (0,-1), 'CENTER'), # SNo
+                ('ALIGN', (1,1), (1,-1), 'LEFT'),   # Code
+                ('ALIGN', (2,1), (2,-1), 'LEFT'),   # Name
+                ('ALIGN', (3,1), (-1,-1), 'CENTER'),# CrHr
+                ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0,0), (-1,-1), 9),
+                ('VALIGN', (0,0), (-1,-1), 'TOP'),
+                ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+                ('BOTTOMPADDING', (0,0), (-1,0), 6),
+                ('TOPPADDING', (0,0), (-1,0), 6),
+            ]))
+            elements.append(t)
+
+            # Define the footer function
+            def add_footer(canvas, doc):
+                canvas.saveState()
+                canvas.setFont('Helvetica', 9)
+                page_num = canvas.getPageNumber()
+                
+                # Page number
+                canvas.drawCentredString(A4[0]/2.0, 20, f"Page {page_num}")
+                
+                # Signatures
+                canvas.setFont('Helvetica-Bold', 9)
+                y_pos = 60
+                date_str = datetime.now().strftime('%d/%m/%Y')
+                
+                # Left side
+                canvas.drawString(40, y_pos + 15, f"Date : {date_str}")
+                canvas.drawString(40, y_pos, "Place :")
+                
+                # Center
+                canvas.drawCentredString(A4[0]/2.0, y_pos, "REGISTRAR")
+                
+                # Right side
+                canvas.drawRightString(A4[0] - 40, y_pos + 15, "DIRECTOR OF ACADEMICS AND")
+                canvas.drawRightString(A4[0] - 40, y_pos, "RESEARCH")
+                
+                canvas.restoreState()
+
+            doc.build(elements, onFirstPage=add_footer, onLaterPages=add_footer)
+            buffer.seek(0)
+            
+            response = make_response(buffer.getvalue())
             response.headers['Content-Type'] = 'application/pdf'
             response.headers['Content-Disposition'] = 'attachment; filename=Course_Detail_Report.pdf'
             return response
@@ -3243,18 +3358,6 @@ def get_batches_with_type_api():
 def get_all_departments_api():
     depts = AcademicsModel.get_departments()
     return jsonify(depts)
-
-@academics_bp.route('/api/get_syllabus_courses', methods=['POST'])
-def get_syllabus_courses_api():
-    data = request.json
-    session_from = data.get('session_from')
-    session_to = data.get('session_to')
-    degree_id = data.get('degree_id')
-    semester_id = data.get('semester_id')
-    dept_id = data.get('dept_id')
-
-    courses = CourseModel.get_syllabus_courses(session_from, session_to, degree_id, semester_id, dept_id)
-    return jsonify(courses)
 
 @academics_bp.route('/minor_advisor', methods=['GET', 'POST'])
 @permission_required('Member of Minor and supporting')
@@ -3622,6 +3725,13 @@ def college_degree_seat_detail():
     
     return render_template('academics/college_degree_seat_detail.html', items=items, lookups=lookups, pagination=pagination, page_range=page_range)
 
+@academics_bp.route('/api/get_pgs_limit/<int:limit_id>')
+def get_pgs_limit_api(limit_id):
+    record = PgsCourseLimitModel.get_limit_by_id(limit_id)
+    if record:
+        return jsonify(clean_json_data(record))
+    return jsonify({'error': 'Record not found'}), 404
+
 @academics_bp.route('/pgs_course_limit_master', methods=['GET', 'POST'])
 @permission_required('PGS Course Limit [Master]')
 def pgs_course_limit_master():
@@ -3658,20 +3768,16 @@ def pgs_course_limit_master():
 
     # Fetch lookup data
     colleges = AcademicsModel.get_colleges_simple()
-    # Filter courses to show only relevant ones if needed, or all. 
+    # Filter courses to show only relevant ones if needed, or all.
     # Restricted to only FIVE PGS courses as requested
     courses = DB.fetch_all("""
-        SELECT pk_courseid as id, '[' + coursecode + ']~' + coursename as name 
-        FROM SMS_Course_Mst 
+        SELECT pk_courseid as id, '[' + coursecode + ']~' + coursename as name
+        FROM SMS_Course_Mst
         WHERE pk_courseid IN (1142, 1147, 1144, 1145, 1143)
         ORDER BY coursecode
     """)
-    
-    # College dropdown should be blank (applicable to all)
-    colleges = []
-    
-    sessions = InfrastructureModel.get_sessions()
 
+    sessions = InfrastructureModel.get_sessions()
     return render_template('academics/pgs_course_limit_master.html', 
                            items=items, 
                            colleges=colleges, 

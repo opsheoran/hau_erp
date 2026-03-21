@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="hau-card">
+<div class="hau-card ajax-card">
     <div class="tableheading">
         <span class="mainheadingborderbottom">Biodata Update Master</span>
     </div>
@@ -12,7 +12,7 @@
                     <td class="vtext" width="12%">College</td>
                     <td class="colon">:</td>
                     <td width="35%">
-                        <select name="college_id" class="textbox w-200 w-300" onchange="this.form.submit()">
+                        <select name="college_id" class="textbox w-200 w-300" onchange="ajaxLoadDegrees(this.value)">
                             <option value="">-- Select College --</option>
                             {% for c in lookups.colleges %}<option value="{{ c.id }}" {% if filters.college_id == c.id|string %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
                         </select> <span class="required">*</span>

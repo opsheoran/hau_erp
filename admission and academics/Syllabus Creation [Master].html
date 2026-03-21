@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<!-- saved from url=(0091)https://hauiums.in/SMS/Reports/SMS_subject_syllabusCreation.aspx?wpid=-371548627&Mwpid=4720 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Syllabus Creation [Master]_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Syllabus Creation [Master]_files/default.css" type="text/css" rel="stylesheet"><link href="./Syllabus Creation [Master]_files/font.css" type="text/css" rel="stylesheet"><link href="./Syllabus Creation [Master]_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Syllabus Creation [Master]_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/SMS/Reports/SMS_subject_syllabusCreation.aspx?wpid=-371548627&amp;Mwpid=4720" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTExNjY5MzQ0OQ8WBB4CaWQFAzU0NR4LcGtfY291cnNlaWQFAzU0NRYCZg8PFgIeB1BlbmRpbmcFATBkFgICAQ9kFhACAg8PFgIeBFRleHQFDiBSYWpiZWVyIFNpbmdoZGQCBA8PFgIfAwUbTExULiAtIDMvMjEvMjAyNiA2OjAzOjUzIEFNZGQCBQ8PFgIfAwUbQ0xULiAtIDMvMjEvMjAyNiA3OjA0OjAxIEFNZGQCBg8PFgIfAwUOIFJhamJlZXIgU2luZ2hkZAIHDw8WAh8DBQ1DT0JTJkgsIEhpc2FyZGQCCQ9kFgJmDxYCHwMFfjxzcGFuPkNvdXJzZSBEZXRhaWxzPC9zcGFuPiZuYnNwOz4mbmJzcDs8c3Bhbj5Db3Vyc2UgTWFuYWdlbWVudDwvc3Bhbj4mbmJzcDs+Jm5ic3A7PHN0cm9uZz5TeWxsYWJ1cyBDcmVhdGlvbiBbTWFzdGVyXTwvU3Ryb25nPmQCCg9kFhYCAw8QDxYGHg1EYXRhVGV4dEZpZWxkBQtzZXNzaW9ubmFtZR4ORGF0YVZhbHVlRmllbGQFDHBrX3Nlc3Npb25pZB4LXyFEYXRhQm91bmRnZBAVEhktLSBTZWxlY3QgRnJvbSBTZXNzaW9uIC0tCjIwMjUtMjAyNiAKMjAyNC0yMDI1IAoyMDIzLTIwMjQgCjIwMjItMjAyMyAKMjAyMS0yMDIyIAoyMDIwLTIwMjEgCjIwMTktMjAyMCAKMjAxOC0yMDE5IAoyMDE3LTIwMTggCjIwMTYtMjAxNyAKMjAxNS0yMDE2IAoyMDE0LTIwMTUgCjIwMTMtMjAxNCAKMjAxMi0yMDEzIAoyMDExLTIwMTIgCjIwMTAtMjAxMSAKMjAwOS0yMDEwIBUSATACNzcCNzICNzACNDYCNDICMjECMjACMTkCMTgCMTcCMTYCMTUCMTQCMTMCNzgCODACNzkUKwMSZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnFgECAmQCBQ8QDxYGHwQFC3Nlc3Npb25uYW1lHwUFDHBrX3Nlc3Npb25pZB8GZ2QQFRIXLS0gU2VsZWN0IFRvIFNlc3Npb24gLS0KMjAyNS0yMDI2IAoyMDI0LTIwMjUgCjIwMjMtMjAyNCAKMjAyMi0yMDIzIAoyMDIxLTIwMjIgCjIwMjAtMjAyMSAKMjAxOS0yMDIwIAoyMDE4LTIwMTkgCjIwMTctMjAxOCAKMjAxNi0yMDE3IAoyMDE1LTIwMTYgCjIwMTQtMjAxNSAKMjAxMy0yMDE0IAoyMDEyLTIwMTMgCjIwMTEtMjAxMiAKMjAxMC0yMDExIAoyMDA5LTIwMTAgFRIBMAI3NwI3MgI3MAI0NgI0MgIyMQIyMAIxOQIxOAIxNwIxNgIxNQIxNAIxMwI3OAI4MAI3ORQrAxJnZ2dnZ2dnZ2dnZ2dnZ2dnZ2cWAQIBZAIHDxAPFgYfBAUKZGVncmVlbmFtZR8FBQtma19kZWdyZWVpZB8GZ2QQFSQRLS1TZWxlY3QgRGVncmVlLS0hQi5TYy4oSG9ucy4pIEFncmljdWx0dXJlKDQgWWVhcikgIUIuU2MuKEhvbnMpIEFncmljdWx0dXJlIDIrNCBZZWFyICJCLlRlY2guKEFncmljdWx0dXJhbCBFbmdpbmVlcmluZykgIkIuU2MuKEhvbnMuKSBIb21lIFNjaWVuY2UoNCBZZWFyKSAiQi5TYy4oSG9ucy4pIEhvbWUgU2NpZW5jZSg2IFllYXIpIAxNLlNjIChCUyZIKSAMUGguRCAoQlMmSCkgEk1CQShBZ3JpYnVzaW5lc3MpIARNQkEgG00uVGVjaChBZ3JpbC4gRW5naW5lZXJpbmcpIB9CLlNjLihIb25zLikgQ29tbXVuaXR5IFNjaWVuY2UgJVBHIERpcGxvbWEgb2YgUmVtb3RlIFNlbnNpbmcgYW5kIEdJUyALTS5TYyAoRlNUKSAKTS5TYyAoSFMpIAtNLlNjIChDT0EpIAtQaC5EIChGU1QpIApQaC5EIChIUykgC1BoLkQgKENPQSkgDFBoLkQgKEFFJlQpIAtQRyBEaXBsb21hIDlQb3N0LUdyYWR1YXRlIERpcGxvbWEgaW4gQ29tbXVuaWNhdGlvbiBza2lsbHMgaW4gRW5nbGlzaCAzUG9zdC1HcmFkdWF0ZSBEaXBsb21hIGluIEVuZ2xpc2ggSGluZGkgVHJhbnNsYXRpb24gUU9uZSBZZWFyIENlcnRpZmljYXRlIENvdXJzZSBpbiBIb21lIEluZHVzdHJ5IDsgR2FybWVudHMgY29uc3RydWN0aW9uIGFuZCBIb3NpZXJ5IAhNLkYuU2MuIBBQaC5ELiAoRmlzaGVyeSkgKEJhY2hlbG9yIG9mIEZpc2hlcmllcyBTY2llbmNlIFByb2dyYW1tZSALTUJBIC1SdXJhbCAQTS5TYy4gKEJpb3RlY2gpIA9QaC5EIChCaW90ZWNoKSAlQi5TYy4oSG9ucy4pIEFncmlidXNpbmVzcyBNYW5hZ2VtZW50IApNLlNjIChDUykgC1BoLkQuIChDUykgF0IuVGVjaC4oQmlvdGVjaG5vbG9neSkgJUIuU2MuKEhvbnMuKSBQaHlzaWNhbCBTY2llbmNlIDQgWWVhciAhQi5TYy4oSG9ucy4pIExpZmUgU2NpZW5jZSA0IHllYXIgFSQRLS1TZWxlY3QgRGVncmVlLS0BMQIyMAIyMQIyMgIyMwIyNAIyNQIyNgIyNwIyOAIyOQIzMAIzMQIzMgIzMwIzNAIzNQIzNgIzNwIzOAIzOQI0MAI0MwI0NQI0NgI0OQI1MAI1MQI1MgI1MwI1NAI1NQI1NgI1NwI1OBQrAyRnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2cWAQIGZAIJDxAPFgYfBAUOc2VtZXN0ZXJfcm9tYW4fBQUNcGtfc2VtZXN0ZXJpZB8GZ2QQFQkUIC0tIFNlbGVjdCBDbGFzcyAtLSACSSADSUkgBElJSSADSVYgAlYgA1ZJIARWSUkgBVZJSUkgFQkUIC0tIFNlbGVjdCBDbGFzcyAtLSABMQEyATMBNAE1ATYBNwE4FCsDCWdnZ2dnZ2dnZxYBAgFkAgsPEA8WBh8EBQpCcmFuY2huYW1lHwUFC1BrX0JyYW5jaElkHwZnZBAVHRUtLVNlbGVjdCBEZXBhcnRtZW50LS0MQWdyaWJ1c2luZXNzGEFncmljdWx0dXJhbCBNZXRlb3JvbG9neQ1CaW8tY2hlbWlzdHJ5D0Jpby1pbmZvcm1hdGljcwZCb3RhbnkZQm90YW55ICYgUGxhbnQgUGh5c2lvbG9neQlDaGVtaXN0cnkQQ29tcHV0ZXIgU2NpZW5jZQpFbnRvbW9sb2d5FUVudmlyb25tZW50YWwgU2NpZW5jZTBFeHRlbnNpb24gRWR1Y2F0aW9uIGFuZCBDb21tdW5pY2F0aW9uIE1hbmFnZW1lbnQZRm9vZCBTY2llbmNlICYgVGVjaG5vbG9neRFGb29kcyAmIE51dHJpdGlvbhpHZW5ldGljcyAmIFBsYW50IEJyZWVkaW5nIDRIb3J0aWN1bHR1cmUgLSBGbG9yaWN1bHR1cmUgJiBsYW5kc2NhcGUgQXJjaGl0ZWN0dXJlHEhvcnRpY3VsdHVyZSAtIEZydWl0IFNjaWVuY2UkSHVtYW4gRGV2ZWxvcG1lbnQgYW5kIGZhbWlseSBTdHVkaWVzC01hdGhlbWF0aWNzDE1pY3JvYmlvbG9neSFNb2xlY3VsYXIgQmlvbG9neSAmIEJpb3RlY2hub2xvZ3kKTmVtYXRvbG9neQdQaHlzaWNzD1BsYW50IFBhdGhvbG9neRBQbGFudCBQaHlzaW9sb2d5CVNvY2lvbG9neQxTb2lsIFNjaWVuY2UKU3RhdGlzdGljcwdab29sb2d5FR0BMAI1MwEyAjE3AjM2AjM3AzEzOQIzNAI1NAE1Ajg3AjUyAjI4AjMwAjcwATgCODECMzECMjACMjICMzUBOQI3OQIxMAIzOQIyMwIxMgIyMQIyNBQrAx1nZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZxYBAhtkAg0PEA8WBh8EBQ9kZWdyZWV5ZWFyX2NoYXIfBQUPcGtfZGVncmVleWVhcmlkHwZnZBAVAQVGaXJzdBUBATEUKwMBZxYBZmQCDw8PFgYfAwULR0VUIENPVVJTRVMeC0NvbW1hbmROYW1lBQpHZXRDb3Vyc2VzHg1BbnRoZW1WaXNpYmxlZ2RkAhMPDxYCHwNlZGQCFQ8PFgIfCGdkFgICAQ88KwARAwAPFgQfBmceC18hSXRlbUNvdW50AhtkARAWABYAFgAMFCsAABYCZg9kFjgCAQ9kFghmD2QWAmYPFQEBMWQCAg8PFgIfAwUkRlNUIDUwNS8gIFBGRSA1MTAgLSAoRk9PRCBQQUNLQUdJTkcpZGQCAw9kFgICAQ8PFgQfAwUPQ3JlYXRlIFN5bGxhYnVzHg9Db21tYW5kQXJndW1lbnQFAzU0NWRkAgQPZBYCAgEPDxYEHwhnHwoFAzU0NWRkAgIPZBYIZg9kFgJmDxUBATJkAgIPDxYCHwMFMkNIRU0gNTIwIEJTTUEgLSAoSW50cm9kdWN0b3J5IElub3JnYW5pYyBDaGVtaXN0cnkpZGQCAw9kFgICAQ8PFgQfAwUPQ3JlYXRlIFN5bGxhYnVzHwoFBDIwMjdkZAIED2QWAgIBDw8WBB8IaB8KBQQy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MjdkAgIPDxYCHwMFRUNPTVAgNTAzIEJTTUEgLSAoSW50cm9kdWN0aW9uIHRvIE5ldHdvcmtpbmcgYW5kIEludGVybmV0IEFwcGxpY2F0aW9uKWRkAgMPZBYCAgEPDxYEHwMFD0NyZWF0ZSBTeWxsYWJ1cx8KBQQzNzk0ZGQCBA9kFgICAQ8PFgQfCGgfCgUEMzc5NGRkAhwPDxYCHgdWaXNpYmxlaGRkAhcPFgQeBkNvbmZpZzK2AwABAAAA/////wEAAAAAAAAADAIAAABZRnJlZENLLkZDS2VkaXRvclYyLCBWZXJzaW9uPTIuNi4zLjIyNDUxLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPTRmODY3NjdjOWI1MTlhMDYFAQAAACpGcmVkQ0suRkNLZWRpdG9yVjIuRkNLZWRpdG9yQ29uZmlndXJhdGlvbnMBAAAAC0NvbmZpZ1RhYmxlAxxTeXN0ZW0uQ29sbGVjdGlvbnMuSGFzaHRhYmxlAgAAAAkDAAAABAMAAAAcU3lzdGVtLkNvbGxlY3Rpb25zLkhhc2h0YWJsZQcAAAAKTG9hZEZhY3RvcgdWZXJzaW9uCENvbXBhcmVyEEhhc2hDb2RlUHJvdmlkZXIISGFzaFNpemUES2V5cwZWYWx1ZXMAAAMDAAUFCwgcU3lzdGVtLkNvbGxlY3Rpb25zLklDb21wYXJlciRTeXN0ZW0uQ29sbGVjdGlvbnMuSUhhc2hDb2RlUHJvdmlkZXII7FE4PwAAAAAKCgMAAAAJBAAAAAkFAAAAEAQAAAAAAAAAEAUAAAAAAAAACx4FVmFsdWVlZAIZDw8WBB8HBQRTQVZFHwMFBFNBVkVkZAILDw8WAh8DZWRkGAIFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYBBQxjdGwwMCRocGxCdG4FImN0bDAwJENvbnRlbnRQbGFjZUhvbGRlcjEkZ3ZDb3Vyc2UPFCsADGRkZGZkZBUBC3BrX2NvdXJzZWlkFCsAGxQrAAECoQQUKwABAusPFCsAAQKsEBQrAAEC8BAUKwABApIRFCsAAQL3ERQrAAECghIUKwABApwTFCsAAQKqFRQrAAECrBUUKwABAsAVFCsAAQLCFRQrAAEC1xUUKwABAuIVFCsAAQLsFRQrAAECpRcUKwABAoYYFCsAAQKKGBQrAAECjhgUKwABAvgaFCsAAQKbGxQrAAECvR0UKwABAr4dFCsAAQK/HRQrAAECwB0UKwABAsEdFCsAAQLSHQIBZGRkZJTdA2f4fXQRRur0LznD3vZPMZikUGy04QnB/AAkELEr">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Syllabus Creation [Master]_files/WebResource.axd" type="text/javascript"></script>
+<script src="./Syllabus Creation [Master]_files/WebResource(1).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="5A916490">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="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">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Syllabus Creation [Master]_files/admission.png">
+                            Admission &amp; Academics
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/SMS/Reports/SMS_subject_syllabusCreation.aspx?wpid=-371548627&amp;Mwpid=4720#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> Rajbeer Singh</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> Rajbeer Singh</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COBS&amp;H, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/SMS/Reports/SMS_subject_syllabusCreation.aspx?wpid=-371548627&amp;Mwpid=4720#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Syllabus Creation [Master]_files/WebResource(2).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Masters and Config." class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2361#" tabindex="-1">Masters and Config.</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:3" role="menuitem" style="position: relative;"><a title="Common Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2398#" tabindex="-1">Common Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:3" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Common Masters preparation" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4718" tabindex="-1">Common Masters preparation</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:6" role="menuitem" style="position: relative;"><a title="Administrative Configurations" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2403#" tabindex="-1">Administrative Configurations</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:6" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Academic Configurations Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4719" tabindex="-1">Academic Configurations Management</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:10" role="menuitem" style="position: relative; float: left;"><a title="Course Details" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2401#" tabindex="-1">Course Details</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:10" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Course Management" class="level2 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4720" tabindex="-1">Course Management</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:13" role="menuitem" style="position: relative; float: left;"><a title="Admission" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2399#" tabindex="-1">Admission</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:13" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:14" role="menuitem" style="position: relative;"><a title="Admission Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2400#" tabindex="-1">Admission Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:14" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Admission Masters Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4721" tabindex="-1">Admission Masters Management</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:17" role="menuitem" style="position: relative;"><a title="Eligibility &amp; Enrollments" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2402#" tabindex="-1">Post Admission Activities</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:17" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Admission No. Generation and Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4722" tabindex="-1">Admission No. Generation and Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Bio Data Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4723" tabindex="-1">Student Bio Data Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Advisory Committee Management for PG/PHD Programme" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4727" tabindex="-1">Advisory Committee Management for PG/PHD Programme</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:23" role="menuitem" style="position: relative; float: left;"><a title="Academics" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2388#" tabindex="-1">Academics</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:23" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:24" role="menuitem" style="position: relative;"><a title="Academics Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=3753#" tabindex="-1">Academics Masters and Cofiguration</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:24" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Calender Event/Notification Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4728" tabindex="-1">Calender Event/Notification Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Transfer, Reg Cancel, Extend, Advisory allocation" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4733" tabindex="-1">Academic Miscellaneous Activities</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:28" role="menuitem" style="position: relative;"><a title="Student Course Allocation" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=3961#" tabindex="-1">Student Course Allocation</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:28" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Subject/Course Allocation and Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4734" tabindex="-1">Student Subject/Course Allocation and Management</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:32" role="menuitem" style="position: relative; float: left;"><a title="Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=4040#" tabindex="-1">Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:32" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:33" role="menuitem" style="position: relative;"><a title="Admission Reports" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=4041#" tabindex="-1">Admission Reports</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:33" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Admission No. Certificate Report, Student Registration Report etc" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4735" tabindex="-1">Admission miscellaneous Reports</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:36" role="menuitem" style="position: relative;"><a title="Academics Reports" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2429#" tabindex="-1">Academics Reports</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:36" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Academic miscellaneous Reports" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4736" tabindex="-1">Academic miscellaneous Reports</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Course content upload Report" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=8474" tabindex="-1">Course content upload report</a></li>
+			</ul></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Course Details</span>&nbsp;&gt;&nbsp;<span>Course Management</span>&nbsp;&gt;&nbsp;<strong>Syllabus Creation [Master]</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Syllabus Creation [Master]_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <script type="text/javascript">
+        function ShowSearch(obj) {
+            document.getElementById('SearchDiv').style.display = 'block';
+        }
+        function HideSearch(obj) {
+            document.getElementById('SearchDiv').style.display = 'none';
+        }
+
+        //        function test() {
+        //            var a = document.getElementById('txtMessage').value;
+        //            alert(a);
+        //        }
+    </script>
+    <table id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_Table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tbody><tr>
+		<td align="left" class="tabbing">
+                <div id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_div1" style="display:inline; width:100%">
+                <a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb1" title="Course Type Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_CourseType_Mst.aspx?wpid=-400586907&amp;Mwpid=4720" style="display:inline-block;width:110px;">Course Type Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb2" title="Paper/Course Title Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_PaperTitle_Mst.aspx?wpid=-1487490480&amp;Mwpid=4720" style="display:inline-block;width:110px;">Paper/Course Title Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb3" title="Course/Subject Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_Course_Dtl.aspx?wpid=1938065253&amp;Mwpid=4720" style="display:inline-block;width:110px;">Course/Subject Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb4" title="ActivityCourse Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_CourseActivity_Mst.aspx?wpid=-1487359410&amp;Mwpid=4720" style="display:inline-block;width:110px;">Activity Course Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb5" title="Activity Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_Activity_mst.aspx?wpid=1972131621&amp;Mwpid=4720" style="display:inline-block;width:110px;">Activity Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb6" title="Package Master" class="tabg" href="https://hauiums.in/SMS/Masters/sms_package_mst.aspx?wpid=1938261858&amp;Mwpid=4720" style="display:inline-block;width:110px;">Package Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb7" title="Course Detail Report" class="tabg" href="https://hauiums.in/SMS/Reports/SMS_Course_Dtl_Rpt.aspx?wpid=-1587134370&amp;Mwpid=4720" style="display:inline-block;width:110px;">Course Detail Report</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb8" title="Syllabus Creation [Master]" class="tabgs" href="https://hauiums.in/SMS/Reports/SMS_subject_syllabusCreation.aspx?wpid=-371548627&amp;Mwpid=4720" style="display:inline-block;width:110px;">Syllabus Creation [Master]</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb9" title="PGS Course Limit [Master]" class="tabg" href="https://hauiums.in/SMS/AdmAcd/SMS_SessionWise_PGS_CourseLimit.aspx?wpid=1576610206&amp;Mwpid=4720" style="display:inline-block;width:110px;">PGS Course Limit [Master]</a></div>
+            </td>
+	</tr>
+</tbody></table>
+
+    <table id="TABLE1" border="0" cellpadding="0" class="secContent" width="100%">
+        <tbody><tr>
+            <td class="tableheading" colspan="6">
+   <span class="mainheadingborderbottom">Syllabus Creation 
+                </span>  
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="vtext" id="lblAcdSession">From Session
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlAcdSession__"><select name="ctl00$ContentPlaceHolder1$D_ddlAcdSession" id="ctl00_ContentPlaceHolder1_D_ddlAcdSession" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlAcdSession&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" style="position: static">
+	<option value="0">-- Select From Session --</option>
+	<option value="77">2025-2026 </option>
+	<option selected="selected" value="72">2024-2025 </option>
+	<option value="70">2023-2024 </option>
+	<option value="46">2022-2023 </option>
+	<option value="42">2021-2022 </option>
+	<option value="21">2020-2021 </option>
+	<option value="20">2019-2020 </option>
+	<option value="19">2018-2019 </option>
+	<option value="18">2017-2018 </option>
+	<option value="17">2016-2017 </option>
+	<option value="16">2015-2016 </option>
+	<option value="15">2014-2015 </option>
+	<option value="14">2013-2014 </option>
+	<option value="13">2012-2013 </option>
+	<option value="78">2011-2012 </option>
+	<option value="80">2010-2011 </option>
+	<option value="79">2009-2010 </option>
+
+</select></span>
+                *
+            </td>
+            <td class="vtext">To Session
+            </td>
+            <td class="colon">:
+            </td>
+            <td class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddltosession__"><select name="ctl00$ContentPlaceHolder1$ddltosession" id="ctl00_ContentPlaceHolder1_ddltosession" class="dropdownlong" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddltosession&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;" style="position: static">
+	<option value="0">-- Select To Session --</option>
+	<option selected="selected" value="77">2025-2026 </option>
+	<option value="72">2024-2025 </option>
+	<option value="70">2023-2024 </option>
+	<option value="46">2022-2023 </option>
+	<option value="42">2021-2022 </option>
+	<option value="21">2020-2021 </option>
+	<option value="20">2019-2020 </option>
+	<option value="19">2018-2019 </option>
+	<option value="18">2017-2018 </option>
+	<option value="17">2016-2017 </option>
+	<option value="16">2015-2016 </option>
+	<option value="15">2014-2015 </option>
+	<option value="14">2013-2014 </option>
+	<option value="13">2012-2013 </option>
+	<option value="78">2011-2012 </option>
+	<option value="80">2010-2011 </option>
+	<option value="79">2009-2010 </option>
+
+</select></span>
+
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext" id="lbldegree">Degree
+            </td>
+            <td class="colon">:
+            </td>
+            <td valign="top" class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddldegree__"><select name="ctl00$ContentPlaceHolder1$D_ddldegree" id="ctl00_ContentPlaceHolder1_D_ddldegree" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddldegree&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value="--Select Degree--">--Select Degree--</option>
+	<option value="1">B.Sc.(Hons.) Agriculture(4 Year) </option>
+	<option value="20">B.Sc.(Hons) Agriculture 2+4 Year </option>
+	<option value="21">B.Tech.(Agricultural Engineering) </option>
+	<option value="22">B.Sc.(Hons.) Home Science(4 Year) </option>
+	<option value="23">B.Sc.(Hons.) Home Science(6 Year) </option>
+	<option selected="selected" value="24">M.Sc (BS&amp;H) </option>
+	<option value="25">Ph.D (BS&amp;H) </option>
+	<option value="26">MBA(Agribusiness) </option>
+	<option value="27">MBA </option>
+	<option value="28">M.Tech(Agril. Engineering) </option>
+	<option value="29">B.Sc.(Hons.) Community Science </option>
+	<option value="30">PG Diploma of Remote Sensing and GIS </option>
+	<option value="31">M.Sc (FST) </option>
+	<option value="32">M.Sc (HS) </option>
+	<option value="33">M.Sc (COA) </option>
+	<option value="34">Ph.D (FST) </option>
+	<option value="35">Ph.D (HS) </option>
+	<option value="36">Ph.D (COA) </option>
+	<option value="37">Ph.D (AE&amp;T) </option>
+	<option value="38">PG Diploma </option>
+	<option value="39">Post-Graduate Diploma in Communication skills in English </option>
+	<option value="40">Post-Graduate Diploma in English Hindi Translation </option>
+	<option value="43">One Year Certificate Course in Home Industry ; Garments construction and Hosiery </option>
+	<option value="45">M.F.Sc. </option>
+	<option value="46">Ph.D. (Fishery) </option>
+	<option value="49">Bachelor of Fisheries Science Programme </option>
+	<option value="50">MBA -Rural </option>
+	<option value="51">M.Sc. (Biotech) </option>
+	<option value="52">Ph.D (Biotech) </option>
+	<option value="53">B.Sc.(Hons.) Agribusiness Management </option>
+	<option value="54">M.Sc (CS) </option>
+	<option value="55">Ph.D. (CS) </option>
+	<option value="56">B.Tech.(Biotechnology) </option>
+	<option value="57">B.Sc.(Hons.) Physical Science 4 Year </option>
+	<option value="58">B.Sc.(Hons.) Life Science 4 year </option>
+
+</select></span>
+                *
+            </td>
+            <td class="vtext" id="lblSemester">Class
+            </td>
+            <td class="colon">:
+            </td>
+            <td align="left" class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlSemester__"><select name="ctl00$ContentPlaceHolder1$D_ddlSemester" id="ctl00_ContentPlaceHolder1_D_ddlSemester" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$D_ddlSemester&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value=" -- Select Class -- "> -- Select Class -- </option>
+	<option selected="selected" value="1">I </option>
+	<option value="2">II </option>
+	<option value="3">III </option>
+	<option value="4">IV </option>
+	<option value="5">V </option>
+	<option value="6">VI </option>
+	<option value="7">VII </option>
+	<option value="8">VIII </option>
+
+</select></span>
+                *
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Department
+            </td>
+            <td class="colon">:
+            </td>
+            <td>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlBranch__"><select name="ctl00$ContentPlaceHolder1$ddlBranch" id="ctl00_ContentPlaceHolder1_ddlBranch" class="dropdown">
+	<option value="0">--Select Department--</option>
+	<option value="53">Agribusiness</option>
+	<option value="2">Agricultural Meteorology</option>
+	<option value="17">Bio-chemistry</option>
+	<option value="36">Bio-informatics</option>
+	<option value="37">Botany</option>
+	<option value="139">Botany &amp; Plant Physiology</option>
+	<option value="34">Chemistry</option>
+	<option value="54">Computer Science</option>
+	<option value="5">Entomology</option>
+	<option value="87">Environmental Science</option>
+	<option value="52">Extension Education and Communication Management</option>
+	<option value="28">Food Science &amp; Technology</option>
+	<option value="30">Foods &amp; Nutrition</option>
+	<option value="70">Genetics &amp; Plant Breeding </option>
+	<option value="8">Horticulture - Floriculture &amp; landscape Architecture</option>
+	<option value="81">Horticulture - Fruit Science</option>
+	<option value="31">Human Development and family Studies</option>
+	<option value="20">Mathematics</option>
+	<option value="22">Microbiology</option>
+	<option value="35">Molecular Biology &amp; Biotechnology</option>
+	<option value="9">Nematology</option>
+	<option value="79">Physics</option>
+	<option value="10">Plant Pathology</option>
+	<option value="39">Plant Physiology</option>
+	<option value="23">Sociology</option>
+	<option value="12">Soil Science</option>
+	<option selected="selected" value="21">Statistics</option>
+	<option value="24">Zoology</option>
+
+</select></span>
+            </td>
+            <td class="vtext">Year
+            </td>
+            <td class="colon">:
+            </td>
+            <td>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlYear__"><select name="ctl00$ContentPlaceHolder1$ddlYear" id="ctl00_ContentPlaceHolder1_ddlYear" disabled="disabled" tabindex="7" class="dropdown">
+	<option selected="selected" value="1">First</option>
+
+</select></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="3">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnGetCourses__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnGetCourses" value="GET COURSES" onclick="return btnSave_PreCallBack();javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnGetCourses&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;Getting...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnGetCourses" class="button-common" cellpadding="0" cellspacing="0"></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_btnReset__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnReset" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnReset&#39;,&#39;&#39;,true,&#39;&#39;,&#39;&#39;,&#39;CLEARING..&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnReset" class="button-common" cellpadding="0" cellspacing="0"></span>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_lblMsg__"><span id="ctl00_ContentPlaceHolder1_lblMsg" class="lblmessage"></span></span>
+            </td>
+        </tr>
+    </tbody></table>
+    <div id="Anthem_ctl00_ContentPlaceHolder1_pnlcourse__"><div id="ctl00_ContentPlaceHolder1_pnlcourse">
+	
+        <table id="tblpanel" border="0" cellpadding="0" class="secContent" width="100%">
+            <tbody><tr>
+                <td class="tablesubheading" colspan="6">List of Courses
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="6">
+                    <div id="Anthem_ctl00_ContentPlaceHolder1_gvCourse__"><div>
+		<table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" id="ctl00_ContentPlaceHolder1_gvCourse" style="width:99%;border:1px solid #D4D4D4;border-collapse:collapse;">
+			<tbody><tr class="header-style">
+				<th scope="col">S.No.</th><th scope="col">Course Name</th><th scope="col">Create Syllabus</th><th scope="col">View</th>
+			</tr><tr class="item-style" style="color:Black;background-color:#E4EAFF;font-weight:normal;">
+				<td align="center" style="width:5%;">
+                                    1
+                                </td><td align="left" style="width:50%;">FST 505/  PFE 510 - (FOOD PACKAGING)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl02_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl02_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl02$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl02_lnkreport1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl02_lnkreport1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl02$lnkreport1&#39;,&#39;&#39;)">View</a></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    2
+                                </td><td align="left" style="width:50%;">CHEM 520 BSMA - (Introductory Inorganic Chemistry)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl03_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl03_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl03$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl03_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    3
+                                </td><td align="left" style="width:50%;">FST 505 BSMA - (Food Packaging)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl04_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl04_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl04$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl04_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    4
+                                </td><td align="left" style="width:50%;">PP 503 BSMA - (Plant Developmental Biology: Physiological And Molecular Basis)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl05_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl05_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl05$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl05_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    5
+                                </td><td align="left" style="width:50%;">MATH 521 BSMA - (Topology)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl06_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl06_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl06$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl06_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    6
+                                </td><td align="left" style="width:50%;">STAT 502 BSMA - (Statistical Methods for Applied Sciences)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl07_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl07_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl07$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl07_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    7
+                                </td><td align="left" style="width:50%;">MBB 501 BSMA - (Principles of Biotechnology)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl08_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl08_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl08$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl08_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    8
+                                </td><td align="left" style="width:50%;">AQC 503 BSMA - (Hatchery Technology for Fin fishes and Shell fishes)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl09_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl09_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl09$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl09_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    9
+                                </td><td align="left" style="width:50%;">MBB 508 BSMA - (Introduction to Bioinformatics)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl10_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl10_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl10$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl10_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    10
+                                </td><td align="left" style="width:50%;">MBB 510 BSMA - (Microbial and Industrial Biotechnology)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl11_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl11_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl11$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl11_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    11
+                                </td><td align="left" style="width:50%;">BI 501 BSMA - (Introduction to Bioinformatics &amp; Computational Biology)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl12_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl12_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl12$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl12_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    12
+                                </td><td align="left" style="width:50%;">BI 503 BSMA - (Genome Assembly and Annotation)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl13_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl13_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl13$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl13_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    13
+                                </td><td align="left" style="width:50%;">ABT 502 BSMA - (Molecular Biology)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl14_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl14_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl14$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl14_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    14
+                                </td><td align="left" style="width:50%;">ABT 514 BSMA - (Stress Biology)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl15_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl15_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl15$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl15_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    15
+                                </td><td align="left" style="width:50%;">AEC 506 BSMA - (Agricultural Development and Policy Analysis)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl16_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl16_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl16$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl16_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    16
+                                </td><td align="left" style="width:50%;">GPB 501 BSMA - (Principles of Genetics)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl17_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl17_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl17$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl17_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    17
+                                </td><td align="left" style="width:50%;">Soil 502 BSMA - (Soil fertility and fertilizer use)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl18_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl18_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl18$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl18_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    18
+                                </td><td align="left" style="width:50%;">Soil 506 BSMA - (Soil Biology and Biochemistry)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl19_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl19_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl19$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl19_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    19
+                                </td><td align="left" style="width:50%;">Soil 510 BSMA - (Analytical technique and instrumental methods in soil and plant analysis)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl20_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl20_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl20$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl20_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    20
+                                </td><td align="left" style="width:50%;">PGS 501 BSMA - (Library and Information Services)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl21_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl21_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl21$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl21_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    21
+                                </td><td align="left" style="width:50%;">RMCS 507 BSMA - (Consumer Issues and Legislations)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl22_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl22_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl22$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl22_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    22
+                                </td><td align="left" style="width:50%;">COMP 501 BSMA - (Computer Programming in Scientific Research)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl23_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl23_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl23$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl23_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    23
+                                </td><td align="left" style="width:50%;">COMP 502 BSMA - (Computer Fundamental &amp; Office Automation)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl24_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl24_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl24$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl24_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    24
+                                </td><td align="left" style="width:50%;">COMP 503 BSMA - (Introduction to Networking and Internet Applications)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl25_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl25_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl25$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl25_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    25
+                                </td><td align="left" style="width:50%;">COMP 504 BSMA - (Scientific data Processing)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl26_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl26_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl26$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl26_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:#FAFAFA;">
+				<td align="center" style="width:5%;">
+                                    26
+                                </td><td align="left" style="width:50%;">COMP 505 BSMA - (Introduction to Big Data)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl27_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl27_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl27$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl27_lnkreport1__"></span>
+
+
+                                </td>
+			</tr><tr class="item-style" style="background-color:White;">
+				<td align="center" style="width:5%;">
+                                    27
+                                </td><td align="left" style="width:50%;">COMP 503 BSMA - (Introduction to Networking and Internet Application)</td><td align="center" style="width:30%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl28_lnkSelect1__"><a id="ctl00_ContentPlaceHolder1_gvCourse_ctl28_lnkSelect1" class="GridLink" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$gvCourse$ctl28$lnkSelect1&#39;,&#39;&#39;)">Create Syllabus</a></span>
+
+
+                                </td><td align="center" style="width:10%;">
+                                    <span id="Anthem_ctl00_ContentPlaceHolder1_gvCourse_ctl28_lnkreport1__"></span>
+
+
+                                </td>
+			</tr>
+		</tbody></table>
+	</div></div>
+
+                </td>
+
+            </tr>
+            <tr>
+                <td colspan="6"></td>
+            </tr>
+        </tbody></table>
+    
+</div></div>
+
+
+    <div id="SearchDiv" class="white_content-new" style="display: none;">
+        <div class="popupboxouter">
+            <div class="popupbox">
+                <div onclick="document.getElementById(&#39;SearchDiv&#39;).style.display=&#39;none&#39;;" class="close">
+                    X
+                </div>
+                <table id="tblsyl" border="0" cellpadding="0" class="secContent" width="100%">
+                    <tbody><tr>
+                        <td class="tablesubheading" colspan="6">Syllabus Creation
+                        </td>
+                    </tr>
+                    <tr>
+                        
+                        <td colspan="6">
+                            <div><input type="hidden" id="ctl00_ContentPlaceHolder1_txtSyllabus" name="ctl00$ContentPlaceHolder1$txtSyllabus" value=""><input type="hidden" id="ctl00_ContentPlaceHolder1_txtSyllabus___Config" value="HtmlEncodeOutput=true"><iframe id="ctl00_ContentPlaceHolder1_txtSyllabus___Frame" src="./Syllabus Creation [Master]_files/fckeditor.html" width="800px" height="350px" frameborder="no" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; width: 800px; height: 350px;"></iframe></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        
+                        <td colspan="6" align="center">
+                            <input type="submit" name="ctl00$ContentPlaceHolder1$btnSave" value="SAVE" id="ctl00_ContentPlaceHolder1_btnSave" class="button-common" cellpadding="5" cellspacing="5">
+
+                        </td>
+                    </tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+
+<script type="text/javascript">
+//<![CDATA[
+ShowSearch();//]]>
+</script>
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script></form>
+
+
+<script language="javascript" src="./Syllabus Creation [Master]_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Syllabus Creation [Master]_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+<iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; height: 0px; width: 0px; position: absolute; z-index: 10000;" src="./Syllabus Creation [Master]_files/saved_resource.html"></iframe><iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; height: 0px; width: 0px; position: absolute; z-index: 10000;" src="./Syllabus Creation [Master]_files/saved_resource(1).html"></iframe><iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; height: 0px; width: 0px; position: absolute; z-index: 10000;" src="./Syllabus Creation [Master]_files/saved_resource(2).html"></iframe><iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; height: 0px; width: 0px; position: absolute; z-index: 10000;" src="./Syllabus Creation [Master]_files/saved_resource(3).html"></iframe><iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; height: 0px; width: 0px; position: absolute; z-index: 10000;" src="./Syllabus Creation [Master]_files/saved_resource(4).html"></iframe><iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; height: 0px; width: 0px; position: absolute; z-index: 10000;" src="./Syllabus Creation [Master]_files/saved_resource(5).html"></iframe><iframe src="javascript:void(0)" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; height: 0px; width: 0px; position: absolute; z-index: 10000;" src="./Syllabus Creation [Master]_files/saved_resource(6).html"></iframe></body><script>window.FCKeditorAPI = {Version : "2.6.4",VersionBuild : "21629",Instances : window.FCKeditorAPI && window.FCKeditorAPI.Instances || {},GetInstance : function( name ){return this.Instances[ name ];},_FormSubmit : function(){for ( var name in FCKeditorAPI.Instances ){var oEditor = FCKeditorAPI.Instances[ name ] ;if ( oEditor.GetParentForm && oEditor.GetParentForm() == this )oEditor.UpdateLinkedField() ;}this._FCKOriginalSubmit() ;},_FunctionQueue	: window.FCKeditorAPI && window.FCKeditorAPI._FunctionQueue || {Functions : new Array(),IsRunning : false,Add : function( f ){this.Functions.push( f );if ( !this.IsRunning )this.StartNext();},StartNext : function(){var aQueue = this.Functions ;if ( aQueue.length > 0 ){this.IsRunning = true;aQueue[0].call();}else this.IsRunning = false;},Remove : function( f ){var aQueue = this.Functions;var i = 0, fFunc;while( (fFunc = aQueue[ i ]) ){if ( fFunc == f )aQueue.splice( i,1 );i++ ;}this.StartNext();}}}</script></html>

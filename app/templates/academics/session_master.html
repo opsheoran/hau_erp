@@ -104,8 +104,8 @@
                         <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
                             <td>{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
                             <td><b>{{ s.sessionname }}</b></td>
-                            <td>{{ s.sessionstart_dt.strftime('%d/%m/%Y') if s.sessionstart_dt else '' }}</td>
-                            <td>{{ s.sessionend_dt.strftime('%d/%m/%Y') if s.sessionend_dt else '' }}</td>
+                            <td>{{ s.sessionstart_dt if s.sessionstart_dt else '' }}</td>
+                            <td>{{ s.sessionend_dt if s.sessionend_dt else '' }}</td>
                             <td>{{ s.sessionorder }}</td>
                             <td>
                                 {% if s.isadmissionopen %}
@@ -115,7 +115,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editSess({{ s|tojson }})'>
+                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editSess({{ sessions_json[loop.index0]|tojson }})'>
                             </td>
                             <td>
                                 <form method="POST" onsubmit="return confirm('Are you sure you want to delete this session?');" style="display:inline;">
@@ -156,6 +156,16 @@ function editSess(s) {
     // Helper to format date for input type=date (YYYY-MM-DD)
     const formatDate = (val) => {
         if (!val) return '';
+        
+        // Handle DD/MM/YYYY format which comes from clean_json_data or tojson serialization
+        if (typeof val === 'string' && val.includes('/')) {
+            const parts = val.split('/');
+            if (parts.length === 3) {
+                return `${parts[2]}-${parts[1]}-${parts[0]}`; // YYYY-MM-DD
+            }
+        }
+        
+        // Handle standard JS Date strings (like Wed, 01 Jan 2025 ...)
         const d = new Date(val);
         if (isNaN(d.getTime())) return '';
         const year = d.getFullYear();
@@ -164,8 +174,23 @@ function editSess(s) {
         return `${year}-${month}-${day}`;
     };
 
-    document.getElementById('sess_start').value = formatDate(s.sessionstart_dt);
-    document.getElementById('sess_to').value = formatDate(s.sessionend_dt);
+    const startVal = formatDate(s.sessionstart_dt);
+    const endVal = formatDate(s.sessionend_dt);
+
+    const startInput = document.getElementById('sess_start');
+    const endInput = document.getElementById('sess_to');
+
+    // Update the actual input values
+    startInput.value = startVal;
+    endInput.value = endVal;
+
+    // If Flatpickr is initialized on these elements, update the Flatpickr instance too
+    if (startInput._flatpickr) {
+        startInput._flatpickr.setDate(startVal);
+    }
+    if (endInput._flatpickr) {
+        endInput._flatpickr.setDate(endVal);
+    }
     
     document.getElementById('sess_name').value = s.sessionname.trim();
     document.getElementById('sess_order').value = s.sessionorder;

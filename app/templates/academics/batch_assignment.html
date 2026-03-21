@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="hau-card">
+<div class="hau-card ajax-card">
     <div class="tableheading"><span class="mainheadingborderbottom">Batch Assignment</span></div>
     
     <div style="padding: 10px;">
@@ -11,7 +11,7 @@
                         <td class="vtext" width="15%">College</td>
                         <td class="colon">:</td>
                         <td colspan="4" class="required">
-                            <select name="college_id" id="ddlCollege" class="textbox w-200 w-300" required onchange="handleFilterChange()">
+                            <select name="college_id" id="ddlCollege" class="textbox w-200 w-300" required onchange="ajaxLoadDegrees(this.value)">
                                 <option value="">-- Select College --</option>
                                 {% for c in lookups.colleges %}
                                 <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -23,7 +23,7 @@
                         <td class="vtext">Academic Session</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="session_id" id="ddlSession" class="textbox w-200 w-200" required onchange="handleFilterChange()">
+                            <select name="session_id" id="ddlSession" class="textbox w-200 w-200" required >
                                 <option value="">-- Select Session --</option>
                                 {% for s in lookups.sessions %}
                                 <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
@@ -33,7 +33,7 @@
                         <td class="vtext" width="15%">Degree</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="degree_id" id="ddlDegree" class="textbox w-200 w-250" required onchange="handleFilterChange()">
+                            <select name="degree_id" id="ddlDegree" class="textbox w-200 w-250" required onchange="ajaxLoadBranches(this.value)">
                                 <option value="">--Select Degree--</option>
                                 {% for d in lookups.degrees %}
                                 <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -164,9 +164,44 @@
 </div>
 
 <script>
-function handleFilterChange() {
-    document.getElementById('filterForm').submit();
+
+// Silent Dropdown Cascading
+function ajaxLoadDegrees(collegeId) {
+    const degSelect = document.querySelector('select[name="degree_id"]');
+    if(!degSelect) return;
+    degSelect.innerHTML = '<option value="0">--Select Degree--</option>';
+    if(!collegeId || collegeId === '0') return;
+    
+    fetch(`/academics/api/college/${collegeId}/degrees`)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.id;
+                opt.textContent = d.name;
+                degSelect.appendChild(opt);
+            });
+        }).catch(err => console.error(err));
 }
+
+function ajaxLoadBranches(degreeId) {
+    const brSelect = document.querySelector('select[name="branch_id"]');
+    if(!brSelect) return;
+    brSelect.innerHTML = '<option value="0">--Select Specialization--</option>';
+    if(!degreeId || degreeId === '0') return;
+    
+    fetch(`/academics/api/degree/${degreeId}/branches`)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b.id;
+                opt.textContent = b.name;
+                brSelect.appendChild(opt);
+            });
+        }).catch(err => console.error(err));
+}
+
 
 async function fetchBatches() {
     const clg = document.getElementById('ddlCollege').value;

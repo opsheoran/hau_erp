@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="hau-card">
+<div class="hau-card ajax-card">
     <div class="tableheading"><span class="mainheadingborderbottom">Addition/Withdrawal Approval Status </span></div>
     
     <div style="padding: 10px;">
@@ -12,7 +12,7 @@
                         <td class="vtext" width="15%">College</td>
                         <td class="colon">:</td>
                         <td class="required" colspan="4">
-                            <select name="college_id" class="textbox w-200 w-300" required onchange="handleFilterChange()">
+                            <select name="college_id" class="textbox w-200 w-300" required onchange="ajaxLoadDegrees(this.value)">
                                 <option value="0">--Select College--</option>
                                 {% for c in lookups.colleges %}
                                 <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -36,7 +36,7 @@
                         <td class="vtext" width="15%">Degree</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="degree_id" class="textbox w-200 w-300" required onchange="handleFilterChange()">
+                            <select name="degree_id" class="textbox w-200 w-300" required onchange="ajaxLoadBranches(this.value)">
                                 <option value="0">--Select Degree--</option>
                                 {% for d in lookups.degrees %}
                                 <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -163,10 +163,44 @@ function calculateYear() {
     txt.value = years[yearIdx] || "N/A";
 }
 
-function handleFilterChange() {
-    localStorage.setItem('add_with_status_scroll', window.scrollY);
-    document.getElementById('filterForm').submit();
+
+// Silent Dropdown Cascading
+function ajaxLoadDegrees(collegeId) {
+    const degSelect = document.querySelector('select[name="degree_id"]');
+    if(!degSelect) return;
+    degSelect.innerHTML = '<option value="0">--Select Degree--</option>';
+    if(!collegeId || collegeId === '0') return;
+    
+    fetch(`/academics/api/college/${collegeId}/degrees`)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.id;
+                opt.textContent = d.name;
+                degSelect.appendChild(opt);
+            });
+        }).catch(err => console.error(err));
 }
+
+function ajaxLoadBranches(degreeId) {
+    const brSelect = document.querySelector('select[name="branch_id"]');
+    if(!brSelect) return;
+    brSelect.innerHTML = '<option value="0">--Select Specialization--</option>';
+    if(!degreeId || degreeId === '0') return;
+    
+    fetch(`/academics/api/degree/${degreeId}/branches`)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b.id;
+                opt.textContent = b.name;
+                brSelect.appendChild(opt);
+            });
+        }).catch(err => console.error(err));
+}
+
 
 window.addEventListener('load', () => {
     const scrollPos = localStorage.getItem('add_with_status_scroll');

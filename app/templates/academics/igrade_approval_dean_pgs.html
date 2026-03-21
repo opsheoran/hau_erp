@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="hau-card">
+<div class="hau-card ajax-card">
     <div class="tableheading"><span class="mainheadingborderbottom">I-Grade Course Approval By Dean </span></div>
     
     <div style="padding: 10px;">
@@ -11,7 +11,7 @@
                         <td class="vtext" width="15%">Academic Session</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="session_id" class="textbox w-200 w-200" required onchange="this.form.submit()">
+                            <select name="session_id" class="textbox w-200 w-200" required >
                                 <option value="0">--Select Academic Session--</option>
                                 {% for s in lookups.sessions %}
                                 <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>

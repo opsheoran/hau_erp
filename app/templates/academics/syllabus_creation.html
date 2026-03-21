@@ -2,9 +2,24 @@
 {% block content %}
 <style>
     .w-150 { width: 150px !important; }
+    .w-200 { width: 200px !important; }
     .w-250 { width: 250px !important; }
-    .w-350 { width: 363px !important; height: 60px !important; }
     .required-star { color: red; font-weight: bold; }
+    
+    /* Popup styling */
+    .grayout {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(0,0,0,0.5); z-index: 1000; display: none;
+    }
+    .popupbox {
+        position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
+        width: 850px; background: #fff; padding: 15px; border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .closebtn {
+        float: right; cursor: pointer; font-weight: bold; font-size: 14px;
+        background: #e74c3c; color: #fff; padding: 2px 8px; border-radius: 4px;
+    }
 </style>
 
 <form method="POST" id="syllabusForm">
@@ -12,7 +27,7 @@
         <tbody>
             <tr>
                 <td class="tableheading" colspan="6">
-                    <span class="mainheadingborderbottom">Syllabus Creation [Master]</span>
+                    <span class="mainheadingborderbottom">Syllabus Creation</span>
                 </td>
             </tr>
             <tr><td colspan="6" height="15"></td></tr>
@@ -22,7 +37,7 @@
                 <td class="vtext" width="15%">From Session</td>
                 <td class="colon">:</td>
                 <td width="30%">
-                    <select name="from_session" id="ddlFromSession" class="textbox w-200 w-250" required>
+                    <select name="from_session" id="ddlFromSession" class="textbox w-250" required>
                         <option value="0">-- Select From Session --</option>
                         {% for s in sessions %}
                         <option value="{{ s.id }}">{{ s.name }}</option>
@@ -33,7 +48,7 @@
                 <td class="vtext" width="15%">To Session</td>
                 <td class="colon">:</td>
                 <td width="35%">
-                    <select name="to_session" id="ddlToSession" class="textbox w-200 w-250">
+                    <select name="to_session" id="ddlToSession" class="textbox w-250">
                         <option value="0">-- Select To Session --</option>
                         {% for s in sessions %}
                         <option value="{{ s.id }}">{{ s.name }}</option>
@@ -47,7 +62,7 @@
                 <td class="vtext">Degree</td>
                 <td class="colon">:</td>
                 <td valign="top">
-                    <select name="degree" id="ddlDegree" class="textbox w-200 w-250" required>
+                    <select name="degree_id" id="ddlDegree" class="textbox w-250" required>
                         <option value="">--Select Degree--</option>
                         {% for d in degrees %}
                         <option value="{{ d.id }}">{{ d.name }}</option>
@@ -58,7 +73,7 @@
                 <td class="vtext">Class</td>
                 <td class="colon">:</td>
                 <td align="left">
-                    <select name="semester" id="ddlSemester" class="textbox w-200 w-250" disabled required>
+                    <select name="semester_id" id="ddlSemester" class="textbox w-250" disabled required>
                         <option value=""> -- Select Class -- </option>
                     </select>
                     <span class="required-star">*</span>
@@ -70,15 +85,15 @@
                 <td class="vtext">Department</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="department" id="ddlBranch" class="textbox w-200 w-250" disabled>
+                    <select name="dept_id" id="ddlBranch" class="textbox w-250" disabled>
                         <option value="0">--Select Department--</option>
                     </select>
                 </td>
                 <td class="vtext">Year</td>
                 <td class="colon">:</td>
                 <td>
-                    <select name="year" id="ddlYear" class="textbox w-200 w-250" disabled>
-                        <option value="">-- Select Year --</option>
+                    <select name="year_id" id="ddlYear" class="textbox w-250" disabled>
+                        <option value="1">First</option>
                     </select>
                 </td>
             </tr>
@@ -88,22 +103,59 @@
             <!-- Buttons -->
             <tr>
                 <td colspan="2"></td>
-                <td colspan="3">
+                <td colspan="4">
                     <input type="button" value="GET COURSES" id="btnGetCourses" class="button-common">
-                    <input type="button" value="RESET" id="btnReset" class="button-common">
+                    <input type="button" value="RESET" id="btnReset" class="button-common" style="margin-left: 5px;">
                 </td>
             </tr>
         </tbody>
     </table>
-    
-    <div id="courseContainer" style="margin-top: 20px;">
-        <!-- Placeholder for course list -->
-    </div>
-
 </form>
 
+<div id="courseContainer" style="margin-top: 20px;">
+    <!-- Course List populated here -->
+</div>
+
+<!-- Popup for Syllabus Creation -->
+<div id="syllabusPopup" class="grayout">
+    <div class="popupbox">
+        <div class="closebtn" onclick="closeSyllabusPopup()">X</div>
+        <div class="tablesubheading" style="margin-bottom: 10px;">Syllabus Creation</div>
+        
+        <form method="POST" id="popupForm">
+            <input type="hidden" name="action" value="SAVE">
+            <input type="hidden" name="course_id" id="pop_course_id">
+            <input type="hidden" name="degree_id" id="pop_degree_id">
+            <input type="hidden" name="session_from" id="pop_session_from">
+            <input type="hidden" name="session_to" id="pop_session_to">
+            
+            <table width="100%">
+                <tr>
+                    <td>
+                        <textarea name="syllabus" id="pop_syllabus" class="textbox" style="width: 100%; height: 350px;" required></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="padding-top: 15px;">
+                        <input type="submit" value="SAVE" class="button-common" style="padding: 5px 20px;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<!-- Include CKEditor CDN Full Version for Word-like features -->
+<script src="https://cdn.ckeditor.com/4.25.1-lts/full/ckeditor.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize CKEditor with word-like configuration
+    CKEDITOR.replace('pop_syllabus', {
+        height: 350,
+        uiColor: '#F7F7F7',
+        removeButtons: 'Save,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Flash,Iframe' // remove web-specific elements not needed for a syllabus
+    });
+
     const ddlDegree = document.getElementById('ddlDegree');
     const ddlSemester = document.getElementById('ddlSemester');
     const ddlBranch = document.getElementById('ddlBranch');
@@ -111,7 +163,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnGetCourses = document.getElementById('btnGetCourses');
     const btnReset = document.getElementById('btnReset');
 
-    // On Degree Change
     ddlDegree.addEventListener('change', function() {
         const degreeId = this.value;
         if (!degreeId) {
@@ -119,11 +170,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Fetch Degree Details (minsem, maxsem, type, isdepartmentreq)
         fetch(`/academics/api/get_degree_details/${degreeId}`)
             .then(response => response.json())
             .then(data => {
-                // Populate Semesters
                 if (data.minsem !== undefined && data.maxsem !== undefined) {
                     fetch(`/academics/api/get_semesters_range/${data.minsem}/${data.maxsem}`)
                         .then(res => res.json())
@@ -141,7 +190,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         });
                 }
 
-                // Handle Department
                 if (!data.isug || data.isdepartmentreq) { 
                     fetch(`/academics/api/get_all_departments`)
                         .then(res => res.json())
@@ -156,25 +204,20 @@ document.addEventListener('DOMContentLoaded', function() {
                             ddlBranch.disabled = false;
                         });
                 } else {
-                    ddlBranch.innerHTML = '<option value="0">Select Department</option>';
+                    ddlBranch.innerHTML = '<option value="0">--Select Department--</option>';
                     ddlBranch.disabled = true;
                 }
             });
             
-        // Reset Semester and Year when Degree changes
         ddlSemester.innerHTML = '<option value=""> -- Select Class -- </option>';
         ddlSemester.disabled = true;
-        ddlYear.innerHTML = '<option value="">-- Select Year --</option>';
+        ddlYear.innerHTML = '<option value="1">First</option>';
         ddlYear.disabled = true;
     });
 
-    // On Semester (Class) Change
     ddlSemester.addEventListener('change', function() {
         const semesterId = this.value;
-        if (!semesterId) {
-            ddlYear.innerHTML = '<option value="">-- Select Year --</option>';
-            return;
-        }
+        if (!semesterId) return;
 
         fetch(`/academics/api/get_semester_year/${semesterId}`)
             .then(response => response.json())
@@ -187,7 +230,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     option.selected = true;
                     ddlYear.appendChild(option);
                 }
-                // Year is "displayed automatically" - user implied it's just shown, possibly disabled or single option
                 ddlYear.disabled = true; 
             });
     });
@@ -200,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const dept = ddlBranch.value;
 
         if (sessionFrom == "0" || !degree || !semester) {
-            alert('Please select mandatory fields (From Session, Degree, Class)');
+            alert('Please select mandatory fields (*)');
             return;
         }
 
@@ -212,8 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
             dept_id: dept
         };
 
-        btnGetCourses.value = 'Loading...';
-        btnGetCourses.disabled = true;
+        btnGetCourses.value = 'Getting...';
 
         fetch('/academics/api/get_syllabus_courses', {
             method: 'POST',
@@ -224,34 +265,29 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             renderCourses(data);
             btnGetCourses.value = 'GET COURSES';
-            btnGetCourses.disabled = false;
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Failed to fetch courses.');
             btnGetCourses.value = 'GET COURSES';
-            btnGetCourses.disabled = false;
         });
     });
 
     function renderCourses(courses) {
         const container = document.getElementById('courseContainer');
         if (!courses || courses.length === 0) {
-            container.innerHTML = '<div style="padding:10px; color:red; text-align:center;">No Courses Found!</div>';
+            container.innerHTML = '<div style="padding:20px; color:#999; text-align:center;">No Courses Found</div>';
             return;
         }
 
         let html = `
-            <table class="table-grid-view" width="100%">
+            <div class="tablesubheading">List of Courses</div>
+            <table class="table-grid-view" width="100%" style="margin-top: 10px;">
                 <thead>
                     <tr class="header-style">
-                        <th>S.No.</th>
-                        <th>Course Code</th>
-                        <th>Course Name</th>
-                        <th>Credit Hours (Th/Pr)</th>
-                        <th>Department</th>
-                        <th>Compulsory</th>
-                        <th>Status</th>
+                        <th width="5%">S.No.</th>
+                        <th width="50%" align="left">Course Name</th>
+                        <th width="30%">Create Syllabus</th>
+                        <th width="10%">View</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -259,15 +295,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
         courses.forEach((c, index) => {
             const rowClass = index % 2 === 0 ? 'item-style-alt' : 'item-style';
+            const syllabusStatus = c.syllabus ? 'Edit Syllabus' : 'Create Syllabus';
+            
             html += `
-                <tr class="${rowClass}" align="center">
-                    <td>${index + 1}</td>
-                    <td>${c.coursecode}</td>
-                    <td align="left">${c.coursename}</td>
-                    <td>${c.crhr_theory} + ${c.crhr_practical}</td>
-                    <td>${c.dept_name || '-'}</td>
-                    <td>${c.iscompuls ? 'Yes' : 'No'}</td>
-                    <td>${c.isactive ? '<span style="color:green">Active</span>' : '<span style="color:red">Inactive</span>'}</td>
+                <tr class="${rowClass}">
+                    <td align="center">${index + 1}</td>
+                    <td>${c.display_name}</td>
+                    <td align="center">
+                        <a href="javascript:void(0)" class="GridLink" style="color: #0000EE; text-decoration: underline;" 
+                           onclick="openSyllabusPopup(${c.id})">${syllabusStatus}</a>
+                    </td>
+                    <td align="center">
+                        ${c.syllabus ? `<a href="javascript:void(0)" class="GridLink" style="color: #0000EE; text-decoration: underline;" onclick="viewSyllabus(${c.id})">View</a>` : '-'}
+                    </td>
                 </tr>
             `;
         });
@@ -276,10 +316,10 @@ document.addEventListener('DOMContentLoaded', function() {
         container.innerHTML = html;
     }
 
-
     btnReset.addEventListener('click', function() {
         document.getElementById('syllabusForm').reset();
         resetCascading();
+        document.getElementById('courseContainer').innerHTML = '';
     });
 
     function resetCascading() {
@@ -291,5 +331,74 @@ document.addEventListener('DOMContentLoaded', function() {
         ddlYear.disabled = true;
     }
 });
+
+// Exposed globally for onclick handler
+window.openSyllabusPopup = function(courseId) {
+    const sessionFrom = document.getElementById('ddlFromSession').value;
+    const sessionTo = document.getElementById('ddlToSession').value;
+    const degreeId = document.getElementById('ddlDegree').value;
+
+    fetch('/academics/api/get_syllabus', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            course_id: courseId,
+            degree_id: degreeId,
+            session_from: sessionFrom,
+            session_to: sessionTo
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        document.getElementById('pop_course_id').value = courseId;
+        document.getElementById('pop_degree_id').value = degreeId;
+        document.getElementById('pop_session_from').value = sessionFrom;
+        document.getElementById('pop_session_to').value = sessionTo;
+        
+        // Remove HTML tags for simple textarea view, or keep if using rich text
+        let cleanText = data.syllabus || '';
+        
+        if (CKEDITOR.instances['pop_syllabus']) {
+            CKEDITOR.instances['pop_syllabus'].setData(cleanText);
+        } else {
+            document.getElementById('pop_syllabus').value = cleanText;
+        }
+        
+        document.getElementById('syllabusPopup').style.display = 'block';
+    });
+};
+
+window.closeSyllabusPopup = function() {
+    document.getElementById('syllabusPopup').style.display = 'none';
+};
+
+window.viewSyllabus = function(courseId) {
+    // Just reuses the popup but makes it readonly or we could make a dedicated view popup
+    const sessionFrom = document.getElementById('ddlFromSession').value;
+    const sessionTo = document.getElementById('ddlToSession').value;
+    const degreeId = document.getElementById('ddlDegree').value;
+
+    fetch('/academics/api/get_syllabus', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            course_id: courseId,
+            degree_id: degreeId,
+            session_from: sessionFrom,
+            session_to: sessionTo
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        // Open a simple window to view syllabus HTML
+        const win = window.open("", "_blank", "width=800,height=600");
+        win.document.write('<html><head><title>Syllabus View</title><style>body{font-family:Arial;}</style></head><body>');
+        win.document.write('<h2>Syllabus Content</h2><hr/>');
+        win.document.write(data.syllabus);
+        win.document.write('</body></html>');
+        win.document.close();
+    });
+};
 </script>
 {% endblock %}
+

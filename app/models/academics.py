@@ -403,7 +403,7 @@ class CourseModel:
 class ActivityCertificateModel:
     @staticmethod
     def get_activities():
-        return DB.fetch_all("SELECT PK_Actid as id, Activity_name as name, Remarks FROM SMS_Activity_Mst ORDER BY Activity_name")
+        return DB.fetch_all("SELECT PK_Actid as id, Activity_name + ' || ' + ISNULL(Activity_code, '') as name, Remarks FROM SMS_Activity_Mst ORDER BY Activity_name")
 
     @staticmethod
     def get_activities_paginated(page=1, per_page=10):
@@ -440,10 +440,12 @@ class CourseActivityModel:
         offset = (page - 1) * per_page
         total = DB.fetch_scalar("SELECT COUNT(*) FROM SMS_CourseActivity_Mst")
         query = f"""
-            SELECT M.*, S.sessionname, SEM.semester_roman, CAT.ActivityCategory_Desc
+            SELECT M.*, S.sessionname, CAT.ActivityCategory_Desc,
+                   CASE WHEN M.semesterid = 1 THEN 'Odd'
+                        WHEN M.semesterid = 2 THEN 'Even'
+                        ELSE '' END as classname
             FROM SMS_CourseActivity_Mst M
             LEFT JOIN SMS_AcademicSession_Mst S ON M.sessionid = S.pk_sessionid
-            LEFT JOIN SMS_Semester_Mst SEM ON M.semesterid = SEM.pk_semesterid
             LEFT JOIN SMS_ActivityCategory_Mst CAT ON M.fk_ActivityCategory_ID = CAT.pk_activityCategory_ID
             ORDER BY M.pk_CourseActivityID
             OFFSET {offset} ROWS FETCH NEXT {per_page} ROWS ONLY
@@ -531,7 +533,7 @@ class CourseActivityModel:
             conn.close()
     @staticmethod
     def get_activities():
-        return DB.fetch_all("SELECT PK_Actid as id, Activity_name as name, Remarks FROM SMS_Activity_Mst ORDER BY Activity_name")
+        return DB.fetch_all("SELECT PK_Actid as id, Activity_name + ' || ' + ISNULL(Activity_code, '') as name, Remarks FROM SMS_Activity_Mst ORDER BY Activity_name")
 
     @staticmethod
     def save_activity(data):
@@ -769,7 +771,100 @@ class InfrastructureModel:
     def delete_session(id):
         return DB.execute("DELETE FROM SMS_AcademicSession_Mst WHERE pk_sessionid = ?", [id])
 
+
+class SyllabusModel:
+    @staticmethod
+    def get_syllabus_courses(filters):
+        sql = """
+            SELECT C.pk_courseid as id, C.coursecode, C.coursename,
+                   C.coursecode + ' - (' + C.coursename + ')' as display_name,
+                   T.syllabus
+            FROM SMS_Course_Mst_Dtl D
+            INNER JOIN SMS_Course_Mst C ON D.fk_courseid = C.pk_courseid
+            LEFT JOIN SMS_syllabusCreation_forCourses_Mst M ON M.fk_Degreeid = D.fk_degreeid
+                                                            AND M.fromSession = ?
+            LEFT JOIN SMS_syllabusCreation_forCourses_Trn T ON T.fk_syllforCourse = M.pk_syllforCourse
+                                                            AND T.fk_courseid = C.pk_courseid
+            WHERE D.fk_degreeid = ? AND D.fk_semesterid = ? AND D.isactive = 1
+        """
+        params = [filters.get('session_from'), filters.get('degree_id'), filters.get('semester_id')]
+        
+        if filters.get('dept_id') and str(filters['dept_id']) != '0':
+            sql += " AND C.fk_Deptid = ?"
+            params.append(filters['dept_id'])
+
+        sql += " ORDER BY C.coursecode"
+        return DB.fetch_all(sql, params)
+
+    @staticmethod
+    def get_syllabus(degree_id, session_from, session_to, course_id):
+        sql = """
+            SELECT T.syllabus
+            FROM SMS_syllabusCreation_forCourses_Mst M
+            INNER JOIN SMS_syllabusCreation_forCourses_Trn T ON M.pk_syllforCourse = T.fk_syllforCourse
+            WHERE M.fk_Degreeid = ? AND M.fromSession = ? AND T.fk_courseid = ?
+        """
+        params = [degree_id, session_from, course_id]
+        if session_to and str(session_to) != '0':
+            sql += " AND M.toSession = ?"
+            params.append(session_to)
+        res = DB.fetch_one(sql, params)
+        return res['syllabus'] if res else ""
+
+    @staticmethod
+    def save_syllabus(data):
+        degree_id = data.get('degree_id')
+        session_from = data.get('session_from')
+        session_to = data.get('session_to') or '0'
+        course_id = data.get('course_id')
+        syllabus = data.get('syllabus')
+
+        conn = DB.get_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute("""
+                SELECT pk_syllforCourse FROM SMS_syllabusCreation_forCourses_Mst 
+                WHERE fk_Degreeid = ? AND fromSession = ? AND ISNULL(toSession, '0') = ?  
+            """, [degree_id, session_from, session_to])
+            mst = cursor.fetchone()
+
+            if mst:
+                mst_id = mst[0]
+            else:
+                cursor.execute("""
+                    INSERT INTO SMS_syllabusCreation_forCourses_Mst (fk_Degreeid, fromSession, toSession)
+                    OUTPUT INSERTED.pk_syllforCourse
+                    VALUES (?, ?, ?)
+                """, [degree_id, session_from, session_to])
+                mst_id = cursor.fetchone()[0]
+
+            cursor.execute("""
+                SELECT pk_id FROM SMS_syllabusCreation_forCourses_Trn
+                WHERE fk_syllforCourse = ? AND fk_courseid = ?
+            """, [mst_id, course_id])
+            trn = cursor.fetchone()
+
+            if trn:
+                cursor.execute("""
+                    UPDATE SMS_syllabusCreation_forCourses_Trn SET syllabus = ?
+                    WHERE pk_id = ?
+                """, [syllabus, trn[0]])
+            else:
+                cursor.execute("""
+                    INSERT INTO SMS_syllabusCreation_forCourses_Trn (fk_syllforCourse, fk_courseid, syllabus)
+                    VALUES (?, ?, ?)
+                """, [mst_id, course_id, syllabus])
+
+            conn.commit()
+            return True
+        except Exception as e:
+            conn.rollback()
+            raise e
+        finally:
+            conn.close()
+
 class PackageMasterModel:
+
     @staticmethod
     def get_packages(page=1, per_page=10):
         offset = (page - 1) * per_page
@@ -2549,23 +2644,11 @@ class AcademicsModel:
                     college['locname'] = DB.fetch_scalar("SELECT locname FROM Location_Mst WHERE pk_locid = ?", [college['fk_locid']])
                 except Exception:
                     college['locname'] = None
-            if college.get('fk_cityid'):
-                try:
-                    college['cityname'] = DB.fetch_scalar(
-                        "SELECT TOP 1 cityname FROM SAL_City_Mst WHERE pk_cityid LIKE '%-' + CAST(? as varchar)",
-                        [college['fk_cityid']]
-                    )
-                except Exception:
-                    college['cityname'] = None
             if college.get('locname') and ',' in str(college.get('locname')):
                 try:
                     loc_city = str(college.get('locname')).split(',', 1)[1].strip()
                     if loc_city:
-                        if not college.get('cityname'):
-                            college['cityname'] = loc_city
-                        else:
-                            if loc_city.lower() not in str(college.get('cityname')).lower():
-                                college['cityname'] = loc_city
+                        college['cityname'] = loc_city
                 except Exception:
                     pass
             if not college.get('cityname'):
@@ -2960,8 +3043,9 @@ class AcademicsModel:
         return DB.fetch_all("""
             SELECT DISTINCT B.Pk_BranchId as id, B.BranchName as name
             FROM SMS_BranchMst B
-            INNER JOIN SMS_DegreeCycle_Mst C ON B.Pk_BranchId = C.fk_branchid
-            WHERE C.fk_degreeid = ?
+            INNER JOIN SMS_CollegeDegreeBranchMap_dtl D ON B.Pk_BranchId = D.fk_branchid
+            INNER JOIN SMS_CollegeDegreeBranchMap_Mst M ON D.fk_Coldgbrmapid = M.PK_Coldgbrid
+            WHERE M.fk_Degreeid = ?
             ORDER BY B.BranchName
         """, [degree_id])
 
@@ -4261,21 +4345,14 @@ class AdvisoryModel:
         details = DB.fetch_all("""
             SELECT D.*, E.empname, DESG.designation as designation, DEPT.description as department, 
                    B.Branchname as specialization,
-                   CASE D.fk_statusid 
-                        WHEN 1 THEN 'Major Advisor'
-                        WHEN 2 THEN 'Minor Advisor'
-                        WHEN 3 THEN 'Member From Major Subject'
-                        WHEN 4 THEN 'Member From Minor Subject'
-                        WHEN 5 THEN 'Member From Supporting Subject'
-                        WHEN 6 THEN 'Dean PGS Nominee'
-                        ELSE 'Member'
-                   END as role_name
+                   STAT.statusname as role_name
             FROM SMS_Advisory_Committee_Dtl D
             LEFT JOIN SAL_Employee_Mst E ON D.fk_empid = E.pk_empid
             LEFT JOIN SAL_Designation_Mst DESG ON E.fk_desgid = DESG.pk_desgid
             LEFT JOIN Department_Mst DEPT ON E.fk_deptid = DEPT.pk_deptid
             LEFT JOIN SMS_Advisory_Committee_Mst ACM ON D.fk_adcid = ACM.pk_adcid
             LEFT JOIN SMS_BranchMst B ON ACM.fk_branchid = B.Pk_BranchId
+            LEFT JOIN SMS_AdvisoryStatus_Mst STAT ON D.fk_statusid = STAT.pk_stid
             WHERE D.fk_adcid = ?
             ORDER BY D.fk_statusid
         """, [mst['pk_adcid']])
@@ -4432,8 +4509,11 @@ class AdvisoryModel:
         # - PGS Courses -> 'CP'
         
         sql = """
-            SELECT DISTINCT C.pk_courseid, C.coursecode, C.coursename, C.crhr_theory, C.crhr_practical, t.default_type
-            FROM (
+            SELECT C.pk_courseid, C.coursecode, C.coursename, C.crhr_theory, C.crhr_practical, best_t.default_type
+            FROM SMS_Course_Mst C
+            INNER JOIN (
+                SELECT id, default_type, ROW_NUMBER() OVER(PARTITION BY id ORDER BY priority) as rn
+                FROM (
                 -- 1. Already allocated courses (guarantee they show up with their assigned type)
                 SELECT fk_courseid as id, courseplan as default_type, 1 as priority
                 FROM Sms_course_Approval WHERE fk_sturegid = ?
@@ -4896,8 +4976,8 @@ class StudentModel:
             'occupations': DB.fetch_all("SELECT PK_occuid as id, Discription as name FROM SMS_Occupation_MST ORDER BY Discription"),
             'qualifications': DB.fetch_all("SELECT Pk_EduQuaid as id, Discription as name FROM SMS_EducationalQualification_MST ORDER BY displayorder"),
             'religions': DB.fetch_all("SELECT pk_religionid as id, religiontype as name FROM Religion_Mst ORDER BY religiontype"),
-            'nationalities': DB.fetch_all("SELECT pk_nid, nationality as name FROM SMS_Nationality_Mst ORDER BY nationality"),
-            'categories': DB.fetch_all("SELECT pk_catid as id, category as name FROM SAL_Category_Mst ORDER BY category"),
+            'nationalities': DB.fetch_all("SELECT pk_nid as id, nationality as name FROM SMS_Nationality_Mst ORDER BY nationality"),
+            'categories': DB.fetch_all("SELECT pk_catid as id, category as name FROM SMS_Category_Mst ORDER BY category"),
             'states': DB.fetch_all("SELECT pk_StateID as id, Description as name FROM Common_State_mst ORDER BY Description"),
             'districts': DB.fetch_all("SELECT pk_districid as id, Description as name FROM distric_mst ORDER BY Description"),
             'colleges': AcademicsModel.get_colleges_simple(),

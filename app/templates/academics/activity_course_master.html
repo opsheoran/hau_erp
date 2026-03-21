@@ -7,7 +7,7 @@
     .required-star { color: red; font-weight: bold; }
 </style>
 
-<div class="hau-card">
+<div class="hau-card ajax-card">
     <div class="tablesubheading">Activity Course Master</div>
     <div style="padding: 15px;">
         <!-- Add/Edit Form -->
@@ -55,7 +55,8 @@
                     <td>
                         <select name="sem_id" id="ca_sem" class="textbox w-200" required>
                             <option value="">--Select Class--</option>
-                            {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                            <option value="1">Odd Semester</option>
+                            <option value="2">Even Semester</option>
                         </select> <span class="required-star">*</span>
                     </td>
                     <td colspan="3"></td>
@@ -114,7 +115,7 @@
                         <td align="center">{{ item.CourseActivity_Code }}</td>
                         <td align="center">{{ item.CourseActivity_Name }}</td>
                         <td align="center">{{ item.sessionname }}</td>
-                        <td align="center">{{ item.semester_roman }}</td>
+                        <td align="center">{{ item.classname }}</td>
                         <td align="center">{{ item.CourseActivity_Order }}</td>
                         <td align="center">
                             <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick="editItem({{ item.pk_CourseActivityID }})">
@@ -208,7 +209,8 @@ async function editItem(id) {
     document.getElementById('ca_session').value = c.sessionid;
     document.getElementById('ca_sem').value = c.semesterid;
     document.getElementById('ca_order').value = c.CourseActivity_Order;
-    document.getElementById('ca_type').value = (c.Activity_type || 'N').trim();
+    const activityType = c.Activity_type || c.activity_type || c.Activity_Type || c.ACTIVITY_TYPE || 'N';
+    document.getElementById('ca_type').value = activityType.trim().toUpperCase();
     document.getElementById('ca_category').value = c.fk_ActivityCategory_ID || '';
 
     const tbody = document.getElementById('detailBody');

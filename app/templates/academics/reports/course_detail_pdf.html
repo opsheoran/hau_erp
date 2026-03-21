@@ -2,60 +2,115 @@
 <html>
 <head>
     <style>
-        body { font-family: Helvetica, sans-serif; font-size: 9pt; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h2 { margin: 0; padding: 0; color: #3c8dbc; }
-        .header h3 { margin: 5px 0; padding: 0; }
-        .footer { text-align: right; font-size: 8pt; color: #666; margin-top: 20px; }
+        @page {
+            size: a4 portrait;
+            margin: 1cm;
+            @frame footer {
+                -pdf-frame-content: footerContent;
+                bottom: 0cm;
+                margin-left: 1cm;
+                margin-right: 1cm;
+                height: 1cm;
+            }
+        }
+        body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; color: #000; }
+        .header-table { width: 100%; border: none; margin-bottom: 10px; }
+        .logo-cell { width: 80px; text-align: left; vertical-align: middle; }
+        .title-cell { text-align: center; vertical-align: middle; padding-right: 80px; }
+        .univ-name { font-size: 16pt; font-weight: bold; margin: 0; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background-color: #f2f2f2; border: 1px solid #ccc; padding: 5px; font-weight: bold; }
-        td { border: 1px solid #ccc; padding: 5px; }
+        .subtitle { text-align: center; font-size: 11pt; margin-bottom: 20px; font-weight: normal; }
+        .subtitle b { font-weight: bold; }
+
+        table.data-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table.data-table th { 
+            border: 0.5pt solid #000; 
+            padding: 6px 4px; 
+            background-color: #fff; 
+            font-weight: bold; 
+            text-align: center;
+            font-size: 9pt;
+        }
+        table.data-table td { 
+            border: 0.5pt solid #000; 
+            padding: 6px 4px; 
+            vertical-align: top;
+            font-size: 9pt;
+        }
         .center { text-align: center; }
-        .bold { font-weight: bold; }
+        
+        .signature-section { margin-top: 50px; width: 100%; }
+        .sig-row { width: 100%; border: none; margin-bottom: 5px; }
+        .sig-label { font-weight: bold; font-size: 9pt; }
+        
+        .footer-info { margin-top: 30px; font-size: 9pt; }
+        .footer-info span { font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h2>CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY, HISAR</h2>
-        <h3>Course Detail Report</h3>
+    <div id="footerContent" style="text-align: center; font-size: 9pt; width: 100%;">
+        Page <pdf:pagenumber> of <pdf:pagecount>
     </div>
 
-    <table>
+    <!-- Header with Logo and Univ Name -->
+    <table class="header-table">
+        <tr>
+            <td class="logo-cell">
+                <img src="{{ url_for('static', filename='images/srec.jpg', _external=True) }}" width="70" height="70">
+            </td>
+            <td class="title-cell">
+                <div class="univ-name">CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY, HISAR</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Filter Subtitle -->
+    <div class="subtitle">
+        Courses For Session <b>{{ filter_names.session }}</b>, 
+        Degree <b>{{ filter_names.degree }}</b>, 
+        Year <b>{{ filter_names.year }}</b>, 
+        Semester <b>{{ filter_names.semester }}</b>
+    </div>
+
+    <!-- Data Table -->
+    <table class="data-table">
         <thead>
             <tr>
-                <th width="3%">S.No.</th>
-                <th width="10%">Code</th>
-                <th width="30%">Course Name</th>
-                <th width="15%">Degree</th>
-                <th width="8%">Sem</th>
-                <th width="5%">Th</th>
-                <th width="5%">Pr</th>
-                <th width="5%">Tot</th>
-                <th width="10%">Compulsory</th>
-                <th width="9%">Status</th>
+                <th width="6%">S.No.</th>
+                <th width="18%">Course Code</th>
+                <th>Course Name</th>
+                <th width="12%">Cr Hr Theory</th>
+                <th width="12%">Cr Hr Practical</th>
             </tr>
         </thead>
         <tbody>
             {% for item in data %}
             <tr>
                 <td class="center">{{ loop.index }}</td>
-                <td class="bold">{{ item.coursecode }}</td>
+                <td class="center">{{ item.coursecode }}</td>
                 <td>{{ item.coursename }}</td>
-                <td>{{ item.degreename }}</td>
-                <td class="center">{{ item.semester_roman }}</td>
                 <td class="center">{{ item.crhr_theory }}</td>
                 <td class="center">{{ item.crhr_practical }}</td>
-                <td class="center bold">{{ item.total_crhr }}</td>
-                <td class="center">{{ item.compulsory }}</td>
-                <td class="center">{{ item.status }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <div class="footer">
-        Generated on: {{ now }}
+    <!-- Signature Section -->
+    <div class="footer-info">
+        <div>Date : <span>{{ now.split(' ')[0] }}</span></div>
+        <div>Place : </div>
     </div>
+
+    <table style="width: 100%; margin-top: 30px; border: none;">
+        <tr>
+            <td width="33%"></td>
+            <td width="33%" align="center" style="font-weight: bold; font-size: 9pt;">REGISTRAR</td>
+            <td width="34%" align="right" style="font-weight: bold; font-size: 9pt; line-height: 1.2;">
+                DIRECTOR OF ACADEMICS AND<br>RESEARCH
+            </td>
+        </tr>
+    </table>
+
 </body>
 </html>

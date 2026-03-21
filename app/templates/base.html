@@ -181,7 +181,7 @@
         .form-table { 
             width: 100%; 
             border-collapse: separate; 
-            border-spacing: 0;
+            border-spacing: 0 3px;
             background: #fdfdfd; /* Subtle background shade for forms */
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             border: 1px solid #eaeaea;
@@ -189,7 +189,7 @@
             overflow: hidden;
             margin-bottom: 20px;
         }
-        .form-table td { padding: 3px 12px; vertical-align: middle; }
+        .form-table td { padding: 0px 12px; vertical-align: middle; }
         
         .hau-card {
             background: #ffffff;
@@ -384,10 +384,12 @@
     <table class="tabbing-table no-print" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class="tabbing-td">
-                {% set active_tabs = academic_tabs or umm_tabs or establishment_tabs or leave_tabs or examination_tabs %}
-                {% for tab in active_tabs %}
-                <a href="{{ tab.url }}" class="{{ 'tabgs' if tab.active else 'tabg' }}">{{ tab.name }}</a>
-                {% endfor %}
+                <div style="display: flex; flex-wrap: wrap; gap: 2px;">
+                    {% set active_tabs = academic_tabs or umm_tabs or establishment_tabs or leave_tabs or examination_tabs %}
+                    {% for tab in active_tabs %}
+                    <a href="{{ tab.url }}" class="{{ 'tabgs' if tab.active else 'tabg' }}" style="float: none; margin-bottom: 2px;">{{ tab.name }}</a>
+                    {% endfor %}
+                </div>
             </td>
         </tr>
     </table>
@@ -418,7 +420,7 @@
         .form-table input[type="number"], 
         .form-table input[type="email"], 
         .form-table textarea {
-            border-radius: 3px !important;
+            border-radius: 6px !important;
             padding: 1px 8px !important;
             height: auto !important;
             min-height: 22px;
@@ -428,6 +430,7 @@
             font-family: Verdana, Arial, sans-serif;
             font-size: 10px;
             box-sizing: border-box;
+            margin-bottom: 3px;
         }
 
         /* Clean native select handling without height auto bug */
@@ -438,12 +441,13 @@
         .form-table select.dropdownvvlong {
             min-width: 0;
             border: 1px solid #aaa;
-            border-radius: 3px;
+            border-radius: 6px;
             font-family: Verdana, Arial, sans-serif;
             font-size: 10px;
             background-color: #fff;
             height: 22px;
             padding: 1px 4px;
+            margin-bottom: 3px;
         }
         
         .form-table .textbox:focus, 
@@ -685,5 +689,163 @@
     {% block extra_js %}{% endblock %}
     {% include "includes/emp_search_modal.html" %}
     {% include "includes/student_profile_modal.html" %}
+
+<script>
+// Global AJAX Form Interceptor to prevent screen flickering
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(e) {
+        if (e.target.tagName === 'INPUT' && e.target.type === 'submit' || e.target.tagName === 'BUTTON') {
+            e.target.setAttribute('data-clicked', 'true');
+        }
+    });
+
+    document.addEventListener('submit', async function(e) {
+        const form = e.target;
+        const card = form.closest('.ajax-card');
+        
+        // Skip if not opted-in or if it's explicitly marked to bypass AJAX (e.g., export/print buttons)
+        if (!card || form.classList.contains('no-ajax')) return; 
+
+        let submitter = null;
+        const buttons = form.querySelectorAll('input[type="submit"], button[type="submit"]');
+        buttons.forEach(b => {
+            if (b.getAttribute('data-clicked') === 'true') {
+                submitter = b;
+                b.removeAttribute('data-clicked');
+            }
+        });
+        
+        // Skip AJAX if the clicked button explicitly opts out
+        if (submitter && (submitter.classList.contains('no-ajax') || submitter.name === 'rpt_format' || submitter.value === 'Print' || submitter.value === 'Export')) {
+            return; // let native form submit happen for file downloads/prints
+        }
+
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        let origValue = '';
+        if (submitter && submitter.name) {
+            formData.append(submitter.name, submitter.value);
+            origValue = submitter.value || submitter.innerText;
+            if (submitter.tagName === 'INPUT') submitter.value = 'Wait...';
+            else submitter.innerText = 'Wait...';
+            submitter.disabled = true;
+        }
+        
+        let url = form.getAttribute('action') || window.location.href;
+        let fetchOpts = { method: form.getAttribute('method') ? form.getAttribute('method').toUpperCase() : 'GET' };
+        
+        if (fetchOpts.method === 'GET') {
+            const params = new URLSearchParams(formData).toString();
+            url = url.split('?')[0] + '?' + params;
+        } else {
+            fetchOpts.body = formData;
+        }
+        
+        try {
+            const res = await fetch(url, fetchOpts);
+            
+            // Check if response is a file download
+            const contentType = res.headers.get('content-type');
+            const disposition = res.headers.get('content-disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1 || (contentType && contentType.includes('application/pdf'))) {
+                const blob = await res.blob();
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = downloadUrl;
+                // Try to extract filename
+                let filename = 'download';
+                if (disposition) {
+                    const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    const matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                }
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(downloadUrl);
+                
+                // Restore button
+                if (submitter) {
+                    submitter.disabled = false;
+                    if (submitter.tagName === 'INPUT') submitter.value = origValue;
+                    else submitter.innerText = origValue;
+                }
+                return;
+            }
+            
+            const html = await res.text();
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            
+            const newCard = doc.querySelector('.ajax-card');
+            if (newCard) {
+                card.innerHTML = newCard.innerHTML;
+            } else {
+                // If the entire page changed (e.g. redirect out of AJAX scope), just reload
+                window.location.href = res.url;
+                return;
+            }
+            
+            // Execute flash toasts from the response
+            const scripts = doc.querySelectorAll('script');
+            scripts.forEach(s => {
+                if (s.innerText.includes('window.showToast')) {
+                    try { eval(s.innerText); } catch(err){}
+                }
+            });
+            
+            // Update URL bar if it was a GET or a redirect
+            if (res.url && res.url !== window.location.href && !res.url.includes('api/')) {
+                window.history.pushState({}, '', res.url);
+            } else if (form.method.toUpperCase() === 'GET') {
+                window.history.pushState({}, '', url);
+            }
+            
+        } catch(err) {
+            console.error('AJAX form error:', err);
+            form.submit(); // fallback
+        }
+    });
+});
+
+// Global Silent Dropdown Cascading
+window.ajaxLoadDegrees = function(collegeId) {
+    const degSelect = document.querySelector('select[name="degree_id"]');
+    if(!degSelect) return;
+    degSelect.innerHTML = '<option value="0">--Select Degree--</option>';
+    if(!collegeId || collegeId === '0') return;
+    
+    fetch(`/academics/api/college/${collegeId}/degrees`)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.id;
+                opt.textContent = d.name;
+                degSelect.appendChild(opt);
+            });
+        }).catch(err => console.error(err));
+};
+
+window.ajaxLoadBranches = function(degreeId) {
+    const brSelect = document.querySelector('select[name="branch_id"]');
+    if(!brSelect) return;
+    brSelect.innerHTML = '<option value="0">--Select Specialization--</option>';
+    if(!degreeId || degreeId === '0') return;
+    
+    fetch(`/academics/api/degree/${degreeId}/branches`)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b.id;
+                opt.textContent = b.name;
+                brSelect.appendChild(opt);
+            });
+        }).catch(err => console.error(err));
+};
+</script>
 </body>
+
 </html>

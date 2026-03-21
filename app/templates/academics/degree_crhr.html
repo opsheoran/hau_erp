@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% if academics_tabs %}
+{% if academic_tabs %}
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 15px;">
     <tr>
         <td align="left" class="tabbing-td">
             <div style="display:inline; width:100%">
-                {% for tab in academics_tabs %}
+                {% for tab in academic_tabs %}
                 <a title="{{ tab.name }}" class="{% if tab.active %}tabgs{% else %}tabg{% endif %}" href="{{ tab.url }}" style="display:inline-block;width:110px;">{{ tab.name }}</a>
                 {% endfor %}
             </div>

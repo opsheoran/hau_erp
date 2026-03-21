@@ -26,7 +26,7 @@
                 <td class="vtext" width="15%">College</td>
                 <td class="colon" width="2%">:</td>
                 <td class="required" colspan="4">
-                    <select name="college_id" id="ddlCollege" class="textbox w-300" onchange="this.form.submit()">
+                    <select name="college_id" id="ddlCollege" class="textbox w-300" onchange="ajaxLoadDegrees(this.value)">
                         <option value="">-- Select College --</option>
                         {% for c in lookups.colleges %}
                         <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>

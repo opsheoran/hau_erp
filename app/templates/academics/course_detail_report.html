@@ -13,18 +13,18 @@
             <tr><td colspan="6" height="10"></td></tr>
             
             <tr>
-                <td class="vtext" width="15%">Applicable From</td>
+                <td id="lblappfrom" class="vtext" width="15%">Applicable From</td>
                 <td class="colon">:</td>
-                <td width="30%">
-                    <select name="session_from" id="rpt_from" class="textbox w-200 w-200">
+                <td align="left" class="required" width="30%">
+                    <select name="session_from" id="rpt_from" class="textbox w-200" required>
                         <option value="0">-- Select Session From --</option>
                         {% for s in sessions %}<option value="{{ s.id }}" {{ 'selected' if filters and filters.session_from|string == s.id|string }}>{{ s.name }}</option>{% endfor %}
-                    </select>
+                    </select> <span class="required-star">*</span>
                 </td>
                 <td class="vtext" width="15%">Applicable Upto</td>
                 <td class="colon">:</td>
-                <td width="35%">
-                    <select name="session_upto" id="rpt_upto" class="textbox w-200 w-200">
+                <td align="left" width="35%">
+                    <select name="session_upto" id="rpt_upto" class="textbox w-200">
                         <option value="0">-- Select Session Upto --</option>
                         {% for s in sessions %}<option value="{{ s.id }}" {{ 'selected' if filters and filters.session_upto|string == s.id|string }}>{{ s.name }}</option>{% endfor %}
                     </select>
@@ -34,46 +34,44 @@
             <tr>
                 <td class="vtext">Degree</td>
                 <td class="colon">:</td>
-                <td width="30%">
-                    <select name="degree_id" id="rpt_degree" class="textbox w-200 w-250" onchange="loadDepartments(this.value); loadClasses(this.value);">
+                <td align="left" valign="top">
+                    <select name="degree_id" id="rpt_degree" class="textbox w-250" onchange="loadDepartments(this.value); loadClasses(this.value);">
                         <option value="0">-- Select Degree --</option>
                         {% for d in degrees %}<option value="{{ d.id }}" {{ 'selected' if filters and filters.degree_id|string == d.id|string }}>{{ d.name }}</option>{% endfor %}
                     </select>
-                </td>
-                <td class="vtext" width="15%">Department</td>
-                <td class="colon">:</td>
-                <td width="35%">
-                    <select name="dept_id" id="rpt_dept" class="textbox w-200 w-200">
+                    <br>
+                    <select name="dept_id" id="rpt_dept" class="textbox w-250" style="margin-top:5px;">
                         <option value="0">--Select Department--</option>
+                    </select>
+                </td>
+                <td class="vtext">Class</td>
+                <td class="colon">:</td>
+                <td align="left">
+                    <select name="semester_id" id="rpt_sem" class="textbox w-200" onchange="autoFillYear(this.value)">
+                        <option value="0">--Select Class--</option>
                     </select>
                 </td>
             </tr>
             
             <tr>
-                <td class="vtext">Class</td>
-                <td class="colon">:</td>
-                <td>
-                    <select name="semester_id" id="rpt_sem" class="textbox w-200 w-150" onchange="autoFillYear(this.value)">
-                        <option value="0">--Select Class--</option>
-                    </select>
-                </td>
                 <td class="vtext">Year</td>
                 <td class="colon">:</td>
-                <td>
-                    <select name="year_id" id="rpt_year" class="textbox w-200 w-150" style="background:#f4f4f4;">
+                <td align="left">
+                    <select name="year_id" id="rpt_year" class="textbox w-200">
                         <option value="0">--Select Year--</option>
                         {% for y in years %}<option value="{{ y.pk_degreeyearid }}">{{ y.degreeyear_char }}</option>{% endfor %}
                     </select>
                 </td>
+                <td colspan="3"></td>
             </tr>
             
             <tr>
                 <td class="vtext">Report Format</td>
                 <td class="colon">:</td>
-                <td style="font-size: 11px;" colspan="4">
-                    <label><input type="radio" name="rpt_format" value="1" {{ 'checked' if not filters or filters.rpt_format == '1' }}> View</label>
-                    <label style="margin-left:10px;"><input type="radio" name="rpt_format" value="2" {{ 'checked' if filters and filters.rpt_format == '2' }}> Excel</label>
-                    <label style="margin-left:10px;"><input type="radio" name="rpt_format" value="3" {{ 'checked' if filters and filters.rpt_format == '3' }}> PDF</label>
+                <td style="font-size: 10px;" colspan="4">
+                    <label><input type="radio" name="rpt_format" value="1" {{ 'checked' if not filters or filters.rpt_format == '1' }}> Word Format</label>
+                    <label style="margin-left:10px;"><input type="radio" name="rpt_format" value="2" {{ 'checked' if filters and filters.rpt_format == '2' }}> Excel Format</label>
+                    <label style="margin-left:10px;"><input type="radio" name="rpt_format" value="3" {{ 'checked' if filters and filters.rpt_format == '3' }}> PDF Format</label>
                 </td>
             </tr>
             
@@ -132,7 +130,7 @@
     </table>
 </div>
 {% elif request.method == 'POST' %}
-<div style="text-align:center; padding:50px; color:#999;">
+<div style="text-align:center; padding:50px; color:#999; font-size:11px;">
     No records found for the selected filters.
 </div>
 {% endif %}
@@ -154,7 +152,7 @@ async function loadDepartments(degreeId) {
         });
         deptSelect.innerHTML = html;
     } catch(e) {
-        deptSelect.innerHTML = '<option value="0">Error loading departments</option>';
+        deptSelect.innerHTML = '<option value="0">--Select Department--</option>';
     }
 }
 
@@ -174,7 +172,7 @@ async function loadClasses(degreeId) {
         });
         semSelect.innerHTML = html;
     } catch(e) {
-        semSelect.innerHTML = '<option value="0">Error loading classes</option>';
+        semSelect.innerHTML = '<option value="0">--Select Class--</option>';
     }
 }
 
@@ -187,32 +185,13 @@ async function autoFillYear(semId) {
         const year = await r.json();
         if (year && year.pk_degreeyearid) {
             yearSelect.value = year.pk_degreeyearid;
-            yearSelect.disabled = true; // Make it gray/non-editable
-            // Add a hidden field to ensure value is POSTed since disabled fields aren't
-            let hiddenYear = document.getElementById('hidden_year');
-            if (!hiddenYear) {
-                hiddenYear = document.createElement('input');
-                hiddenYear.type = 'hidden';
-                hiddenYear.name = 'year_id';
-                hiddenYear.id = 'hidden_year';
-                yearSelect.parentNode.appendChild(hiddenYear);
-            }
-            hiddenYear.value = year.pk_degreeyearid;
-        } else {
-            yearSelect.disabled = false;
         }
-    } catch(e) {
-        yearSelect.disabled = false;
-    }
+    } catch(e) {}
 }
 
-// Re-trigger if page was loaded with filters (POST)
 document.addEventListener('DOMContentLoaded', () => {
-    const degreeId = document.getElementById('rpt_degree').value;
-    const semId = document.getElementById('rpt_sem').value;
-    if (degreeId && degreeId != '0') {
-        // We might need to handle pre-selection if needed, but for now simple refresh is fine
-    }
+    // If we have filters from POST, we might want to trigger loads, 
+    // but the current backend passes static lists if needed or relies on user interaction.
 });
 </script>
 {% endblock %}

@@ -24,7 +24,7 @@
     }
 </style>
 
-<div class="hau-card">
+<div class="hau-card ajax-card">
     <div class="tableheading" style="margin-bottom:0;">
         <span class="mainheadingborderbottom">Student Biodata</span>
     </div>
@@ -165,7 +165,8 @@
                     <tr>
                         <td class="vtext">Annual income of Family</td>
                         <td class="colon">:</td>
-                        <td><input type="number" name="family_income" id="c_income" class="textbox w-100" value="{{ student_data.basic.FamilyAnnualIncome if student_data else '' }}"> <span class="required">*</span></td>
+                        <td><input type="text" name="family_income" id="c_income" class="textbox w-150" value="{{ student_data.basic.FamilyAnnualIncome if student_data else '' }}"> <span class="required">*</span></td>
+                        <td colspan="3"></td>
                     </tr>
 
                     <tr><td colspan="6" height="20"></td></tr>
@@ -719,6 +720,18 @@
             } catch(e) { window.showToast("Error searching student", "danger"); }
         }
 
+        // Helper to format DD/MM/YYYY or datetime string to YYYY-MM-DD for date inputs
+        function formatJsDate(val) {
+            if (!val) return '';
+            if (typeof val === 'string' && val.includes('/')) {
+                const parts = val.split('/');
+                if (parts.length === 3) return `${parts[2]}-${parts[1]}-${parts[0]}`;
+            } else if (typeof val === 'string' && val.includes('-')) {
+                return val.split('T')[0];
+            }
+            return '';
+        }
+
         function populateForm(data) {
             const b = data.basic;
             document.getElementById('pk_sid').value = b.pk_sid;
@@ -728,18 +741,37 @@
             document.getElementById('c_session').value = b.fk_adm_session || '';
             document.getElementById('c_sal').value = b.fk_salutationid || '';
             document.getElementById('c_name').value = b.fullname || '';
-            if(b.dob) document.getElementById('c_dob').value = b.dob.split('T')[0];
+            
+            // Set Dates correctly
+            const dobVal = formatJsDate(b.dob);
+            document.getElementById('c_dob').value = dobVal;
+            if(document.getElementById('c_dob')._flatpickr) document.getElementById('c_dob')._flatpickr.setDate(dobVal);
+            
             document.getElementById('c_fname').value = b.fname || '';
-            if(b.FatherDOB) document.getElementById('c_fdob').value = b.FatherDOB.split('T')[0];
+            
+            const fdobVal = formatJsDate(b.FatherDOB);
+            document.getElementById('c_fdob').value = fdobVal;
+            if(document.getElementById('c_fdob')._flatpickr) document.getElementById('c_fdob')._flatpickr.setDate(fdobVal);
+            
             document.getElementById('c_foccu').value = b.FK_occuidF || '';
             document.getElementById('c_foccu_addr').value = b.OccuAddressF || '';
             document.getElementById('c_fedu').value = b.FK_EduQuaid || '';
             document.getElementById('c_mname').value = b.mname || '';
-            if(b.MotherDOB) document.getElementById('c_mdob').value = b.MotherDOB.split('T')[0];
+            
+            const mdobVal = formatJsDate(b.MotherDOB);
+            document.getElementById('c_mdob').value = mdobVal;
+            if(document.getElementById('c_mdob')._flatpickr) document.getElementById('c_mdob')._flatpickr.setDate(mdobVal);
+            
             document.getElementById('c_moccu').value = b.FK_occuidM || '';
             document.getElementById('c_moccu_addr').value = b.OccuAddressM || '';
             document.getElementById('c_medu').value = b.FK_EduQuaidM || '';
-            document.getElementById('c_income').value = b.FamilyAnnualIncome || '';
+            
+            // Income
+            let inc = b.FamilyAnnualIncome;
+            if (inc === undefined || inc === null || inc === 'None' || isNaN(inc)) {
+                inc = '';
+            }
+            document.getElementById('c_income').value = inc;
 
             // Category details
             document.getElementById('c_cat').value = b.fk_catid || '';
@@ -765,6 +797,17 @@
             if(b.HaveLand === 'Y') document.getElementById('c_land_y').checked = true; else document.getElementById('c_land_n').checked = true;
             document.getElementById('c_start_school').value = b.StartAgeSchooling || '';
             if(b.IsFamilyJoint === 'Joint') document.getElementById('c_fam_joint').checked = true; else document.getElementById('c_fam_nuc').checked = true;
+            
+            // Missed Education Fields
+            if(b.HouseDisc === 'Owned') document.getElementById('c_house_own').checked = true;
+            else if(b.HouseDisc === 'Rental') document.getElementById('c_house_rent').checked = true;
+            else if(b.HouseDisc === 'Self Built') document.getElementById('c_house_self').checked = true;
+            else if(b.HouseDisc === 'Ancestral') document.getElementById('c_house_anc').checked = true;
+            
+            document.getElementById('c_hobbies').value = b.Hobbies || '';
+            document.getElementById('c_married_since').value = b.PerentMarriedDate || '';
+            document.getElementById('c_pets').value = b.PetOwnedDisc || '';
+            document.getElementById('c_why_vet').value = b.WhyOptVS || '';
             
             // Sports & Extras
             if(b.ParticipatioInsports === 'Y') document.getElementById('c_sport_y').checked = true; else document.getElementById('c_sport_n').checked = true;

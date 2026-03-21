@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<!-- saved from url=(0082)https://hauiums.in/SMS/Reports/SMS_Course_Dtl_Rpt.aspx?wpid=-1587134370&Mwpid=4720 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11"><link href="./Course Detail Report_files/Site.css" rel="stylesheet" type="text/css"><title>
+	CCS HAU
+</title>
+
+    <script type="text/javascript">
+
+
+        function burstCache() {
+            if (!navigator.onLine) {
+                document.body.innerHTML = 'Offline Viewing not Allowed...pls be online.';
+                window.location = '~/ErrorPage.html';
+            }
+        }
+        function ShowSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'block';
+        }
+        function HideSearchmaster(obj) {
+            document.getElementById('lightbookmaster').style.display = 'none';
+        }
+        function checkscript() {
+            var evtobj = window.event ? event : e
+            if (evtobj.shiftKey) {
+                if (evtobj.keyCode == 188 || evtobj.keyCode == 190 || evtobj.keyCode == 222) {
+                    return false;
+                }
+            }
+
+            //            if (event.keyCode == 222) {
+            //                document.form1.outstring.value = """";
+            //            }  
+
+
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        var isClose = false;
+
+        //this code will handle the F5 or Ctrl+F5 key
+        //need to handle more cases like ctrl+R whose codes are not listed here
+        document.onkeydown = checkKeycode
+        function checkKeycode(e) {
+            var keycode;
+            if (window.event)
+                keycode = window.event.keyCode;
+            else if (e)
+                keycode = e.which;
+            if (keycode == 116) {
+                isClose = true;
+            }
+        }
+        function somefunction() {
+            isClose = true;
+        }
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+        //<![CDATA[
+
+        function bodyUnload() {
+
+            if (!isClose) {
+                var request = GetRequest();
+                request.open("GET", "~/Logout.aspx", true);
+                request.send();
+            }
+        }
+        function GetRequest() {
+            var request = null;
+            if (window.XMLHttpRequest) {
+                //incase of IE7,FF, Opera and Safari browser
+                request = new XMLHttpRequest();
+            }
+            else {
+                //for old browser like IE 6.x and IE 5.x
+                request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+            }
+            return request;
+        }
+        //
+    </script>
+
+
+
+<link href="./Course Detail Report_files/default.css" type="text/css" rel="stylesheet"><link href="./Course Detail Report_files/font.css" type="text/css" rel="stylesheet"><link href="./Course Detail Report_files/GridviewScroll.css" type="text/css" rel="stylesheet"><link href="./Course Detail Report_files/stylesheet.css" type="text/css" rel="stylesheet"><style type="text/css">
+	/* <![CDATA[ */
+	#ctl00_MainMenu img.icon { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu img.separator { border-style:none;display:block; }
+	#ctl00_MainMenu img.horizontal-separator { border-style:none;vertical-align:middle; }
+	#ctl00_MainMenu ul { list-style:none;margin:0;padding:0;width:auto; }
+	#ctl00_MainMenu ul.dynamic { z-index:1; }
+	#ctl00_MainMenu a { text-decoration:none;white-space:nowrap;display:block; }
+	#ctl00_MainMenu a.static { padding-left:0.15em;padding-right:0.15em; }
+	#ctl00_MainMenu a.popout-dynamic { background:url("../../Images/popout.jpg") no-repeat right center;padding-right:14px; }
+	/* ]]> */
+</style></head>
+<body class="backgroundmaster" onload="burstCache();" onkeydown="return checkscript();" onbeforeunload="bodyUnload();" onmousedown="somefunction()" ondragstart="return false" draggable="false">
+    <form name="aspnetForm" method="post" action="https://hauiums.in/SMS/Reports/SMS_Course_Dtl_Rpt.aspx?wpid=-1587134370&amp;Mwpid=4720" id="aspnetForm" autocomplete="off">
+<div>
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./Course Detail Report_files/WebResource.axd" type="text/javascript"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var Anthem_FormID = "aspnetForm";
+//]]>
+</script>
+<script src="./Course Detail Report_files/WebResource(1).axd" type="text/javascript"></script>
+<script src="./Course Detail Report_files/WebResource(2).axd" type="text/javascript"></script>
+<script src="./Course Detail Report_files/WebResource(3).axd" type="text/javascript"></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="E1DB80BB">
+	<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+	<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+	<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="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">
+</div>
+
+        <div class="headermainfix">
+            <div class="header">
+                <h1 class="logo"></h1>
+
+                <div class="glcl ">
+
+                    <ul class="menu">
+
+
+                        <li id="ctl00_modulediv" class="currentmodule">
+                            <img width="18px" height="18px" src="./Course Detail Report_files/admission.png">
+                            Admission &amp; Academics
+                        </li>
+
+
+                        
+                        <li style="padding: 3px 10px 4px; font-size: x-small">
+
+                            <a href="https://filenotesys/FN_FileStatus.aspx">Document(s) Pending (0)</a>
+                        </li>
+                        
+
+                        <li class="downloadicon" style="display: none;"><a href="https://hauiums.in/SMS/Reports/SMS_Course_Dtl_Rpt.aspx?wpid=-1587134370&amp;Mwpid=4720#">Download</a>
+
+                            <ul>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/circulars81.html" target="_blank">Circulars</a></li>
+                                <li class="downloadicon"><a href="http://www.luvas.edu.in/download-proformas.html" target="_blank">Download Proformas</a></li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="custsupport">
+                            <a href="http://52.172.11.249/iumssupport" target="_blank">
+                                
+                                            Support
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            
+                            
+                        </li>
+
+                        <li class="mymodule"><a href="https://hauiums.in/Modules.aspx">My Modules</a></li>
+
+                        <li class="chngpass"><a href="https://hauiums.in/UMM/ChangePassword.aspx">Change Password</a></li>
+                        <li class="logout">
+                            <a href="https://hauiums.in/Logout.aspx">Log Out <b>
+                                <span id="ctl00_lblUserName"></span></b></a>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>Welcome:
+                            <span id="ctl00_lblEnrollment"> Rajbeer Singh</span></li>
+                    </ul>
+                </div>
+                <div class="headersecondnav">
+                    <ul>
+                        
+
+                        
+                        
+                        <li>
+                            </li>
+                        <li>
+                            </li>
+                        <li>
+                            <span id="ctl00_lblLoginName"> Rajbeer Singh</span></li>
+                        <li>
+                            <span id="ctl00_lblCampus">COBS&amp;H, Hisar</span></li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="nav">
+                <a href="https://hauiums.in/SMS/Reports/SMS_Course_Dtl_Rpt.aspx?wpid=-1587134370&amp;Mwpid=4720#ctl00_MainMenu_SkipLink"><img alt="Skip Navigation Links" src="./Course Detail Report_files/WebResource(4).axd" width="0" height="0" style="border-width:0px;"></a><div id="ctl00_MainMenu" style="float: left;">
+	<ul class="level1 static" tabindex="0" role="menubar" style="position: relative; width: auto; float: left;">
+		<li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:2" role="menuitem" style="position: relative; float: left;"><a title="Masters and Config." class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2361#" tabindex="-1">Masters and Config.</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:2" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:3" role="menuitem" style="position: relative;"><a title="Common Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2398#" tabindex="-1">Common Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:3" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Common Masters preparation" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4718" tabindex="-1">Common Masters preparation</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:6" role="menuitem" style="position: relative;"><a title="Administrative Configurations" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2403#" tabindex="-1">Administrative Configurations</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:6" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Academic Configurations Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4719" tabindex="-1">Academic Configurations Management</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:10" role="menuitem" style="position: relative; float: left;"><a title="Course Details" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2401#" tabindex="-1">Course Details</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:10" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li role="menuitem" class="dynamic" style="position: relative;"><a title="Course Management" class="level2 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4720" tabindex="-1">Course Management</a></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:13" role="menuitem" style="position: relative; float: left;"><a title="Admission" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2399#" tabindex="-1">Admission</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:13" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:14" role="menuitem" style="position: relative;"><a title="Admission Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2400#" tabindex="-1">Admission Masters</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:14" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Admission Masters Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4721" tabindex="-1">Admission Masters Management</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:17" role="menuitem" style="position: relative;"><a title="Eligibility &amp; Enrollments" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2402#" tabindex="-1">Post Admission Activities</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:17" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Admission No. Generation and Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4722" tabindex="-1">Admission No. Generation and Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Bio Data Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4723" tabindex="-1">Student Bio Data Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Advisory Committee Management for PG/PHD Programme" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4727" tabindex="-1">Advisory Committee Management for PG/PHD Programme</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:23" role="menuitem" style="position: relative; float: left;"><a title="Academics" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=2388#" tabindex="-1">Academics</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:23" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:24" role="menuitem" style="position: relative;"><a title="Academics Masters" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=3753#" tabindex="-1">Academics Masters and Cofiguration</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:24" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Calender Event/Notification Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4728" tabindex="-1">Calender Event/Notification Management</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Transfer, Reg Cancel, Extend, Advisory allocation" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4733" tabindex="-1">Academic Miscellaneous Activities</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:28" role="menuitem" style="position: relative;"><a title="Student Course Allocation" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=3961#" tabindex="-1">Student Course Allocation</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:28" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Student Subject/Course Allocation and Management" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4734" tabindex="-1">Student Subject/Course Allocation and Management</a></li>
+			</ul></li>
+		</ul></li><li class="has-popup static" aria-haspopup="ctl00_MainMenu:submenu:32" role="menuitem" style="position: relative; float: left;"><a title="Reports" class="level1 static" href="https://hauiums.in/UMM/?Mwpid=4040#" tabindex="-1">Reports</a><ul class="level2 dynamic" id="ctl00_MainMenu:submenu:32" style="display: none; position: absolute; top: 100%; left: 0px;">
+			<li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:33" role="menuitem" style="position: relative;"><a title="Admission Reports" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=4041#" tabindex="-1">Admission Reports</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:33" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Admission No. Certificate Report, Student Registration Report etc" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4735" tabindex="-1">Admission miscellaneous Reports</a></li>
+			</ul></li><li class="has-popup dynamic" aria-haspopup="ctl00_MainMenu:submenu:36" role="menuitem" style="position: relative;"><a title="Academics Reports" class="popout-dynamic level2 dynamic" href="https://hauiums.in/UMM/?Mwpid=2429#" tabindex="-1">Academics Reports</a><ul class="level3 dynamic" id="ctl00_MainMenu:submenu:36" style="display: none; position: absolute; top: 0px; left: 100%;">
+				<li role="menuitem" class="dynamic" style="position: relative;"><a title="Academic miscellaneous Reports" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=4736" tabindex="-1">Academic miscellaneous Reports</a></li><li role="menuitem" class="dynamic" style="position: relative;"><a title="Course content upload Report" class="level3 dynamic" href="https://hauiums.in/SMS/UC/SMS_Examination_commonPage.aspx?Mwpid=8474" tabindex="-1">Course content upload report</a></li>
+			</ul></li>
+		</ul></li>
+	</ul>
+</div><div style="clear: left;"></div><a id="ctl00_MainMenu_SkipLink"></a>
+            </div>
+        </div>
+        <div class="maincontent">
+            <table border="0" cellpadding="0" cellspacing="0" class="master-border" width="100%">
+                <tbody><tr>
+                    <td valign="top">
+
+                        <div id="body">
+                            <div id="ctl00_brdcrums" class="brdcums">
+                                
+                                <div class="brdcrmsinnerdiv">
+                                    <img style="float: left; margin: 2px 5px 0 0;" src="https://app_themes/skyblue/Images/home-icon.png">
+                                    <span>Course Details</span>&nbsp;&gt;&nbsp;<span>Course Management</span>&nbsp;&gt;&nbsp;<strong>Course Detail Report</strong>
+                                </div>
+                                <div class="helpbtn" id="hlpbtn">
+                                    <input type="image" name="ctl00$hplBtn" id="ctl00_hplBtn" src="./Course Detail Report_files/help.png" alt="Click For Help" style="height:26px;width:16px;border-width:0px;">
+                                </div>
+                            </div>
+                            <div class="body-form">
+                                
+    <table id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_Table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tbody><tr>
+		<td align="left" class="tabbing">
+                <div id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_div1" style="display:inline; width:100%">
+                <a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb1" title="Course Type Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_CourseType_Mst.aspx?wpid=-400586907&amp;Mwpid=4720" style="display:inline-block;width:110px;">Course Type Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb2" title="Paper/Course Title Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_PaperTitle_Mst.aspx?wpid=-1487490480&amp;Mwpid=4720" style="display:inline-block;width:110px;">Paper/Course Title Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb3" title="Course/Subject Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_Course_Dtl.aspx?wpid=1938065253&amp;Mwpid=4720" style="display:inline-block;width:110px;">Course/Subject Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb4" title="ActivityCourse Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_CourseActivity_Mst.aspx?wpid=-1487359410&amp;Mwpid=4720" style="display:inline-block;width:110px;">Activity Course Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb5" title="Activity Master" class="tabg" href="https://hauiums.in/SMS/Masters/SMS_Activity_mst.aspx?wpid=1972131621&amp;Mwpid=4720" style="display:inline-block;width:110px;">Activity Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb6" title="Package Master" class="tabg" href="https://hauiums.in/SMS/Masters/sms_package_mst.aspx?wpid=1938261858&amp;Mwpid=4720" style="display:inline-block;width:110px;">Package Master</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb7" title="Course Detail Report" class="tabgs" href="https://hauiums.in/SMS/Reports/SMS_Course_Dtl_Rpt.aspx?wpid=-1587134370&amp;Mwpid=4720" style="display:inline-block;width:110px;">Course Detail Report</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb8" title="Syllabus Creation [Master]" class="tabg" href="https://hauiums.in/SMS/Reports/SMS_subject_syllabusCreation.aspx?wpid=-371548627&amp;Mwpid=4720" style="display:inline-block;width:110px;">Syllabus Creation [Master]</a><a id="ctl00_ContentPlaceHolder1_SMS_UCCommonPageToSetTabbing_lb9" title="PGS Course Limit [Master]" class="tabg" href="https://hauiums.in/SMS/AdmAcd/SMS_SessionWise_PGS_CourseLimit.aspx?wpid=1576610206&amp;Mwpid=4720" style="display:inline-block;width:110px;">PGS Course Limit [Master]</a></div>
+            </td>
+	</tr>
+</tbody></table>
+
+    <table border="0" class="table" width="100%">
+        <tbody><tr>
+            <td class="tableheading" colspan="6"><span class="mainheadingborderbottom">Course Detail Report</span>
+            </td>
+        </tr>
+        <tr>
+            <td id="lblappfrom" class="vtext">Applicable From
+            </td>
+            <td class="colon">:</td>
+            <td align="left" class="required">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_D_ddlappfrom__"><select name="ctl00$ContentPlaceHolder1$D_ddlappfrom" id="ctl00_ContentPlaceHolder1_D_ddlappfrom" class="dropdown">
+	<option value=" -- Select Session From -- "> -- Select Session From -- </option>
+	<option value="77">2025-2026 </option>
+	<option selected="selected" value="72">2024-2025 </option>
+	<option value="70">2023-2024 </option>
+	<option value="46">2022-2023 </option>
+	<option value="42">2021-2022 </option>
+	<option value="21">2020-2021 </option>
+	<option value="20">2019-2020 </option>
+	<option value="19">2018-2019 </option>
+	<option value="18">2017-2018 </option>
+	<option value="17">2016-2017 </option>
+	<option value="16">2015-2016 </option>
+	<option value="15">2014-2015 </option>
+	<option value="14">2013-2014 </option>
+	<option value="13">2012-2013 </option>
+	<option value="78">2011-2012 </option>
+	<option value="80">2010-2011 </option>
+	<option value="79">2009-2010 </option>
+
+</select></span>
+                *
+                
+            </td>
+            <td class="vtext">Applicable Upto
+            </td>
+            <td class="colon">:</td>
+            <td align="left">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlappupto__"><select name="ctl00$ContentPlaceHolder1$ddlappupto" id="ctl00_ContentPlaceHolder1_ddlappupto" class="dropdownlong">
+	<option value=" -- Select Session Upto-- "> -- Select Session Upto-- </option>
+	<option selected="selected" value="77">2025-2026 </option>
+	<option value="72">2024-2025 </option>
+	<option value="70">2023-2024 </option>
+	<option value="46">2022-2023 </option>
+	<option value="42">2021-2022 </option>
+	<option value="21">2020-2021 </option>
+	<option value="20">2019-2020 </option>
+	<option value="19">2018-2019 </option>
+	<option value="18">2017-2018 </option>
+	<option value="17">2016-2017 </option>
+	<option value="16">2015-2016 </option>
+	<option value="15">2014-2015 </option>
+	<option value="14">2013-2014 </option>
+	<option value="13">2012-2013 </option>
+	<option value="78">2011-2012 </option>
+	<option value="80">2010-2011 </option>
+	<option value="79">2009-2010 </option>
+
+</select></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Degree
+            </td>
+            <td class="colon">:</td>
+            <td align="left" valign="top">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlDegree__"><select name="ctl00$ContentPlaceHolder1$ddlDegree" id="ctl00_ContentPlaceHolder1_ddlDegree" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlDegree&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;...&#39;,true,null,null,null,true,true);return false;">
+	<option value="-- Select Degree --">-- Select Degree --</option>
+	<option value="47">-------- </option>
+	<option value="20">B.Sc.(Hons) Agriculture 2+4 Year </option>
+	<option value="53">B.Sc.(Hons.) Agribusiness Management </option>
+	<option value="1">B.Sc.(Hons.) Agriculture(4 Year) </option>
+	<option value="29">B.Sc.(Hons.) Community Science </option>
+	<option value="22">B.Sc.(Hons.) Home Science(4 Year) </option>
+	<option value="23">B.Sc.(Hons.) Home Science(6 Year) </option>
+	<option value="58">B.Sc.(Hons.) Life Science 4 year </option>
+	<option value="57">B.Sc.(Hons.) Physical Science 4 Year </option>
+	<option value="21">B.Tech.(Agricultural Engineering) </option>
+	<option value="56">B.Tech.(Biotechnology) </option>
+	<option value="49">Bachelor of Fisheries Science Programme </option>
+	<option value="45">M.F.Sc. </option>
+	<option selected="selected" value="24">M.Sc (BS&amp;H) </option>
+	<option value="33">M.Sc (COA) </option>
+	<option value="54">M.Sc (CS) </option>
+	<option value="31">M.Sc (FST) </option>
+	<option value="32">M.Sc (HS) </option>
+	<option value="51">M.Sc. (Biotech) </option>
+	<option value="41">M.Sc. Bioinformatics </option>
+	<option value="42">M.Sc. Environmental Science </option>
+	<option value="28">M.Tech(Agril. Engineering) </option>
+	<option value="27">MBA </option>
+	<option value="50">MBA -Rural </option>
+	<option value="26">MBA(Agribusiness) </option>
+	<option value="43">One Year Certificate Course in Home Industry ; Garments construction and Hosiery </option>
+	<option value="38">PG Diploma </option>
+	<option value="44">Pg Diploma in Remote Sensing and GIS </option>
+	<option value="30">PG Diploma of Remote Sensing and GIS </option>
+	<option value="37">Ph.D (AE&amp;T) </option>
+	<option value="52">Ph.D (Biotech) </option>
+	<option value="25">Ph.D (BS&amp;H) </option>
+	<option value="36">Ph.D (COA) </option>
+	<option value="34">Ph.D (FST) </option>
+	<option value="35">Ph.D (HS) </option>
+	<option value="48">Ph.D. </option>
+	<option value="55">Ph.D. (CS) </option>
+	<option value="46">Ph.D. (Fishery) </option>
+	<option value="39">Post-Graduate Diploma in Communication skills in English </option>
+	<option value="40">Post-Graduate Diploma in English Hindi Translation </option>
+
+</select></span>
+                <label for="ctl00_ContentPlaceHolder1_ddlDegree" id="ctl00_ContentPlaceHolder1_Label3"></label><br>
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlDivision__"><select name="ctl00$ContentPlaceHolder1$ddlDivision" id="ctl00_ContentPlaceHolder1_ddlDivision">
+	<option value="0">--Select Department--</option>
+	<option value="53">Agribusiness</option>
+	<option value="2">Agricultural Meteorology</option>
+	<option value="17">Bio-chemistry</option>
+	<option value="36">Bio-informatics</option>
+	<option value="37">Botany</option>
+	<option value="139">Botany &amp; Plant Physiology</option>
+	<option value="34">Chemistry</option>
+	<option value="54">Computer Science</option>
+	<option value="5">Entomology</option>
+	<option value="87">Environmental Science</option>
+	<option value="52">Extension Education and Communication Management</option>
+	<option value="28">Food Science &amp; Technology</option>
+	<option value="30">Foods &amp; Nutrition</option>
+	<option value="70">Genetics &amp; Plant Breeding </option>
+	<option value="8">Horticulture - Floriculture &amp; landscape Architecture</option>
+	<option value="81">Horticulture - Fruit Science</option>
+	<option value="31">Human Development and family Studies</option>
+	<option value="20">Mathematics</option>
+	<option value="22">Microbiology</option>
+	<option value="35">Molecular Biology &amp; Biotechnology</option>
+	<option value="9">Nematology</option>
+	<option value="79">Physics</option>
+	<option value="10">Plant Pathology</option>
+	<option value="39">Plant Physiology</option>
+	<option value="23">Sociology</option>
+	<option value="12">Soil Science</option>
+	<option selected="selected" value="21">Statistics</option>
+	<option value="24">Zoology</option>
+
+</select></span>
+            </td>
+            <td class="vtext">Class
+            </td>
+            <td class="colon">:</td>
+            <td align="left">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlSemester__"><select name="ctl00$ContentPlaceHolder1$ddlSemester" id="ctl00_ContentPlaceHolder1_ddlSemester" class="dropdown" onchange="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$ddlSemester&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;&#39;,true,null,null,null,true,true);return false;">
+	<option value="0">--Select Class--</option>
+	<option selected="selected" value="1">I </option>
+	<option value="2">II </option>
+	<option value="3">III </option>
+	<option value="4">IV </option>
+	<option value="5">V </option>
+	<option value="6">VI </option>
+	<option value="7">VII </option>
+	<option value="8">VIII </option>
+
+</select></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Year
+            </td>
+            <td class="colon">:</td>
+            <td align="left">
+                <span id="Anthem_ctl00_ContentPlaceHolder1_ddlYear__"><select name="ctl00$ContentPlaceHolder1$ddlYear" id="ctl00_ContentPlaceHolder1_ddlYear" disabled="disabled" class="dropdown">
+	<option value="0">--Select Year--</option>
+	<option selected="selected" value="1">First</option>
+
+</select></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="vtext">Report Format
+            </td>
+            <td class="colon">:</td>
+            <td class="vtext">
+                <div id="Anthem_ctl00_ContentPlaceHolder1_rbRptFormat__"><table id="ctl00_ContentPlaceHolder1_rbRptFormat" class="radio" border="0">
+	<tbody><tr>
+		<td><span><input id="ctl00_ContentPlaceHolder1_rbRptFormat_0" type="radio" name="ctl00$ContentPlaceHolder1$rbRptFormat" value="1"><label for="ctl00_ContentPlaceHolder1_rbRptFormat_0">Word Format</label></span></td><td><span><input id="ctl00_ContentPlaceHolder1_rbRptFormat_1" type="radio" name="ctl00$ContentPlaceHolder1$rbRptFormat" value="2"><label for="ctl00_ContentPlaceHolder1_rbRptFormat_1">Excel Format </label></span></td><td><span><input id="ctl00_ContentPlaceHolder1_rbRptFormat_2" type="radio" name="ctl00$ContentPlaceHolder1$rbRptFormat" value="3" checked="checked"><label for="ctl00_ContentPlaceHolder1_rbRptFormat_2">PDF Format </label></span></td>
+	</tr>
+</tbody></table></div>
+            </td>
+
+        </tr>
+        <tr>            
+
+            <td colspan="6">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tbody><tr>
+                        <td style="width: 16%"></td>
+                        <td>
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnSView__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSView" value="VIEW" id="ctl00_ContentPlaceHolder1_btnSView" class="button-common" cellpadding="0" cellspacing="0"></span>
+
+                            <span id="Anthem_ctl00_ContentPlaceHolder1_btnSReaet__"><input type="submit" name="ctl00$ContentPlaceHolder1$btnSReaet" value="RESET" onclick="javascript:Anthem_FireCallBackEvent(this,event,&#39;ctl00$ContentPlaceHolder1$btnSReaet&#39;,&#39;&#39;,false,&#39;&#39;,&#39;&#39;,&#39;WAIT...&#39;,true,null,null,null,true,true);return false;" id="ctl00_ContentPlaceHolder1_btnSReaet" class="button-common" cellpadding="0" cellspacing="0"></span>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+    </tbody></table>
+
+                            </div>
+                        </div>
+                        <span id="ctl00_lblCheck" class="HeadingRed"></span>
+                        
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="footer">
+            
+        </div>
+        <div id="lightbookmaster" class="grayout" style="display: none; top: 10%; height: auto;">
+            <div class="dvHelp">
+                <div onclick="document.getElementById(&#39;lightbookmaster&#39;).style.display=&#39;none&#39;;" class="closebtn">
+                    X
+                </div>
+                <div id="ctl00_dvHelp">
+                    <div class="helpheading">
+                        Help
+                    </div>
+                    
+                    The Context sensitive help will be activated  after final User Acceptance of respective IUMS Modules.
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">new Sys.WebForms.Menu({ element: 'ctl00_MainMenu', disappearAfter: 500, orientation: 'horizontal', tabIndex: 0, disabled: false });</script>
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('ctl00_ContentPlaceHolder1_D_ddlappfrom');//]]>
+</script>
+</form>
+
+
+<script language="javascript" src="./Course Detail Report_files/CommonJS.js.download" type="text/javascript"></script>
+<script language="javascript" src="./Course Detail Report_files/jquery-2.2.0.min.js.download" type="text/javascript"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function () {
+
+    });
+</script>
+
+
+
+</body></html>

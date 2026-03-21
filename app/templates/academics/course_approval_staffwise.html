@@ -9,7 +9,7 @@
                 <div class="row g-3">
                     <div class="col-md-5">
                         <label class="form-label small">College *</label>
-                        <select name="college_id" class="form-select form-select-sm textbox" required onchange="this.form.submit()">
+                        <select name="college_id" class="form-select form-select-sm textbox" required onchange="ajaxLoadDegrees(this.value)">
                             <option value="">-- Select College --</option>
                             {% for c in lookups.colleges %}
                             <option value="{{ c.id or c.pk_collegeid }}" {% if filters.college_id|string == (c.id or c.pk_collegeid)|string %}selected{% endif %}>{{ c.name or c.collegename }}</option>
@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-md-2">
                         <label class="form-label small">Academic Session *</label>
-                        <select name="session_id" class="form-select form-select-sm textbox" required onchange="this.form.submit()">
+                        <select name="session_id" class="form-select form-select-sm textbox" required >
                             <option value="">-- Select --</option>
                             {% for s in lookups.sessions %}
                             <option value="{{ s.pk_sessionid }}" {% if filters.session_id|string == s.pk_sessionid|string %}selected{% endif %}>{{ s.sessionname }}</option>
@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-md-3">
                         <label class="form-label small">Degree *</label>
-                        <select name="degree_id" class="form-select form-select-sm textbox" required onchange="this.form.submit()">
+                        <select name="degree_id" class="form-select form-select-sm textbox" required onchange="ajaxLoadBranches(this.value)">
                             <option value="">-- Select Degree --</option>
                             {% for d in lookups.degrees %}
                             <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label small">Department / Specialization</label>
-                        <select name="branch_id" class="form-select form-select-sm textbox" onchange="this.form.submit()">
+                        <select name="branch_id" class="form-select form-select-sm textbox" >
                             <option value="">-- ALL --</option>
                             {% for b in lookups.branches %}
                             <option value="{{ b.Pk_BranchId }}" {% if filters.branch_id|string == b.Pk_BranchId|string %}selected{% endif %}>{{ b.Branchname }}</option>

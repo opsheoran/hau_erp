@@ -2,6 +2,7 @@
 {% block content %}
 <style>
     .w-150 { width: 150px !important; }
+    .w-200 { width: 200px !important; }
     .w-250 { width: 250px !important; }
     .w-350 { width: 363px !important; height: 60px !important; }
     .required-star { color: red; font-weight: bold; }
@@ -95,7 +96,7 @@
             <tr>
                 <td colspan="2"></td>
                 <td colspan="4">
-                    <input type="submit" value="SAVE" class="button-common">
+                    <input type="submit" value="SAVE" id="btnSave" class="button-common">
                     <input type="button" value="RESET" class="button-common" onclick="resetForm()">
                 </td>
             </tr>
@@ -120,11 +121,14 @@
                     <thead>
                         <tr class="header-style">
                             <th width="5%">S.No.</th>
-                            <th>College</th>
-                            <th>Course</th>
+                            <th>College Name</th>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th>Class</th>
                             <th>Session</th>
-                            <th>Capacity</th>
-                            <th width="5%">Action</th>
+                            <th>Course Capacity</th>
+                            <th width="5%">EDIT</th>
+                            <th width="5%">DELETE</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -132,11 +136,17 @@
                         <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
                             <td>{{ (pagination.page - 1) * pagination.per_page + loop.index }}</td>
                             <td align="left">{{ item.collegename }}</td>
+                            <td align="left">{{ item.coursecode }}</td>
                             <td align="left">{{ item.coursename }}</td>
+                            <td>{{ item.classname }}</td>
                             <td>{{ item.sessionname }}</td>
                             <td>{{ item.CourseCapacity }}</td>
                             <td>
-                                <!-- DELETE FORM IS SEPARATE -->
+                                <a href="javascript:void(0)" onclick="editRecord({{ item.pk_PgsId }})">
+                                    <img src="{{ url_for('static', filename='images/edit.gif') }}" alt="Edit">
+                                </a>
+                            </td>
+                            <td>
                                 <form method="POST" onsubmit="return confirm('Are you sure you want to delete this course limit for ALL colleges?');" style="display:inline;">
                                     <input type="hidden" name="action" value="DELETE">
                                     <input type="hidden" name="id" value="{{ item.pk_PgsId }}">
@@ -145,7 +155,7 @@
                             </td>
                         </tr>
                         {% else %}
-                        <tr><td colspan="6" align="center" style="color:red; padding:10px;">No records found</td></tr>
+                        <tr><td colspan="9" align="center" style="color:red; padding:10px;">No records found</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -162,6 +172,40 @@
 function resetForm() {
     document.getElementById('pk_id').value = '';
     document.getElementById('saveForm').reset();
+    document.getElementById('btnSave').value = 'SAVE';
+    // Remove disabled state just in case
+    document.getElementById('ddlCourseName').disabled = false;
+    document.getElementById('ddlSessionFrom').disabled = false;
+    document.getElementById('ddlSemester').disabled = false;
+}
+
+function editRecord(id) {
+    fetch('/academics/api/get_pgs_limit/' + id)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+            // In the live system, editing often restricts changing primary keys 
+            // but the UI typically says UPDATE. Our backend upsert_single uses 
+            // fk_collegeid, fk_courseId, fk_SessionId, fk_classId as the unique key.
+            // If they change these during edit, it creates a new record or overrides another.
+            // To mimic standard edit, we populate fields and let them update.
+            document.getElementById('pk_id').value = data.pk_PgsId;
+            document.getElementById('ddlColleges').value = (data.fk_collegeid !== null && data.fk_collegeid !== undefined) ? data.fk_collegeid : "0";
+            document.getElementById('ddlCourseName').value = data.fk_courseId;
+            document.getElementById('ddlSessionFrom').value = data.fk_SessionId;
+            document.getElementById('ddlSemester').value = data.fk_classId;
+            document.getElementById('txtCapacity').value = data.CourseCapacity;
+            
+            document.getElementById('btnSave').value = 'UPDATE';
+            window.scrollTo(0, 0);
+        })
+        .catch(error => {
+            console.error('Error fetching record:', error);
+            alert('Failed to fetch record details.');
+        });
 }
 </script>
 {% endblock %}

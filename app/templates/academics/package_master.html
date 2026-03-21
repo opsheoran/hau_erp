@@ -7,7 +7,7 @@
     .required-star { color: red; font-weight: bold; }
 </style>
 
-<div class="hau-card">
+<div class="hau-card ajax-card">
     <div class="tablesubheading">Package Master
         <div class="helpbtn" style="float:right;">
             <input type="image" src="{{ url_for('static', filename='images/help.png') }}" onclick="document.getElementById('helpModal').style.display='block'" style="height:20px;">
@@ -169,9 +169,12 @@ async function loadSemesters(degreeId, selectedSemId = null) {
             const opt = document.createElement('option');
             opt.value = s.id;
             opt.textContent = s.name;
-            if (selectedSemId && String(s.id) === String(selectedSemId)) opt.selected = true;
             semSelect.appendChild(opt);
         });
+        
+        if (selectedSemId) {
+            semSelect.value = String(selectedSemId);
+        }
     } catch (e) { console.error("Error loading semesters", e); }
 }
 
@@ -187,6 +190,8 @@ function addCourseRow(data = null) {
         courseOpts += `<option value="${c.id}" ${selected}>${c.name}</option>`;
     });
 
+    const isActive = data ? (data.dtlcourseactive !== undefined ? data.dtlcourseactive : true) : true;
+
     tr.innerHTML = `
         <td align="center">${rowCount}</td>
         <td align="center">
@@ -194,7 +199,7 @@ function addCourseRow(data = null) {
         </td>
         <td align="center">
             <span class="chkbox">
-                <input type="checkbox" name="course_active[]" checked>
+                <input type="checkbox" name="course_active[]" ${isActive ? 'checked' : ''}>
                 <label>YES</label>
             </span>
         </td>
@@ -209,13 +214,24 @@ async function editItem(id) {
     const res = await fetch(`/academics/api/get_package_details/${id}`);
     const p = await res.json();
     
-    document.getElementById('p_id').value = p.pk_packageID;
-    document.getElementById('p_name').value = p.PackageName;
-    document.getElementById('p_degree').value = p.fk_degreeid;
-    await loadSemesters(p.fk_degreeid, p.fk_semesterid);
-    document.getElementById('p_sess_from').value = p.fromsession || '';
-    document.getElementById('p_sess_to').value = p.tosession || '';
-    document.getElementById('p_active').checked = !!p.mstcourseactive;
+    // Multiple casing fallback for robustness
+    const pkId = p.pk_packageID || p.pk_packageid;
+    const pName = p.PackageName || p.packagename;
+    const degId = p.fk_degreeid || p.fk_degreeid;
+    const semId = p.fk_semesterid || p.fk_semesterid;
+    const sessFrom = p.fromsession || p.fromsession;
+    const sessTo = p.tosession || p.tosession;
+    const active = p.mstcourseactive || p.mstcourseactive;
+
+    document.getElementById('p_id').value = pkId;
+    document.getElementById('p_name').value = pName;
+    document.getElementById('p_degree').value = degId;
+    
+    await loadSemesters(degId, semId);
+    
+    document.getElementById('p_sess_from').value = sessFrom || '';
+    document.getElementById('p_sess_to').value = sessTo || '';
+    document.getElementById('p_active').checked = !!active;
 
     const tbody = document.getElementById('courseBody');
     tbody.innerHTML = '';

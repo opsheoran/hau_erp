@@ -27,3 +27,5 @@ from .establishment_promotion import AppointingAuthorityModel, NonTeachingPromot
 from .payroll import PayrollModel
 from .establishment import EstablishmentModel
 from .examination import ExaminationModel
+
+from app.models.academics import SyllabusModel

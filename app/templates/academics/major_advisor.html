@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="hau-card">
+<div class="hau-card ajax-card">
     <!-- Main Heading -->
     <div class="tableheading"><span class="mainheadingborderbottom">Major Advisor</span></div>
     
@@ -12,7 +12,7 @@
                         <td width="21%" class="vtext">College</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="college_id" class="textbox w-200 w-300" required onchange="this.form.submit()">
+                            <select name="college_id" class="textbox w-200 w-300" required onchange="ajaxLoadDegrees(this.value)">
                                 <option value="0">--Select College--</option>
                                 {% for c in lookups.colleges %}
                                 <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -36,7 +36,7 @@
                         <td class="vtext">Degree</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="degree_id" class="textbox w-200 w-300" required onchange="this.form.submit()">
+                            <select name="degree_id" class="textbox w-200 w-300" required onchange="ajaxLoadBranches(this.value)">
                                 <option value="0">--Select Degree--</option>
                                 {% for d in lookups.degrees %}
                                 <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
