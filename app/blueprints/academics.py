@@ -4261,7 +4261,7 @@ def minor_advisor_report(sid):
     buffer = generate_advisory_committee_report(student_info, committee_data)
     response = make_response(buffer.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = f'inline; filename=Committee_Report_{sid}.pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=Committee_Report_{sid}.pdf'
     return response
 
 @academics_bp.route('/api/student/<int:sid>/advisory_committee')
