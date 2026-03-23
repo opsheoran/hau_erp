@@ -16,7 +16,7 @@
                     <td class="vtext" width="15%">College</td>
                     <td class="colon">:</td>
                     <td width="30%">
-                        <select name="college_id" class="textbox w-200 w-300" required onchange="ajaxLoadDegrees(this.value)">
+                        <select name="college_id" id="ddlCollege" class="textbox w-200 w-300" required onchange="localLoadDegrees(this.value, 'ddlDegree')">
                             <option value="">--Select College--</option>
                             {% for c in lookups.colleges %}
                             <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -42,7 +42,7 @@
                     <td class="vtext">Degree</td>
                     <td class="colon">:</td>
                     <td>
-                        <select name="degree_id" class="textbox w-200 w-300" required onchange="ajaxLoadBranches(this.value)">
+                        <select name="degree_id" id="ddlDegree" class="textbox w-200 w-300" required onchange="localLoadBranches(document.getElementById('ddlCollege').value, this.value, 'ddlSpecialization')">
                             <option value="">--Select Degree--</option>
                             {% for d in lookups.degrees %}
                             <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -54,7 +54,7 @@
                     <td class="vtext">Specialization</td>
                     <td class="colon">:</td>
                     <td>
-                        <select name="filter_branch_id" class="textbox w-200 w-200">
+                        <select name="filter_branch_id" id="ddlSpecialization" class="textbox w-200 w-200">
                             <option value="0">--Select Specialization--</option>
                             {% for b in lookups.branches %}
                             <option value="{{ b.id }}" {% if filters.filter_branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
@@ -253,6 +253,47 @@ function loadStudentDisciplines(sid) {
             if(data.minor_id) document.getElementById('ddlMinor').value = data.minor_id;
             if(data.supporting_id) document.getElementById('ddlSupporting').value = data.supporting_id;
             if(data.advisor_id) document.getElementById('ddlAdvisor').value = data.advisor_id;
+        });
+}
+
+function localLoadDegrees(collegeId, targetId) {
+    if (!collegeId || collegeId === '0') return;
+    fetch('/academics/api/college/' + collegeId + '/degrees?is_pg_phd=1')
+        .then(res => res.json())
+        .then(data => {
+            let ddl = document.getElementById(targetId);
+            ddl.innerHTML = '<option value="">--Select Degree--</option>';
+            data.forEach(d => {
+                ddl.innerHTML += `<option value="${d.id}">${d.name}</option>`;
+            });
+        });
+}
+
+function localLoadBranches(degreeId, targetId) {
+    if (!degreeId || degreeId === '0') return;
+    const url = '/academics/api/degree/' + degreeId + '/branches';
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            let ddlFilter = document.getElementById(targetId);
+            let ddlMajor = document.getElementById('ddlMajor');
+            let ddlMinor = document.getElementById('ddlMinor');
+            let ddlSupporting = document.getElementById('ddlSupporting');
+            
+            ddlFilter.innerHTML = '<option value="0">--Select Specialization--</option>';
+            ddlMajor.innerHTML = '<option value="">--Select Major Subject--</option>';
+            ddlMinor.innerHTML = '<option value="">--Select Minor Subject--</option>';
+            ddlSupporting.innerHTML = '<option value="">--Select Supporting Subject--</option>';
+            
+            if (data && data.length > 0) {
+                data.forEach(b => {
+                    let opt = `<option value="${b.id}">${b.name}</option>`;
+                    ddlFilter.innerHTML += opt;
+                    ddlMajor.innerHTML += opt;
+                    ddlMinor.innerHTML += opt;
+                    ddlSupporting.innerHTML += opt;
+                });
+            }
         });
 }
 </script>
