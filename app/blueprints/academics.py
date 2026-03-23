@@ -4210,20 +4210,15 @@ def get_student_committee_api(sid):
                E.empname + ' || ' + E.empcode as advisor_name,
                DESG.designation as designation, DEPT.description as department,
                B.Branchname as specialization,
-               CASE ACD.fk_statusid
-                    WHEN 1 THEN 'Major Advisor' WHEN 2 THEN 'Co-Advisor'
-                    WHEN 3 THEN 'Member From Minor Subject' WHEN 4 THEN 'Member From Supporting Subject'
-                    WHEN 5 THEN 'Dean PGS Nominee' WHEN 6 THEN 'Member From Major Subject'
-                    ELSE 'Member'
-               END as role_name
+               'Major Advisor' as role_name
         FROM SMS_Advisory_Committee_Dtl ACD
         INNER JOIN SMS_Advisory_Committee_Mst ACM ON ACD.fk_adcid = ACM.pk_adcid
         INNER JOIN SMS_Student_Mst S ON ACM.fk_stid = S.pk_sid
         INNER JOIN SAL_Employee_Mst E ON ACD.fk_empid = E.pk_empid
-        LEFT JOIN SAL_Designation_Mst DESG ON E.fk_desgid = DESG.pk_desgid        LEFT JOIN Department_Mst DEPT ON E.fk_deptid = DEPT.pk_deptid
+        LEFT JOIN SAL_Designation_Mst DESG ON E.fk_desgid = DESG.pk_desgid
+        LEFT JOIN Department_Mst DEPT ON E.fk_deptid = DEPT.pk_deptid
         LEFT JOIN SMS_BranchMst B ON S.fk_branchid = B.Pk_BranchId
-        WHERE ACM.fk_stid = ?
-        ORDER BY ACD.fk_statusid
+        WHERE ACM.fk_stid = ? AND ACD.fk_statusid = 1
     """
     rows = DB.fetch_all(sql, [sid])
     return jsonify(clean_json_data(rows))
