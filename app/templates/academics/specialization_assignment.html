@@ -195,7 +195,7 @@
                         <tbody>
                             {% for s in students %}
                             <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
-                                <td>{{ loop.index }}</td>
+                                <td>{{ loop.index + ((pagination.page|default(1) - 1) * pagination.per_page|default(10)) }}</td>
                                 <td align="left">{{ s.fullname }} [ {{ s.enrollmentno }} ]</td>
                                 <td align="left">{{ degree_name }}</td>
                                 <td align="left">{{ session_name }}</td>
@@ -216,6 +216,11 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                    {% if pagination and pagination.total_pages > 1 %}
+                    <div style="margin-top: 10px;">
+                        {% include "includes/pagination.html" %}
+                    </div>
+                    {% endif %}
                 </td>
             </tr>
         </tbody>
