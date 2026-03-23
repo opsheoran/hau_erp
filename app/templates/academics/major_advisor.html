@@ -132,16 +132,26 @@
 
         <!-- Committee Grid -->
         <div id="divCommittee" style="margin-top: 20px; display:{% if edit_sid %}block{% else %}none{% endif %};">
+            <table border="0" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 5px;">
+                <tr>
+                    <td class="tablesubheading" colspan="6" style="background-color: #2d5a27; color: white; padding: 5px 10px;">
+                        <span style="border-bottom: 2px solid white;">List of Advisors</span>
+                    </td>
+                </tr>
+            </table>
             <table class="table-grid-view" width="100%">
                 <thead>
                     <tr class="header-style" align="center">
                         <th width="5%">S.No.</th>
                         <th width="15%">Student</th>
-                        <th width="15%">Advisory Type</th>
+                        <th width="15%">Status/Advisory Type</th>
+                        <th width="15%">Status/Advisory Type</th>
                         <th width="20%">Advisor Name</th>
-                        <th width="15%">Designation</th>
-                        <th width="15%">Department</th>
-                        <th width="15%">Specialization</th>
+                        <th width="10%">Designation</th>
+                        <th width="10%">Department</th>
+                        <th width="10%">Specialization</th>
+                        <th width="5%">EDIT</th>
+                        <th width="5%">DELETE</th>
                     </tr>
                 </thead>
                 <tbody id="tbodyCommittee">
@@ -273,7 +283,7 @@
                         <td align="left">{{ s.responseremarks or '-' }}</td>
                         <td><img src="{{ url_for('static', filename='images/print.gif') }}" style="cursor:pointer" title="Print Committee"></td>
                         <td>
-                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editStudentAdvisor({{ s.pk_sid }}, {{ s.fk_collegeid|default(0) }}, {{ s.fk_adm_session|default(0) }}, {{ s.fk_degreeid|default(0) }})' title="Edit Advisor">
+                            <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editStudentAdvisor({{ s.pk_sid }}, {{ s.fk_collegeid|default(0) }}, {{ s.fk_adm_session|default(0) }}, {{ s.fk_degreeid|default(0) }}, {{ s.fk_branchid|default(0) }})' title="Edit Advisor">
                         </td>
                         <td>
                             {% if s.approvalstatus != 'A' %}
@@ -354,10 +364,13 @@ function loadCommittee(sid) {
                         <td>${index + 1}</td>
                         <td align="left">${item.student_name || '-'}</td>
                         <td align="left">${item.role_name || '-'}</td>
+                        <td align="left">${item.role_name || '-'}</td>
                         <td align="left">${item.advisor_name || '-'}</td>
                         <td align="left">${item.designation || '-'}</td>
                         <td align="left">${item.department || '-'}</td>
                         <td align="left">${item.specialization || '-'}</td>
+                        <td align="center"><img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" title="Edit"></td>
+                        <td align="center"><img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer" title="Delete"></td>
                     </tr>`;
                     tbody.innerHTML += row;
                     
@@ -374,29 +387,18 @@ function loadCommittee(sid) {
         });
 }
 
-function editStudentAdvisor(sid, collegeId, sessionId, degreeId) {
-    let ddl = document.getElementById('ddlStudentName');
-    let found = false;
-    for(let i=0; i<ddl.options.length; i++) {
-        if(ddl.options[i].value == sid) {
-            ddl.selectedIndex = i;
-            found = true;
-            break;
-        }
-    }
-    
-    if(found) {
-        loadCommittee(sid);
-        window.scrollTo(0, 0);
+function editStudentAdvisor(sid, collegeId, sessionId, degreeId, branchId) {
+    let url = new URL(window.location.href);
+    url.searchParams.set('college_id', collegeId || '');
+    url.searchParams.set('session_id', sessionId || '');
+    url.searchParams.set('degree_id', degreeId || '');
+    if (branchId && branchId != 'None' && branchId != '0') {
+        url.searchParams.set('branch_id', branchId);
     } else {
-        // Redirect to load students and edit
-        let url = new URL(window.location.href);
-        url.searchParams.set('college_id', collegeId || '');
-        url.searchParams.set('session_id', sessionId || '');
-        url.searchParams.set('degree_id', degreeId || '');
-        url.searchParams.set('edit_sid', sid);
-        window.location.href = url.toString();
+        url.searchParams.delete('branch_id');
     }
+    url.searchParams.set('edit_sid', sid);
+    window.location.href = url.toString();
 }
 
 function toggleFilter() {
