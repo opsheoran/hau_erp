@@ -1975,6 +1975,25 @@ def major_advisor():
         finally:
             conn.close()
 
+    employees = []
+    if branch_id and branch_id != '0' and branch_id != 'None':
+        employees = DB.fetch_all("""
+            SELECT E.pk_empid as id, E.empname + ' || ' + ISNULL(E.empcode, '') + ' (' + ISNULL(D.description, 'No Dept') + ')' as name 
+            FROM SAL_Employee_Mst E 
+            LEFT JOIN Department_Mst D ON E.fk_deptid = D.pk_deptid 
+            JOIN SMS_BranchMst B ON E.fk_deptid = B.fk_deptidDdo 
+            WHERE E.employeeleftstatus = 'N' AND B.Pk_BranchId = ? 
+            ORDER BY E.empname
+        """, [branch_id])
+    else:
+        employees = DB.fetch_all("""
+            SELECT E.pk_empid as id, E.empname + ' || ' + ISNULL(E.empcode, '') + ' (' + ISNULL(D.description, 'No Dept') + ')' as name 
+            FROM SAL_Employee_Mst E 
+            LEFT JOIN Department_Mst D ON E.fk_deptid = D.pk_deptid 
+            WHERE E.employeeleftstatus = 'N' 
+            ORDER BY E.empname
+        """)
+
     lookups = {
         'colleges': colleges,
         'sessions': InfrastructureModel.get_sessions(),
@@ -1982,7 +2001,7 @@ def major_advisor():
         'branches': AcademicsModel.get_college_degree_specializations(college_id, degree_id) if (college_id and degree_id) else [],
         'degrees_f': AcademicsModel.get_college_pg_degrees(college_id_f) if college_id_f else [],
         'branches_f': AcademicsModel.get_college_degree_specializations(college_id_f, degree_id_f) if (college_id_f and degree_id_f) else [],
-        'employees': DB.fetch_all("SELECT E.pk_empid as id, E.empname + ' || ' + ISNULL(E.empcode, '') + ' (' + ISNULL(D.description, 'No Dept') + ')' as name FROM SAL_Employee_Mst E LEFT JOIN Department_Mst D ON E.fk_deptid = D.pk_deptid WHERE E.employeeleftstatus = 'N' ORDER BY E.empname")
+        'employees': employees
     }
     
     active_filters = {
