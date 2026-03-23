@@ -4217,7 +4217,9 @@ def minor_advisor_report(sid):
     stu_query = """
         SELECT S.fullname, S.AdmissionNo, S.enrollmentno, 
                CLG.collegename, DEPT.description as department_name,
-               B_MAJ.Branchname as major_name, B_MIN.Branchname as minor_name, B_SUP.Branchname as supporting_name
+               B_MAJ.Branchname as major_name, B_MIN.Branchname as minor_name, B_SUP.Branchname as supporting_name,
+               ACM.hod_date, ACM.Collegedean_date, ACM.deanpgs_date,
+               E_HOD.empname as hod_name, E_DEAN.empname as dean_name, E_PGS.empname as deanpgs_name
         FROM SMS_Student_Mst S
         LEFT JOIN SMS_College_Mst CLG ON S.fk_collegeid = CLG.pk_collegeid
         LEFT JOIN SMS_stuDiscipline_dtl SD ON S.pk_sid = SD.fk_sturegid
@@ -4225,6 +4227,10 @@ def minor_advisor_report(sid):
         LEFT JOIN Department_Mst DEPT ON B_MAJ.fk_deptidDdo = DEPT.pk_deptid
         LEFT JOIN SMS_BranchMst B_MIN ON SD.fk_desciplineidMinor = B_MIN.Pk_BranchId
         LEFT JOIN SMS_BranchMst B_SUP ON SD.fk_desciplineidSupporting = B_SUP.Pk_BranchId
+        LEFT JOIN SMS_Advisory_Committee_Mst ACM ON S.pk_sid = ACM.fk_stid
+        LEFT JOIN SAL_Employee_Mst E_HOD ON ACM.hod_id = E_HOD.pk_empid
+        LEFT JOIN SAL_Employee_Mst E_DEAN ON ACM.collegedean_id = E_DEAN.pk_empid
+        LEFT JOIN SAL_Employee_Mst E_PGS ON ACM.deanpgs_id = E_PGS.pk_empid
         WHERE S.pk_sid = ?
     """
     student_info = DB.fetch_one(stu_query, [sid])

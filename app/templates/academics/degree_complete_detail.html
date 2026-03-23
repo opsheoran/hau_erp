@@ -2,18 +2,18 @@
 {% block content %}
 <div class="hau-card ajax-card">
     <div class="tableheading"><span class="mainheadingborderbottom">Student Degree Complete Detail</span></div>
-    
+
     <div style="padding: 10px;">
         <form method="GET" id="filterForm">
-            <input type="hidden" name="view" id="hdnView" value="{{ filters.view or '0' }}">
+            <input type="hidden" name="view" value="1">
             <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
                         <td class="vtext" width="15%">College</td>
                         <td class="colon">:</td>
                         <td colspan="4" class="required">
-                            <select name="college_id" id="ddlColleges" class="textbox w-200 w-300" required onchange="handleCollegeChange()">
-                                <option value="0">--Select College--</option>
+                            <select name="college_id" id="ddlCollege" class="textbox w-200 w-300" required onchange="ajaxLoadDegrees(this.value)">
+                                <option value="">--Select College--</option>
                                 {% for c in lookups.colleges %}
                                 <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
                                 {% endfor %}
@@ -24,8 +24,8 @@
                         <td class="vtext">Academic Session</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="session_id" id="D_ddlAcdSession" class="textbox w-200 w-200" required onchange="handleSessionChange()">
-                                <option value="0">--Select Academic Session--</option>
+                            <select name="session_id" id="ddlSession" class="textbox w-200 w-250" required>
+                                <option value="">--Select Academic Session--</option>
                                 {% for s in lookups.sessions %}
                                 <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
                                 {% endfor %}
@@ -34,14 +34,14 @@
                         <td class="vtext" width="15%">Degree Complete Date</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <input type="date" name="comp_date" id="V_txtDegCompleteDate" class="textbox w-150" value="{{ now.strftime('%Y-%m-%d') }}"> *
+                            <input type="text" name="completion_date" value="{{ filters.completion_date }}" class="textbox w-150 datepicker" required>
                         </td>
                     </tr>
                     <tr>
                         <td class="vtext">Degree</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="degree_id" id="ddlDegree" class="textbox w-200 w-250" required onchange="handleDegreeChange()">
+                            <select name="degree_id" id="ddlDegree" class="textbox w-200 w-250" required onchange="onDegreeChange(this.value);">
                                 <option value="">--Select Degree--</option>
                                 {% for d in lookups.degrees %}
                                 <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -51,20 +51,20 @@
                         <td class="vtext">Class</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="semester_id" id="ddlSemester" class="textbox w-200 w-150">
-                                <option value="0">--Select Class--</option>
+                            <select name="semester_id" id="ddlSemester" class="textbox w-150" required>
+                                <option value="">--Select Class--</option>
                                 {% for s in lookups.semesters %}
                                 <option value="{{ s.pk_semesterid }}" {% if filters.semester_id|string == s.pk_semesterid|string %}selected{% endif %}>{{ s.semester_roman }}</option>
                                 {% endfor %}
                             </select> *
                         </td>
                     </tr>
-                    <tr><td colspan="6" height="15"></td></tr>
+                    <tr><td colspan="6" height="10"></td></tr>
                     <tr>
                         <td></td>
                         <td colspan="5">
-                            <input type="button" value="VIEW" class="button-common" style="width:100px;" onclick="triggerView()">
-                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:10px;" onclick="location.href='{{ url_for('academics.degree_complete_detail') }}'">
+                            <input type="submit" value="VIEW" class="button-common" style="width:80px;">
+                            <input type="button" value="RESET" class="button-common" style="width:80px; margin-left:5px;" onclick="location.href='{{ url_for('academics.degree_complete_detail') }}'">
                         </td>
                     </tr>
                 </tbody>
@@ -72,109 +72,203 @@
         </form>
 
         <br>
-        <div class="tablesubheading">List of Student</div>
-        <form method="POST">
+        <div class="tablesubheading" style="margin-top:6px;">List of Student</div>
+        <form method="POST" id="saveForm">
+            <input type="hidden" name="action" value="SAVE">
+            <input type="hidden" name="completion_date" value="{{ filters.completion_date }}">
+            
             <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4;">
-                <table class="table-grid-view" width="50%" align="center">
+                <table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" width="50%" id="gvDetails" style="border:1px solid #D4D4D4;border-collapse:collapse;">
                     <thead>
                         <tr class="header-style">
                             <th width="10%">S.No.</th>
-                            <th width="15%">Select</th>
-                            <th width="30%">Enrollnment No.</th>
-                            <th>Student Name</th>
+                            <th width="15%"><input type="checkbox" id="chkAll" onclick="toggleSelectAll(this)"> Select All</th>
+                            <th width="25%" align="center">Enrollment No.</th>
+                            <th align="left">Student Name</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for s in students %}
                         <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
                             <td align="center">{{ loop.index }}</td>
-                            <td align="center"><input type="checkbox" name="chk_comp" value="{{ s.pk_sid }}"></td>
-                            <td align="left">{{ s.enrollmentno }}</td>
-                            <td>{{ s.fullname }}</td>
+                            <td align="center">
+                                <input type="checkbox" name="chk_student" value="{{ s.pk_sid }}" class="student-chk">
+                            </td>
+                            <td align="center">{{ s.enrollmentno or s.AdmissionNo or 'N/A' }}</td>
+                            <td align="left">{{ s.fullname }}</td>
                         </tr>
                         {% else %}
-                        <tr class="item-style"><td colspan="4" align="center" style="padding:20px; color:#999;">Apply filters and press VIEW.</td></tr>
+                        <tr class="item-style"><td colspan="4" align="center" style="padding:20px; color:#999;">Apply filters and click VIEW to list students.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
+
             {% if students %}
-            <div style="text-align:center; margin-top:10px;">
-                <input type="submit" value="SAVE COMPLETION" class="button-common" style="width:150px;">
+            <div style="margin-top:12px; padding:8px 0;">
+                <input type="submit" value="Save" class="button-common" style="width:80px;">
+                <input type="button" value="Cancel" class="button-common" style="width:80px; margin-left:5px;" onclick="location.reload()">
             </div>
             {% endif %}
         </form>
 
         <br><br>
+        <div class="tablesubheading" style="margin-top:6px;">List of Student Degree Completed</div>
+        <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4; margin-bottom: 20px;">
+            <table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" width="100%" id="gvDgcompleted" style="border:1px solid #D4D4D4;border-collapse:collapse;">
+                <thead>
+                    <tr class="header-style">
+                        <th width="5%">S.No.</th>
+                        <th width="20%">Enrollment No.</th>
+                        <th align="left">Student Name</th>
+                        <th width="20%">Specialization</th>
+                        <th width="15%" align="center">Degree Complete Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in completed_students %}
+                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td align="center">{{ s.enrollmentno or s.AdmissionNo }}</td>
+                        <td align="left">{{ s.fullname }}</td>
+                        <td align="center">{{ s.Branchname or 'N/A' }}</td>
+                        <td align="center">{{ s.dgcompleteddate.strftime('%d/%m/%Y') if s.dgcompleteddate else 'N/A' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr class="item-style"><td colspan="5" align="center" style="padding:10px; color:#999;">No degree completed students found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
         <div class="tableheading"><span class="mainheadingborderbottom">Student Degree Complete Report</span></div>
-        <form id="reportForm">
-            <table border="0" class="form-table" width="100%">
-                <tr>
-                    <td class="vtext" width="15%">From Date</td>
-                    <td class="colon">:</td>
-                    <td class="required">
-                        <input type="date" name="from_date" id="from_date" class="textbox w-150" value="{{ now.strftime('%Y-01-01') }}"> *
-                    </td>
-                    <td class="vtext" width="15%">To Date</td>
-                    <td class="colon">:</td>
-                    <td class="required">
-                        <input type="date" name="to_date" id="to_date" class="textbox w-150" value="{{ now.strftime('%Y-%m-%d') }}"> *
-                    </td>
-                </tr>
-                <tr>
-                    <td class="vtext">Report Format</td>
-                    <td class="colon">:</td>
-                    <td colspan="4">
-                        <input type="radio" name="format" value="word"> Word Format
-                        <input type="radio" name="format" value="excel"> Excel Format
-                        <input type="radio" name="format" value="pdf" checked> PDF Format
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2"></td>
-                    <td colspan="4" style="padding-top:10px;">
-                        <input type="button" value="GET REPORT" class="button-common" style="width:120px;" onclick="viewDegreeReport()">
-                    </td>
-                </tr>
+        <form method="GET" action="{{ url_for('academics.degree_complete_report') }}" id="reportForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td colspan="4" class="required">
+                            <select name="college_id" id="ddlCollegeRpt" class="textbox w-200 w-300" required onchange="ajaxLoadDegreesRpt(this.value)">
+                                <option value="">--Select College--</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td colspan="4" class="required">
+                            <select name="degree_id" id="ddlDegreeRpt" class="textbox w-200 w-300" required>
+                                <option value="">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext" width="15%">From Date</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <input type="text" name="from_date" value="{{ filters.from_date or now.strftime('%Y-%m-%d') }}" class="textbox w-150 datepicker" required>
+                        </td>
+                        <td class="vtext" width="15%">To Date</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <input type="text" name="to_date" value="{{ filters.to_date or now.strftime('%Y-%m-%d') }}" class="textbox w-150 datepicker" required>
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="10"></td></tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="5">
+                            <input type="submit" value="GET REPORT" class="button-common no-ajax" style="width:120px;">
+                            <input type="button" value="RESET" class="button-common" style="width:80px; margin-left:5px;" onclick="location.href='{{ url_for('academics.degree_complete_detail') }}'">
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </form>
     </div>
 </div>
 
 <script>
-function handleCollegeChange() {
-    document.getElementById('hdnView').value = '0';
-    document.getElementById('D_ddlAcdSession').value = '0';
-    document.getElementById('ddlDegree').innerHTML = '<option value="">--Select Degree--</option>';
-    document.getElementById('ddlSemester').innerHTML = '<option value="0">--Select Class--</option>';
-    document.getElementById('filterForm').submit();
+function ajaxLoadDegrees(collegeId) {
+    const degSelect = document.getElementById('ddlDegree');
+    if (!degSelect) return;
+    degSelect.innerHTML = '<option value="">--Select Degree--</option>';
+    if (!collegeId || collegeId === '0') return;
+    fetch(`/academics/api/college/${collegeId}/degrees`)
+        .then(r => r.json())
+        .then(data => {
+            data.forEach(d => {
+                const o = document.createElement('option');
+                o.value = d.id; o.textContent = d.name;
+                degSelect.appendChild(o);
+            });
+        }).catch(err => console.error(err));
 }
 
-function handleSessionChange() {
-    document.getElementById('hdnView').value = '0';
-    document.getElementById('ddlDegree').innerHTML = '<option value="">--Select Degree--</option>';
-    document.getElementById('ddlSemester').innerHTML = '<option value="0">--Select Class--</option>';
-    document.getElementById('filterForm').submit();
+function ajaxLoadDegreesRpt(collegeId) {
+    const degSelect = document.getElementById('ddlDegreeRpt');
+    if (!degSelect) return;
+    degSelect.innerHTML = '<option value="">--Select Degree--</option>';
+    if (!collegeId || collegeId === '0') return;
+    fetch(`/academics/api/college/${collegeId}/degrees`)
+        .then(r => r.json())
+        .then(data => {
+            data.forEach(d => {
+                const o = document.createElement('option');
+                o.value = d.id; o.textContent = d.name;
+                degSelect.appendChild(o);
+            });
+        }).catch(err => console.error(err));
 }
 
-function handleDegreeChange() {
-    document.getElementById('hdnView').value = '0';
-    document.getElementById('ddlSemester').innerHTML = '<option value="0">--Select Class--</option>';
-    document.getElementById('filterForm').submit();
+function onDegreeChange(degreeId) {
+    const semSelect = document.getElementById('ddlSemester');
+    if (!semSelect) return;
+    semSelect.innerHTML = '<option value="">--Select Class--</option>';
+    semSelect.disabled = true;
+    if (!degreeId) return;
+    fetch(`/academics/api/get_degree_details/${degreeId}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.minsem !== undefined && data.maxsem !== undefined) {
+                let min_class = 4; // default M.Sc / Masters
+                let max_class = 8;
+                
+                if (data.degreetype === 'Doctorate') {
+                    min_class = 7; // User specified vii to xii
+                    max_class = 12;
+                } else if (data.degreetype === 'Bachelors' || data.isug === 'B') {
+                    min_class = 8; // User specified viii to xii
+                    max_class = 12;
+                } else {
+                    min_class = 4; // User specified iv to viii for msc
+                    max_class = 8;
+                }
+                
+                fetch(`/academics/api/get_semesters_range/${min_class}/${max_class}`)
+                    .then(r => r.json())
+                    .then(sems => {
+                        sems.forEach(s => {
+                            const o = document.createElement('option');
+                            o.value = s.pk_semesterid;
+                            o.textContent = s.semester_roman.trim();
+                            semSelect.appendChild(o);
+                        });
+                        semSelect.disabled = false;
+                    });
+            }
+        }).catch(() => { semSelect.disabled = false; });
 }
 
-function triggerView() {
-    const sem = document.getElementById('ddlSemester').value;
-    if (!sem || sem === '0') {
-        alert("Please select Class (Semester) before viewing students.");
-        return;
-    }
-    document.getElementById('hdnView').value = '1';
-    document.getElementById('filterForm').submit();
-}
-
-function viewDegreeReport() {
-    alert("Degree completion report logic being implemented...");
+function toggleSelectAll(master) {
+    document.querySelectorAll('.student-chk').forEach(c => c.checked = master.checked);
 }
 </script>
 {% endblock %}

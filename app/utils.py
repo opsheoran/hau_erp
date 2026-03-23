@@ -1017,3 +1017,171 @@ def generate_teacher_course_assignment_pdf(report_data):
     doc.build(elements)
     buffer.seek(0)
     return buffer
+
+
+
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+#  English -> Hindi (Devanagari) phonetic transliteration
+# ──────────────────────────────────────────────────────────────────────────────
+def english_to_hindi(text):
+    """Transliterate English-spelled Indian names to Devanagari.
+    Returns text unchanged if already non-ASCII (already Hindi).
+    """
+    if not text or not isinstance(text, str):
+        return text or ""
+    if any(ord(c) > 127 for c in text):
+        return text
+
+    HINDI_NUMS = dict(zip("0123456789", "०१२३४५६७८९"))
+    HALANT = "्"
+
+    # Consonant clusters — all lowercase, longest first, NO retroflex defaults.
+    CONS = [
+        # 3-char clusters (must come before 2-char)
+        ("ksh", "क्ष"),  ("gya", "ज्ञ"),  ("shr", "श्र"),
+        ("sch", "श्च"),  ("ddh", "द्ध"),  ("tth", "त्थ"),
+        ("chh", "छ"),    ("ngh", "ंह"),   # ngh->ंह (SINGH=सिंह)
+        # 2-char aspirates
+        ("gh", "घ"),  ("kh", "ख"),
+        ("ch", "च"),  ("jh", "झ"),  ("ny", "ञ"),
+        ("th", "थ"),  ("dh", "ध"),  ("sh", "श"),
+        ("ph", "फ"),  ("bh", "भ"),
+        # nasal + consonant -> anusvara (must come before single n)
+        ("ng", "ंग"),   # ng->ंग (MANGO, GANG)
+        # geminate (doubled) consonants
+        ("nn", "न्न"),  ("mm", "म्म"),  ("ll", "ल्ल"),
+        ("tt", "त्त"),  ("dd", "द्द"),  ("ss", "स्स"),
+        ("kk", "क्क"),  ("pp", "प्प"),  ("bb", "ब्ब"),
+        ("rr", "र्र"),
+        # single consonants
+        ("k", "क"),  ("g", "ग"),  ("c", "क"),  ("j", "ज"),
+        ("t", "त"),  ("d", "द"),  ("n", "न"),  ("p", "प"),
+        ("f", "फ"),  ("b", "ब"),  ("m", "म"),  ("y", "य"),
+        ("r", "र"),  ("l", "ल"),  ("v", "व"),  ("w", "व"),
+        ("s", "स"),  ("h", "ह"),  ("q", "क"),  ("z", "ज"),
+        ("x", "क्स"),
+    ]
+
+    VOWELS_FULL = [
+        ("aa", "आ"), ("ee", "ई"), ("ii", "ई"), ("oo", "ऊ"), ("uu", "ऊ"),
+        ("ai", "ऐ"), ("au", "औ"), ("ow", "औ"),
+        ("a", "अ"), ("e", "ए"), ("i", "इ"), ("o", "ओ"), ("u", "उ"),
+    ]
+
+    MATRAS = [
+        ("aa", "ा"), ("ee", "ी"), ("ii", "ी"), ("oo", "ू"), ("uu", "ू"),
+        ("ai", "ै"), ("au", "ौ"), ("ow", "ौ"),
+        ("a",  "ा"), ("e",  "े"), ("i",  "ि"), ("o",  "ो"), ("u",  "ु"),
+    ]
+
+    def _word(w):
+        result = []
+        i = 0
+        n = len(w)
+        after_cons = False
+        prev_was_vowel = True   # treat word-start as "after vowel"
+
+        while i < n:
+            ch = w[i]
+
+            if ch.isdigit():
+                after_cons = False
+                prev_was_vowel = False
+                result.append(HINDI_NUMS.get(ch, ch))
+                i += 1
+                continue
+
+            if not ch.isalpha():
+                after_cons = False
+                prev_was_vowel = False
+                result.append(ch)
+                i += 1
+                continue
+
+            # consonant match (case-insensitive)
+            matched_deva = None
+            matched_end  = None
+            matched_rom  = None
+            for roman, deva in CONS:
+                end = i + len(roman)
+                if w[i:end].lower() == roman:
+                    matched_deva = deva
+                    matched_end  = end
+                    matched_rom  = roman
+                    break
+
+            if matched_deva is not None:
+                _prev_was_vowel = prev_was_vowel
+                if after_cons:
+                    result.append(HALANT)
+                result.append(matched_deva)
+                after_cons = True
+                prev_was_vowel = False
+                i = matched_end
+
+                # peek for explicit vowel matra
+                vm_matra = None
+                vm_end   = None
+                for vrom, matra in MATRAS:
+                    vend = i + len(vrom)
+                    if w[i:vend].lower() == vrom:
+                        vm_matra = matra
+                        vm_end   = vend
+                        break
+
+                if vm_matra is not None:
+                    result.append(vm_matra)   # always add (fixed "skip a" bug)
+                    after_cons = False
+                    prev_was_vowel = True
+                    i = vm_end
+                elif matched_rom == "y" and _prev_was_vowel:
+                    # Y after vowel with no explicit following vowel =
+                    # standalone "ya" — don't chain halant to next consonant
+                    after_cons = False
+                    prev_was_vowel = True
+                continue
+
+            # standalone vowel
+            sv_full = None
+            sv_end  = None
+            for vrom, vfull in VOWELS_FULL:
+                vend = i + len(vrom)
+                if w[i:vend].lower() == vrom:
+                    sv_full = vfull
+                    sv_end  = vend
+                    break
+
+            if sv_full is not None:
+                if after_cons:
+                    for vrom2, matra2 in MATRAS:
+                        if w[i:i+len(vrom2)].lower() == vrom2:
+                            result.append(matra2)
+                            i += len(vrom2)
+                            break
+                    else:
+                        result.append(sv_full)
+                        i = sv_end
+                else:
+                    result.append(sv_full)
+                    i = sv_end
+                after_cons = False
+                prev_was_vowel = True
+                continue
+
+            # unrecognised — pass through
+            after_cons = False
+            prev_was_vowel = False
+            result.append(w[i])
+            i += 1
+
+        out = "".join(result)
+        # Final short-i -> long-i  (most Indian name-final I = long ī)
+        if out.endswith("ि"):
+            out = out[:-1] + "ी"
+        return out
+
+    import re
+    parts = re.split(r"(\s+)", text.strip())
+    return "".join(_word(p) if not p.isspace() else p for p in parts)

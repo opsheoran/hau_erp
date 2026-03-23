@@ -1,26 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-<style>
-    .w-150 { width: 150px !important; }
-    .w-200 { width: 200px !important; }
-    .w-250 { width: 250px !important; }
-    .required-star { color: red; font-weight: bold; }
-    
-    /* Popup styling */
-    .grayout {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background-color: rgba(0,0,0,0.5); z-index: 1000; display: none;
-    }
-    .popupbox {
-        position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
-        width: 850px; background: #fff; padding: 15px; border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-    .closebtn {
-        float: right; cursor: pointer; font-weight: bold; font-size: 14px;
-        background: #e74c3c; color: #fff; padding: 2px 8px; border-radius: 4px;
-    }
-</style>
+
+<!-- Jodit Editor (free, open source, no API key) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jodit@3/build/jodit.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jodit@3/build/jodit.min.js"></script>
 
 <form method="POST" id="syllabusForm">
     <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
@@ -31,17 +14,13 @@
                 </td>
             </tr>
             <tr><td colspan="6" height="15"></td></tr>
-            
-            <!-- Row 1: From Session, To Session -->
             <tr>
                 <td class="vtext" width="15%">From Session</td>
                 <td class="colon">:</td>
                 <td width="30%">
                     <select name="from_session" id="ddlFromSession" class="textbox w-250" required>
                         <option value="0">-- Select From Session --</option>
-                        {% for s in sessions %}
-                        <option value="{{ s.id }}">{{ s.name }}</option>
-                        {% endfor %}
+                        {% for s in sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
                     </select>
                     <span class="required-star">*</span>
                 </td>
@@ -50,37 +29,29 @@
                 <td width="35%">
                     <select name="to_session" id="ddlToSession" class="textbox w-250">
                         <option value="0">-- Select To Session --</option>
-                        {% for s in sessions %}
-                        <option value="{{ s.id }}">{{ s.name }}</option>
-                        {% endfor %}
+                        {% for s in sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
                     </select>
                 </td>
             </tr>
-
-            <!-- Row 2: Degree, Class -->
             <tr>
                 <td class="vtext">Degree</td>
                 <td class="colon">:</td>
                 <td valign="top">
                     <select name="degree_id" id="ddlDegree" class="textbox w-250" required>
                         <option value="">--Select Degree--</option>
-                        {% for d in degrees %}
-                        <option value="{{ d.id }}">{{ d.name }}</option>
-                        {% endfor %}
+                        {% for d in degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
                     </select>
                     <span class="required-star">*</span>
                 </td>
                 <td class="vtext">Class</td>
                 <td class="colon">:</td>
-                <td align="left">
+                <td>
                     <select name="semester_id" id="ddlSemester" class="textbox w-250" disabled required>
                         <option value=""> -- Select Class -- </option>
                     </select>
                     <span class="required-star">*</span>
                 </td>
             </tr>
-
-            <!-- Row 3: Department, Year -->
             <tr>
                 <td class="vtext">Department</td>
                 <td class="colon">:</td>
@@ -97,109 +68,120 @@
                     </select>
                 </td>
             </tr>
-            
             <tr><td colspan="6" height="15"></td></tr>
-            
-            <!-- Buttons -->
             <tr>
                 <td colspan="2"></td>
                 <td colspan="4">
                     <input type="button" value="GET COURSES" id="btnGetCourses" class="button-common">
-                    <input type="button" value="RESET" id="btnReset" class="button-common" style="margin-left: 5px;">
+                    <input type="button" value="RESET" id="btnReset" class="button-common" style="margin-left:5px;">
                 </td>
             </tr>
         </tbody>
     </table>
 </form>
 
-<div id="courseContainer" style="margin-top: 20px;">
-    <!-- Course List populated here -->
-</div>
+<div id="courseContainer" style="margin-top:20px;"></div>
 
-<!-- Popup for Syllabus Creation -->
-<div id="syllabusPopup" class="grayout">
-    <div class="popupbox">
-        <div class="closebtn" onclick="closeSyllabusPopup()">X</div>
-        <div class="tablesubheading" style="margin-bottom: 10px;">Syllabus Creation</div>
-        
-        <form method="POST" id="popupForm">
-            <input type="hidden" name="action" value="SAVE">
-            <input type="hidden" name="course_id" id="pop_course_id">
-            <input type="hidden" name="degree_id" id="pop_degree_id">
-            <input type="hidden" name="session_from" id="pop_session_from">
-            <input type="hidden" name="session_to" id="pop_session_to">
-            
-            <table width="100%">
-                <tr>
-                    <td>
-                        <textarea name="syllabus" id="pop_syllabus" class="textbox" style="width: 100%; height: 350px;" required></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="center" style="padding-top: 15px;">
-                        <input type="submit" value="SAVE" class="button-common" style="padding: 5px 20px;">
-                    </td>
-                </tr>
-            </table>
-        </form>
+<!-- Syllabus Popup -->
+<div id="SearchDiv" class="white_content-new" style="display:none;">
+    <div class="popupboxouter">
+        <div class="popupbox">
+            <div class="close" onclick="closeSyllabusPopup()">X</div>
+            <form method="POST" id="popupForm">
+                <input type="hidden" name="action" value="SAVE">
+                <input type="hidden" name="course_id" id="pop_course_id">
+                <input type="hidden" name="degree_id" id="pop_degree_id">
+                <input type="hidden" name="session_from" id="pop_session_from">
+                <input type="hidden" name="session_to" id="pop_session_to">
+                <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr>
+                            <td class="tablesubheading" colspan="6">
+                                <span class="subheadingborderbottom" id="popupCourseTitle">Syllabus Creation</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="padding:8px 0;">
+                                <textarea name="syllabus" id="pop_syllabus" style="width:100%;"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" align="center" style="padding:8px 0;">
+                                <input type="submit" value="SAVE SYLLABUS" class="button-common" style="padding:4px 24px;">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
     </div>
 </div>
 
-<!-- Include CKEditor CDN Full Version for Word-like features -->
-<script src="https://cdn.ckeditor.com/4.25.1-lts/full/ckeditor.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize CKEditor with word-like configuration
-    CKEDITOR.replace('pop_syllabus', {
-        height: 350,
-        uiColor: '#F7F7F7',
-        removeButtons: 'Save,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Flash,Iframe' // remove web-specific elements not needed for a syllabus
-    });
+let joditEditor = null;
 
-    const ddlDegree = document.getElementById('ddlDegree');
-    const ddlSemester = document.getElementById('ddlSemester');
-    const ddlBranch = document.getElementById('ddlBranch');
-    const ddlYear = document.getElementById('ddlYear');
+function initJodit() {
+    if (joditEditor) return;
+    joditEditor = Jodit.make('#pop_syllabus', {
+        height: 380,
+        toolbarButtonSize: 'small',
+        buttons: [
+            'source', '|',
+            'bold', 'italic', 'underline', 'strikethrough', '|',
+            'superscript', 'subscript', '|',
+            'ul', 'ol', '|',
+            'outdent', 'indent', '|',
+            'font', 'fontsize', 'brush', 'paragraph', '|',
+            'image', 'table', 'link', '|',
+            'align', '|',
+            'undo', 'redo', '|',
+            'hr', 'eraser', 'copyformat', '|',
+            'selectall', 'print', 'fullsize'
+        ],
+        uploader: { insertImageAsBase64URI: true },
+        defaultFontSizePoints: 'pt',
+        style: { 'font-family': 'Calibri, Arial, sans-serif', 'font-size': '12pt' }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const ddlDegree     = document.getElementById('ddlDegree');
+    const ddlSemester   = document.getElementById('ddlSemester');
+    const ddlBranch     = document.getElementById('ddlBranch');
+    const ddlYear       = document.getElementById('ddlYear');
     const btnGetCourses = document.getElementById('btnGetCourses');
-    const btnReset = document.getElementById('btnReset');
+    const btnReset      = document.getElementById('btnReset');
 
     ddlDegree.addEventListener('change', function() {
         const degreeId = this.value;
-        if (!degreeId) {
-            resetCascading();
-            return;
-        }
-
+        if (!degreeId) { resetCascading(); return; }
         fetch(`/academics/api/get_degree_details/${degreeId}`)
-            .then(response => response.json())
+            .then(r => r.json())
             .then(data => {
                 if (data.minsem !== undefined && data.maxsem !== undefined) {
                     fetch(`/academics/api/get_semesters_range/${data.minsem}/${data.maxsem}`)
-                        .then(res => res.json())
-                        .then(semesters => {
+                        .then(r => r.json())
+                        .then(sems => {
                             ddlSemester.innerHTML = '<option value=""> -- Select Class -- </option>';
-                            if (semesters && semesters.length > 0) {
-                                semesters.forEach(sem => {
-                                    const option = document.createElement('option');
-                                    option.value = sem.pk_semesterid;
-                                    option.textContent = sem.semester_roman.trim();
-                                    ddlSemester.appendChild(option);
-                                });
-                                ddlSemester.disabled = false;
-                            }
+                            sems.forEach(s => {
+                                const o = document.createElement('option');
+                                o.value = s.pk_semesterid;
+                                o.textContent = s.semester_roman.trim();
+                                ddlSemester.appendChild(o);
+                            });
+                            ddlSemester.disabled = false;
                         });
                 }
-
-                if (!data.isug || data.isdepartmentreq) { 
-                    fetch(`/academics/api/get_all_departments`)
-                        .then(res => res.json())
+                if (!data.isug || data.isdepartmentreq) {
+                    fetch('/academics/api/get_all_departments')
+                        .then(r => r.json())
                         .then(depts => {
                             ddlBranch.innerHTML = '<option value="0">--Select Department--</option>';
                             depts.forEach(d => {
-                                const option = document.createElement('option');
-                                option.value = d.id; 
-                                option.textContent = d.name; 
-                                ddlBranch.appendChild(option);
+                                const o = document.createElement('option');
+                                o.value = d.id;
+                                o.textContent = d.name;
+                                ddlBranch.appendChild(o);
                             });
                             ddlBranch.disabled = false;
                         });
@@ -208,7 +190,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     ddlBranch.disabled = true;
                 }
             });
-            
         ddlSemester.innerHTML = '<option value=""> -- Select Class -- </option>';
         ddlSemester.disabled = true;
         ddlYear.innerHTML = '<option value="1">First</option>';
@@ -216,103 +197,99 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     ddlSemester.addEventListener('change', function() {
-        const semesterId = this.value;
-        if (!semesterId) return;
-
-        fetch(`/academics/api/get_semester_year/${semesterId}`)
-            .then(response => response.json())
+        const semId = this.value;
+        if (!semId) return;
+        fetch(`/academics/api/get_semester_year/${semId}`)
+            .then(r => r.json())
             .then(data => {
                 ddlYear.innerHTML = '';
                 if (data.degreeyear_char) {
-                    const option = document.createElement('option');
-                    option.value = data.pk_degreeyearid;
-                    option.textContent = data.degreeyear_char;
-                    option.selected = true;
-                    ddlYear.appendChild(option);
+                    const o = document.createElement('option');
+                    o.value = data.pk_degreeyearid;
+                    o.textContent = data.degreeyear_char;
+                    o.selected = true;
+                    ddlYear.appendChild(o);
                 }
-                ddlYear.disabled = true; 
+                ddlYear.disabled = true;
             });
     });
 
     btnGetCourses.addEventListener('click', function() {
         const sessionFrom = document.getElementById('ddlFromSession').value;
-        const sessionTo = document.getElementById('ddlToSession').value;
-        const degree = ddlDegree.value;
+        const sessionTo   = document.getElementById('ddlToSession').value;
+        const degree   = ddlDegree.value;
         const semester = ddlSemester.value;
-        const dept = ddlBranch.value;
+        const dept     = ddlBranch.value;
 
-        if (sessionFrom == "0" || !degree || !semester) {
-            alert('Please select mandatory fields (*)');
+        if (sessionFrom == '0' || !degree || !semester) {
+            alert('Please select mandatory fields (From Session, Degree, Class).');
             return;
         }
 
-        const payload = {
-            session_from: sessionFrom,
-            session_to: sessionTo,
-            degree_id: degree,
-            semester_id: semester,
-            dept_id: dept
-        };
-
         btnGetCourses.value = 'Getting...';
+        btnGetCourses.disabled = true;
 
         fetch('/academics/api/get_syllabus_courses', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({ session_from: sessionFrom, session_to: sessionTo, degree_id: degree, semester_id: semester, dept_id: dept })
         })
-        .then(response => response.json())
-        .then(data => {
-            renderCourses(data);
-            btnGetCourses.value = 'GET COURSES';
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            btnGetCourses.value = 'GET COURSES';
-        });
+        .then(r => r.json())
+        .then(data => { renderCourses(data); })
+        .catch(() => { alert('Error fetching courses.'); })
+        .finally(() => { btnGetCourses.value = 'GET COURSES'; btnGetCourses.disabled = false; });
     });
 
     function renderCourses(courses) {
         const container = document.getElementById('courseContainer');
         if (!courses || courses.length === 0) {
-            container.innerHTML = '<div style="padding:20px; color:#999; text-align:center;">No Courses Found</div>';
+            container.innerHTML = '<div style="padding:20px;color:#999;text-align:center;font-size:11px;">No courses found for the selected criteria.</div>';
             return;
         }
-
         let html = `
-            <div class="tablesubheading">List of Courses</div>
-            <table class="table-grid-view" width="100%" style="margin-top: 10px;">
-                <thead>
-                    <tr class="header-style">
-                        <th width="5%">S.No.</th>
-                        <th width="50%" align="left">Course Name</th>
-                        <th width="30%">Create Syllabus</th>
-                        <th width="10%">View</th>
-                    </tr>
-                </thead>
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
                 <tbody>
-        `;
-
-        courses.forEach((c, index) => {
-            const rowClass = index % 2 === 0 ? 'item-style-alt' : 'item-style';
-            const syllabusStatus = c.syllabus ? 'Edit Syllabus' : 'Create Syllabus';
-            
-            html += `
-                <tr class="${rowClass}">
-                    <td align="center">${index + 1}</td>
-                    <td>${c.display_name}</td>
-                    <td align="center">
-                        <a href="javascript:void(0)" class="GridLink" style="color: #0000EE; text-decoration: underline;" 
-                           onclick="openSyllabusPopup(${c.id})">${syllabusStatus}</a>
-                    </td>
-                    <td align="center">
-                        ${c.syllabus ? `<a href="javascript:void(0)" class="GridLink" style="color: #0000EE; text-decoration: underline;" onclick="viewSyllabus(${c.id})">View</a>` : '-'}
-                    </td>
-                </tr>
-            `;
+                    <tr>
+                        <td class="tablesubheading" colspan="6">
+                            <span class="subheadingborderbottom">List of Courses</span>
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="10"></td></tr>
+                    <tr>
+                        <td colspan="6">
+                            <table class="table-grid-view" width="100%" cellspacing="1" cellpadding="1" rules="all" border="1" style="border:1px solid #D4D4D4;border-collapse:collapse;">
+                                <thead>
+                                    <tr class="header-style">
+                                        <th width="5%">S.No.</th>
+                                        <th width="50%" align="left">Course Name</th>
+                                        <th width="30%">Create Syllabus</th>
+                                        <th width="10%">View</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+        courses.forEach((c, i) => {
+            const rc = i % 2 === 0 ? 'item-style' : 'item-style-alt';
+            const label = c.syllabus ? 'Edit Syllabus' : 'Create Syllabus';
+            const dn = (c.display_name || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+            html += `<tr class="${rc}">
+                <td align="center">${i + 1}</td>
+                <td align="left">${c.display_name || ''}</td>
+                <td align="center">
+                    <a href="javascript:void(0)" class="GridLink"
+                       data-cid="${c.id}" data-cname="${dn}"
+                       onclick="openSyllabusPopup(this)">${label}</a>
+                </td>
+                <td align="center">
+                    ${c.syllabus ? `<a href="javascript:void(0)" class="GridLink" data-cid="${c.id}" onclick="viewSyllabus(this)">View</a>` : '-'}
+                </td>
+            </tr>`;
         });
-
-        html += '</tbody></table>';
+        html += `           </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>`;
         container.innerHTML = html;
     }
 
@@ -330,75 +307,63 @@ document.addEventListener('DOMContentLoaded', function() {
         ddlYear.innerHTML = '<option value="">-- Select Year --</option>';
         ddlYear.disabled = true;
     }
+
+    document.getElementById('popupForm').addEventListener('submit', function() {
+        if (joditEditor) {
+            document.getElementById('pop_syllabus').value = joditEditor.value;
+        }
+    });
 });
 
-// Exposed globally for onclick handler
-window.openSyllabusPopup = function(courseId) {
+window.openSyllabusPopup = function(el) {
+    const courseId    = el.dataset.cid;
+    const courseName  = el.dataset.cname || '';
     const sessionFrom = document.getElementById('ddlFromSession').value;
-    const sessionTo = document.getElementById('ddlToSession').value;
-    const degreeId = document.getElementById('ddlDegree').value;
+    const sessionTo   = document.getElementById('ddlToSession').value;
+    const degreeId    = document.getElementById('ddlDegree').value;
+
+    document.getElementById('popupCourseTitle').textContent = 'Syllabus: ' + courseName;
+    document.getElementById('pop_course_id').value    = courseId;
+    document.getElementById('pop_degree_id').value    = degreeId;
+    document.getElementById('pop_session_from').value = sessionFrom;
+    document.getElementById('pop_session_to').value   = sessionTo;
+    document.getElementById('SearchDiv').style.display = 'block';
+
+    initJodit();
 
     fetch('/academics/api/get_syllabus', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            course_id: courseId,
-            degree_id: degreeId,
-            session_from: sessionFrom,
-            session_to: sessionTo
-        })
+        body: JSON.stringify({ course_id: courseId, degree_id: degreeId, session_from: sessionFrom, session_to: sessionTo })
     })
     .then(r => r.json())
-    .then(data => {
-        document.getElementById('pop_course_id').value = courseId;
-        document.getElementById('pop_degree_id').value = degreeId;
-        document.getElementById('pop_session_from').value = sessionFrom;
-        document.getElementById('pop_session_to').value = sessionTo;
-        
-        // Remove HTML tags for simple textarea view, or keep if using rich text
-        let cleanText = data.syllabus || '';
-        
-        if (CKEDITOR.instances['pop_syllabus']) {
-            CKEDITOR.instances['pop_syllabus'].setData(cleanText);
-        } else {
-            document.getElementById('pop_syllabus').value = cleanText;
-        }
-        
-        document.getElementById('syllabusPopup').style.display = 'block';
-    });
+    .then(data => { joditEditor.value = data.syllabus || ''; });
 };
 
 window.closeSyllabusPopup = function() {
-    document.getElementById('syllabusPopup').style.display = 'none';
+    document.getElementById('SearchDiv').style.display = 'none';
 };
 
-window.viewSyllabus = function(courseId) {
-    // Just reuses the popup but makes it readonly or we could make a dedicated view popup
+window.viewSyllabus = function(el) {
+    const courseId    = el.dataset.cid;
     const sessionFrom = document.getElementById('ddlFromSession').value;
-    const sessionTo = document.getElementById('ddlToSession').value;
-    const degreeId = document.getElementById('ddlDegree').value;
+    const sessionTo   = document.getElementById('ddlToSession').value;
+    const degreeId    = document.getElementById('ddlDegree').value;
 
     fetch('/academics/api/get_syllabus', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            course_id: courseId,
-            degree_id: degreeId,
-            session_from: sessionFrom,
-            session_to: sessionTo
-        })
+        body: JSON.stringify({ course_id: courseId, degree_id: degreeId, session_from: sessionFrom, session_to: sessionTo })
     })
     .then(r => r.json())
     .then(data => {
-        // Open a simple window to view syllabus HTML
-        const win = window.open("", "_blank", "width=800,height=600");
-        win.document.write('<html><head><title>Syllabus View</title><style>body{font-family:Arial;}</style></head><body>');
-        win.document.write('<h2>Syllabus Content</h2><hr/>');
-        win.document.write(data.syllabus);
+        const win = window.open('', '_blank', 'width=900,height=700');
+        win.document.write('<html><head><title>Syllabus</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;margin:30px;}h2{border-bottom:1px solid #ccc;padding-bottom:6px;}</style></head><body>');
+        win.document.write('<h2>Syllabus</h2>');
+        win.document.write(data.syllabus || '<p><i>No syllabus content.</i></p>');
         win.document.write('</body></html>');
         win.document.close();
     });
 };
 </script>
 {% endblock %}
-

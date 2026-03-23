@@ -17,6 +17,8 @@
             --header-height: 60px;
         }
 
+        *, *::before, *::after { box-sizing: border-box; }
+
         body {
             margin: 0;
             padding: 0;
@@ -26,7 +28,17 @@
             display: flex;
         }
 
-        /* Sidebar */
+        /* ===== OVERLAY (mobile) ===== */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+        }
+        .sidebar-overlay.active { display: block; }
+
+        /* ===== SIDEBAR ===== */
         .sidebar {
             width: var(--sidebar-width);
             background-color: var(--primary-color);
@@ -38,6 +50,7 @@
             overflow-y: auto;
             box-shadow: 2px 0 5px rgba(0,0,0,0.1);
             z-index: 100;
+            transition: transform 0.3s ease;
         }
 
         .sidebar-header {
@@ -65,9 +78,10 @@
         .nav-menu li a {
             display: flex;
             align-items: center;
-            padding: 15px 20px;
+            padding: 13px 20px;
             color: #ecf0f1;
             text-decoration: none;
+            font-size: 14px;
             transition: all 0.3s ease;
         }
 
@@ -78,21 +92,23 @@
         }
 
         .nav-menu li a i {
-            width: 25px;
-            font-size: 16px;
+            width: 22px;
+            font-size: 15px;
             margin-right: 10px;
+            flex-shrink: 0;
         }
 
-        /* Main Content */
+        /* ===== MAIN CONTENT ===== */
         .main-content {
             margin-left: var(--sidebar-width);
             width: calc(100% - var(--sidebar-width));
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            transition: margin-left 0.3s ease, width 0.3s ease;
         }
 
-        /* Top Header */
+        /* ===== TOP HEADER ===== */
         .top-header {
             height: var(--header-height);
             background-color: #fff;
@@ -100,24 +116,53 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
+            padding: 0 16px;
+            position: sticky;
+            top: 0;
+            z-index: 98;
         }
 
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Hamburger button — hidden on desktop */
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            line-height: 1;
+        }
+        .hamburger-btn:hover { background: #f0f7ef; }
+
         .header-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 500;
             color: var(--primary-color);
+            white-space: nowrap;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         .user-name {
             font-weight: 500;
             color: #333;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
         }
 
         .logout-btn {
@@ -126,21 +171,19 @@
             padding: 6px 12px;
             border-radius: 4px;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             transition: background 0.3s;
+            white-space: nowrap;
         }
+        .logout-btn:hover { background-color: #c0392b; }
 
-        .logout-btn:hover {
-            background-color: #c0392b;
-        }
-
-        /* Content Area */
+        /* ===== CONTENT AREA ===== */
         .content-area {
             padding: 20px;
             flex: 1;
         }
 
-        /* Utility Classes */
+        /* ===== CARDS ===== */
         .card {
             background: #fff;
             border-radius: 8px;
@@ -149,52 +192,175 @@
             margin-bottom: 20px;
         }
 
+        /* ===== ALERTS ===== */
         .alert {
-            padding: 15px;
+            padding: 12px 16px;
             border-radius: 4px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+        .alert-success { background-color: #d4edda; color: #155724; }
+        .alert-danger  { background-color: #f8d7da; color: #721c24; }
+        .alert-warning { background-color: #fff3cd; color: #856404; }
+        .alert-info    { background-color: #d1ecf1; color: #0c5460; }
+
+        /* ===== TABLE RESPONSIVE WRAPPER ===== */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .alert-success { background-color: #d4edda; color: #155724; }
-        .alert-danger { background-color: #f8d7da; color: #721c24; }
-        .alert-warning { background-color: #fff3cd; color: #856404; }
+        /* ===== RESPONSIVE BREAKPOINTS ===== */
+
+        /* Tablet: 768px - 1024px */
+        @media (max-width: 1024px) {
+            :root { --sidebar-width: 220px; }
+            .user-name { max-width: 140px; }
+        }
+
+        /* Mobile: ≤ 768px */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            .hamburger-btn {
+                display: block;
+            }
+            .header-title {
+                font-size: 15px;
+            }
+            .user-name {
+                display: none; /* hide on very small screens */
+            }
+            .content-area {
+                padding: 12px;
+            }
+        }
+
+        /* Extra small: ≤ 480px */
+        @media (max-width: 480px) {
+            .logout-btn span { display: none; }
+            .card { padding: 14px; }
+        }
+    </style>
+    <style>
+        /* ===== GLOBAL MOBILE FIX ===== */
+        /* Prevent iOS Safari zoom on input focus (requires font-size >= 16px) */
+        input, select, textarea, button {
+            font-size: 16px;
+        }
+        input[type="checkbox"], input[type="radio"] {
+            font-size: inherit;
+            width: 16px; height: 16px;
+            flex-shrink: 0;
+        }
+        /* Minimum tap target size */
+        button, a.btn-dl, a.logout-btn, .btn {
+            min-height: 40px;
+        }
+        /* All tables: no word-break issues */
+        table { border-collapse: collapse; }
+        /* Utility: horizontal scroll wrapper */
+        .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; display: block; }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
 <body>
 
-    <aside class="sidebar">
+    <!-- Mobile overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
+            {% set _photo = session.get('student_photo') %}
+            <img src="{{ '/static/uploads/students/' ~ _photo if _photo else '/static/images/inside-pg-logo.png' }}"
+                 alt="Student Photo"
+                 style="width:60px; height:60px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,0.4); margin-bottom:8px;"
+                 onerror="this.src='/static/images/inside-pg-logo.png'">
             <h3>CCS HAU</h3>
+            <p style="margin:2px 0 0; font-size:12px; color:rgba(255,255,255,0.7); word-break:break-word;">
+                {{ session.get('student_name','') }}
+            </p>
         </div>
         <ul class="nav-menu">
             <li class="{% if request.endpoint == 'student_portal.dashboard' %}active{% endif %}">
-                <a href="{{ url_for('student_portal.dashboard') }}"><i class="fas fa-home"></i> Home</a>
+                <a href="{{ url_for('student_portal.dashboard') }}" onclick="closeSidebar()"><i class="fas fa-home"></i> Home</a>
             </li>
             <li class="{% if request.endpoint == 'student_portal.profile' %}active{% endif %}">
-                <a href="{{ url_for('student_portal.profile') }}"><i class="fas fa-user"></i> My Profile</a>
+                <a href="{{ url_for('student_portal.profile') }}" onclick="closeSidebar()"><i class="fas fa-user"></i> My Profile</a>
             </li>
             <li class="{% if request.endpoint == 'student_portal.card_entry' %}active{% endif %}">
-                <a href="{{ url_for('student_portal.card_entry') }}"><i class="fas fa-id-card"></i> Card Entry</a>
+                <a href="{{ url_for('student_portal.card_entry') }}" onclick="closeSidebar()"><i class="fas fa-id-card"></i> Card Entry</a>
             </li>
-            <li><a href="{{ url_for('student_portal.course_addition_withdrawal') }}"><i class="fas fa-book"></i> Course Add/Drop</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> I-Grade</a></li>
-            <li><a href="#"><i class="fas fa-file-alt"></i> Supplimentary</a></li>
-            <li><a href="#"><i class="fas fa-calendar-alt"></i> Course Plan</a></li>
-            <li><a href="#"><i class="fas fa-list"></i> Course Details</a></li>
-            <li><a href="#"><i class="fas fa-credit-card"></i> Online Fee</a></li>
-            <li><a href="#"><i class="fas fa-receipt"></i> Fee Details</a></li>
-            <li><a href="#"><i class="fas fa-users"></i> Faculty Details</a></li>
-            <li><a href="#"><i class="fas fa-poll"></i> View Marks</a></li>
+            <li class="{% if request.endpoint == 'student_portal.course_addition_withdrawal' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.course_addition_withdrawal') }}" onclick="closeSidebar()"><i class="fas fa-book"></i> Course Add/Drop</a>
+            </li>
+            <li class="{% if request.endpoint == 'student_portal.course_plan' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.course_plan') }}" onclick="closeSidebar()"><i class="fas fa-calendar-alt"></i> Course Plan (POW)</a>
+            </li>
+            <li class="{% if request.endpoint == 'student_portal.course_details' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.course_details') }}" onclick="closeSidebar()"><i class="fas fa-list"></i> Course Details</a>
+            </li>
+            <li class="{% if request.endpoint == 'student_portal.faculty_details' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.faculty_details') }}" onclick="closeSidebar()"><i class="fas fa-users"></i> Faculty Details</a>
+            </li>
+            <li class="{% if request.endpoint == 'student_portal.igrade' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.igrade') }}" onclick="closeSidebar()"><i class="fas fa-star"></i> I-Grade</a>
+            </li>
+            <li class="{% if request.endpoint == 'student_portal.supplementary' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.supplementary') }}" onclick="closeSidebar()"><i class="fas fa-file-alt"></i> Supplementary</a>
+            </li>
+            <li class="{% if request.endpoint == 'student_portal.results' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.results') }}" onclick="closeSidebar()"><i class="fas fa-poll"></i> View Marks</a>
+            </li>
+            <li class="{% if request.endpoint == 'student_portal.attendance' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.attendance') }}" onclick="closeSidebar()"><i class="fas fa-clipboard-check"></i> Attendance</a>
+            </li>
+            <li class="{% if request.endpoint == 'student_portal.online_fee_payment' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.online_fee_payment') }}" onclick="closeSidebar()"><i class="fas fa-credit-card"></i> Online Fee Payment</a>
+            </li>
+            <li class="{% if request.endpoint == 'student_portal.fee_details' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.fee_details') }}" onclick="closeSidebar()"><i class="fas fa-receipt"></i> Fee Details</a>
+            </li>
+            <li class="{% if request.endpoint == 'student_portal.notifications' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.notifications') }}" onclick="closeSidebar()"><i class="fas fa-bell"></i> Notifications</a>
+            </li>
+            <li class="{% if request.endpoint == 'student_portal.question_papers' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.question_papers') }}" onclick="closeSidebar()"><i class="fas fa-question-circle"></i> Question Papers</a>
+            </li>
+            <li class="{% if request.endpoint == 'student_portal.certificate_request' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.certificate_request') }}" onclick="closeSidebar()"><i class="fas fa-certificate"></i> Certificate Request</a>
+            </li>
+            <li class="{% if request.endpoint == 'student_portal.change_password' %}active{% endif %}">
+                <a href="{{ url_for('student_portal.change_password') }}" onclick="closeSidebar()"><i class="fas fa-key"></i> Change Password</a>
+            </li>
         </ul>
     </aside>
 
     <main class="main-content">
         <header class="top-header">
-            <div class="header-title">Student Portal</div>
+            <div class="header-left">
+                <button class="hamburger-btn" id="hamburgerBtn" onclick="openSidebar()" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-title">Student Portal</div>
+            </div>
             <div class="user-info">
-                <span class="user-name"><i class="fas fa-user-circle"></i> {{ session.get('student_name', 'Student') }} ({{ session.get('student_enrollment', '') }})</span>
-                <a href="{{ url_for('student_portal.logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <span class="user-name">
+                    <i class="fas fa-user-circle"></i>
+                    {{ session.get('student_name', 'Student') }}
+                    ({{ session.get('student_enrollment', '') }})
+                </span>
+                <a href="{{ url_for('student_portal.logout') }}" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                </a>
             </div>
         </header>
 
@@ -202,9 +368,7 @@
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            {{ message }}
-                        </div>
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
@@ -212,6 +376,38 @@
             {% block content %}{% endblock %}
         </div>
     </main>
+
+    <script>
+    // Auto-wrap ALL tables in horizontal-scroll containers (for mobile)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('table').forEach(function(tbl) {
+            var parent = tbl.parentElement;
+            if (!parent) return;
+            var ox = getComputedStyle(parent).overflowX;
+            if (ox === 'auto' || ox === 'scroll') return; // already wrapped
+            if (parent.classList.contains('tbl-wrap') || parent.classList.contains('tbl-scroll') ||
+                parent.classList.contains('table-responsive')) return;
+            var wrap = document.createElement('div');
+            wrap.style.cssText = 'overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;';
+            parent.insertBefore(wrap, tbl);
+            wrap.appendChild(tbl);
+        });
+    });
+    function openSidebar() {
+        document.getElementById('sidebar').classList.add('open');
+        document.getElementById('sidebarOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    // Close sidebar on resize to desktop
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) closeSidebar();
+    });
+    </script>
 
     {% block extra_js %}{% endblock %}
 </body>

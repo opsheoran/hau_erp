@@ -42,8 +42,14 @@
 
     .modules-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 16px;
+    }
+    @media (max-width: 480px) {
+        .modules-grid { grid-template-columns: 1fr; gap: 10px; }
+        .dashboard-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+        .login-stats { font-size: 12px; }
+        .login-stats span { display: block; margin-bottom: 4px; }
     }
 
     .module-card {
@@ -80,6 +86,9 @@
     .c6 { background-color: #1abc9c; }
     .c7 { background-color: #34495e; }
     .c8 { background-color: #e67e22; }
+    .c9 { background-color: #16a085; }
+    .c10 { background-color: #8e44ad; }
+    .c11 { background-color: #2980b9; }
 
     .module-content {
         padding: 20px;
@@ -98,20 +107,39 @@
         color: #777;
         margin: 0;
     }
+
+    /* ── Responsive additions ── */
+    @media (max-width: 768px) {
+        .module-card { min-width: 0; }
+        .module-title { font-size: 15px; }
+        .module-icon { width: 64px; font-size: 26px; }
+        .module-content { padding: 14px; }
+    }
+    @media (max-width: 480px) {
+        /* grid already collapses to 1-col at 480 via existing rule */
+        .module-card { max-width: 100%; overflow: hidden; }
+        .module-icon { width: 56px; font-size: 22px; flex-shrink: 0; }
+        .module-content { padding: 12px 10px; }
+        .module-title { font-size: 14px; }
+        .module-desc { font-size: 12px; }
+        .btn-outline { width: 100%; text-align: center; box-sizing: border-box; }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="dashboard-header">
     <div class="login-stats">
-        <span><i class="fas fa-clock"></i> Last Login: Just now</span>
-        <span><i class="fas fa-sign-in-alt"></i> Current Login: {{ session.get('student_name') }}</span>
+        <span><i class="fas fa-clock"></i> Last Login: {{ last_login or 'First Login' }}</span>
+        <span><i class="fas fa-sign-in-alt"></i> Current Login: {{ session.get('current_login', '') }}</span>
     </div>
-    <a href="#" class="btn-outline"><i class="fas fa-key"></i> Change Password</a>
+    <a href="{{ url_for('student_portal.change_password') }}" class="btn-outline">
+        <i class="fas fa-key"></i> Change Password
+    </a>
 </div>
 
 <div class="modules-grid">
-    <a href="#" class="module-card">
+    <a href="{{ url_for('student_portal.dashboard') }}" class="module-card">
         <div class="module-icon c8">
             <i class="fas fa-home"></i>
         </div>
@@ -151,7 +179,7 @@
         </div>
     </a>
 
-    <a href="#" class="module-card">
+    <a href="{{ url_for('student_portal.igrade') }}" class="module-card">
         <div class="module-icon c2">
             <i class="fas fa-star"></i>
         </div>
@@ -161,17 +189,17 @@
         </div>
     </a>
 
-    <a href="#" class="module-card">
+    <a href="{{ url_for('student_portal.supplementary') }}" class="module-card">
         <div class="module-icon c3">
             <i class="fas fa-file-alt"></i>
         </div>
         <div class="module-content">
-            <h4 class="module-title">Supplimentary</h4>
-            <p class="module-desc">Apply for Supplimentary Exams</p>
+            <h4 class="module-title">Supplementary</h4>
+            <p class="module-desc">Apply for Supplementary Exams</p>
         </div>
     </a>
 
-    <a href="#" class="module-card">
+    <a href="{{ url_for('student_portal.course_plan') }}" class="module-card">
         <div class="module-icon c4">
             <i class="fas fa-calendar-alt"></i>
         </div>
@@ -181,7 +209,7 @@
         </div>
     </a>
 
-    <a href="#" class="module-card">
+    <a href="{{ url_for('student_portal.course_details') }}" class="module-card">
         <div class="module-icon c5">
             <i class="fas fa-list"></i>
         </div>
@@ -191,7 +219,7 @@
         </div>
     </a>
 
-    <a href="#" class="module-card">
+    <a href="{{ url_for('student_portal.online_fee_payment') }}" class="module-card">
         <div class="module-icon c6">
             <i class="fas fa-credit-card"></i>
         </div>
@@ -201,7 +229,7 @@
         </div>
     </a>
 
-    <a href="#" class="module-card">
+    <a href="{{ url_for('student_portal.fee_details') }}" class="module-card">
         <div class="module-icon c7">
             <i class="fas fa-receipt"></i>
         </div>
@@ -211,7 +239,7 @@
         </div>
     </a>
 
-    <a href="#" class="module-card">
+    <a href="{{ url_for('student_portal.faculty_details') }}" class="module-card">
         <div class="module-icon c1">
             <i class="fas fa-users"></i>
         </div>
@@ -221,13 +249,53 @@
         </div>
     </a>
 
-    <a href="#" class="module-card">
+    <a href="{{ url_for('student_portal.results') }}" class="module-card">
         <div class="module-icon c2">
             <i class="fas fa-poll"></i>
         </div>
         <div class="module-content">
             <h4 class="module-title">View Marks</h4>
             <p class="module-desc">Check your consolidated results</p>
+        </div>
+    </a>
+
+    <a href="{{ url_for('student_portal.notifications') }}" class="module-card">
+        <div class="module-icon c9">
+            <i class="fas fa-bell"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">Notifications</h4>
+            <p class="module-desc">View important notices and announcements</p>
+        </div>
+    </a>
+
+    <a href="{{ url_for('student_portal.question_papers') }}" class="module-card">
+        <div class="module-icon c10">
+            <i class="fas fa-question-circle"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">Question Papers</h4>
+            <p class="module-desc">Access previous year question papers</p>
+        </div>
+    </a>
+
+    <a href="{{ url_for('student_portal.attendance') }}" class="module-card">
+        <div class="module-icon c9">
+            <i class="fas fa-clipboard-check"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">Attendance</h4>
+            <p class="module-desc">View your course attendance details</p>
+        </div>
+    </a>
+
+    <a href="{{ url_for('student_portal.certificate_request') }}" class="module-card">
+        <div class="module-icon c11">
+            <i class="fas fa-certificate"></i>
+        </div>
+        <div class="module-content">
+            <h4 class="module-title">Certificate Request</h4>
+            <p class="module-desc">Request certificates and documents</p>
         </div>
     </a>
 </div>

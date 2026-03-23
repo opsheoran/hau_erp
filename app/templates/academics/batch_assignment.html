@@ -2,7 +2,7 @@
 {% block content %}
 <div class="hau-card ajax-card">
     <div class="tableheading"><span class="mainheadingborderbottom">Batch Assignment</span></div>
-    
+
     <div style="padding: 10px;">
         <form method="GET" id="filterForm">
             <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
@@ -22,43 +22,53 @@
                     <tr>
                         <td class="vtext">Academic Session</td>
                         <td class="colon">:</td>
-                        <td class="required">
-                            <select name="session_id" id="ddlSession" class="textbox w-200 w-200" required >
+                        <td colspan="4" class="required">
+                            <select name="session_id" id="ddlSession" class="textbox w-200 w-200" required>
                                 <option value="">-- Select Session --</option>
                                 {% for s in lookups.sessions %}
                                 <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
                                 {% endfor %}
                             </select> *
                         </td>
+                    </tr>
+                    <tr>
                         <td class="vtext" width="15%">Degree</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="degree_id" id="ddlDegree" class="textbox w-200 w-250" required onchange="ajaxLoadBranches(this.value)">
+                            <select name="degree_id" id="ddlDegree" class="textbox w-200 w-250" required onchange="ajaxLoadBranches(this.value); onDegreeChange(this.value);">
                                 <option value="">--Select Degree--</option>
                                 {% for d in lookups.degrees %}
                                 <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
                                 {% endfor %}
                             </select> *
                         </td>
-                    </tr>
-                    <tr>
-                        <td class="vtext">Class</td>
+                        <td class="vtext" width="10%">Class</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="semester_id" id="ddlSemester" class="textbox w-200 w-150" required onchange="fetchBatches()">
+                            <select name="semester_id" id="ddlSemester" class="textbox w-200 w-150" required onchange="onSemesterChange(this.value)">
                                 <option value=""> -- Select Semester -- </option>
                                 {% for s in lookups.semesters %}
                                 <option value="{{ s.pk_semesterid }}" {% if filters.semester_id|string == s.pk_semesterid|string %}selected{% endif %}>{{ s.semester_roman }}</option>
                                 {% endfor %}
                             </select> *
                         </td>
+                    </tr>
+                    <tr>
                         <td class="vtext">Theory/Practical</td>
                         <td class="colon">:</td>
                         <td class="required">
                             <select name="type_tp" id="ddlTP" class="textbox w-200 w-150" required onchange="fetchBatches()">
+                                <option value="0">--Select Theory/Practical--</option>
                                 <option value="T" {% if filters.type_tp == 'T' %}selected{% endif %}>Theory</option>
                                 <option value="P" {% if filters.type_tp == 'P' %}selected{% endif %}>Practical</option>
                             </select> *
+                        </td>
+                        <td class="vtext">Year</td>
+                        <td class="colon">:</td>
+                        <td>
+                            <select id="ddlYear" class="textbox w-200 w-150" disabled>
+                                <option value="1">First</option>
+                            </select>
                         </td>
                     </tr>
                     <tr>
@@ -76,9 +86,11 @@
                         <td class="colon">:</td>
                         <td class="required">
                             <select name="batch_id" id="ddlBatch" class="textbox w-200 w-200">
-                                <option value="8803">ALL</option>
+                                <option value="0" {% if not filters.batch_id or filters.batch_id == '0' %}selected{% endif %}>ALL</option>
                                 {% for b in lookups.batches %}
+                                {% if b.name|upper != 'ALL' %}
                                 <option value="{{ b.id }}" {% if filters.batch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                                {% endif %}
                                 {% endfor %}
                             </select> *
                         </td>
@@ -87,18 +99,18 @@
                         <td class="vtext">Report Format</td>
                         <td class="colon">:</td>
                         <td colspan="4">
-                            <input type="radio" name="format" value="word"> Word Format
-                            <input type="radio" name="format" value="excel"> Excel Format
+                            <input type="radio" name="format" value="word"> Word Format &nbsp;
+                            <input type="radio" name="format" value="excel"> Excel Format &nbsp;
                             <input type="radio" name="format" value="pdf" checked> PDF Format
                         </td>
                     </tr>
-                    <tr><td colspan="6" height="15"></td></tr>
+                    <tr><td colspan="6" height="10"></td></tr>
                     <tr>
                         <td></td>
                         <td colspan="5">
-                            <input type="submit" value="VIEW STUDENTS" class="button-common" style="width:150px;">
-                            <input type="button" value="VIEW REPORT" class="button-common" style="width:120px; margin-left:5px;" onclick="viewReport()">
-                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="location.href='{{ url_for('academics.batch_assignment') }}'">
+                            <input type="submit" value="VIEW" class="button-common" style="width:80px;">
+                            <input type="button" value="VIEW REPORT" class="button-common" style="width:110px; margin-left:5px;" onclick="viewReport()">
+                            <input type="button" value="RESET" class="button-common" style="width:80px; margin-left:5px;" onclick="location.href='{{ url_for('academics.batch_assignment') }}'">
                         </td>
                     </tr>
                 </tbody>
@@ -106,54 +118,61 @@
         </form>
 
         <br>
-        <div class="tablesubheading" style="color:red"><b>Note: Batch can not be changed of those students whose Attendance is Already Entertained.</b></div>
-        <div class="tablesubheading">List of Students</div>
-        
-        <form method="POST">
+        <div style="color:red; font-size:11px;"><b>Note: Batch can not be changed of those students whose Attendance is Already Entertained.</b></div>
+        <div class="tablesubheading" style="margin-top:6px;">List of Students</div>
+
+        <form method="POST" id="saveForm">
             <input type="hidden" name="type_tp" value="{{ filters.type_tp }}">
+            <input type="hidden" name="assign_batch_id" id="h_assign_batch_id" value="{{ filters.batch_id or '0' }}">
+
             <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4;">
-                <table class="table-grid-view" width="100%" id="gvDetails">
+                <table class="table-grid-view" cellspacing="1" cellpadding="1" rules="all" border="1" width="100%" id="gvDetails" style="border:1px solid #D4D4D4;border-collapse:collapse;">
                     <thead>
                         <tr class="header-style">
-                            <th width="5%"><input type="checkbox" id="chkAll" onclick="toggleSelectAll(this)"></th>
+                            <th width="3%"><input type="checkbox" id="chkAll" onclick="toggleSelectAll(this)"></th>
                             <th width="5%">S.No.</th>
-                            <th>Student Name</th>
-                            <th>Admission No.</th>
-                            <th>Current Batch</th>
+                            <th align="left">Student Name</th>
+                            <th width="20%" align="center">Admission No.</th>
+                            <th width="20%" align="center">Batch Name</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for s in students %}
-                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}">
-                            <td align="center"><input type="checkbox" name="chk_student" value="{{ s.pk_sid }}" class="student-chk"></td>
+                        {% set locked = s.AttCount and s.AttCount > 0 %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}"{% if locked %} style="background-color:#90EE90;"{% endif %}>
+                            <td align="center">
+                                <input type="checkbox" name="chk_student" value="{{ s.pk_sid }}"
+                                    class="student-chk"
+                                    {% if locked %}disabled title="Attendance already recorded"{% endif %}>
+                            </td>
                             <td align="center">{{ loop.index }}</td>
                             <td align="left">{{ s.fullname }} [{{ s.enrollmentno }}]</td>
                             <td align="center">{{ s.AdmissionNo or 'N/A' }}</td>
                             <td align="center">{{ s.BatchName or 'None' }}</td>
                         </tr>
                         {% else %}
-                        <tr class="item-style"><td colspan="5" align="center" style="padding:20px; color:#999;">Apply filters to list students.</td></tr>
+                        <tr class="item-style"><td colspan="5" align="center" style="padding:20px; color:#999;">Apply filters and click VIEW to list students.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
 
             {% if students %}
-            <div style="margin-top:20px; padding:10px; background:#f9f9f9; border:1px solid #ddd;">
+            <div style="margin-top:12px; padding:8px 0;">
                 <table border="0">
                     <tr>
-                        <td class="vtext">Select Batch to Assign</td>
+                        <td class="vtext">Assign to Batch</td>
                         <td class="colon">:</td>
                         <td>
                             <select name="batch_id" id="assign_batch_id" class="textbox w-200 w-250" required>
                                 <option value="">-- Select Batch Name --</option>
                                 {% for b in lookups.batches %}
-                                <option value="{{ b.id }}">{{ b.name }}</option>
+                                <option value="{{ b.id }}" {% if filters.batch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
                                 {% endfor %}
                             </select>
                         </td>
-                        <td style="padding-left:20px;">
-                            <input type="submit" value="SAVE ASSIGNMENT" class="button-common" style="width:150px;">
+                        <td style="padding-left:15px;">
+                            <input type="submit" value="Save" class="button-common" style="width:80px;">
                         </td>
                     </tr>
                 </table>
@@ -165,81 +184,157 @@
 
 <script>
 
-// Silent Dropdown Cascading
+// --- Degree cascade ---
 function ajaxLoadDegrees(collegeId) {
-    const degSelect = document.querySelector('select[name="degree_id"]');
-    if(!degSelect) return;
-    degSelect.innerHTML = '<option value="0">--Select Degree--</option>';
-    if(!collegeId || collegeId === '0') return;
-    
+    const degSelect = document.getElementById('ddlDegree');
+    if (!degSelect) return;
+    degSelect.innerHTML = '<option value="">--Select Degree--</option>';
+    if (!collegeId || collegeId === '0') return;
     fetch(`/academics/api/college/${collegeId}/degrees`)
-        .then(res => res.json())
+        .then(r => r.json())
         .then(data => {
             data.forEach(d => {
-                const opt = document.createElement('option');
-                opt.value = d.id;
-                opt.textContent = d.name;
-                degSelect.appendChild(opt);
+                const o = document.createElement('option');
+                o.value = d.id; o.textContent = d.name;
+                degSelect.appendChild(o);
             });
         }).catch(err => console.error(err));
 }
 
+// --- Branch cascade from degree ---
 function ajaxLoadBranches(degreeId) {
-    const brSelect = document.querySelector('select[name="branch_id"]');
-    if(!brSelect) return;
-    brSelect.innerHTML = '<option value="0">--Select Specialization--</option>';
-    if(!degreeId || degreeId === '0') return;
-    
+    const brSelect = document.getElementById('ddlBranch');
+    if (!brSelect) return;
+    brSelect.innerHTML = '<option value="0">-- Select Specialization --</option>';
+    if (!degreeId || degreeId === '0') return;
     fetch(`/academics/api/degree/${degreeId}/branches`)
-        .then(res => res.json())
+        .then(r => r.json())
         .then(data => {
             data.forEach(b => {
-                const opt = document.createElement('option');
-                opt.value = b.id;
-                opt.textContent = b.name;
-                brSelect.appendChild(opt);
+                const o = document.createElement('option');
+                o.value = b.id; o.textContent = b.name;
+                brSelect.appendChild(o);
             });
         }).catch(err => console.error(err));
 }
 
+// --- Semester cascade from degree ---
+function onDegreeChange(degreeId) {
+    const semSelect = document.getElementById('ddlSemester');
+    semSelect.innerHTML = '<option value=""> -- Select Semester -- </option>';
+    semSelect.disabled = true;
+    if (!degreeId) return;
+    fetch(`/academics/api/get_degree_details/${degreeId}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.minsem !== undefined && data.maxsem !== undefined) {
+                fetch(`/academics/api/get_semesters_range/${data.minsem}/${data.maxsem}`)
+                    .then(r => r.json())
+                    .then(sems => {
+                        sems.forEach(s => {
+                            const o = document.createElement('option');
+                            o.value = s.pk_semesterid;
+                            o.textContent = s.semester_roman.trim();
+                            semSelect.appendChild(o);
+                        });
+                        semSelect.disabled = false;
+                    });
+            }
+        }).catch(() => { semSelect.disabled = false; });
+}
 
+// --- Year auto-load from semester ---
+function onSemesterChange(semId) {
+    fetchBatches();
+    const ddlYear = document.getElementById('ddlYear');
+    if (!semId) { ddlYear.innerHTML = '<option value="1">First</option>'; return; }
+    fetch(`/academics/api/get_semester_year/${semId}`)
+        .then(r => r.json())
+        .then(data => {
+            ddlYear.innerHTML = '';
+            if (data.degreeyear_char) {
+                const o = document.createElement('option');
+                o.value = data.pk_degreeyearid || 1;
+                o.textContent = data.degreeyear_char;
+                o.selected = true;
+                ddlYear.appendChild(o);
+            } else {
+                ddlYear.innerHTML = '<option value="1">First</option>';
+            }
+        }).catch(() => {});
+}
+
+// --- Fetch batches for both filter ddlBatch and assign_batch_id ---
 async function fetchBatches() {
     const clg = document.getElementById('ddlCollege').value;
     const deg = document.getElementById('ddlDegree').value;
     const sem = document.getElementById('ddlSemester').value;
-    const tp = document.getElementById('ddlTP').value;
-    
-    if (clg && deg && sem && tp) {
+    const tp  = document.getElementById('ddlTP').value;
+
+    if (clg && deg && sem && tp && tp !== '0') {
         const res = await fetch(`/academics/api/admission/get_batches?college_id=${clg}&degree_id=${deg}&semester_id=${sem}&type_tp=${tp}`);
         const batches = await res.json();
-        
-        const ddl = document.getElementById('ddlBatch');
+
+        const ddlFilter = document.getElementById('ddlBatch');
         const ddlAssign = document.getElementById('assign_batch_id');
-        
-        [ddl, ddlAssign].forEach(d => {
-            if(!d) return;
-            const currentVal = d.value;
-            d.innerHTML = (d === ddl ? '<option value="8803">ALL</option>' : '<option value="">-- Select Batch Name --</option>');
-            batches.forEach(b => {
-                d.innerHTML += `<option value="${b.id}" ${currentVal == b.id ? 'selected' : ''}>${b.name}</option>`;
-            });
+
+        [ddlFilter, ddlAssign].forEach(d => {
+            if (!d) return;
+            const cur = d.value;
+            if (d === ddlFilter) {
+                d.innerHTML = '<option value="0">ALL</option>';
+                batches.forEach(b => {
+                    if (b.name.toUpperCase() !== 'ALL')
+                        d.innerHTML += `<option value="${b.id}" ${cur == b.id ? 'selected' : ''}>${b.name}</option>`;
+                });
+            } else {
+                d.innerHTML = '<option value="">-- Select Batch Name --</option>';
+                batches.forEach(b => {
+                    d.innerHTML += `<option value="${b.id}" ${cur == b.id ? 'selected' : ''}>${b.name}</option>`;
+                });
+            }
         });
     }
 }
 
+// --- Report ---
 function viewReport() {
     const form = document.getElementById('filterForm');
-    const formData = new FormData(form);
-    const params = new URLSearchParams();
-    for (const pair of formData.entries()) { params.append(pair[0], pair[1]); }
-    const format = document.querySelector('input[name="format"]:checked').value;
-    params.append('format', format);
+    const params = new URLSearchParams(new FormData(form));
+    const fmt = document.querySelector('input[name="format"]:checked');
+    if (fmt) params.set('format', fmt.value);
     window.open('/academics/batch_assignment_report?' + params.toString(), '_blank');
 }
 
+// --- Select all (only enabled checkboxes) ---
 function toggleSelectAll(master) {
-    const chks = document.querySelectorAll('.student-chk');
-    chks.forEach(c => c.checked = master.checked);
+    document.querySelectorAll('.student-chk:not(:disabled)').forEach(c => c.checked = master.checked);
 }
+
+// --- Sync hidden assign_batch_id when filter batch changes ---
+document.addEventListener('DOMContentLoaded', function () {
+    const ddlBatch = document.getElementById('ddlBatch');
+    const hAssign  = document.getElementById('h_assign_batch_id');
+    if (ddlBatch && hAssign) {
+        ddlBatch.addEventListener('change', () => hAssign.value = ddlBatch.value);
+    }
+
+    // On page load with pre-selected semester, load year
+    const sem = document.getElementById('ddlSemester');
+    if (sem && sem.value) {
+        fetch(`/academics/api/get_semester_year/${sem.value}`)
+            .then(r => r.json())
+            .then(data => {
+                const ddlYear = document.getElementById('ddlYear');
+                if (data.degreeyear_char) {
+                    ddlYear.innerHTML = '';
+                    const o = document.createElement('option');
+                    o.value = data.pk_degreeyearid || 1;
+                    o.textContent = data.degreeyear_char;
+                    ddlYear.appendChild(o);
+                }
+            }).catch(() => {});
+    }
+});
 </script>
 {% endblock %}

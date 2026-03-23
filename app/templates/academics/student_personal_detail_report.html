@@ -12,7 +12,7 @@
                     <td class="vtext" width="15%">College</td>
                     <td class="colon">:</td>
                     <td width="30%">
-                        <select name="college_id" class="textbox w-200 w-250">
+                        <select name="college_id" id="ddlCollege" class="textbox w-200 w-250" onchange="loadSpecializations()">
                             <option value="0">--Select College--</option>
                             {% for c in lookups.colleges %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
                         </select>
@@ -30,7 +30,7 @@
                     <td class="vtext">Degree</td>
                     <td class="colon">:</td>
                     <td>
-                        <select name="degree_id" class="textbox w-200 w-250">
+                        <select name="degree_id" id="ddlDegree" class="textbox w-200 w-250" onchange="loadSpecializations()">
                             <option value="0">--Select Degree--</option>
                             {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
                         </select>
@@ -43,6 +43,16 @@
                             {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.semester_roman }}</option>{% endfor %}
                         </select>
                     </td>
+                </tr>
+                <tr>
+                    <td class="vtext">Specialization</td>
+                    <td class="colon">:</td>
+                    <td>
+                        <select name="branch_id" id="ddlBranch" class="textbox w-200 w-250">
+                            <option value="0">--Select Specialization--</option>
+                        </select>
+                    </td>
+                    <td colspan="3"></td>
                 </tr>
                 <tr>
                     <td class="vtext">Report Type</td>
@@ -72,4 +82,24 @@
         </form>
     </div>
 </div>
+
+<script>
+function loadSpecializations() {
+    var collegeId = document.getElementById('ddlCollege').value;
+    var degreeId  = document.getElementById('ddlDegree').value;
+    var ddl = document.getElementById('ddlBranch');
+    ddl.innerHTML = '<option value="0">--Select Specialization--</option>';
+    if (!collegeId || collegeId === '0' || !degreeId || degreeId === '0') return;
+    fetch('/academics/api/college/' + collegeId + '/degree/' + degreeId + '/specializations')
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            data.forEach(function(item) {
+                var opt = document.createElement('option');
+                opt.value = item.id;
+                opt.textContent = item.name;
+                ddl.appendChild(opt);
+            });
+        });
+}
+</script>
 {% endblock %}

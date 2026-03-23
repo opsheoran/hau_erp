@@ -53,7 +53,10 @@ def course_addition_withdrawal():
                 cr_pr = a['crhrpr1'] if a.get('crhrpr1') is not None else a['crhr_practical']
                 withdrawable.append({
                     'id': a['fk_courseid'],
-                    'text': f"{a['coursename']} [ {a['coursecode']} ] {{ {cr_th} + {cr_pr} }}"
+                    'text': f"{a['coursename']} [ {a['coursecode']} ] {{ {cr_th} + {cr_pr} }}",
+                    'th': cr_th or 0,
+                    'pr': cr_pr or 0,
+                    'isNC': False
                 })
             return jsonify({'courses': withdrawable})
             
@@ -127,7 +130,10 @@ def course_addition_withdrawal():
                     cr_pr = p['master_pr']
                     addable.append({
                         'id': c_id,
-                        'text': f"{p['coursename']} [ {p['coursecode']} ] {{ {cr_th} + {cr_pr} }}"
+                        'text': f"{p['coursename']} [ {p['coursecode']} ] {{ {cr_th} + {cr_pr} }}",
+                        'th': cr_th or 0,
+                        'pr': cr_pr or 0,
+                        'isNC': bool(p['isNC'])
                     })
             return jsonify({'courses': addable})
 
@@ -185,13 +191,14 @@ def course_addition_withdrawal():
             
     # Find min/max credits for this degree
     credit_limits = DB.fetch_one('''
-        SELECT mincrhr, maxcrhr 
-        FROM SMS_Degreewise_crhr_Trn_CP
-        WHERE fk_degreeid = ? AND fk_semesterid = ?
+        SELECT T.crhrmin, T.crhrmax
+        FROM SMS_Degreewise_crhr DC
+        INNER JOIN SMS_Degreewise_crhr_Trn T ON DC.pk_degreewise_crhr = T.fk_degreewise_crhr
+        WHERE DC.fk_degreeid = ? AND DC.fk_semesterid = ?
     ''', [student['fk_degreeid'], student['fk_semesterid']])
-    
-    min_cr = credit_limits['mincrhr'] if credit_limits else 9
-    max_cr = credit_limits['maxcrhr'] if credit_limits else 22
+
+    min_cr = credit_limits['crhrmin'] if credit_limits else 9
+    max_cr = credit_limits['crhrmax'] if credit_limits else 22
 
     return render_template('student_portal/course_addition_withdrawal.html', 
                            student=student,

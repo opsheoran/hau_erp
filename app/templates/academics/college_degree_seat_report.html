@@ -25,16 +25,19 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="vtext">Format</td><td class="colon">:</td>
-                    <td>
-                        <label><input type="radio" name="fmt" value="pdf" checked> PDF</label>
-                        <label style="margin-left:10px;"><input type="radio" name="fmt" value="excel"> Excel</label>
-                    </td>
-                    <td colspan="3" style="text-align:right;">
+                    <td colspan="2"></td>
+                    <td colspan="4">
                         <input type="submit" value="VIEW REPORT" class="button-common" style="width:120px;">
                         {% if data %}
-                        <a href="{{ url_for('academics.college_degree_seat_report', fmt='excel', **filters) }}" class="button-common" style="background:#00a65a; color:white; padding: 5px 15px; text-decoration:none; margin-left:10px;">EXPORT EXCEL</a>
-                        <a href="{{ url_for('academics.college_degree_seat_report', fmt='pdf', **filters) }}" target="_blank" class="button-common" style="background:#d9534f; color:white; padding: 5px 15px; text-decoration:none; margin-left:5px;">PRINT PDF</a>
+                        <a href="{{ url_for('academics.college_degree_seat_report', fmt='excel', **filters) }}"
+                           class="button-common" style="background:#00a65a; color:white; padding:5px 15px; text-decoration:none; margin-left:10px;">
+                           EXPORT EXCEL
+                        </a>
+                        <a href="{{ url_for('academics.college_degree_seat_report', fmt='pdf', **filters) }}"
+                           target="_blank" class="button-common"
+                           style="background:#d9534f; color:white; padding:5px 15px; text-decoration:none; margin-left:5px;">
+                           PRINT PDF
+                        </a>
                         {% endif %}
                     </td>
                 </tr>
@@ -42,28 +45,43 @@
         </form>
 
         {% if data %}
-        <div style="margin-top: 25px;">
+        <div style="margin-top: 25px; overflow-x: auto;">
             <table class="table-grid-view" width="100%">
                 <thead>
                     <tr class="header-style">
-                        <th width="5%">S.No.</th>
-                        <th>College</th>
+                        <th width="40">S.No.</th>
                         <th>Degree</th>
                         <th>Specialization</th>
-                        <th width="10%">Seats</th>
+                        <th width="80">Total Seats</th>
+                        {% for st in seat_types %}
+                        <th width="80">{{ st }}</th>
+                        {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in data %}
                     <tr class="{{ loop.cycle('item-style', 'item-style-alt') }}">
                         <td align="center">{{ loop.index }}</td>
-                        <td>{{ item.collegename }}</td>
                         <td>{{ item.degreename }}</td>
                         <td>{{ item.Branchname or 'All' }}</td>
                         <td align="center"><b>{{ item.totseat }}</b></td>
+                        {% for st in seat_types %}
+                        <td align="center">{{ item.seat_types.get(st, '-') }}</td>
+                        {% endfor %}
                     </tr>
                     {% endfor %}
                 </tbody>
+                <tfoot>
+                    <tr style="background:#e8f4fc; font-weight:bold;">
+                        <td colspan="3" align="right" style="padding-right:8px;">Total</td>
+                        <td align="center">{{ data | sum(attribute='totseat') }}</td>
+                        {% for st in seat_types %}
+                        {% set ns = namespace(tot=0) %}
+                        {% for item in data %}{% set ns.tot = ns.tot + item.seat_types.get(st, 0) %}{% endfor %}
+                        <td align="center">{{ ns.tot if ns.tot > 0 else '-' }}</td>
+                        {% endfor %}
+                    </tr>
+                </tfoot>
             </table>
         </div>
         {% elif filters.college_id %}

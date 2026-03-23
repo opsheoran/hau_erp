@@ -31,7 +31,7 @@
                 <tr>
                     <td class="vtext">Employee</td><td class="colon">:</td>
                     <td>
-                        <select name="user_id" id="m_user" class="textbox w-200 w-300" required>
+                        <select name="user_id" id="m_user" class="textbox w-200 w-300" required onchange="loadEmployeeDegrees(this.value)">
                             <option value="">--Select Employee--</option>
                         </select> <span class="required">*</span>
                     </td>
@@ -96,7 +96,7 @@
 async function loadCollegeDegrees(collegeId) {
     const container = document.getElementById('degree_container');
     if (!collegeId) {
-        container.innerHTML = '<span style="color:#999 italic">Please select a college first...</span>';
+        container.innerHTML = '<span style="color:#999; font-style:italic;">Please select a college first...</span>';
         return;
     }
     container.innerHTML = 'Loading degrees...';
@@ -112,19 +112,44 @@ async function loadCollegeDegrees(collegeId) {
             html += `<label style="display:block; margin-bottom:5px;"><input type="checkbox" name="degree_ids" value="${d.id}"> ${d.name}</label>`;
         });
         container.innerHTML = html;
+
+        // If an employee is already selected, check their assigned degrees
+        const userId = document.getElementById('m_user').value;
+        if (userId) {
+            await checkAssignedDegrees(userId);
+        }
     } catch (e) {
         container.innerHTML = '<span style="color:red">Error loading degrees.</span>';
     }
 }
+
+async function checkAssignedDegrees(userId) {
+    if (!userId) return;
+    try {
+        const response = await fetch(`/academics/api/employee_mapped_degrees?user_id=${userId}`);
+        const mappedIds = await response.json();
+        if (!mappedIds.length) return;
+        const mapped = new Set(mappedIds.map(String));
+        document.querySelectorAll('#degree_container input[type="checkbox"]').forEach(cb => {
+            cb.checked = mapped.has(cb.value);
+        });
+    } catch (e) {
+        console.error('Error loading employee degrees:', e);
+    }
+}
+
+async function loadEmployeeDegrees(userId) {
+    // Called when employee dropdown changes — check their already-assigned degrees
+    await checkAssignedDegrees(userId);
+}
+
 async function loadCollegeEmployees(collegeId) {
     const userSelect = document.getElementById('m_user');
-    userSelect.innerHTML = '<option value="">--Select Employee--</option>'; // Clear existing
+    userSelect.innerHTML = '<option value="">--Select Employee--</option>';
     if (!collegeId) return;
-    
     try {
         const response = await fetch(`/academics/api/get_teachers?college_id=${collegeId}`);
         const employees = await response.json();
-        
         employees.forEach(e => {
             const option = document.createElement('option');
             option.value = e.id;

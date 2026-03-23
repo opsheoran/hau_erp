@@ -93,6 +93,21 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
+    @media (max-width: 768px) {
+        .info-grid { grid-template-columns: 1fr; }
+        .profile-header { flex-direction: column; text-align: center; }
+        .profile-image { margin-right: 0; margin-bottom: 12px; }
+        .nav-tabs { flex-wrap: wrap; }
+        .nav-tabs li a { padding: 10px 14px; font-size: 13px; }
+        .tab-content { padding: 16px; }
+        .info-label { width: 140px; font-size: 12px; }
+        .info-value { font-size: 13px; }
+    }
+    @media (max-width: 480px) {
+        .info-group { flex-direction: column; }
+        .info-label { width: 100%; text-align: left; }
+        .info-label::after { content: ":"; }
+    }
 
     .info-group {
         display: flex;
@@ -160,16 +175,44 @@
         margin-top: 0;
         margin-bottom: 20px;
     }
+
+    /* ── Responsive additions ── */
+    /* Nav tabs: horizontal scroll on mobile instead of wrapping */
+    @media (max-width: 600px) {
+        .profile-header { flex-direction: column; align-items: center; text-align: center; padding: 16px; }
+        .profile-image { margin-right: 0; margin-bottom: 12px; }
+        .profile-name { font-size: 18px; }
+        .nav-tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; scrollbar-width: none; }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        .nav-tabs li { flex-shrink: 0; }
+        .nav-tabs li a { padding: 10px 16px; font-size: 13px; }
+        .tab-content { padding: 14px; }
+    }
+    @media (max-width: 480px) {
+        .info-grid { grid-template-columns: 1fr; gap: 10px; }
+        /* iOS zoom fix: all inputs/selects at 16px */
+        input, select, textarea { font-size: 16px !important; }
+        /* Basic details table: allow horizontal scroll */
+        #tab-basic table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 12px; }
+        /* data-table: scrollable */
+        .data-table { font-size: 12px; }
+        .data-table th, .data-table td { padding: 6px 8px; }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="profile-card">
     <div class="profile-header">
-        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiB2aWV3Qm94PSIwIDAgMTUwIDE1MCI+PHJlY3Qgd2lkdGg9IjE1MCIgaGVpZ2h0PSIxNTAiIGZpbGw9IiNlZWVlZWUiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM5OTk5OTkiPlBob3RvPC90ZXh0Pjwvc3ZnPg==" alt="Profile Image" class="profile-image">
+        {% set photo = student.get('photoimage') or student.get('StuImage') or '' %}
+        <img src="{{ '/static/uploads/students/' ~ photo if photo else '/static/images/inside-pg-logo.png' }}"
+             alt="Profile Photo"
+             class="profile-image"
+             onerror="this.onerror=null; this.src='/static/images/inside-pg-logo.png';">
         <div>
             <h2 class="profile-name">{{ student.fullname }}</h2>
             <p class="profile-enrollment">Enrollment No: {{ student.enrollmentno }}</p>
+            <p style="margin:4px 0 0; font-size:13px; color:#555;">{{ student.degreename or '' }}{% if student.branchname %} &mdash; {{ student.branchname }}{% endif %}</p>
         </div>
     </div>
 

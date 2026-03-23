@@ -55,26 +55,27 @@
                         <td class="vtext">Separator</td>
                         <td class="colon">:</td>
                         <td>
-                            <input type="text" id="txt_separator" class="textbox w-100" value="{{ config.separator if config else '' }}" readonly style="background:#f0f0f0;">
+                            <input type="text" id="txt_separator" class="textbox w-100" value="{{ config.separator if config else '' }}">
                         </td>
                     </tr>
                     <tr>
                         <td class="vtext">Prefix</td>
                         <td class="colon">:</td>
                         <td>
-                            <input type="text" id="txt_prefix" class="textbox w-150" value="{{ config.prefix if config else '' }}" readonly style="background:#f0f0f0;">
+                            <input type="text" id="txt_prefix" class="textbox w-150" value="{{ config.prefix if config else '' }}">
                         </td>
                         <td class="vtext">Suffix</td>
                         <td class="colon">:</td>
                         <td>
-                            <input type="text" id="txt_suffix" class="textbox w-150" value="{{ config.suffix if config else '' }}" readonly style="background:#f0f0f0;">
+                            <input type="text" id="txt_suffix" class="textbox w-150" value="{{ config.suffix if config else '' }}">
                         </td>
                     </tr>
                     <tr><td colspan="6" height="15"></td></tr>
                     <tr>
                         <td></td>
                         <td colspan="5">
-                            <input type="button" value="GENERATE" class="button-common" style="width:120px;" onclick="generateSuggestedNumbers()">
+                            <input type="submit" value="GET STUDENTS" class="button-common" style="width:130px;">
+                            <input type="button" value="GENERATE" class="button-common" style="width:120px; margin-left:5px;" onclick="generateSuggestedNumbers()">
                             <input type="button" value="UNPROCESS" class="button-common" style="width:120px; margin-left:5px;" onclick="confirmUnprocess()">
                         </td>
                     </tr>
@@ -180,20 +181,23 @@ function ajaxLoadBranches(degreeId) {
 
 
 function generateSuggestedNumbers() {
-    if (!config) {
-        alert("No configuration found for current selection.");
+    const prefix    = document.getElementById('txt_prefix').value;
+    const separator = document.getElementById('txt_separator').value;
+    const suffix    = document.getElementById('txt_suffix').value;
+
+    const rows = document.querySelectorAll('.suggested-no');
+    if (rows.length === 0) {
+        alert("No students listed. Select filters and reload first.");
         return;
     }
-    
-    const rows = document.querySelectorAll('.suggested-no');
+
     let serial = nextSerial;
-    
+
     rows.forEach(input => {
-        // Only suggest for those without a current number OR if force generating
-        const currentNoCell = input.closest('tr').cells[2].innerText;
-        if (currentNoCell === 'N/A' || confirm("Override existing number?")) {
+        const currentNoCell = input.closest('tr').cells[2].innerText.trim();
+        if (currentNoCell === 'N/A') {
             const serialStr = serial.toString().padStart(3, '0');
-            input.value = `${config.prefix}${config.separator}${serialStr}${config.suffix}`;
+            input.value = `${prefix}${separator}${serialStr}${suffix}`;
             serial++;
         }
     });

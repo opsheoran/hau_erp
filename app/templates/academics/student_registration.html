@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
+{% set s = sd %}
 <style>
     .inner-tabbing { border-bottom: 2px solid #3c8dbc; margin-bottom: 15px; }
-    .inner-tab { 
-        display: inline-block; padding: 6px 15px; cursor: pointer; background: #eee; 
+    .inner-tab {
+        display: inline-block; padding: 6px 15px; cursor: pointer; background: #eee;
         border: 1px solid #ddd; border-bottom: none; margin-right: 3px; font-size: 11px;
         font-weight: bold;
     }
@@ -11,6 +12,13 @@
     .tab-content { display: none; padding: 10px; border: 1px solid #ddd; border-top: none; background: #fff; }
     .tab-content.active { display: block; }
     .required { color: red; font-weight: bold; }
+    .search-panel { background:#f4f9ff; border:1px solid #b8d4ef; border-radius:4px; padding:12px 15px; margin-bottom:15px; }
+    .search-panel .sp-title { font-weight:bold; font-size:12px; color:#3c8dbc; margin-bottom:8px; cursor:pointer; user-select:none; }
+    .search-row { display:flex; flex-wrap:wrap; gap:8px 15px; align-items:center; }
+    .search-row label { font-size:11px; color:#555; }
+    .search-row select, .search-row input[type="text"] { font-size:11px; padding:3px 5px; border:1px solid #ccc; border-radius:3px; height:26px; }
+    #student-list-panel .sp-list-heading { background:#3c8dbc; color:#fff; padding:5px 10px; font-size:12px; font-weight:bold; margin-bottom:5px; }
+    {% if s %}.edit-mode-banner{background:#dff0d8;color:#3c763d;padding:6px 15px;font-size:12px;font-weight:bold;border-left:4px solid #3c763d;margin:0 0 10px 0;}{% endif %}
 </style>
 
 <div class="hau-card ajax-card">
@@ -18,17 +26,115 @@
         <span class="mainheadingborderbottom">Student Registration</span>
     </div>
 
+    {% if s %}
+    <div class="edit-mode-banner">
+        Editing: {{ s.fullname }} &nbsp;|&nbsp; Enroll No: {{ s.enrollmentno or s.AdmissionNo or '-' }}
+        &nbsp;&nbsp;<a href="{{ url_for('academics.student_registration') }}" style="color:#3c763d; font-size:11px;">[New Entry]</a>
+    </div>
+    {% endif %}
+
+    <!-- SEARCH STUDENTS PANEL -->
+    <div class="search-panel" id="searchPanel" style="margin:10px 15px 0 15px;">
+        <div class="sp-title" onclick="toggleSearchPanel()">&#9660; Search Students</div>
+        <div class="sp-body">
+            <div class="search-row">
+                <label>Student Name:</label>
+                <input type="text" id="s_name" placeholder="Enter name..." style="width:160px;">
+                <label>Enroll/Adm No:</label>
+                <input type="text" id="s_admission_no" placeholder="Enrollment or Adm No" style="width:160px;">
+                <label>Gender:</label>
+                <select id="s_gender" style="width:100px;">
+                    <option value="">--All--</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                    <option value="T">Transgender</option>
+                </select>
+                <label>College:</label>
+                <select id="s_college" style="width:200px;">
+                    <option value="">--All--</option>
+                    {% for c in lookups.colleges %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                </select>
+                <label>Session:</label>
+                <select id="s_session" style="width:160px;">
+                    <option value="">--All--</option>
+                    {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                </select>
+                <label>Degree:</label>
+                <select id="s_degree" style="width:160px;">
+                    <option value="">--All--</option>
+                    {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                </select>
+                <label>Class:</label>
+                <select id="s_semester" style="width:100px;">
+                    <option value="">--All--</option>
+                    {% for sem in lookups.semesters %}<option value="{{ sem.id }}">{{ sem.semester_roman }}</option>{% endfor %}
+                </select>
+                <label>Specialization:</label>
+                <select id="s_branch" style="width:160px;">
+                    <option value="">--All--</option>
+                    {% for b in lookups.branches %}<option value="{{ b.id }}">{{ b.name }}</option>{% endfor %}
+                </select>
+                <label>Seat Type:</label>
+                <select id="s_seat_type" style="width:120px;">
+                    <option value="">--All--</option>
+                    {% for st in lookups.seat_types %}<option value="{{ st.id }}">{{ st.name }}</option>{% endfor %}
+                </select>
+                <label>Category:</label>
+                <select id="s_category" style="width:120px;">
+                    <option value="">--All--</option>
+                    {% for c in lookups.categories %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                </select>
+                <label>Status:</label>
+                <select id="s_reg_status" style="width:110px;">
+                    <option value="">--All--</option>
+                    <option value="registered">Registered</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div style="margin-top:8px;">
+                <input type="button" value="VIEW" class="button-common" style="background:#3c8dbc; color:white; padding:4px 18px;" onclick="searchStudents()">
+                <input type="button" value="RESET" class="button-common" style="margin-left:8px; padding:4px 18px;" onclick="resetSearch()">
+            </div>
+            <div id="student-list-panel" style="display:none; margin-top:10px;">
+                <div class="sp-list-heading">List of Students (<span id="student-count">0</span>)</div>
+                <div style="overflow-x:auto; max-height:300px; overflow-y:auto;">
+                    <table class="table-grid-view" width="100%">
+                        <thead>
+                            <tr class="header-style">
+                                <th width="40">S.No.</th>
+                                <th>Student Name</th>
+                                <th>Enroll/Adm No</th>
+                                <th>College</th>
+                                <th>Degree</th>
+                                <th>Class</th>
+                                <th>Branch</th>
+                                <th>Seat Type</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th width="55">Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-list-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- INTERNAL TABS -->
-    <div class="inner-tabbing" style="padding: 0 15px;">
-        <div class="inner-tab active" id="btn-basic" onclick="showTab('basic')">Basic Details</div>
-        <div class="inner-tab" id="btn-qualification" onclick="showTab('qualification')">Qualification</div>
-        <div class="inner-tab" id="btn-certificate" onclick="showTab('certificate')">Certificate</div>
-        <div class="inner-tab" id="btn-cancel" onclick="showTab('cancel')">Registration Cancel</div>
+    <div class="inner-tabbing" style="padding: 0 15px; margin-top:12px;" id="formTabs">
+        <div class="inner-tab {% if not active_tab or active_tab == 'basic' %}active{% endif %}" id="btn-basic" onclick="showTab('basic')">Basic Details</div>
+        <div class="inner-tab {% if active_tab == 'qualification' %}active{% endif %}" id="btn-qualification" onclick="showTab('qualification')">Qualification</div>
+        <div class="inner-tab {% if active_tab == 'certificate' %}active{% endif %}" id="btn-certificate" onclick="showTab('certificate')">Certificate</div>
+        <div class="inner-tab {% if active_tab == 'cancel' %}active{% endif %}" id="btn-cancel" onclick="showTab('cancel')">Registration Cancel</div>
     </div>
 
     <form method="POST" id="regForm" enctype="multipart/form-data">
+        <input type="hidden" name="pk_sid" id="f_sid" value="{{ s.pk_sid if s else '' }}">
+        <input type="hidden" name="action" id="form_action" value="SAVE_BASIC">
+
         <!-- BASIC DETAILS TAB -->
-        <div id="tab-basic" class="tab-content active">
+        <div id="tab-basic" class="tab-content {% if not active_tab or active_tab == 'basic' %}active{% endif %}">
             <table class="form-table" width="100%">
                 <tr>
                     <td class="tablesubheading" colspan="6"><span class="subheadingborderbottom">Basic Details</span></td>
@@ -37,31 +143,31 @@
                     <td class="vtext" width="15%">Student Name</td><td class="colon">:</td>
                     <td width="35%">
                         <select name="salutation_id" class="textbox w-200 w-75">
-                            {% for s in lookups.salutations %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                            {% for sal in lookups.salutations %}<option value="{{ sal.id }}" {% if s and s.fk_salutationid == sal.id %}selected{% endif %}>{{ sal.name }}</option>{% endfor %}
                         </select>
-                        <input type="text" name="fullname" class="textbox w-150" required> <span class="required">*</span>
+                        <input type="text" name="fullname" class="textbox w-150" value="{{ s.fullname or '' if s else '' }}" required> <span class="required">*</span>
                     </td>
                     <td class="vtext" width="15%">Mother's Name</td><td class="colon">:</td>
-                    <td><input type="text" name="mname" class="textbox w-200" required> <span class="required">*</span></td>
+                    <td><input type="text" name="mname" class="textbox w-200" value="{{ s.mname or '' if s else '' }}" required> <span class="required">*</span></td>
                 </tr>
                 <tr>
                     <td class="vtext">Father's Name</td><td class="colon">:</td>
-                    <td><input type="text" name="fname" class="textbox w-200"></td>
-                    <td class="vtext">Student 's Name(in hindi)</td><td class="colon">:</td>
-                    <td><input type="text" name="fullname_hindi" class="textbox w-200"></td>
+                    <td><input type="text" name="fname" class="textbox w-200" value="{{ s.fname or '' if s else '' }}"></td>
+                    <td class="vtext">Student's Name (Hindi)</td><td class="colon">:</td>
+                    <td><input type="text" name="fullname_hindi" class="textbox w-200" value="{{ s.Sname or '' if s else '' }}"></td>
                 </tr>
                 <tr>
-                    <td class="vtext">Mother 's Name(in hindi)</td><td class="colon">:</td>
-                    <td><input type="text" name="mname_hindi" class="textbox w-200"></td>
-                    <td class="vtext">Father 's Name(in hindi)</td><td class="colon">:</td>
-                    <td><input type="text" name="fname_hindi" class="textbox w-200"></td>
+                    <td class="vtext">Mother's Name (Hindi)</td><td class="colon">:</td>
+                    <td><input type="text" name="mname_hindi" class="textbox w-200" value="{{ s.Mnamehindi or '' if s else '' }}"></td>
+                    <td class="vtext">Father's Name (Hindi)</td><td class="colon">:</td>
+                    <td><input type="text" name="fname_hindi" class="textbox w-200" value="{{ s.Fnamehindi or '' if s else '' }}"></td>
                 </tr>
                 <tr>
                     <td class="vtext">College</td><td class="colon">:</td>
                     <td colspan="4">
                         <select name="college_id" class="textbox w-200 w-300" required>
                             <option value="">--Select College--</option>
-                            {% for c in lookups.colleges %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                            {% for c in lookups.colleges %}<option value="{{ c.id }}" {% if s and s.fk_collegeid == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
                         </select> <span class="required">*</span>
                     </td>
                 </tr>
@@ -70,52 +176,36 @@
                     <td>
                         <select name="session_id" class="textbox w-200 w-200" required>
                             <option value="">--Select Academic Session--</option>
-                            {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+                            {% for sess in lookups.sessions %}<option value="{{ sess.id }}" {% if s and s.fk_adm_session == sess.id %}selected{% endif %}>{{ sess.name }}</option>{% endfor %}
                         </select> <span class="required">*</span>
                     </td>
                     <td class="vtext">Admission No.</td><td class="colon">:</td>
-                    <td><input type="text" name="admission_no" class="textbox w-150" required> <span class="required">*</span></td>
-                </tr>
-                <tr>
-                    <td class="vtext">Current Session</td><td class="colon">:</td>
                     <td>
-                        <input type="text" value="2025-2026" class="textbox w-150" disabled> <span class="required">*</span>
+                        {% if s %}
+                            <input type="text" class="textbox w-150" value="{{ s.AdmissionNo or s.enrollmentno or '' }}" readonly style="background:#f5f5f5; color:#555;">
+                            <input type="hidden" name="admission_no" value="{{ s.AdmissionNo or s.enrollmentno or '' }}">
+                            {% if s.enrollmentno and s.AdmissionNo and s.enrollmentno != s.AdmissionNo %}
+                            <br><small style="color:#888;">Enroll No: {{ s.enrollmentno }}</small>
+                            {% endif %}
+                        {% else %}
+                            <input type="text" name="admission_no" class="textbox w-150" required> <span class="required">*</span>
+                        {% endif %}
                     </td>
-                    <td colspan="3"></td>
                 </tr>
                 <tr>
                     <td class="vtext">Degree</td><td class="colon">:</td>
                     <td>
                         <select name="degree_id" class="textbox w-200 w-250" required>
                             <option value="">--Select Degree--</option>
-                            {% for d in lookups.degrees %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                            {% for d in lookups.degrees %}<option value="{{ d.id }}" {% if s and s.fk_degreeid == d.id %}selected{% endif %}>{{ d.name }}</option>{% endfor %}
                         </select> <span class="required">*</span>
                     </td>
-                    <td class="vtext">Class</td><td class="colon">:</td>
-                    <td>
-                        <select name="semester_id" class="textbox w-200 w-150" required>
-                            <option value="">--Select Class--</option>
-                            {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.semester_roman }}</option>{% endfor %}
-                        </select> <span class="required">*</span>
-                    </td>
-                </tr>
-                <tr>
                     <td class="vtext">Specialization</td><td class="colon">:</td>
                     <td>
                         <select name="branch_id" class="textbox w-200 w-250">
                             <option value="">--Select Specialization--</option>
-                            {% for b in lookups.branches %}<option value="{{ b.id }}">{{ b.name }}</option>{% endfor %}
-                        </select> <span class="required">*</span>
-                    </td>
-                    <td class="vtext">Year</td><td class="colon">:</td>
-                    <td>
-                        <select name="year_id" class="textbox w-200 w-150">
-                            <option value="">--Select Year--</option>
-                            <option value="1">1st Year</option>
-                            <option value="2">2nd Year</option>
-                            <option value="3">3rd Year</option>
-                            <option value="4">4th Year</option>
-                        </select> <span class="required">*</span>
+                            {% for b in lookups.branches %}<option value="{{ b.id }}" {% if s and s.fk_branchid == b.id %}selected{% endif %}>{{ b.name }}</option>{% endfor %}
+                        </select>
                     </td>
                 </tr>
                 <tr>
@@ -123,39 +213,39 @@
                     <td>
                         <select name="gender" class="textbox w-200 w-100" required>
                             <option value="0">--Select Gender--</option>
-                            <option value="M">Male</option>
-                            <option value="F">Female</option>
-                            <option value="T">Transgender</option>
+                            <option value="M" {% if s and s.gender == 'M' %}selected{% endif %}>Male</option>
+                            <option value="F" {% if s and s.gender == 'F' %}selected{% endif %}>Female</option>
+                            <option value="T" {% if s and s.gender == 'T' %}selected{% endif %}>Transgender</option>
                         </select> <span class="required">*</span>
                     </td>
                     <td class="vtext">Date of Birth</td><td class="colon">:</td>
-                    <td><input type="date" name="dob" class="textbox w-150" required> <span class="required">*</span></td>
+                    <td><input type="date" name="dob" class="textbox w-150" value="{{ s.dob or '' if s else '' }}" required> <span class="required">*</span></td>
                 </tr>
                 <tr>
                     <td class="vtext">Qualifying/Institution Quota</td><td class="colon">:</td>
                     <td>
                         <select name="rank_id" class="textbox w-200 w-200">
-                            <option value="0">--Select Qualifying/Institution Quota--</option>
-                            {% for r in lookups.ranks %}<option value="{{ r.id }}">{{ r.name }}</option>{% endfor %}
+                            <option value="0">--Select--</option>
+                            {% for r in lookups.ranks %}<option value="{{ r.id }}" {% if s and s.fk_rankid == r.id %}selected{% endif %}>{{ r.name }}</option>{% endfor %}
                         </select>
                     </td>
                     <td class="vtext">Rank</td><td class="colon">:</td>
-                    <td><input type="text" name="rank_no" class="textbox w-100"></td>
+                    <td><input type="text" name="rank_no" class="textbox w-100" value="{{ s.ranknumber or '' if s else '' }}"></td>
                 </tr>
                 <tr>
                     <td class="vtext">Nationality</td><td class="colon">:</td>
                     <td>
                         <select name="nid" class="textbox w-200 w-200">
                             <option value="0">--Select Nationality--</option>
-                            {% for n in lookups.nationalities %}<option value="{{ n.pk_nid }}" {% if n.name == 'INDIAN' %}selected{% endif %}>{{ n.name }}</option>{% endfor %}
-                        </select> <span class="required">*</span>
+                            {% for n in lookups.nationalities %}<option value="{{ n.id }}" {% if s and s.fk_nid == n.id %}selected{% elif not s and n.name == 'INDIAN' %}selected{% endif %}>{{ n.name }}</option>{% endfor %}
+                        </select>
                     </td>
                     <td class="vtext">State</td><td class="colon">:</td>
                     <td>
                         <select name="state_id" class="textbox w-200 w-200">
                             <option value="0">--Select State--</option>
-                            {% for s in lookups.states %}<option value="{{ s.id }}" {% if s.name == 'Haryana' %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
-                        </select> <span class="required">*</span>
+                            {% for st in lookups.states %}<option value="{{ st.id }}" {% if s and s.fk_stateid == st.id %}selected{% elif not s and st.name == 'Haryana' %}selected{% endif %}>{{ st.name }}</option>{% endfor %}
+                        </select>
                     </td>
                 </tr>
                 <tr>
@@ -163,14 +253,14 @@
                     <td>
                         <select name="religion_id" class="textbox w-200 w-200">
                             <option value="0">--Select Religion--</option>
-                            {% for r in lookups.religions %}<option value="{{ r.id }}">{{ r.name }}</option>{% endfor %}
-                        </select> <span class="required">*</span>
+                            {% for r in lookups.religions %}<option value="{{ r.id }}" {% if s and s.fk_religionid|string == r.id|string %}selected{% endif %}>{{ r.name }}</option>{% endfor %}
+                        </select>
                     </td>
                     <td class="vtext">District</td><td class="colon">:</td>
                     <td>
                         <select name="district_id" class="textbox w-200 w-200">
                             <option value="0">--Select District--</option>
-                            {% for d in lookups.districts %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+                            {% for d in lookups.districts %}<option value="{{ d.id }}" {% if s and s.fk_districid == d.id %}selected{% endif %}>{{ d.name }}</option>{% endfor %}
                         </select>
                     </td>
                 </tr>
@@ -179,100 +269,99 @@
                     <td>
                         <select name="cat_id" class="textbox w-200 w-200" required>
                             <option value="0">--Select Category--</option>
-                            {% for c in lookups.categories %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                            {% for c in lookups.categories %}<option value="{{ c.id }}" {% if s and s.fk_catid == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
                         </select> <span class="required">*</span>
                     </td>
                     <td class="vtext">Seat Type</td><td class="colon">:</td>
                     <td>
                         <select name="seat_type_id" class="textbox w-200 w-200" required>
                             <option value="0">--Select Seat Type--</option>
-                            {% for st in lookups.seat_types %}<option value="{{ st.id }}">{{ st.name }}</option>{% endfor %}
+                            {% for st in lookups.seat_types %}<option value="{{ st.id }}" {% if s and s.fk_seattypeid == st.id %}selected{% endif %}>{{ st.name }}</option>{% endfor %}
                         </select> <span class="required">*</span>
                     </td>
                 </tr>
                 <tr>
-                    <td class="vtext">Parent's Email Id</td><td class="colon">:</td>
-                    <td><input type="email" name="p_email" class="textbox w-250"></td>
-                    <td class="vtext">Student's Email Id</td><td class="colon">:</td>
-                    <td><input type="email" name="email" class="textbox w-250" required> <span class="required">*</span></td>
+                    <td class="vtext">Parent's Email</td><td class="colon">:</td>
+                    <td><input type="email" name="p_email" class="textbox w-250" value="{{ s.p_emailid or '' if s else '' }}"></td>
+                    <td class="vtext">Student's Email</td><td class="colon">:</td>
+                    <td><input type="email" name="email" class="textbox w-250" value="{{ s.s_emailid or '' if s else '' }}" required> <span class="required">*</span></td>
                 </tr>
                 <tr>
                     <td class="vtext">Parent's Contact No.</td><td class="colon">:</td>
-                    <td><input type="text" name="p_mobile" class="textbox w-150" maxlength="11"> <span class="required">*</span></td>
+                    <td><input type="text" name="p_mobile" class="textbox w-150" value="{{ s.p_phoneno or '' if s else '' }}" maxlength="11"></td>
                     <td class="vtext">Student's Contact No.</td><td class="colon">:</td>
-                    <td><input type="text" name="mobile" class="textbox w-150" required maxlength="11"> <span class="required">*</span></td>
+                    <td><input type="text" name="mobile" class="textbox w-150" value="{{ s.phoneno or '' if s else '' }}" required maxlength="11"> <span class="required">*</span></td>
                 </tr>
                 <tr>
                     <td class="vtext">Passport No.</td><td class="colon">:</td>
-                    <td><input type="text" name="passport_no" class="textbox w-200"></td>
+                    <td><input type="text" name="passport_no" class="textbox w-200" value="{{ s.passportno or '' if s else '' }}"></td>
                     <td class="vtext">Place of Passport Issue</td><td class="colon">:</td>
-                    <td><input type="text" name="passport_place" class="textbox w-200"></td>
+                    <td><input type="text" name="passport_place" class="textbox w-200" value="{{ s.PassportIssuePlace or '' if s else '' }}"></td>
                 </tr>
                 <tr>
                     <td class="vtext">Passport Expiry Date</td><td class="colon">:</td>
-                    <td><input type="date" name="passport_expiry" class="textbox w-150"></td>
+                    <td><input type="date" name="passport_expiry" class="textbox w-150" value="{{ s.PassportExpirydate or '' if s else '' }}"></td>
                     <td class="vtext">Admission Date</td><td class="colon">:</td>
-                    <td><input type="date" name="doa" class="textbox w-150" required> <span class="required">*</span></td>
+                    <td><input type="date" name="doa" class="textbox w-150" value="{{ s.date_of_adm or '' if s else '' }}" required> <span class="required">*</span></td>
                 </tr>
                 <tr>
                     <td class="vtext">Place of Birth</td><td class="colon">:</td>
-                    <td><input type="text" name="birth_place" class="textbox w-200"></td>
+                    <td><input type="text" name="birth_place" class="textbox w-200" value="{{ s.birthplace or '' if s else '' }}"></td>
                     <td class="vtext">Reporting Date</td><td class="colon">:</td>
-                    <td><input type="date" name="report_date" class="textbox w-150" required> <span class="required">*</span></td>
+                    <td><input type="date" name="report_date" class="textbox w-150" value="{{ s.reportdate or '' if s else '' }}" required> <span class="required">*</span></td>
                 </tr>
                 <tr>
                     <td class="vtext">Is Physically Handicapped?</td><td class="colon">:</td>
-                    <td><input type="checkbox" name="is_ph" class="chkbox"></td>
+                    <td><input type="checkbox" name="is_ph" class="chkbox" {% if s and s.isPhysicalHandicapped %}checked{% endif %}></td>
                     <td class="vtext">Spot Admission?</td><td class="colon">:</td>
-                    <td><input type="checkbox" name="is_spot" class="chkbox"></td>
+                    <td><input type="checkbox" name="is_spot" class="chkbox" {% if s and s.SpotAddmission %}checked{% endif %}></td>
                 </tr>
                 <tr>
                     <td class="vtext">Fee Exempted?</td><td class="colon">:</td>
                     <td>
-                        <label><input type="radio" name="fee_exempted" value="0" checked> No</label>
-                        <label style="margin-left:10px;"><input type="radio" name="fee_exempted" value="1"> Yes</label>
+                        <label><input type="radio" name="fee_exempted" value="0" {% if not s or s.isFeeNotExempt %}checked{% endif %}> No</label>
+                        <label style="margin-left:10px;"><input type="radio" name="fee_exempted" value="1" {% if s and not s.isFeeNotExempt %}checked{% endif %}> Yes</label>
                     </td>
                     <td class="vtext">Remarks</td><td class="colon">:</td>
-                    <td><textarea name="remarks" class="textbox w-200" style="height:40px;"></textarea></td>
+                    <td><textarea name="remarks" class="textbox w-200" style="height:40px;">{{ s.Remarks or '' if s else '' }}</textarea></td>
                 </tr>
                 <tr>
                     <td class="vtext">Domicile</td><td class="colon">:</td>
-                    <td><input type="checkbox" name="is_domicile" class="chkbox"></td>
+                    <td><input type="checkbox" name="is_domicile" class="chkbox" {% if s and s.IsResidency %}checked{% endif %}></td>
                     <td class="vtext">Marital Status</td><td class="colon">:</td>
                     <td>
-                        <label><input type="radio" name="marital_status" value="M"> Married</label>
-                        <label style="margin-left:10px;"><input type="radio" name="marital_status" value="S" checked> Single</label>
+                        <label><input type="radio" name="marital_status" value="M" {% if s and s.MaritalStatus == 'M' %}checked{% endif %}> Married</label>
+                        <label style="margin-left:10px;"><input type="radio" name="marital_status" value="S" {% if not s or s.MaritalStatus != 'M' %}checked{% endif %}> Single</label>
                     </td>
                 </tr>
                 <tr>
                     <td class="vtext">Aadhaar Number</td><td class="colon">:</td>
-                    <td><input type="text" name="aadhaar_no" class="textbox w-200" maxlength="12"></td>
+                    <td><input type="text" name="aadhaar_no" class="textbox w-200" value="{{ s.AdharNo or '' if s else '' }}" maxlength="12"></td>
                     <td class="vtext">Lateral Entry</td><td class="colon">:</td>
-                    <td><input type="checkbox" name="is_lateral" class="chkbox"></td>
+                    <td><input type="checkbox" name="is_lateral" class="chkbox" {% if s and s.Lateral_Entry %}checked{% endif %}></td>
                 </tr>
                 <tr>
                     <td class="vtext">Student USID</td><td class="colon">:</td>
-                    <td><input type="text" name="usid" class="textbox w-200"></td>
+                    <td><input type="text" name="usid" class="textbox w-200" value="{{ s.USID or '' if s else '' }}"></td>
                     <td class="vtext">Blood Group</td><td class="colon">:</td>
                     <td>
                         <select name="blood_group" class="textbox w-200 w-150">
                             <option value="">--Select Blood--</option>
-                            <option value="A+">A+</option><option value="A-">A-</option>
-                            <option value="B+">B+</option><option value="B-">B-</option>
-                            <option value="O+">O+</option><option value="O-">O-</option>
-                            <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                            {% for bg in ['A+','A-','B+','B-','O+','O-','AB+','AB-'] %}
+                            <option value="{{ bg }}" {% if s and s.B_Group == bg %}selected{% endif %}>{{ bg }}</option>
+                            {% endfor %}
                         </select>
                     </td>
                 </tr>
                 <tr>
                     <td class="vtext">Bank Name</td><td class="colon">:</td>
-                    <td><input type="text" name="bank_name" class="textbox w-250"></td>
+                    <td><input type="text" name="bank_name" class="textbox w-250" value="{{ s.bankname or '' if s else '' }}"></td>
                     <td class="vtext">Bank A/C Number</td><td class="colon">:</td>
-                    <td><input type="text" name="bank_ac" class="textbox w-200"></td>
+                    <td><input type="text" name="bank_ac" class="textbox w-200" value="{{ s.bankaccountnumber or '' if s else '' }}"></td>
                 </tr>
                 <tr>
                     <td class="vtext">IFSC Code</td><td class="colon">:</td>
-                    <td><input type="text" name="bank_ifsc" class="textbox w-150"></td>
+                    <td><input type="text" name="bank_ifsc" class="textbox w-150" value="{{ s.IFSCcode or '' if s else '' }}"></td>
                     <td colspan="3"></td>
                 </tr>
                 <tr>
@@ -280,71 +369,99 @@
                 </tr>
                 <tr>
                     <td class="vtext">Current Address</td><td class="colon">:</td>
-                    <td class="required">
-                        <textarea name="p_address" class="textbox w-300" style="height:40px;"></textarea> *
+                    <td>
+                        <textarea name="p_address" class="textbox w-300" style="height:40px;">{{ s.paddress or '' if s else '' }}</textarea> <span class="required">*</span>
                     </td>
                     <td class="vtext">Postal Address</td><td class="colon">:</td>
-                    <td class="required">
-                        <textarea name="postal_address" id="postal_address" class="textbox w-300" style="height:40px;"></textarea>
-                        <br><label style="font-size:10px;"><input type="checkbox" onclick="copyAddress(this)"> Same As</label> *
+                    <td>
+                        <textarea name="postal_address" id="postal_address" class="textbox w-300" style="height:40px;">{{ s.postaladdress or '' if s else '' }}</textarea>
+                        <br><label style="font-size:10px;"><input type="checkbox" onclick="copyAddress(this)"> Same As</label> <span class="required">*</span>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2"></td>
                     <td colspan="4" style="padding-top:20px;">
-                        <input type="submit" value="SAVE" class="button-common" style="width:120px; background:#3c8dbc; color:white;">
-                        <input type="button" value="COPY LAST ENTRY" class="button-common" style="width:140px; margin-left:10px;">
-                        <input type="button" value="RESET" class="button-common" onclick="location.reload()" style="margin-left:10px; width:100px;">
+                        <input type="submit" id="btn_save" value="{{ 'UPDATE' if s else 'SAVE' }}" class="button-common" style="width:120px; background:#3c8dbc; color:white;">
+                        <input type="button" value="RESET" class="button-common" onclick="location.href='{{ url_for('academics.student_registration') }}'" style="margin-left:10px; width:100px;">
                     </td>
                 </tr>
             </table>
         </div>
 
         <!-- QUALIFICATION TAB -->
-        <div id="tab-qualification" class="tab-content">
+        <div id="tab-qualification" class="tab-content {% if active_tab == 'qualification' %}active{% endif %}">
+            {% if not s %}
+            <div style="padding:15px; color:#a94442; background:#f2dede; border-radius:4px; margin-bottom:10px;">
+                Please save Basic Details first before adding qualifications.
+            </div>
+            {% endif %}
             <table class="table-grid-view" width="100%">
                 <thead>
                     <tr class="header-style">
-                        <th width="5%">S.No.</th>
-                        <th>Exam</th>
-                        <th>Univ/Board</th>
-                        <th>Year</th>
-                        <th>Roll No.</th>
-                        <th>Max Marks</th>
-                        <th>Marks Obtained</th>
-                        <th>Percentage</th>
-                        <th>Subjects</th>
+                        <th width="4%">S.No.</th><th>Exam Type</th><th>Univ/Board</th><th>Year</th>
+                        <th>Roll No.</th><th>Max Marks</th><th>% / Marks</th><th>Subjects</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for i in range(1, 6) %}
+                    {# Show existing qualifications first, then empty rows to total 6 #}
+                    {% set ns = namespace(count=0) %}
+                    {% for q in qualifications %}
+                    {% set ns.count = ns.count + 1 %}
                     <tr class="{{ loop.cycle('item-style', 'item-style-alt') }}">
-                        <td align="center">{{ i }}</td>
+                        <td align="center">{{ loop.index }}</td>
                         <td>
-                            <select name="exam_id[]" class="textbox w-200 w-150">
-                                <option value="">---Select Exam Type---</option>
+                            <select name="exam_id[]" class="textbox w-150">
+                                <option value="">---Select---</option>
+                                {% for e in lookups.edu_types %}<option value="{{ e.id }}" {% if q.fk_examid == e.id %}selected{% endif %}>{{ e.name }}</option>{% endfor %}
+                            </select>
+                        </td>
+                        <td><input type="text" name="board[]" class="textbox w-150" value="{{ q.Bord_Univ or '' }}"></td>
+                        <td><input type="text" name="year[]" class="textbox w-60" maxlength="4" value="{{ q.yearofpassing or '' }}"></td>
+                        <td><input type="text" name="roll_no[]" class="textbox w-80" value="{{ q.enrollmentno or '' }}"></td>
+                        <td><input type="text" name="max_marks[]" class="textbox w-60" value="{{ q.marks_s or '' }}"></td>
+                        <td><input type="text" name="per[]" class="textbox w-60" value="{{ q.percentage or '' }}"></td>
+                        <td><input type="text" name="subjects[]" class="textbox w-200" value="{{ q.subject or '' }}"></td>
+                    </tr>
+                    {% endfor %}
+                    {# Empty rows to fill up to 6 total #}
+                    {% for i in range(ns.count + 1, 7) %}
+                    <tr class="{{ 'item-style' if loop.index % 2 != 0 else 'item-style-alt' }}">
+                        <td align="center">{{ loop.index + ns.count }}</td>
+                        <td>
+                            <select name="exam_id[]" class="textbox w-150">
+                                <option value="">---Select---</option>
                                 {% for e in lookups.edu_types %}<option value="{{ e.id }}">{{ e.name }}</option>{% endfor %}
                             </select>
                         </td>
                         <td><input type="text" name="board[]" class="textbox w-150"></td>
-                        <td><input type="text" name="year[]" class="textbox w-50" maxlength="4"></td>
-                        <td><input type="text" name="roll_no[]" class="textbox w-75"></td>
-                        <td><input type="text" name="max_marks[]" class="textbox w-50"></td>
-                        <td><input type="text" name="marks_obt[]" class="textbox w-50"></td>
-                        <td><input type="text" name="per[]" class="textbox w-50" readonly placeholder="Auto"></td>
-                        <td><input type="text" name="subjects[]" class="textbox w-150"></td>
+                        <td><input type="text" name="year[]" class="textbox w-60" maxlength="4"></td>
+                        <td><input type="text" name="roll_no[]" class="textbox w-80"></td>
+                        <td><input type="text" name="max_marks[]" class="textbox w-60"></td>
+                        <td><input type="text" name="per[]" class="textbox w-60"></td>
+                        <td><input type="text" name="subjects[]" class="textbox w-200"></td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            <div style="text-align:right; margin-top:10px;">
-                <input type="button" value="Add More" class="button-common">
-                <input type="submit" value="SAVE QUALIFICATION" class="button-common" style="background:#3c8dbc; color:white;">
+            <div style="margin-top:10px;">
+                {% if s %}
+                <input type="submit" value="SAVE QUALIFICATION" class="button-common"
+                       style="background:#3c8dbc; color:white;"
+                       onclick="document.getElementById('form_action').value='SAVE_QUALIFICATION'">
+                {% else %}
+                <input type="button" value="SAVE QUALIFICATION" class="button-common"
+                       style="background:#aaa; color:white; cursor:not-allowed;" disabled>
+                {% endif %}
             </div>
         </div>
 
         <!-- CERTIFICATE TAB -->
-        <div id="tab-certificate" class="tab-content">
+        <div id="tab-certificate" class="tab-content {% if active_tab == 'certificate' %}active{% endif %}">
+            {% if not s %}
+            <div style="padding:15px; color:#a94442; background:#f2dede; border-radius:4px; margin-bottom:10px;">
+                Please save Basic Details first before uploading certificates.
+            </div>
+            {% endif %}
             <table class="form-table" width="100%" style="margin-bottom:20px; border:1px solid #ddd; padding:10px; background:#fefefe;">
                 <tr>
                     <td class="tablesubheading" colspan="6"><span class="subheadingborderbottom">Certificates Upload</span></td>
@@ -362,66 +479,66 @@
                     <td class="vtext" width="15%">Choose File</td><td class="colon">:</td>
                     <td>
                         <input type="file" name="cert_file" id="cert_file" class="textbox w-200">
-                        <input type="button" value="Upload" class="button-common" style="margin-left:10px;" onclick="uploadFile()">
+                        <input type="button" value="Upload" class="button-common" style="margin-left:10px;" onclick="uploadFile()" {% if not s %}disabled{% endif %}>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2"></td>
-                    <td colspan="4" class="required" style="font-size:10px;">Individual Certificate size should not be more than 2MB (jpg, png, pdf)</td>
+                    <td colspan="4" style="font-size:10px; color:#a94442;">Individual Certificate size should not be more than 2MB (jpg, png, pdf)</td>
                 </tr>
             </table>
-
             <table class="table-grid-view" width="100%">
                 <thead>
                     <tr class="header-style">
-                        <th width="5%">S.No.</th>
-                        <th>Certificate Name</th>
-                        <th width="20%">File Name</th>
-                        <th width="15%">Status</th>
-                        <th width="10%">Action</th>
+                        <th width="5%">S.No.</th><th>Certificate Name</th><th width="25%">File Name</th>
+                        <th width="12%">Verified</th><th width="10%">View</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="item-style">
-                        <td colspan="5" align="center" style="padding:20px; color:#999;">No certificates uploaded yet.</td>
+                    {% if certificates %}
+                    {% for c in certificates %}
+                    <tr class="{{ 'item-style' if loop.index % 2 != 0 else 'item-style-alt' }}">
+                        <td align="center">{{ loop.index }}</td>
+                        <td>{{ c.certificatename or 'N/A' }}</td>
+                        <td>{{ c.OriginalFileName or c.UploadCertificateFileName }}</td>
+                        <td align="center">
+                            {% if c.IsVerified %}<span style="color:green; font-weight:bold;">&#10003; Yes</span>
+                            {% else %}<span style="color:#888;">Pending</span>{% endif %}
+                        </td>
+                        <td align="center">
+                            <a href="/static/uploads/certificates/{{ c.UploadCertificateFileName }}" target="_blank" style="color:#3c8dbc; font-size:12px;">View</a>
+                        </td>
                     </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr class="item-style"><td colspan="5" align="center" style="padding:20px; color:#999;">No certificates uploaded yet.</td></tr>
+                    {% endif %}
                 </tbody>
             </table>
         </div>
 
         <!-- CANCEL TAB -->
-        <div id="tab-cancel" class="tab-content">
+        <div id="tab-cancel" class="tab-content {% if active_tab == 'cancel' %}active{% endif %}">
             <table class="form-table" width="100%">
                 <tr>
                     <td class="tablesubheading" colspan="6"><span class="subheadingborderbottom">Registration Cancel Details</span></td>
                 </tr>
                 <tr>
                     <td class="vtext" width="20%">Is Registration Cancelled?</td><td class="colon">:</td>
-                    <td>
-                        <label><input type="checkbox" name="is_reg_cancelled" value="YES" class="chkbox"> YES</label>
-                    </td>
+                    <td><label><input type="checkbox" name="is_reg_cancelled" value="YES" class="chkbox" {% if s and s.IsRegCancel %}checked{% endif %}> YES</label></td>
                 </tr>
                 <tr>
                     <td class="vtext">Admitted Session</td><td class="colon">:</td>
                     <td>
                         <select name="cancel_session_id" class="textbox w-200 w-250">
                             <option value="">--Select Academic Session--</option>
-                            {% for s in lookups.sessions %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="vtext">Semester</td><td class="colon">:</td>
-                    <td>
-                        <select name="cancel_semester_id" class="textbox w-200 w-200">
-                            <option value="">--Select Semester--</option>
-                            {% for s in lookups.semesters %}<option value="{{ s.id }}">{{ s.semester_roman }}</option>{% endfor %}
+                            {% for sess in lookups.sessions %}<option value="{{ sess.id }}" {% if s and s.RegCancelSession == sess.id %}selected{% endif %}>{{ sess.name }}</option>{% endfor %}
                         </select>
                     </td>
                 </tr>
                 <tr>
                     <td class="vtext">Remarks</td><td class="colon">:</td>
-                    <td><textarea name="cancel_remarks" class="textbox w-300" style="height:60px;"></textarea></td>
+                    <td><textarea name="cancel_remarks" class="textbox w-300" style="height:60px;">{{ s.Remarks_For_RegCancel if s else '' }}</textarea></td>
                 </tr>
                 <tr>
                     <td colspan="2"></td>
@@ -440,39 +557,95 @@ function showTab(tabId) {
     document.querySelectorAll('.inner-tab').forEach(t => t.classList.remove('active'));
     document.getElementById('tab-' + tabId).classList.add('active');
     document.getElementById('btn-' + tabId).classList.add('active');
+    // Reset form action when switching tabs (qualification sets its own on submit)
+    const fa = document.getElementById('form_action');
+    if (fa) fa.value = 'SAVE_BASIC';
 }
 
 function copyAddress(chk) {
-    if(chk.checked) {
-        document.getElementById('postal_address').value = document.getElementsByName('p_address')[0].value;
-    } else {
-        document.getElementById('postal_address').value = '';
-    }
+    const from = document.querySelector('textarea[name="p_address"]');
+    const to = document.getElementById('postal_address');
+    if (chk.checked) to.value = from ? from.value : '';
+    else to.value = '';
 }
 
 function uploadFile() {
     const fileInput = document.getElementById('cert_file');
     const certDdl = document.getElementById('ddlCert');
-    if(!fileInput.files[0]) return alert('Select a file first');
-    if(!certDdl.value) return alert('Select certificate type');
-
+    if (!fileInput.files[0]) return alert('Select a file first');
+    if (!certDdl.value) return alert('Select certificate type');
     const formData = new FormData();
     formData.append('cert_file', fileInput.files[0]);
     formData.append('upload_cert_id', certDdl.value);
+    fetch('/academics/upload_certificate', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => alert(data.success ? 'Uploaded: ' + data.filename : 'Failed: ' + data.message));
+}
 
-    fetch('/academics/upload_certificate', {
-        method: 'POST',
-        body: formData
-    })
-    .then(r => r.json())
-    .then(data => {
-        if(data.success) {
-            alert('File uploaded: ' + data.filename);
-            // In a full implementation, refresh the uploaded list table here
-        } else {
-            alert('Upload failed: ' + data.message);
-        }
+function toggleSearchPanel() {
+    const body = document.querySelector('#searchPanel .sp-body');
+    const title = document.querySelector('#searchPanel .sp-title');
+    const hidden = body.style.display === 'none';
+    body.style.display = hidden ? '' : 'none';
+    title.innerHTML = (hidden ? '&#9660; ' : '&#9658; ') + 'Search Students';
+}
+
+function resetSearch() {
+    ['s_name','s_admission_no'].forEach(id => document.getElementById(id).value = '');
+    ['s_gender','s_college','s_session','s_degree','s_semester','s_branch','s_seat_type','s_category','s_reg_status'].forEach(id => {
+        document.getElementById(id).value = '';
     });
+    document.getElementById('student-list-panel').style.display = 'none';
+    document.getElementById('student-list-body').innerHTML = '';
+}
+
+async function searchStudents() {
+    const params = new URLSearchParams();
+    const map = { name:'s_name', admission_no:'s_admission_no', gender:'s_gender',
+        college_id:'s_college', session_id:'s_session', degree_id:'s_degree',
+        semester_id:'s_semester', branch_id:'s_branch', seat_type_id:'s_seat_type',
+        cat_id:'s_category', reg_status:'s_reg_status' };
+    let hasFilter = false;
+    for (const [param, elId] of Object.entries(map)) {
+        const val = document.getElementById(elId).value.trim();
+        if (val) { params.append(param, val); hasFilter = true; }
+    }
+    if (!hasFilter) { alert('Please enter at least one search criterion.'); return; }
+    try {
+        const res = await fetch('/academics/api/search_students?' + params.toString());
+        const students = await res.json();
+        renderStudentList(students);
+    } catch(e) { alert('Search error: ' + e.message); }
+}
+
+function renderStudentList(students) {
+    document.getElementById('student-count').textContent = students.length;
+    document.getElementById('student-list-panel').style.display = 'block';
+    const tbody = document.getElementById('student-list-body');
+    if (!students.length) {
+        tbody.innerHTML = '<tr><td colspan="11" align="center" style="padding:15px;color:#999;">No students found.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = students.map((s, i) => {
+        const cls = i % 2 === 0 ? 'item-style' : 'item-style-alt';
+        const admNo = s.enrollmentno || s.AdmissionNo || '-';
+        return `<tr class="${cls}">
+            <td align="center">${i+1}</td>
+            <td style="font-weight:bold;">${s.fullname}</td>
+            <td>${admNo}</td>
+            <td>${s.collegename}</td>
+            <td>${s.degreename}</td>
+            <td align="center">${s.semester_roman}</td>
+            <td>${s.branchname}</td>
+            <td>${s.seatype}</td>
+            <td>${s.category}</td>
+            <td align="center">${s.reg_status}</td>
+            <td align="center">
+                <button type="button" onclick="window.location.href='/academics/student_registration?sid=${s.pk_sid}'"
+                    style="background:#3c8dbc;color:#fff;border:none;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:11px;">Edit</button>
+            </td>
+        </tr>`;
+    }).join('');
 }
 </script>
 {% endblock %}
