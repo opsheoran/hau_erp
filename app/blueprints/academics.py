@@ -2032,7 +2032,7 @@ def dean_pgs_approval():
     if request.method == 'POST':
         action = request.form.get('action')
         user_id = session['user_id']
-        
+
         if action == 'ADD_NOMINEE':
             adcid = request.form.get('adcid')
             advisor_id = request.form.get('advisor_id')
@@ -2040,7 +2040,7 @@ def dean_pgs_approval():
                 AdvisoryModel.save_nominee(adcid, advisor_id)
                 flash('Nominee added successfully.', 'success')
             return redirect(url_for('academics.dean_pgs_approval', **request.args))
-            
+
         elif action in ['APPROVE', 'REJECT']:
             adcid = request.form.get('adcid')
             status = 'A' if action == 'APPROVE' else 'R'
@@ -2050,40 +2050,78 @@ def dean_pgs_approval():
                 flash(f'Advisory record { "approved" if status == "A" else "rejected" } successfully.', 'success')
             return redirect(url_for('academics.dean_pgs_approval', **request.args))
 
-    filters = {
-        'college_id': request.args.get('college_id'),
-        'session_id': request.args.get('session_id'),
-        'degree_id': request.args.get('degree_id'),
-        'branch_id': request.args.get('branch_id')
-    }
-    
-    sid = request.args.get('sid')
+    college_id = request.args.get('college_id')
+    loc_id = session.get('selected_loc')
+    colleges = DB.fetch_all("SELECT pk_collegeid as id, collegename as name FROM SMS_College_Mst WHERE fk_locid = ? ORDER BY collegename", [loc_id]) if loc_id else AcademicsModel.get_colleges_simple()
+
+    if not college_id and colleges:
+        college_id = str(colleges[0]['id'])
+
+    session_id = request.args.get('session_id')
+    if not session_id:
+        curr_session = InfrastructureModel.get_current_session_id()
+        session_id = str(curr_session) if curr_session else None
+
+    degree_id = request.args.get('degree_id')
+    branch_id = request.args.get('branch_id')
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+
     students = []
+    total_students = 0
+    if college_id:
+        filters = {
+            'college_id': college_id,
+            'session_id': session_id,
+            'degree_id': degree_id,
+            'branch_id': branch_id
+        }
+        students, total_students = AdvisoryModel.get_students_for_advisory(filters, page=page, per_page=per_page)
+
+    import math
+    pagination = {
+        'page': page,
+        'per_page': per_page,
+        'total': total_students,
+        'total_pages': math.ceil(total_students / per_page) if total_students else 1,
+        'has_prev': page > 1,
+        'has_next': page < (math.ceil(total_students / per_page) if total_students else 1)
+    }
+
+    sid = request.args.get('sid')
     advisory_details = []
     current_adcid = None
-    
-    if all([filters['college_id'], filters['session_id'], filters['degree_id']]):
-        # Get all students for the dropdown as per live template
-        students = AdvisoryModel.get_students_for_advisory(filters)
-        
+
     if sid:
         advisory_info = AdvisoryModel.get_student_advisory_committee(sid)
         if advisory_info:
             advisory_details = advisory_info.get('details', [])
             current_adcid = advisory_info.get('adcid')
 
-    lookups = AdvisoryModel.get_advisory_lookups(filters['college_id'], filters['degree_id'])
-    # Add status types (Nominee is type 5)
-    lookups['advisory_types'] = [{'id': 5, 'name': 'Dean PGS Nominee'}]
-    
+    lookups = {
+        'colleges': colleges,
+        'sessions': InfrastructureModel.get_sessions(),
+        'degrees': AcademicsModel.get_college_pg_degrees(college_id) if college_id else [],
+        'branches': AcademicsModel.get_college_degree_specializations(college_id, degree_id) if (college_id and degree_id and str(degree_id) != '0') else [],
+        'employees': DB.fetch_all("SELECT E.pk_empid as id, E.empname + ' || ' + ISNULL(E.empcode, '') + ' (' + ISNULL(D.description, 'No Dept') + ')' as name FROM SAL_Employee_Mst E LEFT JOIN Department_Mst D ON E.fk_deptid = D.pk_deptid WHERE E.employeeleftstatus = 'N' ORDER BY E.empname"),
+        'advisory_types': [{'id': 5, 'name': 'Dean PGS Nominee'}]
+    }
+
+    active_filters = {
+        'college_id': college_id,
+        'session_id': session_id,
+        'degree_id': degree_id,
+        'branch_id': branch_id
+    }
+
     return render_template('academics/dean_pgs_approval.html', 
                            lookups=lookups, 
-                           filters=filters, 
-                           students=students, 
+                           filters=active_filters, 
+                           students=clean_json_data(students), 
+                           pagination=pagination,
                            advisory_details=advisory_details,
                            current_adcid=current_adcid,
                            sid=sid)
-
 @academics_bp.route('/hod_approval', methods=['GET', 'POST'])
 @permission_required('HOD Approval')
 def hod_approval():

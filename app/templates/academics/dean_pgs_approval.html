@@ -13,7 +13,7 @@
                         <td class="vtext" width="15%">College</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="college_id" class="textbox w-200 w-300" required onchange="ajaxLoadDegrees(this.value)">
+                            <select name="college_id" id="ddlCollege" class="textbox w-200 w-300" required onchange="localLoadDegrees(this.value, 'ddlDegree')">
                                 <option value="0">--Select College--</option>
                                 {% for c in lookups.colleges %}
                                 <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -37,7 +37,7 @@
                         <td class="vtext">Degree</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="degree_id" class="textbox w-200 w-300" required onchange="ajaxLoadBranches(this.value)">
+                            <select name="degree_id" id="ddlDegree" class="textbox w-200 w-300" required onchange="localLoadBranches(this.value, 'ddlSpecialization')">
                                 <option value="0">--Select Degree--</option>
                                 {% for d in lookups.degrees %}
                                 <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
@@ -48,7 +48,7 @@
                         <td class="vtext">Specialization</td>
                         <td class="colon">:</td>
                         <td>
-                            <select name="branch_id" class="textbox w-200 w-200">
+                            <select name="branch_id" id="ddlSpecialization" class="textbox w-200 w-200">
                                 <option value="0">--Select Specialization--</option>
                                 {% for b in lookups.branches %}
                                 <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
