@@ -338,18 +338,13 @@ def generate_advisory_committee_report(student_info, committee_data):
         ],
         [
             Paragraph("Major Advisor", styles['SigRole']),
-            Paragraph(hod_date_str,    styles['SigRoleCenter']),
-            Paragraph(dean_date_str,   styles['SigRoleRight']),
+            Paragraph("Head of the Department", styles['SigRoleCenter']),
+            Paragraph("Dean",        styles['SigRoleRight']),
         ],
         [
             Paragraph("",                   styles['SigRole']),
-            Paragraph("Head of Department", styles['SigRoleCenter']),
-            Paragraph("Countersigned",      styles['SigRoleRight']),
-        ],
-        [
-            Paragraph("", styles['SigRole']),
-            Paragraph("", styles['SigRoleCenter']),
-            Paragraph(dean_txt,        styles['SigRoleRight']),
+            Paragraph(hod_date_str,    styles['SigRoleCenter']),
+            Paragraph(f"{dean_date_str}<br/>Countersigned", styles['SigRoleRight']),
         ],
     ]
     sig_table = Table(sig_rows, colWidths=[183, 184, 183])
@@ -377,13 +372,12 @@ def generate_advisory_committee_report(student_info, committee_data):
         dept_str = nominee.get('department',     '') or ''
         spec_str = nominee.get('specialization', '') or ''
 
-        nom_dept = f"Deptt of {dept_str}"
+        nom_dept = f"Deptt of <b>{dept_str}</b>"
         if spec_str:
-            nom_dept += f" ({spec_str})"
+            nom_dept += f" (<b>{spec_str}</b>)"
 
         # Dynamic Nominee Text (With bold name and department)
-        nominee_line = f"Dean,PGS Nominee <b>{nom_name}</b>, <b>{nom_dept}</b>"
-
+        nominee_line = f"Dean,PGS Nominee <b>{nom_name}</b>, {nom_dept}"
         nom_para = Paragraph(nominee_line, styles['NomineeText'])
     else:
         nom_para = Paragraph("Dean,PGS Nominee", styles['NomineeText'])
@@ -395,7 +389,7 @@ def generate_advisory_committee_report(student_info, committee_data):
             [Paragraph(deanpgs_date_str,             styles['SigRoleRight'])],
             [Paragraph("Dean,Post-Graduate Studies.", styles['SigRoleRight'])],
         ],
-        colWidths=[540],
+        colWidths=[200],
     )
     deanpgs_inner.setStyle(TableStyle([
         ('VALIGN',       (0, 0), (-1, -1), 'TOP'),
@@ -404,7 +398,20 @@ def generate_advisory_committee_report(student_info, committee_data):
         ('BOTTOMPADDING',(0, 0), (-1, -1), 1),
         ('TOPPADDING',   (0, 0), (-1, -1), 1),
     ]))
-    elements.append(deanpgs_inner)
+
+    # Outer 2-column table: nominee text LEFT | Dean PGS block RIGHT
+    nominee_table = Table(
+        [[nom_para, deanpgs_inner]],
+        colWidths=[350, 200],
+    )
+    nominee_table.setStyle(TableStyle([
+        ('VALIGN',       (0, 0), (-1, -1), 'TOP'),
+        ('LEFTPADDING',  (0, 0), (-1, -1), 0),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+        ('BOTTOMPADDING',(0, 0), (-1, -1), 0),
+        ('TOPPADDING',   (0, 0), (-1, -1), 0),
+    ]))
+    elements.append(nominee_table)
 
     # ── Build PDF ─────────────────────────────────────────────────────────────
     doc.build(elements)
