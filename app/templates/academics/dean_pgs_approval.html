@@ -334,13 +334,13 @@ function editNominee(empId) {
 
 
 // Silent Dropdown Cascading
-function ajaxLoadDegrees(collegeId) {
-    const degSelect = document.querySelector('select[name="degree_id"]');
+function localLoadDegrees(collegeId, targetId) {
+    const degSelect = document.getElementById(targetId) || document.querySelector('select[name="degree_id"]');
     if(!degSelect) return;
     degSelect.innerHTML = '<option value="0">--Select Degree--</option>';
     if(!collegeId || collegeId === '0') return;
     
-    fetch(`/academics/api/college/${collegeId}/degrees`)
+    fetch(`/academics/api/college/${collegeId}/degrees?is_pg_phd=1`)
         .then(res => res.json())
         .then(data => {
             data.forEach(d => {
@@ -352,8 +352,8 @@ function ajaxLoadDegrees(collegeId) {
         }).catch(err => console.error(err));
 }
 
-function ajaxLoadBranches(degreeId) {
-    const brSelect = document.querySelector('select[name="branch_id"]');
+function localLoadBranches(degreeId, targetId) {
+    const brSelect = document.getElementById(targetId) || document.querySelector('select[name="branch_id"]');
     if(!brSelect) return;
     brSelect.innerHTML = '<option value="0">--Select Specialization--</option>';
     if(!degreeId || degreeId === '0') return;
