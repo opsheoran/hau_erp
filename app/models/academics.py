@@ -4345,7 +4345,6 @@ class AdvisoryModel:
         major_id = data.get('major_id')
         minor_id = data.get('minor_id')
         supporting_id = data.get('supporting_id')
-        advisor_id = data.get('advisor_id')
         
         if not sid: return False
         
@@ -4385,15 +4384,6 @@ class AdvisoryModel:
             else:
                 adcid = mst[0]
                 cursor.execute("UPDATE SMS_Advisory_Committee_Mst SET fk_branchid = ?, updated_by = ?, updated_date = GETDATE() WHERE pk_adcid = ?", [major_id, user_id, adcid])
-
-            # Upsert Detail for Major Advisor (statusid = 1)
-            # Table SMS_Advisory_Committee_Dtl has: fk_adcid, fk_statusid, fk_deptid, fk_empid
-            cursor.execute("SELECT fk_adcid FROM SMS_Advisory_Committee_Dtl WHERE fk_adcid = ? AND fk_statusid = 1", [adcid])
-            existing_adv = cursor.fetchone()
-            if existing_adv:
-                cursor.execute("UPDATE SMS_Advisory_Committee_Dtl SET fk_empid = ? WHERE fk_adcid = ? AND fk_statusid = 1", [advisor_id, adcid])
-            else:
-                cursor.execute("INSERT INTO SMS_Advisory_Committee_Dtl (fk_adcid, fk_statusid, fk_empid) VALUES (?, 1, ?)", [adcid, advisor_id])
 
             # 3. Update SMS_Student_Mst main branch
             cursor.execute("UPDATE SMS_Student_Mst SET fk_branchid = ? WHERE pk_sid = ?", [major_id, sid])

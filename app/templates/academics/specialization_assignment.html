@@ -152,21 +152,6 @@
                     <td colspan="4"></td>
                 </tr>
                 
-                <tr>
-                    <td class="vtext">Major Advisor</td>
-                    <td class="colon">:</td>
-                    <td>
-                        <select name="advisor_id" id="ddlAdvisor" class="textbox w-200 w-250" required>
-                            <option value="">--Select Major Advisor--</option>
-                            {% for e in lookups.employees %}
-                            <option value="{{ e.id }}">{{ e.name }}</option>
-                            {% endfor %}
-                        </select>
-                        <span class="required">*</span>
-                    </td>
-                    <td colspan="4"></td>
-                </tr>
-                
                 <tr><td colspan="7" height="15"></td></tr>
                 
                 <tr>
@@ -252,7 +237,6 @@ function loadStudentDisciplines(sid) {
             if(data.major_id) document.getElementById('ddlMajor').value = data.major_id;
             if(data.minor_id) document.getElementById('ddlMinor').value = data.minor_id;
             if(data.supporting_id) document.getElementById('ddlSupporting').value = data.supporting_id;
-            if(data.advisor_id) document.getElementById('ddlAdvisor').value = data.advisor_id;
         });
 }
 

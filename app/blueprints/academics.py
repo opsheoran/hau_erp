@@ -4243,7 +4243,7 @@ def get_advisor_students_api(advisor_id):
 def specialization_assignment():
     if request.method == 'POST':
         if AdvisoryModel.save_student_discipline(request.form, session['user_id']):
-            flash('Specialization and Advisor assigned successfully!', 'success')
+            flash('Specialization assigned successfully!', 'success')
         else:
             flash('Error assigning specialization. Please check all fields.', 'danger')
         return redirect(url_for('academics.specialization_assignment', **request.args))
@@ -4277,10 +4277,8 @@ def specialization_assignment():
         'colleges': colleges,
         'sessions': InfrastructureModel.get_sessions(),
         'degrees': AcademicsModel.get_college_pg_degrees(college_id) if college_id else [],
-        'branches': AcademicsModel.get_college_degree_specializations(college_id, degree_id) if (college_id and degree_id and str(degree_id) != '0') else [],
-        'employees': DB.fetch_all("SELECT E.pk_empid as id, E.empname + ' || ' + ISNULL(E.empcode, '') + ' (' + ISNULL(D.description, 'No Dept') + ')' as name FROM SAL_Employee_Mst E LEFT JOIN Department_Mst D ON E.fk_deptid = D.pk_deptid WHERE E.employeeleftstatus = 'N' ORDER BY E.empname")
+        'branches': AcademicsModel.get_college_degree_specializations(college_id, degree_id) if (college_id and degree_id and str(degree_id) != '0') else []
     }
-
     # Context info for grid labels
     degree_name = ''
     session_name = ''
