@@ -1998,8 +1998,7 @@ def major_advisor():
                            lookups=lookups,
                            students=clean_json_data(students),
                            grid_students=clean_json_data(grid_students),
-                           total_f=total_f,
-                           page_f=page_f,
+                           pagination=pagination,
                            edit_advisor=edit_advisor,
                            edit_sid=edit_sid,
                            filters=active_filters)

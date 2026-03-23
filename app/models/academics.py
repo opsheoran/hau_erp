@@ -4481,7 +4481,7 @@ class AdvisoryModel:
             LEFT JOIN SMS_College_Mst CLG ON S.fk_collegeid = CLG.pk_collegeid
             LEFT JOIN SMS_Degree_Mst DEG ON S.fk_degreeid = DEG.pk_degreeid
             LEFT JOIN SMS_AcademicSession_Mst SES ON S.fk_adm_session = SES.pk_sessionid
-            WHERE 1=1
+            WHERE DEG.fk_degreetypeid IN (2, 4)
         """
         params = []
         if filters.get('college_id') and str(filters['college_id']) != '0':
