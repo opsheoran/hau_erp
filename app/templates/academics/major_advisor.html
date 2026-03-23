@@ -111,10 +111,14 @@
                         <td class="vtext">Advisor Name</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <input type="hidden" name="advisor_id" id="hfAdvisorId" value="{{ edit_advisor.id if edit_advisor else '' }}">
-                            <input type="text" id="txtAdvisorName" class="textbox w-300" readonly value="{{ edit_advisor.name if edit_advisor else '' }}" placeholder="Select Advisor" required>
-                            <a href="javascript:void(0);" onclick="openEmpSearch('hfAdvisorId', 'txtAdvisorName')" style="color: blue; text-decoration: underline; margin-left: 10px;">Search Advisor</a>
+                            <select name="advisor_id" id="ddlAdvisor" class="textbox w-300" required onchange="loadAdvisorStudents(this)">
+                                <option value="">--Select Employees--</option>
+                                {% for e in lookups.employees %}
+                                <option value="{{ e.id }}" {% if edit_advisor and edit_advisor.id|string == e.id|string %}selected{% endif %}>{{ e.name }}</option>
+                                {% endfor %}
+                            </select>
                             <span class="required">*</span>
+                            <div id="divAdvisorStudents" style="font-weight: normal; margin-top: 5px; color: #333; font-size: 11px;"></div>
                         </td>
                         <td colspan="3"></td>
                     </tr>
@@ -122,7 +126,11 @@
                     <tr>
                         <td colspan="2"></td>
                         <td colspan="4">
+                            {% if edit_sid %}
+                            <input type="submit" name="action" value="UPDATE" class="button-common" style="width:100px;">
+                            {% else %}
                             <input type="submit" name="action" value="ADD" class="button-common" style="width:100px;">
+                            {% endif %}
                             <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="window.location.href='{{ url_for('academics.major_advisor') }}'">
                         </td>
                     </tr>
@@ -375,15 +383,46 @@ function loadCommittee(sid) {
                     tbody.innerHTML += row;
                     
                     if(item.fk_statusid == 1) {
-                        document.getElementById('hfAdvisorId').value = item.fk_empid;
-                        document.getElementById('txtAdvisorName').value = item.advisor_name;
+                        let ddlAdvisor = document.getElementById('ddlAdvisor');
+                        ddlAdvisor.value = item.fk_empid;
+                        loadAdvisorStudents(ddlAdvisor);
                     }
                 });
             } else {
                 document.getElementById('divCommittee').style.display = 'none';
-                document.getElementById('hfAdvisorId').value = '';
-                document.getElementById('txtAdvisorName').value = '';
+                document.getElementById('ddlAdvisor').value = '';
+                document.getElementById('divAdvisorStudents').innerHTML = '';
             }
+        });
+}
+
+function loadAdvisorStudents(element) {
+    let advisorId = element.value;
+    let div = document.getElementById('divAdvisorStudents');
+    
+    if (!advisorId) {
+        div.innerHTML = '';
+        return;
+    }
+
+    let advisorName = element.options[element.selectedIndex].text;
+    
+    fetch('/academics/api/advisor/' + advisorId + '/students')
+        .then(res => res.json())
+        .then(data => {
+            if(data && data.length > 0) {
+                let html = '* Students List under ' + advisorName + '<br><ul style="margin-left:20px; padding-left:0; list-style-type:circle;">';
+                data.forEach(s => {
+                    html += `<li>${s.fullname} [${s.AdmissionNo || s.enrollmentno}] - ${s.degreename} (${s.Branchname || ''})</li>`;
+                });
+                html += '</ul>';
+                div.innerHTML = html;
+            } else {
+                div.innerHTML = '* Students List No Students are under ' + advisorName;
+            }
+        })
+        .catch(err => {
+            div.innerHTML = '* Students List No Students are under ' + advisorName;
         });
 }
 
