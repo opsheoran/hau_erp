@@ -42,7 +42,7 @@
                     <td class="vtext">Degree</td>
                     <td class="colon">:</td>
                     <td>
-                        <select name="degree_id" id="ddlDegree" class="textbox w-200 w-300" required onchange="localLoadBranches(document.getElementById('ddlCollege').value, this.value, 'ddlSpecialization')">
+                        <select name="degree_id" id="ddlDegree" class="textbox w-200 w-300" required onchange="localLoadBranches(this.value, 'ddlSpecialization')">
                             <option value="">--Select Degree--</option>
                             {% for d in lookups.degrees %}
                             <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
