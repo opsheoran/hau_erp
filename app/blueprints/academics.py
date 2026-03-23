@@ -1970,6 +1970,19 @@ def major_advisor():
         'branches_f': AcademicsModel.get_college_degree_specializations(college_id_f, degree_id_f) if (college_id_f and degree_id_f) else []
     }
     
+    active_filters = {
+        'college_id': college_id,
+        'session_id': session_id,
+        'degree_id': degree_id,
+        'branch_id': branch_id,
+        'college_id_f': college_id_f,
+        'session_id_f': session_id_f,
+        'degree_id_f': degree_id_f,
+        'branch_id_f': branch_id_f,
+        'admission_no_f': admission_no_f,
+        'status_f': status_f
+    }
+    
     return render_template('academics/major_advisor.html', 
                            lookups=lookups,
                            students=clean_json_data(students),
@@ -1978,7 +1991,7 @@ def major_advisor():
                            page_f=page_f,
                            edit_advisor=edit_advisor,
                            edit_sid=edit_sid,
-                           filters=request.args)
+                           filters=active_filters)
 
 @academics_bp.route('/dean_pgs_approval', methods=['GET', 'POST'])
 @permission_required('Dean PGS approval (advisory committee)')
