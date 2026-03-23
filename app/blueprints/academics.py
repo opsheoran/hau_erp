@@ -4242,6 +4242,7 @@ def minor_advisor_report(sid):
     com_query = """
         SELECT ACD.*, E.empname + ' || ' + ISNULL(E.empcode, '') as advisor_name,
                DEPT.description as department, DESG.designation,
+               (SELECT TOP 1 B.Branchname FROM SMS_BranchMst B WHERE B.fk_deptidDdo = E.fk_deptid) as specialization,
                CASE ACD.fk_statusid
                     WHEN 1 THEN 'Major Advisor' WHEN 2 THEN 'Co-Advisor'
                     WHEN 3 THEN 'Member From Minor Subject' WHEN 4 THEN 'Member From Supporting Subject'
