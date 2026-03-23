@@ -4235,7 +4235,7 @@ def minor_advisor_report(sid):
     # 2. Fetch Committee Details
     com_query = """
         SELECT ACD.*, E.empname + ' || ' + ISNULL(E.empcode, '') as advisor_name,
-               DEPT.description as department,
+               DEPT.description as department, DESG.designation,
                CASE ACD.fk_statusid
                     WHEN 1 THEN 'Major Advisor' WHEN 2 THEN 'Co-Advisor'
                     WHEN 3 THEN 'Member From Minor Subject' WHEN 4 THEN 'Member From Supporting Subject'
@@ -4246,6 +4246,7 @@ def minor_advisor_report(sid):
         INNER JOIN SMS_Advisory_Committee_Mst ACM ON ACD.fk_adcid = ACM.pk_adcid
         INNER JOIN SAL_Employee_Mst E ON ACD.fk_empid = E.pk_empid
         LEFT JOIN Department_Mst DEPT ON E.fk_deptid = DEPT.pk_deptid
+        LEFT JOIN SAL_Designation_Mst DESG ON E.fk_desgid = DESG.pk_desgid
         WHERE ACM.fk_stid = ? AND ACD.fk_statusid != 5
     """
     committee_data = DB.fetch_all(com_query, [sid])
