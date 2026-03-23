@@ -364,8 +364,29 @@ def generate_advisory_committee_report(student_info, committee_data):
     elements.append(Spacer(1, 10))
 
     # ── Nominee line + Dean PGS block ────────────────────────────────────────
-    elements.append(Paragraph("Dean,PGS Nominee Dr. Rakesh Kumar, Deptt of Cotton Research Station, Sirsa (Microbiology)", styles['NomineeText']))
-    elements.append(Spacer(1, 14))
+    nominee = next(
+        (m for m in committee_data if m.get('role_name') == 'Dean PGS Nominee'), None
+    )
+
+    if nominee:
+        adv_name_raw = nominee.get('advisor_name', '')
+        nom_name     = (
+            adv_name_raw.split('||')[0].strip()
+            if '||' in adv_name_raw else adv_name_raw
+        )
+        dept_str = nominee.get('department',     '') or ''
+        spec_str = nominee.get('specialization', '') or ''
+
+        nom_dept = f"Deptt of {dept_str}"
+        if spec_str:
+            nom_dept += f" ({spec_str})"
+
+        # Dynamic Nominee Text (With bold name and department)
+        nominee_line = f"Dean,PGS Nominee <b>{nom_name}</b>, <b>{nom_dept}</b>"
+
+        nom_para = Paragraph(nominee_line, styles['NomineeText'])
+    else:
+        nom_para = Paragraph("Dean,PGS Nominee", styles['NomineeText'])
 
     # Inner table for Dean PGS (right col): name / date / title stacked
     deanpgs_inner = Table(

@@ -4253,7 +4253,7 @@ def minor_advisor_report(sid):
         INNER JOIN SAL_Employee_Mst E ON ACD.fk_empid = E.pk_empid
         LEFT JOIN Department_Mst DEPT ON E.fk_deptid = DEPT.pk_deptid
         LEFT JOIN SAL_Designation_Mst DESG ON E.fk_desgid = DESG.pk_desgid
-        WHERE ACM.fk_stid = ? AND ACD.fk_statusid != 5
+        WHERE ACM.fk_stid = ?
     """
     committee_data = DB.fetch_all(com_query, [sid])
     
