@@ -246,7 +246,7 @@
                                     </td>
                                     <td>{{ s.responsedate or '-' }}</td>
                                     <td align="left">{{ s.responseremarks or '-' }}</td>
-                                    <td><img src="{{ url_for('static', filename='images/print.gif') }}" style="cursor:pointer"></td>
+                                    <td><img src="{{ url_for('static', filename='images/print.gif') }}" style="cursor:pointer" onclick="window.open('/academics/minor_advisor_report/{{ s.pk_sid }}', '_blank');"></td>
                                     <td>
                                         <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editMinorAdvisor({{ s.pk_sid }})'>
                                     </td>
