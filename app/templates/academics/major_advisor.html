@@ -149,10 +149,14 @@
         <br>
 
         <!-- SECTION: Show Filter & List of Students Grid -->
-        <div class="tablesubheading" style="background-color: #2d5a27; color: white; padding: 5px 10px; cursor:pointer;" onclick="toggleFilter()">
-            <span style="border-bottom: 2px solid white;">List of Students</span>
-            <span id="btnToggleFilter" style="float:right; font-size:11px; font-weight:bold;">Show Filter [+]</span>
-        </div>
+        <table border="0" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
+            <tr>
+                <td class="tableheading" colspan="6">
+                    <span class="subheadingborderbottom">List of Students</span>
+                    <a href="javascript:void(0)" id="btnToggleFilter" onclick="toggleFilter()" style="float:right; font-size:11px; color:#3c8dbc; font-weight:bold;">Show Filter [+]</a>
+                </td>
+            </tr>
+        </table>
         
         <div id="pnlShowFilter" style="padding: 15px; border: 1px solid #ddd; border-top:none; display:none;">
             <form method="GET">
@@ -286,7 +290,7 @@
                     {% endfor %}
                 </tbody>
             </table>
-            {% if total_f and total_f > 10 %}
+            {% if pagination and pagination.total_pages > 1 %}
             <div style="margin-top: 10px;">
                 {% include "includes/pagination.html" %}
             </div>

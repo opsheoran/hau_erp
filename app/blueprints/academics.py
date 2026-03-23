@@ -1913,13 +1913,13 @@ def major_advisor():
     branch_id = request.args.get('branch_id')
     
     # Filters for Bottom Grid
+    page = request.args.get('page', 1, type=int)
     college_id_f = request.args.get('college_id_f', college_id)
     session_id_f = request.args.get('session_id_f', session_id)
     degree_id_f = request.args.get('degree_id_f')
     branch_id_f = request.args.get('branch_id_f')
     admission_no_f = request.args.get('admission_no_f')
     status_f = request.args.get('status_f', '-1')
-    page_f = request.args.get('page_f', 1, type=int)
 
     students = []
     if college_id and session_id and degree_id:
@@ -1945,7 +1945,18 @@ def major_advisor():
         'admission_no': admission_no_f,
         'status': status_f
     }
-    grid_students, total_f = AdvisoryModel.get_students_for_advisory(filters_f, page=page_f, per_page=10)
+    per_page = 10
+    grid_students, total_f = AdvisoryModel.get_students_for_advisory(filters_f, page=page, per_page=per_page)
+    
+    import math
+    pagination = {
+        'page': page,
+        'per_page': per_page,
+        'total': total_f,
+        'total_pages': math.ceil(total_f / per_page) if total_f else 1,
+        'has_prev': page > 1,
+        'has_next': page < (math.ceil(total_f / per_page) if total_f else 1)
+    }
 
     # For auto-filling the advisor dropdown if edited
     edit_sid = request.args.get('edit_sid')
