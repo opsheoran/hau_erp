@@ -317,7 +317,7 @@ function loadCommittee(sid) {
         return;
     }
     
-    fetch('/academics/api/student/' + sid + '/committee')
+    fetch('/academics/api/student/' + sid + '/committee?type=minor')
         .then(res => res.json())
         .then(data => {
             currentCommittee = data;

@@ -4259,6 +4259,8 @@ def get_student_committee_api(sid):
     """
     if filter_type == 'major':
         sql += " AND ACD.fk_statusid = 1"
+    elif filter_type == 'minor':
+        sql += " AND ACD.fk_statusid != 5"
         
     sql += " ORDER BY ACD.fk_statusid"
     rows = DB.fetch_all(sql, [sid])
