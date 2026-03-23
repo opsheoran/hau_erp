@@ -330,6 +330,7 @@ def generate_advisory_committee_report(student_info, committee_data):
     deanpgs_date_str = deanpgs_date.strftime('%d/%m/%Y') if deanpgs_date else ""
 
     # ── Top 3-column signature block ─────────────────────────────────────────
+    elements.append(Spacer(1, 20)) # One blank line above 3 signature block
     sig_rows = [
         [
             Paragraph(major_adv_name,  styles['SigName']),
@@ -356,7 +357,7 @@ def generate_advisory_committee_report(student_info, committee_data):
         ('TOPPADDING',   (0, 0), (-1, -1), 1),
     ]))
     elements.append(sig_table)
-    elements.append(Spacer(1, 10))
+    elements.append(Spacer(1, 40)) # Two blank lines between Dean and PGS Nominee
 
     # ── Nominee line + Dean PGS block ────────────────────────────────────────
     nominee = next(
