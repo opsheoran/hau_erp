@@ -1,4 +1,5 @@
 from app.db import DB
+from flask import has_app_context
 from datetime import datetime
 import os
 import base64
@@ -359,8 +360,8 @@ class CourseModel:
             branches = data.getlist('map_branch[]')
             semesters = data.getlist('map_sem[]')
             ogpas = data.getlist('map_ogpa[]')
-            actives = data.getlist('map_active[]')
-            compuls = data.getlist('map_compuls[]')
+            actives = data.getlist('map_active_val[]')
+            compuls = data.getlist('map_compuls_val[]')
 
             for i in range(len(degrees)):
                 if degrees[i] and str(degrees[i]).isdigit():
@@ -786,8 +787,9 @@ class SyllabusModel:
             LEFT JOIN SMS_syllabusCreation_forCourses_Trn T ON T.fk_syllforCourse = M.pk_syllforCourse
                                                             AND T.fk_courseid = C.pk_courseid
             WHERE D.fk_degreeid = ? AND D.fk_semesterid = ? AND D.isactive = 1
+              AND D.fk_sessionid_from = ?
         """
-        params = [filters.get('session_from'), filters.get('degree_id'), filters.get('semester_id')]
+        params = [filters.get('session_from'), filters.get('degree_id'), filters.get('semester_id'), filters.get('session_from')]
         
         if filters.get('dept_id') and str(filters['dept_id']) != '0':
             sql += " AND C.fk_Deptid = ?"
@@ -949,6 +951,140 @@ class PackageMasterModel:
             conn.close()
 
 class AdmissionModel:
+
+    @staticmethod
+    def get_students_for_degree_complete(filters, is_completed=False):
+        status_filter = "S.isdgcompleted = 1" if is_completed else "(S.isdgcompleted IS NULL OR S.isdgcompleted = 0)"
+        
+        # 1. Get Current Session Order
+        curr_session = DB.fetch_one("SELECT sessionorder FROM SMS_AcademicSession_Mst WHERE pk_sessionid = ?", [filters['session_id']])
+        if not curr_session: return []
+        curr_session_order = curr_session['sessionorder']
+
+        # 2. Get order of selected semester/class
+        target_sem = DB.fetch_one("SELECT semesterorder FROM SMS_Semester_Mst WHERE pk_semesterid = ?", [filters['semester_id']])
+        if not target_sem: return []
+        sem_order = target_sem['semesterorder']
+
+        # 3. Calculate Target Admission Session based on class (1 session back for sem 4, 2 for sem 6)
+        sessions_back = (sem_order - 1) // 2
+        target_session_order = curr_session_order - sessions_back
+        
+        target_adm_session = DB.fetch_one("SELECT pk_sessionid FROM SMS_AcademicSession_Mst WHERE sessionorder = ?", [target_session_order])
+        if not target_adm_session: return []
+        adm_session_id = target_adm_session['pk_sessionid']
+
+        sql = f"""
+            SELECT S.pk_sid, S.fullname, S.enrollmentno, S.AdmissionNo, S.dgcompleteddate, B.Branchname
+            FROM SMS_Student_Mst S
+            LEFT JOIN SMS_BranchMst B ON S.fk_branchid = B.Pk_BranchId
+            WHERE S.fk_collegeid = ? AND S.fk_degreeid = ? AND S.fk_adm_session = ?
+            AND (S.IsRegCancel IS NULL OR S.IsRegCancel = 0)
+            AND {status_filter}
+            AND EXISTS (
+                SELECT 1 FROM SMS_StuCourseAllocation CA 
+                INNER JOIN SMS_DegreeCycle_Mst DC ON CA.fk_degreecycleid = DC.pk_degreecycleid
+                WHERE CA.fk_sturegid = S.pk_sid 
+                  AND CA.fk_dgacasessionid = ? 
+                  AND DC.fk_semesterid = ?
+            )
+        """
+        params = [
+            filters['college_id'], 
+            filters['degree_id'], 
+            adm_session_id,
+            filters['session_id'],
+            filters['semester_id']
+        ]
+        return DB.fetch_all(sql, params)
+
+    @staticmethod
+    def save_degree_complete(student_ids, comp_date, college_id, degree_id, session_id, semester_id, user_id):
+        conn = DB.get_connection()
+        cursor = conn.cursor()
+        count = 0
+        try:
+            # Parse DD/MM/YYYY to YYYY-MM-DD for SQL compatibility
+            from datetime import datetime
+            try:
+                parsed_date = datetime.strptime(comp_date, '%d/%m/%Y').strftime('%Y-%m-%d')
+            except ValueError:
+                parsed_date = comp_date # Fallback if already YYYY-MM-DD or different format
+
+            # 1. Ensure a master record exists
+            cursor.execute("""
+                SELECT PK_SDCId FROM SMS_StudentDegreeComplete_Mst 
+                WHERE fk_collegeId=? AND fk_degreeId=? AND fk_SessionId=? AND fk_DegreeCycleId=? AND CAST(DegreeCompleteDate AS DATE)=?
+            """, [college_id, degree_id, session_id, semester_id, parsed_date])
+            row = cursor.fetchone()
+            if row:
+                mst_id = row[0]
+            else:
+                cursor.execute("""
+                    INSERT INTO SMS_StudentDegreeComplete_Mst (fk_collegeId, fk_degreeId, fk_SessionId, fk_DegreeCycleId, DegreeCompleteDate, FK_UserId, EntryBy)
+                    OUTPUT INSERTED.PK_SDCId
+                    VALUES (?, ?, ?, ?, ?, ?, GETDATE())
+                """, [college_id, degree_id, session_id, semester_id, parsed_date, user_id])
+                mst_id = cursor.fetchone()[0]
+
+            for sid in student_ids:
+                # Update student master
+                cursor.execute("UPDATE SMS_Student_Mst SET isdgcompleted = 1, dgcompleteddate = ? WHERE pk_sid = ?", [comp_date, sid])
+                
+                # Check if dtl exists
+                cursor.execute("SELECT PK_SDCDId FROM SMS_StudentDegreeComplete_Dtl WHERE Fk_Sid = ?", [sid])
+                if not cursor.fetchone():
+                    cursor.execute("INSERT INTO SMS_StudentDegreeComplete_Dtl (FK_SDCId, Fk_Sid) VALUES (?, ?)", [mst_id, sid])
+                count += 1
+                
+            conn.commit()
+            return count
+        except Exception as e:
+            conn.rollback()
+            raise e
+        finally:
+            conn.close()
+
+    @staticmethod
+    def get_degree_complete_report(filters):
+        from datetime import datetime
+        try:
+            parsed_from = datetime.strptime(filters['from_date'], '%d/%m/%Y').strftime('%Y-%m-%d')
+        except ValueError:
+            parsed_from = filters['from_date']
+
+        try:
+            parsed_to = datetime.strptime(filters['to_date'], '%d/%m/%Y').strftime('%Y-%m-%d')
+        except ValueError:
+            parsed_to = filters['to_date']
+
+        sql = """
+            SELECT ISNULL(S.enrollmentno, S.AdmissionNo) as AdmissionNo,
+                   S.fullname, ISNULL(S.fullname_h, '') as fullname_h, S.gender,
+                   S.fname, ISNULL(S.Fnamehindi, '') as Fnamehindi,
+                   S.mname, ISNULL(S.Mnamehindi, '') as Mnamehindi,
+                   S.dgcompleteddate, B.Branchname,
+                   ISNULL(B.Branchname_hindi, '') as Branchname_hindi,
+                   S.AdharNo, S.StuImage,
+                   DG.degreename, ISNULL(DG.degreename_hindi, '') as degreename_hindi,
+                   ISNULL(RES.final_cgpa, '') as final_cgpa
+            FROM SMS_Student_Mst S
+            LEFT JOIN SMS_BranchMst B  ON S.fk_branchid  = B.Pk_BranchId
+            LEFT JOIN SMS_Degree_Mst DG ON S.fk_degreeid = DG.pk_degreeid
+            LEFT JOIN (
+                SELECT SCA2.fk_sturegid,
+                       MAX(CAST(MC2.OGPA AS FLOAT)) as final_cgpa
+                FROM SMS_StuCourseAllocation SCA2
+                INNER JOIN SMS_StuExamMarks_Cld MC2
+                        ON SCA2.Pk_stucourseallocid = MC2.fk_stucourseallocid
+                WHERE MC2.OGPA IS NOT NULL
+                GROUP BY SCA2.fk_sturegid
+            ) RES ON RES.fk_sturegid = S.pk_sid
+            WHERE S.fk_collegeid = ? AND S.fk_degreeid = ? AND S.isdgcompleted = 1
+            AND S.dgcompleteddate >= ? AND S.dgcompleteddate <= ?
+            ORDER BY S.AdmissionNo
+        """
+        return DB.fetch_all(sql, [filters['college_id'], filters['degree_id'], parsed_from, parsed_to])
     @staticmethod
     def get_certificates(page=1, per_page=10):
         offset = (page - 1) * per_page
@@ -1144,17 +1280,50 @@ class SeatDetailModel:
 
     @staticmethod
     def get_seat_report(filters):
-        query = """
-            SELECT S.*, C.collegename, D.degreename, B.Branchname, SES.sessionname
-            FROM SMS_Clg_DegreeSeat_dtl S
-            INNER JOIN SMS_College_Mst C ON S.fk_collegeid = C.pk_collegeid
-            INNER JOIN SMS_Degree_Mst D ON S.fk_degreeid = D.pk_degreeid
-            LEFT JOIN SMS_BranchMst B ON S.fk_branchid = B.Pk_BranchId
-            INNER JOIN SMS_AcademicSession_Mst SES ON S.fk_sessionid = SES.pk_sessionid
-            WHERE S.fk_sessionid = ? AND S.fk_collegeid = ?
+        # Base seat data
+        rows = DB.fetch_all("""
+            SELECT SD.pk_clg_degree_seat_dtl, C.collegename, D.degreename,
+                   ISNULL(B.Branchname, '') AS Branchname,
+                   SES.sessionname, SD.totseat,
+                   SD.fk_degreeid, SD.fk_branchid
+            FROM SMS_Clg_DegreeSeat_dtl SD
+            INNER JOIN SMS_College_Mst C ON SD.fk_collegeid = C.pk_collegeid
+            INNER JOIN SMS_Degree_Mst D ON SD.fk_degreeid = D.pk_degreeid
+            LEFT JOIN SMS_BranchMst B ON SD.fk_branchid = B.Pk_BranchId
+            INNER JOIN SMS_AcademicSession_Mst SES ON SD.fk_sessionid = SES.pk_sessionid
+            WHERE SD.fk_sessionid = ? AND SD.fk_collegeid = ?
             ORDER BY D.degreename, B.Branchname
-        """
-        return DB.fetch_all(query, [filters['session_id'], filters['college_id']])
+        """, [filters['session_id'], filters['college_id']])
+
+        # Student counts per degree/branch/seat-type for same college+session
+        type_rows = DB.fetch_all("""
+            SELECT S.fk_degreeid, S.fk_branchid, ST.seatype, COUNT(S.pk_sid) AS cnt
+            FROM SMS_Student_Mst S
+            INNER JOIN SMS_SeatType_Mst ST ON S.fk_seattypeid = ST.pk_seatypeid
+            WHERE S.fk_collegeid = ? AND S.fk_adm_session = ?
+            GROUP BY S.fk_degreeid, S.fk_branchid, ST.seatype
+        """, [filters['college_id'], filters['session_id']])
+
+        # Build lookup: (fk_degreeid, fk_branchid) -> {seatype: count}
+        type_map = {}
+        seat_types_set = []
+        seen = set()
+        for r in type_rows:
+            key = (r['fk_degreeid'], r['fk_branchid'])
+            type_map.setdefault(key, {})[r['seatype']] = r['cnt']
+            if r['seatype'] not in seen:
+                seen.add(r['seatype'])
+                seat_types_set.append(r['seatype'])
+        seat_types_set.sort()
+
+        result = []
+        for row in rows:
+            d = dict(row)
+            key = (row['fk_degreeid'], row['fk_branchid'])
+            d['seat_types'] = type_map.get(key, {})
+            result.append(d)
+
+        return result, seat_types_set
 
     @staticmethod
     def save_seat_detail(data):
@@ -2622,12 +2791,7 @@ class AcademicsModel:
 
     @staticmethod
     def get_cities():
-        sal_cities = DB.fetch_all("SELECT pk_cityid as id, cityname as name FROM SAL_City_Mst WHERE cityname IS NOT NULL ORDER BY cityname")
-        if sal_cities:
-            for c in sal_cities:
-                if c.get('name') and 'hisar' in str(c.get('name')).lower():
-                    return sal_cities
-        return DB.fetch_all("SELECT Pk_Cityid as id, Cityname as name FROM Common_City_mst ORDER BY Cityname")
+        return DB.fetch_all("SELECT pk_districid as id, Description as name FROM distric_mst WHERE fk_Stateid=5 ORDER BY Description")
 
     @staticmethod
     def get_college_full_details(college_id):
@@ -2659,10 +2823,17 @@ class AcademicsModel:
                         break
             details = DB.fetch_all("SELECT * FROM SMS_College_Dtl WHERE fk_collegeid = ?", [college_id])
             for d in details:
+                for k in list(d.keys()):
+                    if hasattr(d[k], 'strftime'):
+                        d[k] = d[k].strftime('%Y-%m-%d')
                 if d.get('fromdate'):
-                    d['fromdate_iso'] = d['fromdate'].strftime('%Y-%m-%d')
+                    d['fromdate_iso'] = d['fromdate']
                 if d.get('todate'):
-                    d['todate_iso'] = d['todate'].strftime('%Y-%m-%d')
+                    d['todate_iso'] = d['todate']
+            # Convert any datetime in the college record too
+            for k in list(college.keys()):
+                if hasattr(college[k], 'strftime'):
+                    college[k] = college[k].strftime('%Y-%m-%d')
             college['details'] = details
         return college
 
@@ -2770,6 +2941,7 @@ class AcademicsModel:
     @staticmethod
     def get_college_degree_specializations(college_id, degree_id):
         # Fetches specializations for a college-degree combination
+        # Try primary mapping table first
         query = """
         SELECT DISTINCT B.Pk_BranchId as id, B.Branchname as name
         FROM SMS_CollegeDegreeBranchMap_dtl D
@@ -2778,11 +2950,36 @@ class AcademicsModel:
         WHERE M.fk_CollegeId = ? AND M.fk_Degreeid = ?
         ORDER BY B.Branchname
         """
-        return DB.fetch_all(query, [college_id, degree_id])
+        results = DB.fetch_all(query, [college_id, degree_id])
+        
+        if not results:
+            # Try new mapping table
+            query_new = """
+            SELECT DISTINCT B.Pk_BranchId as id, B.Branchname as name
+            FROM SMS_BranchMst B
+            INNER JOIN SMS_CollegeDegreeBranchMap_dtlnew D ON B.Pk_BranchId = D.branchid
+            INNER JOIN SMS_CollegeDegreeBranchMap_Mst M ON D.fk_Coldgbrmapnewid = M.PK_Coldgbrid
+            WHERE M.fk_CollegeId = ? AND M.fk_Degreeid = ?
+            ORDER BY B.Branchname
+            """
+            results = DB.fetch_all(query_new, [college_id, degree_id])
+            
+        if not results:
+            # Fallback: Get branches that are actually assigned to students of this degree
+            query_stu = """
+            SELECT DISTINCT B.Pk_BranchId as id, B.Branchname as name
+            FROM SMS_BranchMst B
+            INNER JOIN SMS_Student_Mst S ON B.Pk_BranchId = S.fk_branchid
+            WHERE S.fk_collegeid = ? AND S.fk_degreeid = ?
+            ORDER BY B.Branchname
+            """
+            results = DB.fetch_all(query_stu, [college_id, degree_id])
+            
+        return results
 
     @staticmethod
     def get_branches(faculty_id=None, sql_limit=""):
-        query = "SELECT B.*, F.faculty FROM SMS_BranchMst B LEFT JOIN SMS_Faculty_Mst F ON B.Fk_Faculty_id = F.pk_facultyid"
+        query = "SELECT B.Pk_BranchId as id, B.Branchname as name, B.*, F.faculty FROM SMS_BranchMst B LEFT JOIN SMS_Faculty_Mst F ON B.Fk_Faculty_id = F.pk_facultyid"
         params = []
         if faculty_id:
             query += " WHERE B.Fk_Faculty_id = ?"
@@ -4262,7 +4459,7 @@ class AdvisoryModel:
         }
 
     @staticmethod
-    def get_students_for_advisory(filters):
+    def get_students_for_advisory(filters, page=None, per_page=10):
         query = """
             SELECT S.pk_sid, S.fullname, S.AdmissionNo, S.enrollmentno, 
                    B_MST.Branchname, S.fk_branchid,
@@ -4284,35 +4481,93 @@ class AdvisoryModel:
             LEFT JOIN SMS_College_Mst CLG ON S.fk_collegeid = CLG.pk_collegeid
             LEFT JOIN SMS_Degree_Mst DEG ON S.fk_degreeid = DEG.pk_degreeid
             LEFT JOIN SMS_AcademicSession_Mst SES ON S.fk_adm_session = SES.pk_sessionid
-            WHERE S.fk_collegeid = ? AND S.fk_adm_session = ? AND S.fk_degreeid = ?
+            WHERE 1=1
         """
-        params = [filters['college_id'], filters['session_id'], filters['degree_id']]
+        params = []
+        if filters.get('college_id') and str(filters['college_id']) != '0':
+            query += " AND S.fk_collegeid = ?"
+            params.append(filters['college_id'])
+        if filters.get('session_id') and str(filters['session_id']) != '0':
+            query += " AND S.fk_adm_session = ?"
+            params.append(filters['session_id'])
+        if filters.get('degree_id') and str(filters['degree_id']) != '0':
+            query += " AND S.fk_degreeid = ?"
+            params.append(filters['degree_id'])
         if filters.get('branch_id') and str(filters['branch_id']) != '0':
             query += " AND S.fk_branchid = ?"
             params.append(filters['branch_id'])
+        if filters.get('admission_no'):
+            query += " AND (S.AdmissionNo LIKE ? OR S.enrollmentno LIKE ?)"
+            params.extend([f"%{filters['admission_no']}%", f"%{filters['admission_no']}%"])
+        if filters.get('status') and filters['status'] != '-1':
+            query += " AND ISNULL(M.approvalstatus, 'P') = ?"
+            params.append(filters['status'])
         
         query += " ORDER BY S.fullname"
+        
+        if page:
+            count_query = query.replace(" ORDER BY S.fullname", "")
+            count_query = f"SELECT COUNT(*) FROM ({count_query}) as cnt"
+            total = DB.fetch_scalar(count_query, params)
+            
+            offset = (page - 1) * per_page
+            paginated_query = query + f" OFFSET {offset} ROWS FETCH NEXT {per_page} ROWS ONLY"
+            return DB.fetch_all(paginated_query, params), total
+            
         return DB.fetch_all(query, params)
+
+    @staticmethod
+    def delete_major_advisor(sid):
+        conn = DB.get_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute("SELECT pk_adcid, approvalstatus FROM SMS_Advisory_Committee_Mst WHERE fk_stid = ?", [sid])
+            mst = cursor.fetchone()
+            if mst:
+                adcid, status = mst
+                if status == 'A':
+                    return False, "Cannot delete approved advisory."
+                cursor.execute("DELETE FROM SMS_Advisory_Committee_Dtl WHERE fk_adcid = ? AND fk_statusid = 1", [adcid])
+                
+                cursor.execute("SELECT COUNT(*) FROM SMS_Advisory_Committee_Dtl WHERE fk_adcid = ?", [adcid])
+                count = cursor.fetchone()[0]
+                if count == 0:
+                    cursor.execute("DELETE FROM SMS_Advisory_Committee_Mst WHERE pk_adcid = ?", [adcid])
+                conn.commit()
+                return True, "Major Advisor deleted successfully."
+            return False, "Advisory record not found."
+        except Exception as e:
+            conn.rollback()
+            return False, str(e)
+        finally:
+            conn.close()
 
     @staticmethod
     def save_major_advisor(sid, advisor_id, user_id):
         # 1. Find or Create Mst record for student
-        mst = DB.fetch_one("SELECT pk_adcid, fk_colgid, fk_sessionid, fk_degreeid, fk_branchid FROM SMS_Advisory_Committee_Mst WHERE fk_stid = ?", [sid])
+        mst = DB.fetch_one("SELECT pk_adcid FROM SMS_Advisory_Committee_Mst WHERE fk_stid = ?", [sid])
         
         if not mst:
             # Get student info to populate mst
             stu = DB.fetch_one("SELECT fk_collegeid, fk_adm_session, fk_degreeid, fk_branchid FROM SMS_Student_Mst WHERE pk_sid=?", [sid])
             if not stu: return False
+            
             conn = DB.get_connection()
             cursor = conn.cursor()
-            cursor.execute("""
-                INSERT INTO SMS_Advisory_Committee_Mst (fk_colgid, fk_sessionid, fk_degreeid, fk_branchid, fk_stid, createdby, creationdate, approvalstatus)
-                OUTPUT INSERTED.pk_adcid
-                VALUES (?, ?, ?, ?, ?, ?, GETDATE(), 'P')
-            """, [stu['fk_collegeid'], stu['fk_adm_session'], stu['fk_degreeid'], stu['fk_branchid'], sid, user_id])
-            adcid = cursor.fetchone()[0]
-            conn.commit()
-            conn.close()
+            try:
+                cursor.execute("""
+                    INSERT INTO SMS_Advisory_Committee_Mst (fk_colgid, fk_sessionid, fk_degreeid, fk_branchid, fk_stid, createdby, creationdate, approvalstatus)
+                    OUTPUT INSERTED.pk_adcid
+                    VALUES (?, ?, ?, ?, ?, ?, GETDATE(), 'P')
+                """, [stu['fk_collegeid'], stu['fk_adm_session'], stu['fk_degreeid'], stu['fk_branchid'], sid, user_id])
+                adcid = cursor.fetchone()[0]
+                conn.commit()
+            except Exception as e:
+                conn.rollback()
+                print(f"Error creating advisory master: {e}")
+                return False
+            finally:
+                if not has_app_context(): conn.close()
         else:
             adcid = mst['pk_adcid']
 
@@ -4917,6 +5172,9 @@ class StudentModel:
     @staticmethod
     def save_student(data):
         # Full logic to save to SMS_Student_Mst and related tables
+        pk_sid = data.get('pk_sid')
+        if pk_sid:
+            return StudentModel.update_student(pk_sid, data)
         try:
             sql = """INSERT INTO SMS_Student_Mst (fullname, mname, fname, fullname_hindi, mname_hindi, fname_hindi,
                      fk_collegeid, fk_sessionid, AdmissionNo, fk_degreeid, fk_semid, fk_branchid, Gender, dob,
@@ -4997,27 +5255,187 @@ class StudentModel:
         }
 
     @staticmethod
+    def update_student(sid, data):
+        def _int(v):
+            """Convert empty/zero string to None, otherwise int."""
+            try:
+                v = str(v).strip() if v is not None else ''
+                return int(v) if v and v != '0' else None
+            except (ValueError, TypeError):
+                return None
+
+        def _str(v):
+            """Convert None or whitespace-only to None, otherwise stripped string."""
+            s = str(v).strip() if v is not None else ''
+            return s if s else None
+
+        def _date(v):
+            """Convert empty string to None for date fields."""
+            s = str(v).strip() if v is not None else ''
+            return s if s else None
+
+        try:
+            sql = """UPDATE SMS_Student_Mst SET
+                     fullname=?, mname=?, fname=?, Sname=?, Mnamehindi=?, Fnamehindi=?,
+                     fk_collegeid=?, fk_adm_session=?, fk_degreeid=?, fk_branchid=?,
+                     gender=?, dob=?, fk_rankid=?, ranknumber=?, fk_nid=?, fk_stateid=?, fk_religionid=?,
+                     fk_districid=?, fk_catid=?, fk_seattypeid=?, s_emailid=?, phoneno=?, p_emailid=?, p_phoneno=?,
+                     passportno=?, PassportIssuePlace=?, PassportExpirydate=?, date_of_adm=?, birthplace=?,
+                     reportdate=?, isPhysicalHandicapped=?, SpotAddmission=?, isFeeNotExempt=?, Remarks=?,
+                     MaritalStatus=?, AdharNo=?, Lateral_Entry=?, USID=?, B_Group=?, bankname=?,
+                     bankaccountnumber=?, IFSCcode=?, paddress=?, postaladdress=?
+                     WHERE pk_sid=?"""
+            params = [
+                _str(data.get('fullname')), _str(data.get('mname')), _str(data.get('fname')),
+                _str(data.get('fullname_hindi')), _str(data.get('mname_hindi')), _str(data.get('fname_hindi')),
+                _int(data.get('college_id')), _int(data.get('session_id')),
+                _int(data.get('degree_id')), _int(data.get('branch_id')),
+                _str(data.get('gender')), _date(data.get('dob')),
+                _int(data.get('rank_id')), _str(data.get('rank_no')),
+                _int(data.get('nid')), _int(data.get('state_id')), _int(data.get('religion_id')),
+                _int(data.get('district_id')), _int(data.get('cat_id')), _int(data.get('seat_type_id')),
+                _str(data.get('email')), _str(data.get('mobile')),
+                _str(data.get('p_email')), _str(data.get('p_mobile')),
+                _str(data.get('passport_no')), _str(data.get('passport_place')),
+                _date(data.get('passport_expiry')), _date(data.get('doa')),
+                _str(data.get('birth_place')), _date(data.get('report_date')),
+                1 if data.get('is_ph') else 0, 1 if data.get('is_spot') else 0,
+                0 if data.get('fee_exempted') == '1' else 1,
+                _str(data.get('remarks')), _str(data.get('marital_status')), _str(data.get('aadhaar_no')),
+                1 if data.get('is_lateral') else 0, _str(data.get('usid')), _str(data.get('blood_group')),
+                _str(data.get('bank_name')), _str(data.get('bank_ac')), _str(data.get('bank_ifsc')),
+                _str(data.get('p_address')), _str(data.get('postal_address')),
+                sid
+            ]
+            return DB.execute(sql, params)
+        except Exception as e:
+            print(f"Error updating student: {e}")
+            import traceback; traceback.print_exc()
+            return str(e)
+
+    @staticmethod
     def get_students_by_filter(filters):
         sql = """
-            SELECT pk_sid, fullname, AdmissionNo, enrollmentno, fk_collegeid, fk_degreeid, fk_adm_session
-            FROM SMS_Student_Mst
+            SELECT S.pk_sid, S.fullname, S.AdmissionNo, S.enrollmentno,
+                   C.collegename, D.degreename, SM.semester_roman,
+                   B.Branchname as branchname, ST.seatype, CAT.category,
+                   CASE WHEN S.IsRegCancel = 1 THEN 'Cancelled' ELSE 'Registered' END as reg_status,
+                   SES.sessionname as adm_session_name
+            FROM SMS_Student_Mst S
+            LEFT JOIN SMS_College_Mst C ON S.fk_collegeid = C.pk_collegeid
+            LEFT JOIN SMS_Degree_Mst D ON S.fk_degreeid = D.pk_degreeid
+            LEFT JOIN SMS_DegreeCycle_Mst DC ON S.fk_degreecycleidcurrent = DC.pk_degreecycleid
+            LEFT JOIN SMS_Semester_Mst SM ON DC.fk_semesterid = SM.pk_semesterid
+            LEFT JOIN SMS_BranchMst B ON S.fk_branchid = B.Pk_BranchId
+            LEFT JOIN SMS_SeatType_Mst ST ON S.fk_seattypeid = ST.pk_seatypeid
+            LEFT JOIN SMS_Category_Mst CAT ON S.fk_catid = CAT.pk_catid
+            LEFT JOIN SMS_AcademicSession_Mst SES ON S.fk_adm_session = SES.pk_sessionid
             WHERE 1=1
         """
         params = []
+        if filters.get('name'):
+            sql += " AND S.fullname LIKE ?"
+            params.append('%' + filters['name'] + '%')
+        if filters.get('gender'):
+            sql += " AND S.gender = ?"
+            params.append(filters['gender'])
         if filters.get('college_id'):
-            sql += " AND fk_collegeid = ?"
+            sql += " AND S.fk_collegeid = ?"
             params.append(filters['college_id'])
         if filters.get('session_id'):
-            sql += " AND fk_adm_session = ?"
+            sql += " AND S.fk_adm_session = ?"
             params.append(filters['session_id'])
         if filters.get('degree_id'):
-            sql += " AND fk_degreeid = ?"
+            sql += " AND S.fk_degreeid = ?"
             params.append(filters['degree_id'])
+        if filters.get('semester_id'):
+            sql += " AND DC.fk_semesterid = ?"
+            params.append(filters['semester_id'])
+        if filters.get('branch_id'):
+            sql += " AND S.fk_branchid = ?"
+            params.append(filters['branch_id'])
+        if filters.get('seat_type_id'):
+            sql += " AND S.fk_seattypeid = ?"
+            params.append(filters['seat_type_id'])
+        if filters.get('cat_id'):
+            sql += " AND S.fk_catid = ?"
+            params.append(filters['cat_id'])
         if filters.get('admission_no'):
-            sql += " AND (AdmissionNo LIKE ? OR enrollmentno LIKE ?)"
+            sql += " AND (S.AdmissionNo LIKE ? OR S.enrollmentno LIKE ?)"
             params.extend(['%' + filters['admission_no'] + '%', '%' + filters['admission_no'] + '%'])
-            
-        sql += " ORDER BY fullname"
+        if filters.get('reg_status') == 'cancelled':
+            sql += " AND S.IsRegCancel = 1"
+        elif filters.get('reg_status') == 'registered':
+            sql += " AND (S.IsRegCancel = 0 OR S.IsRegCancel IS NULL)"
+
+        sql += " ORDER BY S.fullname"
+        return DB.fetch_all(sql, params)
+
+    @staticmethod
+    def get_student_personal_detail_report(filters):
+        sql = """
+            SELECT
+                ISNULL(S.fullname, '') as fullname,
+                ISNULL(S.fname, '') as fname,
+                ISNULL(S.mname, '') as mname,
+                ISNULL(S.gender, '') as gender,
+                S.dob,
+                ISNULL(S.phoneno, '') as phoneno,
+                ISNULL(S.postaladdress, ISNULL(S.paddress, '')) as address,
+                S.date_of_adm as DateOfAdmission,
+                0 as is_resident,
+                ISNULL(S.AdmissionNo, '') as AdmissionNo,
+                ISNULL(S.enrollmentno, '') as enrollmentno,
+                ISNULL(C.collegename, '') as collegename,
+                ISNULL(D.degreename, '') as degreename,
+                ISNULL(SM.semester_roman, '') as semester_roman,
+                ISNULL(ST.seatype, '') as seatype,
+                ISNULL(CAT.category, '') as category,
+                ISNULL(SES.sessionname, '') as sessionname,
+                ISNULL(EQ.Discription, '') as qual_exam,
+                ISNULL(PA.Univ_Board, '') as board_university,
+                ISNULL(B.Branchname, '') as specialization,
+                CASE WHEN S.IsRegCancel = 1 THEN 'Cancelled' ELSE 'Registered' END as reg_status
+            FROM SMS_Student_Mst S
+            LEFT JOIN SMS_College_Mst C ON S.fk_collegeid = C.pk_collegeid
+            LEFT JOIN SMS_Degree_Mst D ON S.fk_degreeid = D.pk_degreeid
+            LEFT JOIN SMS_DegreeCycle_Mst DC ON S.fk_degreecycleidcurrent = DC.pk_degreecycleid
+            LEFT JOIN SMS_Semester_Mst SM ON DC.fk_semesterid = SM.pk_semesterid
+            LEFT JOIN SMS_SeatType_Mst ST ON S.fk_seattypeid = ST.pk_seatypeid
+            LEFT JOIN SMS_Category_Mst CAT ON S.fk_catid = CAT.pk_catid
+            LEFT JOIN SMS_AcademicSession_Mst SES ON S.fk_adm_session = SES.pk_sessionid
+            LEFT JOIN SMS_BranchMst B ON S.fk_branchid = B.Pk_BranchId
+            OUTER APPLY (
+                SELECT TOP 1 fk_ExamId, Univ_Board
+                FROM SMS_StudentPreAdmission_dtl
+                WHERE FK_Sturegid = S.pk_sid
+                ORDER BY (SELECT NULL)
+            ) PA
+            LEFT JOIN SMS_EducationalQualification_MST EQ ON PA.fk_ExamId = EQ.Pk_EduQuaid
+            WHERE 1=1
+        """
+        params = []
+        if filters.get('college_id') and str(filters['college_id']) != '0':
+            sql += " AND S.fk_collegeid = ?"
+            params.append(filters['college_id'])
+        if filters.get('session_id') and str(filters['session_id']) != '0':
+            sql += " AND S.fk_adm_session = ?"
+            params.append(filters['session_id'])
+        if filters.get('degree_id') and str(filters['degree_id']) != '0':
+            sql += " AND S.fk_degreeid = ?"
+            params.append(filters['degree_id'])
+        if filters.get('semester_id') and str(filters['semester_id']) != '0':
+            sql += " AND DC.fk_semesterid = ?"
+            params.append(filters['semester_id'])
+        if filters.get('branch_id') and str(filters['branch_id']) != '0':
+            sql += " AND S.fk_branchid = ?"
+            params.append(filters['branch_id'])
+        rpt_type = str(filters.get('rpt_type', '1'))
+        if rpt_type == '1':
+            sql += " AND (S.IsRegCancel = 0 OR S.IsRegCancel IS NULL)"
+        elif rpt_type == '2':
+            sql += " AND S.IsRegCancel = 1"
+        sql += " ORDER BY S.fullname"
         return DB.fetch_all(sql, params)
 
     @staticmethod
@@ -5148,6 +5566,53 @@ class StudentModel:
             WHERE P.fk_sid = ?
         """, [sid])
         return res
+
+    @staticmethod
+    def get_student_qualifications(sid):
+        return DB.fetch_all("""
+            SELECT pk_qdlid, fk_examid, Bord_Univ, yearofpassing, enrollmentno,
+                   marks_s, percentage, subject, CGPA
+            FROM SMS_Stu_Quali_Dtl
+            WHERE fk_sid = ?
+            ORDER BY pk_qdlid
+        """, [sid])
+
+    @staticmethod
+    def save_student_qualifications(sid, rows):
+        """rows = list of dicts from form"""
+        # Delete existing and re-insert
+        DB.execute("DELETE FROM SMS_Stu_Quali_Dtl WHERE fk_sid = ?", [sid])
+        for r in rows:
+            if not r.get('exam_id') and not r.get('board') and not r.get('year'):
+                continue
+            DB.execute("""
+                INSERT INTO SMS_Stu_Quali_Dtl
+                    (fk_sid, fk_examid, Bord_Univ, yearofpassing, enrollmentno,
+                     marks_s, percentage, subject)
+                VALUES (?,?,?,?,?,?,?,?)
+            """, [
+                sid,
+                r.get('exam_id') or None,
+                r.get('board') or '',
+                r.get('year') or '',
+                r.get('roll_no') or '',
+                r.get('max_marks') or None,
+                r.get('per') or None,
+                r.get('subjects') or '',
+            ])
+        return True
+
+    @staticmethod
+    def get_student_certificates(sid):
+        return DB.fetch_all("""
+            SELECT U.Pk_StuCertId, U.OriginalFileName, U.UploadCertificateFileName,
+                   U.IsVerified, U.fk_certificateId,
+                   C.certificatename
+            FROM Sms_StudentCertificateUpload_Dtl U
+            LEFT JOIN SMS_Certificate_Mst C ON U.fk_certificateId = C.pk_certificateid
+            WHERE U.fk_sid = ?
+            ORDER BY U.Pk_StuCertId
+        """, [sid])
 
     @staticmethod
     def save_student_biodata(data, user_id):
@@ -5348,6 +5813,14 @@ class PgsCourseLimitModel:
         else:
             # Single college
             return upsert_single(college_id, course_id, session_id, class_id, capacity, user_id)
+
+    @staticmethod
+    def get_limit_by_id(limit_id):
+        return DB.fetch_one("""
+            SELECT pk_PgsId, fk_collegeid, fk_courseId, fk_SessionId, fk_classId, CourseCapacity
+            FROM SMS_Sessionwise_PGS_CourseLimit_Mst
+            WHERE pk_PgsId = ?
+        """, [limit_id])
 
     @staticmethod
     def delete_limit(limit_id):
@@ -8505,21 +8978,67 @@ class BatchModel:
     @staticmethod
     def get_batches(college_id, degree_id, semester_id, type_tp):
         # type_tp: 'T' for Theory, 'P' for Practical
-        sql = """
+        # Dynamically resolve the theory/practical column name
+        batch_cols = [c['COLUMN_NAME'] for c in AcademicsModel._get_table_columns_info('SMS_Batch_Mst')]
+        type_col = AcademicsModel._pick_batch_type_column(batch_cols) or 'theory_Practical'
+        type_col_q = AcademicsModel._quote_ident(type_col)
+        is_theory = str(type_tp).upper() in ('T', 'TH', 'THEORY')
+
+        # Try FK-based lookup first to get actual stored type ID
+        fk_info = AcademicsModel._get_batch_type_fk_info()
+        type_filter = ""
+        type_params = []
+        if fk_info:
+            ref_table = fk_info['ref_table']
+            ref_col = fk_info['ref_col']
+            parent_col = fk_info['parent_col']
+            cols = AcademicsModel._get_table_columns_info(ref_table)
+            col_list = [c['COLUMN_NAME'] for c in cols]
+            name_col = AcademicsModel._pick_column(col_list, ['typename', 'type', 'name', 'description', 'theory_practical'])
+            if name_col:
+                ref_table_q = AcademicsModel._quote_ident(ref_table)
+                name_col_q = AcademicsModel._quote_ident(name_col)
+                ref_col_q = AcademicsModel._quote_ident(ref_col)
+                parent_col_q = AcademicsModel._quote_ident(parent_col)
+                # Find the type record matching Theory or Practical
+                keyword = 'theory' if is_theory else 'practical'
+                type_rows = DB.fetch_all(
+                    f"SELECT {ref_col_q} as id FROM {ref_table_q} WHERE LOWER({name_col_q}) LIKE ?",
+                    [f'%{keyword}%']
+                )
+                if type_rows:
+                    placeholders = ','.join(['?' for _ in type_rows])
+                    type_ids = [r['id'] for r in type_rows]
+                    type_filter = f"AND M.{parent_col_q} IN ({placeholders})"
+                    type_params = type_ids
+                    type_col_q = parent_col_q
+
+        if not type_filter:
+            # Fallback: flexible string/int matching
+            if is_theory:
+                type_filter = f"""AND (
+                    UPPER(LTRIM(RTRIM(CAST(M.{type_col_q} as varchar(20))))) IN ('T','TH','THEORY')
+                    OR TRY_CONVERT(int, M.{type_col_q}) = 1
+                )"""
+            else:
+                type_filter = f"""AND (
+                    UPPER(LTRIM(RTRIM(CAST(M.{type_col_q} as varchar(20))))) IN ('P','PR','PRACTICAL')
+                    OR TRY_CONVERT(int, M.{type_col_q}) = 0
+                )"""
+
+        sql = f"""
             SELECT D.pk_batchdtl as id, D.name_of_batch as name
             FROM SMS_Batch_Dtl D
             INNER JOIN SMS_Batch_Mst M ON D.fk_batchid = M.pk_batchid
-            WHERE M.fk_collegeid = ? AND M.fk_degreeid = ? 
-              AND M.fk_semesterid = ? AND M.theory_Practical = ?
+            WHERE M.fk_collegeid = ? AND M.fk_degreeid = ?
+              AND M.fk_semesterid = ? {type_filter}
             ORDER BY D.name_of_batch
         """
-        rows = DB.fetch_all(sql, [college_id, degree_id, semester_id, type_tp])
-        
-        # Ensure "ALL" is first and unique
-        final_batches = [{'id': 0, 'name': 'ALL'}]
-        seen = {'ALL'}
+        rows = DB.fetch_all(sql, [college_id, degree_id, semester_id] + type_params)
+        seen = set()
+        final_batches = []
         for r in rows:
-            if r['name'].upper() != 'ALL' and r['name'] not in seen:
+            if r['name'] not in seen:
                 final_batches.append(r)
                 seen.add(r['name'])
         return final_batches
@@ -8529,20 +9048,26 @@ class BatchModel:
         # Filters: college_id, session_id, degree_id, semester_id, type_tp, batch_id
         type_tp = filters.get('type_tp', 'T')
         batch_col = 'fk_batchid_Th' if type_tp == 'T' else 'fk_batchid_Pr'
-        
+
         sql = f"""
             SELECT S.pk_sid, S.fullname, S.AdmissionNo, S.enrollmentno,
-                   BD.name_of_batch as BatchName, S.{batch_col} as CurrentBatchId
+                   BD.name_of_batch as BatchName, S.{batch_col} as CurrentBatchId,
+                   0 as AttCount
             FROM SMS_Student_Mst S
             LEFT JOIN SMS_Batch_Dtl BD ON S.{batch_col} = BD.pk_batchdtl
             WHERE S.fk_collegeid = ? AND S.fk_adm_session = ? AND S.fk_degreeid = ?
         """
         params = [filters['college_id'], filters['session_id'], filters['degree_id']]
-        
+
         if filters.get('branch_id') and str(filters['branch_id']) != '0':
             sql += " AND S.fk_branchid = ?"
             params.append(filters['branch_id'])
-            
+
+        batch_id = filters.get('batch_id')
+        if batch_id and str(batch_id) not in ('0', ''):
+            sql += f" AND S.{batch_col} = ?"
+            params.append(batch_id)
+
         sql += " ORDER BY S.fullname"
         return DB.fetch_all(sql, params)
 
@@ -8574,10 +9099,9 @@ class BatchModel:
             # but for basic batch listing, we rely on degree/session
             pass
 
-        if filters.get('batch_id') and str(filters['batch_id']) != '0' and filters['batch_id'] != '8803': # 8803 is ALL
+        if filters.get('batch_id') and str(filters['batch_id']) not in ('0', ''):
             sql += f" AND S.{batch_col} = ?"
             params.append(filters['batch_id'])
-            
+
         sql += " ORDER BY BD.name_of_batch, S.fullname"
-        return DB.fetch_all(sql, params)
         return DB.fetch_all(sql, params)

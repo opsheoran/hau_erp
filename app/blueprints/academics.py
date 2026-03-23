@@ -15,7 +15,7 @@ from app.models import (
     AdvisoryStatusModel, IGradeModel, BatchModel, EmployeeModel, AdvisorApprovalModel, TeacherApprovalModel, DswApprovalModel, LibraryApprovalModel, FeeApprovalModel, DeanApprovalModel, SyllabusModel, AdvisorAllocationModel
 )
 from functools import wraps
-from app.utils import get_page_url, get_pagination, get_pagination_range, clean_json_data
+from app.utils import get_page_url, get_pagination, get_pagination_range, clean_json_data, english_to_hindi
 
 academics_bp = Blueprint('academics', __name__)
 
@@ -429,6 +429,18 @@ def rank_master():
     
     return render_template('academics/rank_master.html', items=items, pagination=pagination, page_range=page_range)
 
+@academics_bp.route('/api/transliterate_hindi', methods=['POST'])
+def api_transliterate_hindi():
+    """Convert English text to Hindi (Devanagari) transliteration.
+
+    POST JSON: {"text": "Ramesh Kumar"}
+    Response:  {"hindi": "रमेश कुमार"}
+    """
+    data = request.get_json(silent=True) or {}
+    text = data.get('text', '')
+    return jsonify({'hindi': english_to_hindi(text)})
+
+
 @academics_bp.route('/api/college/<college_id>/degrees')
 def get_college_degrees_api(college_id):
     from app.utils import clean_json_data
@@ -569,7 +581,7 @@ def get_college_details_data_api(college_id):
 
 @academics_bp.route('/api/get_all_employees')
 def get_all_employees_api():
-    sql = "SELECT pk_empid as id, empname + ' || ' + ISNULL(empcode, '') as name FROM SAL_Employee_Mst WHERE Isactive=1 ORDER BY empname"
+    sql = "SELECT pk_empid as id, empname + ' || ' + ISNULL(empcode, '') as name FROM SAL_Employee_Mst WHERE employeeleftstatus='N' AND stopsalary=0 ORDER BY empname"
     emps = DB.fetch_all(sql)
     return jsonify(emps)
 
@@ -971,18 +983,126 @@ def upload_certificate():
             
         return jsonify({'success': True, 'filename': filename})
 
+@academics_bp.route('/api/search_students')
+@permission_required('Student Registration')
+def api_search_students():
+    filters = {
+        'name': request.args.get('name', '').strip(),
+        'gender': request.args.get('gender', '').strip(),
+        'college_id': request.args.get('college_id', '').strip(),
+        'session_id': request.args.get('session_id', '').strip(),
+        'degree_id': request.args.get('degree_id', '').strip(),
+        'semester_id': request.args.get('semester_id', '').strip(),
+        'branch_id': request.args.get('branch_id', '').strip(),
+        'seat_type_id': request.args.get('seat_type_id', '').strip(),
+        'cat_id': request.args.get('cat_id', '').strip(),
+        'admission_no': request.args.get('admission_no', '').strip(),
+        'reg_status': request.args.get('reg_status', '').strip(),
+    }
+    # Remove empty values
+    filters = {k: v for k, v in filters.items() if v}
+    if not filters:
+        return jsonify([])
+    rows = StudentModel.get_students_by_filter(filters)
+    result = []
+    for r in rows:
+        result.append({
+            'pk_sid': r['pk_sid'],
+            'fullname': r.get('fullname') or '',
+            'AdmissionNo': r.get('AdmissionNo') or '',
+            'enrollmentno': r.get('enrollmentno') or '',
+            'collegename': r.get('collegename') or '',
+            'degreename': r.get('degreename') or '',
+            'semester_roman': (r.get('semester_roman') or '').strip(),
+            'branchname': r.get('branchname') or '',
+            'seatype': r.get('seatype') or '',
+            'category': r.get('category') or '',
+            'reg_status': r.get('reg_status') or '',
+            'adm_session_name': r.get('adm_session_name') or '',
+        })
+    return jsonify(result)
+
 @academics_bp.route('/student_registration', methods=['GET', 'POST'])
 @permission_required('Student Registration')
 def student_registration():
+    import decimal as _decimal
     if request.method == 'POST':
-        if StudentModel.save_student(request.form):
-            flash('Student registered successfully!', 'success')
+        form_data = request.form.to_dict()
+        pk_sid = form_data.get('pk_sid', '').strip()
+        action = form_data.get('action', 'SAVE_BASIC').upper()
+
+        if action == 'SAVE_QUALIFICATION':
+            if not pk_sid:
+                flash('Please save basic details first before saving qualifications.', 'warning')
+            else:
+                # Build list of qualification rows from form arrays
+                exam_ids   = request.form.getlist('exam_id[]')
+                boards     = request.form.getlist('board[]')
+                years      = request.form.getlist('year[]')
+                roll_nos   = request.form.getlist('roll_no[]')
+                max_marks  = request.form.getlist('max_marks[]')
+                marks_obt  = request.form.getlist('marks_obt[]')
+                pers       = request.form.getlist('per[]')
+                subjects   = request.form.getlist('subjects[]')
+                qual_rows = []
+                for i in range(len(exam_ids)):
+                    qual_rows.append({
+                        'exam_id':   exam_ids[i] if i < len(exam_ids) else '',
+                        'board':     boards[i]   if i < len(boards)   else '',
+                        'year':      years[i]    if i < len(years)    else '',
+                        'roll_no':   roll_nos[i] if i < len(roll_nos) else '',
+                        'max_marks': max_marks[i]if i < len(max_marks)else '',
+                        'per':       pers[i]     if i < len(pers)     else '',
+                        'subjects':  subjects[i] if i < len(subjects) else '',
+                    })
+                if StudentModel.save_student_qualifications(pk_sid, qual_rows):
+                    flash('Qualifications saved successfully!', 'success')
+                else:
+                    flash('Error saving qualifications.', 'danger')
+            return redirect(url_for('academics.student_registration') + f'?sid={pk_sid}&tab=qualification')
+
+        # Default: save basic details
+        if pk_sid:
+            form_data['pk_sid'] = pk_sid
+        result = StudentModel.save_student(form_data)
+        if result is True or result == 1:
+            flash('Student saved successfully!', 'success')
         else:
-            flash('Error saving student details. Check for duplicate Admission No.', 'danger')
-        return redirect(url_for('academics.student_registration'))
-    
+            flash(f'Error saving student: {result}', 'danger')
+        sid = pk_sid or ''
+        return redirect(url_for('academics.student_registration') + (f'?sid={sid}' if sid else ''))
+
+    sd = None
+    qualifications = []
+    certificates = []
+    sid = request.args.get('sid', '').strip()
+    active_tab = request.args.get('tab', 'basic')
+    if not sid:
+        enroll = request.args.get('enroll', '').strip()
+        if enroll:
+            row = StudentModel.get_student_by_enrollment(enroll)
+            if row:
+                sid = str(row['pk_sid'])
+    if sid:
+        details = StudentModel.get_student_all_details(sid)
+        if details and details.get('basic'):
+            sd = dict(details['basic'])
+            for k, v in list(sd.items()):
+                if hasattr(v, 'strftime'):
+                    sd[k] = v.strftime('%Y-%m-%d')
+                elif isinstance(v, _decimal.Decimal):
+                    sd[k] = int(v) if v == int(v) else float(v)
+                elif isinstance(v, (bytes, bytearray, memoryview)):
+                    sd[k] = None
+        qualifications = StudentModel.get_student_qualifications(sid)
+        certificates   = StudentModel.get_student_certificates(sid)
+
     lookups = StudentModel.get_student_lookups()
-    return render_template('academics/student_registration.html', lookups=lookups)
+    return render_template('academics/student_registration.html',
+                           lookups=lookups, sd=sd,
+                           qualifications=qualifications,
+                           certificates=certificates,
+                           active_tab=active_tab)
 
 @academics_bp.route('/student_password', methods=['GET', 'POST'])
 @permission_required('Student Password')
@@ -1065,33 +1185,229 @@ def college_degree_seat_report():
         'session_id': request.args.get('session_id'),
         'college_id': request.args.get('college_id')
     }
-    
-    fmt = request.args.get('fmt')
-    if fmt and all(filters.values()):
-        data = SeatDetailModel.get_seat_report(filters)
-        if fmt == 'excel':
-            df = pd.DataFrame(data)
-            # Adjust column selection based on actual model return
-            cols = ['collegename', 'degreename', 'Branchname', 'totseat']
-            df = df[[c for c in cols if c in df.columns]]
-            output = io.BytesIO()
-            with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-                df.to_excel(writer, index=False, sheet_name='SeatReport')
-            output.seek(0)
-            return send_file(output, attachment_filename='College_Degree_Seat_Report.xlsx', as_attachment=True)
-        elif fmt == 'pdf':
-            html = render_template('reports/seat_report_pdf.html', data=data, filters=filters, now=datetime.now())
-            return html
 
-    data = []
+    data, seat_types = [], []
     if all(filters.values()):
-        data = SeatDetailModel.get_seat_report(filters)
-        
+        data, seat_types = SeatDetailModel.get_seat_report(filters)
+
+    fmt = request.args.get('fmt')
+    if fmt and data:
+        if fmt == 'excel':
+            import xlsxwriter
+            output = io.BytesIO()
+            wb = xlsxwriter.Workbook(output, {'in_memory': True})
+            ws = wb.add_worksheet('Seat Report')
+
+            # ── Formats ──────────────────────────────────────────────────
+            border = {'border': 1, 'border_color': '#AAAAAA'}
+
+            fmt_title = wb.add_format({
+                'bold': True, 'font_size': 14, 'align': 'center', 'valign': 'vcenter',
+                'font_color': '#1F3864', 'font_name': 'Calibri'
+            })
+            fmt_sub = wb.add_format({
+                'font_size': 10, 'align': 'center', 'valign': 'vcenter',
+                'font_color': '#444444', 'font_name': 'Calibri'
+            })
+            fmt_hdr = wb.add_format({
+                'bold': True, 'font_size': 10, 'align': 'center', 'valign': 'vcenter',
+                'bg_color': '#2E75B6', 'font_color': '#FFFFFF',
+                'font_name': 'Calibri', 'text_wrap': True, **border
+            })
+            fmt_cell = wb.add_format({
+                'font_size': 9, 'align': 'left', 'valign': 'vcenter',
+                'font_name': 'Calibri', 'text_wrap': True, **border
+            })
+            fmt_cell_c = wb.add_format({
+                'font_size': 9, 'align': 'center', 'valign': 'vcenter',
+                'font_name': 'Calibri', **border
+            })
+            fmt_cell_alt = wb.add_format({
+                'font_size': 9, 'align': 'left', 'valign': 'vcenter',
+                'bg_color': '#DEEAF1', 'font_name': 'Calibri', 'text_wrap': True, **border
+            })
+            fmt_cell_alt_c = wb.add_format({
+                'font_size': 9, 'align': 'center', 'valign': 'vcenter',
+                'bg_color': '#DEEAF1', 'font_name': 'Calibri', **border
+            })
+            fmt_total_lbl = wb.add_format({
+                'bold': True, 'font_size': 10, 'align': 'right', 'valign': 'vcenter',
+                'bg_color': '#1F3864', 'font_color': '#FFFFFF',
+                'font_name': 'Calibri', **border
+            })
+            fmt_total_val = wb.add_format({
+                'bold': True, 'font_size': 10, 'align': 'center', 'valign': 'vcenter',
+                'bg_color': '#1F3864', 'font_color': '#FFFFFF',
+                'font_name': 'Calibri', **border
+            })
+
+            session_name = data[0]['sessionname'] if data else ''
+            college_name = data[0]['collegename'] if data else ''
+            total_cols = 4 + len(seat_types)  # S.No, Degree, Specialization, Total, *seat_types
+
+            # ── Title rows ───────────────────────────────────────────────
+            ws.merge_range(0, 0, 0, total_cols - 1,
+                           'HAU — College Degree Seat Report', fmt_title)
+            ws.merge_range(1, 0, 1, total_cols - 1,
+                           f'Session: {session_name}     College: {college_name}', fmt_sub)
+            ws.merge_range(2, 0, 2, total_cols - 1,
+                           f'Generated: {datetime.now().strftime("%d/%m/%Y %I:%M %p")}', fmt_sub)
+            ws.set_row(0, 22)
+            ws.set_row(1, 16)
+            ws.set_row(2, 14)
+
+            # ── Header row ───────────────────────────────────────────────
+            HDR_ROW = 4
+            headers = ['S.No.', 'Degree', 'Specialization', 'Total Seats'] + seat_types
+            for col, h in enumerate(headers):
+                ws.write(HDR_ROW, col, h, fmt_hdr)
+            ws.set_row(HDR_ROW, 28)
+
+            # ── Column widths ────────────────────────────────────────────
+            ws.set_column(0, 0, 6)    # S.No.
+            ws.set_column(1, 1, 30)   # Degree
+            ws.set_column(2, 2, 28)   # Specialization
+            ws.set_column(3, 3, 12)   # Total Seats
+            for c in range(4, 4 + len(seat_types)):
+                ws.set_column(c, c, 12)
+
+            # ── Data rows ────────────────────────────────────────────────
+            totals = {st: 0 for st in seat_types}
+            grand_total = 0
+            for i, row in enumerate(data):
+                r = HDR_ROW + 1 + i
+                alt = (i % 2 == 1)
+                fl, fc = (fmt_cell_alt, fmt_cell_alt_c) if alt else (fmt_cell, fmt_cell_c)
+                ws.write(r, 0, i + 1,                        fc)
+                ws.write(r, 1, row['degreename'] or '',       fl)
+                ws.write(r, 2, row['Branchname'] or 'All',    fl)
+                ws.write(r, 3, row['totseat'] or 0,           fc)
+                grand_total += (row['totseat'] or 0)
+                for ci, st in enumerate(seat_types):
+                    val = row['seat_types'].get(st, 0)
+                    ws.write(r, 4 + ci, val if val else '-',  fc)
+                    totals[st] += val if val else 0
+                ws.set_row(r, 18)
+
+            # ── Totals row ───────────────────────────────────────────────
+            total_row = HDR_ROW + 1 + len(data)
+            ws.merge_range(total_row, 0, total_row, 2, 'TOTAL', fmt_total_lbl)
+            ws.write(total_row, 3, grand_total, fmt_total_val)
+            for ci, st in enumerate(seat_types):
+                ws.write(total_row, 4 + ci, totals[st] or '-', fmt_total_val)
+            ws.set_row(total_row, 20)
+
+            # ── Freeze panes below header ─────────────────────────────────
+            ws.freeze_panes(HDR_ROW + 1, 0)
+
+            wb.close()
+            output.seek(0)
+            return send_file(output, download_name='College_Degree_Seat_Report.xlsx',
+                             as_attachment=True,
+                             mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+        elif fmt == 'pdf':
+            from reportlab.lib.pagesizes import A4, landscape
+            from reportlab.lib import colors
+            from reportlab.lib.units import cm
+            from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
+            from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+            from reportlab.lib.enums import TA_CENTER, TA_LEFT
+
+            buf = io.BytesIO()
+            doc = SimpleDocTemplate(buf, pagesize=landscape(A4),
+                                    leftMargin=1.5*cm, rightMargin=1.5*cm,
+                                    topMargin=1.5*cm, bottomMargin=1.5*cm)
+            styles = getSampleStyleSheet()
+
+            # Reusable paragraph styles for table cells (enable word-wrap)
+            hdr_style  = ParagraphStyle('hdr',  fontSize=8, leading=10,
+                                        textColor=colors.white, fontName='Helvetica-Bold',
+                                        alignment=TA_CENTER, wordWrap='CJK')
+            cell_c     = ParagraphStyle('cellc', fontSize=8, leading=10,
+                                        fontName='Helvetica', alignment=TA_CENTER, wordWrap='CJK')
+            cell_l     = ParagraphStyle('celll', fontSize=8, leading=10,
+                                        fontName='Helvetica', alignment=TA_LEFT,  wordWrap='CJK')
+
+            def P(text, style): return Paragraph(str(text) if text is not None else '', style)
+
+            story = []
+
+            # Header: logo + title
+            logo_path = os.path.join(current_app.root_path, 'static', 'images', 'logo.png')
+            if os.path.exists(logo_path):
+                logo = Image(logo_path, width=2.5*cm, height=2.5*cm)
+                title_para = Paragraph(
+                    '<b>HAU - College Degree Seat Report</b><br/>'
+                    f'<font size=10>Session: {data[0]["sessionname"] if data else ""} &nbsp;&nbsp; '
+                    f'College: {data[0]["collegename"] if data else ""}</font><br/>'
+                    f'<font size=8>Generated: {datetime.now().strftime("%d/%m/%Y %I:%M %p")}</font>',
+                    ParagraphStyle('titl', fontSize=14, leading=20, alignment=TA_CENTER)
+                )
+                header_tbl = Table([[logo, title_para]], colWidths=[3*cm, None])
+                header_tbl.setStyle(TableStyle([
+                    ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+                    ('ALIGN',  (1,0), (1,0),   'CENTER'),
+                ]))
+                story.append(header_tbl)
+            else:
+                story.append(Paragraph('<b>HAU - College Degree Seat Report</b>', styles['Title']))
+            story.append(Spacer(1, 0.4*cm))
+
+            # Column widths
+            fixed = [1.2*cm, 5*cm, 5*cm, 2*cm]
+            remaining = 28*cm - sum(fixed)
+            st_width = max(1.8*cm, (remaining / len(seat_types))) if seat_types else 2*cm
+            col_widths = fixed + [st_width] * len(seat_types)
+
+            # Header row — all cells are Paragraphs so long headers wrap too
+            header_row = [
+                P('S.No.',         hdr_style),
+                P('Degree',        hdr_style),
+                P('Specialization',hdr_style),
+                P('Total Seats',   hdr_style),
+            ] + [P(st, hdr_style) for st in seat_types]
+
+            table_data = [header_row]
+            for i, row in enumerate(data, 1):
+                r = [
+                    P(i,                          cell_c),
+                    P(row['degreename'],           cell_l),
+                    P(row['Branchname'] or 'All',  cell_l),
+                    P(row['totseat'],              cell_c),
+                ]
+                for st in seat_types:
+                    r.append(P(row['seat_types'].get(st, '-'), cell_c))
+                table_data.append(r)
+
+            tbl = Table(table_data, colWidths=col_widths, repeatRows=1)
+            tbl.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (-1,0),   colors.HexColor('#3c8dbc')),
+                ('ROWBACKGROUNDS', (0,1), (-1,-1),
+                                            [colors.white, colors.HexColor('#f0f7ff')]),
+                ('GRID',       (0,0), (-1,-1),  0.4, colors.grey),
+                ('VALIGN',     (0,0), (-1,-1),  'MIDDLE'),
+                ('TOPPADDING', (0,0), (-1,-1),  4),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+                ('LEFTPADDING',   (0,0), (-1,-1), 4),
+                ('RIGHTPADDING',  (0,0), (-1,-1), 4),
+            ]))
+            story.append(tbl)
+
+            doc.build(story)
+            buf.seek(0)
+            response = make_response(buf.read())
+            response.headers['Content-Type'] = 'application/pdf'
+            response.headers['Content-Disposition'] = 'inline; filename=College_Degree_Seat_Report.pdf'
+            return response
+
     lookups = {
         'sessions': InfrastructureModel.get_sessions(),
         'colleges': AcademicsModel.get_colleges_simple()
     }
-    return render_template('academics/college_degree_seat_report.html', lookups=lookups, filters=filters, data=data)
+    return render_template('academics/college_degree_seat_report.html',
+                           lookups=lookups, filters=filters,
+                           data=data, seat_types=seat_types)
 
 @academics_bp.route('/student_biodata_updation', methods=['GET', 'POST'])
 @permission_required('Student Biodata Updation')
@@ -1163,6 +1479,311 @@ def student_personal_detail_report():
         'degrees': AcademicsModel.get_all_degrees(),
         'semesters': InfrastructureModel.get_all_semesters()
     }
+
+    if request.method == 'POST':
+        filters = {
+            'college_id': request.form.get('college_id', '0'),
+            'session_id': request.form.get('session_id', '0'),
+            'degree_id': request.form.get('degree_id', '0'),
+            'semester_id': request.form.get('semester_id', '0'),
+            'branch_id': request.form.get('branch_id', '0'),
+            'rpt_type': request.form.get('rpt_type', '1'),
+            'rpt_format': request.form.get('rpt_format', 'PDF'),
+        }
+
+        def fmt_date(val):
+            if not val:
+                return ''
+            try:
+                if hasattr(val, 'strftime'):
+                    return val.strftime('%d/%m/%Y')
+                return str(val)[:10]
+            except Exception:
+                return str(val) if val else ''
+
+        try:
+            data = StudentModel.get_student_personal_detail_report(filters)
+        except Exception as e:
+            import traceback; traceback.print_exc()
+            flash(f'Error fetching data: {e}', 'danger')
+            return render_template('academics/student_personal_detail_report.html', lookups=lookups)
+
+        if not data:
+            flash('No records found for the selected filters.', 'warning')
+            return render_template('academics/student_personal_detail_report.html', lookups=lookups)
+
+        # ========== EXCEL ==========
+        if filters['rpt_format'] == 'Excel':
+            try:
+                from openpyxl import Workbook
+                from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
+                from openpyxl.utils import get_column_letter
+
+                wb = Workbook()
+                ws = wb.active
+                ws.title = 'Student Personal Detail'
+
+                navy   = PatternFill('solid', fgColor='1F3864')
+                blue   = PatternFill('solid', fgColor='2E75B6')
+                pale   = PatternFill('solid', fgColor='D9E1F2')
+                white  = PatternFill('solid', fgColor='FFFFFF')
+                alt    = PatternFill('solid', fgColor='EBF3FF')
+                bold_white    = Font(name='Calibri', bold=True, color='FFFFFF', size=13)
+                bold_white_sm = Font(name='Calibri', bold=True, color='FFFFFF', size=11)
+                bold_dark     = Font(name='Calibri', bold=True, color='1F3864', size=10)
+                normal        = Font(name='Calibri', size=10)
+                center        = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                left          = Alignment(horizontal='left',   vertical='center', wrap_text=True)
+                thin          = Side(style='thin',   color='8EA9C1')
+                thick         = Side(style='medium', color='1F3864')
+                thin_border   = Border(left=thin, right=thin, top=thin, bottom=thin)
+
+                num_cols = 22
+                last_col = get_column_letter(num_cols)
+
+                ws.append(['CHAUDHARY CHARAN SINGH HARYANA AGRICULTURAL UNIVERSITY, HISAR'])
+                ws.merge_cells(f'A1:{last_col}1')
+                ws['A1'].fill = navy
+                ws['A1'].font = bold_white
+                ws['A1'].alignment = center
+                ws.row_dimensions[1].height = 28
+
+                ws.append(['Student Personal Detail Report'])
+                ws.merge_cells(f'A2:{last_col}2')
+                ws['A2'].fill = blue
+                ws['A2'].font = bold_white_sm
+                ws['A2'].alignment = center
+                ws.row_dimensions[2].height = 20
+
+                ws.append([f'Generated on: {datetime.now().strftime("%d/%m/%Y %H:%M")}'])
+                ws.merge_cells(f'A3:{last_col}3')
+                ws['A3'].fill = pale
+                ws['A3'].font = Font(name='Calibri', italic=True, size=9, color='1F3864')
+                ws['A3'].alignment = center
+                ws.row_dimensions[3].height = 16
+
+                headers = [
+                    'S.No.', 'Admission No', 'Enrollment No', 'Full Name', "Father's Name",
+                    "Mother's Name", 'Date of Birth', 'Date of Admission', 'Gender',
+                    'Qualifying Exam', 'Board / University', 'Postal Address',
+                    'College', 'Degree', 'Specialization', 'Class', 'Session', 'Seat Type',
+                    'Category', 'Phone No', 'Is Resident', 'Reg. Status'
+                ]
+                col_widths = [6, 14, 14, 25, 22, 22, 14, 16, 9, 25, 28, 35,
+                              30, 25, 25, 8, 18, 14, 14, 14, 11, 12]
+                ws.append(headers)
+                for ci, (h, w) in enumerate(zip(headers, col_widths), start=1):
+                    cell = ws.cell(row=4, column=ci)
+                    cell.fill = pale
+                    cell.font = bold_dark
+                    cell.alignment = center
+                    cell.border = Border(left=thick, right=thick, top=thick, bottom=thick)
+                    ws.column_dimensions[get_column_letter(ci)].width = w
+                ws.row_dimensions[4].height = 28
+                ws.auto_filter.ref = f'A4:{last_col}4'
+                ws.freeze_panes = 'A5'
+
+                center_cols = {1, 7, 8, 9, 16, 20, 21, 22}
+                for idx, row in enumerate(data, start=1):
+                    fill = white if idx % 2 == 0 else alt
+                    values = [
+                        idx,
+                        row.get('AdmissionNo', ''),
+                        row.get('enrollmentno', ''),
+                        row.get('fullname', ''),
+                        row.get('fname', ''),
+                        row.get('mname', ''),
+                        fmt_date(row.get('dob')),
+                        fmt_date(row.get('DateOfAdmission')),
+                        row.get('gender', ''),
+                        row.get('qual_exam', ''),
+                        row.get('board_university', ''),
+                        row.get('address', ''),
+                        row.get('collegename', ''),
+                        row.get('degreename', ''),
+                        row.get('specialization', ''),
+                        row.get('semester_roman', ''),
+                        row.get('sessionname', ''),
+                        row.get('seatype', ''),
+                        row.get('category', ''),
+                        row.get('phoneno', ''),
+                        'YES' if row.get('is_resident') else 'NO',
+                        row.get('reg_status', ''),
+                    ]
+                    ws.append(values)
+                    r = 4 + idx
+                    for ci in range(1, num_cols + 1):
+                        cell = ws.cell(row=r, column=ci)
+                        cell.fill = fill
+                        cell.font = normal
+                        cell.alignment = center if ci in center_cols else left
+                        cell.border = thin_border
+
+                footer_row = 5 + len(data)
+                ws.append([f'Total Records: {len(data)}  |  HAU ERP System'])
+                ws.merge_cells(f'A{footer_row}:{last_col}{footer_row}')
+                ws[f'A{footer_row}'].fill = pale
+                ws[f'A{footer_row}'].font = Font(name='Calibri', bold=True, size=9, color='1F3864')
+                ws[f'A{footer_row}'].alignment = center
+                ws.sheet_properties.pageSetUpPr.fitToPage = True
+                ws.page_setup.orientation = 'landscape'
+                ws.page_setup.fitToWidth = 1
+
+                output = io.BytesIO()
+                wb.save(output)
+                output.seek(0)
+                return send_file(output,
+                                 download_name='Student_Personal_Detail_Report.xlsx',
+                                 as_attachment=True,
+                                 mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            except Exception as e:
+                import traceback; traceback.print_exc()
+                flash(f'Excel error: {e}', 'danger')
+                return render_template('academics/student_personal_detail_report.html', lookups=lookups)
+
+        # ========== PDF ==========
+        try:
+            from reportlab.lib.pagesizes import A4
+            from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image, PageBreak
+            from reportlab.lib import colors
+            from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+            from reportlab.lib.units import inch, mm
+
+            navy_color = colors.HexColor('#1F3864')
+            blue_color = colors.HexColor('#2E75B6')
+            pale_color = colors.HexColor('#D9E1F2')
+            alt_color  = colors.HexColor('#EBF3FF')
+
+            buffer = io.BytesIO()
+            doc = SimpleDocTemplate(buffer, pagesize=A4,
+                                    rightMargin=18*mm, leftMargin=18*mm,
+                                    topMargin=20*mm, bottomMargin=25*mm)
+            elements = []
+            styles = getSampleStyleSheet()
+
+            title_style   = ParagraphStyle('T', parent=styles['Normal'],
+                                           fontName='Helvetica-Bold', fontSize=12, alignment=1,
+                                           textColor=colors.white, spaceAfter=2)
+            label_style   = ParagraphStyle('L', parent=styles['Normal'],
+                                           fontName='Helvetica-Bold', fontSize=9,
+                                           textColor=navy_color)
+            value_style   = ParagraphStyle('V', parent=styles['Normal'],
+                                           fontName='Helvetica', fontSize=9,
+                                           textColor=colors.black)
+            heading_style = ParagraphStyle('H', parent=styles['Normal'],
+                                           fontName='Helvetica-Bold', fontSize=10,
+                                           textColor=navy_color, alignment=1, spaceAfter=4)
+
+            logo_path = os.path.join(current_app.root_path, 'static', 'images', 'logo.png')
+
+            def page_footer(canvas, doc):
+                canvas.saveState()
+                canvas.setFont('Helvetica', 8)
+                canvas.setFillColor(colors.grey)
+                canvas.drawCentredString(A4[0] / 2.0, 12*mm,
+                                         f'Page {canvas.getPageNumber()}  |  HAU ERP System  |  Confidential')
+                canvas.restoreState()
+
+            if os.path.exists(logo_path):
+                img = Image(logo_path, width=0.75*inch, height=0.75*inch)
+                hdr_data = [[img, Paragraph('CHAUDHARY CHARAN SINGH<br/>HARYANA AGRICULTURAL UNIVERSITY, HISAR', title_style)]]
+            else:
+                hdr_data = [['', Paragraph('CHAUDHARY CHARAN SINGH<br/>HARYANA AGRICULTURAL UNIVERSITY, HISAR', title_style)]]
+
+            hdr_table = Table(hdr_data, colWidths=[0.9*inch, 4.8*inch])
+            hdr_table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, -1), navy_color),
+                ('VALIGN',     (0, 0), (-1, -1), 'MIDDLE'),
+                ('ALIGN',      (0, 0), (0,  0),  'CENTER'),
+                ('TOPPADDING',    (0, 0), (-1, -1), 8),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+            ]))
+            elements.append(hdr_table)
+            elements.append(Spacer(1, 6))
+            elements.append(Paragraph('STUDENT PERSONAL DETAIL REPORT', heading_style))
+            elements.append(Spacer(1, 4))
+
+            pw = doc.width
+
+            def lv(label, value):
+                return [Paragraph(label, label_style),
+                        Paragraph(str(value) if value else '---', value_style)]
+
+            for i, row in enumerate(data):
+                dob_str  = fmt_date(row.get('dob'))
+                doa_str  = fmt_date(row.get('DateOfAdmission'))
+                resident = 'YES' if row.get('is_resident') else 'NO'
+                adm_no   = row.get('AdmissionNo') or row.get('enrollmentno') or ''
+
+                card_hdr = Table(
+                    [[Paragraph(f"Admission No: {adm_no}", label_style),
+                      Paragraph(f"Status: {row.get('reg_status', '')}", label_style)]],
+                    colWidths=[pw * 0.5, pw * 0.5]
+                )
+                card_hdr.setStyle(TableStyle([
+                    ('BACKGROUND',    (0, 0), (-1, -1), pale_color),
+                    ('TOPPADDING',    (0, 0), (-1, -1), 4),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+                    ('LEFTPADDING',   (0, 0), (-1, -1), 6),
+                    ('RIGHTPADDING',  (0, 0), (-1, -1), 6),
+                    ('LINEBELOW',     (0, 0), (-1, -1), 0.8, blue_color),
+                ]))
+                elements.append(card_hdr)
+
+                left_col  = pw * 0.22
+                right_col = pw * 0.28
+
+                detail_data = [
+                    lv('Full Name (Block Letters):', row.get('fullname', '')) +
+                    lv('College:', row.get('collegename', '')),
+                    lv("Father's Name:", row.get('fname', '')) +
+                    lv('Degree:', row.get('degreename', '')),
+                    lv("Mother's Name:", row.get('mname', '')) +
+                    lv('Specialization:', row.get('specialization', '')),
+                    lv('Date of Birth:', dob_str) +
+                    lv('Class (Semester):', row.get('semester_roman', '')),
+                    lv('Date of Admission:', doa_str) +
+                    lv('Session:', row.get('sessionname', '')),
+                    lv('Gender:', row.get('gender', '')) +
+                    lv('Seat Type:', row.get('seatype', '')),
+                    lv('Qualifying Examination:', row.get('qual_exam', '')) +
+                    lv('Category:', row.get('category', '')),
+                    lv('Board / University:', row.get('board_university', '')) +
+                    lv('Phone No:', row.get('phoneno', '')),
+                    lv('Is Resident:', resident) +
+                    lv('Postal Address:', row.get('address', '')),
+                ]
+
+                card_tbl = Table(detail_data, colWidths=[left_col, right_col, left_col, right_col])
+                card_tbl.setStyle(TableStyle([
+                    ('FONTNAME',       (0, 0), (-1, -1), 'Helvetica'),
+                    ('FONTSIZE',       (0, 0), (-1, -1), 9),
+                    ('VALIGN',         (0, 0), (-1, -1), 'TOP'),
+                    ('TOPPADDING',     (0, 0), (-1, -1), 3),
+                    ('BOTTOMPADDING',  (0, 0), (-1, -1), 3),
+                    ('LEFTPADDING',    (0, 0), (-1, -1), 5),
+                    ('RIGHTPADDING',   (0, 0), (-1, -1), 5),
+                    ('ROWBACKGROUNDS', (0, 0), (-1, -1), [colors.white, alt_color]),
+                    ('GRID',           (0, 0), (-1, -1), 0.4, colors.HexColor('#B8CCE4')),
+                    ('LINEBELOW',      (0, -1), (-1, -1), 1.2, navy_color),
+                ]))
+                elements.append(card_tbl)
+                elements.append(Spacer(1, 8))
+
+                if (i + 1) % 3 == 0 and i + 1 < len(data):
+                    elements.append(PageBreak())
+
+            doc.build(elements, onFirstPage=page_footer, onLaterPages=page_footer)
+            buffer.seek(0)
+            response = make_response(buffer.getvalue())
+            response.headers['Content-Type'] = 'application/pdf'
+            response.headers['Content-Disposition'] = 'inline; filename=Student_Personal_Detail_Report.pdf'
+            return response
+        except Exception as e:
+            import traceback; traceback.print_exc()
+            flash(f'PDF error: {e}', 'danger')
+            return render_template('academics/student_personal_detail_report.html', lookups=lookups)
+
     return render_template('academics/student_personal_detail_report.html', lookups=lookups)
 
 @academics_bp.route('/moderation_marks', methods=['GET', 'POST'])
@@ -1256,10 +1877,21 @@ def limit_assignment():
 @academics_bp.route('/major_advisor', methods=['GET', 'POST'])
 @permission_required('Major Advisor')
 def major_advisor():
+    user_id = session.get('user_id')
+    
     if request.method == 'POST':
+        action = request.form.get('action')
         sid = request.form.get('sid')
+        
+        if action == 'delete' and sid:
+            success, msg = AdvisoryModel.delete_major_advisor(sid)
+            if success:
+                flash(msg, 'success')
+            else:
+                flash(msg, 'danger')
+            return redirect(url_for('academics.major_advisor', **request.args))
+            
         advisor_id = request.form.get('advisor_id')
-        user_id = session['user_id']
         if sid and advisor_id:
             if AdvisoryModel.save_major_advisor(sid, advisor_id, user_id):
                 flash('Major Advisor assigned successfully.', 'success')
@@ -1267,32 +1899,85 @@ def major_advisor():
                 flash('Error assigning Major Advisor.', 'danger')
         return redirect(url_for('academics.major_advisor', **request.args))
 
+    # Filters for Student Selection
     college_id = request.args.get('college_id')
+    if not college_id and session.get('location_id'):
+        college_id = str(session.get('location_id'))
+        
     session_id = request.args.get('session_id')
+    if not session_id:
+        curr_session = InfrastructureModel.get_current_session_id()
+        session_id = str(curr_session) if curr_session else None
+        
     degree_id = request.args.get('degree_id')
     branch_id = request.args.get('branch_id')
     
+    # Filters for Bottom Grid
+    college_id_f = request.args.get('college_id_f', college_id)
+    session_id_f = request.args.get('session_id_f', session_id)
+    degree_id_f = request.args.get('degree_id_f')
+    branch_id_f = request.args.get('branch_id_f')
+    admission_no_f = request.args.get('admission_no_f')
+    status_f = request.args.get('status_f', '-1')
+    page_f = request.args.get('page_f', 1, type=int)
+
     students = []
-    if college_id and session_id and degree_id and str(degree_id) != '0':
+    if college_id and session_id and degree_id:
         filters = {
             'college_id': college_id,
             'session_id': session_id,
             'degree_id': degree_id,
             'branch_id': branch_id
         }
-        students = AdvisoryModel.get_students_for_advisory(filters)
+        students = DB.fetch_all(
+            "SELECT pk_sid, fullname, AdmissionNo, enrollmentno FROM SMS_Student_Mst "
+            "WHERE fk_collegeid=? AND fk_adm_session=? AND fk_degreeid=? "
+            "AND (fk_branchid=? OR ?='') ORDER BY fullname",
+            [college_id, session_id, degree_id, branch_id or '', branch_id or '']
+        )
+
+    # Bottom Grid Students
+    filters_f = {
+        'college_id': college_id_f,
+        'session_id': session_id_f,
+        'degree_id': degree_id_f,
+        'branch_id': branch_id_f,
+        'admission_no': admission_no_f,
+        'status': status_f
+    }
+    grid_students, total_f = AdvisoryModel.get_students_for_advisory(filters_f, page=page_f, per_page=10)
+
+    # For auto-filling the advisor dropdown if edited
+    edit_sid = request.args.get('edit_sid')
+    edit_advisor = None
+    if edit_sid:
+        conn = DB.get_connection()
+        try:
+            mst = conn.execute("SELECT pk_adcid FROM SMS_Advisory_Committee_Mst WHERE fk_stid=?", [edit_sid]).fetchone()
+            if mst:
+                dtl = conn.execute("SELECT D.fk_empid, E.empname, E.empcode FROM SMS_Advisory_Committee_Dtl D JOIN SAL_Employee_Mst E ON D.fk_empid = E.pk_empid WHERE D.fk_adcid=? AND D.fk_statusid=1", [mst[0]]).fetchone()
+                if dtl:
+                    edit_advisor = {'id': dtl[0], 'name': f"{dtl[1]} | {dtl[2]}"}
+        finally:
+            conn.close()
 
     lookups = {
         'colleges': AcademicsModel.get_colleges_simple(),
         'sessions': InfrastructureModel.get_sessions(),
         'degrees': AcademicsModel.get_college_pg_degrees(college_id) if college_id else [],
-        'branches': AcademicsModel.get_college_degree_specializations(college_id, degree_id) if (college_id and degree_id and str(degree_id) != '0') else [],
-        'employees': DB.fetch_all("SELECT E.pk_empid as id, E.empname + ' | ' + E.empcode + ' | (' + ISNULL(D.description, 'No Dept') + ')' as name FROM SAL_Employee_Mst E LEFT JOIN Department_Mst D ON E.fk_deptid = D.pk_deptid WHERE E.employeeleftstatus = 'N' ORDER BY E.empname")
+        'branches': AcademicsModel.get_college_degree_specializations(college_id, degree_id) if (college_id and degree_id) else [],
+        'degrees_f': AcademicsModel.get_college_pg_degrees(college_id_f) if college_id_f else [],
+        'branches_f': AcademicsModel.get_college_degree_specializations(college_id_f, degree_id_f) if (college_id_f and degree_id_f) else []
     }
     
     return render_template('academics/major_advisor.html', 
                            lookups=lookups,
-                           students=clean_json_data(students), 
+                           students=clean_json_data(students),
+                           grid_students=clean_json_data(grid_students),
+                           total_f=total_f,
+                           page_f=page_f,
+                           edit_advisor=edit_advisor,
+                           edit_sid=edit_sid,
                            filters=request.args)
 
 @academics_bp.route('/dean_pgs_approval', methods=['GET', 'POST'])
@@ -1449,37 +2134,50 @@ def college_dean_approval():
 
 @academics_bp.app_context_processor
 def inject_academic_menu():
-    if 'user_id' not in session or str(session.get('current_module_id')) not in ['32', '33']:
+    if 'user_id' not in session:
         return dict(ACADEMIC_MENU_CONFIG=ACADEMIC_MENU_CONFIG, academic_tabs=[], academics_breadcrumb=[])
 
     curr_path = request.path.rstrip('/').lower()
-    
+
+    # Get user permissions for tab filtering
+    from app.models import NavModel as _NavModel
+    _user_id = session.get('user_id')
+    _is_super = _NavModel._is_super_admin(_user_id)
+    _all_rights = session.get('current_user_rights') or []
+    _allowed_norm = {' '.join(str(r.get('PageName') or '').strip().lower().split())
+                     for r in _all_rights if r.get('AllowView')}
+
+    def _n(s):
+        return ' '.join(str(s or '').strip().lower().split())
+
     academic_tabs = []
     academics_breadcrumb = []
 
+    # Scan ALL groups; last matching group with visible tabs wins.
+    # This ensures the "Admission" group (which comes after "Master and Config"
+    # in the config) takes priority when both share the same page URLs.
     for main_cat, subs in ACADEMIC_MENU_CONFIG.items():
         for sub_cat, sub_subs in subs.items():
             for folder_name, pages in sub_subs.items():
-                if not pages: continue
-                
+                if not pages:
+                    continue
+
                 is_active_group = False
                 tab_list = []
                 for p_name in pages:
                     p_url = get_page_url(p_name).rstrip('/')
-                    
                     is_current = (curr_path == p_url.lower())
-                        
-                    active = is_current
-                    tab_list.append({'name': p_name, 'url': p_url, 'active': active})
-                    if active:
+
+                    if _is_super or _n(p_name) in _allowed_norm:
+                        tab_list.append({'name': p_name, 'url': p_url, 'active': is_current})
+
+                    if is_current:
                         is_active_group = True
                         academics_breadcrumb = [main_cat, folder_name, p_name]
-                
-                if is_active_group:
+
+                # Only override when the new group has at least one visible tab
+                if is_active_group and tab_list:
                     academic_tabs = tab_list
-                    break
-            if academic_tabs: break
-        if academic_tabs: break
 
     return dict(ACADEMIC_MENU_CONFIG=ACADEMIC_MENU_CONFIG, academic_tabs=academic_tabs, academics_breadcrumb=academics_breadcrumb)
 
@@ -3289,8 +3987,16 @@ def get_degree_branches_api(degree_id):
 
 @academics_bp.route('/api/college/<int:college_id>/degree/<int:degree_id>/specializations')
 def get_college_degree_specializations_api(college_id, degree_id):
-    # Used by pages where Department list depends on the college-degree mapping (PG/PHD specializations).
+    # Try the specific college-degree mapping first
     branches = AcademicsModel.get_college_degree_specializations(college_id, degree_id)
+    if not branches:
+        # Fallback to degree branches
+        branches = AcademicsModel.get_degree_branches(degree_id)
+    if not branches:
+        # Final fallback: return all branches to ensure the dropdown works
+        from app.db import DB
+        branches = DB.fetch_all("SELECT Pk_BranchId as id, Branchname as name FROM SMS_BranchMst ORDER BY Branchname")
+        
     from app.utils import clean_json_data
     return jsonify(clean_json_data(branches))
 
@@ -3302,10 +4008,8 @@ def get_degree_departments_api(degree_id):
 
 @academics_bp.route('/api/get_semesters_range/<int:min_sem>/<int:max_sem>')
 def get_semesters_range_api(min_sem, max_sem):
-    # User requested to show only 8 semesters.
-    # We use semesterorder to limit from 1 to 8.
-    sql = "SELECT pk_semesterid, semester_roman, semester_char FROM SMS_Semester_Mst WHERE semesterorder BETWEEN 1 AND 8 ORDER BY semesterorder"
-    rows = DB.fetch_all(sql)
+    sql = "SELECT pk_semesterid, semester_roman, semester_char FROM SMS_Semester_Mst WHERE semesterorder BETWEEN ? AND ? ORDER BY semesterorder"
+    rows = DB.fetch_all(sql, [min_sem, max_sem])
     from app.utils import clean_json_data
     return jsonify(clean_json_data(rows))
 
@@ -3356,7 +4060,7 @@ def get_batches_with_type_api():
 
 @academics_bp.route('/api/get_all_departments')
 def get_all_departments_api():
-    depts = AcademicsModel.get_departments()
+    depts = DB.fetch_all("SELECT Pk_BranchId as id, Branchname as name FROM SMS_BranchMst ORDER BY Branchname")
     return jsonify(depts)
 
 @academics_bp.route('/minor_advisor', methods=['GET', 'POST'])
@@ -3791,11 +4495,14 @@ def pgs_course_limit_master():
 def batch_assignment():
     if request.method == 'POST':
         student_ids = request.form.getlist('chk_student')
-        batch_id = request.form.get('batch_id')
+        # batch_id comes from the "Assign to Batch" select; assign_batch_id is the hidden fallback
+        batch_id = request.form.get('batch_id') or request.form.get('assign_batch_id')
         type_tp = request.form.get('type_tp')
-        if student_ids and batch_id and type_tp:
+        if student_ids and batch_id and batch_id not in ('0', '') and type_tp:
             BatchModel.assign_batch(student_ids, batch_id, type_tp)
             flash('Batch assigned successfully.', 'success')
+        elif student_ids and not batch_id:
+            flash('Please select a batch to assign.', 'warning')
         return redirect(url_for('academics.batch_assignment', **request.args))
 
     filters = {
@@ -4325,64 +5032,304 @@ def student_course_approval_deanpgs():
         pending_students=clean_json_data(pending_students),
     )
 
+
 @academics_bp.route('/degree_complete_detail', methods=['GET', 'POST'])
-@permission_required('Degree Complete Detail')
 def degree_complete_detail():
+    from datetime import datetime
     filters = {
-        'college_id': request.args.get('college_id'),
-        'session_id': request.args.get('session_id'),
-        'degree_id': request.args.get('degree_id'),
-        'semester_id': request.args.get('semester_id'),
-        'from_date': request.args.get('from_date'),
-        'to_date': request.args.get('to_date'),
+        'college_id': request.args.get('college_id', ''),
+        'session_id': request.args.get('session_id', ''),
+        'degree_id': request.args.get('degree_id', ''),
+        'semester_id': request.args.get('semester_id', ''),
+        'completion_date': request.args.get('completion_date', datetime.now().strftime('%Y-%m-%d')),
+        'from_date': request.args.get('from_date', datetime.now().strftime('%Y-%m-%d')),
+        'to_date': request.args.get('to_date', datetime.now().strftime('%Y-%m-%d')),
         'view': request.args.get('view')
     }
 
+    if request.method == 'POST':
+        action = request.form.get('action')
+        if action == 'SAVE':
+            student_ids = request.form.getlist('chk_student')
+            comp_date = request.form.get('completion_date')
+            if student_ids and comp_date:
+                count = AdmissionModel.save_degree_complete(student_ids, comp_date, filters['college_id'], filters['degree_id'], filters['session_id'], filters['semester_id'], session.get('user_id', 'Admin'))
+                flash(f'Degree complete updated for {count} students.', 'success')
+            else:
+                flash('Please select students and provide a date.', 'warning')
+            return redirect(url_for('academics.degree_complete_detail', **request.args))
+
     students = []
-    max_sem = 8
-    enroll_year_prefix = None
+    completed_students = []
     
-    if filters['college_id'] and filters['session_id'] and filters['degree_id']:
-        max_sem_raw = AdmissionModel.get_degree_max_sem(filters['degree_id'])
-        if max_sem_raw: max_sem = max_sem_raw
-        
-        session_name = DB.fetch_scalar("SELECT sessionname FROM SMS_AcademicSession_Mst WHERE pk_sessionid = ?", [filters['session_id']])
-        if session_name:
-            import re
-            year_match = re.search(r'(\d{4})', session_name)
-            if year_match:
-                enroll_year_prefix = str(int(year_match.group(1)) - 1)
-
-        # Only fetch students if VIEW button was pressed AND Class is selected
-        if filters['view'] == '1' and filters['semester_id'] and str(filters['semester_id']) != '0':
-            students = AdmissionModel.get_students_for_degree_completion(filters)
-        else:
-            students = []
-
-    # Lookups
+    if filters['college_id'] and filters['session_id'] and filters['degree_id'] and filters['semester_id']:
+        if filters['view'] == '1':
+            students = AdmissionModel.get_students_for_degree_complete(filters, is_completed=False)
+            completed_students = AdmissionModel.get_students_for_degree_complete(filters, is_completed=True)
+            
     loc_id = session.get('selected_loc')
     if loc_id:
         colleges = DB.fetch_all("SELECT pk_collegeid as id, collegename as name FROM SMS_College_Mst WHERE fk_locid = ? ORDER BY collegename", [loc_id])
     else:
         colleges = AcademicsModel.get_colleges_simple()
 
-    # Filter semesters from IV to max_sem
-    all_semesters = InfrastructureModel.get_all_semesters()
-    filtered_semesters = [s for s in all_semesters if s['semesterorder'] >= 4 and s['semesterorder'] <= max_sem]
-
-    if not filters['degree_id']:
-        students = []
-
     lookups = {
         'colleges': colleges,
         'sessions': InfrastructureModel.get_sessions(),
-        'degrees': AcademicsModel.get_college_all_degrees(filters['college_id']) if filters['college_id'] and str(filters['college_id']) != '0' else [],
-        'semesters': filtered_semesters if filters['degree_id'] and str(filters['degree_id']) != '0' else []
+        'degrees': AcademicsModel.get_college_all_degrees(filters['college_id']) if filters['college_id'] else [],
+        'semesters': DB.fetch_all("SELECT pk_semesterid, semester_roman FROM SMS_Semester_Mst ORDER BY pk_semesterid")
     }
 
-    return render_template('academics/degree_complete_detail.html', 
-                           lookups=lookups, filters=filters, students=students, 
-                           enroll_year_prefix=enroll_year_prefix, now=datetime.now())
+    return render_template('academics/degree_complete_detail.html', lookups=lookups, filters=filters, students=students, completed_students=completed_students, now=datetime.now())
+
+@academics_bp.route('/degree_complete_report')
+def degree_complete_report():
+    import io
+    from datetime import datetime
+    filters = {
+        'college_id': request.args.get('college_id', ''),
+        'degree_id': request.args.get('degree_id', ''),
+        'from_date': request.args.get('from_date', datetime.now().strftime('%d/%m/%Y')),
+        'to_date': request.args.get('to_date', datetime.now().strftime('%d/%m/%Y'))
+    }
+    
+    if not all([filters['college_id'], filters['degree_id'], filters['from_date'], filters['to_date']]):
+        flash('Please select all filters for the report.', 'warning')
+        return redirect(url_for('academics.degree_complete_detail'))
+        
+    report_data = AdmissionModel.get_degree_complete_report(filters)
+    
+    if not report_data:
+        flash('No Record Found!', 'warning')
+        return redirect(url_for('academics.degree_complete_detail', **request.args))
+        
+    HINDI_MONTHS = {
+        1: 'जनवरी', 2: 'फरवरी', 3: 'मार्च', 4: 'अप्रैल',
+        5: 'मई',    6: 'जून',   7: 'जुलाई', 8: 'अगस्त',
+        9: 'सितम्बर', 10: 'अक्तूबर', 11: 'नवम्बर', 12: 'दिसम्बर'
+    }
+
+    def get_division(cgpa):
+        if cgpa is None or cgpa == '':
+            return '', ''
+        try:
+            v = float(cgpa)
+        except (ValueError, TypeError):
+            return '', ''
+        if v >= 7.5:
+            return 'First Division with Distinction', 'प्रथम श्रेणी श्रेष्ठता के साथ'
+        elif v >= 6.0:
+            return 'First Division', 'प्रथम श्रेणी '
+        elif v >= 5.0:
+            return 'Second Division', 'द्वितीय श्रेणी'
+        else:
+            return 'Third Division', 'तृतीय श्रेणी'
+
+    expected_cols = ['SrNo', 'DegreeNo', 'AdmissionNo', 'StudentName', 'StudentNameHindi', 'SonDaughter', 'HisHer', 'सुपुत्री सुपुत्र', 'FatherName', 'FatherNameHindi', 'MotherName', 'MotherNameHindi', 'Completion', 'Completion1', 'पूर्णता की तिथि', 'Discipline', 'DegreeNameHindi', 'MarksObtain', 'MaxMarks', 'Division', 'श्रेणी', 'AadharNumber', 'PhotoFileName', 'Percentages', 'MajorField', 'Branchname_hindi']
+
+    import pandas as pd
+    out_df = pd.DataFrame(columns=expected_cols)
+    for i, row in enumerate(report_data):
+        dt = row.get('dgcompleteddate', '')
+        if hasattr(dt, 'strftime'):
+            comp_date    = dt.strftime('%d/%m/%Y')
+            completion1  = dt.strftime('%B, %Y')
+            hindi_date   = f"{HINDI_MONTHS.get(dt.month, '')}, {dt.year}"
+        else:
+            comp_date   = str(dt) if dt else ''
+            completion1 = comp_date
+            hindi_date  = comp_date
+
+        cgpa = row.get('final_cgpa', '')
+        try:
+            cgpa_val = round(float(cgpa), 2) if cgpa != '' else ''
+        except (ValueError, TypeError):
+            cgpa_val = ''
+        pct = round(float(cgpa_val) * 10, 2) if cgpa_val != '' else ''
+        div_en, div_hi = get_division(cgpa_val)
+
+        out_df.loc[i] = {
+            'SrNo':               i + 1,
+            'DegreeNo':           '',
+            'AdmissionNo':        row.get('AdmissionNo', ''),
+            'StudentName':        row.get('fullname', ''),
+            'StudentNameHindi':   row.get('fullname_h', '') or english_to_hindi(row.get('fullname', '')),
+            'SonDaughter':        'Daughter' if row.get('gender') == 'F' else 'Son',
+            'HisHer':             'her'       if row.get('gender') == 'F' else 'his',
+            'सुपुत्री सुपुत्र':  'सुपुत्री'  if row.get('gender') == 'F' else 'सुपुत्र',
+            'FatherName':         row.get('fname', ''),
+            'FatherNameHindi':    row.get('Fnamehindi', '') or english_to_hindi(row.get('fname', '')),
+            'MotherName':         row.get('mname', ''),
+            'MotherNameHindi':    row.get('Mnamehindi', '') or english_to_hindi(row.get('mname', '')),
+            'Completion':         comp_date,
+            'Completion1':        completion1,
+            'पूर्णता की तिथि':   hindi_date,
+            'Discipline':         row.get('degreename', ''),
+            'DegreeNameHindi':    row.get('degreename_hindi', '') or english_to_hindi(row.get('degreename', '')),
+            'MarksObtain':        cgpa_val,
+            'MaxMarks':           10 if cgpa_val != '' else '',
+            'Division':           div_en,
+            'श्रेणी':             div_hi,
+            'AadharNumber':       row.get('AdharNo', ''),
+            'PhotoFileName':      row.get('StuImage', ''),
+            'Percentages':        pct,
+            'MajorField':         row.get('Branchname', ''),
+            'Branchname_hindi':   row.get('Branchname_hindi', '') or english_to_hindi(row.get('Branchname', '')),
+        }
+        
+    # --- Professional Excel Report with openpyxl ---
+    import openpyxl
+    from openpyxl.styles import (PatternFill, Font, Alignment, Border, Side,
+                                  GradientFill)
+    from openpyxl.utils import get_column_letter
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = 'Degree Complete'
+
+    # ── Color palette ──────────────────────────────────────────────
+    CLR_HEADER_BG   = '1F3864'   # deep navy
+    CLR_HEADER_FG   = 'FFFFFF'   # white
+    CLR_TITLE_BG    = '2E75B6'   # medium blue
+    CLR_TITLE_FG    = 'FFFFFF'
+    CLR_SUBHDR_BG   = 'D6E4F0'   # pale blue
+    CLR_SUBHDR_FG   = '1F3864'
+    CLR_ROW_ODD     = 'FFFFFF'
+    CLR_ROW_EVEN    = 'EBF5FB'
+    CLR_FOOTER_BG   = 'F2F2F2'
+    CLR_ACCENT      = 'F39C12'   # golden accent for distinction rows
+
+    # ── Border helper ──────────────────────────────────────────────
+    thin  = Side(style='thin',   color='AAAAAA')
+    thick = Side(style='medium', color='1F3864')
+    def mk_border(left=thin, right=thin, top=thin, bottom=thin):
+        return Border(left=left, right=right, top=top, bottom=bottom)
+
+    outer_border = Border(left=thick, right=thick, top=thick, bottom=thick)
+
+    # ── Column definitions ─────────────────────────────────────────
+    # (header label, field key in out_df, width, alignment)
+    columns = [
+        ('Sr.No',             'SrNo',              6,  'center'),
+        ('Degree No',         'DegreeNo',           12, 'center'),
+        ('Admission No',      'AdmissionNo',        16, 'center'),
+        ('Student Name',      'StudentName',        22, 'left'),
+        ('Name (Hindi)',       'StudentNameHindi',   22, 'left'),
+        ('Son/Daughter',      'SonDaughter',        12, 'center'),
+        ('His/Her',           'HisHer',              8, 'center'),
+        ('सुपुत्री/सुपुत्र', 'सुपुत्री सुपुत्र',  14, 'center'),
+        ('Father Name',       'FatherName',         22, 'left'),
+        ('Father (Hindi)',    'FatherNameHindi',    22, 'left'),
+        ('Mother Name',       'MotherName',         22, 'left'),
+        ('Mother (Hindi)',    'MotherNameHindi',    22, 'left'),
+        ('Completion Date',   'Completion',         16, 'center'),
+        ('Completion1',       'Completion1',        16, 'center'),
+        ('पूर्णता की तिथि',   'पूर्णता की तिथि',   18, 'center'),
+        ('Discipline',        'Discipline',         22, 'left'),
+        ('Degree (Hindi)',    'DegreeNameHindi',    22, 'left'),
+        ('Marks Obtained',    'MarksObtain',        14, 'center'),
+        ('Max Marks',         'MaxMarks',           10, 'center'),
+        ('Division',          'Division',           28, 'left'),
+        ('श्रेणी',            'श्रेणी',             24, 'left'),
+        ('Aadhar Number',     'AadharNumber',       18, 'center'),
+        ('Photo File',        'PhotoFileName',      26, 'left'),
+        ('Percentage',        'Percentages',        12, 'center'),
+        ('Major Field',       'MajorField',         20, 'left'),
+        ('Branch (Hindi)',    'Branchname_hindi',   22, 'left'),
+    ]
+    num_cols = len(columns)
+
+    # ── ROW 1 : Main Title (merged) ────────────────────────────────
+    ws.row_dimensions[1].height = 36
+    ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=num_cols)
+    c = ws.cell(1, 1,
+        value='HARYANA AGRICULTURAL UNIVERSITY, HISAR')
+    c.font      = Font(name='Calibri', bold=True, size=18, color=CLR_HEADER_FG)
+    c.fill      = PatternFill('solid', fgColor=CLR_HEADER_BG)
+    c.alignment = Alignment(horizontal='center', vertical='center')
+    c.border    = mk_border(left=thick, right=thick, top=thick, bottom=thin)
+
+    # ── ROW 2 : Sub-Title ─────────────────────────────────────────
+    ws.row_dimensions[2].height = 26
+    ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=num_cols)
+    c = ws.cell(2, 1, value='Student Degree Complete Report')
+    c.font      = Font(name='Calibri', bold=True, size=14, color=CLR_TITLE_FG)
+    c.fill      = PatternFill('solid', fgColor=CLR_TITLE_BG)
+    c.alignment = Alignment(horizontal='center', vertical='center')
+    c.border    = mk_border(left=thick, right=thick, top=thin, bottom=thin)
+
+    # ── ROW 3 : Date range info ────────────────────────────────────
+    ws.row_dimensions[3].height = 18
+    ws.merge_cells(start_row=3, start_column=1, end_row=3, end_column=num_cols)
+    date_info = f"Period: {filters['from_date']}  to  {filters['to_date']}     |     Generated on: {datetime.now().strftime('%d %B %Y  %I:%M %p')}"
+    c = ws.cell(3, 1, value=date_info)
+    c.font      = Font(name='Calibri', italic=True, size=10, color='555555')
+    c.fill      = PatternFill('solid', fgColor='EAF2FF')
+    c.alignment = Alignment(horizontal='center', vertical='center')
+    c.border    = mk_border(left=thick, right=thick, top=thin, bottom=thick)
+
+    # ── ROW 4 : Column Headers ────────────────────────────────────
+    ws.row_dimensions[4].height = 30
+    for col_idx, (label, _, width, _align) in enumerate(columns, start=1):
+        ws.column_dimensions[get_column_letter(col_idx)].width = width
+        c = ws.cell(4, col_idx, value=label)
+        c.font      = Font(name='Calibri', bold=True, size=10, color=CLR_SUBHDR_FG)
+        c.fill      = PatternFill('solid', fgColor=CLR_SUBHDR_BG)
+        c.alignment = Alignment(horizontal='center', vertical='center',
+                                wrap_text=True)
+        lft = thick if col_idx == 1        else thin
+        rgt = thick if col_idx == num_cols else thin
+        c.border = Border(left=lft, right=rgt, top=thick, bottom=thick)
+
+    # ── DATA ROWS ─────────────────────────────────────────────────
+    for row_idx, (_, row_data) in enumerate(out_df.iterrows(), start=5):
+        ws.row_dimensions[row_idx].height = 17
+        is_even      = (row_idx % 2 == 0)
+        is_distinct  = 'distinction' in str(row_data.get('Division', '')).lower()
+        row_bg = 'FFF8E7' if is_distinct else (CLR_ROW_EVEN if is_even else CLR_ROW_ODD)
+
+        for col_idx, (_, field, _, align) in enumerate(columns, start=1):
+            val = row_data.get(field, '')
+            c   = ws.cell(row_idx, col_idx, value=val)
+            c.font      = Font(name='Calibri', size=9,
+                               bold=(col_idx == 1),
+                               color='1A1A1A')
+            c.fill      = PatternFill('solid', fgColor=row_bg)
+            c.alignment = Alignment(horizontal=align, vertical='center',
+                                    wrap_text=False)
+            lft = thick if col_idx == 1        else thin
+            rgt = thick if col_idx == num_cols else thin
+            c.border = Border(left=lft, right=rgt, top=thin, bottom=thin)
+
+    # ── FOOTER ROW ────────────────────────────────────────────────
+    last_row = 5 + len(out_df)
+    ws.row_dimensions[last_row].height = 18
+    ws.merge_cells(start_row=last_row, start_column=1,
+                   end_row=last_row, end_column=num_cols)
+    c = ws.cell(last_row, 1,
+        value=f'Total Records: {len(out_df)}     |     HAU ERP System  —  Confidential')
+    c.font      = Font(name='Calibri', bold=True, size=9, color='555555')
+    c.fill      = PatternFill('solid', fgColor=CLR_FOOTER_BG)
+    c.alignment = Alignment(horizontal='right', vertical='center')
+    c.border    = mk_border(left=thick, right=thick, top=thick, bottom=thick)
+
+    # ── Freeze panes below header row ────────────────────────────
+    ws.freeze_panes = 'A5'
+
+    # ── Auto-filter on header row ─────────────────────────────────
+    ws.auto_filter.ref = (
+        f'A4:{get_column_letter(num_cols)}{4 + len(out_df)}'
+    )
+
+    # ── Print settings ────────────────────────────────────────────
+    ws.page_setup.orientation = 'landscape'
+    ws.page_setup.fitToWidth  = 1
+    ws.print_title_rows       = '1:4'
+
+    output = io.BytesIO()
+    wb.save(output)
+    output.seek(0)
+    return send_file(output, download_name="DegreeComplete Report (5).xlsx", as_attachment=True, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 @academics_bp.route('/api/get_college_degrees')
 def get_college_degrees_query_api():
@@ -4412,3 +5359,16 @@ def get_teachers_api():
         return jsonify([])
     teachers = AdvisorAllocationModel.get_teachers_for_dropdown(college_id)
     return jsonify(clean_json_data(teachers))
+
+@academics_bp.route('/api/employee_mapped_degrees')
+def get_employee_mapped_degrees():
+    """Return degree IDs already mapped to a given user."""
+    user_id = request.args.get('user_id')
+    if not user_id:
+        return jsonify([])
+    rows = DB.fetch_all("""
+        SELECT FK_DegreeID AS degree_id
+        FROM SMS_EmployeeDegreeMap
+        WHERE FK_USERID = ?
+    """, [user_id])
+    return jsonify([r['degree_id'] for r in rows])
