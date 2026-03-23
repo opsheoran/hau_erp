@@ -359,7 +359,7 @@ function loadCommittee(sid) {
         document.getElementById('txtAdvisorName').value = '';
         return;
     }
-    fetch('/academics/api/student/' + sid + '/committee')
+    fetch('/academics/api/student/' + sid + '/committee?type=major')
         .then(res => res.json())
         .then(data => {
             let tbody = document.getElementById('tbodyCommittee');

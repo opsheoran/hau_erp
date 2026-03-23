@@ -4236,12 +4236,18 @@ def get_student_specializations_api(sid):
 
 @academics_bp.route('/api/student/<int:sid>/committee')
 def get_student_committee_api(sid):
+    filter_type = request.args.get('type', 'all')
     sql = """
         SELECT ACD.*, S.fullname as student_name, 
                E.empname + ' || ' + E.empcode as advisor_name,
                DESG.designation as designation, DEPT.description as department,
                B.Branchname as specialization,
-               'Major Advisor' as role_name
+               CASE ACD.fk_statusid
+                    WHEN 1 THEN 'Major Advisor' WHEN 2 THEN 'Co-Advisor'
+                    WHEN 3 THEN 'Member From Minor Subject' WHEN 4 THEN 'Member From Supporting Subject'
+                    WHEN 5 THEN 'Dean PGS Nominee' WHEN 6 THEN 'Member From Major Subject'
+                    ELSE 'Member'
+               END as role_name
         FROM SMS_Advisory_Committee_Dtl ACD
         INNER JOIN SMS_Advisory_Committee_Mst ACM ON ACD.fk_adcid = ACM.pk_adcid
         INNER JOIN SMS_Student_Mst S ON ACM.fk_stid = S.pk_sid
@@ -4249,8 +4255,12 @@ def get_student_committee_api(sid):
         LEFT JOIN SAL_Designation_Mst DESG ON E.fk_desgid = DESG.pk_desgid
         LEFT JOIN Department_Mst DEPT ON E.fk_deptid = DEPT.pk_deptid
         LEFT JOIN SMS_BranchMst B ON S.fk_branchid = B.Pk_BranchId
-        WHERE ACM.fk_stid = ? AND ACD.fk_statusid = 1
+        WHERE ACM.fk_stid = ?
     """
+    if filter_type == 'major':
+        sql += " AND ACD.fk_statusid = 1"
+        
+    sql += " ORDER BY ACD.fk_statusid"
     rows = DB.fetch_all(sql, [sid])
     return jsonify(clean_json_data(rows))
 
