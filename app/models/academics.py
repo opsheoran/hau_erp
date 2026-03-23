@@ -4468,6 +4468,7 @@ class AdvisoryModel:
                    B_MIN.Branchname as minor_name,
                    B_SUP.Branchname as supporting_name,
                    CLG.collegename, DEG.degreename, SES.sessionname,
+                   S.fk_collegeid, S.fk_adm_session, S.fk_degreeid,
                    M.submitdate, M.approvalstatus, M.responsedate, M.responseremarks
             FROM SMS_Student_Mst S
             LEFT JOIN SMS_BranchMst B_MST ON S.fk_branchid = B_MST.Pk_BranchId

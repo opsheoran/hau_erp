@@ -1901,8 +1901,11 @@ def major_advisor():
 
     # Filters for Student Selection
     college_id = request.args.get('college_id')
-    if not college_id and session.get('location_id'):
-        college_id = str(session.get('location_id'))
+    loc_id = session.get('selected_loc')
+    colleges = DB.fetch_all("SELECT pk_collegeid as id, collegename as name FROM SMS_College_Mst WHERE fk_locid = ? ORDER BY collegename", [loc_id]) if loc_id else AcademicsModel.get_colleges_simple()
+    
+    if not college_id and colleges:
+        college_id = str(colleges[0]['id'])
         
     session_id = request.args.get('session_id')
     if not session_id:
@@ -1968,12 +1971,12 @@ def major_advisor():
             if mst:
                 dtl = conn.execute("SELECT D.fk_empid, E.empname, E.empcode FROM SMS_Advisory_Committee_Dtl D JOIN SAL_Employee_Mst E ON D.fk_empid = E.pk_empid WHERE D.fk_adcid=? AND D.fk_statusid=1", [mst[0]]).fetchone()
                 if dtl:
-                    edit_advisor = {'id': dtl[0], 'name': f"{dtl[1]} | {dtl[2]}"}
+                    edit_advisor = {'id': dtl[0], 'name': f"{dtl[1]} || {dtl[2]}"}
         finally:
             conn.close()
 
     lookups = {
-        'colleges': AcademicsModel.get_colleges_simple(),
+        'colleges': colleges,
         'sessions': InfrastructureModel.get_sessions(),
         'degrees': AcademicsModel.get_college_pg_degrees(college_id) if college_id else [],
         'branches': AcademicsModel.get_college_degree_specializations(college_id, degree_id) if (college_id and degree_id) else [],
@@ -4183,21 +4186,21 @@ def get_student_specializations_api(sid):
 @academics_bp.route('/api/student/<int:sid>/committee')
 def get_student_committee_api(sid):
     sql = """
-        SELECT ACD.*, S.fullname as student_name, E.empname as advisor_name, 
+        SELECT ACD.*, S.fullname as student_name, 
+               E.empname + ' || ' + E.empcode as advisor_name,
                DESG.designation as designation, DEPT.description as department,
                B.Branchname as specialization,
-               CASE ACD.fk_statusid 
+               CASE ACD.fk_statusid
                     WHEN 1 THEN 'Major Advisor' WHEN 2 THEN 'Co-Advisor'
                     WHEN 3 THEN 'Member From Minor Subject' WHEN 4 THEN 'Member From Supporting Subject'
                     WHEN 5 THEN 'Dean PGS Nominee' WHEN 6 THEN 'Member From Major Subject'
-                    ELSE 'Member' 
+                    ELSE 'Member'
                END as role_name
         FROM SMS_Advisory_Committee_Dtl ACD
         INNER JOIN SMS_Advisory_Committee_Mst ACM ON ACD.fk_adcid = ACM.pk_adcid
         INNER JOIN SMS_Student_Mst S ON ACM.fk_stid = S.pk_sid
         INNER JOIN SAL_Employee_Mst E ON ACD.fk_empid = E.pk_empid
-        LEFT JOIN SAL_Designation_Mst DESG ON E.fk_desgid = DESG.pk_desgid
-        LEFT JOIN Department_Mst DEPT ON E.fk_deptid = DEPT.pk_deptid
+        LEFT JOIN SAL_Designation_Mst DESG ON E.fk_desgid = DESG.pk_desgid        LEFT JOIN Department_Mst DEPT ON E.fk_deptid = DEPT.pk_deptid
         LEFT JOIN SMS_BranchMst B ON S.fk_branchid = B.Pk_BranchId
         WHERE ACM.fk_stid = ?
         ORDER BY ACD.fk_statusid
