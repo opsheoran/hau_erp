@@ -4141,32 +4141,63 @@ def minor_advisor():
         return redirect(url_for('academics.minor_advisor', **request.args))
 
     college_id = request.args.get('college_id')
+    loc_id = session.get('selected_loc')
+    colleges = DB.fetch_all("SELECT pk_collegeid as id, collegename as name FROM SMS_College_Mst WHERE fk_locid = ? ORDER BY collegename", [loc_id]) if loc_id else AcademicsModel.get_colleges_simple()
+    
+    if not college_id and colleges:
+        college_id = str(colleges[0]['id'])
+
     session_id = request.args.get('session_id')
+    if not session_id:
+        curr_session = InfrastructureModel.get_current_session_id()
+        session_id = str(curr_session) if curr_session else None
+
     degree_id = request.args.get('degree_id')
     branch_id = request.args.get('branch_id')
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
     
     students = []
-    if college_id and session_id and degree_id and str(degree_id) != '0':
+    total_students = 0
+    if college_id:
         filters = {
             'college_id': college_id,
             'session_id': session_id,
             'degree_id': degree_id,
             'branch_id': branch_id
         }
-        students = AdvisoryModel.get_students_for_advisory(filters)
+        students, total_students = AdvisoryModel.get_students_for_advisory(filters, page=page, per_page=per_page)
+
+    import math
+    pagination = {
+        'page': page,
+        'per_page': per_page,
+        'total': total_students,
+        'total_pages': math.ceil(total_students / per_page) if total_students else 1,
+        'has_prev': page > 1,
+        'has_next': page < (math.ceil(total_students / per_page) if total_students else 1)
+    }
 
     lookups = {
-        'colleges': AcademicsModel.get_colleges_simple(),
+        'colleges': colleges,
         'sessions': InfrastructureModel.get_sessions(),
         'degrees': AcademicsModel.get_college_pg_degrees(college_id) if college_id else [],
         'branches': AcademicsModel.get_college_degree_specializations(college_id, degree_id) if (college_id and degree_id and str(degree_id) != '0') else [],
-        'employees': DB.fetch_all("SELECT E.pk_empid as id, E.empname + ' | ' + E.empcode + ' | (' + ISNULL(D.description, 'No Dept') + ')' as name FROM SAL_Employee_Mst E LEFT JOIN Department_Mst D ON E.fk_deptid = D.pk_deptid WHERE E.employeeleftstatus = 'N' ORDER BY E.empname")
+        'employees': DB.fetch_all("SELECT E.pk_empid as id, E.empname + ' || ' + ISNULL(E.empcode, '') + ' (' + ISNULL(D.description, 'No Dept') + ')' as name FROM SAL_Employee_Mst E LEFT JOIN Department_Mst D ON E.fk_deptid = D.pk_deptid WHERE E.employeeleftstatus = 'N' ORDER BY E.empname")
+    }
+
+    active_filters = {
+        'college_id': college_id,
+        'session_id': session_id,
+        'degree_id': degree_id,
+        'branch_id': branch_id
     }
     
     return render_template('academics/minor_advisor.html', 
                            lookups=lookups,
                            students=clean_json_data(students), 
-                           filters=request.args)
+                           pagination=pagination,
+                           filters=active_filters)
 
 @academics_bp.route('/api/student/<int:sid>/advisory_committee')
 def get_student_advisory_committee_api(sid):
