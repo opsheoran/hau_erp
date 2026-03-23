@@ -4113,11 +4113,17 @@ def get_all_departments_api():
 @permission_required('Member of Minor and supporting')
 def minor_advisor():
     if request.method == 'POST':
+        action = request.form.get('action')
         sid = request.form.get('sid')
         advisor_id = request.form.get('advisor_id')
         role_id = request.form.get('role_id')
         user_id = session['user_id']
-        
+
+        if action == 'SUBMIT' and sid:
+            DB.execute("UPDATE SMS_Advisory_Committee_Mst SET submitdate = GETDATE() WHERE fk_stid = ?", [sid])
+            flash('Committee submitted successfully!', 'success')
+            return redirect(url_for('academics.minor_advisor', **request.args))
+
         if sid and advisor_id and role_id:
             # Upsert into unified committee structure
             mst = DB.fetch_one("SELECT pk_adcid FROM SMS_Advisory_Committee_Mst WHERE fk_stid = ?", [sid])
@@ -4129,17 +4135,19 @@ def minor_advisor():
                         VALUES (?, ?, ?, ?, ?, ?, GETDATE(), 'P')
                     """, [stu['fk_collegeid'], stu['fk_adm_session'], stu['fk_degreeid'], stu['fk_branchid'], sid, user_id])
                     mst = DB.fetch_one("SELECT pk_adcid FROM SMS_Advisory_Committee_Mst WHERE fk_stid = ?", [sid])
-            
+
             if mst:
                 adcid = mst['pk_adcid']
                 DB.execute("DELETE FROM SMS_Advisory_Committee_Dtl WHERE fk_adcid=? AND fk_statusid=?", [adcid, role_id])
                 DB.execute("INSERT INTO SMS_Advisory_Committee_Dtl (fk_adcid, fk_statusid, fk_empid) VALUES (?, ?, ?)",
                            [adcid, role_id, advisor_id])
-                flash('Committee member assigned successfully!', 'success')
+                if action == 'UPDATE':
+                    flash('Committee member updated successfully!', 'success')
+                else:
+                    flash('Committee member assigned successfully!', 'success')
             else:
                 flash('Error creating advisory master.', 'danger')
         return redirect(url_for('academics.minor_advisor', **request.args))
-
     college_id = request.args.get('college_id')
     loc_id = session.get('selected_loc')
     colleges = DB.fetch_all("SELECT pk_collegeid as id, collegename as name FROM SMS_College_Mst WHERE fk_locid = ? ORDER BY collegename", [loc_id]) if loc_id else AcademicsModel.get_colleges_simple()
@@ -4198,6 +4206,55 @@ def minor_advisor():
                            students=clean_json_data(students), 
                            pagination=pagination,
                            filters=active_filters)
+
+@academics_bp.route('/minor_advisor_report/<int:sid>')
+@permission_required('Member of Minor and supporting')
+def minor_advisor_report(sid):
+    from flask import make_response
+    from app.utils_pdf import generate_advisory_committee_report
+    
+    # 1. Fetch Student Details
+    stu_query = """
+        SELECT S.fullname, S.AdmissionNo, S.enrollmentno, 
+               CLG.collegename, DEPT.description as department_name,
+               B_MAJ.Branchname as major_name, B_MIN.Branchname as minor_name, B_SUP.Branchname as supporting_name
+        FROM SMS_Student_Mst S
+        LEFT JOIN SMS_College_Mst CLG ON S.fk_collegeid = CLG.pk_collegeid
+        LEFT JOIN SMS_stuDiscipline_dtl SD ON S.pk_sid = SD.fk_sturegid
+        LEFT JOIN SMS_BranchMst B_MAJ ON SD.fk_desciplineidMajor = B_MAJ.Pk_BranchId
+        LEFT JOIN Department_Mst DEPT ON B_MAJ.fk_deptidDdo = DEPT.pk_deptid
+        LEFT JOIN SMS_BranchMst B_MIN ON SD.fk_desciplineidMinor = B_MIN.Pk_BranchId
+        LEFT JOIN SMS_BranchMst B_SUP ON SD.fk_desciplineidSupporting = B_SUP.Pk_BranchId
+        WHERE S.pk_sid = ?
+    """
+    student_info = DB.fetch_one(stu_query, [sid])
+    if not student_info:
+        flash("Student not found for report.", "danger")
+        return redirect(url_for('academics.minor_advisor'))
+
+    # 2. Fetch Committee Details
+    com_query = """
+        SELECT ACD.*, E.empname + ' || ' + ISNULL(E.empcode, '') as advisor_name,
+               DEPT.description as department,
+               CASE ACD.fk_statusid
+                    WHEN 1 THEN 'Major Advisor' WHEN 2 THEN 'Co-Advisor'
+                    WHEN 3 THEN 'Member From Minor Subject' WHEN 4 THEN 'Member From Supporting Subject'
+                    WHEN 5 THEN 'Dean PGS Nominee' WHEN 6 THEN 'Member From Major Subject'
+                    ELSE 'Member'
+               END as role_name
+        FROM SMS_Advisory_Committee_Dtl ACD
+        INNER JOIN SMS_Advisory_Committee_Mst ACM ON ACD.fk_adcid = ACM.pk_adcid
+        INNER JOIN SAL_Employee_Mst E ON ACD.fk_empid = E.pk_empid
+        LEFT JOIN Department_Mst DEPT ON E.fk_deptid = DEPT.pk_deptid
+        WHERE ACM.fk_stid = ? AND ACD.fk_statusid != 5
+    """
+    committee_data = DB.fetch_all(com_query, [sid])
+    
+    buffer = generate_advisory_committee_report(student_info, committee_data)
+    response = make_response(buffer.getvalue())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'inline; filename=Committee_Report_{sid}.pdf'
+    return response
 
 @academics_bp.route('/api/student/<int:sid>/advisory_committee')
 def get_student_advisory_committee_api(sid):

@@ -139,8 +139,11 @@
                     <tr>
                         <td colspan="2"></td>
                         <td colspan="5">
-                            <input type="submit" value="ADD" class="button-common" style="width:100px;">
-                            <input type="reset" value="RESET" class="button-common" style="width:100px; margin-left:5px;">
+                            <input type="submit" name="action" value="UPDATE" class="button-common" style="width:100px; display:none;" id="btnUpdate">
+                            <input type="submit" name="action" value="ADD" class="button-common" style="width:100px;" id="btnAdd">
+                            <input type="submit" name="action" value="SUBMIT" class="button-common" style="width:100px; margin-left:5px;">
+                            <input type="reset" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="window.location.href='{{ url_for('academics.minor_advisor') }}'">
+                            <input type="button" value="VIEW REPORT" class="button-common" style="width:120px; margin-left:5px;" id="btnViewReport" onclick="generateReport()" disabled>
                         </td>
                     </tr>
                 </tbody>
@@ -314,6 +317,9 @@ function editMinorAdvisor(sid) {
 function loadCommittee(sid) {
     if(!sid || sid === '0') {
         currentCommittee = [];
+        document.getElementById('btnViewReport').disabled = true;
+        document.getElementById('committee_table').innerHTML = '';
+        document.getElementById('agreementRow').style.display = 'none';
         return;
     }
     
@@ -323,23 +329,30 @@ function loadCommittee(sid) {
             currentCommittee = data;
             const tbody = document.querySelector('#committee_table tbody');
             tbody.innerHTML = '';
-            data.forEach((member, index) => {
-                const row = tbody.insertRow();
-                row.className = index % 2 === 0 ? 'item-style' : 'item-style-alt';
-                row.align = 'center';
-                let html = '<td>' + (index + 1) + '</td>';
-                html += '<td align="left">' + member.student_name + '</td>';
-                html += '<td>' + member.role_name + '</td>';
-                html += '<td align="left">' + member.advisor_name + '</td>';
-                html += '<td align="left">' + (member.designation || '-') + '</td>';
-                html += '<td align="left">' + (member.department || '-') + '</td>';
-                html += '<td align="left">' + (member.specialization || '-') + '</td>';
-                html += '<td><img src="/static/images/Edit.gif" style="cursor:pointer" onclick="fillForm(\'' + member.fk_statusid + '\', \'' + member.fk_empid + '\')"></td>';
-                html += '<td><img src="/static/images/Delete.gif" style="cursor:pointer"></td>';
-                row.innerHTML = html;
-            });
-            document.getElementById('gvdtl').style.display = 'table-row';
-            document.getElementById('agreementRow').style.display = 'table-row';
+            if(data && data.length > 0) {
+                document.getElementById('btnViewReport').disabled = false;
+                data.forEach((member, index) => {
+                    const row = tbody.insertRow();
+                    row.className = index % 2 === 0 ? 'item-style' : 'item-style-alt';
+                    row.align = 'center';
+                    let html = '<td>' + (index + 1) + '</td>';
+                    html += '<td align="left">' + (member.student_name || '-') + '</td>';
+                    html += '<td>' + member.role_name + '</td>';
+                    html += '<td align="left">' + member.advisor_name + '</td>';
+                    html += '<td align="left">' + (member.designation || '-') + '</td>';
+                    html += '<td align="left">' + (member.department || '-') + '</td>';
+                    html += '<td align="left">' + (member.specialization || '-') + '</td>';
+                    html += '<td><img src="/static/images/Edit.gif" style="cursor:pointer" onclick="fillForm(\'' + member.fk_statusid + '\', \'' + member.fk_empid + '\')"></td>';
+                    html += '<td><img src="/static/images/Delete.gif" style="cursor:pointer"></td>';
+                    row.innerHTML = html;
+                });
+                document.getElementById('gvdtl').style.display = 'table-row';
+                document.getElementById('agreementRow').style.display = 'table-row';
+            } else {
+                document.getElementById('btnViewReport').disabled = true;
+                document.getElementById('gvdtl').style.display = 'none';
+                document.getElementById('agreementRow').style.display = 'none';
+            }
         });
 }
 
@@ -356,9 +369,20 @@ function fillAdvisorByRole(roleId) {
 function fillForm(roleId, empId) {
     document.getElementById('ddlRole').value = roleId;
     document.getElementById('ddlAdvisor').value = empId;
+    
+    document.getElementById('btnAdd').style.display = 'none';
+    document.getElementById('btnUpdate').style.display = 'inline-block';
+    
     // Scroll to the Committee Details section
     const target = document.getElementById('ddlRole').closest('tr').previousElementSibling;
     if(target) target.scrollIntoView({behavior: 'smooth'});
+}
+
+function generateReport() {
+    let sid = document.querySelector('select[name="sid"]').value;
+    if (sid) {
+        window.open('/academics/minor_advisor_report/' + sid, '_blank');
+    }
 }
 </script>
 {% endblock %}
