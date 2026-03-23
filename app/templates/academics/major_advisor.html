@@ -134,11 +134,14 @@
         <div id="divCommittee" style="margin-top: 20px; display:{% if edit_sid %}block{% else %}none{% endif %};">
             <table class="table-grid-view" width="100%">
                 <thead>
-                    <tr class="header-style">
+                    <tr class="header-style" align="center">
                         <th width="5%">S.No.</th>
-                        <th>Role Name</th>
-                        <th>Advisor Name</th>
-                        <th>Department</th>
+                        <th width="15%">Student</th>
+                        <th width="15%">Advisory Type</th>
+                        <th width="20%">Advisor Name</th>
+                        <th width="15%">Designation</th>
+                        <th width="15%">Department</th>
+                        <th width="15%">Specialization</th>
                     </tr>
                 </thead>
                 <tbody id="tbodyCommittee">
@@ -349,9 +352,12 @@ function loadCommittee(sid) {
                 data.forEach((item, index) => {
                     let row = `<tr class="${index % 2 === 0 ? 'item-style' : 'item-style-alt'}" align="center">
                         <td>${index + 1}</td>
-                        <td align="left">${item.role_name}</td>
-                        <td align="left">${item.advisor_name}</td>
+                        <td align="left">${item.student_name || '-'}</td>
+                        <td align="left">${item.role_name || '-'}</td>
+                        <td align="left">${item.advisor_name || '-'}</td>
+                        <td align="left">${item.designation || '-'}</td>
                         <td align="left">${item.department || '-'}</td>
+                        <td align="left">${item.specialization || '-'}</td>
                     </tr>`;
                     tbody.innerHTML += row;
                     
