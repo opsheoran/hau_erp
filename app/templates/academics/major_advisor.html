@@ -411,11 +411,23 @@ function loadAdvisorStudents(element) {
         .then(res => res.json())
         .then(data => {
             if(data && data.length > 0) {
-                let html = '* Students List under ' + advisorName + '<br><ul style="margin-left:20px; padding-left:0; list-style-type:circle;">';
-                data.forEach(s => {
-                    html += `<li>${s.fullname} [${s.AdmissionNo || s.enrollmentno}] - ${s.degreename} (${s.Branchname || ''})</li>`;
+                let html = '* <a href="javascript:void(0);" onclick="showStudentsModal()" style="color:blue; text-decoration:underline;">Students List</a>';
+                html += '<div id="advisorStudentsModal" class="modal fade" tabindex="-1" aria-hidden="true" style="z-index: 10050;">';
+                html += '<div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header" style="background-color: #2d5a27; color: white;">';
+                html += '<h5 class="modal-title" style="margin: 0; font-size: 14px;">Students List under ' + advisorName + '</h5>';
+                html += '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1); padding: 0.5rem;"></button></div>';
+                html += '<div class="modal-body" style="padding: 15px;"><table class="table-grid-view" width="100%"><thead><tr class="header-style"><th>S.No.</th><th>Student Name</th><th>Degree</th><th>Specialization</th></tr></thead><tbody>';
+                
+                data.forEach((s, index) => {
+                    html += `<tr class="${index % 2 === 0 ? 'item-style' : 'item-style-alt'}" align="center">
+                        <td>${index + 1}</td>
+                        <td align="left">${s.fullname} [${s.AdmissionNo || s.enrollmentno}]</td>
+                        <td align="left">${s.degreename}</td>
+                        <td align="left">${s.Branchname || '-'}</td>
+                    </tr>`;
                 });
-                html += '</ul>';
+                
+                html += '</tbody></table></div></div></div></div>';
                 div.innerHTML = html;
             } else {
                 div.innerHTML = '* Students List No Students are under ' + advisorName;
@@ -424,6 +436,11 @@ function loadAdvisorStudents(element) {
         .catch(err => {
             div.innerHTML = '* Students List No Students are under ' + advisorName;
         });
+}
+
+function showStudentsModal() {
+    let modal = new bootstrap.Modal(document.getElementById('advisorStudentsModal'));
+    modal.show();
 }
 
 function editStudentAdvisor(sid, collegeId, sessionId, degreeId, branchId) {
