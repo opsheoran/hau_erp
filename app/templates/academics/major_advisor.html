@@ -255,7 +255,7 @@
                 <tbody>
                     {% for s in grid_students %}
                     <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
-                        <td>{{ loop.index + ((page_f|default(1) - 1) * 10) }}</td>
+                        <td>{{ loop.index + ((pagination.page|default(1) - 1) * pagination.per_page|default(10)) }}</td>
                         <td align="left"><b>{{ s.fullname }}</b><br><small>[ {{ s.AdmissionNo or s.enrollmentno }} ]</small></td>
                         <td align="left" style="font-size:10px;">{{ s.collegename }}</td>
                         <td align="left">{{ s.degreename }}</td>
