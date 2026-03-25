@@ -4540,6 +4540,7 @@ def get_student_committee_api(sid):
 
 @academics_bp.route('/api/advisor/<string:advisor_id>/students')
 def get_advisor_students_api(advisor_id):
+    session_id = request.args.get('session_id')
     sql = """
         SELECT S.fullname, S.AdmissionNo, S.enrollmentno, DEG.degreename, B.Branchname
         FROM SMS_Advisory_Committee_Dtl ACD
@@ -4547,10 +4548,17 @@ def get_advisor_students_api(advisor_id):
         JOIN SMS_Student_Mst S ON ACM.fk_stid = S.pk_sid
         LEFT JOIN SMS_Degree_Mst DEG ON S.fk_degreeid = DEG.pk_degreeid
         LEFT JOIN SMS_BranchMst B ON S.fk_branchid = B.Pk_BranchId
-        WHERE ACD.fk_empid = ? AND ACD.fk_statusid = 1
-        ORDER BY S.fullname
+        WHERE ACD.fk_empid = ?
     """
-    rows = DB.fetch_all(sql, [advisor_id])
+    params = [advisor_id]
+    
+    if session_id and session_id != '0':
+        sql += " AND ACM.fk_sessionid = ?"
+        params.append(session_id)
+        
+    sql += " ORDER BY S.fullname"
+    
+    rows = DB.fetch_all(sql, params)
     return jsonify(clean_json_data(rows))
 
 @academics_bp.route('/specialization_assignment', methods=['GET', 'POST'])
