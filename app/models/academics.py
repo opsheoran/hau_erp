@@ -5025,22 +5025,15 @@ class AdvisoryModel:
     @staticmethod
     def update_approval_status(adcid_list, role, action, emp_id):
         status = 'A' if action == 'approve' else 'R'
-        from app.utils import get_db_connection
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        
         placeholders = ','.join(['?'] * len(adcid_list))
         params = [status, emp_id] + adcid_list
         
         if role == 'hod':
-            cursor.execute(f"UPDATE SMS_Advisory_Committee_Mst SET hod_approval = ?, hod_by = ?, hod_date = GETDATE() WHERE pk_adcid IN ({placeholders})", params)
+            DB.execute(f"UPDATE SMS_Advisory_Committee_Mst SET hod_approval = ?, hod_by = ?, hod_date = GETDATE() WHERE pk_adcid IN ({placeholders})", params)
         elif role == 'dean':
-            cursor.execute(f"UPDATE SMS_Advisory_Committee_Mst SET college_deanapproval = ?, college_deanby = ?, Collegedean_date = GETDATE() WHERE pk_adcid IN ({placeholders})", params)
+            DB.execute(f"UPDATE SMS_Advisory_Committee_Mst SET college_deanapproval = ?, college_deanby = ?, Collegedean_date = GETDATE() WHERE pk_adcid IN ({placeholders})", params)
         elif role == 'dean_pgs':
-            cursor.execute(f"UPDATE SMS_Advisory_Committee_Mst SET approvalstatus = ?, deanpgs_id = ?, deanpgs_date = GETDATE() WHERE pk_adcid IN ({placeholders})", params)
-            
-        conn.commit()
-        conn.close()
+            DB.execute(f"UPDATE SMS_Advisory_Committee_Mst SET approvalstatus = ?, deanpgs_id = ?, deanpgs_date = GETDATE() WHERE pk_adcid IN ({placeholders})", params)
 
     @staticmethod
     def get_students_for_course_plan(filters):
@@ -5055,15 +5048,7 @@ class AdvisoryModel:
             params.append(filters['session_id'])
             
         query += " ORDER BY S.fullname"
-        
-        from app.utils import get_db_connection
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute(query, params)
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        conn.close()
-        return results
+        return DB.fetch_all(query, params)
 
     @staticmethod
     def get_student_course_plan(sid):
@@ -5086,38 +5071,23 @@ class AdvisoryModel:
             JOIN SMS_Course_Mst C ON CA.fk_courseid = C.pk_courseid
             WHERE CA.fk_sturegid = ?
         '''
-        from app.utils import get_db_connection
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute(query, [sid])
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        conn.close()
-        return results
+        return DB.fetch_all(query, [sid])
 
     @staticmethod
     def save_course_plan(sid, course_ids, emp_id):
-        from app.utils import get_db_connection
-        conn = get_db_connection()
-        cursor = conn.cursor()
         try:
             # Simple replace mechanism for now (real logic might be more complex)
-            cursor.execute("DELETE FROM Sms_course_Approval WHERE fk_sturegid = ?", [sid])
+            DB.execute("DELETE FROM Sms_course_Approval WHERE fk_sturegid = ?", [sid])
             for cid in course_ids:
                 # Fetch course details
-                cursor.execute("SELECT crhrth, crhrpr FROM SMS_Course_Mst WHERE pk_courseid = ?", [cid])
-                cd = cursor.fetchone()
+                cd = DB.fetch_one("SELECT crhrth, crhrpr FROM SMS_Course_Mst WHERE pk_courseid = ?", [cid])
                 if cd:
-                    cursor.execute('''
+                    DB.execute('''
                         INSERT INTO Sms_course_Approval (fk_sturegid, fk_courseid, crhrth, crhrpr, courseplan, created_by, created_date)
                         VALUES (?, ?, ?, ?, 'MA', ?, GETDATE())
-                    ''', [sid, cid, cd[0], cd[1], emp_id])
-            conn.commit()
+                    ''', [sid, cid, cd.get('crhrth', 0), cd.get('crhrpr', 0), emp_id])
         except Exception as e:
-            conn.rollback()
             print(f"Error saving course plan: {e}")
-        finally:
-            conn.close()
 
 class StudentModel:
     @staticmethod
