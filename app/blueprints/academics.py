@@ -2807,12 +2807,12 @@ def hod_approval_advisory():
             SELECT 
                 RM.statusname as role_name,
                 E.empname as advisor_name,
-                ISNULL(DES.DesigName, '') as designation,
-                ISNULL(DEPT.deptname, '') as department
+                ISNULL(DES.designation, '') as designation,
+                ISNULL(DEPT.description, '') as department
             FROM SMS_Advisory_Committee_Dtl D
             JOIN SMS_AdvisoryStatus_Mst RM ON D.fk_statusid = RM.pk_stid
             JOIN SAL_Employee_Mst E ON D.fk_empid = E.pk_empid
-            LEFT JOIN SAL_Designation_Mst DES ON E.fk_desigid = DES.Pk_DesigId
+            LEFT JOIN SAL_Designation_Mst DES ON E.fk_desgid = DES.pk_desgid
             LEFT JOIN Department_Mst DEPT ON E.fk_deptid = DEPT.pk_deptid
             WHERE D.fk_adcid = ?
             ORDER BY RM.pk_stid
