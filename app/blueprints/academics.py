@@ -4366,12 +4366,12 @@ def minor_advisor():
         'branch_id': branch_id
     }
     
-    return render_template('academics/minor_advisor.html', 
+    return render_template('academics/minor_advisor.html',
                            lookups=lookups,
-                           students=clean_json_data(students), 
+                           students=clean_json_data(students),
+                           grid_students=clean_json_data(students),
                            pagination=pagination,
                            filters=active_filters)
-
 @academics_bp.route('/minor_advisor_report/<int:sid>')
 @permission_required('Member of Minor and supporting')
 def minor_advisor_report(sid):
