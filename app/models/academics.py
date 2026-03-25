@@ -2943,7 +2943,7 @@ class AcademicsModel:
         # Fetches specializations for a college-degree combination
         # Try primary mapping table first
         query = """
-        SELECT DISTINCT B.Pk_BranchId as id, B.Branchname as name
+        SELECT DISTINCT B.Pk_BranchId as id, B.Branchname as name, B.fk_deptidDdo
         FROM SMS_CollegeDegreeBranchMap_dtl D
         INNER JOIN SMS_CollegeDegreeBranchMap_Mst M ON D.fk_Coldgbrmapid = M.PK_Coldgbrid
         INNER JOIN SMS_BranchMst B ON D.fk_BranchId = B.Pk_BranchId
@@ -2955,11 +2955,10 @@ class AcademicsModel:
         if not results:
             # Try new mapping table
             query_new = """
-            SELECT DISTINCT B.Pk_BranchId as id, B.Branchname as name
+            SELECT DISTINCT B.Pk_BranchId as id, B.Branchname as name, B.fk_deptidDdo
             FROM SMS_BranchMst B
-            INNER JOIN SMS_CollegeDegreeBranchMap_dtlnew D ON B.Pk_BranchId = D.branchid
-            INNER JOIN SMS_CollegeDegreeBranchMap_Mst M ON D.fk_Coldgbrmapnewid = M.PK_Coldgbrid
-            WHERE M.fk_CollegeId = ? AND M.fk_Degreeid = ?
+            INNER JOIN SMS_CollegeDegreeBranchMap_dtlnew D ON B.Pk_BranchId = D.branchid   
+            INNER JOIN SMS_CollegeDegreeBranchMap_Mst M ON D.fk_Coldgbrmapnewid = M.PK_Coldgbrid            WHERE M.fk_CollegeId = ? AND M.fk_Degreeid = ?
             ORDER BY B.Branchname
             """
             results = DB.fetch_all(query_new, [college_id, degree_id])
@@ -3238,7 +3237,7 @@ class AcademicsModel:
     @staticmethod
     def get_degree_branches(degree_id):
         return DB.fetch_all("""
-            SELECT DISTINCT B.Pk_BranchId as id, B.BranchName as name
+            SELECT DISTINCT B.Pk_BranchId as id, B.BranchName as name, B.fk_deptidDdo
             FROM SMS_BranchMst B
             INNER JOIN SMS_CollegeDegreeBranchMap_dtl D ON B.Pk_BranchId = D.fk_branchid
             INNER JOIN SMS_CollegeDegreeBranchMap_Mst M ON D.fk_Coldgbrmapid = M.PK_Coldgbrid
@@ -4339,6 +4338,83 @@ class AcademicsModel:
             conn.close()
 
 class AdvisoryModel:
+
+    @staticmethod
+    def get_academic_context_lookups(user_id, loc_id, level, req_args):
+        context = {
+            'college_id': req_args.get('college_id'),
+            'session_id': req_args.get('session_id'),
+            'degree_id': req_args.get('degree_id'),
+            'branch_id': req_args.get('branch_id', req_args.get('filter_branch_id')),
+            'user_dept': None,
+            'colleges': [],
+            'sessions': [],
+            'degrees': [],
+            'branches': [],
+            'all_branches': []
+        }
+
+        # 1. Fetch Session (Default to current if not provided)
+        if not context['session_id']:
+            context['session_id'] = str(InfrastructureModel.get_current_session_id())
+        context['sessions'] = InfrastructureModel.get_sessions()
+
+        # 2. Fetch User Dept for strict filtering (Teachers and HODs)
+        if user_id and level in ['TEACHER', 'HOD']:
+            user_info = DB.fetch_one('''
+                SELECT E.fk_deptid
+                FROM UM_Users_Mst U
+                JOIN SAL_Employee_Mst E ON U.fk_empId = E.pk_empid
+                WHERE U.pk_userId = ?''', [str(user_id)])
+            if user_info:
+                context['user_dept'] = user_info.get('fk_deptid')
+
+        # 3. Fetch Allowed Colleges Based on Access Level
+        if context['user_dept'] and level in ['TEACHER', 'HOD']:
+            context['colleges'] = DB.fetch_all('''
+                SELECT DISTINCT C.pk_collegeid as id, C.collegename as name
+                FROM SMS_BranchMst B
+                JOIN SMS_CollegeDegreeBranchMap_dtl D ON B.Pk_BranchId = D.fk_BranchId
+                JOIN SMS_CollegeDegreeBranchMap_Mst M ON D.fk_Coldgbrmapid = M.PK_Coldgbrid
+                JOIN SMS_College_Mst C ON M.fk_CollegeId = C.pk_collegeid
+                WHERE B.fk_deptidDdo = ?
+            ''', [str(context['user_dept'])])
+        elif loc_id and level == 'DEAN':
+            context['colleges'] = DB.fetch_all("SELECT pk_collegeid as id, collegename as name FROM SMS_College_Mst WHERE fk_locid = ? ORDER BY collegename", [str(loc_id)])
+
+        # Fallback to all colleges if not explicitly restricted
+        if not context['colleges']:
+            context['colleges'] = AcademicsModel.get_colleges_simple()
+
+        # Auto-select the college if there is only 1 option or none selected yet
+        if not context['college_id'] and len(context['colleges']) >= 1 and level != 'PGS':
+            # Try to auto-select based on location if possible
+            if loc_id:
+                loc_col = DB.fetch_scalar("SELECT pk_collegeid FROM SMS_College_Mst WHERE fk_locid = ?", [str(loc_id)])
+                if loc_col:
+                    context['college_id'] = str(loc_col)
+
+            # If still not selected, only default to the first one if there's exactly 1 college
+            if not context['college_id'] and len(context['colleges']) == 1:
+                context['college_id'] = str(context['colleges'][0]['id'])        # 4. Fetch Degrees (Filtered by selected college)
+        if context['college_id']:
+            context['degrees'] = AcademicsModel.get_college_pg_degrees(context['college_id'])
+
+        # 5. Fetch Branches (Strictly filtered by Dept if HOD/Teacher)
+        if context['college_id'] and context['degree_id'] and str(context['degree_id']) != '0':
+            branches = AcademicsModel.get_college_degree_specializations(context['college_id'], context['degree_id'])
+            if not branches:
+                branches = AcademicsModel.get_degree_branches(context['degree_id'])
+            
+            context['all_branches'] = branches
+            
+            if context['user_dept'] and level in ['TEACHER', 'HOD']:
+                branches = [b for b in branches if str(b.get('fk_deptidDdo')) == str(context['user_dept'])]
+                
+            context['branches'] = branches
+
+        return context
+
     @staticmethod
     def save_student_discipline(data, user_id):
         sid = data.get('sid')
@@ -4487,17 +4563,22 @@ class AdvisoryModel:
         if filters.get('branch_id') and str(filters['branch_id']) != '0':
             query += " AND S.fk_branchid = ?"
             params.append(filters['branch_id'])
+        if filters.get('dept_id') and str(filters['dept_id']) != '0':
+            query += " AND B_MST.fk_deptidDdo = ?"
+            params.append(filters['dept_id'])
         if filters.get('admission_no'):
             query += " AND (S.AdmissionNo LIKE ? OR S.enrollmentno LIKE ?)"
             params.extend([f"%{filters['admission_no']}%", f"%{filters['admission_no']}%"])
         if filters.get('status') and filters['status'] != '-1':
             query += " AND ISNULL(M.approvalstatus, 'P') = ?"
             params.append(filters['status'])
-        
-        query += " ORDER BY S.fullname"
-        
+        if filters.get('major_advisor_emp_id'):
+            query += " AND D.fk_empid = ?"
+            params.append(filters['major_advisor_emp_id'])
+
+        query += " ORDER BY S.fk_adm_session DESC, S.fullname"
         if page:
-            count_query = query.replace(" ORDER BY S.fullname", "")
+            count_query = query.replace(" ORDER BY S.fk_adm_session DESC, S.fullname", "")
             count_query = f"SELECT COUNT(*) FROM ({count_query}) as cnt"
             total = DB.fetch_scalar(count_query, params)
             
@@ -4580,34 +4661,54 @@ class AdvisoryModel:
 
     @staticmethod
     def get_student_advisory_committee(sid):
+        student_info = DB.fetch_one("""
+            SELECT fullname, fk_collegeid, fk_adm_session, fk_degreeid, fk_branchid
+            FROM SMS_Student_Mst
+            WHERE pk_sid = ?
+        """, [sid])
+
+        if not student_info:
+            return {'error': 'Student not found'}
+
         mst = DB.fetch_one("""
-            SELECT M.pk_adcid, M.approvalstatus, M.responseremarks, S.fullname, M.fk_branchid 
+            SELECT M.pk_adcid, M.approvalstatus, M.responseremarks, M.fk_branchid
             FROM SMS_Advisory_Committee_Mst M
-            INNER JOIN SMS_Student_Mst S ON M.fk_stid = S.pk_sid
             WHERE M.fk_stid=?
         """, [sid])
-        if not mst: return {'major': None, 'minor': None, 'nominee': None, 'all': [], 'details': []}
-        
+
+        if not mst:
+            return {
+                'student_name': student_info['fullname'],
+                'fk_collegeid': student_info['fk_collegeid'],
+                'fk_adm_session': student_info['fk_adm_session'],
+                'fk_degreeid': student_info['fk_degreeid'],
+                'fk_branchid': student_info['fk_branchid'],
+                'major': None, 'minor': None, 'nominee': None, 'all': [], 'details': []
+            }
+
         details = DB.fetch_all("""
-            SELECT D.*, E.empname, DESG.designation as designation, DEPT.description as department, 
-                   B.Branchname as specialization,
+            SELECT D.*, E.empname, DESG.designation as designation, DEPT.description as department,
+                   EMP_BR.Branchname as specialization,
                    STAT.statusname as role_name
             FROM SMS_Advisory_Committee_Dtl D
             LEFT JOIN SAL_Employee_Mst E ON D.fk_empid = E.pk_empid
             LEFT JOIN SAL_Designation_Mst DESG ON E.fk_desgid = DESG.pk_desgid
             LEFT JOIN Department_Mst DEPT ON E.fk_deptid = DEPT.pk_deptid
-            LEFT JOIN SMS_Advisory_Committee_Mst ACM ON D.fk_adcid = ACM.pk_adcid
-            LEFT JOIN SMS_BranchMst B ON ACM.fk_branchid = B.Pk_BranchId
+            LEFT JOIN SMS_BranchMst EMP_BR ON E.fK_DesignspecId = EMP_BR.Pk_BranchId
             LEFT JOIN SMS_AdvisoryStatus_Mst STAT ON D.fk_statusid = STAT.pk_stid
             WHERE D.fk_adcid = ?
             ORDER BY D.fk_statusid
         """, [mst['pk_adcid']])
-        
+
         res = {
             'adcid': mst['pk_adcid'],
             'approval_status': mst['approvalstatus'],
             'remarks': mst['responseremarks'],
-            'student_name': mst['fullname'],
+            'student_name': student_info['fullname'],
+            'fk_collegeid': student_info['fk_collegeid'],
+            'fk_adm_session': student_info['fk_adm_session'],
+            'fk_degreeid': student_info['fk_degreeid'],
+            'fk_branchid': student_info['fk_branchid'],
             'details': details,
             'major': next((d for d in details if d['fk_statusid'] == 1), None),
             'minor': next((d for d in details if d['fk_statusid'] == 2), None),
@@ -4875,6 +4976,148 @@ class AdvisoryModel:
               AND (CP.submitbit IS NULL OR CP.submitbit = 0)
         """
         return DB.fetch_all(query, [filters['college_id'], filters['session_id'], filters['degree_id']])
+
+    @staticmethod
+    def get_pending_approvals(filters, role, emp_id):
+        query = '''
+            SELECT S.pk_sid, S.AdmissionNo, S.fullname, D.degreename, B.Branchname, A.pk_adcid
+            FROM SMS_Advisory_Committee_Mst A
+            JOIN SMS_Student_Mst S ON A.fk_stid = S.pk_sid
+            JOIN SMS_Degree_Mst D ON S.fk_degreeid = D.pk_degreeid
+            JOIN SMS_DegreeType_Mst T ON D.fk_degreetypeid = T.pk_degreetypeid
+            JOIN SMS_BranchMst B ON S.fk_branchid = B.Pk_BranchId
+            WHERE T.isug IN ('M', 'P')
+        '''
+        params = []
+        
+        if filters.get('college_id') and filters.get('college_id') != '0':
+            query += " AND A.fk_colgid = ?"
+            params.append(filters['college_id'])
+        
+        if filters.get('degree_id') and filters['degree_id'] != '0':
+            query += " AND A.fk_degreeid = ?"
+            params.append(filters['degree_id'])
+
+        if filters.get('session_id') and filters['session_id'] != '0':
+            query += " AND A.fk_sessionid = ?"
+            params.append(filters['session_id'])
+            
+        if filters.get('branch_id') and filters['branch_id'] != '0':
+            query += " AND A.fk_branchid = ?"
+            params.append(filters['branch_id'])
+
+        # Check for HOD department restriction
+        if filters.get('user_dept'):
+            query += " AND B.fk_deptidDdo = ?"
+            params.append(filters['user_dept'])
+
+        if role == 'hod':
+            query += " AND (A.hod_approval IS NULL OR A.hod_approval = 'P')"
+        elif role == 'dean':
+            query += " AND A.hod_approval = 'A' AND (A.college_deanapproval IS NULL OR A.college_deanapproval = 'P')"
+        elif role == 'dean_pgs':
+            query += " AND A.college_deanapproval = 'A' AND (A.approvalstatus IS NULL OR A.approvalstatus = 'P')"
+
+        query += " ORDER BY S.AdmissionNo"
+        
+        return DB.fetch_all(query, params)
+
+    @staticmethod
+    def update_approval_status(adcid_list, role, action, emp_id):
+        status = 'A' if action == 'approve' else 'R'
+        from app.utils import get_db_connection
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        placeholders = ','.join(['?'] * len(adcid_list))
+        params = [status, emp_id] + adcid_list
+        
+        if role == 'hod':
+            cursor.execute(f"UPDATE SMS_Advisory_Committee_Mst SET hod_approval = ?, hod_by = ?, hod_date = GETDATE() WHERE pk_adcid IN ({placeholders})", params)
+        elif role == 'dean':
+            cursor.execute(f"UPDATE SMS_Advisory_Committee_Mst SET college_deanapproval = ?, college_deanby = ?, Collegedean_date = GETDATE() WHERE pk_adcid IN ({placeholders})", params)
+        elif role == 'dean_pgs':
+            cursor.execute(f"UPDATE SMS_Advisory_Committee_Mst SET approvalstatus = ?, deanpgs_id = ?, deanpgs_date = GETDATE() WHERE pk_adcid IN ({placeholders})", params)
+            
+        conn.commit()
+        conn.close()
+
+    @staticmethod
+    def get_students_for_course_plan(filters):
+        query = '''
+            SELECT S.pk_sid, S.AdmissionNo, S.fullname
+            FROM SMS_Student_Mst S
+            WHERE S.fk_collegeid = ? AND S.fk_degreeid = ? AND S.fk_branchid = ?
+        '''
+        params = [filters['college_id'], filters['degree_id'], filters['branch_id']]
+        if filters.get('session_id') and filters['session_id'] != '0':
+            query += " AND S.fk_adm_session = ?"
+            params.append(filters['session_id'])
+            
+        query += " ORDER BY S.fullname"
+        
+        from app.utils import get_db_connection
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(query, params)
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        conn.close()
+        return results
+
+    @staticmethod
+    def get_student_course_plan(sid):
+        query = '''
+            SELECT CA.pk_Sms_course_Appid, CA.fk_courseid as pk_courseid, C.coursecode, C.coursename, 
+                   (CA.crhrth + CA.crhrpr) as credits,
+                   CASE CA.courseplan
+                        WHEN 'MA' THEN 'Major Courses'
+                        WHEN 'MI' THEN 'Minor Courses'
+                        WHEN 'SU' THEN 'Supporting Courses'
+                        WHEN 'CP' THEN 'Compulsory Courses'
+                        WHEN 'DE' THEN 'Deficiency Courses'
+                        WHEN '1' THEN 'Major Courses'
+                        WHEN '2' THEN 'Minor Courses'
+                        WHEN '3' THEN 'Supporting Courses'
+                        WHEN '4' THEN 'Compulsory Courses'
+                        WHEN '5' THEN 'Deficiency Courses'
+                        ELSE 'Other' END as category_name
+            FROM Sms_course_Approval CA
+            JOIN SMS_Course_Mst C ON CA.fk_courseid = C.pk_courseid
+            WHERE CA.fk_sturegid = ?
+        '''
+        from app.utils import get_db_connection
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(query, [sid])
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        conn.close()
+        return results
+
+    @staticmethod
+    def save_course_plan(sid, course_ids, emp_id):
+        from app.utils import get_db_connection
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            # Simple replace mechanism for now (real logic might be more complex)
+            cursor.execute("DELETE FROM Sms_course_Approval WHERE fk_sturegid = ?", [sid])
+            for cid in course_ids:
+                # Fetch course details
+                cursor.execute("SELECT crhrth, crhrpr FROM SMS_Course_Mst WHERE pk_courseid = ?", [cid])
+                cd = cursor.fetchone()
+                if cd:
+                    cursor.execute('''
+                        INSERT INTO Sms_course_Approval (fk_sturegid, fk_courseid, crhrth, crhrpr, courseplan, created_by, created_date)
+                        VALUES (?, ?, ?, ?, 'MA', ?, GETDATE())
+                    ''', [sid, cid, cd[0], cd[1], emp_id])
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+            print(f"Error saving course plan: {e}")
+        finally:
+            conn.close()
 
 class StudentModel:
     @staticmethod
@@ -8601,6 +8844,10 @@ class ResearchModel:
             })
 
         return detailed_students
+
+
+
+
 
 class AdvisoryStatusModel:
     @staticmethod

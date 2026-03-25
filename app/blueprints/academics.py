@@ -2723,6 +2723,133 @@ def advisory_creation_approval_status():
     return render_template('academics/advisory_creation_approval_status.html', 
                            lookups=lookups, filters=filters, status_list=status_list)
 
+
+@academics_bp.route('/dean_pgs_approval_advisory', methods=['GET', 'POST'])
+@permission_required('Dean PGS approval (advisory committee)')
+def dean_pgs_approval_advisory():
+    user_id = session.get('user_id')
+    loc_id = session.get('selected_loc')
+    
+    # Force default session to '0' on page load if not specified
+    lookups = AdvisoryModel.get_academic_context_lookups(user_id, loc_id, 'DEAN_PGS', request.args)
+    if not request.args.get('session_id'):
+        lookups['session_id'] = '0'
+
+    filters = {
+        'college_id': lookups.get('college_id', '0'),
+        'session_id': lookups.get('session_id', '0'),
+        'degree_id': lookups.get('degree_id', '0'),
+        'branch_id': lookups.get('branch_id', '0'),
+        'user_dept': lookups.get('user_dept')
+    }
+    
+    if request.method == 'POST':
+        action = request.form.get('action')
+        selected_students = request.form.getlist('selected_students')
+        if action and selected_students:
+            AdvisoryModel.update_approval_status(selected_students, 'dean_pgs', action, session.get('emp_id'))
+            flash(f"Successfully {action}ed the selected committees.", 'success')
+        return redirect(url_for('academics.dean_pgs_approval_advisory', **filters))
+    
+    pending_students = AdvisoryModel.get_pending_approvals(filters, 'dean_pgs', session.get('emp_id'))
+        
+    return render_template('academics/dean_pgs_approval_advisory.html', lookups=lookups, filters=filters, pending_students=pending_students)
+
+@academics_bp.route('/hod_approval_advisory', methods=['GET', 'POST'])
+@permission_required('HOD Approval')
+def hod_approval_advisory():
+    user_id = session.get('user_id')
+    loc_id = session.get('selected_loc')
+    
+    # Force default session to '0' on page load if not specified
+    lookups = AdvisoryModel.get_academic_context_lookups(user_id, loc_id, 'HOD', request.args)
+    if not request.args.get('session_id'):
+        lookups['session_id'] = '0'
+    
+    filters = {
+        'college_id': lookups.get('college_id', '0'),
+        'session_id': lookups.get('session_id', '0'),
+        'degree_id': lookups.get('degree_id', '0'),
+        'branch_id': lookups.get('branch_id', '0'),
+        'user_dept': lookups.get('user_dept')
+    }
+    
+    if request.method == 'POST':
+        action = request.form.get('action')
+        selected_students = request.form.getlist('selected_students')
+        if action and selected_students:
+            AdvisoryModel.update_approval_status(selected_students, 'hod', action, session.get('emp_id'))
+            flash(f"Successfully {action}ed the selected committees.", 'success')
+        return redirect(url_for('academics.hod_approval_advisory', **filters))
+    
+    pending_students = AdvisoryModel.get_pending_approvals(filters, 'hod', session.get('emp_id'))
+        
+    return render_template('academics/hod_approval_advisory.html', lookups=lookups, filters=filters, pending_students=pending_students)
+
+@academics_bp.route('/college_dean_approval_advisory', methods=['GET', 'POST'])
+@permission_required('College Dean Approval')
+def college_dean_approval_advisory():
+    user_id = session.get('user_id')
+    loc_id = session.get('selected_loc')
+    
+    lookups = AdvisoryModel.get_academic_context_lookups(user_id, loc_id, 'DEAN', request.args)
+    if not request.args.get('session_id'):
+        lookups['session_id'] = '0'
+    
+    filters = {
+        'college_id': lookups.get('college_id', '0'),
+        'session_id': lookups.get('session_id', '0'),
+        'degree_id': lookups.get('degree_id', '0'),
+        'branch_id': lookups.get('branch_id', '0'),
+        'user_dept': lookups.get('user_dept')
+    }
+    
+    if request.method == 'POST':
+        action = request.form.get('action')
+        selected_students = request.form.getlist('selected_students')
+        if action and selected_students:
+            AdvisoryModel.update_approval_status(selected_students, 'dean', action, session.get('emp_id'))
+            flash(f"Successfully {action}ed the selected committees.", 'success')
+        return redirect(url_for('academics.college_dean_approval_advisory', **filters))
+    
+    pending_students = AdvisoryModel.get_pending_approvals(filters, 'dean', session.get('emp_id'))
+        
+    return render_template('academics/college_dean_approval_advisory.html', lookups=lookups, filters=filters, pending_students=pending_students)
+
+@academics_bp.route('/prepare_course_plan', methods=['GET', 'POST'])
+@permission_required('Prepare Course Plan')
+def prepare_course_plan():
+    user_id = session.get('user_id')
+    loc_id = session.get('selected_loc')
+    
+    filters = {
+        'college_id': request.args.get('college_id'),
+        'session_id': request.args.get('session_id'),
+        'degree_id': request.args.get('degree_id'),
+        'branch_id': request.args.get('branch_id'),
+        'sid': request.args.get('sid')
+    }
+    
+    if request.method == 'POST':
+        sid = filters.get('sid')
+        course_ids = request.form.getlist('course_ids[]')
+        if sid and course_ids:
+            AdvisoryModel.save_course_plan(sid, course_ids, session.get('emp_id'))
+            flash("Course plan saved successfully.", 'success')
+        return redirect(url_for('academics.prepare_course_plan', **filters))
+    
+    lookups = AdvisoryModel.get_academic_context_lookups(user_id, loc_id, 'TEACHER', request.args)
+    students = []
+    current_plan = []
+    
+    if filters['college_id'] and filters['degree_id'] and filters['branch_id']:
+        students = AdvisoryModel.get_students_for_course_plan(filters)
+        
+    if filters['sid'] and filters['sid'] != '0':
+        current_plan = AdvisoryModel.get_student_course_plan(filters['sid'])
+        
+    return render_template('academics/prepare_course_plan.html', lookups=lookups, filters=filters, students=students, current_plan=current_plan)
+
 @academics_bp.route('/advisory_status_report')
 @permission_required('Advisory Creation And Approval Status')
 def advisory_status_report():

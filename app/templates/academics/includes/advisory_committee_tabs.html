@@ -1,0 +1,18 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="tabbing-table">
+    <tbody>
+        <tr>
+            <td align="left" class="tabbing-td">
+                <div style="display:inline; width:100%">
+                    <a title="Limit Assignment" class="{{ 'tabgs' if request.endpoint == 'academics.pgs_course_limit_master' or request.endpoint == 'academics.limit_assignment' else 'tabg' }}" href="{{ url_for('academics.pgs_course_limit_master') }}">Limit Assignment</a>
+                    <a title="Major Advisor" class="{{ 'tabgs' if request.endpoint == 'academics.major_advisor' else 'tabg' }}" href="{{ url_for('academics.major_advisor') }}">Major Advisor</a>
+                    <a title="Specialization Assignment" class="{{ 'tabgs' if request.endpoint == 'academics.specialization_assignment' else 'tabg' }}" href="{{ url_for('academics.specialization_assignment') }}">Specialization Assignment</a>
+                    <a title="Member of Minor and supporting" class="{{ 'tabgs' if request.endpoint == 'academics.minor_advisor' else 'tabg' }}" href="{{ url_for('academics.minor_advisor') }}">Member of Minor and supporting</a>
+                    <a title="Dean PGS approval (advisory committee)" class="{{ 'tabgs' if request.endpoint == 'academics.dean_pgs_approval_advisory' else 'tabg' }}" href="{{ url_for('academics.dean_pgs_approval_advisory', _external=False) if 'academics.dean_pgs_approval_advisory' in request.url_rule.endpoint else '#' }}">Dean PGS approval (advisory committee)</a>
+                    <a title="HOD Approval" class="{{ 'tabgs' if request.endpoint == 'academics.hod_approval_advisory' else 'tabg' }}" href="{{ url_for('academics.hod_approval_advisory', _external=False) if 'academics.hod_approval_advisory' in request.url_rule.endpoint else '#' }}">HOD Approval</a>
+                    <a title="College Dean Approval" class="{{ 'tabgs' if request.endpoint == 'academics.college_dean_approval_advisory' else 'tabg' }}" href="{{ url_for('academics.college_dean_approval_advisory', _external=False) if 'academics.college_dean_approval_advisory' in request.url_rule.endpoint else '#' }}">College Dean Approval</a>
+                    <a title="Prepare Course Plan" class="{{ 'tabgs' if request.endpoint == 'academics.prepare_course_plan' else 'tabg' }}" href="{{ url_for('academics.prepare_course_plan', _external=False) if 'academics.prepare_course_plan' in request.url_rule.endpoint else '#' }}">Prepare Course Plan</a>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

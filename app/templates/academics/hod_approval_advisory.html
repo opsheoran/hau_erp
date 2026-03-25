@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'academics/includes/advisory_committee_tabs.html' %}
+<br>
+<div class="hau-card ajax-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">HOD Approval</span></div>
+    
+    <div style="padding: 10px;">
+        <!-- FILTER FORM -->
+        <form method="GET" id="filterForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="college_id" class="textbox w-300" required onchange="ajaxLoadDegrees(this.value)">
+                                <option value="0">--Select College--</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext" width="15%">Academic Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" class="textbox w-200" required>
+                                <option value="0">--Select Session--</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" class="textbox w-300" onchange="ajaxLoadBranches(this.value)">
+                                <option value="0">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td class="vtext">Department</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="branch_id" class="textbox w-200">
+                                <option value="0">-- Select Department --</option>
+                                {% for b in lookups.branches %}
+                                <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="10"></td></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="4">
+                            <input type="submit" value="GET STUDENTS" class="button-common" style="width:120px;">
+                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="window.location.href='{{ url_for('academics.hod_approval_advisory') }}'">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+        
+        <form method="POST" id="approvalForm">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="action" id="hdnAction" value="">
+            
+            <div class="tablesubheading"><span class="subheadingborderbottom">Pending Approvals</span></div>
+            <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4; margin-top:10px;">
+                <table class="table-grid-view" width="100%">
+                    <thead>
+                        <tr class="header-style">
+                            <th align="center" scope="col" width="3%"><input type="checkbox" id="chkAll" onchange="toggleAll(this)"></th>
+                            <th align="center" scope="col">S.No</th>
+                            <th align="center" scope="col">Admission No</th>
+                            <th align="center" scope="col">Student Name</th>
+                            <th align="center" scope="col">Degree</th>
+                            <th align="center" scope="col">Department</th>
+                            <th align="center" scope="col">Advisory Committee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in pending_students %}
+                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
+                            <td><input type="checkbox" name="selected_students" value="{{ s.pk_adcid }}" class="chkStudent"></td>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ s.AdmissionNo }}</td>
+                            <td align="left">{{ s.fullname }}</td>
+                            <td align="left">{{ s.degreename }}</td>
+                            <td align="left">{{ s.Branchname }}</td>
+                            <td>
+                                <a href="javascript:void(0)" onclick="viewCommittee({{ s.pk_sid }})" style="color:blue; text-decoration:underline;">View Committee</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr class="item-style"><td colspan="7" align="center" style="padding:20px; color:#999;">No pending students found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            {% if pending_students %}
+            <div style="margin-top: 15px; text-align: right;">
+                <input type="button" value="APPROVE SELECTED" class="button-common" style="width:150px; background-color:green;" onclick="submitAction('approve')">
+                <input type="button" value="REJECT SELECTED" class="button-common" style="width:150px; background-color:red; margin-left:5px;" onclick="submitAction('reject')">
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<!-- COMMITTEE MODAL -->
+<div id="committeeModal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); width:70%; max-height:80%; background:#fff; border:2px solid #2d5a27; z-index:1000; overflow-y:auto; box-shadow:0px 0px 10px rgba(0,0,0,0.5);">
+    <div class="tableheading" style="display:flex; justify-content:space-between; align-items:center;">
+        <span class="mainheadingborderbottom">Advisory Committee Details</span>
+        <span style="cursor:pointer; color:red; font-weight:bold; padding:0 10px;" onclick="document.getElementById('committeeModal').style.display='none'">X Close</span>
+    </div>
+    <div style="padding:10px;">
+        <table class="table-grid-view" width="100%" id="committeeTable">
+            <thead>
+                <tr class="header-style">
+                    <th width="5%">S.No.</th>
+                    <th>Role</th>
+                    <th>Advisor Name</th>
+                    <th>Designation</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function toggleAll(source) {
+    checkboxes = document.getElementsByClassName('chkStudent');
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}
+
+function submitAction(action) {
+    var checked = document.querySelectorAll('.chkStudent:checked');
+    if(checked.length === 0) {
+        alert("Please select at least one student.");
+        return;
+    }
+    
+    if(confirm("Are you sure you want to " + action.toUpperCase() + " the selected committees?")) {
+        document.getElementById('hdnAction').value = action;
+        document.getElementById('approvalForm').submit();
+    }
+}
+
+function viewCommittee(sid) {
+    fetch('/academics/api/student/' + sid + '/committee')
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.querySelector('#committeeTable tbody');
+            tbody.innerHTML = "";
+            
+            if(data && data.length > 0) {
+                data.forEach((s, index) => {
+                    const row = document.createElement('tr');
+                    row.className = (index + 1) % 2 === 0 ? 'item-style-alt' : 'item-style';
+                    row.align = "center";
+                    
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td align="left">${s.role_name || ''}</td>
+                        <td align="left"><b>${s.advisor_name || ''}</b></td>
+                        <td align="left">${s.designation || ''}</td>
+                        <td align="left">${s.department || ''}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } else {
+                tbody.innerHTML = '<tr class="item-style"><td colspan="5" align="center" style="padding:15px; color:#999;">No committee members found.</td></tr>';
+            }
+            document.getElementById('committeeModal').style.display = 'block';
+        })
+        .catch(err => console.error('Error loading committee:', err));
+}
+
+function ajaxLoadDegrees(collegeId) {
+    const degSelect = document.querySelector('select[name="degree_id"]');
+    if(!degSelect) return;
+    degSelect.innerHTML = '<option value="0">--Select Degree--</option>';
+    if(!collegeId || collegeId === '0') return;
+    
+    fetch(`/academics/api/college/${collegeId}/degrees?is_pg_phd=1`)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.id;
+                opt.textContent = d.name;
+                degSelect.appendChild(opt);
+            });
+        }).catch(err => console.error(err));
+}
+
+function ajaxLoadBranches(degreeId) {
+    const brSelect = document.querySelector('select[name="branch_id"]');
+    if(!brSelect) return;
+    brSelect.innerHTML = '<option value="0">--Select Department--</option>';
+    if(!degreeId || degreeId === '0') return;
+    
+    fetch(`/academics/api/degree/${degreeId}/branches`)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b.id;
+                opt.textContent = b.name;
+                brSelect.appendChild(opt);
+            });
+        }).catch(err => console.error(err));
+}
+</script>
+{% endblock %}

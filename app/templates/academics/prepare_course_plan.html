@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'academics/includes/advisory_committee_tabs.html' %}
+<br>
+<div class="hau-card ajax-card">
+    <div class="tableheading"><span class="mainheadingborderbottom">Prepare Course Plan</span></div>
+    
+    <div style="padding: 10px;">
+        <!-- FILTER FORM -->
+        <form method="GET" id="filterForm">
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td class="vtext" width="15%">College</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="college_id" class="textbox w-300" required onchange="ajaxLoadDegrees(this.value)">
+                                <option value="0">--Select College--</option>
+                                {% for c in lookups.colleges %}
+                                <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext" width="15%">Academic Session</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="session_id" class="textbox w-200" required>
+                                <option value="0">--Select Session--</option>
+                                {% for s in lookups.sessions %}
+                                <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Degree</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="degree_id" class="textbox w-300" required onchange="ajaxLoadBranches(this.value)">
+                                <option value="0">--Select Degree--</option>
+                                {% for d in lookups.degrees %}
+                                <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                        <td class="vtext">Department</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="branch_id" class="textbox w-200" required onchange="this.form.submit()">
+                                <option value="0">-- Select Department --</option>
+                                {% for b in lookups.branches %}
+                                <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vtext">Student</td>
+                        <td class="colon">:</td>
+                        <td class="required" colspan="4">
+                            <select name="sid" id="ddlStudent" class="textbox w-300" onchange="this.form.submit()">
+                                <option value="0">-- Select Student --</option>
+                                {% for s in students %}
+                                <option value="{{ s.pk_sid }}" {% if filters.sid|string == s.pk_sid|string %}selected{% endif %}>{{ s.fullname }} [{{ s.AdmissionNo }}]</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td colspan="6" height="10"></td></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="4">
+                            <input type="submit" value="GET COURSE PLAN" class="button-common" style="width:140px;">
+                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="window.location.href='{{ url_for('academics.prepare_course_plan') }}'">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <br>
+        
+        {% if filters.sid and filters.sid != '0' %}
+        <form method="POST" id="planForm">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            
+            <div class="tablesubheading"><span class="subheadingborderbottom">Course Allocation (Programme of Work)</span></div>
+            <div style="padding: 10px; border: 1px solid #ddd; margin-top:10px;">
+                <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td class="vtext" width="15%">Course Category</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="course_category" id="ddlCourseCategory" class="textbox w-200" onchange="loadCoursesByCategory()">
+                                <option value="">--Select Category--</option>
+                                <option value="1">Major Courses</option>
+                                <option value="2">Minor Courses</option>
+                                <option value="3">Supporting Courses</option>
+                                <option value="4">Compulsory Courses</option>
+                                <option value="5">Deficiency Courses</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td colspan="3" height="10"></td></tr>
+                    <tr>
+                        <td class="vtext">Course</td>
+                        <td class="colon">:</td>
+                        <td class="required">
+                            <select name="course_id" id="ddlCourse" class="textbox w-300">
+                                <option value="">--Select Course--</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td colspan="3" height="10"></td></tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <input type="button" value="ADD COURSE" class="button-common" onclick="addCourseToPlan()">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <br>
+            <div class="tablesubheading"><span class="subheadingborderbottom">Selected Courses</span></div>
+            <table class="table-grid-view" width="100%" id="selectedCoursesTable" style="margin-top:10px;">
+                <thead>
+                    <tr class="header-style">
+                        <th width="5%">S.No.</th>
+                        <th>Category</th>
+                        <th>Course Code</th>
+                        <th>Course Title</th>
+                        <th>Credit Hours</th>
+                        <th width="5%">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in current_plan %}
+                    <tr class="item-style" align="center">
+                        <td>{{ loop.index }}</td>
+                        <td align="left">{{ course.category_name }}</td>
+                        <td align="left">{{ course.coursecode }}</td>
+                        <td align="left">{{ course.coursename }}</td>
+                        <td>{{ course.credits }}</td>
+                        <td>
+                            <input type="hidden" name="course_ids[]" value="{{ course.pk_courseid }}">
+                            <img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer" onclick="this.closest('tr').remove(); calculateTotals();">
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr class="item-style" id="noCoursesRow"><td colspan="6" align="center" style="padding:15px; color:#999;">No courses added to the plan yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="header-style" style="font-weight:bold;">
+                        <td colspan="4" align="right">Total Credits:</td>
+                        <td align="center" id="lblTotalCredits">0</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+            
+            <div style="margin-top: 15px; text-align: center;">
+                <input type="submit" value="SAVE COURSE PLAN" class="button-common" style="width:150px; background-color:green;">
+            </div>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+let courseCache = [];
+
+function ajaxLoadDegrees(collegeId) {
+    const degSelect = document.querySelector('select[name="degree_id"]');
+    if(!degSelect) return;
+    degSelect.innerHTML = '<option value="0">--Select Degree--</option>';
+    if(!collegeId || collegeId === '0') return;
+    
+    fetch(`/academics/api/college/${collegeId}/degrees?is_pg_phd=1`)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.id;
+                opt.textContent = d.name;
+                degSelect.appendChild(opt);
+            });
+        }).catch(err => console.error(err));
+}
+
+function ajaxLoadBranches(degreeId) {
+    const brSelect = document.querySelector('select[name="branch_id"]');
+    if(!brSelect) return;
+    brSelect.innerHTML = '<option value="0">--Select Department--</option>';
+    if(!degreeId || degreeId === '0') return;
+    
+    fetch(`/academics/api/degree/${degreeId}/branches`)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b.id;
+                opt.textContent = b.name;
+                brSelect.appendChild(opt);
+            });
+        }).catch(err => console.error(err));
+}
+
+function loadCoursesByCategory() {
+    const catId = document.getElementById('ddlCourseCategory').value;
+    const ddlCourse = document.getElementById('ddlCourse');
+    ddlCourse.innerHTML = '<option value="">--Select Course--</option>';
+    
+    if(!catId) return;
+    
+    const sid = document.getElementById('ddlStudent').value;
+    
+    fetch(`/academics/api/student/${sid}/courses?category=${catId}`)
+        .then(res => res.json())
+        .then(data => {
+            courseCache = data;
+            data.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                opt.textContent = `${c.code} - ${c.name} (${c.credits} Cr)`;
+                opt.dataset.code = c.code;
+                opt.dataset.name = c.name;
+                opt.dataset.credits = c.credits;
+                ddlCourse.appendChild(opt);
+            });
+        }).catch(err => console.error(err));
+}
+
+function addCourseToPlan() {
+    const ddlCategory = document.getElementById('ddlCourseCategory');
+    const catName = ddlCategory.options[ddlCategory.selectedIndex].text;
+    
+    const ddlCourse = document.getElementById('ddlCourse');
+    const courseId = ddlCourse.value;
+    
+    if(!courseId) {
+        alert("Please select a course to add.");
+        return;
+    }
+    
+    const opt = ddlCourse.options[ddlCourse.selectedIndex];
+    
+    // Check if already added
+    const existingIds = Array.from(document.querySelectorAll('input[name="course_ids[]"]')).map(i => i.value);
+    if(existingIds.includes(courseId)) {
+        alert("This course is already added to the plan.");
+        return;
+    }
+    
+    const tbody = document.querySelector('#selectedCoursesTable tbody');
+    const noRows = document.getElementById('noCoursesRow');
+    if(noRows) noRows.remove();
+    
+    const rowCount = tbody.rows.length + 1;
+    
+    const tr = document.createElement('tr');
+    tr.className = rowCount % 2 === 0 ? 'item-style-alt' : 'item-style';
+    tr.align = "center";
+    
+    tr.innerHTML = `
+        <td>${rowCount}</td>
+        <td align="left">${catName}</td>
+        <td align="left">${opt.dataset.code}</td>
+        <td align="left">${opt.dataset.name}</td>
+        <td class="course-credits">${opt.dataset.credits}</td>
+        <td>
+            <input type="hidden" name="course_ids[]" value="${courseId}">
+            <img src="/static/images/Delete.gif" style="cursor:pointer" onclick="this.closest('tr').remove(); calculateTotals();">
+        </td>
+    `;
+    
+    tbody.appendChild(tr);
+    calculateTotals();
+}
+
+function calculateTotals() {
+    const credits = Array.from(document.querySelectorAll('.course-credits')).map(td => parseFloat(td.innerText) || 0);
+    const total = credits.reduce((a, b) => a + b, 0);
+    document.getElementById('lblTotalCredits').innerText = total;
+    
+    // Re-index rows
+    const rows = document.querySelectorAll('#selectedCoursesTable tbody tr.item-style, #selectedCoursesTable tbody tr.item-style-alt');
+    rows.forEach((row, i) => {
+        row.className = (i + 1) % 2 === 0 ? 'item-style-alt' : 'item-style';
+        if(row.cells.length > 0) row.cells[0].innerText = i + 1;
+    });
+}
+
+// Initial calculation if editing existing plan
+document.addEventListener('DOMContentLoaded', calculateTotals);
+</script>
+{% endblock %}
