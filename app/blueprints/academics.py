@@ -2805,17 +2805,17 @@ def hod_approval_advisory():
         # Get advisory committee details
         advisory_details = DB.fetch_all('''
             SELECT 
-                RM.RoleName as role_name,
+                RM.statusname as role_name,
                 E.empname as advisor_name,
                 ISNULL(DES.DesigName, '') as designation,
                 ISNULL(DEPT.deptname, '') as department
             FROM SMS_Advisory_Committee_Dtl D
-            JOIN SMS_Advisory_Role_Mst RM ON D.fk_roleid = RM.Pk_RoleId
+            JOIN SMS_AdvisoryStatus_Mst RM ON D.fk_statusid = RM.pk_stid
             JOIN SAL_Employee_Mst E ON D.fk_empid = E.pk_empid
             LEFT JOIN SAL_Designation_Mst DES ON E.fk_desigid = DES.Pk_DesigId
             LEFT JOIN Department_Mst DEPT ON E.fk_deptid = DEPT.pk_deptid
-            WHERE D.fk_adcid = ? AND D.fk_statusid = 1
-            ORDER BY RM.Pk_RoleId
+            WHERE D.fk_adcid = ?
+            ORDER BY RM.pk_stid
         ''', [edit_adcid])
         
     return render_template('academics/hod_approval_advisory.html', 
