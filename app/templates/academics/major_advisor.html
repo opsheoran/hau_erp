@@ -360,21 +360,19 @@ function showAdvisorStudents(empId) {
             tbody.innerHTML = "";
             
             if(data && data.length > 0) {
+                let html = '';
                 data.forEach((s, index) => {
-                    const row = document.createElement('tr');
-                    row.className = (index + 1) % 2 === 0 ? 'item-style-alt' : 'item-style';
-                    row.align = "center";
-                    
-                    row.innerHTML = `
+                    let c = (index + 1) % 2 === 0 ? 'item-style-alt' : 'item-style';
+                    html += `<tr class="${c}" align="center">
                         <td>${index + 1}</td>
                         <td align="left">${s.fullname || ''}</td>
                         <td align="left">${s.AdmissionNo || ''}</td>
                         <td align="left">${s.enrollmentno || ''}</td>
                         <td align="left">${s.degreename || ''}</td>
                         <td align="left">${s.Branchname || ''}</td>
-                    `;
-                    tbody.appendChild(row);
+                    </tr>`;
                 });
+                tbody.innerHTML = html;
             } else {
                 tbody.innerHTML = '<tr class="item-style"><td colspan="6" align="center" style="padding:15px; color:#999;">No students allocated to this advisor for the selected session.</td></tr>';
             }
