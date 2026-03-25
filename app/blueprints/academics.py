@@ -2806,6 +2806,7 @@ def hod_approval_advisory():
         advisory_details = DB.fetch_all('''
             SELECT 
                 RM.statusname as role_name,
+                E.pk_empid as fk_empid,
                 E.empname as advisor_name,
                 ISNULL(DES.designation, '') as designation,
                 ISNULL(DEPT.description, '') as department

@@ -125,7 +125,7 @@
                                             <td>{{ edit_student.fullname }} [{{ edit_student.enrollmentno or edit_student.AdmissionNo }}]</td>
                                             <td>{{ member.role_name }}</td>
                                             <td align="left" style="width:25%;">
-                                                <a href="javascript:void(0);">{{ member.advisor_name }}</a>
+                                                <a href="javascript:void(0);" onclick="showAdvisorStudents('{{ member.fk_empid }}')"><b>{{ member.advisor_name }}</b></a>
                                             </td>
                                             <td align="left" style="width:20%;">{{ member.designation }}</td>
                                             <td>{{ member.department }}</td>
@@ -248,7 +248,66 @@
     </div>
 </div>
 
+
+<!-- ADVISOR STUDENTS MODAL -->
+<div id="advisorStudentsModal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); width:70%; max-height:80%; background:#fff; border:2px solid #2d5a27; z-index:1000; overflow-y:auto; box-shadow:0px 0px 10px rgba(0,0,0,0.5);">
+    <div class="tableheading" style="display:flex; justify-content:space-between; align-items:center;">
+        <span class="mainheadingborderbottom">Students Allocated to Advisor</span>
+        <span style="cursor:pointer; color:red; font-weight:bold; padding:0 10px;" onclick="document.getElementById('advisorStudentsModal').style.display='none'">X Close</span>
+    </div>
+    <div style="padding:10px;">
+        <table class="table-grid-view" width="100%" id="advisorStudentsTable">
+            <thead>
+                <tr class="header-style">
+                    <th width="5%">S.No.</th>
+                    <th>Student Name</th>
+                    <th>Admission No</th>
+                    <th>Enrollment No</th>
+                    <th>Degree</th>
+                    <th>Branch</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <script>
+function showAdvisorStudents(empId) {
+    if(!empId) return;
+    const sessionId = document.getElementById('ddlAcdSession').value;
+
+    fetch('/academics/api/advisor/' + empId + '/students?session_id=' + sessionId)
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.querySelector('#advisorStudentsTable tbody');
+            tbody.innerHTML = "";
+
+            if(data && data.length > 0) {
+                data.forEach((s, index) => {
+                    const row = document.createElement('tr');
+                    row.className = (index + 1) % 2 === 0 ? 'item-style-alt' : 'item-style';
+                    row.align = "center";
+
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td align="left">${s.fullname || ''}</td>
+                        <td align="left">${s.AdmissionNo || ''}</td>
+                        <td align="left">${s.enrollmentno || ''}</td>
+                        <td align="left">${s.degreename || ''}</td>
+                        <td align="left">${s.Branchname || ''}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } else {
+                tbody.innerHTML = '<tr class="item-style"><td colspan="6" align="center" style="padding:15px; color:#999;">No students found for this advisor in the selected session.</td></tr>';
+            }
+            document.getElementById('advisorStudentsModal').style.display = 'block';
+        })
+        .catch(err => console.error('Error loading advisor students:', err));
+}
+
 function editStudent(sid, adcid) {
     let url = new URL(window.location.href);
     url.searchParams.set('edit_sid', sid);
