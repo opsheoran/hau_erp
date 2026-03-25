@@ -2846,7 +2846,7 @@ def prepare_course_plan():
         students = AdvisoryModel.get_students_for_course_plan(filters)
         
     if filters['sid'] and filters['sid'] != '0':
-        current_plan = AdvisoryModel.get_student_course_plan(filters['sid'])
+        current_plan = AdvisoryModel.get_student_course_plan_advisory(filters['sid'])
         
     return render_template('academics/prepare_course_plan.html', lookups=lookups, filters=filters, students=students, current_plan=current_plan)
 
@@ -4563,7 +4563,8 @@ def specialization_assignment():
         'colleges': colleges,
         'sessions': InfrastructureModel.get_sessions(),
         'degrees': AcademicsModel.get_college_pg_degrees(college_id) if college_id else [],
-        'branches': AcademicsModel.get_college_degree_specializations(college_id, degree_id) if (college_id and degree_id and str(degree_id) != '0') else []
+        'branches': AcademicsModel.get_college_degree_specializations(college_id, degree_id) if (college_id and degree_id and str(degree_id) != '0') else [],
+        'all_branches': AcademicsModel.get_branches()
     }
 
     # Context info for grid labels

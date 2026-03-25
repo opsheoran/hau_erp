@@ -319,7 +319,7 @@ function localLoadDegrees(collegeId, targetId) {
 
 function localLoadBranches(degreeId, targetId) {
     if (!degreeId || degreeId === '0') return;
-    
+
     let url = '/academics/api/degree/' + degreeId + '/branches';
 
     fetch(url)
@@ -327,22 +327,15 @@ function localLoadBranches(degreeId, targetId) {
         .then(data => {
             let ddlFilter = document.getElementById(targetId);
             let ddlMajor = document.getElementById('ddlMajor');
-            let ddlMinor = document.getElementById('ddlMinor');
-            let ddlSupporting = document.getElementById('ddlSupporting');
-            
+
             ddlFilter.innerHTML = '<option value="0">--Select Specialization--</option>';
             ddlMajor.innerHTML = '<option value="">--Select Major Subject--</option>';
-            ddlMinor.innerHTML = '<option value="">--Select Minor Subject--</option>';
-            ddlSupporting.innerHTML = '<option value="">--Select Supporting Subject--</option>';
-            
+
             let userDept = "{{ user_dept or '' }}";
 
             if (data && data.length > 0) {
                 data.forEach(b => {
                     let opt = `<option value="${b.id}">${b.name}</option>`;
-                    
-                    ddlMinor.innerHTML += opt;
-                    ddlSupporting.innerHTML += opt;
 
                     if (!userDept || String(b.fk_deptidDdo) === userDept) {
                         ddlFilter.innerHTML += opt;
@@ -351,6 +344,5 @@ function localLoadBranches(degreeId, targetId) {
                 });
             }
         });
-}
-</script>
+}</script>
 {% endblock %}
