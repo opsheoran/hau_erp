@@ -69,6 +69,7 @@
 
         <br>
 
+        <div id="editSection" style="display:none;">
         <!-- STUDENT SELECTION -->
         <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
             <tbody>
@@ -153,6 +154,7 @@
         </form>
 
         <br>
+        </div>
 
         <!-- MASTER LIST OF STUDENTS -->
         <div class="tablesubheading"><span class="subheadingborderbottom">List of Dean PGS Advisory Committee</span></div>
@@ -184,7 +186,7 @@
                         </span>
                     </td>
                     <td align="left">{{ s.responseremarks or '-' }}</td>
-                    <td>Print</td>
+                    <td><img src="{{ url_for('static', filename='images/print.gif') }}" style="cursor:pointer" onclick="window.open('/academics/student_advisory_report/{{ s.pk_sid }}', '_blank');"></td>
                     <td>
                         <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick="loadStudent('{{ s.pk_sid }}')">
                     </td>
@@ -194,6 +196,30 @@
                     <td colspan="9" align="center" style="padding:20px; color:#999;">No student records found for the selected filters.</td>
                 </tr>
                 {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ADVISOR STUDENTS MODAL -->
+<div id="advisorStudentsModal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); width:70%; max-height:80%; background:#fff; border:2px solid #2d5a27; z-index:1000; overflow-y:auto; box-shadow:0px 0px 10px rgba(0,0,0,0.5);">
+    <div class="tableheading" style="display:flex; justify-content:space-between; align-items:center;">
+        <span class="mainheadingborderbottom">Students Allocated to Advisor</span>
+        <span style="cursor:pointer; color:red; font-weight:bold; padding:0 10px;" onclick="document.getElementById('advisorStudentsModal').style.display='none'">X Close</span>
+    </div>
+    <div style="padding:10px;">
+        <table class="table-grid-view" width="100%" id="advisorStudentsTable">
+            <thead>
+                <tr class="header-style">
+                    <th width="5%">S.No.</th>
+                    <th>Student Name</th>
+                    <th>Admission No</th>
+                    <th>Enrollment No</th>
+                    <th>Degree</th>
+                    <th>Branch</th>
+                </tr>
+            </thead>
+            <tbody>
             </tbody>
         </table>
     </div>
@@ -220,6 +246,7 @@ window.addEventListener('load', () => {
 
 function loadStudent(sid) {
     if(!sid || sid === '0') return;
+    document.getElementById('editSection').style.display = 'block';
     document.getElementById('ddlStudent').value = sid;
 
     fetch('/academics/api/student/' + sid + '/advisory_committee')
@@ -229,7 +256,49 @@ function loadStudent(sid) {
                 alert('Committee details not found for this student.');
                 return;
             }
-            document.getElementById('hiddenAdcid').value = data.adcid;
+
+            // Auto-populate filter dropdowns with database values
+            const ddlCollege = document.querySelector('select[name="college_id"]');
+            const ddlSession = document.querySelector('select[name="session_id"]');
+            const ddlDegree = document.querySelector('select[name="degree_id"]');
+            const ddlBranch = document.querySelector('select[name="branch_id"]');
+
+            if (ddlCollege && data.fk_collegeid) ddlCollege.value = data.fk_collegeid;
+            if (ddlSession && data.fk_adm_session) ddlSession.value = data.fk_adm_session;
+
+            if (data.fk_collegeid) {
+                fetch(`/academics/api/college/${data.fk_collegeid}/degrees`)
+                    .then(r => r.json())
+                    .then(degrees => {
+                        if (ddlDegree) {
+                            ddlDegree.innerHTML = '<option value="0">--Select Degree--</option>';
+                            degrees.forEach(d => {
+                                const opt = document.createElement('option');
+                                opt.value = d.id;
+                                opt.textContent = d.name;
+                                ddlDegree.appendChild(opt);
+                            });
+                            ddlDegree.value = data.fk_degreeid || '0';
+                        }
+                        if (data.fk_degreeid) return fetch(`/academics/api/college/${data.fk_collegeid}/degree/${data.fk_degreeid}/specializations`);
+                        return null;
+                    })
+                    .then(r => r ? r.json() : null)
+                    .then(branches => {
+                        if (branches && ddlBranch) {
+                            ddlBranch.innerHTML = '<option value="0">--Select Specialization--</option>';
+                            branches.forEach(b => {
+                                const opt = document.createElement('option');
+                                opt.value = b.id;
+                                opt.textContent = b.name;
+                                ddlBranch.appendChild(opt);
+                            });
+                            ddlBranch.value = data.fk_branchid || '0';
+                        }
+                    }).catch(err => console.error(err));
+            }
+
+            document.getElementById('hiddenAdcid').value = data.adcid || "";
             document.getElementById('btnApprove').disabled = false;
             document.getElementById('btnReject').disabled = false;
             document.getElementById('txtRemarks').value = data.remarks || "";
@@ -246,7 +315,7 @@ function loadStudent(sid) {
                         <td>${index + 1}</td>
                         <td align="left">${index === 0 ? data.student_name || "" : ""}</td>
                         <td align="left">${d.role_name || d.status_name || ""}</td>
-                        <td align="left"><b>${d.empname}</b></td>
+                        <td align="left"><a href="javascript:void(0);" onclick="showAdvisorStudents('${d.fk_empid}')"><b>${d.empname}</b></a></td>
                         <td align="left">${d.designation || ""}</td>
                         <td align="left">${d.department || ""}</td>
                         <td align="left">${d.specialization || ""}</td>
@@ -256,8 +325,43 @@ function loadStudent(sid) {
             } else {
                 tbody.innerHTML = '<tr class="item-style"><td colspan="7" align="center" style="padding:15px; color:#999;">No committee details found.</td></tr>';
             }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         })
         .catch(err => console.error('Error loading committee:', err));
+}
+
+function showAdvisorStudents(empId) {
+    if(!empId) return;
+    const sessionId = document.querySelector('select[name="session_id"]').value;
+    
+    fetch('/academics/api/advisor/' + empId + '/students?session_id=' + sessionId)
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.querySelector('#advisorStudentsTable tbody');
+            tbody.innerHTML = "";
+            
+            if(data && data.length > 0) {
+                data.forEach((s, index) => {
+                    const row = document.createElement('tr');
+                    row.className = (index + 1) % 2 === 0 ? 'item-style-alt' : 'item-style';
+                    row.align = "center";
+                    
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td align="left">${s.fullname || ''}</td>
+                        <td align="left">${s.AdmissionNo || ''}</td>
+                        <td align="left">${s.enrollmentno || ''}</td>
+                        <td align="left">${s.degreename || ''}</td>
+                        <td align="left">${s.Branchname || ''}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } else {
+                tbody.innerHTML = '<tr class="item-style"><td colspan="6" align="center" style="padding:15px; color:#999;">No students allocated to this advisor for the selected session.</td></tr>';
+            }
+            document.getElementById('advisorStudentsModal').style.display = 'block';
+        })
+        .catch(err => console.error('Error loading advisor students:', err));
 }
 
 
@@ -285,8 +389,11 @@ function ajaxLoadBranches(degreeId) {
     if(!brSelect) return;
     brSelect.innerHTML = '<option value="0">--Select Specialization--</option>';
     if(!degreeId || degreeId === '0') return;
-    
-    fetch(`/academics/api/degree/${degreeId}/branches`)
+
+    const collegeId = document.querySelector('select[name="college_id"]').value;
+    let url = `/academics/api/college/${collegeId}/degree/${degreeId}/specializations`;
+
+    fetch(url)
         .then(res => res.json())
         .then(data => {
             data.forEach(b => {
@@ -297,6 +404,5 @@ function ajaxLoadBranches(degreeId) {
             });
         }).catch(err => console.error(err));
 }
-
 </script>
 {% endblock %}

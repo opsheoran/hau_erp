@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+<br>
 <div class="hau-card ajax-card">
     <!-- FILTER FORM (GET) -->
     <form method="GET">
@@ -28,8 +29,8 @@
                     <td class="vtext" width="15%">Admitted Session</td>
                     <td class="colon">:</td>
                     <td width="35%">
-                        <select name="session_id" class="textbox w-200 w-200" required>
-                            <option value="">--Select Session--</option>
+                        <select name="session_id" class="textbox w-200 w-200">
+                            <option value="0">--All Sessions--</option>
                             {% for s in lookups.sessions %}
                             <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
                             {% endfor %}
@@ -80,6 +81,7 @@
     <br>
 
     <!-- SAVE FORM (POST) -->
+    <div id="editSection">
     <form method="POST">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
         <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
@@ -128,7 +130,7 @@
                     <td>
                         <select name="minor_id" id="ddlMinor" class="textbox w-200 w-250" required>
                             <option value="">--Select Minor Subject--</option>
-                            {% for b in lookups.branches %}
+                            {% for b in lookups.all_branches %}
                             <option value="{{ b.id }}">{{ b.name }}</option>
                             {% endfor %}
                         </select>
@@ -143,7 +145,7 @@
                     <td>
                         <select name="supporting_id" id="ddlSupporting" class="textbox w-200 w-250" required>
                             <option value="">--Select Supporting Subject--</option>
-                            {% for b in lookups.branches %}
+                            {% for b in lookups.all_branches %}
                             <option value="{{ b.id }}">{{ b.name }}</option>
                             {% endfor %}
                         </select>
@@ -164,11 +166,12 @@
             </tbody>
         </table>
     </form>
+    </div>
 
     <br>
 
     <!-- LIST VIEW -->
-    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
+    <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">     
         <tbody>
             <tr>
                 <td class="tablesubheading" colspan="7">
@@ -188,6 +191,7 @@
                                 <th>Major Subject</th>
                                 <th>Minor Subject</th>
                                 <th>Supporting Subject</th>
+                                <th width="5%">Print</th>
                                 <th width="5%">EDIT</th>
                                 <th width="5%">DELETE</th>
                             </tr>
@@ -201,12 +205,12 @@
                                 <td align="left">{{ session_name }}</td>
                                 <td align="left">{{ s.major_name or '-' }}</td>
                                 <td align="left">{{ s.minor_name or '-' }}</td>
-                                <td align="left">{{ s.supporting_name or '-' }}</td>
+                                <td align="left">{{ s.supporting_name or '-' }}</td>       
+                                <td><img src="{{ url_for('static', filename='images/print.gif') }}" style="cursor:pointer" onclick="window.open('/academics/minor_advisor_report/{{ s.pk_sid }}', '_blank');" title="Print Report"></td>
                                 <td>
                                     <img src="{{ url_for('static', filename='images/Edit.gif') }}" style="cursor:pointer" onclick='editStudent({{ s.pk_sid }})'>
                                 </td>
-                                <td>
-                                    <img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer">
+                                <td>                                    <img src="{{ url_for('static', filename='images/Delete.gif') }}" style="cursor:pointer">
                                 </td>
                             </tr>
                             {% else %}
@@ -229,7 +233,62 @@
 
 <script>
 function editStudent(sid) {
+    document.getElementById('editSection').style.display = 'block';
     document.querySelector('select[name="sid"]').value = sid;
+    
+    // Fetch student basic profile to populate filters
+    fetch('/academics/api/student/' + sid + '/advisory_committee')
+        .then(res => res.json())
+        .then(data => {
+            if(!data.error) {
+                const ddlCollege = document.getElementById('ddlCollege');
+                const ddlSession = document.querySelector('select[name="session_id"]');
+                const ddlDegree = document.getElementById('ddlDegree');
+                const ddlBranch = document.getElementById('ddlSpecialization');
+
+                if (ddlCollege && data.fk_collegeid) ddlCollege.value = data.fk_collegeid;
+                if (ddlSession && data.fk_adm_session) ddlSession.value = data.fk_adm_session;
+
+                if (data.fk_collegeid) {
+                    fetch(`/academics/api/college/${data.fk_collegeid}/degrees?is_pg_phd=1`)
+                        .then(r => r.json())
+                        .then(degrees => {
+                            if (ddlDegree) {
+                                ddlDegree.innerHTML = '<option value="">--Select Degree--</option>';
+                                degrees.forEach(d => {
+                                    const opt = document.createElement('option');
+                                    opt.value = d.id;
+                                    opt.textContent = d.name;
+                                    ddlDegree.appendChild(opt);
+                                });
+                                ddlDegree.value = data.fk_degreeid || '';
+                            }
+                            if (data.fk_degreeid) {
+                                let branchUrl = `/academics/api/degree/${data.fk_degreeid}/branches`;
+                                {% if user_dept %}
+                                branchUrl += `?dept_id={{ user_dept }}`;
+                                {% endif %}
+                                return fetch(branchUrl);
+                            }
+                            return null;
+                        })
+                        .then(r => r ? r.json() : null)
+                        .then(branches => {
+                            if (branches && ddlBranch) {
+                                ddlBranch.innerHTML = '<option value="0">--Select Specialization--</option>';
+                                branches.forEach(b => {
+                                    const opt = document.createElement('option');
+                                    opt.value = b.id;
+                                    opt.textContent = b.name;
+                                    ddlBranch.appendChild(opt);
+                                });
+                                ddlBranch.value = data.fk_branchid || '0';
+                            }
+                        }).catch(err => console.error(err));
+                }
+            }
+        });
+
     loadStudentDisciplines(sid);
     window.scrollTo(0,0);
 }
@@ -260,7 +319,9 @@ function localLoadDegrees(collegeId, targetId) {
 
 function localLoadBranches(degreeId, targetId) {
     if (!degreeId || degreeId === '0') return;
-    const url = '/academics/api/degree/' + degreeId + '/branches';
+    
+    let url = '/academics/api/degree/' + degreeId + '/branches';
+
     fetch(url)
         .then(res => res.json())
         .then(data => {
@@ -274,13 +335,19 @@ function localLoadBranches(degreeId, targetId) {
             ddlMinor.innerHTML = '<option value="">--Select Minor Subject--</option>';
             ddlSupporting.innerHTML = '<option value="">--Select Supporting Subject--</option>';
             
+            let userDept = "{{ user_dept or '' }}";
+
             if (data && data.length > 0) {
                 data.forEach(b => {
                     let opt = `<option value="${b.id}">${b.name}</option>`;
-                    ddlFilter.innerHTML += opt;
-                    ddlMajor.innerHTML += opt;
+                    
                     ddlMinor.innerHTML += opt;
                     ddlSupporting.innerHTML += opt;
+
+                    if (!userDept || String(b.fk_deptidDdo) === userDept) {
+                        ddlFilter.innerHTML += opt;
+                        ddlMajor.innerHTML += opt;
+                    }
                 });
             }
         });
