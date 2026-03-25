@@ -5087,6 +5087,61 @@ class AdvisoryModel:
         except Exception as e:
             print(f"Error saving course plan: {e}")
 
+    @staticmethod
+    def get_advisory_approvals_list(filters, role, page=None, per_page=10):
+        # Base query to fetch all students (pending or approved) for the grid
+        query = '''
+            SELECT S.pk_sid, S.AdmissionNo, S.enrollmentno, S.fullname, 
+                   CLG.collegename, D.degreename, SES.sessionname, B.Branchname, A.pk_adcid,
+                   A.hod_approval, A.college_deanapproval, A.approvalstatus,
+                   A.hod_remarks, A.college_deanremarks, A.responseremarks
+            FROM SMS_Advisory_Committee_Mst A
+            JOIN SMS_Student_Mst S ON A.fk_stid = S.pk_sid
+            JOIN SMS_Degree_Mst D ON S.fk_degreeid = D.pk_degreeid
+            JOIN SMS_DegreeType_Mst T ON D.fk_degreetypeid = T.pk_degreetypeid
+            JOIN SMS_BranchMst B ON S.fk_branchid = B.Pk_BranchId
+            JOIN SMS_College_Mst CLG ON A.fk_colgid = CLG.pk_collegeid
+            JOIN SMS_AcademicSession_Mst SES ON A.fk_sessionid = SES.pk_sessionid
+            WHERE T.isug IN ('M', 'P')
+        '''
+        params = []
+        
+        if filters.get('college_id') and filters.get('college_id') != '0':
+            query += " AND A.fk_colgid = ?"
+            params.append(filters['college_id'])
+
+        if filters.get('degree_id') and filters.get('degree_id') != '0':
+            query += " AND A.fk_degreeid = ?"
+            params.append(filters['degree_id'])
+
+        if filters.get('session_id') and filters.get('session_id') != '0':
+            query += " AND A.fk_sessionid = ?"
+            params.append(filters['session_id'])
+            
+        if filters.get('branch_id') and filters.get('branch_id') != '0':
+            query += " AND A.fk_branchid = ?"
+            params.append(filters['branch_id'])
+
+        if filters.get('user_dept'):
+            query += " AND B.fk_deptidDdo = ?"
+            params.append(filters['user_dept'])
+
+        # Role specific filtering to show what's relevant to them
+        if role == 'dean':
+            query += " AND A.hod_approval = 'A'"
+        elif role == 'dean_pgs':
+            query += " AND A.college_deanapproval = 'A'"
+
+        if page:
+            count_query = "SELECT COUNT(*) " + query[query.upper().find("FROM"):]
+            total = DB.fetch_scalar(count_query, params)
+            
+            query += f" ORDER BY S.fullname OFFSET {(page - 1) * per_page} ROWS FETCH NEXT {per_page} ROWS ONLY"
+            return DB.fetch_all(query, params), total
+        else:
+            query += " ORDER BY S.fullname"
+            return DB.fetch_all(query, params)
+
 class StudentModel:
     @staticmethod
     def get_student_profile_basic(sid):
