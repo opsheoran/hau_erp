@@ -2774,17 +2774,58 @@ def hod_approval_advisory():
         'user_dept': lookups.get('user_dept')
     }
     
+    edit_sid = request.args.get('edit_sid')
+    edit_adcid = request.args.get('edit_adcid')
+    
     if request.method == 'POST':
         action = request.form.get('action')
-        selected_students = request.form.getlist('selected_students')
-        if action and selected_students:
-            AdvisoryModel.update_approval_status(selected_students, 'hod', action, session.get('emp_id'))
-            flash(f"Successfully {action}ed the selected committees.", 'success')
+        adcid = request.form.get('adcid')
+        remarks = request.form.get('remarks')
+        
+        if action and adcid and remarks:
+            AdvisoryModel.update_approval_status(adcid, 'hod', action, session.get('emp_id'), remarks)
+            flash(f"Successfully {action}ed the selected committee.", 'success')
         return redirect(url_for('academics.hod_approval_advisory', **filters))
     
-    pending_students = AdvisoryModel.get_pending_approvals(filters, 'hod', session.get('emp_id'))
+    # Pagination
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    
+    grid_students, total = AdvisoryModel.get_advisory_approvals_list(filters, 'hod', page=page, per_page=per_page)
+    pagination = {'page': page, 'per_page': per_page, 'total': total, 'has_next': (page * per_page) < total}
+    
+    edit_student = None
+    advisory_details = []
+    
+    if edit_sid:
+        # Find student info
+        from app.db import DB
+        edit_student = DB.fetch_one("SELECT S.pk_sid, S.fullname, S.enrollmentno, S.AdmissionNo FROM SMS_Student_Mst S WHERE pk_sid = ?", [edit_sid])
         
-    return render_template('academics/hod_approval_advisory.html', lookups=lookups, filters=filters, pending_students=pending_students)
+        # Get advisory committee details
+        advisory_details = DB.fetch_all('''
+            SELECT 
+                RM.RoleName as role_name,
+                E.empname as advisor_name,
+                ISNULL(DES.DesigName, '') as designation,
+                ISNULL(DEPT.deptname, '') as department
+            FROM SMS_Advisory_Committee_Dtl D
+            JOIN SMS_Advisory_Role_Mst RM ON D.fk_roleid = RM.Pk_RoleId
+            JOIN SAL_Employee_Mst E ON D.fk_empid = E.pk_empid
+            LEFT JOIN SAL_Designation_Mst DES ON E.fk_desigid = DES.Pk_DesigId
+            LEFT JOIN Department_Mst DEPT ON E.fk_deptid = DEPT.pk_deptid
+            WHERE D.fk_adcid = ? AND D.fk_statusid = 1
+            ORDER BY RM.Pk_RoleId
+        ''', [edit_adcid])
+        
+    return render_template('academics/hod_approval_advisory.html', 
+                           lookups=lookups, 
+                           filters=filters, 
+                           grid_students=clean_json_data(grid_students),
+                           pagination=pagination,
+                           edit_student=edit_student,
+                           edit_adcid=edit_adcid,
+                           advisory_details=advisory_details)
 
 @academics_bp.route('/college_dean_approval_advisory', methods=['GET', 'POST'])
 @permission_required('College Dean Approval')

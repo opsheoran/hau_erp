@@ -5023,17 +5023,15 @@ class AdvisoryModel:
         return DB.fetch_all(query, params)
 
     @staticmethod
-    def update_approval_status(adcid_list, role, action, emp_id):
+    def update_approval_status(adcid, role, action, emp_id, remarks=''):
         status = 'A' if action == 'approve' else 'R'
-        placeholders = ','.join(['?'] * len(adcid_list))
-        params = [status, emp_id] + adcid_list
         
         if role == 'hod':
-            DB.execute(f"UPDATE SMS_Advisory_Committee_Mst SET hod_approval = ?, hod_by = ?, hod_date = GETDATE() WHERE pk_adcid IN ({placeholders})", params)
+            DB.execute("UPDATE SMS_Advisory_Committee_Mst SET hod_approval = ?, hod_by = ?, hod_date = GETDATE(), hod_remarks = ? WHERE pk_adcid = ?", [status, emp_id, remarks, adcid])
         elif role == 'dean':
-            DB.execute(f"UPDATE SMS_Advisory_Committee_Mst SET college_deanapproval = ?, college_deanby = ?, Collegedean_date = GETDATE() WHERE pk_adcid IN ({placeholders})", params)
+            DB.execute("UPDATE SMS_Advisory_Committee_Mst SET college_deanapproval = ?, college_deanby = ?, Collegedean_date = GETDATE(), college_deanremarks = ? WHERE pk_adcid = ?", [status, emp_id, remarks, adcid])
         elif role == 'dean_pgs':
-            DB.execute(f"UPDATE SMS_Advisory_Committee_Mst SET approvalstatus = ?, deanpgs_id = ?, deanpgs_date = GETDATE() WHERE pk_adcid IN ({placeholders})", params)
+            DB.execute("UPDATE SMS_Advisory_Committee_Mst SET approvalstatus = ?, deanpgs_id = ?, deanpgs_date = GETDATE(), responseremarks = ? WHERE pk_adcid = ?", [status, emp_id, remarks, adcid])
 
     @staticmethod
     def get_students_for_course_plan(filters):
@@ -5051,9 +5049,9 @@ class AdvisoryModel:
         return DB.fetch_all(query, params)
 
     @staticmethod
-    def get_student_course_plan(sid):
+    def get_student_course_plan_advisory(sid):
         query = '''
-            SELECT CA.pk_Sms_course_Appid, CA.fk_courseid as pk_courseid, C.coursecode, C.coursename, 
+            SELECT CA.pk_stucourseapprove, CA.fk_courseid as pk_courseid, C.coursecode, C.coursename, 
                    (CA.crhrth + CA.crhrpr) as credits,
                    CASE CA.courseplan
                         WHEN 'MA' THEN 'Major Courses'
@@ -5083,9 +5081,9 @@ class AdvisoryModel:
                 cd = DB.fetch_one("SELECT crhrth, crhrpr FROM SMS_Course_Mst WHERE pk_courseid = ?", [cid])
                 if cd:
                     DB.execute('''
-                        INSERT INTO Sms_course_Approval (fk_sturegid, fk_courseid, crhrth, crhrpr, courseplan, created_by, created_date)
-                        VALUES (?, ?, ?, ?, 'MA', ?, GETDATE())
-                    ''', [sid, cid, cd.get('crhrth', 0), cd.get('crhrpr', 0), emp_id])
+                        INSERT INTO Sms_course_Approval (fk_sturegid, fk_courseid, crhrth, crhrpr, courseplan)
+                        VALUES (?, ?, ?, ?, 'MA')
+                    ''', [sid, cid, cd.get('crhrth', 0), cd.get('crhrpr', 0)])
         except Exception as e:
             print(f"Error saving course plan: {e}")
 

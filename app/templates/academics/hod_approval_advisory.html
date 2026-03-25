@@ -2,7 +2,7 @@
 {% block content %}
 <br>
 <div class="hau-card ajax-card">
-    <div class="tableheading"><span class="mainheadingborderbottom">HOD Approval</span></div>
+    <div class="tableheading"><span class="mainheadingborderbottom">Hod Approval</span></div>
     
     <div style="padding: 10px;">
         <!-- FILTER FORM -->
@@ -10,10 +10,10 @@
             <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                        <td class="vtext" width="15%">College</td>
+                        <td class="vtext" width="15%" id="lblColleges">College</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="college_id" class="textbox w-300" required onchange="ajaxLoadDegrees(this.value)">
+                            <select name="college_id" id="ddlColleges" class="textbox w-300" required onchange="ajaxLoadDegrees(this.value)">
                                 <option value="0">--Select College--</option>
                                 {% for c in lookups.colleges %}
                                 <option value="{{ c.id }}" {% if filters.college_id|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
@@ -21,11 +21,12 @@
                             </select>
                             <span class="required">*</span>
                         </td>
-                        <td class="vtext" width="15%">Academic Session</td>
+
+                        <td class="vtext" width="15%" id="lblAcdSession">Admitted Session</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="session_id" class="textbox w-200" required>
-                                <option value="0">--Select Session--</option>
+                            <select name="session_id" id="ddlAcdSession" class="textbox w-200" required>
+                                <option value="0">--Select Academic Session--</option>
                                 {% for s in lookups.sessions %}
                                 <option value="{{ s.id }}" {% if filters.session_id|string == s.id|string %}selected{% endif %}>{{ s.name }}</option>
                                 {% endfor %}
@@ -34,33 +35,148 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="vtext">Degree</td>
+                        <td class="vtext" id="lblDegree">Degree</td>
                         <td class="colon">:</td>
                         <td class="required">
-                            <select name="degree_id" class="textbox w-300" onchange="ajaxLoadBranches(this.value)">
+                            <select name="degree_id" id="ddlDegree" class="textbox w-300" onchange="ajaxLoadBranches(this.value)">
                                 <option value="0">--Select Degree--</option>
                                 {% for d in lookups.degrees %}
                                 <option value="{{ d.id }}" {% if filters.degree_id|string == d.id|string %}selected{% endif %}>{{ d.name }}</option>
                                 {% endfor %}
                             </select>
+                            <span class="required">*</span>
                         </td>
-                        <td class="vtext">Department</td>
+                        <td class="vtext" style="width: 15%">Specialization</td>
                         <td class="colon">:</td>
-                        <td class="required">
-                            <select name="branch_id" class="textbox w-200">
-                                <option value="0">-- Select Department --</option>
+                        <td>
+                            <select name="branch_id" id="ddlBranch" class="textbox w-200">
+                                <option value="0">--Select Specialization--</option>
                                 {% for b in lookups.branches %}
                                 <option value="{{ b.id }}" {% if filters.branch_id|string == b.id|string %}selected{% endif %}>{{ b.name }}</option>
                                 {% endfor %}
                             </select>
                         </td>
                     </tr>
-                    <tr><td colspan="6" height="10"></td></tr>
                     <tr>
                         <td colspan="2"></td>
                         <td colspan="4">
-                            <input type="submit" value="GET STUDENTS" class="button-common" style="width:120px;">
-                            <input type="button" value="RESET" class="button-common" style="width:100px; margin-left:5px;" onclick="window.location.href='{{ url_for('academics.hod_approval_advisory') }}'">
+                            <table border="0" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <input type="submit" value="GET STUDENTS" class="button-common" cellpadding="0" cellspacing="0">
+                                        </td>
+                                        <td class="btngap" style="width:5px;"></td>
+                                        <td>
+                                            <input type="button" value="RESET" class="button-common" cellpadding="0" cellspacing="0" onclick="window.location.href='{{ url_for('academics.hod_approval_advisory') }}'">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <form method="POST" id="approvalForm" action="{{ url_for('academics.hod_approval_advisory', **filters) }}">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="action" id="hdnAction" value="">
+            <input type="hidden" name="adcid" id="hdnAdcId" value="{{ edit_adcid or '' }}">
+
+            <table border="0" class="form-table" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
+                <tbody>
+                    <tr><td class="tdgap" height="10" colspan="6"></td></tr>
+                    <tr>
+                        <td class="vtext" id="lblsname" width="15%">Student Name</td>
+                        <td class="colon">:</td>
+                        <td class="required" colspan="4">
+                            <select name="sid" id="ddlsname" class="textbox w-300" disabled="disabled">
+                                <option value="">--Select Student Name--</option>
+                                {% if edit_student %}
+                                <option value="{{ edit_student.pk_sid }}" selected>{{ edit_student.fullname }} [{{ edit_student.enrollmentno or edit_student.AdmissionNo }}]</option>
+                                {% endif %}
+                            </select>
+                            <span class="required">*</span>
+                        </td>
+                    </tr>
+                    <tr><td class="tdgap" height="10" colspan="6"></td></tr>
+                    
+                    <tr>
+                        <td class="tablesubheading" colspan="6"><span class="subheadingborderbottom">List of Advisors</span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <div id="pnlCommitteeGrid">
+                                {% if edit_student %}
+                                <table class="table-grid-view" cellspacing="1" cellpadding="1" border="1" id="gvdtl" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+                                    <tbody>
+                                        <tr class="header-style" align="center">
+                                            <th align="center" scope="col" style="width:5%;">S.No.</th>
+                                            <th scope="col" style="width:15%;">Student</th>
+                                            <th scope="col" style="width:20%;">Status/Advisory Type</th>
+                                            <th align="left" scope="col" style="width:25%;">Advisor Name</th>
+                                            <th scope="col" style="width:20%;">Designation</th>
+                                            <th scope="col" style="width:30%;">Department</th>
+                                        </tr>
+                                        {% for member in advisory_details %}
+                                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" style="background-color:{% if loop.index % 2 == 0 %}#FAFAFA{% else %}White{% endif %};">
+                                            <td align="center">{{ loop.index }}</td>
+                                            <td>{{ edit_student.fullname }} [{{ edit_student.enrollmentno or edit_student.AdmissionNo }}]</td>
+                                            <td>{{ member.role_name }}</td>
+                                            <td align="left" style="width:25%;">
+                                                <a href="javascript:void(0);">{{ member.advisor_name }}</a>
+                                            </td>
+                                            <td align="left" style="width:20%;">{{ member.designation }}</td>
+                                            <td>{{ member.department }}</td>
+                                        </tr>
+                                        {% else %}
+                                        <tr class="item-style"><td colspan="6" align="center" style="padding:15px; color:#999;">No committee members found.</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <div id="pnlbutton" style="{% if not edit_student %}display:none;{% endif %} margin-top:10px;">
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td class="vtext" width="15%">Remarks</td>
+                                            <td class="colon">:</td>
+                                            <td colspan="4">
+                                                <textarea name="remarks" rows="2" cols="20" id="txtremarks" class="textboxmultiline w-400" required></textarea>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 15%"></td>
+                                            <td></td>
+                                            <td colspan="4">
+                                                <table border="0" cellpadding="0" cellspacing="0" style="margin-top:10px;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="submit" value="APPROVE" class="button-common" onclick="return submitAction('approve');">
+                                                            </td>
+                                                            <td class="btngap" style="width:5px;"></td>
+                                                            <td>
+                                                                <input type="submit" value="RETURN BACK" class="button-common" onclick="return submitAction('reject');">
+                                                            </td>
+                                                            <td class="btngap" style="width:5px;"></td>
+                                                            <td>
+                                                                <input type="button" value="RESET" class="button-common" onclick="window.location.href='{{ url_for('academics.hod_approval_advisory', **filters) }}'">
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -68,131 +184,96 @@
         </form>
 
         <br>
-        
-        <form method="POST" id="approvalForm">
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
-            <input type="hidden" name="action" id="hdnAction" value="">
-            
-            <div class="tablesubheading"><span class="subheadingborderbottom">Pending Approvals</span></div>
-            <div style="width: 100%; overflow: auto; border:1px solid #D4D4D4; margin-top:10px;">
-                <table class="table-grid-view" width="100%">
-                    <thead>
-                        <tr class="header-style">
-                            <th align="center" scope="col" width="3%"><input type="checkbox" id="chkAll" onchange="toggleAll(this)"></th>
-                            <th align="center" scope="col">S.No</th>
-                            <th align="center" scope="col">Admission No</th>
-                            <th align="center" scope="col">Student Name</th>
-                            <th align="center" scope="col">Degree</th>
-                            <th align="center" scope="col">Department</th>
-                            <th align="center" scope="col">Advisory Committee</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for s in pending_students %}
-                        <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center">
-                            <td><input type="checkbox" name="selected_students" value="{{ s.pk_adcid }}" class="chkStudent"></td>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ s.AdmissionNo }}</td>
-                            <td align="left">{{ s.fullname }}</td>
-                            <td align="left">{{ s.degreename }}</td>
-                            <td align="left">{{ s.Branchname }}</td>
-                            <td>
-                                <a href="javascript:void(0)" onclick="viewCommittee({{ s.pk_sid }})" style="color:blue; text-decoration:underline;">View Committee</a>
-                            </td>
-                        </tr>
-                        {% else %}
-                        <tr class="item-style"><td colspan="7" align="center" style="padding:20px; color:#999;">No pending students found.</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            
-            {% if pending_students %}
-            <div style="margin-top: 15px; text-align: right;">
-                <input type="button" value="APPROVE SELECTED" class="button-common" style="width:150px; background-color:green;" onclick="submitAction('approve')">
-                <input type="button" value="REJECT SELECTED" class="button-common" style="width:150px; background-color:red; margin-left:5px;" onclick="submitAction('reject')">
-            </div>
-            {% endif %}
-        </form>
-    </div>
-</div>
-
-<!-- COMMITTEE MODAL -->
-<div id="committeeModal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); width:70%; max-height:80%; background:#fff; border:2px solid #2d5a27; z-index:1000; overflow-y:auto; box-shadow:0px 0px 10px rgba(0,0,0,0.5);">
-    <div class="tableheading" style="display:flex; justify-content:space-between; align-items:center;">
-        <span class="mainheadingborderbottom">Advisory Committee Details</span>
-        <span style="cursor:pointer; color:red; font-weight:bold; padding:0 10px;" onclick="document.getElementById('committeeModal').style.display='none'">X Close</span>
-    </div>
-    <div style="padding:10px;">
-        <table class="table-grid-view" width="100%" id="committeeTable">
-            <thead>
-                <tr class="header-style">
-                    <th width="5%">S.No.</th>
-                    <th>Role</th>
-                    <th>Advisor Name</th>
-                    <th>Designation</th>
-                    <th>Department</th>
-                </tr>
-            </thead>
+        <table border="0" cellpadding="0" cellspacing="0" class="table" width="100%">
             <tbody>
+                <tr>
+                    <td class="tablesubheading" colspan="4"><span class="subheadingborderbottom">List of Dean PGS Advisory Committee</span></td>
+                </tr>
+                <tr><td class="tdgap" colspan="4" height="10"></td></tr>
+                <tr>
+                    <td colspan="4">
+                        <div style="width: 100%; overflow: auto;">
+                            <table class="table-grid-view" cellspacing="1" cellpadding="1" align="Center" border="1" id="gvDetails" style="width:100%;border:1px solid #D4D4D4;border-collapse:collapse;">
+                                <tbody>
+                                    <tr class="header-style">
+                                        <th scope="col">S.No.</th>
+                                        <th align="center" scope="col" style="width:25%;">Student Name</th>
+                                        <th align="center" scope="col" style="width:25%;">College Name</th>
+                                        <th align="center" scope="col" style="width:15%;">Degree</th>
+                                        <th align="center" scope="col" style="width:10%;">Session</th>
+                                        <th align="center" scope="col" style="width:10%;">Approval Status</th>
+                                        <th align="center" scope="col">Remarks</th>
+                                        <th scope="col">Print</th>
+                                        <th scope="col">EDIT</th>
+                                    </tr>
+                                    {% for s in grid_students %}
+                                    <tr class="{% if loop.index % 2 == 0 %}item-style-alt{% else %}item-style{% endif %}" align="center" style="{% if s.hod_approval == 'A' %}color:Black;background-color:#E4EAFF;{% endif %}">
+                                        <td style="width:5%;">{{ loop.index + ((pagination.page - 1) * pagination.per_page) }}</td>
+                                        <td align="left">{{ s.fullname }} [{{ s.enrollmentno or s.AdmissionNo }}]</td>
+                                        <td align="left">{{ s.collegename }}</td>
+                                        <td align="left">{{ s.degreename }}</td>
+                                        <td align="left">{{ s.sessionname }}</td>
+                                        <td align="left">
+                                            {% if s.hod_approval == 'A' %}Approved
+                                            {% elif s.hod_approval == 'R' %}Returned
+                                            {% else %}Pending{% endif %}
+                                        </td>
+                                        <td align="left">{{ s.hod_remarks or '' }}</td>
+                                        <td align="center" style="width:5%;">
+                                            <a href="javascript:void(0);" onclick="printReport({{ s.pk_sid }})">
+                                                <img src="{{ url_for('static', filename='images/print.gif') }}" alt="Print" border="0">
+                                            </a>
+                                        </td>
+                                        <td align="center" style="width:5%;">
+                                            <a href="javascript:void(0);" onclick="editStudent('{{ s.pk_sid }}', '{{ s.pk_adcid }}')">
+                                                <img src="{{ url_for('static', filename='images/Edit.gif') }}" alt="Edit" border="0">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% else %}
+                                    <tr class="item-style"><td colspan="9" align="center" style="padding:20px; color:#999;">No records found.</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if grid_students %}
+                            <div class="pager-style" align="center" style="color:#000000; margin-top: 10px;">
+                                {% include 'includes/pagination.html' %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
 </div>
 
 <script>
-function toggleAll(source) {
-    checkboxes = document.getElementsByClassName('chkStudent');
-    for(var i=0, n=checkboxes.length;i<n;i++) {
-        checkboxes[i].checked = source.checked;
-    }
+function editStudent(sid, adcid) {
+    let url = new URL(window.location.href);
+    url.searchParams.set('edit_sid', sid);
+    url.searchParams.set('edit_adcid', adcid);
+    window.location.href = url.toString();
+}
+
+function printReport(sid) {
+    window.open('/academics/student_advisory_report/' + sid, '_blank');
 }
 
 function submitAction(action) {
-    var checked = document.querySelectorAll('.chkStudent:checked');
-    if(checked.length === 0) {
-        alert("Please select at least one student.");
-        return;
+    if(!document.getElementById('txtremarks').value.trim()) {
+        alert("Please enter Remarks before submitting.");
+        return false;
     }
-    
-    if(confirm("Are you sure you want to " + action.toUpperCase() + " the selected committees?")) {
+    if(confirm("Are you sure you want to " + action.toUpperCase() + " this committee?")) {
         document.getElementById('hdnAction').value = action;
-        document.getElementById('approvalForm').submit();
+        return true;
     }
-}
-
-function viewCommittee(sid) {
-    fetch('/academics/api/student/' + sid + '/committee')
-        .then(res => res.json())
-        .then(data => {
-            const tbody = document.querySelector('#committeeTable tbody');
-            tbody.innerHTML = "";
-            
-            if(data && data.length > 0) {
-                data.forEach((s, index) => {
-                    const row = document.createElement('tr');
-                    row.className = (index + 1) % 2 === 0 ? 'item-style-alt' : 'item-style';
-                    row.align = "center";
-                    
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td align="left">${s.role_name || ''}</td>
-                        <td align="left"><b>${s.advisor_name || ''}</b></td>
-                        <td align="left">${s.designation || ''}</td>
-                        <td align="left">${s.department || ''}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            } else {
-                tbody.innerHTML = '<tr class="item-style"><td colspan="5" align="center" style="padding:15px; color:#999;">No committee members found.</td></tr>';
-            }
-            document.getElementById('committeeModal').style.display = 'block';
-        })
-        .catch(err => console.error('Error loading committee:', err));
+    return false;
 }
 
 function ajaxLoadDegrees(collegeId) {
-    const degSelect = document.querySelector('select[name="degree_id"]');
+    const degSelect = document.getElementById('ddlDegree');
     if(!degSelect) return;
     degSelect.innerHTML = '<option value="0">--Select Degree--</option>';
     if(!collegeId || collegeId === '0') return;
@@ -210,21 +291,31 @@ function ajaxLoadDegrees(collegeId) {
 }
 
 function ajaxLoadBranches(degreeId) {
-    const brSelect = document.querySelector('select[name="branch_id"]');
+    const brSelect = document.getElementById('ddlBranch');
     if(!brSelect) return;
-    brSelect.innerHTML = '<option value="0">--Select Department--</option>';
+    brSelect.innerHTML = '<option value="0">--Select Specialization--</option>';
     if(!degreeId || degreeId === '0') return;
     
     fetch(`/academics/api/degree/${degreeId}/branches`)
         .then(res => res.json())
         .then(data => {
+            let userDept = "{{ user_dept or '' }}";
             data.forEach(b => {
-                const opt = document.createElement('option');
-                opt.value = b.id;
-                opt.textContent = b.name;
-                brSelect.appendChild(opt);
+                if (!userDept || String(b.fk_deptidDdo) === userDept) {
+                    const opt = document.createElement('option');
+                    opt.value = b.id;
+                    opt.textContent = b.name;
+                    brSelect.appendChild(opt);
+                }
             });
         }).catch(err => console.error(err));
 }
+
+// Auto-scroll to top if editing
+{% if edit_student %}
+document.addEventListener("DOMContentLoaded", function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+{% endif %}
 </script>
 {% endblock %}
